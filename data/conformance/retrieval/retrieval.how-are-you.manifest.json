@@ -1,0 +1,20 @@
+{
+  "schema": "ccc4.retrieval.v1",
+  "prompt_id": "how-are-you",
+  "prompt_text": "hi how are you",
+  "model": "google/embeddinggemma-2",
+  "dimensions": 256,
+  "normalization": "L2 after Matryoshka truncation",
+  "prompt_name": "Retrieval-query",
+  "top_k": 5,
+  "query_vec_sha256": "c56de0e5cc22af13b18120105a0110926b2acd4643be5c1a9f7c4d5f139e2166",
+  "vector_manifest_sha256": "6bce89f103aef62513c2b6f34ce760465b6b5f71085afc721f7bc524ff08a01b",
+  "sources": [
+    { "file": "build/io/aiml-embeddinggemma2-vectors/pattern_vectors.f32.npy", "lane": "A_pattern_context" },
+    { "file": "build/io/aiml-embeddinggemma2-vectors/aiml_pattern_template_pairs.jsonl", "lane": "pair_records" }
+  ],
+  "results_file": "retrieval.how-are-you.jsonl",
+  "authority": "data_only",
+  "semantic_commit": false,
+  "_note": "I4 reference prompt: top hit HI HOW ARE YOU cosine=0.862 is the symbolic exact match used in acc-greeting-symbolic-only.json"
+}

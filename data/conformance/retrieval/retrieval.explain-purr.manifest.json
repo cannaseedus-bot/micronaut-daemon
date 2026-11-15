@@ -1,0 +1,20 @@
+{
+  "schema": "ccc4.retrieval.v1",
+  "prompt_id": "explain-purr",
+  "prompt_text": "explain why cats purr",
+  "model": "google/embeddinggemma-2",
+  "dimensions": 256,
+  "normalization": "L2 after Matryoshka truncation",
+  "prompt_name": "Retrieval-query",
+  "top_k": 5,
+  "query_vec_sha256": "69ee342684ebb4bbbf9cae18dfc4f8d819d27ddb6c7fdd8b69bd83435a4e78ff",
+  "vector_manifest_sha256": "6bce89f103aef62513c2b6f34ce760465b6b5f71085afc721f7bc524ff08a01b",
+  "sources": [
+    { "file": "build/io/aiml-embeddinggemma2-vectors/pattern_vectors.f32.npy", "lane": "A_pattern_context" },
+    { "file": "build/io/aiml-embeddinggemma2-vectors/aiml_pattern_template_pairs.jsonl", "lane": "pair_records" }
+  ],
+  "results_file": "retrieval.explain-purr.jsonl",
+  "authority": "data_only",
+  "semantic_commit": false,
+  "_note": "⟁EXPLAIN reference prompt from acc-five-concepts.json. WHY DO CATS PURR cosine=0.862."
+}

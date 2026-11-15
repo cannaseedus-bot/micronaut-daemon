@@ -1,0 +1,20 @@
+{
+  "schema": "ccc4.retrieval.v1",
+  "prompt_id": "bank-pun",
+  "prompt_text": "tell me a joke about a bank",
+  "model": "google/embeddinggemma-2",
+  "dimensions": 256,
+  "normalization": "L2 after Matryoshka truncation",
+  "prompt_name": "Retrieval-query",
+  "top_k": 5,
+  "query_vec_sha256": "bd5ac653dd8b90e17394268e79d702f1ea6e47b34d2d18d557df4578628b3a44",
+  "vector_manifest_sha256": "6bce89f103aef62513c2b6f34ce760465b6b5f71085afc721f7bc524ff08a01b",
+  "sources": [
+    { "file": "build/io/aiml-embeddinggemma2-vectors/pattern_vectors.f32.npy", "lane": "A_pattern_context" },
+    { "file": "build/io/aiml-embeddinggemma2-vectors/aiml_pattern_template_pairs.jsonl", "lane": "pair_records" }
+  ],
+  "results_file": "retrieval.bank-pun.jsonl",
+  "authority": "data_only",
+  "semantic_commit": false,
+  "_note": "Bigram disambiguation reference: bank_financial vs bank_riverbank. WHAT row=14774 template='dollars and scents' is the pun hit that surfaces the financial+wordplay split in acc-bank-pun-both-senses.json."
+}
