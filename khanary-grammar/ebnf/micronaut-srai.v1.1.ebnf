@@ -1,0 +1,51 @@
+(* micronaut-srai.v1.1.ebnf
+   Surface grammar for Micronaut SRAI.
+   v1.1 changes:
+     - 'source' is a typed field, not implicit "vector"
+     - 'vector_row' is optional, required only when source=vector
+     - 'symbolic_ref' is the alternative to vector_row
+     - 'concept' is mandatory on the route target so the route is
+       scoped to a concept field (refinement #3)
+   Authority: proposal_only. Never executes; constructs proposals. *)
+
+srai            = "srai" , "[" , srai_body , "]" ;
+
+srai_body       = "kind" , ":" , "micronaut_srai" ,
+                  "route" , ":" , route_ref ,
+                  "concept" , ":" , concept_ref ,          (* v1.1 *)
+                  [ "input" , ":" , input_expr ] ,
+                  "max_depth" , ":" , integer ,
+                  [ "provenance" , ":" , provenance_mode ] ,
+                  [ "source" , ":" , source_kind ] ,       (* v1.1 *)
+                  [ "vector_row" , ":" , integer ] ,       (* v1.1, iff source=vector *)
+                  [ "symbolic_ref" , ":" , symbolic_ref ] ,(* v1.1, iff source≠vector *)
+                  { admission_field } ;
+
+route_ref       = identifier | capability_ref ;
+capability_ref  = "micronaut" , ":" , identifier ;
+concept_ref     = glyph_identifier ;                        (* e.g. "⟁HUMOR" *)
+
+source_kind     = "vector" | "aiml" | "manifest" | "gramstore" | "rule" ;  (* v1.1 *)
+symbolic_ref    = identifier , { "." , identifier } ;       (* manifest key, AIML pattern id, rule id *)
+
+input_expr      = string_literal | binding_expr ;
+binding_expr    = "{" , binding_path , "}" ;
+binding_path    = identifier , { "." , identifier } , [ "[" , integer , "]" ] ;
+
+provenance_mode = "required" | "optional" | "forbidden" ;
+
+admission_field = "admission" , ":" , admission_mode
+                | "fallback"  , ":" , fallback_mode
+                | "phase"     , ":" , phase_name
+                | "authority" , ":" , "proposal_only" ;
+
+admission_mode  = "xcfe_required" | "not_applicable_read_only" ;
+fallback_mode   = "fail_template" | "return_empty" | "route" , ":" , route_ref ;
+phase_name      = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul" ;
+
+glyph_identifier = "⟁" , identifier ;                       (* v1.1: concept glyph *)
+identifier      = letter , { letter | digit | "_" } ;
+integer         = digit , { digit } ;
+string_literal  = '"' , { any_char - '"' } , '"' ;
+letter          = "A".."Z" | "a".."z" ;
+digit           = "0".."9" ;

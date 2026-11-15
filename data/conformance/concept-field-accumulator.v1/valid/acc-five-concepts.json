@@ -1,0 +1,125 @@
+[
+  {
+    "_fixture_note": "I2 test: 'cat' appears in ⟁HUMOR and ⟁EXPLAIN with different scoring_context_hash — independent scoring.",
+    "schema": "concept-field-accumulator.v1",
+    "concept_id": "⟁HUMOR",
+    "concept_scope": "Tell me a joke about a cat",
+    "state": "candidate",
+    "concept_context_hash": "sha256:c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4",
+    "gram_activations": [
+      {
+        "gram": "tell me a joke",
+        "concept_id": "⟁HUMOR",
+        "score_components": { "W": 0.90, "C": 0.95, "S": 0.91, "P": 0.98 },
+        "product": 0.761,
+        "scoring_context_hash": "sha256:c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4",
+        "shared": false
+      },
+      {
+        "gram": "cat",
+        "concept_id": "⟁HUMOR",
+        "score_components": { "W": 0.72, "C": 0.85, "S": 0.83, "P": 0.95 },
+        "product": 0.483,
+        "scoring_context_hash": "sha256:c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4",
+        "shared": true,
+        "shared_source": "words.manifest:cat"
+      }
+    ],
+    "vector_matches": [
+      { "pattern_id": "joke_cat_001", "cosine": 0.83, "source_vector_row": 41823, "source": "EmbeddingGemma.pattern" }
+    ],
+    "symbolic_evidence": [],
+    "unresolved_gaps": [],
+    "shared_references": [
+      { "ref": "cat", "used_by": ["⟁HUMOR", "⟁EXPLAIN"] }
+    ],
+    "verified_evidence": [],
+    "fold_state": "pending_reduce"
+  },
+  {
+    "schema": "concept-field-accumulator.v1",
+    "concept_id": "⟁EXPLAIN",
+    "concept_scope": "explain why cats purr",
+    "state": "candidate",
+    "concept_context_hash": "sha256:d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5",
+    "gram_activations": [
+      {
+        "gram": "explain why",
+        "concept_id": "⟁EXPLAIN",
+        "score_components": { "W": 0.88, "C": 0.90, "S": 0.86, "P": 0.98 },
+        "product": 0.669,
+        "scoring_context_hash": "sha256:d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5",
+        "shared": false
+      },
+      {
+        "gram": "cat",
+        "concept_id": "⟁EXPLAIN",
+        "score_components": { "W": 0.65, "C": 0.78, "S": 0.71, "P": 0.95 },
+        "product": 0.342,
+        "scoring_context_hash": "sha256:d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5",
+        "shared": true,
+        "shared_source": "words.manifest:cat"
+      }
+    ],
+    "vector_matches": [
+      { "pattern_id": "explain_cat_purr_001", "cosine": 0.86, "source_vector_row": 52190, "source": "EmbeddingGemma.pattern" }
+    ],
+    "symbolic_evidence": [],
+    "unresolved_gaps": [],
+    "shared_references": [
+      { "ref": "cat", "used_by": ["⟁HUMOR", "⟁EXPLAIN"] }
+    ],
+    "verified_evidence": [],
+    "fold_state": "pending_reduce"
+  },
+  {
+    "schema": "concept-field-accumulator.v1",
+    "concept_id": "⟁REMEMBER",
+    "concept_scope": "remind me what we were building",
+    "state": "candidate",
+    "concept_context_hash": "sha256:e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6",
+    "gram_activations": [
+      {
+        "gram": "remind me",
+        "concept_id": "⟁REMEMBER",
+        "score_components": { "W": 0.91, "C": 0.93, "S": 0.88, "P": 0.97 },
+        "product": 0.726,
+        "scoring_context_hash": "sha256:e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6",
+        "shared": false
+      }
+    ],
+    "vector_matches": [
+      { "pattern_id": "memory_recall_001", "cosine": 0.88, "source_vector_row": 63041, "source": "EmbeddingGemma.pattern" }
+    ],
+    "symbolic_evidence": [],
+    "unresolved_gaps": [],
+    "shared_references": [],
+    "verified_evidence": [],
+    "fold_state": "pending_reduce"
+  },
+  {
+    "schema": "concept-field-accumulator.v1",
+    "concept_id": "⟁SOCIAL",
+    "concept_scope": "Hi, how are you?",
+    "state": "candidate",
+    "concept_context_hash": "sha256:b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3",
+    "gram_activations": [
+      {
+        "gram": "HI HOW ARE YOU",
+        "concept_id": "⟁SOCIAL",
+        "score_components": { "W": 0.92, "C": 0.95, "S": 0.0, "P": 0.99 },
+        "product": 0.0,
+        "scoring_context_hash": "sha256:b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3",
+        "shared": false
+      }
+    ],
+    "vector_matches": [],
+    "symbolic_evidence": [
+      { "kind": "aiml", "ref": "alice.HI_HOW_ARE_YOU", "source": "alice-corpus" }
+    ],
+    "unresolved_gaps": [],
+    "shared_references": [],
+    "verified_evidence": [],
+    "fold_state": "pending_reduce"
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "_fixture_note": "I3 violation: gram_activation has no typed source (neither vector_match nor symbolic_evidence references it).",
+  "_expected_error": "E_ACC_UNTRACED_ACTIVATION",
+  "schema": "concept-field-accumulator.v1",
+  "concept_id": "⟁HUMOR",
+  "concept_scope": "tell me a joke",
+  "state": "candidate",
+  "concept_context_hash": "sha256:a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+  "gram_activations": [
+    {
+      "gram": "tell me a joke",
+      "concept_id": "⟁HUMOR",
+      "score_components": { "W": 0.90, "C": 0.95, "S": 0.91, "P": 0.98 },
+      "product": 0.761,
+      "scoring_context_hash": "sha256:a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+      "shared": false
+    }
+  ],
+  "vector_matches": [],
+  "symbolic_evidence": [],
+  "unresolved_gaps": [],
+  "shared_references": [],
+  "verified_evidence": [],
+  "fold_state": "pending_reduce"
+}

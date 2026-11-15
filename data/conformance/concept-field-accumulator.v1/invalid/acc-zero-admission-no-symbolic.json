@@ -1,0 +1,25 @@
+{
+  "_fixture_note": "I4 violation: S=0 (product=0) with no symbolic_evidence — neither admission path satisfied.",
+  "_expected_error": "E_ACC_ZERO_ADMISSION",
+  "schema": "concept-field-accumulator.v1",
+  "concept_id": "⟁SOCIAL",
+  "concept_scope": "Hi, how are you?",
+  "state": "candidate",
+  "concept_context_hash": "sha256:b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3",
+  "gram_activations": [
+    {
+      "gram": "HI HOW ARE YOU",
+      "concept_id": "⟁SOCIAL",
+      "score_components": { "W": 0.92, "C": 0.95, "S": 0.0, "P": 0.99 },
+      "product": 0.0,
+      "scoring_context_hash": "sha256:b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3",
+      "shared": false
+    }
+  ],
+  "vector_matches": [],
+  "symbolic_evidence": [],
+  "unresolved_gaps": [],
+  "shared_references": [],
+  "verified_evidence": [],
+  "fold_state": "pending_reduce"
+}

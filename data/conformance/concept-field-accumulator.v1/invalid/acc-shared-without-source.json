@@ -1,0 +1,27 @@
+{
+  "_fixture_note": "I2 violation: gram marked shared=true but shared_source is absent.",
+  "_expected_error": "E_ACC_SHARED_WITHOUT_SOURCE",
+  "schema": "concept-field-accumulator.v1",
+  "concept_id": "⟁HUMOR",
+  "concept_scope": "tell me a joke about a cat",
+  "state": "candidate",
+  "concept_context_hash": "sha256:c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4",
+  "gram_activations": [
+    {
+      "gram": "cat",
+      "concept_id": "⟁HUMOR",
+      "score_components": { "W": 0.72, "C": 0.85, "S": 0.83, "P": 0.95 },
+      "product": 0.483,
+      "scoring_context_hash": "sha256:c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4",
+      "shared": true
+    }
+  ],
+  "vector_matches": [
+    { "pattern_id": "joke_cat_001", "cosine": 0.83, "source_vector_row": 41823, "source": "EmbeddingGemma.pattern" }
+  ],
+  "symbolic_evidence": [],
+  "unresolved_gaps": [],
+  "shared_references": [],
+  "verified_evidence": [],
+  "fold_state": "pending_reduce"
+}

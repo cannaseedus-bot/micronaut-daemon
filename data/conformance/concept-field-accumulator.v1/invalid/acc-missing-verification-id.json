@@ -1,0 +1,29 @@
+{
+  "_fixture_note": "I1 violation: state=verified but a verified_evidence entry is missing verification_id.",
+  "_expected_error": "E_ACC_MISSING_VERIFICATION_ID",
+  "schema": "concept-field-accumulator.v1",
+  "concept_id": "⟁HUMOR",
+  "concept_scope": "tell me a joke",
+  "state": "verified",
+  "concept_context_hash": "sha256:a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+  "gram_activations": [
+    {
+      "gram": "tell me a joke",
+      "concept_id": "⟁HUMOR",
+      "score_components": { "W": 0.90, "C": 0.95, "S": 0.91, "P": 0.98 },
+      "product": 0.761,
+      "scoring_context_hash": "sha256:a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+      "shared": false
+    }
+  ],
+  "vector_matches": [
+    { "pattern_id": "joke_generic_001", "cosine": 0.91, "source_vector_row": 7201, "source": "EmbeddingGemma.pattern" }
+  ],
+  "symbolic_evidence": [],
+  "unresolved_gaps": [],
+  "shared_references": [],
+  "verified_evidence": [
+    { "kind": "aiml", "value": "joke_response_a", "admitted": true }
+  ],
+  "fold_state": "complete"
+}

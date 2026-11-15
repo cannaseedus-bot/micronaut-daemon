@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kuhul.dev/schemas/concept-field-accumulator.v1.json",
+  "title": "concept-field-accumulator.v1",
+  "description": "Frozen data model. Consumes micronaut-srai.v1.1 and vector-lane retrieval output. Invariants I1-I4 are normative.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "concept_id", "concept_scope", "state",
+    "gram_activations", "vector_matches", "symbolic_evidence",
+    "unresolved_gaps", "shared_references", "verified_evidence", "fold_state",
+    "concept_context_hash"
+  ],
+  "properties": {
+    "schema":               { "const": "concept-field-accumulator.v1" },
+    "concept_id":           { "type": "string", "pattern": "^⟁[A-Za-z_][A-Za-z0-9_]*$" },
+    "concept_scope":        { "type": "string", "minLength": 1 },
+    "state":                { "enum": ["candidate", "verified"] },
+    "concept_context_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+
+    "gram_activations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["gram", "concept_id", "score_components", "product", "scoring_context_hash"],
+        "properties": {
+          "gram":                 { "type": "string", "minLength": 1 },
+          "concept_id":           { "type": "string", "pattern": "^⟁[A-Za-z_][A-Za-z0-9_]*$" },
+          "score_components": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["W", "C", "S", "P"],
+            "properties": {
+              "W": { "type": "number", "minimum": 0, "maximum": 1 },
+              "C": { "type": "number", "minimum": 0, "maximum": 1 },
+              "S": { "type": "number", "minimum": 0, "maximum": 1 },
+              "P": { "type": "number", "minimum": 0, "maximum": 1 }
+            }
+          },
+          "product":              { "type": "number", "minimum": 0, "maximum": 1 },
+          "scoring_context_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "shared":               { "type": "boolean", "default": false },
+          "shared_source":        { "type": "string" }
+        }
+      }
+    },
+
+    "vector_matches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["pattern_id", "cosine", "source_vector_row", "source"],
+        "properties": {
+          "pattern_id":        { "type": "string" },
+          "cosine":            { "type": "number", "minimum": -1, "maximum": 1 },
+          "source_vector_row": { "type": "integer", "minimum": 0 },
+          "source":            { "enum": ["EmbeddingGemma.pattern", "EmbeddingGemma.template", "EmbeddingGemma.category"] }
+        }
+      }
+    },
+
+    "symbolic_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "ref", "source"],
+        "properties": {
+          "kind":   { "enum": ["aiml", "manifest", "gramstore", "rule"] },
+          "ref":    { "type": "string" },
+          "source": { "type": "string" }
+        }
+      }
+    },
+
+    "unresolved_gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["gap", "severity"],
+        "properties": {
+          "gap":      { "type": "string" },
+          "severity": { "enum": ["soft", "hard"] },
+          "fallback": { "type": "string" }
+        }
+      }
+    },
+
+    "shared_references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ref", "used_by"],
+        "properties": {
+          "ref":     { "type": "string" },
+          "used_by": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+
+    "verified_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "value", "admitted", "verification_id"],
+        "properties": {
+          "kind":            { "type": "string" },
+          "value":           {},
+          "admitted":        { "type": "boolean" },
+          "verification_id": { "type": "string" }
+        }
+      }
+    },
+
+    "fold_state": { "enum": ["pending_reduce", "reduced", "verified"] }
+  }
+}
