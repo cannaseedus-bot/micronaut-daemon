@@ -2,31 +2,8 @@
 
 Add-Type -AssemblyName PresentationFramework, PresentationCore, WindowsBase, System.Windows.Forms
 
-# Use the local WebView2 WPF SDK for the CSS-ML browser trainer.
-$script:WebView2Available = $false
-$script:WebView2Status = 'WebView2 SDK/runtime unavailable'
-$script:CssMlWebView = $null
-$webViewSdkRoot = Join-Path $PSScriptRoot '..\..\.CSS-C\webview2_sdk'
-$webViewManaged = Join-Path $webViewSdkRoot 'lib_manual\netcoreapp3.0'
-$webViewNativeArch = if ([Environment]::Is64BitProcess) { 'win-x64' } else { 'win-x86' }
-$webViewNativeDir = Join-Path $webViewSdkRoot "runtimes\$webViewNativeArch\native"
-try {
-    Add-Type -Path (Join-Path $webViewManaged 'Microsoft.Web.WebView2.Core.dll') -ErrorAction Stop
-    Add-Type -Path (Join-Path $webViewManaged 'Microsoft.Web.WebView2.Wpf.dll') -ErrorAction Stop
-    $env:PATH = "$webViewNativeDir;$env:PATH"
-    $version = [Microsoft.Web.WebView2.Core.CoreWebView2Environment]::GetAvailableBrowserVersionString()
-    $script:WebView2Available = $true
-    $script:WebView2Status = "Edge WebView2 $version"
-} catch {
-    $script:WebView2Status = "WebView2 unavailable: $($_.Exception.Message)"
-}
-
 trap {
-    $msg = @(
-        $_.Exception.ToString()
-        $_.InvocationInfo.PositionMessage
-        "Script stack: $($_.ScriptStackTrace)"
-    ) -join [Environment]::NewLine
+    $msg = $_.Exception.ToString()
     $msg | Out-File (Join-Path $PSScriptRoot 'trainer-dashboard-error.log') -Append -Encoding UTF8
     [System.Windows.MessageBox]::Show($msg, 'Trainer Dashboard Error', 'OK', 'Error') | Out-Null
     break
@@ -41,23 +18,11 @@ $script:IsBusy           = $false
 $script:NativeProcess    = $null
 $script:D3D11Process     = $null
 
-$script:KuhulEsRoot      = Join-Path $PSScriptRoot 'kuhul-es'
-$script:WebView2SmokeExe = Join-Path $script:KuhulEsRoot 'tools\webview2-smoke-test\bin\Debug\net8.0-windows\WebView2Smoke.exe'
-$script:KuhulEsCli       = Join-Path $script:KuhulEsRoot 'bin\kuhul-es.js'
-$script:GemmaScratchTrainer = Join-Path $script:RepoRoot 'tools\train_gemma3_scratch.py'
-$script:GemmaBaselineDir    = Join-Path $script:RepoRoot 'build\gemma3-reasoning-opencl-300m-24h'
-$script:GemmaTokenBin       = Join-Path $script:RepoRoot 'build\gemma3-chat-reasoning\chat.tokens.bin'
-$script:D3D11WorkDir     = Join-Path $script:RepoRoot 'build'
-$script:D3D11TrainerExe  = Join-Path $script:D3D11WorkDir 'Release\gpt2_trainer.exe'
-# The inspect trainer and the daemon checkout use different build layouts.
-# Prefer their conventional Release folders, then keep the UI usable even if
-# this checkout has not built the D3D11 trainer yet.
-if (-not (Test-Path -LiteralPath $script:D3D11TrainerExe -PathType Leaf)) {
-    $alternateTrainer = Join-Path $script:D3D11WorkDir 'gml-stage1\Release\gpt2_trainer.exe'
-    if (Test-Path -LiteralPath $alternateTrainer -PathType Leaf) {
-        $script:D3D11TrainerExe = $alternateTrainer
-    }
-}
+$script:WebView2SmokeExe = Join-Path $script:RepoRoot 'tools\trainer-dashboard\webview2-smoke-test\bin\Debug\net8.0-windows\WebView2Smoke.exe'
+$script:KuhulEsCli       = Join-Path $script:RepoRoot 'tools\trainer-dashboard\kuhul-es\bin\kuhul-es.js'
+$script:PyTrainer        = Join-Path $script:RepoRoot 'tools\pi_kuhul_train.py'
+$script:D3D11TrainerExe  = Join-Path $script:RepoRoot 'tools\bin\gpt2_trainer.exe'
+$script:D3D11WorkDir     = (Resolve-Path (Join-Path $script:RepoRoot 'tools\d3d11-build')).Path
 
 # ── model catalog ─────────────────────────────────────────────────────────────
 $script:ModelCatalog = @(
@@ -125,24 +90,6 @@ $script:ModelCatalog = @(
         Tags        = @('DEFAULT','POP','YAX','CHEN','Q4','Q8','XSHARD')
         StatusNote  = 'Default model  -- Pop/Yax/Ch''en folds * port 17474'
         Path        = 'E:\models\GPT2\gemma-3-1b-it'
-    }
-    [pscustomobject]@{
-        Name        = 'Gemma 3 Reasoning 300M'
-        Family      = 'gemma3-reasoning-scratch'
-        Arch        = 'Gemma3 text * 303,995,904 params'
-        Status      = '24H BASELINE'
-        StatusColor = '#3FB950'
-        TypeLabel   = 'GEMMA 3'
-        Lines       = @(
-            'model.safetensors  1,216,001,416 bytes'
-            '24h CPU forward/backward + OpenCL AdamW update'
-            'sequence length 32  |  18,183 optimizer steps'
-            'training loss 0.5808  |  validation loss 1.7404'
-            'CSS-ML WebGL2 full Gemma training is not wired yet'
-        )
-        Tags        = @('300M','SCRATCH','24H','OPENCL','CHECKPOINT')
-        StatusNote  = 'Current Gemma training baseline · build\gemma3-reasoning-opencl-300m-24h'
-        Path        = Join-Path $script:RepoRoot 'build\gemma3-reasoning-opencl-300m-24h'
     }
     [pscustomobject]@{
         Name        = 'Qwen2.5 0.5B Coder'
@@ -271,7 +218,7 @@ $script:DatasetCatalog = @(
 [xml]$xaml = @"
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="KUHUL TRAINER  |  CSS-ML  |  WebGL2  |  D3D11  |  PyTorch"
+        Title="KUHUL TRAINER  |  HD 4600  |  WebGL2  |  PyTorch"
         Height="960" Width="1340" MinHeight="720" MinWidth="1000"
         WindowStartupLocation="CenterScreen"
         Background="#03120b" FontFamily="Consolas">
@@ -507,7 +454,7 @@ $script:DatasetCatalog = @(
           <Border Grid.Row="0" Background="#0a1c10" BorderBrush="#1a4a2e" BorderThickness="0,0,0,1" Padding="12,0">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
               <TextBlock Text="MODEL REGISTRY" Foreground="#0aff76" FontWeight="Bold" FontSize="12" VerticalAlignment="Center" Margin="0,0,24,0"/>
-              <TextBlock x:Name="ModelCountText" Text="6 models" Foreground="#07cc5e" FontSize="11" VerticalAlignment="Center"/>
+              <TextBlock x:Name="ModelCountText" Text="5 models" Foreground="#07cc5e" FontSize="11" VerticalAlignment="Center"/>
             </StackPanel>
           </Border>
           <ScrollViewer Grid.Row="1" Background="#03120b" VerticalScrollBarVisibility="Auto">
@@ -539,20 +486,6 @@ $script:DatasetCatalog = @(
       <TabItem Header="  TRAINER ">
         <ScrollViewer Background="#03120b" VerticalScrollBarVisibility="Auto">
           <StackPanel Margin="10,8,10,8">
-
-            <!-- CSS-ML / WebGL2 capability and model-size boundary -->
-            <Border Margin="0,0,0,8" Background="#0a1c10"
-                    BorderBrush="#4db8ff" BorderThickness="1" CornerRadius="6" Padding="12">
-              <StackPanel>
-                <TextBlock Text="CSS-ML WEBGL2  *  GPU TENSOR RUNTIME"
-                           Foreground="#4db8ff" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
-                <TextBlock Text="WebGL2 executor: GEMM, linear, and ReLU forward kernels. Backpropagation and AdamW currently use the CPU reference. The connected demo trains a small synthetic MNIST graph; it does not yet train the Gemma 3 300M checkpoint."
-                           Foreground="#b9d9f2" FontSize="11" TextWrapping="Wrap"/>
-                <TextBlock Text="Large checkpoint tensor sweeps remain available through the existing WebGL2 sweep route. The model catalog includes the 300M Gemma baseline and the larger GPT-2/Gemma/Qwen models."
-                           Foreground="#07cc5e" FontSize="11" TextWrapping="Wrap" Margin="0,5,0,0"/>
-                <ContentControl x:Name="CssMlWebViewHost" Height="430" Visibility="Collapsed" Margin="0,10,0,0"/>
-              </StackPanel>
-            </Border>
 
             <!-- D3D11 GPT-2 Section -->
             <Border Margin="0,0,0,8" Background="#0a1c10"
@@ -657,7 +590,7 @@ $script:DatasetCatalog = @(
             <Border Margin="0,0,0,8" Background="#0a1c10"
                     BorderBrush="#1a4a2e" BorderThickness="1" CornerRadius="6" Padding="12">
               <StackPanel>
-                <TextBlock Text="TRAINING PARAMETERS  *  CSS-ML WebGL2 sweeps / Native / PyTorch"
+                <TextBlock Text="TRAINING PARAMETERS  *  WebGL2 / Native / PyTorch"
                            Foreground="#07cc5e" FontWeight="Bold" FontSize="11" Margin="0,0,0,8"/>
                 <Grid>
                   <Grid.ColumnDefinitions>
@@ -741,32 +674,13 @@ $script:DatasetCatalog = @(
             <!-- Action buttons -->
             <Border Margin="0,0,0,8" Background="#0a1c10"
                     BorderBrush="#1a4a2e" BorderThickness="1" CornerRadius="6" Padding="10">
-              <StackPanel>
-                <WrapPanel Orientation="Horizontal" Margin="0,0,0,6">
-                  <TextBlock Text="TRAINING MODE" Foreground="#07cc5e" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                  <ComboBox x:Name="TrainerModeBox" Width="340" Height="27" Margin="0,0,8,0" Style="{StaticResource GreenComboStyle}">
-                    <ComboBoxItem Content="CSS-ML / WebGL2 model trainer" IsSelected="True"/>
-                    <ComboBoxItem Content="PyTorch / OpenCL Gemma 3 300M"/>
-                  </ComboBox>
-                  <Button x:Name="RunTrainerModeBtn" Content="RUN SELECTED MODE" Background="#0d3a1a" Style="{StaticResource GreenBtn}"/>
-                </WrapPanel>
-                <WrapPanel Orientation="Horizontal" Margin="0,0,0,5">
-                  <TextBlock Text="PyTorch output" Foreground="#07cc5e" FontSize="10" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                  <TextBox x:Name="GemmaOutputBox" Width="520" Height="25" Margin="0,0,10,0" Background="#03120b" Foreground="#0aff76" BorderBrush="#1a4a2e" FontFamily="Consolas" FontSize="10" VerticalContentAlignment="Center"/>
-                  <TextBlock Text="Hours" Foreground="#07cc5e" FontSize="10" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                  <TextBox x:Name="GemmaHoursBox" Width="54" Height="25" Text="96" Background="#03120b" Foreground="#0aff76" BorderBrush="#1a4a2e" FontFamily="Consolas" FontSize="10" VerticalContentAlignment="Center"/>
-                </WrapPanel>
-                <TextBlock x:Name="TrainerScriptText" Text="CSS-ML script: .CSS-C demo + css-ml-runtime WebGL2 executor in WebView2"
-                           Foreground="#b9d9f2" FontSize="10" TextWrapping="Wrap"/>
-              </StackPanel>
-            </Border>
-            <Border Margin="0,0,0,8" Background="#0a1c10"
-                    BorderBrush="#1a4a2e" BorderThickness="1" CornerRadius="6" Padding="10">
               <WrapPanel Orientation="Horizontal">
-                <Button x:Name="HfTensorsBtn"   Content="WEBGL2 LARGE MODEL SWEEP" Margin="0,0,6,0" Background="#0d3a1a" Style="{StaticResource GreenBtn}" ToolTip="Run kuhul-es train-webgl2-sweep over the selected Safetensors model"/>
+                <Button x:Name="StartBtn"       Content="HF TENSOR SWEEP"  Margin="0,0,6,0" Background="#0d2e5c" Style="{StaticResource GreenBtn}" Foreground="#4db8ff" BorderBrush="#4db8ff"/>
                 <Button x:Name="StopBtn"        Content="STOP SESSION"      Margin="0,0,6,0" Background="#3a0a0a" Style="{StaticResource GreenBtn}" Foreground="#ff5555" BorderBrush="#ff5555"/>
                 <Button x:Name="NativeGpuBtn"   Content="NATIVE GPU"        Margin="0,0,6,0" Background="#2a1060" Style="{StaticResource GreenBtn}" Foreground="#c084fc" BorderBrush="#c084fc"/>
                 <Button x:Name="XShardBtn"      Content="XSHARD"            Margin="0,0,6,0" Background="#3a1f00" Style="{StaticResource GreenBtn}" Foreground="#F0883E" BorderBrush="#F0883E"/>
+                <Button x:Name="HfTensorsBtn"   Content="HF TENSORS"        Margin="0,0,6,0" Background="#0d3a1a" Style="{StaticResource GreenBtn}"/>
+                <Button x:Name="PyTorchBtn"     Content="PYTORCH"           Margin="0,0,6,0" Background="#3a1010" Style="{StaticResource GreenBtn}" Foreground="#ff8888" BorderBrush="#ff8888" ToolTip="pi_kuhul_train.py  -- PyTorch sharded trainer"/>
                 <Button x:Name="PrepareFourBtn" Content="PREPARE 4 LANES"   Margin="0,0,6,0" Background="#1a0a40" Style="{StaticResource GreenBtn}" Foreground="#a571f7" BorderBrush="#a571f7" ToolTip="Register tool_call/memory/coder/chat FP16 hot-swap lanes"/>
                 <Button x:Name="ClearLogBtn"    Content="CLEAR LOG"         Margin="0,0,0,0" Background="#0d2415" Style="{StaticResource GreenBtn}" Foreground="#07cc5e" BorderBrush="#07cc5e"/>
               </WrapPanel>
@@ -800,7 +714,7 @@ $script:DatasetCatalog = @(
             BorderBrush="#0aff76" BorderThickness="0,1,0,0" Padding="12,0">
       <Grid>
         <TextBlock x:Name="StatusBarLeft"
-                   Text="KUHUL TRAINER  *  CSS-ML WebGL2  *  HD 4600 D3D11  *  Native / PyTorch"
+                   Text="KUHUL TRAINER  *  HD 4600 D3D11  *  WebGL2  *  PyTorch"
                    Foreground="#07cc5e" FontFamily="Consolas" FontSize="10"
                    VerticalAlignment="Center"/>
         <TextBlock x:Name="StatusBarRight"
@@ -885,16 +799,12 @@ $saveEveryBox        = $window.FindName('SaveEveryBox')
 $shardEveryBox       = $window.FindName('ShardEveryBox')
 $maxSamplesBox       = $window.FindName('MaxSamplesBox')
 $tokenizerBox        = $window.FindName('TokenizerBox')
-$trainerModeBox      = $window.FindName('TrainerModeBox')
-$runTrainerModeBtn   = $window.FindName('RunTrainerModeBtn')
-$gemmaOutputBox      = $window.FindName('GemmaOutputBox')
-$gemmaHoursBox       = $window.FindName('GemmaHoursBox')
-$trainerScriptText   = $window.FindName('TrainerScriptText')
-$cssMlWebViewHost    = $window.FindName('CssMlWebViewHost')
+$startBtn            = $window.FindName('StartBtn')
 $stopBtn             = $window.FindName('StopBtn')
 $nativeGpuBtn        = $window.FindName('NativeGpuBtn')
 $xShardBtn           = $window.FindName('XShardBtn')
 $hfTensorsBtn        = $window.FindName('HfTensorsBtn')
+$pyTorchBtn          = $window.FindName('PyTorchBtn')
 $prepareFourBtn      = $window.FindName('PrepareFourBtn')
 $clearLogBtn         = $window.FindName('ClearLogBtn')
 $eventsList          = $window.FindName('EventsList')
@@ -934,10 +844,8 @@ function New-HolotapeCard {
     $c1.Width = [System.Windows.GridLength]::new(1, [System.Windows.GridUnitType]::Star)
     $c2 = [System.Windows.Controls.ColumnDefinition]::new()
     $c2.Width = [System.Windows.GridLength]::Auto
-    # Cast to the exact WPF collection item types. Windows PowerShell 5.1's
-    # method binder can otherwise fail to resolve Add() for these collections.
-    [void]$hdrGrid.ColumnDefinitions.Add([System.Windows.Controls.ColumnDefinition]$c1)
-    [void]$hdrGrid.ColumnDefinitions.Add([System.Windows.Controls.ColumnDefinition]$c2)
+    $hdrGrid.ColumnDefinitions.Add($c1)
+    $hdrGrid.ColumnDefinitions.Add($c2)
 
     $titleRow = [System.Windows.Controls.StackPanel]::new()
     $titleRow.Orientation = [System.Windows.Controls.Orientation]::Horizontal
@@ -948,7 +856,7 @@ function New-HolotapeCard {
     $dot.Fill    = $conv.ConvertFromString($StatusColor)
     $dot.VerticalAlignment = [System.Windows.VerticalAlignment]::Center
     $dot.Margin  = [System.Windows.Thickness]::new(0,0,8,0)
-    [void]$titleRow.Children.Add([System.Windows.UIElement]$dot)
+    $titleRow.Children.Add($dot) | Out-Null
 
     $titleTb = [System.Windows.Controls.TextBlock]::new()
     $titleTb.Text       = $Title
@@ -957,10 +865,10 @@ function New-HolotapeCard {
     $titleTb.FontSize   = 13
     $titleTb.FontFamily = [System.Windows.Media.FontFamily]::new('Consolas')
     $titleTb.VerticalAlignment = [System.Windows.VerticalAlignment]::Center
-    [void]$titleRow.Children.Add([System.Windows.UIElement]$titleTb)
+    $titleRow.Children.Add($titleTb) | Out-Null
 
     [System.Windows.Controls.Grid]::SetColumn($titleRow, 0)
-    [void]$hdrGrid.Children.Add([System.Windows.UIElement]$titleRow)
+    $hdrGrid.Children.Add($titleRow) | Out-Null
 
     $badge = [System.Windows.Controls.Border]::new()
     $badge.BorderBrush     = $conv.ConvertFromString('#0aff76')
@@ -975,8 +883,8 @@ function New-HolotapeCard {
     $badgeTb.FontFamily = [System.Windows.Media.FontFamily]::new('Consolas')
     $badge.Child = $badgeTb
     [System.Windows.Controls.Grid]::SetColumn($badge, 1)
-    [void]$hdrGrid.Children.Add([System.Windows.UIElement]$badge)
-    [void]$root.Children.Add([System.Windows.UIElement]$hdrGrid)
+    $hdrGrid.Children.Add($badge) | Out-Null
+    $root.Children.Add($hdrGrid) | Out-Null
 
     # arch / family subtitle
     if ($Arch) {
@@ -986,7 +894,7 @@ function New-HolotapeCard {
         $archTb.FontSize   = 11
         $archTb.FontFamily = [System.Windows.Media.FontFamily]::new('Consolas')
         $archTb.Margin     = [System.Windows.Thickness]::new(17,4,0,0)
-        [void]$root.Children.Add([System.Windows.UIElement]$archTb)
+        $root.Children.Add($archTb) | Out-Null
     }
 
     # separator
@@ -994,7 +902,7 @@ function New-HolotapeCard {
     $sep.Height = 1
     $sep.Fill   = $conv.ConvertFromString('#1a4a2e')
     $sep.Margin = [System.Windows.Thickness]::new(0,8,0,8)
-    [void]$root.Children.Add([System.Windows.UIElement]$sep)
+    $root.Children.Add($sep) | Out-Null
 
     # detail lines
     foreach ($ln in $Lines) {
@@ -1005,7 +913,7 @@ function New-HolotapeCard {
         $lineTb.FontFamily  = [System.Windows.Media.FontFamily]::new('Consolas')
         $lineTb.TextWrapping = [System.Windows.TextWrapping]::Wrap
         $lineTb.Margin      = [System.Windows.Thickness]::new(0,1,0,1)
-        [void]$root.Children.Add([System.Windows.UIElement]$lineTb)
+        $root.Children.Add($lineTb) | Out-Null
     }
 
     # tags
@@ -1026,9 +934,9 @@ function New-HolotapeCard {
             $ttb.FontSize   = 10
             $ttb.FontFamily = [System.Windows.Media.FontFamily]::new('Consolas')
             $tb.Child = $ttb
-            [void]$tagWrap.Children.Add([System.Windows.UIElement]$tb)
+            $tagWrap.Children.Add($tb) | Out-Null
         }
-        [void]$root.Children.Add([System.Windows.UIElement]$tagWrap)
+        $root.Children.Add($tagWrap) | Out-Null
     }
 
     # status note footer
@@ -1045,7 +953,7 @@ function New-HolotapeCard {
         $noteTb.FontFamily  = [System.Windows.Media.FontFamily]::new('Consolas')
         $noteTb.TextWrapping = [System.Windows.TextWrapping]::Wrap
         $noteBorder.Child   = $noteTb
-        [void]$root.Children.Add([System.Windows.UIElement]$noteBorder)
+        $root.Children.Add($noteBorder) | Out-Null
     }
 
     $card.Child = $root
@@ -1062,7 +970,7 @@ foreach ($m in $script:ModelCatalog) {
         -StatusNote  $m.StatusNote `
         -StatusColor $m.StatusColor `
         -TypeLabel   $m.TypeLabel
-    [void]$modelsPanel.Children.Add([System.Windows.UIElement]$card)
+    $modelsPanel.Children.Add($card) | Out-Null
 }
 $modelCountText.Text = "$($script:ModelCatalog.Count) models registered"
 
@@ -1077,7 +985,7 @@ foreach ($d in $script:DatasetCatalog) {
         -StatusNote  $d.StatusNote `
         -StatusColor $d.StatusColor `
         -TypeLabel   $d.TypeLabel
-    [void]$datasetsPanel.Children.Add([System.Windows.UIElement]$card)
+    $datasetsPanel.Children.Add($card) | Out-Null
 }
 $datasetCountText.Text = "$($script:DatasetCatalog.Count) datasets registered"
 
@@ -1096,7 +1004,7 @@ function Add-EventLog([string]$line) {
     $item = [System.Windows.Controls.ListBoxItem]::new()
     $item.Content    = $line
     $item.Foreground = $script:GreenBrush
-    [void]$eventsList.Items.Add([object]$item)
+    $eventsList.Items.Add($item) | Out-Null
     $eventsList.ScrollIntoView($item)
 }
 
@@ -1404,12 +1312,6 @@ function Start-HfTensorSweep {
     if (-not $inputPath) { throw 'Input safetensors path is required.' }
     if (-not (Test-Path $inputPath)) { throw "Input not found: $inputPath" }
     if (-not (Test-Path $script:KuhulEsCli)) { throw "kuhul-es CLI not found: $($script:KuhulEsCli)" }
-    $sweepWrapper = Join-Path $script:KuhulEsRoot 'runtime\src\webgl2_hf_safetensor_trainer.cjs'
-    $expectedSweepImpl = Join-Path (Split-Path $script:KuhulEsRoot -Parent) 'kuhul-runtime-v1\trainer\webgl2_hf_safetensor_trainer.cjs'
-    if (-not (Test-Path -LiteralPath $sweepWrapper -PathType Leaf)) { throw "WebGL2 sweep wrapper missing: $sweepWrapper" }
-    if (-not (Test-Path -LiteralPath $expectedSweepImpl -PathType Leaf)) {
-        throw "WebGL2 sweep implementation missing: $expectedSweepImpl. The kuhul-es CLI is present, but its wrapper has no trainer implementation to launch."
-    }
     $bins = @(Split-TokenBins $tokenBinsBox.Text); if ($bins.Count -lt 1) { throw 'Token bin required.' }
     $dataPath = $bins[0]; if (-not (Test-Path $dataPath)) { throw "Token bin not found: $dataPath" }
     $hfOut  = Get-HfTensorOutputPath $inputPath $outputBox.Text.Trim()
@@ -1428,147 +1330,27 @@ function Start-HfTensorSweep {
 }
 
 function Start-PyTorchTraining {
-    if (-not (Test-Path -LiteralPath $script:GemmaScratchTrainer -PathType Leaf)) { throw "PyTorch Gemma trainer not found: $($script:GemmaScratchTrainer)" }
-    if (-not (Test-Path -LiteralPath $script:GemmaTokenBin -PathType Leaf)) { throw "Gemma token bin not found: $($script:GemmaTokenBin)" }
-    if (-not (Test-Path -LiteralPath (Join-Path $script:GemmaBaselineDir 'tokenizer.json') -PathType Leaf)) { throw "Gemma 300M baseline/tokenizer not found: $($script:GemmaBaselineDir)" }
-    $hours = 0.0
-    if (-not [double]::TryParse($gemmaHoursBox.Text.Trim(), [ref]$hours) -or $hours -le 0) { throw 'Training hours must be a positive number.' }
-    $runOutput = $gemmaOutputBox.Text.Trim()
-    if (-not $runOutput) { throw 'Choose a PyTorch output directory.' }
-    if (-not [System.IO.Path]::IsPathRooted($runOutput)) { $runOutput = Join-Path $script:RepoRoot $runOutput }
-    $python = (Get-Command 'python.exe' -ErrorAction Stop).Source
-    $pyArgs = @(
-        (Quote-NativeArg $script:GemmaScratchTrainer),
-        '--tokens', (Quote-NativeArg $script:GemmaTokenBin),
-        '--tokenizer-dir', (Quote-NativeArg $script:GemmaBaselineDir),
-        '--model-config', (Quote-NativeArg (Join-Path $script:GemmaBaselineDir 'config.json')),
-        '--output', (Quote-NativeArg $runOutput),
-        '--max-hours', ([string]$hours),
-        '--checkpoint-every', '1000',
-        '--model-preset', '300m',
-        '--sequence-length', '32',
-        '--optimizer-backend', 'opencl',
-        '--threads', '4',
-        '--initialize-from', (Quote-NativeArg $script:GemmaBaselineDir)
-    )
-    $psi = [System.Diagnostics.ProcessStartInfo]::new(); $psi.FileName=$python; $psi.Arguments=($pyArgs -join ' '); $psi.WorkingDirectory=$script:RepoRoot; $psi.UseShellExecute=$false; $psi.RedirectStandardOutput=$true; $psi.RedirectStandardError=$true; $psi.CreateNoWindow=$true
+    if (-not (Test-Path $script:PyTrainer)) { throw "PyTorch trainer not found: $($script:PyTrainer)" }
+    $bins = @(Split-TokenBins $tokenBinsBox.Text); if ($bins.Count -lt 1) { throw 'Token bins[0] = training data JSONL.' }
+    $dataPath = $bins[0]; if (-not (Test-Path $dataPath)) { throw "Training data not found: $dataPath" }
+    $shardDir  = $outputBox.Text.Trim()
+    if (-not $shardDir) { $shardDir = Join-Path $script:RepoRoot 'models\from_zero\pi_kuhul_shards' }
+    $ckptDir   = Join-Path ([System.IO.Path]::GetDirectoryName($shardDir)) 'pi_kuhul_checkpoints'
+    $tokenizer = if ($tokenizerBox.SelectedItem -and $tokenizerBox.SelectedItem.Content) { $tokenizerBox.SelectedItem.Content.ToString() } else { 'word' }
+    $resume    = $inputBox.Text.Trim()
+    $pyArgs    = @( (Quote-NativeArg $script:PyTrainer),'--data',(Quote-NativeArg $dataPath),'--shard-dir',(Quote-NativeArg $shardDir),'--ckpt-dir',(Quote-NativeArg $ckptDir),'--steps',([string][int]$stepsBox.Text.Trim()),'--batch',([string][int]$batchBox.Text.Trim()),'--lr',([string][double]$lrBox.Text.Trim()),'--block',([string][int]$blockBox.Text.Trim()),'--num-shards',([string][int]$numShardsBox.Text.Trim()),'--save-every',([string][int]$saveEveryBox.Text.Trim()),'--shard-every',([string][int]$shardEveryBox.Text.Trim()),'--tokenizer',(Quote-NativeArg $tokenizer) )
+    $ms = $maxSamplesBox.Text.Trim(); if ($ms) { $pyArgs += @('--max-samples',([string][int]$ms)) }
+    if ($resume -and $resume -like '*.pt' -and (Test-Path $resume)) { $pyArgs += @('--resume',(Quote-NativeArg $resume)) }
+    $psi = [System.Diagnostics.ProcessStartInfo]::new(); $psi.FileName='python.exe'; $psi.Arguments=($pyArgs -join ' '); $psi.WorkingDirectory=(Join-Path $script:RepoRoot 'tools'); $psi.UseShellExecute=$false; $psi.RedirectStandardOutput=$true; $psi.RedirectStandardError=$true; $psi.CreateNoWindow=$true
     $proc = [System.Diagnostics.Process]::new(); $proc.StartInfo=$psi; $proc.EnableRaisingEvents=$true
-    Register-ObjectEvent -InputObject $proc -EventName OutputDataReceived -Action { if ($EventArgs.Data) { $window.Dispatcher.BeginInvoke([Action[string]]{ param($l); Add-EventLog("[pytorch-opencl] $l") }, $EventArgs.Data) | Out-Null } } | Out-Null
-    Register-ObjectEvent -InputObject $proc -EventName ErrorDataReceived  -Action { if ($EventArgs.Data) { $window.Dispatcher.BeginInvoke([Action[string]]{ param($l); Add-EventLog("[pytorch-opencl-err] $l") }, $EventArgs.Data) | Out-Null } } | Out-Null
-    Register-ObjectEvent -InputObject $proc -EventName Exited -Action { $c=$Event.Sender.ExitCode; $window.Dispatcher.BeginInvoke([Action[int]]{ param($ec); $script:NativeProcess=$null; Add-EventLog("[pytorch-opencl] exit $ec") }, $c) | Out-Null } | Out-Null
-    if (-not $proc.Start()) { throw 'Failed to start PyTorch/OpenCL Gemma trainer.' }
+    Register-ObjectEvent -InputObject $proc -EventName OutputDataReceived -Action { if ($EventArgs.Data) { $window.Dispatcher.BeginInvoke([Action[string]]{ param($l); Add-EventLog("[pytorch] $l") }, $EventArgs.Data) | Out-Null } } | Out-Null
+    Register-ObjectEvent -InputObject $proc -EventName ErrorDataReceived  -Action { if ($EventArgs.Data) { $window.Dispatcher.BeginInvoke([Action[string]]{ param($l); Add-EventLog("[pytorch-err] $l") }, $EventArgs.Data) | Out-Null } } | Out-Null
+    Register-ObjectEvent -InputObject $proc -EventName Exited -Action { $c=$Event.Sender.ExitCode; $window.Dispatcher.BeginInvoke([Action[int]]{ param($ec); $script:NativeProcess=$null; Add-EventLog("[pytorch] exit $ec") }, $c) | Out-Null } | Out-Null
+    if (-not $proc.Start()) { throw 'Failed to start PyTorch trainer.' }
     $proc.BeginOutputReadLine(); $proc.BeginErrorReadLine()
     $script:NativeProcess = $proc
-    Update-SessionStatusText -status 'running' -sessionId 'pytorch-gemma3-300m' -progressText "pid=$($proc.Id)"
-    Add-EventLog("[pytorch-opencl] started pid=$($proc.Id) baseline=$($script:GemmaBaselineDir) output=$runOutput hours=$hours checkpoint_every=1000")
-}
-
-function Set-CssMlHostMessage([string]$message) {
-    $text = [System.Windows.Controls.TextBlock]::new()
-    $text.Text = $message
-    $text.Foreground = [System.Windows.Media.BrushConverter]::new().ConvertFromString('#ffb86b')
-    $text.FontFamily = [System.Windows.Media.FontFamily]::new('Consolas')
-    $text.FontSize = 11
-    $text.TextWrapping = [System.Windows.TextWrapping]::Wrap
-    $text.Margin = [System.Windows.Thickness]::new(8)
-    $cssMlWebViewHost.Content = $text
-    $cssMlWebViewHost.Visibility = [System.Windows.Visibility]::Visible
-}
-
-function Show-CssMlTrainer {
-    if (-not $script:WebView2Available) { throw $script:WebView2Status }
-    if (-not $script:CssMlWebView) {
-        $control = [Microsoft.Web.WebView2.Wpf.WebView2]::new()
-        $control.HorizontalAlignment = [System.Windows.HorizontalAlignment]::Stretch
-        $control.VerticalAlignment = [System.Windows.VerticalAlignment]::Stretch
-        $control.CreationProperties = [Microsoft.Web.WebView2.Wpf.CoreWebView2CreationProperties]::new()
-        $control.CreationProperties.UserDataFolder = Join-Path $env:LOCALAPPDATA 'Micronaut\TrainerWebView2'
-        $control.CreationProperties.AdditionalBrowserArguments = '--disable-background-timer-throttling --disable-renderer-backgrounding'
-        $script:CssMlWebView = $control
-        $cssMlWebViewHost.Content = $control
-        $cssRoot = Join-Path $script:RepoRoot '.CSS-C'
-        $control.Add_Loaded(({
-            $view = $this
-            if ($view.CoreWebView2) {
-                $view.CoreWebView2.Navigate('https://cssml.local/demo/gsnr-universe.html#css-gemm-card')
-                return
-            }
-            $initTask = $view.EnsureCoreWebView2Async($null)
-            $initTimer = [System.Windows.Threading.DispatcherTimer]::new()
-            $initTimer.Interval = [TimeSpan]::FromMilliseconds(100)
-            $initTimer.Add_Tick(({
-                if (-not $initTask.IsCompleted) { return }
-                $initTimer.Stop()
-                if ($initTask.IsFaulted) {
-                    Set-CssMlHostMessage "WebView2 initialization failed: $($initTask.Exception.GetBaseException().Message)"
-                    return
-                }
-                try {
-                    $view.CoreWebView2.SetVirtualHostNameToFolderMapping(
-                        'cssml.local', $cssRoot,
-                        [Microsoft.Web.WebView2.Core.CoreWebView2HostResourceAccessKind]::Allow
-                    )
-                    $view.CoreWebView2.add_WebMessageReceived({
-                        param($sender, $eventArgs)
-                        try {
-                            $raw = [string]$eventArgs.TryGetWebMessageAsString()
-                            if ($raw.Length -gt 2048) { return }
-                            $message = $raw | ConvertFrom-Json -ErrorAction Stop
-                            if ($message.source -eq 'css-gemm' -and $message.type -eq 'trainer.completed') {
-                                Add-EventLog("[css-ml] $($message.renderer) · $($message.steps) step(s) · loss=$($message.loss) · synthetic samples=$($message.samples)")
-                            }
-                        } catch { }
-                    })
-                    $view.CoreWebView2.Navigate('https://cssml.local/demo/gsnr-universe.html#css-gemm-card')
-                    Add-EventLog('[css-ml] WebView2 mapped cssml.local to the local .CSS-C runtime')
-                } catch {
-                    Set-CssMlHostMessage "CSS-ML page setup failed: $($_.Exception.Message)"
-                }
-            }).GetNewClosure())
-            $initTimer.Start()
-        }).GetNewClosure())
-    } else {
-        $cssMlWebViewHost.Content = $script:CssMlWebView
-        if ($script:CssMlWebView.CoreWebView2) {
-            $script:CssMlWebView.CoreWebView2.Navigate('https://cssml.local/demo/gsnr-universe.html#css-gemm-card')
-        }
-    }
-    $cssMlWebViewHost.Visibility = [System.Windows.Visibility]::Visible
-    $cssMlWebViewHost.BringIntoView()
-    Add-EventLog('[css-ml] in-app WebGL2 demo opened; press TRAIN MODEL inside the page to run its demo graph')
-}
-
-function Get-SelectedTrainerMode {
-    if ($trainerModeBox.SelectedItem -and $trainerModeBox.SelectedItem.Content) {
-        return [string]$trainerModeBox.SelectedItem.Content
-    }
-    return 'CSS-ML / WebGL2 checkpoint sweep'
-}
-
-function Update-TrainerModeDescription {
-    $mode = Get-SelectedTrainerMode
-    if ($mode -like 'PyTorch*') {
-        $trainerScriptText.Text = "Script: $($script:GemmaScratchTrainer) · 300M warm-start · CPU forward/backward + OpenCL AdamW"
-        $trainerScriptText.Foreground = [System.Windows.Media.BrushConverter]::new().ConvertFromString('#ffb86b')
-        $cssMlWebViewHost.Visibility = [System.Windows.Visibility]::Collapsed
-    } else {
-        $trainerScriptText.Text = "WebView2: .CSS-C/demo/gsnr-universe.html · CSS-ML synthetic graph · WebGL2 forward kernels + CPU backprop/AdamW"
-        $trainerScriptText.Foreground = [System.Windows.Media.BrushConverter]::new().ConvertFromString('#b9d9f2')
-        $cssMlWebViewHost.Visibility = [System.Windows.Visibility]::Collapsed
-    }
-}
-
-function Start-SelectedTrainerMode {
-    if ($script:NativeProcess -and -not $script:NativeProcess.HasExited) {
-        throw "A trainer process is already running (pid=$($script:NativeProcess.Id))."
-    }
-    $mode = Get-SelectedTrainerMode
-    if ($mode -like 'PyTorch*') {
-        $cssMlWebViewHost.Visibility = [System.Windows.Visibility]::Collapsed
-        Start-PyTorchTraining
-    } else {
-        Show-CssMlTrainer
-    }
+    Update-SessionStatusText -status 'running' -sessionId 'pytorch' -progressText "pid=$($proc.Id)"
+    Add-EventLog("[pytorch] started pid=$($proc.Id) data=$dataPath shards=$shardDir steps=$([int]$stepsBox.Text.Trim())")
 }
 
 function Prepare-FourMicronautLanes {
@@ -1668,21 +1450,20 @@ $d3d11KillBtn.Add_Click({
     } else { Add-EventLog("[D3D11] no active process") }
 })
 
-$trainerModeBox.Add_SelectionChanged({ Update-TrainerModeDescription })
-$runTrainerModeBtn.Add_Click({
-    try { Start-SelectedTrainerMode } catch { Add-EventLog("[trainer-mode-err] $($_.Exception.Message)") }
-})
-$hfTensorsBtn.Add_Click({
-    try {
-        if ($script:NativeProcess -and -not $script:NativeProcess.HasExited) { throw "A trainer process is already running (pid=$($script:NativeProcess.Id))." }
-        Start-HfTensorSweep
-    } catch { Add-EventLog("[webgl2-sweep-err] $($_.Exception.Message)") }
+$startBtn.Add_Click({
+    try { if ($script:NativeProcess -and -not $script:NativeProcess.HasExited) { Add-EventLog("[hf] already running pid=$($script:NativeProcess.Id)"); return }; Start-HfTensorSweep } catch { Add-EventLog("[hf-err] $($_.Exception.Message)") }
 })
 $nativeGpuBtn.Add_Click({
     try { if ($script:NativeProcess -and -not $script:NativeProcess.HasExited) { Add-EventLog("[native] already running pid=$($script:NativeProcess.Id)"); return }; Start-NativeGpuTraining } catch { Add-EventLog("[native-err] $($_.Exception.Message)") }
 })
 $xShardBtn.Add_Click({
     try { if ($script:NativeProcess -and -not $script:NativeProcess.HasExited) { Add-EventLog("[xshard] already running pid=$($script:NativeProcess.Id)"); return }; Start-XShardTraining } catch { Add-EventLog("[xshard-err] $($_.Exception.Message)") }
+})
+$hfTensorsBtn.Add_Click({
+    try { if ($script:NativeProcess -and -not $script:NativeProcess.HasExited) { Add-EventLog("[hf] already running pid=$($script:NativeProcess.Id)"); return }; Start-HfTensorSweep } catch { Add-EventLog("[hf-err] $($_.Exception.Message)") }
+})
+$pyTorchBtn.Add_Click({
+    try { if ($script:NativeProcess -and -not $script:NativeProcess.HasExited) { Add-EventLog("[pytorch] already running pid=$($script:NativeProcess.Id)"); return }; Start-PyTorchTraining } catch { Add-EventLog("[pytorch-err] $($_.Exception.Message)") }
 })
 $prepareFourBtn.Add_Click({ try { Prepare-FourMicronautLanes } catch { Add-EventLog("[4-lane] error: $($_.Exception.Message)") } })
 $clearLogBtn.Add_Click({ $eventsList.Items.Clear() })
@@ -1705,8 +1486,6 @@ $window.Add_Closed({
 # ── defaults ──────────────────────────────────────────────────────────────────
 $inputBox.Text            = 'E:\models\GPT2\coder_micronaut\ultrachat_coder_slerp_0p35.webgl2.dashboard.safetensors'
 $outputBox.Text           = 'E:\models\GPT2\micronaut_four_lanes_v2'
-$gemmaOutputBox.Text       = Join-Path $script:RepoRoot ("build\gemma3-reasoning-opencl-300m-96h-{0}" -f (Get-Date -Format 'yyyyMMdd-HHmmss'))
-$gemmaHoursBox.Text        = '96'
 $xjslOutBox.Text          = 'E:\models\GPT2\micronaut_four_lanes_v2\four-lane-manifest.json'
 $tokenBinsBox.Text        = 'E:\models\GPT2\coder_micronaut\coder_ast_json_seq256_tokens.bin'
 $trainDimBox.Text         = '1024'
@@ -1721,14 +1500,12 @@ $saveEveryBox.Text        = '200'
 $shardEveryBox.Text       = '500'
 $maxSamplesBox.Text       = ''
 $tokenizerBox.SelectedIndex = 0
-Update-TrainerModeDescription
 
 # ── init ──────────────────────────────────────────────────────────────────────
 [void](Test-KuhulServer)
 Update-D3D11LogTail
 
-Add-EventLog("[init] KUHUL Trainer  -- CSS-ML WebGL2 * HD 4600 D3D11 * Native * PyTorch")
-Add-EventLog("[init] Trainer modes: CSS-ML WebGL2 checkpoint sweep or PyTorch/OpenCL Gemma 3 300M")
+Add-EventLog("[init] KUHUL Trainer  -- HD 4600 D3D11 * WebGL2 * Native * PyTorch")
 Add-EventLog("[init] D3D11: gpt2-small phase 1  -- stack corpus 10K steps  -- log tailing every 2s")
 Add-EventLog("[init] Gemma 3 1B ACTIVE on port 17474  -- default fold model (Pop/Yax/Ch'en)")
 Add-EventLog("[init] tip: Phase 2 auto-fills data=stack_phase2.bin, lr=1e-5, steps=2000, --completion-only")
