@@ -21,8 +21,9 @@ sys.path.insert(0, str(ROOT / "tools" / "scripts"))
 
 from encode_gemma_query import encode  # noqa: E402
 
-VECTORS = ROOT / "build/io/aiml-embeddinggemma2-vectors/pattern_vectors.f32.npy"
-PAIRS   = ROOT / "build/io/aiml-embeddinggemma2-vectors/aiml_pattern_template_pairs.jsonl"
+MANIFEST = ROOT / "build/io/aiml-embeddinggemma2-vectors/manifest.json"
+VECTORS  = ROOT / "build/io/aiml-embeddinggemma2-vectors/pattern_vectors.f32.npy"
+PAIRS    = ROOT / "build/io/aiml-embeddinggemma2-vectors/aiml_pattern_template_pairs.jsonl"
 WORDS   = ROOT / "data/manifest/words.manifest.json"
 
 
@@ -56,7 +57,7 @@ def concept_fields_for(gram: str, words: dict) -> list[str]:
 
 
 def run(text: str, top_k: int) -> list[dict]:
-    vector, meta = encode(text)
+    vector, meta = encode(text, manifest_path=MANIFEST)
     patterns = np.load(VECTORS, mmap_mode="r")
     scores = np.asarray(patterns @ vector, dtype=np.float64)
     top_idx = np.argsort(scores)[::-1][:top_k]
