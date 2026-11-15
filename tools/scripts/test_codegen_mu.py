@@ -13,15 +13,17 @@ _spec = importlib.util.spec_from_file_location(
 _mod = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_mod)
 
-detect_language    = _mod.detect_language
-classify_language  = _mod.classify_language
-lookup_bigrams     = _mod.lookup_bigrams
+detect_language     = _mod.detect_language
+classify_language   = _mod.classify_language
+lookup_bigrams      = _mod.lookup_bigrams
 validate_gemma3_ast = _mod.validate_gemma3_ast
-compile_ir         = _mod.compile_ir
-build_diff_preview = _mod.build_diff_preview
-generate_proposal  = _mod.generate_proposal
-route_label        = _mod.route_label
-LANGUAGE_MAP       = _mod.LANGUAGE_MAP
+compile_ir          = _mod.compile_ir
+build_diff_preview  = _mod.build_diff_preview
+generate_proposal   = _mod.generate_proposal
+route_label         = _mod.route_label
+load_attachment     = _mod.load_attachment
+_OP_TO_TASK         = _mod._OP_TO_TASK
+LANGUAGE_MAP        = _mod.LANGUAGE_MAP
 
 
 # ── 1. detect_language ────────────────────────────────────────────────────────
@@ -240,6 +242,79 @@ for task, verb in [("edit","edit"), ("refactor","refactor"),
     assert "TRACK:CODEGEN-" in lbl
 
 print("PASS route_label")
+
+
+# ── 11. load_attachment ───────────────────────────────────────────────────────
+
+import tempfile, os
+
+# valid full CodeTask
+task_json = {
+    "op": "code.edit",
+    "language": "cpp",
+    "file": "src/sek.cpp",
+    "prompt": "replace compute_score",
+    "gemma3": {"op": "replace_function", "name": "compute_score",
+                "body": "float compute_score() {}", "reason": "simplify"},
+}
+with tempfile.NamedTemporaryFile(mode="w", suffix="-edit-task.json",
+                                  delete=False, encoding="utf-8") as tf:
+    json.dump(task_json, tf)
+    tmp_path = pathlib.Path(tf.name)
+
+try:
+    att = load_attachment(tmp_path)
+    assert att["language"] == "cpp"
+    assert att["prompt"] == "replace compute_score"
+    assert att["gemma3"]["op"] == "replace_function"
+finally:
+    os.unlink(tmp_path)
+
+# hyphenated filename handled correctly
+with tempfile.NamedTemporaryFile(mode="w", suffix="-my-file-name.json",
+                                  delete=False, encoding="utf-8") as tf:
+    json.dump({"task": "generate", "language": "py", "prompt": "encode"}, tf)
+    hyphen_path = pathlib.Path(tf.name)
+try:
+    att2 = load_attachment(hyphen_path)
+    assert att2["task"] == "generate"
+finally:
+    os.unlink(hyphen_path)
+
+# missing file raises ValueError
+try:
+    load_attachment(pathlib.Path("/nonexistent/no-such-file.json"))
+    raise AssertionError("missing file accepted")
+except ValueError:
+    pass
+
+# non-object JSON raises ValueError
+with tempfile.NamedTemporaryFile(mode="w", suffix=".json",
+                                  delete=False, encoding="utf-8") as tf:
+    tf.write("[1,2,3]")
+    arr_path = pathlib.Path(tf.name)
+try:
+    load_attachment(arr_path)
+    raise AssertionError("JSON array accepted as attachment")
+except ValueError:
+    pass
+finally:
+    os.unlink(arr_path)
+
+print("PASS load_attachment")
+
+
+# ── 12. _OP_TO_TASK map ───────────────────────────────────────────────────────
+
+assert _OP_TO_TASK["code.edit"]      == "edit"
+assert _OP_TO_TASK["code.generate"]  == "generate"
+assert _OP_TO_TASK["code.refactor"]  == "refactor"
+assert _OP_TO_TASK["code.debug"]     == "debug"
+assert _OP_TO_TASK["code.test"]      == "test"
+assert _OP_TO_TASK["chat.generate"]  == "generate"
+assert "unknown.op" not in _OP_TO_TASK
+
+print("PASS _OP_TO_TASK")
 
 
 print("\nAll codegen-mu tests passed.")

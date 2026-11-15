@@ -11,7 +11,13 @@ All output carries authority: candidate_only.
 XCFE Ch'en admission is required before any edit crosses into the file system.
 
 Usage:
-    # Generate from bigram corpus
+    # Attach a full CodeTask JSON (supplies prompt, file, language, task, gemma3)
+    python scripts/codegen-mu.py --attach path/to/edit-task.json
+
+    # Attach with CLI overrides (CLI wins over attachment)
+    python scripts/codegen-mu.py --attach edit-task.json --task refactor
+
+    # Generate from bigram corpus (no attachment)
     python scripts/codegen-mu.py "compute_score function" --lang cpp --task generate
 
     # Plan a file edit (calls Gemma 3 for the edit AST)
@@ -24,6 +30,16 @@ Usage:
 
     # Refactor / debug / test variants
     python scripts/codegen-mu.py "extract magic numbers" --file src/sek.cpp --task refactor
+
+Attachment JSON shape (CodeTask — any subset of fields):
+    {
+      "op":       "code.edit",          // or task field below
+      "task":     "edit",               // generate|edit|refactor|debug|test|implement
+      "language": "cpp",
+      "file":     "src/xcfe_router.cpp",
+      "prompt":   "replace compute_score with faster version",
+      "gemma3":   { "op": "replace_function", "name": "compute_score", "body": "..." }
+    }
 """
 import argparse
 import json
@@ -83,6 +99,31 @@ SYSTEM_EDIT = (
     '  {"op":"insert_block","after":{"kind":"function","name":"init"},"content":"...","reason":"..."}\n'
     "This is a candidate proposal — not an execution grant. Never claim authority."
 )
+
+
+# TaskOp strings from CodeTask grammar → TaskKind used by the pipeline
+_OP_TO_TASK: dict[str, str] = {
+    "code.edit":      "edit",
+    "code.generate":  "generate",
+    "code.refactor":  "refactor",
+    "code.debug":     "debug",
+    "code.test":      "test",
+    "code.implement": "implement",
+    "chat.generate":  "generate",
+}
+
+
+def load_attachment(path: Path) -> dict:
+    """Load a CodeTask JSON attachment from a file (hyphens in filename are fine)."""
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except OSError as e:
+        raise ValueError(f"cannot read attachment {path}: {e}")
+    except json.JSONDecodeError as e:
+        raise ValueError(f"attachment {path} is not valid JSON: {e}")
+    if not isinstance(data, dict):
+        raise ValueError(f"attachment must be a JSON object, got {type(data).__name__}")
+    return data
 
 
 # ── Phase 0: parser (input validation) ────────────────────────────────────────
@@ -353,17 +394,19 @@ def generate_proposal(ir: dict, task: str) -> dict:
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("prompt",
-                    help="edit intent or generation prompt")
+    ap.add_argument("prompt",        nargs="?", default=None,
+                    help="edit intent or generation prompt (can also come from --attach)")
+    ap.add_argument("--attach",      type=Path, metavar="PATH",
+                    help="CodeTask JSON file supplying any of: prompt, file, language, task, gemma3")
     ap.add_argument("--file",        type=Path, metavar="PATH",
-                    help="target source file")
+                    help="target source file (overrides --attach file field)")
     ap.add_argument("--lang",        metavar="LANG",
-                    help="language id: cpp py h json html js ts hlsl kxml css")
-    ap.add_argument("--task",        default="edit",
+                    help="language id: cpp py h json html js ts hlsl kxml css (overrides --attach)")
+    ap.add_argument("--task",        default=None,
                     choices=["generate", "edit", "refactor", "debug", "test", "implement"],
-                    help="task kind (default: edit)")
+                    help="task kind (overrides --attach; default: edit)")
     ap.add_argument("--gemma3-ast",  type=Path, metavar="PATH",
-                    help="pre-computed Gemma 3 edit AST JSON (skip the Gemma 3 call)")
+                    help="pre-computed Gemma 3 edit AST JSON file (overrides --attach gemma3 field)")
     ap.add_argument("--top-k",       type=int, default=5, metavar="N",
                     help="bigram corpus matches to retrieve (default: 5)")
     ap.add_argument("--max-tokens",  type=int, default=384, metavar="N",
@@ -374,13 +417,34 @@ def main():
                     help="skip Gemma 3 call; compile from bigrams only")
     args = ap.parse_args()
 
+    # ── load attachment (CLI values override attachment fields) ───────────────
+    attachment: dict = {}
+    if args.attach:
+        try:
+            attachment = load_attachment(args.attach)
+        except ValueError as e:
+            print(f"error: {e}", file=sys.stderr)
+            sys.exit(1)
+
+    att_task = attachment.get("task") or _OP_TO_TASK.get(attachment.get("op", ""), None)
+    prompt = args.prompt or attachment.get("prompt") or ""
+    file_  = args.file or (Path(attachment["file"]) if attachment.get("file") else None)
+    lang_  = args.lang or attachment.get("language")
+    task   = args.task or att_task or "edit"
+
+    if not prompt:
+        print("error: prompt is required (pass as positional argument or in --attach JSON)",
+              file=sys.stderr)
+        sys.exit(1)
+
     # ── parser phase ──────────────────────────────────────────────────────────
     try:
-        lang = detect_language(args.file, args.lang)
+        lang = detect_language(file_, lang_)
     except ValueError as e:
         print(f"error: {e}", file=sys.stderr)
         sys.exit(1)
 
+    # gemma3 AST: --gemma3-ast file > attachment gemma3 field > None
     gemma3_ast: dict | None = None
     if args.gemma3_ast:
         try:
@@ -389,22 +453,29 @@ def main():
         except (json.JSONDecodeError, ValueError) as e:
             print(f"error: invalid gemma3-ast: {e}", file=sys.stderr)
             sys.exit(1)
+    elif attachment.get("gemma3"):
+        try:
+            gemma3_ast = attachment["gemma3"]
+            validate_gemma3_ast(gemma3_ast)
+        except ValueError as e:
+            print(f"error: invalid gemma3 in attachment: {e}", file=sys.stderr)
+            sys.exit(1)
 
     # ── Wo: classify + bigram lookup ──────────────────────────────────────────
     lang_binding = classify_language(lang)
-    bigrams = lookup_bigrams(lang_binding, args.prompt, top_k=args.top_k)
+    bigrams = lookup_bigrams(lang_binding, prompt, top_k=args.top_k)
 
     # ── Yax: get Gemma 3 edit AST if needed ───────────────────────────────────
     needs_gemma3 = (
-        args.task in {"edit", "refactor", "debug", "test", "implement"}
+        task in {"edit", "refactor", "debug", "test", "implement"}
         and gemma3_ast is None
         and not args.dry_run
     )
     if needs_gemma3:
-        file_context = read_file_context(args.file)
+        file_context = read_file_context(file_)
         try:
             gemma3_ast = call_gemma3_edit(
-                args.prompt, file_context, bigrams, max_tokens=args.max_tokens
+                prompt, file_context, bigrams, max_tokens=args.max_tokens
             )
             validate_gemma3_ast(gemma3_ast)
         except Exception as e:
@@ -413,16 +484,16 @@ def main():
             gemma3_ast = None
 
     # ── Yax: compile IR ───────────────────────────────────────────────────────
-    ir = compile_ir(lang_binding, args.file, bigrams, gemma3_ast, args.task)
+    ir = compile_ir(lang_binding, file_, bigrams, gemma3_ast, task)
 
     # ── Sek: generate proposal ────────────────────────────────────────────────
-    proposal = generate_proposal(ir, args.task)
+    proposal = generate_proposal(ir, task)
 
     output = {
         "schema": "codegen-mu.output.v1",
         "authority": "candidate_only",
         "model": MODEL.name if needs_gemma3 else None,
-        "task": args.task,
+        "task": task,
         "language": lang,
         "corpus_records": lang_binding["records"],
         "bigrams_matched": len(bigrams),
