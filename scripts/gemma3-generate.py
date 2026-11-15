@@ -149,10 +149,16 @@ def main():
     system = SYSTEM_PROMPTS[args.mode]
     raw_text = call_gemma3(system, user_message, args.max_tokens)
 
+    # Gemma 3 often wraps JSON in markdown fences — strip them before parsing
+    stripped = raw_text.strip()
+    if stripped.startswith("```"):
+        stripped = stripped.split("\n", 1)[-1]  # drop opening ```[lang] line
+        stripped = stripped.rsplit("```", 1)[0].strip()
+
     try:
-        inner = json.loads(raw_text)
+        inner = json.loads(stripped)
     except json.JSONDecodeError:
-        inner = {"raw": raw_text}
+        inner = {"raw": stripped}
 
     output = {
         "schema": "gemma3.generate.v1",
