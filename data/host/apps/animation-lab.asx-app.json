@@ -1,0 +1,57 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "animation-lab",
+  "@key": "⟁APP:ANIMATION_LAB",
+  "@mount": "⟁ROOT:ANIMATION_LAB",
+  "@theme": { "accent": "#e879f9", "bg": "#040008", "surface": "#0a0010", "text": "#fae8ff", "hero_phase": "Sek", "tagline": "Motion that communicates" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "animations", "component": "⟁WIDGET:ANIMATIONS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "animations": [], "active": null, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:ANIMATION_LAB": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:NEW_ANIM", "⟁ACTION:PREVIEW"] },
+    "⟁ACTION:NEW_ANIM": { "@type": "button", "@text": "New Animation", "@on": { "click": "anim.open_compose" } },
+    "⟁ACTION:PREVIEW": { "@type": "button", "@text": "Preview", "@on": { "click": "anim.preview" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:ANIMATIONS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:ANIMATIONS": { "@type": "grid", "@bind": "state.animations", "@children": ["⟁WIDGET:ANIM_CARD"] },
+    "⟁WIDGET:ANIM_CARD": { "@type": "media-card", "@bind": "anim", "@on": { "view": "anim.view", "play": "anim.play" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:PROPERTIES", "⟁WIDGET:PRESETS"] },
+    "⟁WIDGET:PROPERTIES": { "@type": "list", "@bind": "data.properties" },
+    "⟁WIDGET:PRESETS": { "@type": "tag-cloud", "@bind": "data.presets" }
+  },
+  "@programs": {
+    "anim.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "anim.preview": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_anim", "@out": "active" }] },
+    "anim.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "anim.play": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_anim", "@out": "active" }] }
+  },
+  "@events": { "anim.new": "anim.open_compose", "anim.preview": "anim.preview", "anim.view": "anim.view", "anim.play": "anim.play" },
+  "@imports": [{ "ref": "animation", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "css-export", "name": "CSS Export", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Export animations as CSS keyframes." },
+      { "id": "lottie-export", "name": "Lottie Export", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Export as Lottie JSON for use in mobile and web." },
+      { "id": "physics-engine", "name": "Physics Presets", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Spring, bounce, and gravity physics presets." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "anim.new", "pattern": "NEW ANIMATION|CREATE ANIMATION|ANIMATE *", "intent": "open_compose" },
+      { "id": "anim.preset", "pattern": "ANIMATION PRESET *|USE SPRING|EASE IN OUT", "intent": "apply_preset" }
+    ]
+  },
+  "@data": {
+    "properties": ["duration", "easing", "delay", "iteration", "direction", "fill"],
+    "presets": ["ease-in-out", "spring", "bounce", "linear", "step", "cubic"],
+    "spotlight": [
+      { "id": "sp1", "title": "Phase Wheel Spin", "type": "rotation", "badge": "Featured", "duration_ms": 800, "excerpt": "Smooth 360° rotation with spring easing. Used in the K'UHUL phase ring." },
+      { "id": "sp2", "title": "Card Reveal Sequence", "type": "stagger", "badge": "Stagger", "items": 6, "excerpt": "6-item staggered fade-in from below. 80ms between items." },
+      { "id": "sp3", "title": "Notification Bounce", "type": "scale", "badge": "Micro", "duration_ms": 300, "excerpt": "Scale-up + settle. Standard notification acknowledgement pattern." }
+    ],
+    "schema": {
+      "animation": { "primaryKey": "anim_id", "fields": { "anim_id": { "type": "string" }, "name": { "type": "string", "required": true }, "type": { "type": "string" }, "keyframes": { "type": "json", "required": true }, "duration_ms": { "type": "integer" }, "easing": { "type": "string" }, "tags": { "type": "json" }, "created_at": { "type": "datetime" } } }
+    }
+  }
+}

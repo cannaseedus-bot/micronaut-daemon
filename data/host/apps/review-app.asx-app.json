@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "review-app",
+  "@key": "⟁APP:REVIEW_APP",
+  "@mount": "⟁ROOT:REVIEW_APP",
+  "@theme": { "accent": "#fb923c", "bg": "#100802", "surface": "#1e1005", "text": "#ffedd5", "hero_phase": "Ch'en", "tagline": "Honest reviews from real people" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "items", "component": "⟁WIDGET:ITEMS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "items": [], "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:REVIEW_APP": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:ADD_ITEM"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:ADD_ITEM": { "@type": "button", "@text": "Add Item", "@on": { "click": "reviews.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:ITEMS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:ITEMS": { "@type": "grid", "@bind": "state.items", "@children": ["⟁WIDGET:ITEM_CARD"] },
+    "⟁WIDGET:ITEM_CARD": { "@type": "media-card", "@bind": "item", "@on": { "review": "reviews.open_review", "view": "reviews.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:CATEGORIES", "⟁WIDGET:TOP_RATED"] },
+    "⟁WIDGET:CATEGORIES": { "@type": "tag-cloud", "@bind": "data.categories" },
+    "⟁WIDGET:TOP_RATED": { "@type": "list", "@bind": "data.top_rated" }
+  },
+  "@programs": {
+    "reviews.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "reviews.open_review": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "reviews.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "reviews.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "item.review": "reviews.open_review", "item.view": "reviews.view", "compose.open": "reviews.open_compose", "search.input": "reviews.search" },
+  "@imports": [{ "ref": "item", "mode": "schema_table" }, { "ref": "review", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "verified-purchase", "name": "Verified Purchase Badge", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Mark reviews from confirmed buyers." },
+      { "id": "spam-bot", "name": "Spam Filter Bot", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Auto-flag suspicious reviews before they go live." },
+      { "id": "summary-widget", "name": "AI Review Summary", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Summarise all reviews for an item into a few sentences." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "reviews.add", "pattern": "ADD REVIEW|WRITE REVIEW|REVIEW *", "intent": "open_review" },
+      { "id": "reviews.search", "pattern": "FIND * REVIEW|SEARCH *", "intent": "filter_items" }
+    ]
+  },
+  "@data": {
+    "categories": ["Software", "Books", "Restaurants", "Gear", "Services"],
+    "top_rated": ["Notion — 4.8★", "The Mom Test — 4.9★", "Monkeytype — 4.7★"],
+    "spotlight": [
+      { "id": "sp1", "title": "Notion", "category": "Software", "badge": "Editors Choice", "rating": 4.8, "excerpt": "Still the most flexible all-in-one workspace after three years." },
+      { "id": "sp2", "title": "The Mom Test", "category": "Books", "badge": "Top Rated", "rating": 4.9, "excerpt": "The only business book where talking to customers actually makes sense." },
+      { "id": "sp3", "title": "Standing Desk (FlexiSpot E7)", "category": "Gear", "badge": "Recommended", "rating": 4.6, "excerpt": "Solid, silent, and handles a dual-monitor setup without wobbling." }
+    ],
+    "schema": {
+      "item": { "primaryKey": "item_id", "fields": { "item_id": { "type": "string" }, "name": { "type": "string", "required": true }, "category": { "type": "string" }, "description": { "type": "text" }, "avg_rating": { "type": "float" }, "review_count": { "type": "integer" }, "image_url": { "type": "uri" } } },
+      "review": { "primaryKey": "review_id", "fields": { "review_id": { "type": "string" }, "item_id": { "type": "string", "required": true }, "user_id": { "type": "string" }, "rating": { "type": "integer", "required": true }, "title": { "type": "string" }, "body": { "type": "textarea", "required": true }, "created_at": { "type": "datetime" } } }
+    }
+  }
+}

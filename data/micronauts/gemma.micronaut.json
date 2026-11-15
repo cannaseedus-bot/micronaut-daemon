@@ -1,0 +1,169 @@
+{
+  "schema": "kuhul.micronaut.atomic.v1",
+  "identity": {
+    "id": "GEMMA-µ",
+    "name": "EmbeddingGemma-2",
+    "version": "2.0.0",
+    "authority_claim": "rank_only"
+  },
+  "descriptor_status": "declarative_proposal",
+  "registered": false,
+  "registered_status": "unregistered; call register_micronaut() to activate",
+  "track_ref": "data/tracks/GEMMA-u.semantic-tracks.v1.json",
+  "bindings_ref": "shell/gemma.bindings.psm1",
+  "manifest": {
+    "display_name": "Gemma Embedder µ",
+    "tagline": "Dense 768-dim embeddings via EmbeddingGemma-2 — Sek phase ranker for π routing",
+    "color": "#4285f4",
+    "icon_svg": "data/micronauts/assets/gemma.svg",
+    "animated_svg": "data/micronauts/assets/gemma.animated.svg",
+    "profile_card": {
+      "widget": "data/host/apps/micronaut-card.asx-app.json",
+      "props": { "id": "GEMMA-µ", "phase": "Sek", "category": "ranker" }
+    }
+  },
+  "api": {
+    "namespace": "gemma",
+    "base": "http://127.0.0.1:3217",
+    "atomic_keys": [
+      { "key": "gemma.embed",       "description": "embed text/image/audio/video/message → 768-dim float32 vector" },
+      { "key": "gemma.batch_embed", "description": "batch embed array of inputs → array of 768-dim vectors" },
+      { "key": "gemma.rank",        "description": "rank candidate texts against a query; returns sorted list with cosine scores" },
+      { "key": "gemma.score",       "description": "pairwise cosine similarity between two embeddings or texts" },
+      { "key": "gemma.pi_rank",     "description": "rank via π routing V_π head — weighted L1 score, hidden_size=32, 43 glyphs" },
+      { "key": "gemma.health",      "description": "model load status and device info" }
+    ]
+  },
+  "model": {
+    "id": "google/embeddinggemma-2",
+    "model_type": "embedding_gemma2",
+    "snapshot": "f9972ac22e696a105c482202646979e33e4b5a1e",
+    "local_cache": "C:/Users/canna/.cache/huggingface/hub/models--google--embeddinggemma-2/snapshots/f9972ac22e696a105c482202646979e33e4b5a1e",
+    "embedding_dim": 768,
+    "pooling": "mean",
+    "normalize": true,
+    "similarity_fn": "cosine",
+    "max_input_length": 512,
+    "modalities": ["text", "image", "audio", "video", "message"],
+    "pipeline": ["Transformer", "Pooling(mean,include_prompt=true)", "Normalize"],
+    "framework": "sentence-transformers>=6.1.0",
+    "pytorch": "2.14.0+cu130"
+  },
+  "prompts": {
+    "Retrieval":          "task: search result | query: ",
+    "Retrieval-document": "title: none | text: ",
+    "STS":                "task: sentence similarity | query: ",
+    "Classification":     "task: classification | query: ",
+    "Clustering":         "task: clustering | query: ",
+    "Reranking":          "task: search result | query: ",
+    "QuestionAnswering":  "task: question answering | query: ",
+    "CodeRetrieval":      "task: code retrieval | query: ",
+    "FactChecking":       "task: fact checking | query: ",
+    "Document":           "title: none | text: "
+  },
+  "key_vocabulary_ref": {
+    "keybase":          "data/apps/atomic-keybase.json",
+    "keybase_host":     "data/host/manifests/atomic-keybase.json",
+    "app_grammar_dir":  "data/apps",
+    "grammar_dir":      "data/grammar",
+    "ingest_dir":       "data/ingest",
+    "schema":           "key.grammar.asx-mini-app.v1",
+    "note": "⟁KEY name tokens and their vocabulary expansions are the embedding vocabulary. Key name parts (split by _ and /) provide the concept cluster words that anchor 768-dim space to named app domains. GEMMA-µ embeds these clusters to score and generate app component JSONL.",
+    "validated_apps": [
+      "DOG_PARK_APP",
+      "SELF_HOSTED_FORUM",
+      "SOCIALSPHERE",
+      "WAR_PIGS",
+      "PIG_KINGDOM",
+      "ANIMAL_FARM",
+      "CLOUD_MODEL_CHAT"
+    ]
+  },
+  "app_generation": {
+    "mode": "semantic_prompt_from_keys",
+    "pipeline": "⟁KEY names → token vocab → task-prefixed prompt → GEMMA embed 768-dim → cosine similarity → app spec JSONL",
+    "validated": {
+      "DOG_PARK_APP": {
+        "result": "success",
+        "note": "Dog Park App created from ⟁KEY vocabulary semantic prompts"
+      }
+    },
+    "component_phase_map": {
+      "app":     "Pop",
+      "widget":  "Pop or Yax",
+      "input":   "Wo",
+      "action":  "Sek",
+      "program": "Sek or Xul",
+      "verify":  "Ch'en"
+    },
+    "prompt_template": "task: search result | query: {domain_tokens} {component_tokens} app feature"
+  },
+  "pi_routing": {
+    "role": "Sek phase vector ranker for π routing head",
+    "v_pi_head": {
+      "hidden_size": 32,
+      "glyph_vocab": 43,
+      "score_fn": "weighted_L1",
+      "gamma_channel": "weighted_keys"
+    },
+    "pi_routing_ref": "pi_routing.py"
+  },
+  "cache": {
+    "ttl": 3600,
+    "strategy": "embedding_lru",
+    "max_entries": 50000
+  },
+  "capabilities": [
+    "text_embedding",
+    "image_embedding",
+    "audio_embedding",
+    "video_embedding",
+    "message_embedding",
+    "cosine_ranking",
+    "batch_embedding",
+    "task_prefixed_prompts",
+    "pi_routing_rank"
+  ],
+  "srai": {
+    "mode": "rank_only",
+    "max_depth": 0
+  },
+  "xcfe": {
+    "authority": "rank_only",
+    "forbidden": [
+      "emit_response",
+      "write_state",
+      "redirect_srai",
+      "mutate_topology",
+      "commit_patterns",
+      "required_for_mutation"
+    ]
+  },
+  "program_contract": {
+    "phase": "Sek",
+    "effects": ["gramRead"],
+    "learning": {
+      "mode": "none",
+      "note": "rank_only — no learning authority; embedding weights are frozen HuggingFace checkpoint"
+    },
+    "drivers": [
+      "DirectML.dll",
+      "dml_gemm.dll",
+      "dxcompiler.dll",
+      "d3d11_infer.dll",
+      "xcfe_gl_ops.dll",
+      "qwen_infer_driver.dll",
+      "NeuralGrammar.Core.dll",
+      "Micronaut.Core.dll",
+      "Micronaut.Compute.dll",
+      "json_runtime_lib.dll",
+      "dag.dll"
+    ],
+    "inference_server": {
+      "port": 3217,
+      "launch": "python serve_models.py",
+      "auto_launch": true,
+      "note": "Import-GemmaDrivers calls Start-GemmaMicronaut automatically unless -NoAutoStart is passed"
+    }
+  }
+}

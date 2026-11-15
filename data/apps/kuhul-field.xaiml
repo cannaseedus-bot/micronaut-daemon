@@ -1,0 +1,153 @@
+{
+  "format": "kuhul.xaiml.pattern-bank.v1",
+  "version": 1,
+  "name": "kuhul-semantic-field",
+  "authority": "pattern_match_only",
+  "field": "⟁KUHUL",
+  "field_source": "../../../../kuhul-field.json",
+  "patterns": [
+    {
+      "id": "kuhul.field.what.is.kuhul",
+      "pattern": "WHAT IS KUHUL",
+      "phase": "Pop",
+      "template": [
+        {
+          "tag": "text",
+          "value": "K'UHUL is this workspace's typed semantic runtime. It organizes semantic keys and fields into bounded Micronaut programs, with Pop → Wo → Yax → Sek → Ch'en → Xul as the phase order. Its declarations and candidate scores do not grant execution authority; registered host capabilities and XCFE admission govern dispatch."
+        }
+      ]
+    },
+    {
+      "id": "kuhul.field.what.is.k.uhul",
+      "pattern": "WHAT IS K UHUL",
+      "phase": "Pop",
+      "template": [
+        {
+          "tag": "text",
+          "value": "K'UHUL is this workspace's typed semantic runtime. It organizes semantic keys and fields into bounded Micronaut programs, with Pop → Wo → Yax → Sek → Ch'en → Xul as the phase order. Its declarations and candidate scores do not grant execution authority; registered host capabilities and XCFE admission govern dispatch."
+        }
+      ]
+    },
+    {
+      "id": "kuhul.field.define.kuhul",
+      "pattern": "DEFINE KUHUL",
+      "phase": "Pop",
+      "template": [
+        {
+          "tag": "text",
+          "value": "K'UHUL: a typed semantic runtime that resolves key identities and fields, sequences bounded Micronaut work through six gated phases, and leaves capability admission to the host/XCFE boundary."
+        }
+      ]
+    },
+    {
+      "id": "kuhul.field.explain.kuhul",
+      "pattern": "EXPLAIN KUHUL",
+      "phase": "Pop",
+      "template": [
+        {
+          "tag": "text",
+          "value": "K'UHUL connects typed keys and KGF fields to XJSON bindings, XSL projections, and purpose-specific Micronauts. Its driver advances Pop → Wo → Yax → Sek → Ch'en → Xul; candidate creation, dispatch authorization, verification, and persistence remain distinct steps."
+        }
+      ]
+    },
+    {
+      "id": "kuhul.field.what.does.kuhul.mean",
+      "pattern": "WHAT DOES KUHUL MEAN",
+      "phase": "Pop",
+      "template": [
+        {
+          "tag": "text",
+          "value": "In this repository, K'UHUL names the semantic runtime and language stack: typed key/field data, declarative programs, six ordered phases, Micronaut roles, and an independent host admission boundary."
+        }
+      ]
+    },
+    {
+      "id": "kuhul.field.how.does.kuhul.work",
+      "pattern": "HOW DOES KUHUL WORK",
+      "phase": "Pop",
+      "template": [
+        {
+          "tag": "text",
+          "value": "A request enters Pop, Wo binds intent and constraints, Yax expands candidates, Sek selects or dispatches admitted work, Ch'en verifies results, and Xul closes and records the run. XCFE/host policy controls any execution or mutation; phase labels alone grant none."
+        }
+      ]
+    },
+    {
+      "id": "kuhul.field.what.are.kuhul.phases",
+      "pattern": "WHAT ARE KUHUL PHASES",
+      "phase": "Pop",
+      "template": [
+        {
+          "tag": "text",
+          "value": "The canonical phases are Pop → Wo → Yax → Sek → Ch'en → Xul: ingress/context, intent and plan, candidate expansion, selection/dispatch, verification, and closure/recording."
+        }
+      ]
+    },
+    {
+      "id": "kuhul.field.what.are.semantic.tracks",
+      "pattern": "WHAT ARE KUHUL SEMANTIC TRACKS",
+      "phase": "Pop",
+      "template": [
+        {
+          "tag": "text",
+          "value": "K'UHUL semantic tracks describe a domain's governed concepts, capabilities, and conformance questions. An AIML pattern can anchor intent; the runtime can compare related key and n-gram patterns, unfold relevant context, and rank candidates. Similarity retrieves candidates but does not prove facts. The response still needs an admitted source or fact."
+        }
+      ]
+    },
+    {
+      "id": "kuhul.field.do.tracks.guide.aiml",
+      "pattern": "DO SEMANTIC TRACKS GUIDE AIML",
+      "phase": "Pop",
+      "template": [
+        {
+          "tag": "text",
+          "value": "Yes. Tracks can guide which AIML pattern or intent to consider. After an AIML pattern anchors the question, the runtime can find similar key and n-gram patterns, unfold relevant context, and rank it for the response. Similarity is a retrieval signal, not evidence; factual claims still need an admitted source."
+        }
+      ]
+    },
+    {
+      "id": "kuhul.field.what.is.kuhul.runtime",
+      "pattern": "WHAT IS THE KUHUL RUNTIME",
+      "phase": "Pop",
+      "template": [
+        {
+          "tag": "text",
+          "value": "The K'UHUL runtime is the host-backed phase driver and its semantic resources: manifests, key graphs, Micronaut programs, API sandboxes, and XCFE admission. XSL/XJSON can declare projections and routes, while registered host code performs actual operations."
+        }
+      ]
+    },
+    {
+      "id": "kuhul.field.what.is.kuhul.field.math",
+      "pattern": "WHAT IS KUHUL FIELD MATHEMATICS",
+      "phase": "Pop",
+      "template": [
+        {
+          "tag": "text",
+          "value": "The K'UHUL field-math reference keeps corpus weights separate from learned modifiers, uses ordered bigram vectors for geometric compatibility, and addresses trigrams by phase and fold. K'UHUL-π compares normalized vectors with cosine similarity s, then derives angle = acos(s) and radius = (1-s)/2. Angle and radius are two forms of the same signal; if cosine is already the geometric score G, do not count the transforms again. For three keys it can derive peer arc weights, a mean-radius hub cost, provisional bridge routing, and entropy-based gravity/levity/neutrality. These quantities use separate symbol namespaces and remain retrieval candidates, not graph truth or execution authority. See vendor/key-grammar-kit/kuhul-field-math.html and vendor/key-grammar-kit/kuhul-pi.ebnf."
+        }
+      ]
+    },
+    {
+      "id": "kuhul.field.explain.kuhul.math",
+      "pattern": "EXPLAIN KUHUL FIELD MATHEMATICS",
+      "phase": "Pop",
+      "template": [
+        {
+          "tag": "text",
+          "value": "The math reference describes unigram priors, bigram geometry, phase-addressed trigrams, manifest and inferred neighborhoods, and a candidate score. It is a reference model; the phase REST sandboxes and runtime contracts control actual execution order."
+        }
+      ]
+    },
+    {
+      "id": "kuhul.field.what.is.kuhul.pi",
+      "pattern": "WHAT IS KUHUL PI",
+      "phase": "Pop",
+      "template": [
+        {
+          "tag": "text",
+          "value": "K'UHUL-π is the proposed ephemeral semantic comparison layer. It compares two embedding vectors, derives cosine similarity, angular separation, and a normalized radius, then evaluates typed neighbors and evidence. The comparison geometry does not prove graph truth. Any bias update or persistent write needs Ch'en verification and separate host/XCFE authorization."
+        }
+      ]
+    }
+  ]
+}

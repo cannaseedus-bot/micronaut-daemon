@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kuhul:khanary:schema:fold-runtime-coordinate:v1",
+  "title": "KHANARY fold runtime coordinate K_t = (F_h, phi, T, s, sigma, X_t)",
+  "description": "One runtime coordinate with six explicit separators: fold identity F_h, phase phi, track T, folded state s, learning/binding state sigma, and mutable execution state X_t. The learning record has its own object and no fold field, so learning can never be read as fold identity or topology (GAP-092).",
+  "$ref": "#/$defs/RuntimeCoordinate",
+  "$defs": {
+    "FoldIdentity": {
+      "type": "object",
+      "description": "F_h: the fold identity. Immutable for the lifetime of the coordinate.",
+      "required": ["@handle", "@hash", "@immutable"],
+      "properties": {
+        "@handle": { "type": "string", "minLength": 1 },
+        "@hash": { "type": "string", "minLength": 8 },
+        "@immutable": { "type": "boolean", "const": true }
+      },
+      "additionalProperties": false
+    },
+    "PhaseState": {
+      "type": "object",
+      "description": "phi: which C6 phase the coordinate is in.",
+      "required": ["@name", "@index"],
+      "properties": {
+        "@name": {
+          "type": "string",
+          "enum": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Ch_en", "Xul"]
+        },
+        "@index": { "type": "integer", "minimum": 0, "maximum": 5 }
+      },
+      "additionalProperties": false
+    },
+    "TrackState": {
+      "type": "object",
+      "description": "T: the micronaut/track owning the coordinate.",
+      "required": ["@id"],
+      "properties": {
+        "@id": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "FoldState": {
+      "type": "object",
+      "description": "s: folded or unfolded, with the extent that was revealed.",
+      "required": ["@folded", "@extent"],
+      "properties": {
+        "@folded": { "type": "boolean" },
+        "@extent": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "LearningState": {
+      "type": "object",
+      "description": "sigma: learning/binding state. Deliberately owns no fold, phase or topology field: a learned binding is evidence about behavior, never a structural fact.",
+      "required": ["@status", "@binding", "@sigma", "@evidence"],
+      "properties": {
+        "@status": { "type": "string", "enum": ["UNBOUND", "BOUND"] },
+        "@binding": { "type": "string" },
+        "@sigma": { "type": "number", "minimum": 0, "maximum": 1 },
+        "@evidence": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "ExecutionState": {
+      "type": "object",
+      "description": "X_t: the mutable execution residue of this coordinate.",
+      "required": ["@step", "@last_operation"],
+      "properties": {
+        "@step": { "type": "integer", "minimum": 0 },
+        "@last_operation": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "Authority": {
+      "type": "object",
+      "required": ["semantic_authority", "commit_authorized", "topology_commit_phase"],
+      "properties": {
+        "semantic_authority": { "type": "boolean", "const": false },
+        "commit_authorized": { "type": "boolean" },
+        "topology_commit_phase": { "type": "string", "enum": ["Xul"] }
+      },
+      "additionalProperties": true
+    },
+    "RuntimeCoordinate": {
+      "type": "object",
+      "required": ["@kind", "@fold", "@phase", "@track", "@state", "@learning", "@execution", "@authority"],
+      "properties": {
+        "@kind": { "type": "string", "const": "khanary.fold.runtime_coordinate.v1" },
+        "@fold": { "$ref": "#/$defs/FoldIdentity" },
+        "@phase": { "$ref": "#/$defs/PhaseState" },
+        "@track": { "$ref": "#/$defs/TrackState" },
+        "@state": { "$ref": "#/$defs/FoldState" },
+        "@learning": { "$ref": "#/$defs/LearningState" },
+        "@execution": { "$ref": "#/$defs/ExecutionState" },
+        "@authority": { "$ref": "#/$defs/Authority" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

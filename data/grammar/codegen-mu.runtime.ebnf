@@ -1,0 +1,195 @@
+(* ================================================================ *)
+(* CODEGEN-µ — Code Generation Orchestrator Grammar                *)
+(* Individual Micronaut domain language                             *)
+(* Role: generate                                                   *)
+(* Owns: language classification, bigram-keyed code generation,    *)
+(*        sub-micronaut delegation, gram read/write closure         *)
+(* Does NOT own: code execution, file commits, test invocation,     *)
+(*               direct user delivery, sub-micronaut implementation *)
+(*                                                                  *)
+(* CODEGEN-µ produces GeneratedCodeProposals. A proposal is not     *)
+(* an invocation. DELEGATE to a sub-micronaut does not invoke it;   *)
+(* XCFE admission is required before dispatch crosses that gate.    *)
+(* gramWrite at Xul records the evidence trace, not the output.     *)
+(* ================================================================ *)
+
+
+(* ---- Part I: Program Surface Syntax ---- *)
+
+program = { language_decl | generate_rule | delegate_decl | type_decl
+          | operation_contract_decl | comment } ;
+
+(* LANGUAGE — declare a code domain with its corpus source *)
+(* CORPUS names the bigram JSONL file reference; declaring it does
+   not load the corpus or trigger any model call. *)
+language_decl = "LANGUAGE" language_id "{"
+                  "DOMAIN" string
+                  "CORPUS" string
+                  "RECORDS" integer
+                "}" ;
+
+(* GENERATE — produce code from a bigram pattern and language template *)
+(* WHEN names the condition; USE names a declared language_id; it does
+   not invoke the model. EMIT names the output type; GeneratedCodeProposal
+   is a candidate, not an invocation or file write. *)
+generate_rule = "GENERATE" identifier "{"
+                  "WHEN" generate_condition
+                  "USE" language_id
+                  [ "DELEGATE" delegate_id ]
+                  "EMIT" generate_output_type
+                "}" ;
+
+generate_condition = "BIGRAM" string
+                   | "INTENT" identifier
+                   | "LANGUAGE" language_id
+                   | "TASK" task_kind ;
+
+task_kind          = "generate" | "debug" | "refactor"
+                   | "test" | "implement" | "emit" ;
+
+generate_output_type = "GeneratedCodeProposal"
+                     | "RefactoredCodeProposal"
+                     | "TestCodeProposal"
+                     | "DebugProposal" ;
+
+(* DELEGATE — declare a named sub-micronaut route for specialized tasks *)
+(* MODE PROPOSAL_ONLY: delegation is informational; no dispatch.
+   MODE XCFE_GATED:    requires XCFE admission before the route may
+                        be followed; XCFE REQUIRED is mandatory syntax.
+   Declaring DELEGATE does not invoke the sub-micronaut. *)
+delegate_decl = "DELEGATE" delegate_id "{"
+                  "TARGET" micronaut_id
+                  "MODE" delegate_mode
+                  "XCFE" "REQUIRED"
+                "}" ;
+
+delegate_mode = "PROPOSAL_ONLY" | "XCFE_GATED" ;
+delegate_id   = identifier ;
+micronaut_id  = identifier ;
+language_id   = identifier ;
+integer       = digit { digit } ;
+
+(* TYPE declarations make the type inventory machine-readable. *)
+type_decl = "TYPE" type_id ":" string
+            [ "requires_xcfe" ":" bool_lit ] ;
+type_id   = identifier ;
+bool_lit  = true_lit | false_lit ;
+true_lit  = "true" ;
+false_lit = "false" ;
+
+(* CONTRACT declarations make operation signatures machine-readable. *)
+operation_contract_decl = "CONTRACT" identifier
+                          "INPUT" type_id
+                          "OUTPUT" type_id
+                          "PHASE" phase_name
+                          [ "xcfe" ":" "required" ] ;
+
+(* ---- Shared terminals ---- *)
+phase_name  = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Chen" | "Ch_en" | "Xul" ;
+identifier  = letter { letter | digit | "_" | "-" | "." } ;
+string      = '"' { string_char } '"' ;
+string_char = ? any character except unescaped '"' or newline ? ;
+digit       = "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9" ;
+letter      = ? Unicode letter or underscore ? ;
+whitespace  = ? space, tab, CR, LF ? ;
+comment     = "#" { ? any character except newline ? } newline ;
+
+
+(* ================================================================ *)
+(* Part II: Static Signatures for CODEGEN-µ                         *)
+(* ================================================================ *)
+
+(*
+  Operation contracts
+  ┌──────────────────────┬────────────────────────────────┬────────────────────────┬────────┐
+  │ Operation            │ Input                          │ Output                 │ Phase  │
+  ├──────────────────────┼────────────────────────────────┼────────────────────────┼────────┤
+  │ LANGUAGE declare     │ corpus_ref × integer records   │ LanguageDescriptor     │ Pop    │
+  │ GENERATE/classify    │ CodeTask × language_id         │ LanguageBinding        │ Wo     │
+  │ GENERATE/USE         │ LanguageBinding × BigramCorpus │ GeneratedCodeCandidate │ Wo     │
+  │ GENERATE/DELEGATE    │ GeneratedCodeCandidate         │ DelegateProposal       │ Sek    │
+  │ GENERATE/EMIT        │ GeneratedCodeCandidate         │ GeneratedCodeProposal  │ Sek    │
+  │ DELEGATE declare     │ micronaut_id × delegate_mode   │ DelegateDescriptor     │ Sek    │
+  └──────────────────────┴────────────────────────────────┴────────────────────────┴────────┘
+
+  Output type definitions
+  ─────────────────────────────────────────────────────────────────────
+  LanguageDescriptor      — declared language with corpus reference and
+                            record count; read-only; no load on declaration
+  CodeTask                — input from Pop/gramRead: op, language, task,
+                            phase fields from the mx2lm pattern wrapper
+  LanguageBinding         — classified language_id from CodeTask; Wo output;
+                            not yet routed to a tool or model
+  BigramCorpus            — bigram-keyed JSONL records for the bound language;
+                            read-only; corpus is immutable per RECORDS count
+  GeneratedCodeCandidate  — model output from language template + BigramCorpus;
+                            not yet admitted; no execution authority
+  DelegateProposal        — named route to a sub-micronaut; MODE governs
+                            whether XCFE admission is required before dispatch;
+                            declaring DELEGATE does not invoke the sub-micronaut
+  GeneratedCodeProposal   — admitted GeneratedCodeCandidate; NOT an invocation;
+                            file writes require separate authorized commit phase
+  RefactoredCodeProposal  — GeneratedCodeProposal in the refactoring task domain
+  TestCodeProposal        — GeneratedCodeProposal in the test generation domain
+  DebugProposal           — GeneratedCodeProposal in the debug-triage domain
+
+  Language corpus invariants
+  ─────────────────────────────────────────────────────────────────────
+  LANGUAGE RECORDS must match the actual count in the CORPUS JSONL
+  Corpus is immutable; updates require a new LANGUAGE declaration
+  Total declared corpus: 155,763 records across 10 domains (cpp 56176,
+       py 42105, h 25003, json 14929, html 11417, js 3691, kxml 974,
+       hlsl 1347, ts 48, css 73)
+  Source root: KHANARY.CPP (C:/Users/canna/.KHANARY.CPP)
+
+  Delegation invariants
+  ─────────────────────────────────────────────────────────────────────
+  DELEGATE/MODE PROPOSAL_ONLY: DelegateProposal is advisory; no dispatch
+  DELEGATE/Mode XCFE_GATED: DelegateProposal carries the gate requirement;
+       XCFE admission by the orchestration layer is required before dispatch
+  Sub-micronauts: coder, TOOL-µ, PLAN-µ, CREATE-µ, NGRAM-KEY-µ,
+       FACTORY-µ, SNOBOL-µ; each requires its own XCFE admission
+  CODEX-µ receives generated output for review via @delegates_to;
+       the relationship is a typed edge, not an automatic invocation
+
+  gram read/write invariants
+  ─────────────────────────────────────────────────────────────────────
+  gramRead at Pop:  reads CodeTask from gram namespace CODEGEN; read-only
+  gramWrite at Xul: writes evidence trace to gram namespace CODEGEN;
+       scope=local; authorized Xul commit only; never writes output directly
+
+  Phase legality
+  ─────────────────────────────────────────────────────────────────────
+  LANGUAGE declare:    Pop   (gramRead binding; no model call; no XCFE)
+  GENERATE/classify:   Wo    (language classification; no model call; no XCFE)
+  GENERATE/USE:        Wo    (bigram lookup; no execution; no XCFE)
+  GENERATE/DELEGATE:   Sek   (tool chain dispatch proposal; XCFE_GATED
+                               routes require external XCFE admission)
+  GENERATE/EMIT:       Sek   (candidate emission; XCFE admission required
+                               before downstream dispatch; max_depth 7)
+  gramWrite:           Xul   (evidence trace only; authorized closure required)
+
+  Static errors
+  ─────────────────────────────────────────────────────────────────────
+  - language_duplicate_id
+  - generate_duplicate_id
+  - delegate_duplicate_id
+  - use_references_undeclared_language
+  - delegate_references_undeclared_target
+  - xcfe_gated_route_without_xcfe_required_keyword
+  - emit_before_use (EMIT requires prior USE or DELEGATE)
+  - records_mismatch (RECORDS declared but corpus size differs)
+  - task_kind_collision (two generate rules with same TASK)
+
+  Authority
+  ─────────────────────────────────────────────────────────────────────
+  grammar_grants_execution: false
+  bigram_match_grants_model_invocation: false
+  delegate_grants_sub_micronaut_dispatch: false
+  emit_grants_file_write: false
+  gramwrite_grants_output_persistence: false
+  route_requires_xcfe_admission: true
+  persistence_requires_verified_authorized_fold: true
+  semantic_authority: false
+  commit_authority: false
+*)

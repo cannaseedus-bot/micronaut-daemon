@@ -1,0 +1,57 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "pet-care",
+  "@key": "⟁APP:PET_CARE",
+  "@mount": "⟁ROOT:PET_CARE",
+  "@theme": { "accent": "#fb923c", "bg": "#0a0400", "surface": "#180c00", "text": "#fff7ed", "hero_phase": "Wo", "tagline": "Your pets. Cared for perfectly." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "pets", "component": "⟁WIDGET:PETS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "pets": [], "active_pet": null, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:PET_CARE": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:ADD_PET", "⟁ACTION:VET_RECORDS"] },
+    "⟁ACTION:ADD_PET": { "@type": "button", "@text": "Add Pet", "@on": { "click": "pc.open_compose" } },
+    "⟁ACTION:VET_RECORDS": { "@type": "button", "@text": "Vet Records", "@on": { "click": "pc.open_records" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:PETS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:PETS": { "@type": "grid", "@bind": "state.pets", "@children": ["⟁WIDGET:PET_CARD"] },
+    "⟁WIDGET:PET_CARD": { "@type": "media-card", "@bind": "pet", "@on": { "view": "pc.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:UPCOMING_CARE", "⟁WIDGET:MEDS"] },
+    "⟁WIDGET:UPCOMING_CARE": { "@type": "list", "@bind": "data.upcoming" },
+    "⟁WIDGET:MEDS": { "@type": "list", "@bind": "data.medications" }
+  },
+  "@programs": {
+    "pc.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "pc.open_records": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "pc.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_pet", "@out": "active_pet" }] }
+  },
+  "@events": { "pet.add": "pc.open_compose", "records.open": "pc.open_records", "pet.view": "pc.view" },
+  "@imports": [{ "ref": "pet", "mode": "schema_table" }, { "ref": "vet_record", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "vaccine-tracker", "name": "Vaccine Tracker", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Track all vaccinations with expiry date reminders." },
+      { "id": "feeding-schedule", "name": "Feeding Schedule", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Automated feeding reminders per pet with quantity tracking." },
+      { "id": "vet-locator", "name": "Vet Finder", "category": "community", "price": "optional", "status": "available_unconfigured", "description": "Save and compare nearby vet practices." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "pc.add", "pattern": "ADD PET|NEW PET|REGISTER PET", "intent": "open_compose" },
+      { "id": "pc.records", "pattern": "VET RECORDS|VET HISTORY|VACCINATION DUE", "intent": "open_records" }
+    ]
+  },
+  "@data": {
+    "upcoming": [{ "pet": "Biscuit", "task": "Annual vaccination", "due": "2026-12-01" }, { "pet": "Shadow", "task": "Flea treatment", "due": "2026-11-05" }],
+    "medications": [{ "pet": "Biscuit", "med": "Heartguard", "dose": "Monthly" }],
+    "spotlight": [
+      { "id": "sp1", "title": "Biscuit — Labrador, 3yrs", "badge": "Up to Date", "vet_visits": 8, "excerpt": "All vaccinations current. Annual check due Dec 2026." },
+      { "id": "sp2", "title": "Shadow — Maine Coon, 6yrs", "badge": "Flea Due", "vet_visits": 12, "excerpt": "Next flea treatment due Nov 5th. Last vet visit Oct 2026." },
+      { "id": "sp3", "title": "Mochi — Hamster, 1yr", "badge": "New", "vet_visits": 1, "excerpt": "First vet visit complete. Diet and enrichment notes logged." }
+    ],
+    "schema": {
+      "pet": { "primaryKey": "pet_id", "fields": { "pet_id": { "type": "string" }, "name": { "type": "string", "required": true }, "species": { "type": "string" }, "breed": { "type": "string" }, "dob": { "type": "datetime" }, "weight_kg": { "type": "float" }, "photo_url": { "type": "string" }, "notes": { "type": "text" } } },
+      "vet_record": { "primaryKey": "record_id", "fields": { "record_id": { "type": "string" }, "pet_id": { "type": "string", "required": true }, "type": { "type": "string", "required": true }, "notes": { "type": "text" }, "vet": { "type": "string" }, "date": { "type": "datetime", "required": true }, "next_due": { "type": "datetime" } } }
+    }
+  }
+}

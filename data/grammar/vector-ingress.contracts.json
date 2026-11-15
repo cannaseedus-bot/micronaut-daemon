@@ -1,0 +1,49 @@
+{
+  "@type": "khanary.vector_ingress.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "similarity_is_not_identity_a_vector_routes_it_never_authorizes",
+  "lane": "KHANARY_VECTOR_INGRESS_TEST",
+  "owner": "src/world/vector_ingress.cpp",
+  "why": "A literal user_id makes every memory lookup a rigid string search: the user is a key, not a location in the field. Binding a user *vector* to the accumulator lets Pop anchor the fold at a point and let each prompt activate a neighbourhood around it. The danger is immediate and specific: if similarity could grant access, then a node belonging to someone else that happens to sit at the same coordinates would be read as if it were yours. So the vector selects candidates and never authenticates, and the host-authenticated principal still decides which of those candidates may be opened.",
+  "composition": {
+    "law": "V_user = V_identity ⊕ V_context ⊕ V_behavior ⊕ V_memory, where ⊕ is a declared composition and not numeric addition",
+    "components": {
+      "identity": "user-associated retrieval key or representation",
+      "context": "relevant memory neighbourhood",
+      "behavior": "preferred AIML modes and Micronauts",
+      "intent": "current goal and question direction",
+      "learning": "user-specific adaptive weights",
+      "phase": "phase-conditioned activation bias",
+      "memory": "the memory term from the composition formula; the accompanying table lists six other kinds, so this contract declares the union of both rather than silently dropping one"
+    },
+    "rules": [
+      "every component carries its own provenance, and an unlabeled component is refused",
+      "the identity component is required: without it there is no anchor",
+      "composition weights are declared, and a composition without declared normalization is a refusal rather than an implicit sum"
+    ],
+    "note": "the formula names identity/context/behavior/memory while the table names identity/context/behavior/intent/learning/phase; the seven declared kinds are the union, and every one of them carries provenance"
+  },
+  "anchor": {
+    "law": "the user is an anchor in the field, and each incoming prompt activates a neighbourhood around that anchor",
+    "activation": "candidates are ranked by cosine similarity against the anchored vector, thresholded, and ordered deterministically",
+    "phase_bias": "the phase component modulates activation per phase; it never changes identity or ownership"
+  },
+  "separation": {
+    "law": "similarity is not identity: a vector can identify relevant memory candidates, and it cannot authenticate a principal, grant a permission or open a node",
+    "consequence": "a candidate that is maximally similar but belongs to another principal is returned as a *refused* candidate, never as an accessible one",
+    "authority": "the host-authenticated principal controls which vector neighbourhoods are accessible, through the same read-scope check that guards every other read"
+  },
+  "invariants": {
+    "VI1": "seven declared components, each carrying provenance; an unlabeled component is refused. The set is the union of the composition formula's terms and the component table's kinds, so neither list is silently truncated",
+    "VI2": "the identity component is required, and a composition missing it is refused rather than defaulted",
+    "VI3": "composition is declared and weighted, not implicit addition: an undeclared normalization is a refusal",
+    "VI4": "the anchor is the composed vector, and activation is a deterministic cosine ranking against it",
+    "VI5": "similarity never grants: no function in this layer returns a capability, a permission or a session",
+    "VI6": "an accessible neighbourhood is filtered by the read-scope check, so a similar-but-unowned candidate is reported as refused and never as accessible",
+    "VI7": "refusals are reported with their typed scope reason, so an audit can tell similarity from access",
+    "VI8": "phase bias modulates activation only: identity and ownership are invariant across phases",
+    "VI9": "the same input produces the same neighbourhood, so personalised routing is reproducible",
+    "VI10": "the vector layer sits between the authenticated principal and the scoped memory field: Principal → User Vector → Scoped Memory Field → Phase Fold, and it never short-circuits the principal"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kuhul.dev/feed/1",
+  "title": "K'UHUL Feed v1",
+  "type": "object",
+  "required": ["feed", "track", "grammar", "generated_at", "content_digest", "items"],
+  "properties": {
+    "feed": { "const": "kuhul.feed/1" },
+    "track": { "type": "string", "minLength": 1 },
+    "grammar": { "type": "string", "minLength": 1 },
+    "vector_field": { "type": "string", "minLength": 1 },
+    "generated_at": { "type": "string", "format": "date-time", "pattern": "Z$" },
+    "content_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["guid", "track", "pattern", "phase", "phase_code", "phase_role", "fold_ref"],
+        "properties": {
+          "guid": { "type": "string", "pattern": "^[^#]+#[^@]+@(Pop|Wo|Yax|Sek|Ch'en|Xul)$" },
+          "track": { "type": "string", "minLength": 1 },
+          "pattern": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": "string", "minLength": 1 } },
+          "phase": { "enum": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"] },
+          "phase_code": { "enum": ["000", "001", "010", "011", "100", "101"] },
+          "phase_role": { "enum": ["Ingress", "Assignment", "Expansion", "Selection", "Verification", "Closure" ] },
+          "fold_ref": { "type": "string", "minLength": 1 },
+          "binding_ref": { "type": "string" },
+          "template_ref": { "type": "string" },
+          "bindings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "source"],
+              "properties": {
+                "name": { "type": "string", "minLength": 1 },
+                "source": { "enum": ["capture", "lm_chain", "char_overlap", "explicit"] },
+                "index": { "type": "integer", "minimum": 1 }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

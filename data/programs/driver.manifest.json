@@ -1,0 +1,63 @@
+{
+  "@kind": "kuhul.driver.manifest.v2",
+  "id": "khanary-driver-inventory",
+  "version": "2.0.0",
+  "generated": "2026-08-15",
+  "role": "Consolidated driver inventory — /drivers folder, GPU paths, shader compilers, model server",
+  "consolidation": {
+    "note": "GPU/driver pieces consolidated into /drivers (single location, no longer scattered across /dist).",
+    "dir": "drivers/",
+    "manifest": "drivers/DRIVERS.md"
+  },
+  "gpu_paths": {
+    "opencl_1_2": { "status": "WORKS", "note": "kernels execute on Intel HD 4600 via igc64 (cl_harness PASS, cl_moe_matvec PASS bit-identical)" },
+    "d3d11_cs5_0": { "status": "VIABLE", "note": "native FL11.x path, D3DCompiler_47 + igdusc64" },
+    "glsl_compute": { "status": "BLOCKED", "note": "driver reports 4.3 (20.19.15.4835) but wglGetProcAddress returns null for compute funcs" },
+    "d3d12": { "status": "DEAD", "note": "FL11.x can't create D3D12 device" },
+    "directml": { "status": "DEAD", "note": "needs D3D12 device (DMLCreateDevice crashed on FL11.x)" }
+  },
+  "hardware": {
+    "gpu": "Intel HD Graphics 4600 (Haswell)",
+    "driver": "20.19.15.4835 (active, newest)",
+    "vram_dedicated_mb": 128,
+    "vram_shared_gb": 2.0,
+    "ram_gb": 16,
+    "shader_compilers": {
+      "igc64.dll": "Intel Graphics Compiler (OpenCL/SPIR-V -> Gen ISA)",
+      "igdusc64.dll": "D3D User-Space Compiler (HLSL -> Gen ISA for D3D11/D3D12)",
+      "igfxcmjit64.dll": "Compute Runtime JIT (OpenCL)",
+      "D3DCompiler_47.dll": "D3D11 SM5 HLSL compiler",
+      "fxc.exe": "HLSL -> cs_5_0 CSO compiler"
+    }
+  },
+  "model_server": {
+    "llama-server.exe": { "path": "drivers/llama-server.exe", "status": "WORKING", "note": "replaces buggy khanary-server.exe (removed from server bat)" },
+    "impl": ["llama-server-impl.dll", "llama-common.dll", "llama.dll", "llama-cli-impl.dll", "mtmd.dll", "ggml*.dll"]
+  },
+  "gpu_runtime": {
+    "GLSL_Server.exe": { "path": "drivers/GLSL_Server.exe", "status": "BROKEN", "note": "PyInstaller bundle missing 'http' module" },
+    "xvm_d12.dll": { "path": "drivers/xvm_d12.dll", "status": "D3D12 only (FL12+)" },
+    "scx_runtime.exe": { "path": "drivers/scx_runtime.exe", "status": "D3D12 init fails on FL11.x" },
+    "kxc.exe": { "path": "drivers/kxc.exe", "status": "KXC shader compiler" },
+    "cs5_shaders/": { "path": "drivers/cs5_shaders/", "status": "D3D11 cs_5_0 CSOs (28+) HD-4600-ready" }
+  },
+  "native_drivers": {
+    "khanary_driver.dll": "in-process TaskEngine + DAG + provider dispatch",
+    "gl_infer_driver.dll": "OpenGL inference driver (probe checks ICD exists only)",
+    "kuhul_engine_driver.dll": "kuhul_engine driver",
+    "qwen_infer_driver.dll": "qwen inference driver",
+    "native_glyph_engine.dll": "glyph engine",
+    "xcfe_gl_ops.dll": "GL ops for XCFE",
+    "json_runtime_lib.dll": "JSON runtime lib (native C++, no Node/JS)"
+  },
+  "opencl_kernels": {
+    "cl_harness.cpp": "OpenCL 1.2 compute PASS on HD 4600",
+    "cl_moe_matvec.cpp": "MoE expert matvec PASS (bit-identical to CPU)",
+    "cl_moe_layer.cpp": "full MoE layer PARTIAL (141MB buffers crash; 128MB VRAM limit -> use 33MB top-4 planes)"
+  },
+  "policy": {
+    "gpu_compute": "OpenCL 1.2 (confirmed) + D3D11 cs_5_0 (viable)",
+    "hybrid": "DirectXMath SIMD (CPU) x 8-thread fabric + OpenCL (GPU top-4 planes)",
+    "residency": "HOT=128MB VRAM (mini+top-4 planes), WARM=16GB RAM (s7 micronauts), COLD=disk (dolphin/oss)"
+  }
+}

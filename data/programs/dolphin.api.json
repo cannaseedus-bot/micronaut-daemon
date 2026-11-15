@@ -1,0 +1,48 @@
+{
+  "@program": "dolphin.api",
+  "@type": "micronaut.chat.runtime",
+  "@version": "1.0.0",
+  "@protocol": "openai_compatible_chatml",
+  "@semantic_runtime": "dist/NNC-K/NeuralGrammar.Core.dll",
+  "@orchestrator": "Supernaut.cs",
+  "@execution_control": "XCFERuntime.cs",
+  "@grammar_kernel": "KuhulPi.cs",
+  "@transport": "http",
+  "@default_endpoint": "http://127.0.0.1:9003/v1/chat/completions",
+  "@tool_endpoint": "http://127.0.0.1:8764/v1/tool-chat",
+  "@template": {
+    "format": "chatml",
+    "system": "<|im_start|>system\n{{content}}<|im_end|>\n",
+    "user": "<|im_start|>user\n{{content}}<|im_end|>\n",
+    "assistant": "<|im_start|>assistant\n{{content}}<|im_end|>\n",
+    "generation_prompt": "<|im_start|>assistant\n",
+    "stop": ["<|im_end|>", "<|im_start|>"]
+  },
+  "@models": {
+    "phi3_micronaut": {
+      "format": "gguf",
+      "path": "E:/models/lmstudio/microsoft/Phi-3-mini-4k-instruct-gguf/Phi-3-mini-4k-instruct-q4-micronaut.gguf",
+      "chat_template": "chatml"
+    },
+    "dolphin_phi2": {
+      "format": "gguf",
+      "path": "E:/models/lmstudio/TheBloke/dolphin-2_6-phi-2-GGUF/dolphin-2_6-phi-2.Q5_K_S.gguf",
+      "chat_template": "chatml"
+    },
+    "gemma3": {
+      "format": "gguf",
+      "path": "E:/models/lmstudio/gemma-3-1B-it-QAT-GGUF/gemma-3-1B-it-QAT-Q4_0.gguf",
+      "chat_template": "chatml"
+    }
+  },
+  "@phases": {
+    "Pop": "load_manifest_and_select_model",
+    "Wo": "resolve_endpoint_and_tools",
+    "Yax": "select_chatml_adapter",
+    "Sek": "POST_openai_chat_completion",
+    "Chen": "validate_response_and_tool_calls",
+    "Xul": "emit_atomicdom_response"
+  },
+  "@micronaut": "micronauts/dolphin.json",
+  "@native_fallback": "dist/khanary-server/kuhul-server.cjs"
+}

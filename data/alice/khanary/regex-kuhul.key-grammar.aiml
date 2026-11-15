@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Generated key lookup bank from regex-kuhul.key-grammar.jsonl; entries are data, not execution authority.-->
+  <category>
+    <pattern>LOOK UP KEY REGEXKUHUL:MAP</pattern>
+    <template>Key REGEXKUHUL:MAP. definition: Regex algebra maps to K-UHUL as language sets projected through Pop/Wo/Yax/Sek/Ch'en/Xul fold fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY REGEXKUHUL:PLUS</pattern>
+    <template>Key REGEXKUHUL:PLUS. definition: Plus requires one occurrence and then allows Kleene-style loop continuation.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY REGEXKUHUL:QUANTIFIER</pattern>
+    <template>Key REGEXKUHUL:QUANTIFIER. definition: Bounded quantifier unfolds a finite range of repetition paths.</template>
+  </category>
+</aiml>

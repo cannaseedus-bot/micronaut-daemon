@@ -1,0 +1,282 @@
+{
+  "@type": "khanary.app_tables.conformance.v1",
+  "contracts": "data/grammar/app-tables.contracts.json",
+  "cases": [
+
+    {
+      "id": "valid_owner_scope_content_table",
+      "expect": "PASS",
+      "description": "Well-formed content-rows table with owner scope and full schema.",
+      "table_decl": {
+        "posts": {
+          "@kind":   "content-rows",
+          "@scope":  "owner",
+          "@title":  "Blog Posts",
+          "@schema": {
+            "title":        "string",
+            "body":         "text",
+            "slug":         "string",
+            "published_at": "epoch"
+          },
+          "@index": ["slug", "published_at"]
+        }
+      }
+    },
+
+    {
+      "id": "valid_visitor_scope_settings_singleton",
+      "expect": "PASS",
+      "description": "Settings table with visitor scope and singleton flag.",
+      "table_decl": {
+        "prefs": {
+          "@kind":      "settings",
+          "@scope":     "visitor",
+          "@singleton": true,
+          "@schema": {
+            "theme":         "string",
+            "notifications": "bool"
+          }
+        }
+      }
+    },
+
+    {
+      "id": "valid_shared_scope_counter",
+      "expect": "PASS",
+      "description": "Shared counter table. Any authenticated visitor can POST.",
+      "table_decl": {
+        "view_count": {
+          "@kind":   "counter",
+          "@scope":  "shared",
+          "@schema": {
+            "post_slug": "string",
+            "count":     "int"
+          }
+        }
+      }
+    },
+
+    {
+      "id": "valid_minimal_table_no_schema",
+      "expect": "PASS",
+      "description": "@kind and @scope are the only required fields. @schema is optional.",
+      "table_decl": {
+        "notes": {
+          "@kind":  "feed",
+          "@scope": "visitor"
+        }
+      }
+    },
+
+    {
+      "id": "valid_relation_rows_visitor",
+      "expect": "PASS",
+      "description": "Comments table: relation-rows with visitor scope.",
+      "table_decl": {
+        "comments": {
+          "@kind":   "relation-rows",
+          "@scope":  "visitor",
+          "@schema": {
+            "post_slug": "string",
+            "author":    "string",
+            "body":      "text"
+          }
+        }
+      }
+    },
+
+    {
+      "id": "valid_row_stamping",
+      "expect": "PASS",
+      "description": "A row returned from GET includes server-stamped _written_by and _written_at.",
+      "row": {
+        "title":        "Hello World",
+        "slug":         "hello-world",
+        "published_at": 1704067200,
+        "_written_by":  "u_alice_...",
+        "_written_at":  1704067200
+      }
+    },
+
+    {
+      "id": "valid_multi_table_manifest",
+      "expect": "PASS",
+      "description": "Manifest with four tables across all three scopes.",
+      "table_decl": {
+        "posts":      { "@kind": "content-rows",  "@scope": "owner"   },
+        "comments":   { "@kind": "relation-rows", "@scope": "visitor" },
+        "prefs":      { "@kind": "settings",      "@scope": "visitor", "@singleton": true },
+        "view_count": { "@kind": "counter",        "@scope": "shared"  }
+      }
+    },
+
+    {
+      "id": "invalid_missing_kind",
+      "expect": "FAIL",
+      "violation": "AT_SCHEMA_1",
+      "description": "@kind is required. Missing @kind must be rejected.",
+      "table_decl": {
+        "posts": {
+          "@scope": "owner"
+        }
+      }
+    },
+
+    {
+      "id": "invalid_missing_scope",
+      "expect": "FAIL",
+      "violation": "AT_SCHEMA_2",
+      "description": "@scope is required. Missing @scope must be rejected.",
+      "table_decl": {
+        "posts": {
+          "@kind": "content-rows"
+        }
+      }
+    },
+
+    {
+      "id": "invalid_unknown_scope",
+      "expect": "FAIL",
+      "violation": "AT5",
+      "description": "Scope value must be 'owner', 'visitor', or 'shared'. Unknown values rejected.",
+      "table_decl": {
+        "posts": {
+          "@kind":  "content-rows",
+          "@scope": "public"
+        }
+      }
+    },
+
+    {
+      "id": "invalid_unknown_kind",
+      "expect": "FAIL",
+      "violation": "AT_SCHEMA_3",
+      "description": "@kind must be one of the declared kind_taxonomy values.",
+      "table_decl": {
+        "posts": {
+          "@kind":  "blob-store",
+          "@scope": "owner"
+        }
+      }
+    },
+
+    {
+      "id": "invalid_owner_write_by_visitor",
+      "expect": "FAIL",
+      "violation": "AT2",
+      "description": "A visitor session attempting to POST to an @scope:owner table must receive 403 OWNER_ONLY.",
+      "scenario": {
+        "table_scope":      "owner",
+        "owner_user_id":    "u_alice_...",
+        "session_user_id":  "u_bob_...",
+        "operation":        "POST",
+        "expected_error":   "OWNER_ONLY"
+      }
+    },
+
+    {
+      "id": "invalid_visitor_get_sees_only_own_rows",
+      "expect": "PASS",
+      "description": "GET for @scope:visitor returns rows keyed by the session user_id, not all rows. This is a positive fixture: the isolation invariant AT3 holds when the response contains only the requesting user's rows.",
+      "scenario": {
+        "table_scope":       "visitor",
+        "session_user_id":   "u_bob_...",
+        "storage_layout": {
+          "u_alice_uid/blog/comments.jsonl": [{"body": "alice comment", "_written_by": "u_alice_..."}],
+          "u_bob_uid/blog/comments.jsonl":   [{"body": "bob comment",   "_written_by": "u_bob_..."}]
+        },
+        "expected_rows": [{"body": "bob comment", "_written_by": "u_bob_..."}],
+        "must_not_contain_written_by": "u_alice_..."
+      }
+    },
+
+    {
+      "id": "invalid_undeclared_table_write",
+      "expect": "FAIL",
+      "violation": "AT5",
+      "description": "Writing to a table_id not declared in @tables must return 404 TABLE_NOT_DECLARED.",
+      "scenario": {
+        "manifest_tables":  ["posts", "comments"],
+        "target_table_id":  "secrets",
+        "operation":        "POST",
+        "expected_error":   "TABLE_NOT_DECLARED"
+      }
+    },
+
+    {
+      "id": "invalid_undeclared_table_read",
+      "expect": "FAIL",
+      "violation": "AT5",
+      "description": "Reading from an undeclared table_id must also return 404 TABLE_NOT_DECLARED.",
+      "scenario": {
+        "manifest_tables":  ["posts"],
+        "target_table_id":  "drafts",
+        "operation":        "GET",
+        "expected_error":   "TABLE_NOT_DECLARED"
+      }
+    },
+
+    {
+      "id": "invalid_client_supplied_stamp_fields",
+      "expect": "FAIL",
+      "violation": "AT7",
+      "description": "Client-supplied _written_by or _written_at must be ignored (overwritten by server). The stored row must contain server values, not the client values.",
+      "scenario": {
+        "client_row": {
+          "title":       "Spoofed",
+          "_written_by": "u_admin_...",
+          "_written_at": 0
+        },
+        "expected_stored_written_by": "u_bob_...",
+        "expected_stored_written_at": "server_epoch"
+      }
+    },
+
+    {
+      "id": "invalid_visitor_get_without_session",
+      "expect": "FAIL",
+      "violation": "AT3",
+      "description": "GET on @scope:visitor without a valid session cookie must return 401 SESSION_REQUIRED.",
+      "scenario": {
+        "table_scope":     "visitor",
+        "session_cookie":  null,
+        "expected_error":  "SESSION_REQUIRED"
+      }
+    },
+
+    {
+      "id": "invalid_singleton_multiple_rows_returns_last",
+      "expect": "PASS",
+      "description": "When @singleton:true and the JSONL has multiple rows, GET returns only the last row. All rows are retained on disk (AT10).",
+      "scenario": {
+        "singleton": true,
+        "jsonl_rows": [
+          {"theme": "dark",  "_written_by": "u_bob_...", "_written_at": 100},
+          {"theme": "light", "_written_by": "u_bob_...", "_written_at": 200}
+        ],
+        "expected_resolved_row": {"theme": "light", "_written_by": "u_bob_...", "_written_at": 200},
+        "rows_on_disk": 2
+      }
+    },
+
+    {
+      "id": "valid_isolation_same_app_id_different_users",
+      "expect": "PASS",
+      "description": "Alice and Bob both publish app_id='blog'. Their tables are at different storage paths and their manifests are fetched from different URLs. AT1 is satisfied.",
+      "scenario": {
+        "alice": {
+          "index_key":      "alice/blog",
+          "manifest_url":   "/api/apps/alice/blog/manifest",
+          "table_path":     "data/host/storage/tables/u_alice_uid/blog/posts.jsonl"
+        },
+        "bob": {
+          "index_key":      "bob/blog",
+          "manifest_url":   "/api/apps/bob/blog/manifest",
+          "table_path":     "data/host/storage/tables/u_bob_uid/blog/posts.jsonl"
+        },
+        "paths_are_distinct": true,
+        "manifests_are_distinct": true
+      }
+    }
+  ]
+}

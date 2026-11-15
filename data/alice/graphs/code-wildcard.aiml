@@ -1,0 +1,1080 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from code-wildcard.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH CODEWILDCARDFIELDGRAPH</pattern>
+    <template>source code-wildcard.gml; label CodeWildcardFieldGraph; identity kgf.code-wildcard/1; authority data_only; directed 1; nodes 79; edges 110. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 20</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 20; absorbs: remainder; arity: variable; id: 20; kind: wildcard; label: *. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 20; absorbs: remainder; arity: variable; id: 20; kind: wildcard; label: *. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 21</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 21; absorbs: sequence; arity: 2; id: 21; kind: wildcard; label: * *. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 21; absorbs: sequence; arity: 2; id: 21; kind: wildcard; label: * *. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 1</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 1; authority: data_only; id: 1; kind: code_construct; label: code:FUNCTION; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE CODE:FUNCTION</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 1; authority: data_only; id: 1; kind: code_construct; label: code:FUNCTION; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 2</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 2; authority: data_only; id: 2; kind: code_construct; label: code:CLASS; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE CODE:CLASS</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 2; authority: data_only; id: 2; kind: code_construct; label: code:CLASS; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 3</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 3; authority: data_only; id: 3; kind: code_construct; label: code:METHOD; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE CODE:METHOD</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 3; authority: data_only; id: 3; kind: code_construct; label: code:METHOD; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 4</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 4; authority: data_only; id: 4; kind: code_construct; label: code:IMPORT; phase: Pop. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE CODE:IMPORT</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 4; authority: data_only; id: 4; kind: code_construct; label: code:IMPORT; phase: Pop. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 5</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 5; authority: data_only; id: 5; kind: code_construct; label: code:VARIABLE; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE CODE:VARIABLE</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 5; authority: data_only; id: 5; kind: code_construct; label: code:VARIABLE; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 6</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 6; authority: data_only; id: 6; kind: code_construct; label: code:LOOP; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE CODE:LOOP</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 6; authority: data_only; id: 6; kind: code_construct; label: code:LOOP; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 7</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 7; authority: data_only; id: 7; kind: code_construct; label: code:CONDITION; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE CODE:CONDITION</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 7; authority: data_only; id: 7; kind: code_construct; label: code:CONDITION; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 8</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 8; authority: data_only; id: 8; kind: code_construct; label: code:EXCEPTION; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE CODE:EXCEPTION</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 8; authority: data_only; id: 8; kind: code_construct; label: code:EXCEPTION; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 9</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 9; authority: data_only; id: 9; kind: code_construct; label: code:INTERFACE; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE CODE:INTERFACE</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 9; authority: data_only; id: 9; kind: code_construct; label: code:INTERFACE; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 10</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 10; authority: data_only; id: 10; kind: code_construct; label: code:ASYNC; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE CODE:ASYNC</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 10; authority: data_only; id: 10; kind: code_construct; label: code:ASYNC; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 11</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 11; authority: data_only; id: 11; kind: code_construct; label: code:STATIC; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE CODE:STATIC</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 11; authority: data_only; id: 11; kind: code_construct; label: code:STATIC; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 12</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 12; authority: data_only; id: 12; kind: code_construct; label: code:CALLBACK; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE CODE:CALLBACK</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 12; authority: data_only; id: 12; kind: code_construct; label: code:CALLBACK; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 13</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 13; authority: data_only; id: 13; kind: code_construct; label: code:PROMISE; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE CODE:PROMISE</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 13; authority: data_only; id: 13; kind: code_construct; label: code:PROMISE; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 14</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 14; authority: data_only; id: 14; kind: code_construct; label: code:MODULE; phase: Pop. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE CODE:MODULE</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 14; authority: data_only; id: 14; kind: code_construct; label: code:MODULE; phase: Pop. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 15</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 15; authority: data_only; id: 15; kind: code_construct; label: code:RETURN; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE CODE:RETURN</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 15; authority: data_only; id: 15; kind: code_construct; label: code:RETURN; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 30</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 30; authority: proposal_only; id: 30; kind: wildcard_pattern; label: pattern:REVIEW_*; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 30; authority: proposal_only; id: 30; kind: wildcard_pattern; label: pattern:REVIEW_*; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 31</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 31; authority: proposal_only; id: 31; kind: wildcard_pattern; label: pattern:REFACTOR_*; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 31; authority: proposal_only; id: 31; kind: wildcard_pattern; label: pattern:REFACTOR_*; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 32</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 32; authority: proposal_only; id: 32; kind: wildcard_pattern; label: pattern:ADD_TEST_FOR_*; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 32; authority: proposal_only; id: 32; kind: wildcard_pattern; label: pattern:ADD_TEST_FOR_*; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 33</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 33; authority: proposal_only; id: 33; kind: wildcard_pattern; label: pattern:TEST_*; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 33; authority: proposal_only; id: 33; kind: wildcard_pattern; label: pattern:TEST_*; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 34</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 34; authority: proposal_only; id: 34; kind: wildcard_pattern; label: pattern:DOCUMENT_*; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 34; authority: proposal_only; id: 34; kind: wildcard_pattern; label: pattern:DOCUMENT_*; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 35</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 35; authority: proposal_only; id: 35; kind: wildcard_pattern; label: pattern:OPTIMIZE_*; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 35; authority: proposal_only; id: 35; kind: wildcard_pattern; label: pattern:OPTIMIZE_*; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 36</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 36; authority: proposal_only; id: 36; kind: wildcard_pattern; label: pattern:FIX_*; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 36; authority: proposal_only; id: 36; kind: wildcard_pattern; label: pattern:FIX_*; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 37</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 37; authority: proposal_only; id: 37; kind: wildcard_pattern; label: pattern:IMPROVE_PERFORMANCE_*; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 37; authority: proposal_only; id: 37; kind: wildcard_pattern; label: pattern:IMPROVE_PERFORMANCE_*; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 40</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 40; authority: proposal_only; id: 40; kind: lang_struct_pattern; label: pattern:FUNCTION_*_JS; lang: javascript; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 40; authority: proposal_only; id: 40; kind: lang_struct_pattern; label: pattern:FUNCTION_*_JS; lang: javascript; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 41</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 41; authority: proposal_only; id: 41; kind: lang_struct_pattern; label: pattern:CLASS_*_JS; lang: javascript; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 41; authority: proposal_only; id: 41; kind: lang_struct_pattern; label: pattern:CLASS_*_JS; lang: javascript; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 42</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 42; authority: proposal_only; id: 42; kind: lang_struct_pattern; label: pattern:ASYNC_FN_*_JS; lang: javascript; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 42; authority: proposal_only; id: 42; kind: lang_struct_pattern; label: pattern:ASYNC_FN_*_JS; lang: javascript; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 43</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 43; authority: proposal_only; id: 43; kind: lang_struct_pattern; label: pattern:DEF_*_PY; lang: python; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 43; authority: proposal_only; id: 43; kind: lang_struct_pattern; label: pattern:DEF_*_PY; lang: python; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 44</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 44; authority: proposal_only; id: 44; kind: lang_struct_pattern; label: pattern:CLASS_*_PY; lang: python; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 44; authority: proposal_only; id: 44; kind: lang_struct_pattern; label: pattern:CLASS_*_PY; lang: python; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 45</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 45; authority: proposal_only; id: 45; kind: lang_struct_pattern; label: pattern:PUBLIC_*_CS; lang: csharp; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 45; authority: proposal_only; id: 45; kind: lang_struct_pattern; label: pattern:PUBLIC_*_CS; lang: csharp; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 46</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 46; authority: proposal_only; id: 46; kind: lang_struct_pattern; label: pattern:VOID_*_CPP; lang: cpp; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 46; authority: proposal_only; id: 46; kind: lang_struct_pattern; label: pattern:VOID_*_CPP; lang: cpp; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 47</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 47; authority: proposal_only; id: 47; kind: lang_struct_pattern; label: pattern:CLASS_*_JAVA; lang: java; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 47; authority: proposal_only; id: 47; kind: lang_struct_pattern; label: pattern:CLASS_*_JAVA; lang: java; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 60</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 60; id: 60; kind: capture; label: capture:REVIEW_SUBJECT; phase: Wo; prefix: review ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 60; id: 60; kind: capture; label: capture:REVIEW_SUBJECT; phase: Wo; prefix: review ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 61</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 61; id: 61; kind: capture; label: capture:REFACTOR_SUBJECT; phase: Yax; prefix: refactor ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 61; id: 61; kind: capture; label: capture:REFACTOR_SUBJECT; phase: Yax; prefix: refactor ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 62</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 62; id: 62; kind: capture; label: capture:TEST_SUBJECT; phase: Yax; prefix: add test for ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 62; id: 62; kind: capture; label: capture:TEST_SUBJECT; phase: Yax; prefix: add test for ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 63</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 63; id: 63; kind: capture; label: capture:TEST_ALT_SUBJECT; phase: Yax; prefix: test ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 63; id: 63; kind: capture; label: capture:TEST_ALT_SUBJECT; phase: Yax; prefix: test ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 64</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 64; id: 64; kind: capture; label: capture:DOC_SUBJECT; phase: Yax; prefix: document ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 64; id: 64; kind: capture; label: capture:DOC_SUBJECT; phase: Yax; prefix: document ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 65</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 65; id: 65; kind: capture; label: capture:OPTIMIZE_SUBJECT; phase: Yax; prefix: optimize ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 65; id: 65; kind: capture; label: capture:OPTIMIZE_SUBJECT; phase: Yax; prefix: optimize ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 66</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 66; id: 66; kind: capture; label: capture:FN_NAME_JS; phase: Wo; prefix: function ; slot: fn_name. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 66; id: 66; kind: capture; label: capture:FN_NAME_JS; phase: Wo; prefix: function ; slot: fn_name. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 67</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 67; id: 67; kind: capture; label: capture:CLASS_NAME_JS; phase: Wo; prefix: class ; slot: class_name. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 67; id: 67; kind: capture; label: capture:CLASS_NAME_JS; phase: Wo; prefix: class ; slot: class_name. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 68</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 68; id: 68; kind: capture; label: capture:DEF_NAME_PY; phase: Wo; prefix: def ; slot: fn_name. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 68; id: 68; kind: capture; label: capture:DEF_NAME_PY; phase: Wo; prefix: def ; slot: fn_name. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 69</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 69; id: 69; kind: capture; label: capture:CLASS_NAME_PY; phase: Wo; prefix: class ; slot: class_name. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 69; id: 69; kind: capture; label: capture:CLASS_NAME_PY; phase: Wo; prefix: class ; slot: class_name. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 80</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 80; authority: proposal_only; id: 80; kind: tool_selector; label: tool:REVIEWER; phase: Sek; shards: github-codereview,Code-Feedback; threshold: 0.7. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE TOOL:REVIEWER</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 80; authority: proposal_only; id: 80; kind: tool_selector; label: tool:REVIEWER; phase: Sek; shards: github-codereview,Code-Feedback; threshold: 0.7. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 81</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 81; authority: proposal_only; id: 81; kind: tool_selector; label: tool:REFACTORER; phase: Sek; shards: dolphin-coder,phi-2-sft-lora; threshold: 0.7. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE TOOL:REFACTORER</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 81; authority: proposal_only; id: 81; kind: tool_selector; label: tool:REFACTORER; phase: Sek; shards: dolphin-coder,phi-2-sft-lora; threshold: 0.7. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 82</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 82; authority: proposal_only; id: 82; kind: tool_selector; label: tool:TESTER; phase: Sek; shards: crowd-code-dataset-1.0; threshold: 0.7. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE TOOL:TESTER</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 82; authority: proposal_only; id: 82; kind: tool_selector; label: tool:TESTER; phase: Sek; shards: crowd-code-dataset-1.0; threshold: 0.7. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 83</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 83; authority: proposal_only; id: 83; kind: tool_selector; label: tool:DOCUMENTER; phase: Sek; shards: G-Code; threshold: 0.7. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE TOOL:DOCUMENTER</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 83; authority: proposal_only; id: 83; kind: tool_selector; label: tool:DOCUMENTER; phase: Sek; shards: G-Code; threshold: 0.7. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 84</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 84; authority: proposal_only; id: 84; kind: tool_selector; label: tool:OPTIMIZER; phase: Sek; shards: scripts,dolphin-coder; threshold: 0.7. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE TOOL:OPTIMIZER</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 84; authority: proposal_only; id: 84; kind: tool_selector; label: tool:OPTIMIZER; phase: Sek; shards: scripts,dolphin-coder; threshold: 0.7. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 90</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 90; authority: host_gated; id: 90; kind: execution_gate; label: xcfe:CODEX_ADMISSION; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 90; authority: host_gated; id: 90; kind: execution_gate; label: xcfe:CODEX_ADMISSION; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 91</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 91; authority: host_gated; id: 91; kind: validator; label: validate:S7_MINI_GGUF; phase: Ch'en; port: 7734. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 91; authority: host_gated; id: 91; kind: validator; label: validate:S7_MINI_GGUF; phase: Ch'en; port: 7734. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 92</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 92; authority: host_gated; id: 92; kind: validator; label: validate:DESP_V1; phase: Ch'en; port: 5003. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 92; authority: host_gated; id: 92; kind: validator; label: validate:DESP_V1; phase: Ch'en; port: 5003. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 93</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 93; authority: host_gated; id: 93; kind: policy; label: xcfe:CODEX_POLICY; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 93; authority: host_gated; id: 93; kind: policy; label: xcfe:CODEX_POLICY; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 94</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 94; authority: host_gated; id: 94; kind: verification_gate; label: phase:CHEN_VERIFY; phase: Ch'en. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 94; authority: host_gated; id: 94; kind: verification_gate; label: phase:CHEN_VERIFY; phase: Ch'en. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 95</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 95; authority: host_gated; id: 95; kind: closure_gate; label: phase:XUL_CLOSE; phase: Xul. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 95; authority: host_gated; id: 95; kind: closure_gate; label: phase:XUL_CLOSE; phase: Xul. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 100</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 100; authority: proposal_only; id: 100; kind: proposal; label: output:CODE_REVIEW_PROPOSAL; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 100; authority: proposal_only; id: 100; kind: proposal; label: output:CODE_REVIEW_PROPOSAL; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 101</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 101; authority: proposal_only; id: 101; kind: proposal; label: output:REFACTOR_PROPOSAL; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 101; authority: proposal_only; id: 101; kind: proposal; label: output:REFACTOR_PROPOSAL; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 102</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 102; authority: proposal_only; id: 102; kind: proposal; label: output:TEST_PROPOSAL; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 102; authority: proposal_only; id: 102; kind: proposal; label: output:TEST_PROPOSAL; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 103</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 103; authority: proposal_only; id: 103; kind: proposal; label: output:DOC_PROPOSAL; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 103; authority: proposal_only; id: 103; kind: proposal; label: output:DOC_PROPOSAL; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 104</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 104; authority: proposal_only; id: 104; kind: proposal; label: output:OPTIMIZATION_PROPOSAL; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 104; authority: proposal_only; id: 104; kind: proposal; label: output:OPTIMIZATION_PROPOSAL; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 105</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 105; authority: host_gated; id: 105; kind: verified_result; label: output:VERIFIED_CODE_PROPOSAL; phase: Ch'en. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 105; authority: host_gated; id: 105; kind: verified_result; label: output:VERIFIED_CODE_PROPOSAL; phase: Ch'en. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 106</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 106; authority: host_gated; id: 106; kind: persistence_target; label: store:DETERMINISTIC_V6_TRACE; phase: Xul. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE </pattern>
+    <template>Graph CodeWildcardFieldGraph; node 106; authority: host_gated; id: 106; kind: persistence_target; label: store:DETERMINISTIC_V6_TRACE; phase: Xul. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 200</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 200; authority: proposal_only; id: 200; kind: bigram_candidate; label: bigram:FUNCTION|ASYNC; lang: javascript; left: code:FUNCTION; phase: Yax; right: code:ASYNC. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE BIGRAM:FUNCTION|ASYNC</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 200; authority: proposal_only; id: 200; kind: bigram_candidate; label: bigram:FUNCTION|ASYNC; lang: javascript; left: code:FUNCTION; phase: Yax; right: code:ASYNC. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 201</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 201; authority: proposal_only; id: 201; kind: bigram_candidate; label: bigram:FUNCTION|CALLBACK; lang: javascript; left: code:FUNCTION; phase: Yax; right: code:CALLBACK. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE BIGRAM:FUNCTION|CALLBACK</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 201; authority: proposal_only; id: 201; kind: bigram_candidate; label: bigram:FUNCTION|CALLBACK; lang: javascript; left: code:FUNCTION; phase: Yax; right: code:CALLBACK. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 202</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 202; authority: proposal_only; id: 202; kind: bigram_candidate; label: bigram:CLASS|EXTENDS; lang: javascript; left: code:CLASS; phase: Yax; right: code:INTERFACE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE BIGRAM:CLASS|EXTENDS</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 202; authority: proposal_only; id: 202; kind: bigram_candidate; label: bigram:CLASS|EXTENDS; lang: javascript; left: code:CLASS; phase: Yax; right: code:INTERFACE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 203</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 203; authority: proposal_only; id: 203; kind: bigram_candidate; label: bigram:PROMISE|THEN; lang: javascript; left: code:PROMISE; phase: Yax; right: code:CALLBACK. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE BIGRAM:PROMISE|THEN</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 203; authority: proposal_only; id: 203; kind: bigram_candidate; label: bigram:PROMISE|THEN; lang: javascript; left: code:PROMISE; phase: Yax; right: code:CALLBACK. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 204</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 204; authority: proposal_only; id: 204; kind: bigram_candidate; label: bigram:ASYNC|AWAIT; lang: javascript; left: code:ASYNC; phase: Yax; right: code:PROMISE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE BIGRAM:ASYNC|AWAIT</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 204; authority: proposal_only; id: 204; kind: bigram_candidate; label: bigram:ASYNC|AWAIT; lang: javascript; left: code:ASYNC; phase: Yax; right: code:PROMISE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 205</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 205; authority: proposal_only; id: 205; kind: bigram_candidate; label: bigram:FUNCTION|RETURN; lang: javascript; left: code:FUNCTION; phase: Yax; right: code:RETURN. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE BIGRAM:FUNCTION|RETURN</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 205; authority: proposal_only; id: 205; kind: bigram_candidate; label: bigram:FUNCTION|RETURN; lang: javascript; left: code:FUNCTION; phase: Yax; right: code:RETURN. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 206</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 206; authority: proposal_only; id: 206; kind: bigram_candidate; label: bigram:VARIABLE|FUNCTION; lang: javascript; left: code:VARIABLE; phase: Yax; right: code:FUNCTION. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE BIGRAM:VARIABLE|FUNCTION</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 206; authority: proposal_only; id: 206; kind: bigram_candidate; label: bigram:VARIABLE|FUNCTION; lang: javascript; left: code:VARIABLE; phase: Yax; right: code:FUNCTION. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 207</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 207; authority: proposal_only; id: 207; kind: bigram_candidate; label: bigram:IMPORT|MODULE; lang: javascript; left: code:IMPORT; phase: Yax; right: code:MODULE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE BIGRAM:IMPORT|MODULE</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 207; authority: proposal_only; id: 207; kind: bigram_candidate; label: bigram:IMPORT|MODULE; lang: javascript; left: code:IMPORT; phase: Yax; right: code:MODULE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 208</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 208; authority: proposal_only; id: 208; kind: bigram_candidate; label: bigram:LOOP|CONDITION; lang: javascript; left: code:LOOP; phase: Yax; right: code:CONDITION. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE BIGRAM:LOOP|CONDITION</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 208; authority: proposal_only; id: 208; kind: bigram_candidate; label: bigram:LOOP|CONDITION; lang: javascript; left: code:LOOP; phase: Yax; right: code:CONDITION. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 209</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 209; authority: proposal_only; id: 209; kind: bigram_candidate; label: bigram:DEF|SELF; lang: python; left: code:METHOD; phase: Yax; right: code:CLASS. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE BIGRAM:DEF|SELF</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 209; authority: proposal_only; id: 209; kind: bigram_candidate; label: bigram:DEF|SELF; lang: python; left: code:METHOD; phase: Yax; right: code:CLASS. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 210</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 210; authority: proposal_only; id: 210; kind: bigram_candidate; label: bigram:CLASS|INIT; lang: python; left: code:CLASS; phase: Yax; right: code:METHOD. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE BIGRAM:CLASS|INIT</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 210; authority: proposal_only; id: 210; kind: bigram_candidate; label: bigram:CLASS|INIT; lang: python; left: code:CLASS; phase: Yax; right: code:METHOD. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 211</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 211; authority: proposal_only; id: 211; kind: bigram_candidate; label: bigram:EXCEPTION|CONDITION; lang: python; left: code:EXCEPTION; phase: Yax; right: code:CONDITION. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE BIGRAM:EXCEPTION|CONDITION</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 211; authority: proposal_only; id: 211; kind: bigram_candidate; label: bigram:EXCEPTION|CONDITION; lang: python; left: code:EXCEPTION; phase: Yax; right: code:CONDITION. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 212</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 212; authority: proposal_only; id: 212; kind: bigram_candidate; label: bigram:LOOP|RANGE; lang: python; left: code:LOOP; phase: Yax; right: code:VARIABLE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE BIGRAM:LOOP|RANGE</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 212; authority: proposal_only; id: 212; kind: bigram_candidate; label: bigram:LOOP|RANGE; lang: python; left: code:LOOP; phase: Yax; right: code:VARIABLE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 213</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 213; authority: proposal_only; id: 213; kind: bigram_candidate; label: bigram:STATIC|METHOD; lang: csharp; left: code:STATIC; phase: Yax; right: code:METHOD. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE BIGRAM:STATIC|METHOD</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 213; authority: proposal_only; id: 213; kind: bigram_candidate; label: bigram:STATIC|METHOD; lang: csharp; left: code:STATIC; phase: Yax; right: code:METHOD. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 214</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 214; authority: proposal_only; id: 214; kind: bigram_candidate; label: bigram:ASYNC|METHOD; lang: csharp; left: code:ASYNC; phase: Yax; right: code:METHOD. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE BIGRAM:ASYNC|METHOD</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 214; authority: proposal_only; id: 214; kind: bigram_candidate; label: bigram:ASYNC|METHOD; lang: csharp; left: code:ASYNC; phase: Yax; right: code:METHOD. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 215</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 215; authority: proposal_only; id: 215; kind: bigram_candidate; label: bigram:INTERFACE|CLASS; lang: csharp; left: code:INTERFACE; phase: Yax; right: code:CLASS. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE BIGRAM:INTERFACE|CLASS</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 215; authority: proposal_only; id: 215; kind: bigram_candidate; label: bigram:INTERFACE|CLASS; lang: csharp; left: code:INTERFACE; phase: Yax; right: code:CLASS. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 216</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 216; authority: proposal_only; id: 216; kind: bigram_candidate; label: bigram:VOID|FUNCTION; lang: cpp; left: code:FUNCTION; phase: Yax; right: code:VARIABLE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE BIGRAM:VOID|FUNCTION</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 216; authority: proposal_only; id: 216; kind: bigram_candidate; label: bigram:VOID|FUNCTION; lang: cpp; left: code:FUNCTION; phase: Yax; right: code:VARIABLE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE 217</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 217; authority: proposal_only; id: 217; kind: bigram_candidate; label: bigram:STATIC|VARIABLE; lang: cpp; left: code:STATIC; phase: Yax; right: code:VARIABLE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH NODE BIGRAM:STATIC|VARIABLE</pattern>
+    <template>Graph CodeWildcardFieldGraph; node 217; authority: proposal_only; id: 217; kind: bigram_candidate; label: bigram:STATIC|VARIABLE; lang: cpp; left: code:STATIC; phase: Yax; right: code:VARIABLE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 1  200</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 1 to 200; relation: unfolds_to_bigram; source: 1; target: 200. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 10  200</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 10 to 200; relation: bigram_target; source: 10; target: 200. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 1  201</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 1 to 201; relation: unfolds_to_bigram; source: 1; target: 201. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 12  201</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 12 to 201; relation: bigram_target; source: 12; target: 201. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 2  202</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 2 to 202; relation: unfolds_to_bigram; source: 2; target: 202. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 9  202</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 9 to 202; relation: bigram_target; source: 9; target: 202. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 13  203</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 13 to 203; relation: unfolds_to_bigram; source: 13; target: 203. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 12  203</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 12 to 203; relation: bigram_target; source: 12; target: 203. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 10  204</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 10 to 204; relation: unfolds_to_bigram; source: 10; target: 204. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 13  204</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 13 to 204; relation: bigram_target; source: 13; target: 204. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 1  205</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 1 to 205; relation: unfolds_to_bigram; source: 1; target: 205. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 15  205</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 15 to 205; relation: bigram_target; source: 15; target: 205. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 5  206</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 5 to 206; relation: unfolds_to_bigram; source: 5; target: 206. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 1  206</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 1 to 206; relation: bigram_target; source: 1; target: 206. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 4  207</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 4 to 207; relation: unfolds_to_bigram; source: 4; target: 207. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 14  207</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 14 to 207; relation: bigram_target; source: 14; target: 207. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 6  208</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 6 to 208; relation: unfolds_to_bigram; source: 6; target: 208. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 7  208</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 7 to 208; relation: bigram_target; source: 7; target: 208. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 3  209</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 3 to 209; relation: unfolds_to_bigram; source: 3; target: 209. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 2  209</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 2 to 209; relation: bigram_target; source: 2; target: 209. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 2  210</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 2 to 210; relation: unfolds_to_bigram; source: 2; target: 210. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 3  210</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 3 to 210; relation: bigram_target; source: 3; target: 210. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 8  211</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 8 to 211; relation: unfolds_to_bigram; source: 8; target: 211. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 7  211</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 7 to 211; relation: bigram_target; source: 7; target: 211. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 6  212</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 6 to 212; relation: unfolds_to_bigram; source: 6; target: 212. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 5  212</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 5 to 212; relation: bigram_target; source: 5; target: 212. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 11  213</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 11 to 213; relation: unfolds_to_bigram; source: 11; target: 213. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 3  213</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 3 to 213; relation: bigram_target; source: 3; target: 213. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 10  214</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 10 to 214; relation: unfolds_to_bigram; source: 10; target: 214. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 3  214</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 3 to 214; relation: bigram_target; source: 3; target: 214. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 9  215</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 9 to 215; relation: unfolds_to_bigram; source: 9; target: 215. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 2  215</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 2 to 215; relation: bigram_target; source: 2; target: 215. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 1  216</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 1 to 216; relation: unfolds_to_bigram; source: 1; target: 216. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 5  216</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 5 to 216; relation: bigram_target; source: 5; target: 216. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 11  217</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 11 to 217; relation: unfolds_to_bigram; source: 11; target: 217. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 5  217</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 5 to 217; relation: bigram_target; source: 5; target: 217. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 200  80</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 200 to 80; relation: instantiates_review; source: 200; status: candidate; target: 80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 201  80</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 201 to 80; relation: instantiates_review; source: 201; status: candidate; target: 80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 202  81</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 202 to 81; relation: instantiates_review; source: 202; status: candidate; target: 81. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 203  80</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 203 to 80; relation: instantiates_review; source: 203; status: candidate; target: 80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 204  80</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 204 to 80; relation: instantiates_review; source: 204; status: candidate; target: 80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 205  82</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 205 to 82; relation: instantiates_review; source: 205; status: candidate; target: 82. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 206  81</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 206 to 81; relation: instantiates_review; source: 206; status: candidate; target: 81. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 207  80</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 207 to 80; relation: instantiates_review; source: 207; status: candidate; target: 80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 208  84</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 208 to 84; relation: instantiates_review; source: 208; status: candidate; target: 84. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 209  80</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 209 to 80; relation: instantiates_review; source: 209; status: candidate; target: 80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 210  80</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 210 to 80; relation: instantiates_review; source: 210; status: candidate; target: 80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 211  80</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 211 to 80; relation: instantiates_review; source: 211; status: candidate; target: 80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 212  84</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 212 to 84; relation: instantiates_review; source: 212; status: candidate; target: 84. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 213  80</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 213 to 80; relation: instantiates_review; source: 213; status: candidate; target: 80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 214  80</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 214 to 80; relation: instantiates_review; source: 214; status: candidate; target: 80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 215  81</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 215 to 81; relation: instantiates_review; source: 215; status: candidate; target: 81. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 216  80</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 216 to 80; relation: instantiates_review; source: 216; status: candidate; target: 80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 217  84</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 217 to 84; relation: instantiates_review; source: 217; status: candidate; target: 84. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 30 CAPTURES 60</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 30 to 60; position: 0; relation: captures; source: 30; target: 60. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 31 CAPTURES 61</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 31 to 61; position: 0; relation: captures; source: 31; target: 61. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 32 CAPTURES 62</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 32 to 62; position: 0; relation: captures; source: 32; target: 62. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 33 CAPTURES 63</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 33 to 63; position: 0; relation: captures; source: 33; target: 63. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 34 CAPTURES 64</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 34 to 64; position: 0; relation: captures; source: 34; target: 64. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 35 CAPTURES 65</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 35 to 65; position: 0; relation: captures; source: 35; target: 65. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 36 CAPTURES 60</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 36 to 60; position: 0; relation: captures; source: 36; target: 60. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 60 BINDS 20</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 60 to 20; relation: binds; source: 60; target: 20. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 61 BINDS 20</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 61 to 20; relation: binds; source: 61; target: 20. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 62 BINDS 20</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 62 to 20; relation: binds; source: 62; target: 20. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 63 BINDS 20</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 63 to 20; relation: binds; source: 63; target: 20. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 64 BINDS 20</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 64 to 20; relation: binds; source: 64; target: 20. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 65 BINDS 20</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 65 to 20; relation: binds; source: 65; target: 20. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 40 CAPTURES 66</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 40 to 66; position: 0; relation: captures; source: 40; target: 66. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 41 CAPTURES 67</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 41 to 67; position: 0; relation: captures; source: 41; target: 67. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 42 CAPTURES 66</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 42 to 66; position: 0; relation: captures; source: 42; target: 66. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 43 CAPTURES 68</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 43 to 68; position: 0; relation: captures; source: 43; target: 68. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 44 CAPTURES 69</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 44 to 69; position: 0; relation: captures; source: 44; target: 69. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 45 CAPTURES 66</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 45 to 66; position: 0; relation: captures; source: 45; target: 66. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 46 CAPTURES 66</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 46 to 66; position: 0; relation: captures; source: 46; target: 66. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 47 CAPTURES 67</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 47 to 67; position: 0; relation: captures; source: 47; target: 67. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 66 BINDS 20</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 66 to 20; relation: binds; source: 66; target: 20. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 67 BINDS 20</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 67 to 20; relation: binds; source: 67; target: 20. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 68 BINDS 20</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 68 to 20; relation: binds; source: 68; target: 20. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 69 BINDS 20</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 69 to 20; relation: binds; source: 69; target: 20. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 30  80</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 30 to 80; relation: routes_to; source: 30; target: 80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 31  81</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 31 to 81; relation: routes_to; source: 31; target: 81. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 32  82</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 32 to 82; relation: routes_to; source: 32; target: 82. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 33  82</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 33 to 82; relation: routes_to; source: 33; target: 82. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 34  83</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 34 to 83; relation: routes_to; source: 34; target: 83. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 35  84</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 35 to 84; relation: routes_to; source: 35; target: 84. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 36  80</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 36 to 80; relation: routes_to; source: 36; target: 80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 37  84</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 37 to 84; relation: routes_to; source: 37; target: 84. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 80  100</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 80 to 100; relation: generates_candidate; source: 80; target: 100. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 81  101</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 81 to 101; relation: generates_candidate; source: 81; target: 101. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 82  102</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 82 to 102; relation: generates_candidate; source: 82; target: 102. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 83  103</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 83 to 103; relation: generates_candidate; source: 83; target: 103. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 84  104</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 84 to 104; relation: generates_candidate; source: 84; target: 104. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 100  90</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 100 to 90; relation: requires_admission; source: 100; target: 90. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 101  90</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 101 to 90; relation: requires_admission; source: 101; target: 90. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 102  90</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 102 to 90; relation: requires_admission; source: 102; target: 90. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 103  90</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 103 to 90; relation: requires_admission; source: 103; target: 90. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 104  90</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 104 to 90; relation: requires_admission; source: 104; target: 90. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 80  93</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 80 to 93; relation: subject_to_policy; source: 80; target: 93. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 81  93</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 81 to 93; relation: subject_to_policy; source: 81; target: 93. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 82  93</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 82 to 93; relation: subject_to_policy; source: 82; target: 93. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 83  93</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 83 to 93; relation: subject_to_policy; source: 83; target: 93. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 84  93</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 84 to 93; relation: subject_to_policy; source: 84; target: 93. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 93  90</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 93 to 90; relation: requires_gate; source: 93; target: 90. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 90  91</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 90 to 91; relation: requires_validator; source: 90; target: 91. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 90  92</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 90 to 92; relation: requires_validator; source: 90; target: 92. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 91  94</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 91 to 94; relation: validator_pass_required; source: 91; target: 94. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 92  94</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 92 to 94; relation: validator_pass_required; source: 92; target: 94. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 94  105</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 94 to 105; relation: produces_if_evidence_sufficient; source: 94; target: 105. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 105  95</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 105 to 95; relation: requires_authorized_closure; source: 105; target: 95. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CODEWILDCARDFIELDGRAPH EDGE 95  106</pattern>
+    <template>Graph CodeWildcardFieldGraph; edge 95 to 106; relation: authorized_persistence_only; source: 95; target: 106. Data-only graph record.</template>
+  </category>
+</aiml>

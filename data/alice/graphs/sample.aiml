@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from sample.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH HELLO, I AM A GRAPH</pattern>
+    <template>source sample.gml; label Hello, I am a graph; identity 42; directed 1; nodes 3; edges 3. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH HELLO, I AM A GRAPH NODE 1</pattern>
+    <template>Graph Hello, I am a graph; node 1; id: 1; label: node 1; thisIsASampleAttribute: 42. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH HELLO, I AM A GRAPH NODE NODE 1</pattern>
+    <template>Graph Hello, I am a graph; node 1; id: 1; label: node 1; thisIsASampleAttribute: 42. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH HELLO, I AM A GRAPH NODE 2</pattern>
+    <template>Graph Hello, I am a graph; node 2; id: 2; label: node 2; thisIsASampleAttribute: 43. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH HELLO, I AM A GRAPH NODE NODE 2</pattern>
+    <template>Graph Hello, I am a graph; node 2; id: 2; label: node 2; thisIsASampleAttribute: 43. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH HELLO, I AM A GRAPH NODE 3</pattern>
+    <template>Graph Hello, I am a graph; node 3; id: 3; label: node 3; thisIsASampleAttribute: 44. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH HELLO, I AM A GRAPH NODE NODE 3</pattern>
+    <template>Graph Hello, I am a graph; node 3; id: 3; label: node 3; thisIsASampleAttribute: 44. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH HELLO, I AM A GRAPH EDGE 1 EDGE FROM NODE 1 TO NODE 2 2</pattern>
+    <template>Graph Hello, I am a graph; edge 1 to 2; label: Edge from node 1 to node 2; source: 1; target: 2; verb: @delegates_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH HELLO, I AM A GRAPH EDGE 2 EDGE FROM NODE 2 TO NODE 3 3</pattern>
+    <template>Graph Hello, I am a graph; edge 2 to 3; label: Edge from node 2 to node 3; source: 2; target: 3; verb: @delegates_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH HELLO, I AM A GRAPH EDGE 3 EDGE FROM NODE 3 TO NODE 1 1</pattern>
+    <template>Graph Hello, I am a graph; edge 3 to 1; label: Edge from node 3 to node 1; source: 3; target: 1; verb: @delegates_to. Data-only graph record.</template>
+  </category>
+</aiml>

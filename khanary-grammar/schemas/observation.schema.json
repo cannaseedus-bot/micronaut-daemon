@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Observation Envelope",
+  "type": "object",
+  "properties": {
+    "@kind": {
+      "enum": [
+        "semantic.fact.v1",
+        "semantic.event.v1",
+        "semantic.assertion.v1",
+        "semantic.correction.v1"
+      ]
+    },
+    "@id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "@source": {
+      "type": "string",
+      "minLength": 1
+    },
+    "@observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "@epistemic_status": {
+      "enum": [
+        "asserted",
+        "observed",
+        "disputed",
+        "verified",
+        "refuted",
+        "unknown"
+      ]
+    },
+    "@provenance": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "@payload": {
+      "type": "object"
+    },
+    "@plane": {
+      "enum": [
+        "user",
+        "research",
+        "project",
+        "micronaut",
+        "knowledge",
+        "context"
+      ]
+    }
+  },
+  "required": [
+    "@kind",
+    "@id",
+    "@source",
+    "@observed_at",
+    "@epistemic_status",
+    "@payload",
+    "@plane"
+  ],
+  "additionalProperties": false
+}

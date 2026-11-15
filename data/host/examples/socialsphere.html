@@ -1,0 +1,65 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>SocialSphere · ASX Mini-App</title>
+<style>
+  :root { color-scheme: dark; font-family: Inter, system-ui, sans-serif; }
+  body { margin: 0; background: #0d1117; color: #e6edf3; }
+  main { max-width: 1180px; margin: 24px auto; border: 1px solid #30363d; border-radius: 24px; overflow: hidden; }
+  header { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:16px 24px; background:#161b22; }
+  h1 { margin:0; color:#a855f7; font-size:1.5rem; }
+  .toolbar { display:flex; gap:10px; flex-wrap:wrap; }
+  input, button { border:1px solid #30363d; border-radius:30px; padding:9px 14px; font:inherit; }
+  input { background:#0d1117; color:#e6edf3; }
+  button { background:linear-gradient(135deg,#7c3aed,#a855f7); color:#fff; cursor:pointer; font-weight:700; }
+  .panels { display:grid; grid-template-columns:220px 1fr 260px; min-height:600px; }
+  nav, aside { padding:20px 14px; background:#0d1117; }
+  nav { border-right:1px solid #21262d; } aside { border-left:1px solid #21262d; }
+  nav a { display:block; padding:12px 16px; color:#e6edf3; text-decoration:none; border-radius:30px; }
+  nav a:hover { background:#161b22; }
+  .feed { padding:8px 0; }
+  .post { display:flex; gap:14px; padding:16px 20px; border-bottom:1px solid #21262d; }
+  .avatar { width:48px; height:48px; border-radius:50%; background:#7c3aed; display:grid; place-items:center; font-weight:800; }
+  .muted { color:#8b949e; } .card { background:#161b22; border:1px solid #21262d; border-radius:16px; padding:16px; margin-bottom:16px; }
+  @media(max-width:900px){.panels{grid-template-columns:1fr}nav,aside{display:none}}
+</style>
+<main data-asx-key="⟁APP:SOCIALSPHERE/⟁ROOT:SOCIALSPHERE">
+  <header data-asx-key="⟁APP:SOCIALSPHERE/⟁WIDGET:HEADER">
+    <h1>◈ SocialSphere</h1>
+    <div class="toolbar">
+      <input type="search" placeholder="Search @handles and #tags" data-asx-key="⟁APP:SOCIALSPHERE/⟁INPUT:SEARCH" data-asx-event="search.input">
+      <button data-asx-key="⟁APP:SOCIALSPHERE/⟁ACTION:AUTH" data-asx-event="auth.open">Login</button>
+      <button data-asx-key="⟁APP:SOCIALSPHERE/⟁ACTION:POST" data-asx-event="post.open">Post</button>
+    </div>
+  </header>
+  <div class="muted" data-asx-key="⟁APP:SOCIALSPHERE/⟁OUTPUT:STATUS">JSON projection runtime · request-scoped · no promotion</div>
+  <div class="panels" data-asx-key="⟁APP:SOCIALSPHERE/⟁WIDGET:PANELS">
+    <nav data-asx-key="⟁APP:SOCIALSPHERE/⟁WIDGET:NAV">
+      <a href="#home" data-asx-key="⟁APP:SOCIALSPHERE/⟁NAV:HOME">Home</a>
+      <a href="#explore" data-asx-key="⟁APP:SOCIALSPHERE/⟁NAV:EXPLORE">Explore</a>
+      <a href="#notifications" data-asx-key="⟁APP:SOCIALSPHERE/⟁NAV:NOTIFICATIONS">Notifications</a>
+      <a href="#messages" data-asx-key="⟁APP:SOCIALSPHERE/⟁NAV:MESSAGES">Messages</a>
+    </nav>
+    <section class="feed" data-asx-key="⟁APP:SOCIALSPHERE/⟁WIDGET:FEED">
+      <article class="post" data-asx-key="⟁APP:SOCIALSPHERE/⟁WIDGET:POST">
+        <div class="avatar">A</div><div><strong>Awaiting posts</strong><p class="muted">The feed is projected from request-scoped JSON state.</p><button data-asx-event="post.like">Like</button><button data-asx-event="post.upvote">Upvote</button></div>
+      </article>
+    </section>
+    <aside>
+      <div class="card" data-asx-key="⟁APP:SOCIALSPHERE/⟁WIDGET:TRENDING"><strong>Trending</strong><p>#SocialSphere · #LocalFirst · #WebDev</p></div>
+      <div class="card" data-asx-key="⟁APP:SOCIALSPHERE/⟁WIDGET:SUGGESTIONS"><strong>Who to follow</strong><p>Alice<br>Bob</p></div>
+    </aside>
+  </div>
+</main>
+<script type="application/json" id="asx-json-runtime">
+{
+  "@kind":"asx.key-runtime.binding.v1",
+  "@app":"⟁APP:SOCIALSPHERE",
+  "@manifest":"data/host/apps/socialsphere.asx-app.json",
+  "@executor":"mx.run",
+  "@route":"json.app",
+  "@authority":"projection_only",
+  "@state":"request_scoped",
+  "@semantic_commit":false,
+  "@events":{"search.input":"socialsphere.search","auth.open":"socialsphere.open_auth","post.open":"socialsphere.open_compose","post.like":"socialsphere.like","post.upvote":"socialsphere.upvote","post.submit":"socialsphere.post_submit"}
+}
+</script>

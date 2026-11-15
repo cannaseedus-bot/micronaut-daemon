@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0.1" xmlns="http://alicebot.org/2001/AIML-1.0.1">
+
+<!-- TRAIN-µ AIML patterns — training pipeline micronaut under Mx2LM-µ -->
+
+<category>
+  <pattern>TRAIN *</pattern>
+  <template><mx2lm>TRAIN-µ dispatched. Pipeline: Pop→corpus scan, Wo→manifest, Yax→admission, Sek→ngram-count + arpa, Ch'en→kblm verify, Xul→commit. Run tools\train_srilm.bat to start. Produces bin/mx2lm.kblm for Mx2LM-µ scoring.</mx2lm></template>
+</category>
+
+<category>
+  <pattern>RETRAIN *</pattern>
+  <template><mx2lm>TRAIN-µ: retrain requested for <star/>. Use tools\train_srilm.bat --rebuild to force re-extraction. Corpus sources: coder_outputs, KodCode parquet, math_data, semantic-json, smgm16 train/val.</mx2lm></template>
+</category>
+
+<category>
+  <pattern>REBUILD *</pattern>
+  <template><mx2lm>TRAIN-µ rebuild for <star/>. Steps: (1) extract corpus → tools\corpus.txt, (2) ngram-count → srilm.counts, (3) arpa build → mx2lm.arpa, (4) pack kblm → bin\mx2lm.kblm. Ch'en verifies CRC before Xul commits.</mx2lm></template>
+</category>
+
+<category>
+  <pattern>REBUILD THE LANGUAGE MODEL</pattern>
+  <template><mx2lm>TRAIN-µ: rebuilding language model from all corpus sources. Run: tools\train_srilm.bat --rebuild. Current corpus sources: 9 paths including coder_outputs (chunk_1-35), KodCode parquet, math_data merged, semantic-json directory, smgm16_gpu_bridge train/val sets.</mx2lm></template>
+</category>
+
+<category>
+  <pattern>RETRAIN THE LANGUAGE MODEL</pattern>
+  <template><mx2lm>TRAIN-µ: language model retrain triggered. This rebuilds bin/mx2lm.kblm which Mx2LM-µ uses for candidate scoring. Run tools\train_srilm.bat to start the pipeline.</mx2lm></template>
+</category>
+
+<category>
+  <pattern>EXTRACT CORPUS</pattern>
+  <template><mx2lm>TRAIN-µ Yax: extracting corpus. Command: py -3 tools\extract_corpus.py E:\data\coder_outputs E:\data\KodCode\train-00000-of-00001.parquet E:\data\math_data\merged_for_gpt2.refined.jsonl E:\data\semantic-json E:\data\smgm16_gpu_bridge -o tools\corpus.txt. Handles BOM, parquet, semantic-json, messages, flat schemas.</mx2lm></template>
+</category>
+
+<category>
+  <pattern>ADD CORPUS *</pattern>
+  <template><mx2lm>TRAIN-µ: adding corpus source <star/>. Add the path to corpus_sources in data/tracks/TRAIN-u.semantic-tracks.v1.json, then run tools\train_srilm.bat --rebuild. New source will be auto-detected by schema type (directory/parquet/jsonl).</mx2lm></template>
+</category>
+
+<category>
+  <pattern>ADD TRAINING DATA *</pattern>
+  <template><mx2lm>TRAIN-µ: adding training data at <star/>. (1) Add path to TRAIN-µ corpus_sources. (2) Confirm schema type: directory→jsonl scan, .parquet→pyarrow, .jsonl→auto-schema detect. (3) Run tools\train_srilm.bat --rebuild.</mx2lm></template>
+</category>
+
+<category>
+  <pattern>TRAIN SRILM</pattern>
+  <template><mx2lm>TRAIN-µ Sek: SRILM training pipeline. ngram-count -text corpus.txt -order 3 -write srilm.counts, then ngram-count -read srilm.counts -lm mx2lm.arpa -unk -cdiscount 0.5. Full pipeline: tools\train_srilm.bat</mx2lm></template>
+</category>
+
+<category>
+  <pattern>PACK KBLM</pattern>
+  <template><mx2lm>TRAIN-µ Ch'en/Xul: packing ARPA to .kblm. py -3 tools\pack_srilm.py tools\mx2lm.arpa -o bin\mx2lm.kblm --order 3 --verify. Format: zlib-compressed, int16 log-probs (×10000), KBLM magic, CRC32. 30-60x smaller than raw ARPA.</mx2lm></template>
+</category>
+
+<category>
+  <pattern>WHAT IS TRAIN MU</pattern>
+  <template><mx2lm>TRAIN-µ is the Mx2LM-µ training pipeline micronaut. It owns corpus extraction → ngram counting → ARPA build → .kblm packaging. Operates under Mx2LM-µ authority. Output: bin/mx2lm.kblm — the binary LM that Mx2LM-µ uses to score n-gram candidates at Sek phase.</mx2lm></template>
+</category>
+
+<category>
+  <pattern>WHAT IS TRAIN-U</pattern>
+  <template><mx2lm>TRAIN-µ (TRAIN-u) is the corpus training pipeline micronaut subordinate to Mx2LM-µ. Full Pop→Wo→Yax→Sek→Ch'en→Xul cycle: scan sources → build manifest → admit changed files → run ngram-count → verify kblm → commit model path to gram store.</mx2lm></template>
+</category>
+
+<category>
+  <pattern>TRAINING PIPELINE STATUS</pattern>
+  <template><mx2lm>TRAIN-µ status: check gram key train:last_run for last training timestamp, train:sentence_count for corpus size, train:kblm_verify_status for last verification result, train:bias_evidence for loaded semantic comparison evidence. mx2lm:kblm_ready signals Mx2LM-µ that a fresh model is available. Bias log: field/distilled/compare.bias.jsonl (loaded at Yax admission gate).</mx2lm></template>
+</category>
+
+<category>
+  <pattern>TRAINING STATUS</pattern>
+  <template><mx2lm>TRAIN-µ: check gram keys — train:last_run (timestamp), train:sentence_count (corpus size), train:kblm_verify_status (SUPPORTED/CONTRADICTED), mx2lm:kblm_ready (bool). Run tools\train_srilm.bat to rebuild.</mx2lm></template>
+</category>
+
+<category>
+  <pattern>CORPUS UPDATE</pattern>
+  <template><mx2lm>TRAIN-µ Yax: corpus update check. Compares mtimes of all corpus_sources against train:last_run. Changed/new files admitted to the extraction run. Use --rebuild flag to re-extract all regardless of mtime.</mx2lm></template>
+</category>
+
+<category>
+  <pattern>MX2LM TRAIN *</pattern>
+  <template><mx2lm>TRAIN-µ (child of Mx2LM-µ): training request — <star/>. The .kblm produced here is what Mx2LM-µ uses at Sek phase for SRILM candidate scoring. Run tools\train_srilm.bat to execute the full pipeline.</mx2lm></template>
+</category>
+
+
+<category>
+  <pattern>BIAS LOG</pattern>
+  <template><mx2lm>TRAIN-µ bias evidence: field/distilled/compare.bias.jsonl. Each line is a kuhul.semantic-compare-bias.v1 or .triangle.v1 record from a user-triggered A↔B or A↔B↔C comparison fold. Fields: similarity, angle_radians, radius, gradient_delta, top_S_base. Loaded at Yax into gram key train:bias_evidence. Provides C-score evidence (evidence-derived per §RULES.md) for weighting n-gram candidates at Sek phase. Read-only; never written by TRAIN-µ.</mx2lm></template>
+</category>
+
+<category>
+  <pattern>TRAIN WITH BIAS</pattern>
+  <template><mx2lm>TRAIN-µ Yax/Sek: bias-augmented training. At Yax admission gate, train:bias_evidence is populated from field/distilled/compare.bias.jsonl. At Sek, the pipeline uses bias evidence similarity scores as C-score weights: n-grams that co-occur with high-similarity comparison pairs receive elevated WCR scoring. Run tools\train_srilm.bat to execute. Bias log must be present; if missing, Sek falls back to unweighted n-gram counts.</mx2lm></template>
+</category>
+
+<category>
+  <pattern>BIAS EVIDENCE STATUS</pattern>
+  <template><mx2lm>TRAIN-µ bias evidence: gram key train:bias_evidence (loaded at Yax). Schema kuhul.semantic-compare-bias.v1 entries have: fold_key, A, B, similarity, gradient_delta, top_candidate, top_S_base. Triangle entries (.triangle.v1) add: C, mean_similarity, perimeter, bridge_glyph, shape, preferred_path_from_A. Source: field/distilled/compare.bias.jsonl. authority: data_only on all entries.</mx2lm></template>
+</category>
+
+</aiml>

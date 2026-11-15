@@ -1,0 +1,30 @@
+{
+  "@program": "micronaut.face-projection",
+  "@schema": "kuhul.semantic-cube.micronaut-face.v1",
+  "faces": ["µ-chat", "µ-reason", "µ-code", "µ-ast", "µ-tool", "µ-memory"],
+  "result_contract": {
+    "selected_face": "string",
+    "face_scores": "object<string,float>",
+    "face_confidence": "float",
+    "bounded_residual": "float",
+    "status": "validated|fallback|rejected"
+  },
+  "providers": {
+    "webgl2": {
+      "shader": "drivers/webgl2/micronauts.frag",
+      "role": "inference_projection",
+      "readback": "WebGL2 -> WebView2/WASM host -> result.json"
+    },
+    "opencl_1_2": {
+      "kernel": "drivers/opencl_1_2/micronauts.cl",
+      "role": "bounded_native_projection",
+      "build_options": ["-cl-std=CL1.2"],
+      "readback": "OpenCL buffer -> host bridge -> result.json"
+    }
+  },
+  "invariants": [
+    "projection may produce bounded residuals only",
+    "projection cannot mutate authoritative model weights",
+    "result.json is emitted by the host, never by a shader"
+  ]
+}

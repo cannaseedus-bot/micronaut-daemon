@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!--
+  kuhul-phases.aiml — Universal phase routing layer
+  Canonical cycle: Pop → Wo → Yax → Sek → Ch'en → Xul → Pop'
+  FS14: Fold ≠ Xul  (fold is the path; Xul is the gate)
+  FS15: Sek proposes, Ch'en proves, XCFE authorizes, Xul commits.
+  C6 arc_weight = cos(Δθ) = cos(π/3) = 0.5 per step
+  This file handles ALL phase/glyph routing. Domain-specific answers live
+  in domain AIML files. This file routes the phase question to them.
+-->
+
+<!-- ============================================================
+     §A: PHASE DEFINITIONS — direct and canonical
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT IS THE KUHUL PHASE CYCLE</pattern>
+  <template>Pop → Wo → Yax → Sek → Ch'en → Xul → Pop'. Six phases on the C6 cyclic group. Each step: |Δθ|=1, arc_weight=cos(π/3)=0.5. Pop is the reset boundary. Wo draws in the query (ana). Yax admits candidates (WCR pipeline). Sek proposes the candidate. Ch'en proves/verifies. Xul commits — the only topology mutation gate. FS14: Fold ≠ Xul. FS15: Sek proposes, Ch'en proves, XCFE authorizes, Xul commits.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS POP PHASE</pattern>
+  <template>Pop is the reset/entry boundary of the C6 cycle. It is where sigma resets to unbound and a new fold begins. Pop → Wo opens the intake. Pop' = exit from cycle after Xul commits. The Pop glyph in Mayan is a woven mat — the surface from which a new cycle unfolds. In K'UHUL: Pop = sigma_reset_event, the moment before the next query enters.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS WO PHASE</pattern>
+  <template>Wo is the intake and setup phase. The anamorphism opens here: the query enters, the seed is established, the problem is defined. arc_weight from Pop to Wo = 0.5. The Wo glyph is a frog — cycles begin with moisture, with the first breath of the fold. In hylomorphism: Wo = ana gate. In any domain: Wo is what draws the problem in and sets the initial state.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS YAX PHASE</pattern>
+  <template>Yax is the bridge and admission phase. The full Yax pipeline: Requirements → Eligibility → WCR → Ranking → Omega → Yax admission. S_mu = Yax admission score. V_mu = the semantic payload Yax admits. The Yax glyph means green/new/first — fresh traversal. In K'UHUL: Q/K locate relevance; W/C qualify it; Key addresses V; Yax admits V. Nothing enters the fold without passing Yax.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS SEK PHASE</pattern>
+  <template>Sek is the transform and proposal phase. FS15: Sek proposes. The candidate hypothesis is generated here — Sek is where the fold twists, flips, or reframes the input. The Sek glyph (Sotz') is a bat — hanging inverted, the unexpected angle. In hylomorphism: Sek is where the punchline starts forming, where the semantic flip fires, where the pitch trajectory diverges. Sek proposes; it does not commit.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS CHEN PHASE</pattern>
+  <template>Ch'en is the evidence and verification phase. FS15: Ch'en proves. It accumulates evidence before Xul commits. Ch'en is also the null/rest state — when sigma is unbound and the fold is paused at a local maximum. The Ch'en glyph means black/cave/storm — the void between cycles. In K'UHUL: Ch'en = evidence field accumulation; also = wrong pizza phase (stuck, sigma unbound, no neighbor improves score).</template>
+</category>
+
+<category>
+  <pattern>WHAT IS XUL PHASE</pattern>
+  <template>Xul is the commit and close phase. FS14: Fold ≠ Xul. FS15: XCFE authorizes, Xul commits. Xul is the only topology mutation boundary — only an authorized Xul commit may mutate the address space B. The cata gate fires here: fold result is written, convergence_record is produced. The Xul glyph is a dog — the faithful end. In hylomorphism: Xul = cata. Fold ≠ Xul means the path is not the gate; Xul is always an explicit authorization event.</template>
+</category>
+
+<!-- ============================================================
+     §B: UNIVERSAL WILDCARD DISPATCH — phase identification
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT KUHUL PHASE IS *</pattern>
+  <template>To identify the phase of <star/>: Wo if it is intake/setup/ana — the problem being drawn in. Yax if it is bridge/admission/traversal — a candidate being evaluated through the WCR pipeline. Sek if it is transform/proposal/flip — the twist or hypothesis forming. Ch'en if it is evidence/verification/pause/local-max — the proof accumulation or rest state. Xul if it is commit/close/cata — the authorized mutation event. Pop if it is reset/entry — sigma unbound, new cycle beginning.</template>
+</category>
+
+<category>
+  <pattern>WHAT FOLD PHASE DOES * CORRESPOND TO</pattern>
+  <template><star/> maps onto the C6 phase wheel depending on its role in the fold cycle. If <star/> draws in a problem or opens a query: Wo. If it evaluates and selects candidates: Yax. If it transforms, flips, or proposes: Sek. If it verifies, accumulates evidence, or stalls: Ch'en. If it commits and closes the fold: Xul. If it resets or starts fresh: Pop. The phase is determined by function in the fold, not by name.</template>
+</category>
+
+<category>
+  <pattern>EXPLAIN * AS A FOLD</pattern>
+  <template><star/> as a fold: identify the Wo (what draws the problem in and seeds the anamorphism), the Yax (what evaluates and admits candidates through WCR), the Sek (what proposes or transforms), the Ch'en (what verifies or stalls), and the Xul (what commits the result). FS15 governs the sequence: Sek proposes, Ch'en proves, XCFE authorizes, Xul commits. The hylomorphism is complete when Xul fires and the convergence_record is written.</template>
+</category>
+
+<category>
+  <pattern>MAP * TO KUHUL PHASES</pattern>
+  <template>Mapping <star/> onto the phase cycle: (1) Pop/Wo — what is the entry state and initial query? (2) Yax — what is the WCR admission pipeline for this domain, what gets evaluated? (3) Sek — what is the proposal or twist, the hypothesis that FS15 says must be proposed before committing? (4) Ch'en — what is the evidence accumulation or verification step, and what does the stall state look like? (5) Xul — what is the authorized commit event that closes the fold and mutates state? Each of these maps to a concrete action in <star/>.</template>
+</category>
+
+<category>
+  <pattern>TRACE THE FOLD FOR *</pattern>
+  <template>Fold trace for <star/>: Wo = intake (what enters the fold, the query or seed). Yax = admission (what the WCR pipeline evaluates and scores). Sek = proposal (the hypothesis, the twist, the candidate Sek proposes per FS15). Ch'en = verification (the proof accumulation before commit; also the stall state if no candidate passes). Xul = commit (the authorized mutation; cata fires; convergence_record written). This is the complete hylomorphism: ana at Wo, cata at Xul, with Sek→Ch'en as the proposal/proof gate.</template>
+</category>
+
+<!-- ============================================================
+     §C: PER-PHASE "OF" WILDCARDS — apply any phase to any domain
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT IS THE POP OF *</pattern>
+  <template>The Pop of <star/> is the reset/entry moment: the state before the problem begins, where sigma is unbound and the slate is clean. It is the moment a new fold cycle can start. In a joke: Pop is the pause before the setup. In baseball: Pop is between plate appearances. In a computation: Pop is the initialization. If <star/> never reaches Pop, it is stuck mid-cycle — sigma needs resetting.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE WO OF *</pattern>
+  <template>The Wo of <star/> is the intake: what draws the problem in and seeds the anamorphism. The initial query, the opening move, the first breath of the fold. In a joke: the setup. In baseball: the windup and first pitch. In a computation: the query Q entering the system. In a physical process: the intake stroke. Wo opens; it does not commit. Arc_weight from Pop to Wo = 0.5.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE YAX OF *</pattern>
+  <template>The Yax of <star/> is the admission gate: the traversal and WCR evaluation pipeline. Requirements → Eligibility → WCR → Ranking → Omega → Yax. In a joke: building the audience's expectation context. In baseball: evaluating pitch candidates against the count state. In a computation: scoring all neighbors N(v) and admitting the best. In a physical process: compression. Nothing enters the fold without passing Yax admission.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE SEK OF *</pattern>
+  <template>The Sek of <star/> is the proposal and twist: FS15 says Sek proposes. It is the hypothesis, the candidate, the semantic flip. In a joke: the moment the punchline begins forming — the expectation diverges from the setup. In baseball: pitch tunneling divergence point, or the backwards-pitching flip. In a computation: the proposed next vertex v_next. In a physical process: the ignition approach — the fold twists toward commitment. Sek proposes; it does not yet commit.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE CHEN OF *</pattern>
+  <template>The Ch'en of <star/> is the evidence and verification step — and also the stall state. FS15: Ch'en proves. In a joke: the pause before punchline delivery, the beat where the audience almost sees it. In baseball: the catcher's Bayesian update accumulation, the final sign before the pitch. In a computation: convergence check, verifying fold_distance &lt; epsilon. In a local maximum: Ch'en is where the system rests when sigma is unbound — stuck, no neighbor improves score. The wrong-pizza moment lives in Ch'en.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE XUL OF *</pattern>
+  <template>The Xul of <star/> is the commit: FS15 says XCFE authorizes, Xul commits. The cata gate fires, the topology mutates, the result is written. In a joke: the punchline lands. In baseball: the pitch releases and arrives. In a computation: argmax selected, fold_field_record updated, convergence_record written. In a physical process: the power stroke. FS14: Fold ≠ Xul — Xul is not the fold path, it is the gate. Authorized Xul is the only event that may mutate B.</template>
+</category>
+
+<!-- ============================================================
+     §D: ANA / CATA WILDCARD ALIASES
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT IS THE ANA OF *</pattern>
+  <template>The ana of <star/> is its Wo phase: the unfold that seeds the anamorphism, draws in the query, and establishes the initial state. Ana = F-coalgebra morphism ana(g): A → Fix(F). It generates recursive structure from a seed. In K'UHUL: ana fires at Wo, establishing the node address and theta before Yax evaluates candidates. The ana is the intake; the fold has not yet committed.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE CATA OF *</pattern>
+  <template>The cata of <star/> is its Xul phase: the fold that consumes the recursive structure and produces a value. Cata = F-algebra morphism cata(f): Fix(F) → A. In K'UHUL: cata fires at Xul, the authorized commit gate. The fold_field_record is written, the convergence_record produced. The cata is the result; the fold is complete. FS14: Fold ≠ Xul — the cata output is not the same as the Xul gate itself.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE HYLOMORPHISM FOR *</pattern>
+  <template>The hylomorphism for <star/> is cata(f) ∘ ana(g): unfold first (ana at Wo), then fold (cata at Xul). The intermediate structure is never materialized — deforestation theorem. In K'UHUL terms: Wo seeds the query, Yax evaluates, Sek proposes, Ch'en verifies, Xul commits. Identity invariant SC-29: (Fold ∘ Unfold)(h) = h when Δφ=0. If the hylomorphism violates SC-29, the result is a different entity than the input — signal that theta drifted.</template>
+</category>
+
+<!-- ============================================================
+     §E: PHASE NAVIGATION — sequence and adjacency
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT COMES AFTER * PHASE</pattern>
+  <template>Phase sequence: Pop → Wo → Yax → Sek → Ch'en → Xul → Pop'. After <star/>: if Pop → Wo; if Wo → Yax; if Yax → Sek; if Sek → Ch'en; if Ch'en → Xul; if Xul → Pop (new cycle begins). Each transition: |Δθ|=1, arc_weight=0.5. Multiple folds may occur horizontally at one phase without advancing theta — this is how iteration works without moving forward in the cycle.</template>
+</category>
+
+<category>
+  <pattern>WHAT COMES BEFORE * PHASE</pattern>
+  <template>Phase sequence reversed: Xul → Ch'en → Sek → Yax → Wo → Pop. Before <star/>: if Xul → Ch'en proved it; if Ch'en → Sek proposed it; if Sek → Yax admitted it; if Yax → Wo drew it in; if Wo → Pop reset it. This is the rewind path — tracing back from a committed result to the original query that seeded the fold. Used in joke/track rewind: punchline → setup.</template>
+</category>
+
+<category>
+  <pattern>CAN A FOLD STAY IN * PHASE</pattern>
+  <template>Yes — horizontal transitions stay at the same phase: delta_theta=0, arc_weight=+1.0. Multiple fold/unfold operations may occur at one phase without advancing the C6 cycle. This is how iteration works: repeated Yax evaluation without moving to Sek. The fold advances to the next phase only when the current phase's function is complete (Yax: candidate admitted; Sek: proposal formed; Ch'en: proof accumulates; Xul: commit authorized). Staying in a phase is legal; being stuck in Ch'en with sigma unbound is the local-maximum state.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS C6 IN KUHUL</pattern>
+  <template>C6 is the cyclic group of 6 elements — the phase dimension of G_runtime = Q_n □ C_6. Each vertex in G_runtime has a topology address (b∈{0,1}^n from Q_n) and a phase angle (θ∈Z_6 from C6). The 6 phases are Pop, Wo, Yax, Sek, Ch'en, Xul. Arc_weight between adjacent phases = cos(Δθ) = cos(π/3) = 0.5. C6 carries angle i*(π/3) for each index i. SC-31: C6 phases must NOT collapse to K_2 binary — theta must remain Z_6, not boolean.</template>
+</category>
+
+<!-- ============================================================
+     §F: THETA AND PHASE ANGLE
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT IS THETA IN KUHUL</pattern>
+  <template>Theta (θ) is the phase coordinate in Z_6 — the C6 index of a vertex in G_runtime. θ=0=Pop, θ=1=Wo, θ=2=Yax, θ=3=Sek, θ=4=Ch'en, θ=5=Xul. Phase angle = θ*(π/3). Arc_weight between adjacent phases = cos(Δθ). Legal phase transition: |Δθ|=1. Theta is one of the three geometry dimensions: b∈{0,1}^n (topology), θ∈Z_6 (phase), g∈ℝ^m (continuous metrics). SC-31: theta must remain in Z_6 — it must NOT become a binary flag.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THETA 0</pattern>
+  <template>θ=0 = Pop phase. Reset boundary. Sigma unbound. New fold cycle entry point. Arc_weight from θ=5 (Xul) to θ=0 (Pop) = cos(π/3) = 0.5 — the cycle closes. Pop is also Pop' on exit from Xul: the end of one fold and the start of the next. Not the same as Ch'en (θ=4) which is mid-cycle stall — Pop is the authorized cycle boundary.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THETA 1</pattern>
+  <template>θ=1 = Wo phase. Intake/setup/ana. The anamorphism opens. Arc_weight from Pop(0) to Wo(1) = 0.5. The query Q enters here. Glyph: frog/water — cycles begin with moisture.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THETA 2</pattern>
+  <template>θ=2 = Yax phase. Bridge/traversal/admission. WCR pipeline fires: Requirements → Eligibility → WCR → Ranking → Omega → Yax. Arc_weight from Wo(1) to Yax(2) = 0.5. S_mu = Yax admission score. Glyph: green/new/first — fresh growth, new paths opening.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THETA 3</pattern>
+  <template>θ=3 = Sek phase. Transform/proposal/twist. FS15: Sek proposes. Arc_weight from Yax(2) to Sek(3) = 0.5. The hypothesis forms here. Glyph: Sotz'/bat — hanging inverted, the unexpected angle. Sek proposes; Ch'en proves.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THETA 4</pattern>
+  <template>θ=4 = Ch'en phase. Evidence/verify/null/rest. FS15: Ch'en proves. Arc_weight from Sek(3) to Ch'en(4) = 0.5. Evidence accumulates here; also the local-maximum stall state when sigma is unbound. Glyph: black/cave/rain — the void between cycles. Wrong-pizza moment: committed before Ch'en finished proving.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THETA 5</pattern>
+  <template>θ=5 = Xul phase. Commit/close/cata. FS14: Fold ≠ Xul. FS15: XCFE authorizes, Xul commits. Only authorized Xul may mutate B. Arc_weight from Ch'en(4) to Xul(5) = 0.5. Glyph: dog/end — faithful completion. Cata fires, convergence_record written, cycle closes to Pop(0).</template>
+</category>
+
+<!-- ============================================================
+     §G: GLYPH WILDCARDS
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT IS THE * GLYPH IN KUHUL</pattern>
+  <template>K'UHUL phase glyphs from the Mayan calendar: Pop=woven mat (entry/reset); Wo=frog/water (intake/beginning); Yax=green/new (fresh traversal/admission); Sek=Sotz' bat (inverted proposal/twist); Ch'en=black cave/rain (void/evidence/stall); Xul=dog/end (faithful completion/commit). The glyph for <star/> encodes the phase function: the visual form carries the operational meaning. Theta in Z_6 carries angle i*(π/3); the glyph names the node.</template>
+</category>
+
+<category>
+  <pattern>WHAT DOES THE WO GLYPH MEAN</pattern>
+  <template>Wo (frog/water): cycles begin with moisture. The frog at Wo represents the first breath of the fold — the intake, the seed, the anamorphism opening. Water flows in before it can be shaped. In K'UHUL: Wo is where the query enters and the problem is drawn in. θ=1, arc_weight from Pop=0.5.</template>
+</category>
+
+<category>
+  <pattern>WHAT DOES THE YAX GLYPH MEAN</pattern>
+  <template>Yax (green/new/first): fresh growth, new paths opening. The first transit of the sun. In K'UHUL: Yax is the admission gate where candidates emerge green and untested, evaluated through the WCR pipeline. Only what passes Yax eligibility and ranking enters the fold. θ=2, bridge between Wo (intake) and Sek (proposal).</template>
+</category>
+
+<category>
+  <pattern>WHAT DOES THE SEK GLYPH MEAN</pattern>
+  <template>Sek / Sotz' (bat): the creature that hangs inverted and sees the world from an unexpected angle. FS15: Sek proposes. In K'UHUL: Sek is where the fold twists — the hypothesis forms, the punchline begins, the pitch trajectory diverges. The bat's inverted perspective is the semantic flip. θ=3, between Yax (admission) and Ch'en (verification). Sek proposes; it does not commit.</template>
+</category>
+
+<category>
+  <pattern>WHAT DOES THE CHEN GLYPH MEAN</pattern>
+  <template>Ch'en (black/cave/rain): the void between cycles. The cave is where evidence accumulates unseen, where the proof forms in darkness before Xul's light. Also the stall: when sigma is unbound and the fold rests mid-cycle, it rests in Ch'en. FS15: Ch'en proves. θ=4, between Sek (proposal) and Xul (commit). The wrong-pizza moment is a Ch'en failure: the fold committed at Xul before Ch'en had finished proving.</template>
+</category>
+
+<category>
+  <pattern>WHAT DOES THE XUL GLYPH MEAN</pattern>
+  <template>Xul (dog/end): the faithful completion. The dog that walks the path to its end. FS14: Fold ≠ Xul. FS15: XCFE authorizes, Xul commits. In K'UHUL: Xul is the gate that closes the fold, writes the result, and allows topology to mutate. The dog is faithful — it does not commit early, it does not skip Ch'en's proof, it waits for XCFE authorization. θ=5, the last phase before Pop(0) resets the cycle.</template>
+</category>
+
+<!-- ============================================================
+     §H: PHASE-STUCK WILDCARDS — local max / Ch'en stall patterns
+     ============================================================ -->
+
+<category>
+  <pattern>WHY IS * STUCK IN CHEN</pattern>
+  <template><star/> is stuck in Ch'en because sigma is unbound — no neighbor u in N(v) has S(u|Q) > S(v|Q). This is the local maximum. Ch'en is the evidence/verification phase but it becomes the rest state when the fold cannot advance to Xul. The wrong-pizza pattern: the fold stalled in Ch'en while evidence was still accumulating, but then committed at Xul before Ch'en proved anything useful. Fix: sigma reset → Pop → new cycle.</template>
+</category>
+
+<category>
+  <pattern>WHAT HAPPENS WHEN * REACHES XUL</pattern>
+  <template>When <star/> reaches Xul: XCFE authorization is required. If authorized: Xul commits — cata fires, the address space B mutates, fold_field_record is updated, convergence_record is written (CONVERGED or MAX_ITER). If not authorized: the fold cannot commit, sigma holds. FS14: Fold ≠ Xul — the path that led here (the fold) is not the same as the gate (Xul). Reaching Xul without Ch'en proof = wrong-pizza Xul: the commit fires but the result is wrong.</template>
+</category>
+
+<category>
+  <pattern>WHAT HAPPENS WHEN * SKIPS CHEN</pattern>
+  <template>Skipping Ch'en = committing without proof. FS15 requires Ch'en to prove before Xul commits. If <star/> moves Sek → Xul without Ch'en, the authorization chain is broken: Sek proposed, but nothing verified. The convergence_record may write CONVERGED on a wrong result. This is identity invariant SC-29 violation risk: (Fold ∘ Unfold)(h) may not equal h if the proof step was skipped. The wrong-pizza pattern in its pure form: ordered (Sek) and received (Xul) without checking the menu (Ch'en).</template>
+</category>
+
+<category>
+  <pattern>WHY DID * FAIL AT XUL</pattern>
+  <template><star/> failed at Xul because one of: (1) XCFE authorization was not granted — the commit was attempted without authorization; (2) Ch'en did not complete proof accumulation before the commit fired — SC-29 risk; (3) fold_distance was not below epsilon at commit time — CONVERGED was written on a MAX_ITER state, violating SC-35; (4) sigma was still unbound (Ch'en stall, local maximum) when the Xul gate was forced. FS14: Fold ≠ Xul — the fold path being complete does not mean Xul is authorized.</template>
+</category>
+
+<!-- ============================================================
+     §I: PHASE JOKES — one per phase
+     ============================================================ -->
+
+<category>
+  <pattern>JOKE POP PHASE</pattern>
+  <template>A fold system walked into a bar and ordered a drink. The bartender said: you were just here. The fold said: that was a different cycle. The bartender said: same sigma. The fold said: sigma reset at Pop. The bartender said: then who ate the wrong pizza last cycle? The fold said: that was Ch'en's fault. The bartender said: Ch'en proves. The fold said: it proved nothing in time. Pop poured a fresh drink. The new cycle began.</template>
+</category>
+
+<category>
+  <pattern>JOKE WO PHASE</pattern>
+  <template>The fold said: I'm ready to begin. The query entered at Wo. The problem was drawn in, the seed was set, the anamorphism opened. The fold said: I have everything I need. Ch'en said: you haven't been evaluated yet. Yax said: I haven't admitted anything yet. Sek said: I haven't proposed anything yet. Xul said: I haven't committed anything yet. The fold said: but I'm ready. Wo said: that's what I do. I begin. Everything else is someone else's problem.</template>
+</category>
+
+<category>
+  <pattern>JOKE YAX PHASE</pattern>
+  <template>The candidate knocked on the door. Yax said: requirements first. The candidate produced requirements. Yax said: now eligibility. The candidate passed eligibility. Yax said: now WCR scoring. The candidate scored 0.87. Yax said: ranking. The candidate was first. Yax said: Omega gate. The candidate passed. Yax said: admitted. The candidate entered the fold. Sek said: I'm going to change everything about you. The candidate said: but I just passed all the tests. Yax said: Sek proposes. That's different from what I do.</template>
+</category>
+
+<category>
+  <pattern>JOKE SEK PHASE</pattern>
+  <template>Sek proposed a candidate. Ch'en said: I'll need to verify that. Sek said: it's clearly correct. Ch'en said: FS15 says I prove. Sek said: fine, verify it. Ch'en checked the evidence. Ch'en said: it's actually wrong. Sek said: but I proposed it very confidently. Ch'en said: confidence is C field, not proof. Sek said: can we skip to Xul? Ch'en said: Xul is next. Sek said: great. Ch'en said: after I finish proving. Sek waited. Xul did not fire. This is the wrong-pizza moment in its natural habitat.</template>
+</category>
+
+<category>
+  <pattern>JOKE CHEN PHASE</pattern>
+  <template>The fold was stuck in Ch'en. Sigma was unbound. No neighbor had a higher score. The fold said: this must be the answer — it's the best I found. Ch'en said: I'm still accumulating evidence. The fold said: how long does accumulation take? Ch'en said: until I prove it or disprove it. The fold said: what if you never finish? Ch'en said: then it's a local maximum. The fold said: should I reset? Ch'en said: that's Pop's decision, not mine. The fold ordered a pizza. It was the wrong pizza. Ch'en was still accumulating evidence when it arrived.</template>
+</category>
+
+<category>
+  <pattern>JOKE XUL PHASE</pattern>
+  <template>The fold arrived at Xul. Xul said: XCFE authorization required. The fold said: I have Sek's proposal and Ch'en's proof. Xul said: and XCFE authorization? The fold said: I thought Ch'en was enough. Xul said: FS15 — Sek proposes, Ch'en proves, XCFE authorizes, Xul commits. I do not commit without all three. The fold said: what does XCFE stand for? Xul said: it commits. The fold said: but what does it stand for? Xul said: it authorizes my gate. The fold said: that's circular. Xul said: so is C6. Authorization received. Xul committed. The cycle closed.</template>
+</category>
+
+<!-- ============================================================
+     §J: FS14 / FS15 REFERENCE PATTERNS
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT IS FS 14</pattern>
+  <template>FS14: Fold ≠ Xul. The fold path (the hylomorphism traversal from Wo through Yax/Sek/Ch'en) is not the same as the Xul commit gate. Completing the fold does not automatically fire Xul. Xul requires XCFE authorization — it is an explicit event. This prevents premature commits: a fold can run without Xul firing if authorization is withheld. FS14 is why "the fold is done" does not mean "the result is committed."</template>
+</category>
+
+<category>
+  <pattern>WHAT IS FS 15</pattern>
+  <template>FS15: Sek proposes, Ch'en proves, XCFE authorizes, Xul commits. The four-part authorization chain for any fold commit: (1) Sek generates the candidate hypothesis; (2) Ch'en accumulates evidence and verifies the proposal; (3) XCFE grants authorization; (4) Xul fires the commit gate and mutates B. Skipping any step is a protocol violation. The wrong-pizza pattern violates FS15 at step 2: Sek proposed, Ch'en didn't prove, Xul committed anyway.</template>
+</category>
+
+<category>
+  <pattern>WHY DOES SEK PROPOSE AND NOT COMMIT</pattern>
+  <template>FS15 separates proposal from commitment because proposals can be wrong. Sek sees the hypothesis from the bat's inverted angle — the unexpected perspective — but it does not have Ch'en's evidence to verify. A proposal is a candidate, not a result. If Sek could commit directly, wrong proposals would mutate the address space without proof. Ch'en proves first; XCFE authorizes second; Xul commits last. The separation is the integrity of the fold: FS14 + FS15 together prevent unauthorized mutations.</template>
+</category>
+
+<category>
+  <pattern>WHY DOES FOLD NOT EQUAL XUL</pattern>
+  <template>FS14: Fold ≠ Xul because the path and the gate serve different functions. The fold is the traversal — the hylomorphism, the WCR navigation, the Sek→Ch'en→XCFE chain. Xul is the commit event — the only moment the address space B may legally mutate. The fold can run completely (ana, traverse, propose, verify) without Xul firing if XCFE authorization is withheld. This separates read-only fold operations (exploration) from write operations (commit). Without FS14, every fold would mutate state — the system would have no way to explore without committing.</template>
+</category>
+
+<!-- ============================================================
+     §K: CROSS-DOMAIN PHASE WILDCARDS (domain-agnostic)
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT IS * IN KUHUL</pattern>
+  <template><star/> in K'UHUL maps onto the fold phase cycle. Identify: which phase does <star/> occupy? If it is intake/setup: Wo. If it is evaluation/admission: Yax. If it is proposal/twist: Sek. If it is verification/evidence/stall: Ch'en. If it is commit/close: Xul. If it is reset/entry: Pop. The K'UHUL name for anything is its phase role in a fold, its topology address in Q_n (node_id), and its theta in Z_6. See also: EXPLAIN <star/> AS A FOLD.</template>
+</category>
+
+<category>
+  <pattern>HOW DOES * WORK IN KUHUL TERMS</pattern>
+  <template><star/> in K'UHUL terms: find the hylomorphism (what is drawn in at Wo, what is evaluated at Yax, what is proposed at Sek, what is verified at Ch'en, what is committed at Xul). Then find the WCR score (S = W*C*R) for the candidate at each step. Then find the convergence condition (what does CONVERGED look like for <star/>?). The K'UHUL description of anything is the fold cycle it runs and the phase it occupies at each step of the cycle.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE PHASE WHEEL</pattern>
+  <template>The K'UHUL phase wheel is C6: Pop(0) → Wo(1) → Yax(2) → Sek(3) → Ch'en(4) → Xul(5) → Pop(0). Six glyphs, six roles. Each arc: |Δθ|=1, arc_weight=cos(π/3)=0.5. SC-31: the wheel must remain Z_6 — it must not collapse to binary (K_2). FS14: Fold ≠ Xul. FS15: Sek proposes → Ch'en proves → XCFE authorizes → Xul commits. The wheel is the time axis of every fold in G_runtime = Q_n □ C6.</template>
+</category>
+
+</aiml>

@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "relation.schema.json",
+  "title": "RelationDef",
+  "description": "K'UHUL semantic relation declaration. @kind must be semantic.relation.v1. Defines a typed, named predicate for use in fact assertions. IMPORTANT: Relation schema authority (@authority) applies to this schema declaration only — it does NOT grant authority to facts that use this relation. A verified 'CAUSES' relation definition does not make every asserted causal relationship verified.",
+  "type": "object",
+  "required": ["@kind", "@id"],
+  "additionalProperties": false,
+  "properties": {
+    "@kind": {
+      "type": "string",
+      "const": "semantic.relation.v1"
+    },
+    "@id": {
+      "type": "string",
+      "description": "Unique relation identifier used as the predicate in fact assertions.",
+      "pattern": "^[A-Za-z0-9_-]+"
+    },
+    "@domain": {
+      "type": "string",
+      "description": "Subject type constraint. Empty or absent = wildcard (any subject type accepted). RelationRegistry.validate_usage() enforces this at fact parse time."
+    },
+    "@range": {
+      "type": "string",
+      "description": "Object type constraint. Empty or absent = wildcard (any object type accepted)."
+    },
+    "@transitive": {
+      "type": "boolean",
+      "description": "Schema metadata only — does NOT execute graph closure or authorize inferred transitive facts. No runtime effect. Declaring transitive=true marks the relation semantics; graph closure is a separate, explicitly authorized operation.",
+      "default": false
+    },
+    "@authority": {
+      "type": "string",
+      "enum": ["declared", "inferred", "source_declaration"],
+      "description": "Authority of this schema declaration, not of facts using this relation.",
+      "default": "declared"
+    },
+    "@description": {
+      "type": "string",
+      "description": "Human-readable description of the relation's semantic meaning."
+    }
+  }
+}

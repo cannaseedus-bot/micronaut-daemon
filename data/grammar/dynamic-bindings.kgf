@@ -1,0 +1,71 @@
+keygraph "dynamic-bindings" version "1.0";
+namespace bind:core domain bind;
+namespace fold:core domain fold;
+namespace gram:core domain gram;
+namespace track:core domain track;
+namespace micro:core domain micro;
+namespace xcfe:core domain xcfe;
+
+key micro:BIND kind program;
+key xcfe:BIND_ADMISSION kind contract;
+key xcfe:BINDING_LOCK kind contract;
+
+key bind:GATHER kind program;
+key bind:PROBE kind program;
+key bind:FILTER kind program;
+key bind:SELECT kind program;
+key bind:FLOAT kind program;
+key bind:REBIND kind program;
+key bind:LOCK kind program;
+key bind:EMIT kind program;
+
+edge bind:PROBE  -> bind:GATHER type requires order 1;
+edge bind:FILTER -> bind:GATHER type requires order 1;
+edge bind:FILTER -> bind:PROBE  type requires order 2;
+edge bind:SELECT -> bind:PROBE  type requires order 1;
+edge bind:SELECT -> bind:FILTER type requires order 2;
+edge bind:FLOAT  -> bind:PROBE  type requires order 1;
+edge bind:FLOAT  -> bind:FILTER type requires order 2;
+edge bind:REBIND -> bind:SELECT type requires order 1;
+edge bind:REBIND -> bind:FLOAT  type requires order 2;
+edge bind:LOCK   -> bind:REBIND type requires order 1;
+edge bind:EMIT   -> bind:LOCK   type requires order 1;
+
+edge bind:LOCK -> xcfe:BINDING_LOCK type references;
+edge bind:EMIT -> xcfe:BIND_ADMISSION type references;
+
+template fold:GATHER domain fold { operator GATHER; input domain; output candidates; };
+template fold:PROBE  domain fold { operator PROBE;  input capability; output availability; };
+template fold:FILTER domain fold { operator FILTER; input candidates; input predicate; output filtered; };
+template fold:SELECT domain fold { operator SELECT; input candidates; input wcr; output binding; };
+template fold:FLOAT  domain fold { operator FLOAT;  input candidates; input wcr; output nominal; };
+template fold:REBIND domain fold { operator REBIND; input binding; input reason; output fallback; };
+template fold:LOCK domain fold { operator LOCK; input binding; output sealed; };
+template fold:EMIT domain fold { operator EMIT; input binding; input key; output event; };
+
+trigram gram:GATHER_POP ("gather",*,*) phase Pop fold fold:GATHER bindings [domain:capture];
+trigram gram:PROBE_WO  ("probe",*,*)  phase Wo  fold fold:PROBE  bindings [capability:capture];
+trigram gram:FILTER_WO ("filter",*,*) phase Wo  fold fold:FILTER bindings [candidates:capture,predicate:capture];
+trigram gram:SELECT_YAX ("select",*,*) phase Yax fold fold:SELECT bindings [candidates:capture,wcr:capture];
+trigram gram:FLOAT_YAX  ("float",*,*)  phase Yax fold fold:FLOAT  bindings [candidates:capture,wcr:capture];
+trigram gram:REBIND_SEK ("rebind",*,*) phase Sek fold fold:REBIND bindings [binding:capture,reason:capture];
+trigram gram:LOCK_CHEN ("lock",*,*) phase Ch'en fold fold:LOCK bindings [binding:capture];
+trigram gram:EMIT_XUL ("emit",*,*) phase Xul fold fold:EMIT bindings [binding:capture,key:capture];
+
+track track:DYNAMIC_BINDING { include micro:BIND; include gram:GATHER_POP; include gram:PROBE_WO; include gram:FILTER_WO; include gram:SELECT_YAX; include gram:FLOAT_YAX; include gram:REBIND_SEK; include gram:LOCK_CHEN; include gram:EMIT_XUL; };
+
+context bind:ACTIVE track track:DYNAMIC_BINDING { query "resolve capability binding"; };
+
+policy xcfe:BIND_POLICY { score wcr; admission xcfe:BIND_ADMISSION; max_depth 2; allow_cycle false; commit_phase Xul; };
+resolver micro:BIND_EXEC domain micro mode execute policy xcfe:BIND_POLICY;
+vector2 micro:BIND (0.7,0.6);
+micronaut micro:BIND track track:DYNAMIC_BINDING resolver micro:BIND_EXEC vector micro:BIND;
+
+program bind:GATHER track track:DYNAMIC_BINDING entry fold:GATHER phase Pop    micronaut micro:BIND;
+program bind:PROBE  track track:DYNAMIC_BINDING entry fold:PROBE  phase Wo     micronaut micro:BIND;
+program bind:FILTER track track:DYNAMIC_BINDING entry fold:FILTER phase Wo     micronaut micro:BIND;
+program bind:SELECT track track:DYNAMIC_BINDING entry fold:SELECT phase Yax    micronaut micro:BIND;
+program bind:FLOAT  track track:DYNAMIC_BINDING entry fold:FLOAT  phase Yax    micronaut micro:BIND;
+program bind:REBIND track track:DYNAMIC_BINDING entry fold:REBIND phase Sek    micronaut micro:BIND;
+program bind:LOCK   track track:DYNAMIC_BINDING entry fold:LOCK   phase Ch'en  micronaut micro:BIND;
+program bind:EMIT   track track:DYNAMIC_BINDING entry fold:EMIT   phase Xul    micronaut micro:BIND;

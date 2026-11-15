@@ -1,0 +1,53 @@
+{
+  "@type": "khanary.track_route_contracts.v1",
+  "@schema": "urn:kuhul:khanary:contracts:track-route:v1",
+  "owner": "data/tracks/*.json",
+  "validator": "tools/check_track_routes.py",
+  "semantic_authority": false,
+  "purpose": "A routable track must declare an address and at least one operation surface, own that address exclusively, and hold the same authority boundary as every other track.",
+  "route_surface": {
+    "address_fields": ["schemes"],
+    "operation_fields": ["verbs", "capabilities", "governs", "key_patterns", "key_templates",
+                         "key_grammar", "aiml_patterns", "aiml_templates"],
+    "rule": "an addressable track needs a scheme and at least one operation surface; an address with no operation is a route that cannot be called",
+    "fallback_order": ["verbs", "capabilities", "governs"],
+    "fallback_note": "the router already falls back to capabilities and governs when verbs is empty, so those are declared operations, not implied ones"
+  },
+  "authority_boundary": {
+    "uniform": true,
+    "track_may_bias_routing": true,
+    "track_may_grant_facts": false,
+    "track_may_verify": false,
+    "track_may_commit_topology": false,
+    "track_is_semantic_authority": false,
+    "verification_gate": "Ch'en",
+    "commit_gate": "Xul",
+    "rule": "one boundary for every track: a track is a routing prior, never a verifier or a committer"
+  },
+  "ambiguity": {
+    "scheme_owner": "exactly one track per declared scheme",
+    "derived_alias": "an id-derived alias may be shared, but a declaration settles ownership (see uri-address.contracts.json)",
+    "rule": "two tracks declaring the same scheme is an ambiguous route surface"
+  },
+  "coverage_snapshot": {
+    "measured": "2026-10-27",
+    "tracks": 71,
+    "declare_schemes": 71,
+    "declare_verbs": 0,
+    "declare_capabilities": 69,
+    "declare_governs": 70,
+    "note": "no track declares URI verbs yet; every track is callable through its capabilities or governs surface"
+  },
+  "invariants": {
+    "ROUTE1": {"name": "every_track_has_an_address",
+               "check": "every shipped track declares at least one scheme"},
+    "ROUTE2": {"name": "every_address_has_an_operation",
+               "check": "every track declares at least one operation surface"},
+    "ROUTE3": {"name": "addresses_are_exclusive",
+               "check": "no two tracks declare the same scheme"},
+    "ROUTE4": {"name": "the_authority_boundary_is_uniform",
+               "check": "no track claims fact, verification or commit authority"},
+    "ROUTE5": {"name": "the_surface_is_not_sparse",
+               "check": "no addressable track has an empty operation surface, and the declared coverage matches the snapshot"}
+  }
+}

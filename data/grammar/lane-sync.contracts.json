@@ -1,0 +1,361 @@
+{
+  "@type": "khanary.lane_sync.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "grammar_describes_the_lane_binary_carries_it_xcfe_judges_it",
+  "lane": "KHANARY_LANE_SYNC_TEST",
+  "owner": "src/kuhul/lane_sync.cpp",
+  "doc": "data/grammar/lane-sync.ebnf",
+  "why": "XCFE mode comparisons were string comparisons against hard-coded phases. A lane descriptor with stable ids plus a canonical binary form lets XCFE compare typed fields, and it keeps the decision requirement-driven: a `stochastic` lane is refused only where the requirement asks for reproducible evidence. Nothing here adds a node class — P13-P15 and the frozen 14-class ISA are untouched.",
+  "binary_layout": {
+    "endianness": "little",
+    "size_bytes": 16,
+    "fields": [
+      {
+        "name": "grammar_version",
+        "offset": 0,
+        "width": 2,
+        "type": "u16"
+      },
+      {
+        "name": "lane_type",
+        "offset": 2,
+        "width": 1,
+        "type": "u8"
+      },
+      {
+        "name": "phase",
+        "offset": 3,
+        "width": 1,
+        "type": "u8",
+        "note": "C6 index 0..5"
+      },
+      {
+        "name": "mode_domain",
+        "offset": 4,
+        "width": 1,
+        "type": "u8"
+      },
+      {
+        "name": "mode_id",
+        "offset": 5,
+        "width": 1,
+        "type": "u8"
+      },
+      {
+        "name": "effect_mask",
+        "offset": 6,
+        "width": 2,
+        "type": "u16"
+      },
+      {
+        "name": "required_effect_mask",
+        "offset": 8,
+        "width": 2,
+        "type": "u16"
+      },
+      {
+        "name": "forbidden_effect_mask",
+        "offset": 10,
+        "width": 2,
+        "type": "u16"
+      },
+      {
+        "name": "determinism_flags",
+        "offset": 12,
+        "width": 1,
+        "type": "u8"
+      },
+      {
+        "name": "lane_source",
+        "offset": 13,
+        "width": 1,
+        "type": "u8",
+        "note": "producer discriminator, see producers"
+      },
+      {
+        "name": "reserved",
+        "offset": 14,
+        "width": 2,
+        "type": "u8[2]",
+        "note": "always zero; the canonical form forbids a non-zero reserved byte"
+      }
+    ],
+    "canonical": "one descriptor has exactly one byte string: fixed width, no padding, optional fields encoded as their neutral value, and the trailing reserved bytes always zero",
+    "descriptor_ref": "sha256 over the 16 canonical bytes, prefixed `sha256:`"
+  },
+  "lane_types": {
+    "semantic": 1,
+    "geometric": 2,
+    "algebraic": 3,
+    "tensor": 4,
+    "phase": 5,
+    "verification": 6,
+    "routing": 7,
+    "memory": 8,
+    "execution": 9,
+    "commit": 10
+  },
+  "effect_bits": {
+    "read": 1,
+    "write": 2,
+    "delete": 4,
+    "propose_delta": 8,
+    "filter": 16,
+    "order": 32,
+    "measure": 64,
+    "verify": 128,
+    "commit": 256
+  },
+  "determinism_flags": {
+    "reproducible": 1,
+    "records_seed": 2,
+    "records_inputs": 4,
+    "records_external_observations": 8
+  },
+  "modes": {
+    "declared_in": "data/grammar/xcfe-modes.contracts.json",
+    "note": "the mode vocabulary has one source (xcfe_mode.h) and these ids are its canonical binary encoding; the lane asserts the two agree",
+    "determinism": {
+      "deterministic": {
+        "mode_id": 1,
+        "determinism_flags": [
+          "reproducible"
+        ],
+        "implies_effects": []
+      },
+      "seeded": {
+        "mode_id": 2,
+        "determinism_flags": [
+          "reproducible"
+        ],
+        "implies_effects": []
+      },
+      "observational": {
+        "mode_id": 3,
+        "determinism_flags": [
+          "records_external_observations"
+        ],
+        "implies_effects": []
+      },
+      "stochastic": {
+        "mode_id": 4,
+        "determinism_flags": [],
+        "implies_effects": []
+      }
+    },
+    "output": {
+      "keep": {
+        "mode_id": 1,
+        "implies_effects": []
+      },
+      "drop": {
+        "mode_id": 2,
+        "implies_effects": [
+          "filter"
+        ]
+      },
+      "new_fold": {
+        "mode_id": 3,
+        "implies_effects": [
+          "write"
+        ]
+      },
+      "in_place": {
+        "mode_id": 4,
+        "implies_effects": [
+          "write"
+        ]
+      }
+    },
+    "ordering": {
+      "structural": {
+        "mode_id": 1,
+        "implies_effects": [
+          "order"
+        ]
+      },
+      "phase": {
+        "mode_id": 2,
+        "implies_effects": [
+          "order"
+        ]
+      },
+      "incidence": {
+        "mode_id": 3,
+        "implies_effects": [
+          "order"
+        ]
+      },
+      "confidence": {
+        "mode_id": 4,
+        "implies_effects": [
+          "order"
+        ]
+      }
+    },
+    "response": {
+      "neutral": {
+        "mode_id": 1,
+        "implies_effects": []
+      },
+      "reset": {
+        "mode_id": 2,
+        "implies_effects": []
+      },
+      "explicit": {
+        "mode_id": 3,
+        "implies_effects": []
+      }
+    }
+  },
+  "reason_codes": {
+    "compatible": 0,
+    "type_mismatch": 1,
+    "phase_not_allowed": 2,
+    "mode_domain_mismatch": 3,
+    "mode_not_allowed": 4,
+    "missing_required_effect": 5,
+    "forbidden_effect_present": 6,
+    "determinism_requirement_unmet": 7,
+    "grammar_version_mismatch": 8,
+    "decode_error": 9,
+    "source_mismatch": 10
+  },
+  "laws": {
+    "LS1": "a descriptor is closed: its fields are the typed set in lane-sync.ebnf, and every integer field is bounded by its declared width",
+    "LS2": "the binary form is canonical: fixed little-endian layout, optional fields encoded as their neutral value, so one descriptor has exactly one byte string and the reserved bytes are always zero",
+    "LS3": "comparison reads typed fields, never source strings, and never reconstructs a descriptor from a lane's prose",
+    "LS4": "determinism compatibility is requirement-driven: a mode is refused only when the requirement asks for a flag the lane does not carry, so a stochastic lane stays compatible wherever reproducible evidence is not required",
+    "LS5": "effect compatibility is symmetric: every required effect must be present and no forbidden effect may be present",
+    "LS6": "Admitted = ExistingXCFEAuthority AND LaneCompatible; the guard can turn an authorized candidate into a rejection and never the reverse",
+    "LS7": "a decoded descriptor is evidence, not permission: unpacking an ASXG/SCXQ2 payload grants nothing, and the guard never sets commit_authorized",
+    "LS8": "the lane descriptor stays authoritative and the guard result names the descriptor it judged",
+    "LS9": "the producer discriminator is compared first: a requirement that names a source accepts only that source, and Unspecified accepts any producer",
+    "LS10": "a phase is compared only for a lane kind that declares @phase; a kind without one is never given an invented phase, and a kind with one is never allowed to dodge the check",
+    "LS11": "descriptor validity does not mean the referenced capability exists: as docs/ASXG-LANE-DESCRIPTORS.md states, a structurally valid descriptor can leave its capability unresolved, and a runnable lane must also resolve every program and phase before it becomes an executable candidate"
+  },
+  "transport": {
+    "binary_descriptor": "normalised lane properties for comparison; no execution required",
+    "bytecode": "encodes comparison instructions when static field matching is insufficient",
+    "asxg_scxq2": "may transport the compiled representation under their existing contracts, and must not introduce a competing authority system",
+    "law": "unpacking a payload is separate from granting execution permission"
+  },
+  "invariants": {
+    "no_node_class_added": true,
+    "isa_untouched": "P13-P15 and the closed 14-class XCFeNodeClass set are unchanged",
+    "commit_authorized_always_false": true
+  },
+  "producers": {
+    "law": "lane sync is one comparison mechanism over several lane vocabularies; sharing a comparison form does not make two lanes the same kind of thing",
+    "phase_bearing": {
+      "law": "a phase is compared only for a kind that declares @phase; HistoryLane and EnvironmentHypothesisLane declare none, so a phase is neither invented for them nor allowed to dodge the check for a kind that bears one"
+    },
+    "sources": {
+      "NGramLane": {
+        "schema": "data/host/asxg/extensions/ngram-lane-v1.schema.json",
+        "declares_phase": true,
+        "canonical_type": "semantic",
+        "note": "orders 1-3 are probability references, 4+ are retrieval references; a key reference is an address and asserts no truth"
+      },
+      "PhaseLane": {
+        "schema": "data/host/asxg/extensions/phase-lane-v1.schema.json",
+        "declares_phase": true,
+        "canonical_type": "phase",
+        "note": "binds a plan step to a registered Micronaut, program and canonical phase with @requires_admission: true"
+      },
+      "HistoryLane": {
+        "schema": "data/host/asxg/extensions/history-lane-v1.schema.json",
+        "declares_phase": false,
+        "canonical_type": "memory",
+        "note": "scope and provenance records; no phase to compare"
+      },
+      "ObjectiveLane": {
+        "schema": "data/host/asxg/extensions/objective-lane-v1.schema.json",
+        "declares_phase": true,
+        "canonical_type": "routing",
+        "note": "objective, metric and constraint references"
+      },
+      "EnvironmentHypothesisLane": {
+        "schema": "data/host/asxg/extensions/environment-hypothesis-lane-v1.schema.json",
+        "declares_phase": false,
+        "canonical_type": "routing",
+        "note": "hypothesis reference and field/micronaut/program refs; no phase"
+      },
+      "runtime_graph": {
+        "schema": "data/grammar/runtime-graph.contracts.json",
+        "declares_phase": true,
+        "canonical_type": "semantic",
+        "note": "a (address, phase) vertex of G_runtime = Q3 □ C6; the phase is the theta coordinate"
+      },
+      "fold_binding": {
+        "schema": "data/grammar/fold-bindings.contracts.json",
+        "declares_phase": true,
+        "canonical_type": "execution",
+        "note": "a (fold, phase, backend) binding"
+      },
+      "operator": {
+        "schema": "data/grammar/operator-algebra.contracts.json",
+        "declares_phase": true,
+        "canonical_type": "execution",
+        "note": "a map/filter/reduce instance; phase comes from the program descriptor it belongs to"
+      },
+      "xcfe_mode": {
+        "schema": "data/grammar/xcfe-modes.contracts.json",
+        "declares_phase": true,
+        "canonical_type": "routing",
+        "note": "a mode applied inside a phase; the phase is the context it applies to"
+      }
+    },
+    "authority_holder": "the producer keeps its own vocabulary and its own validator; the canonical descriptor is a comparison projection and never replaces the source record"
+  },
+  "related_authorities": {
+    "asxg_lane_descriptors": "docs/ASXG-LANE-DESCRIPTORS.md",
+    "asxg_lane_schema": "data/host/asxg/extensions/asxg-lane-descriptors.v1.schema.json",
+    "asxg_lane_fixtures": "data/host/asxg/lane-descriptor-fixtures.json",
+    "note": "asxg.lanes.v1 stays frozen and is versioned independently; lane sync compares projections of it and of the other producers, and packing/unpacking/validation still do not execute a lane",
+    "asxg_lane_fixtures_used_by": "src/tests/test_lane_plan.cpp (both valid fixtures sync; all six invalid fixtures are refused)"
+  },
+  "plan_sync": {
+    "runtime": "src/kuhul/lane_plan.cpp",
+    "subject": "an asxg.lanes.v1 bundle (docs/ASXG-LANE-DESCRIPTORS.md)",
+    "law": "the same canonical descriptor and the same guard judge a plan's PhaseLanes and a Q3 □ C6 movement; the producer discriminator keeps them distinct",
+    "bundle_rules": {
+      "contract": "asxg.lanes.v1",
+      "interpreted": "a bundle declaring @interpreted true is refused: packing, unpacking and validation do not execute a lane",
+      "lanes": "at least one declared lane, and at least one PhaseLane: a bundle of evidence lanes is not a plan (no_phase_lanes)"
+    },
+    "step_rules": {
+      "phase": "canonical C6 phase; Chen/Ch_en are aliases of Ch'en, an unknown token is refused",
+      "admission": "@requires_admission must be true (admission_requirement_missing)",
+      "order": "one execution, so the ladder is forward-only and cannot wrap (phase_not_forward)",
+      "commit_effect": "only a Xul step may carry the commit effect; the per-step requirement forbids it elsewhere",
+      "guard": "each step is judged by lane_guard against a reproducible PhaseLane requirement, and against the consumer requirement when one is supplied"
+    },
+    "edge_rules": {
+      "transitions_to": "PhaseLane -> PhaseLane, adjacent in C6 order",
+      "depends_on": "PhaseLane -> PhaseLane, target strictly earlier",
+      "provides_evidence": "NGramLane -> PhaseLane",
+      "other": "an unknown relation is refused rather than ignored",
+      "endpoints": "every edge endpoint must resolve to a declared lane"
+    },
+    "statuses": [
+      "bundle_not_object",
+      "contract_unknown",
+      "bundle_claims_interpreted",
+      "no_lanes",
+      "no_phase_lanes",
+      "phase_unknown",
+      "admission_requirement_missing",
+      "phase_not_forward",
+      "commit_outside_xul",
+      "step_incompatible",
+      "lane_edge_endpoint_unresolved",
+      "lane_edge_type_mismatch",
+      "lane_edge_relation_unknown",
+      "lane_edge_not_adjacent",
+      "lane_edge_not_earlier"
+    ],
+    "does_not_resolve_capability": "descriptor and plan validity still do not prove a referenced capability exists (LS11): every program and phase must resolve against its manifest before the plan is an executable candidate"
+  }
+}

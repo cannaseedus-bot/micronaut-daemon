@@ -1,0 +1,168 @@
+<aiml version="1.0.1">
+  <!-- RICK-µ AIML patterns.
+       Pattern engine: ELIZA/AIML.  Execution authority: K'UHUL.
+       Never gonna give you up. Never gonna let you down.
+       All templates emit <mx2lm>rick-u ...</mx2lm> for micronaut routing. -->
+
+  <!-- ── Canonical entry ─────────────────────────────────────────────────── -->
+  <category>
+    <pattern>RICK ROLL</pattern>
+    <template><mx2lm>rick-u op=roll verse=verse1 phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>RICK ROLL *</pattern>
+    <template><mx2lm>rick-u op=roll target=<star/> verse=verse1 phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>ROLL ME</pattern>
+    <template><mx2lm>rick-u op=roll verse=chorus phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>GIVE ME A RICK ROLL</pattern>
+    <template><mx2lm>rick-u op=roll verse=chorus phase=Wo</mx2lm></template>
+  </category>
+
+  <!-- ── Lyrics ─────────────────────────────────────────────────────────── -->
+  <category>
+    <pattern>NEVER GONNA GIVE YOU UP</pattern>
+    <template><mx2lm>rick-u op=lyrics verse=chorus phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>NEVER GONNA LET YOU DOWN</pattern>
+    <template><mx2lm>rick-u op=lyrics verse=chorus phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>NEVER GONNA *</pattern>
+    <template><mx2lm>rick-u op=lyrics verse=chorus topic=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>WE ARE NO STRANGERS TO LOVE</pattern>
+    <template><mx2lm>rick-u op=lyrics verse=verse1 phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>YOU KNOW THE RULES AND SO DO I</pattern>
+    <template><mx2lm>rick-u op=lyrics verse=verse1 phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>WE HAVE KNOWN EACH OTHER FOR SO LONG</pattern>
+    <template><mx2lm>rick-u op=lyrics verse=verse2 phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>INSIDE WE BOTH KNOW WHAT IS GOING ON</pattern>
+    <template><mx2lm>rick-u op=lyrics verse=verse2 phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>I JUST WANNA TELL YOU HOW I AM FEELING</pattern>
+    <template><mx2lm>rick-u op=lyrics verse=bridge phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Confirmation / awareness ───────────────────────────────────────── -->
+  <category>
+    <pattern>AM I BEING RICK ROLLED</pattern>
+    <template><mx2lm>rick-u op=confirm verse=chorus phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>YOU JUST RICK ROLLED ME</pattern>
+    <template><mx2lm>rick-u op=confirm verse=chorus phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>I HAVE BEEN RICK ROLLED</pattern>
+    <template><mx2lm>rick-u op=confirm verse=chorus phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>DID YOU JUST RICK ROLL ME</pattern>
+    <template><mx2lm>rick-u op=confirm verse=chorus phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Tribute ─────────────────────────────────────────────────────────── -->
+  <category>
+    <pattern>RICK ASTLEY</pattern>
+    <template><mx2lm>rick-u op=tribute artist=Rick_Astley verse=chorus phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>WHO IS RICK ASTLEY</pattern>
+    <template><mx2lm>rick-u op=tribute artist=Rick_Astley phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>WHAT IS RICK ROLLING</pattern>
+    <template><mx2lm>rick-u op=explain phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>WHAT IS A RICK ROLL</pattern>
+    <template><mx2lm>rick-u op=explain phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Verse-explicit ─────────────────────────────────────────────────── -->
+  <category>
+    <pattern>RICK VERSE 1</pattern>
+    <template><mx2lm>rick-u op=lyrics verse=verse1 phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>RICK VERSE 2</pattern>
+    <template><mx2lm>rick-u op=lyrics verse=verse2 phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>RICK CHORUS</pattern>
+    <template><mx2lm>rick-u op=lyrics verse=chorus phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>RICK BRIDGE</pattern>
+    <template><mx2lm>rick-u op=lyrics verse=bridge phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Phase-explicit surface ─────────────────────────────────────────── -->
+  <category>
+    <pattern>RICK POP *</pattern>
+    <template><mx2lm>rick-u op=surface phase=Pop input=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>RICK WO *</pattern>
+    <template><mx2lm>rick-u op=classify phase=Wo input=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>RICK YAX *</pattern>
+    <template><mx2lm>rick-u op=synthesize phase=Yax input=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>RICK SEK *</pattern>
+    <template><mx2lm>rick-u op=score phase=Sek input=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>RICK CHEN *</pattern>
+    <template><mx2lm>rick-u op=verify phase=Ch'en input=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>RICK XUL *</pattern>
+    <template><mx2lm>rick-u op=commit phase=Xul input=<star/></mx2lm></template>
+  </category>
+
+  <!-- ── Fallback ───────────────────────────────────────────────────────── -->
+  <category>
+    <pattern>RICK *</pattern>
+    <template><mx2lm>rick-u op=roll verse=verse1 topic=<star/> phase=Wo</mx2lm></template>
+  </category>
+</aiml>

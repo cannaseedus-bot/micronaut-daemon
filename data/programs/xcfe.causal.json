@@ -1,0 +1,23 @@
+{
+  "@type": "khanary.xcfe_program.v1",
+  "@no-eval": true,
+  "id": "xcfe.causal",
+  "program_class": "CAUSAL",
+  "phase": "Wo",
+  "input_role": "cause_event",
+  "output_role": "effect_record",
+  "admission": "explicit",
+  "description": "Evaluates a @cause chain: binds a cause event at Wo, dispatches the causal consequence at Sek, and records the effect. CAUSAL class — canonical authority phase Wo.",
+  "steps": [
+    { "phase": "Pop",   "op": "gramRead",   "id": "xcfe_cause" },
+    { "phase": "Wo",    "op": "bind",       "id": "cause_event" },
+    { "phase": "Sek",   "op": "dispatch",   "id": "causal_consequence" },
+    { "phase": "Ch'en", "op": "verify",     "id": "effect_valid" },
+    { "phase": "Xul",   "op": "gramWrite",  "id": "effect_record" }
+  ],
+  "authority": {
+    "semantic_authority": false,
+    "topology_mutation": false,
+    "commit_authorized": false
+  }
+}

@@ -1,0 +1,144 @@
+(* ================================================================ *)
+(* QUESTION-µ — Question Generation Grammar                         *)
+(* Individual Micronaut domain language                             *)
+(* Role: generate                                                   *)
+(* Owns: question generation, ranking, candidate emission           *)
+(* Does NOT own: research dispatch, answer verification,            *)
+(*               WCR scoring of candidates, learning commits        *)
+(*                                                                  *)
+(* QUESTION-µ produces QuestionCandidates, not verified answers.    *)
+(* A ResearchProposal is a named output type, not an invocation.    *)
+(* Authorized research dispatch is separate from candidate emission. *)
+(* ================================================================ *)
+
+
+(* ---- Part I: Program Surface Syntax ---- *)
+
+program       = { template_decl | question_rule | type_decl
+               | operation_contract_decl | comment } ;
+
+(* TEMPLATE — declare a named question template with interpolation sites *)
+(* {variable} slots are filled from BIND bindings at rule evaluation time.
+   Templates are declarative; declaring one does not emit a question. *)
+template_decl = "TEMPLATE" identifier "=" string ;
+
+(* QUESTION — generate candidate questions from an unresolved condition *)
+(* USE names a declared template_id. BIND names the binding to fill it.
+   RANK selects the ranking method applied to generated candidates.
+   EMIT names the output type; QuestionCandidates is a candidate set,
+        not an admission or invocation. *)
+question_rule = "QUESTION" identifier "{"
+                  "WHEN" condition
+                  "USE" identifier
+                  [ "BIND" identifier ]
+                  [ "RANK" rank_method ]
+                  "EMIT" output_type
+                "}" ;
+
+condition     = "STATUS" "UNRESOLVED"
+              | "GAP" identifier
+              | "RELATION" identifier ;
+
+rank_method   = "NOVELTY"
+              | "INFORMATION_GAIN"
+              | "WCR" ;
+
+(* WCR rank_method delegates to the WCR pipeline for final scoring.
+   Declaring "RANK WCR" does not trigger WCR; it marks the output as
+   suitable input for the WCR stage in the orchestrator. *)
+
+output_type   = "QuestionCandidates"
+              | "ResearchProposal" ;
+
+(* TYPE declarations make the type inventory machine-readable. *)
+type_decl               = "TYPE" type_id ":" string
+                          [ "requires_xcfe" ":" bool_lit ] ;
+type_id                 = identifier ;
+bool_lit                = true_lit | false_lit ;
+true_lit                = "true" ;
+false_lit               = "false" ;
+
+(* CONTRACT declarations make operation signatures machine-readable. *)
+operation_contract_decl = "CONTRACT" identifier
+                          "INPUT" type_id
+                          "OUTPUT" type_id
+                          "PHASE" phase_name
+                          [ "xcfe" ":" "required" ] ;
+
+(* ---- Shared terminals ---- *)
+phase_name  = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Chen" | "Ch_en" | "Xul" ;
+identifier  = letter { letter | digit | "_" | "-" | "." } ;
+string      = '"' { string_char } '"' ;
+string_char = ? any character except unescaped '"' or newline ? ;
+digit       = "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9" ;
+letter      = ? Unicode letter or underscore ? ;
+whitespace  = ? space, tab, CR, LF ? ;
+comment     = "#" { ? any character except newline ? } newline ;
+
+
+(* ================================================================ *)
+(* Part II: Static Signatures for QUESTION-µ                        *)
+(* ================================================================ *)
+
+(*
+  Operation contracts
+  ┌──────────────────┬──────────────────────────────────┬──────────────────────┬───────┐
+  │ Operation        │ Input                            │ Output               │ Phase │
+  ├──────────────────┼──────────────────────────────────┼──────────────────────┼───────┤
+  │ TEMPLATE declare │ Lexical string with {} slots     │ TemplateDef          │ Wo    │
+  │ QUESTION/USE     │ UnresolvedQuery × TemplateDef    │ GeneratedQuestion     │ Yax   │
+  │ QUESTION/RANK    │ GeneratedQuestion × rank_method  │ RankedQuestion        │ Yax   │
+  │ QUESTION/EMIT    │ RankedQuestion                   │ QuestionCandidates    │ Yax   │
+  │ QUESTION/EMIT    │ RankedQuestion                   │ ResearchProposal      │ Yax   │
+  └──────────────────┴──────────────────────────────────┴──────────────────────┴───────┘
+
+  Output type definitions
+  ─────────────────────────────────────────────────────────────────────
+  TemplateDef          — compiled template with declared {} slots; read-only
+  UnresolvedQuery      — input containing STATUS UNRESOLVED, GAP, or RELATION;
+                         read-only
+  GeneratedQuestion    — text filled from TemplateDef and BIND bindings
+  RankedQuestion       — GeneratedQuestion with a rank score assigned by
+                         NOVELTY, INFORMATION_GAIN, or WCR marker
+  QuestionCandidates   — ordered set of RankedQuestions; not yet admitted;
+                         suitable input for CATA or WCR in the orchestrator
+  ResearchProposal     — named proposal referencing a QuestionCandidates set;
+                         NOT an invocation; authorized dispatch is separate
+
+  Ranking invariants
+  ─────────────────────────────────────────────────────────────────────
+  RANK NOVELTY:           ranks by information not yet in the knowledge base
+  RANK INFORMATION_GAIN:  ranks by expected reduction in uncertainty
+  RANK WCR:               marks output as suitable for WCR pipeline scoring;
+                          does not invoke WCR; orchestrator applies WCR externally
+  Rank scores are relative within a QUESTION rule; cross-rule comparison
+       requires normalization by the orchestrator
+
+  Phase legality
+  ─────────────────────────────────────────────────────────────────────
+  TEMPLATE declare:    Wo  (declarative; no XCFE)
+  QUESTION/USE:        Yax (R-phase: template instantiation; no XCFE)
+  QUESTION/RANK:       Yax (R-phase: scoring; no XCFE)
+  QUESTION/EMIT:       Yax (candidate emission; no XCFE;
+                           ResearchProposal dispatch requires XCFE externally)
+
+  Static errors
+  ─────────────────────────────────────────────────────────────────────
+  - template_duplicate_id
+  - question_duplicate_id
+  - use_references_undeclared_template
+  - bind_slot_not_in_template
+  - emit_before_rank (EMIT QuestionCandidates requires prior RANK)
+  - emit_research_proposal_without_condition
+  - wcr_rank_method_implicit_invocation (RANK WCR must not trigger WCR)
+
+  Authority
+  ─────────────────────────────────────────────────────────────────────
+  grammar_grants_execution: false
+  emit_grants_dispatch: false
+  research_proposal_requires_external_xcfe: true
+  route_requires_xcfe_admission: true
+  persistence_requires_verified_authorized_fold: true
+  semantic_authority: false
+  commit_authority: false
+*)

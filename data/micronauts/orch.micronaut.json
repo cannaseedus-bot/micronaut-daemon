@@ -1,0 +1,61 @@
+{
+  "@kind": "kuhul.micronaut.atomic.v1",
+  "id": "ORCH-µ",
+  "descriptor_status": "active",
+  "track_ref": "data/tracks/ORCH-u.semantic-tracks.v1.json",
+  "manifest": {
+    "name": "ORCH-µ",
+    "version": "1.0.0",
+    "description": "Orchestration micronaut — relational routing, call dispatch, composition planning, knowledge-gap routing. Routes resolved requests to target micronauts via Ch'en phase dispatch. proposal_only: does not execute calls; emits a typed dispatch proposal for XCFE."
+  },
+  "api": {
+    "namespace": "orch",
+    "atomic_keys": ["orch.route", "orch.plan", "orch.dispatch", "orch.verify", "orch.health"],
+    "verb_surface": ["DISPATCH *", "ROUTE *", "ORCHESTRATE *", "COORDINATE *", "ORCH STATUS"]
+  },
+  "xcfe": {
+    "mode": "xcfe_gated_read_only",
+    "escalation_mode": "proposal_only",
+    "authority": "proposal_only",
+    "forbidden": ["emit_response", "write_state", "mutate_topology", "commit_patterns", "direct_dispatch"]
+  },
+  "atomic_key_defs": {
+    "orch.route": {
+      "@type": "route_select",
+      "description": "Pop/Wo-phase: select target micronaut from governs registry — matches input against track governs lists, returns ranked target candidates with confidence scores.",
+      "phases": ["Pop", "Wo"],
+      "authority": "data_only"
+    },
+    "orch.plan": {
+      "@type": "compose_plan",
+      "description": "Wo/Yax-phase: compose a multi-step dispatch plan from a request — decomposes into ordered call sequence, identifies dependency chain between target micronauts.",
+      "phases": ["Wo", "Yax"],
+      "authority": "proposal_only"
+    },
+    "orch.dispatch": {
+      "@type": "dispatch_call",
+      "description": "Ch'en-phase: emit xcfe-gated dispatch call proposal to selected target micronaut — includes target ID, input text, expected phase, and authority chain. XCFE must admit before execution.",
+      "phases": ["Ch'en"],
+      "xcfe_required": true,
+      "authority": "proposal_only"
+    },
+    "orch.verify": {
+      "@type": "verify_result",
+      "description": "Ch'en/Xul-phase: verify result returned from dispatched micronaut — checks response schema, authority claim, and xcfe_admitted status.",
+      "phases": ["Ch'en", "Xul"],
+      "authority": "data_only"
+    },
+    "orch.health": {
+      "@type": "status",
+      "description": "Pop-phase: reports registered target micronauts, dispatch queue status, last route proposal, xcfe gate status.",
+      "phases": ["Pop"]
+    }
+  },
+  "program_contract": {
+    "drivers": ["Micronaut.Core.dll", "CFPC.Patterns.dll"],
+    "sandbox": "xcfe_gated_read_only",
+    "learning": false
+  },
+  "srai": { "enabled": false },
+  "capabilities": ["relational-routing", "call-dispatch", "composition-planning", "asset-research-routing", "knowledge-gap-routing"]
+}

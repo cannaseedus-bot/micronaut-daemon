@@ -1,0 +1,41 @@
+(* Compiled SRAI route graph, v1.1. References are identifiers, never calls. *)
+route-graph = "route-graph", space, identifier, "{", version, entry-points,
+              nodes, edges, cycles, limits, [ guard-reference ], [ closure-reference ], "}" ;
+version = "version:", semver, ";" ;
+entry-points = "entry-points:[", entry-point, { ",", entry-point }, "];" ;
+entry-point = "{pattern:", quoted, ",node:", quoted, "}" ;
+nodes = "nodes:[", node, { ",", node }, "];" ;
+node = "{id:", quoted, ",pattern:", quoted, ",topic:", quoted,
+       ",kind:", node-kind, [ ",dispatch-op:", identifier, ",dispatch-arity:", arity ],
+       ",specificity:", number, "}" ;
+node-kind = "match" | "redirect" | "fallback" | "dispatch" | "closure" ;
+arity = "1" | "2" ;
+edges = "edges:[", [ edge, { ",", edge } ], "];" ;
+edge = "{from:", quoted, ",to:", quoted, ",kind:", edge-kind,
+       [ ",guard-check:", guard-check ], [ ",priority:", integer ], "}" ;
+edge-kind = "srai" | "pi" | "fallback" | "conditional" | "guard" ;
+guard-check = "{field:", guard-field, ",operator:", comparison,
+              ",value:", quoted, ",on-fail:", fail-action, "}" ;
+guard-field = "reasoning.depth" | "reasoning.visited" | "reasoning.guard" ;
+comparison = "==" | "!=" | "<" | "<=" | ">" | ">=" ;
+fail-action = "reject" | "warn" | "defer" ;
+guard-reference = "guard:{id:", identifier, ",max-depth:", positive-integer, "};" ;
+closure-reference = "closure:{result-pattern:\"REASONING RESULT *\",denied-pattern:\"REASONING DENIED *\"};" ;
+cycles = "cycles:[", [ cycle, { ",", cycle } ], "];" ;
+cycle = "{path:[", quoted, { ",", quoted }, "],policy:", fail-action, "}" ;
+limits = "limits:{max-depth:", positive-integer, ",max-nodes:", positive-integer,
+         ",max-edges:", positive-integer, "};" ;
+semver = integer, ".", integer, ".", integer ;
+number = integer, [ ".", integer ] ;
+integer = digit, { digit } ;
+positive-integer = nonzero-digit, { digit } ;
+digit = "0" | nonzero-digit ;
+nonzero-digit = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+identifier = letter, { letter | digit | "_" | "-" } ;
+letter = "A".."Z" | "a".."z" ;
+quoted = '"', { letter | digit | " " | "_" | "-" | "." | "*" }, '"' ;
+space = " " | "\t" | "\r" | "\n" ;
+
+(* Binding constraints: edge endpoints and entry points resolve to node ids;
+   dispatch-op resolves to an operator of matching arity; guard fields resolve;
+   closure nodes have no outgoing edge; cycles must be declared. *)

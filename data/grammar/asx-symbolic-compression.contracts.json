@@ -1,0 +1,173 @@
+{
+  "@type": "khanary.asx_symbolic_compression.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "normalization_only_compression_proposes_xcfe_admits_xul_commits",
+  "lane": "KHANARY_ASX_COMPRESSION_TEST",
+  "owner": "src/world/asx_vector_ops.h",
+  "artifact": "data/manifest/css.manifest.json",
+  "docs": {
+    "in_repo": "docs/asx-comresssion-white.html",
+    "canonical_source": "C:/Users/canna/.key-grammar-kit/asx-comresssion-white.v2.html",
+    "ui_surface": "docs/asx-compression.html",
+    "note": "the white paper is the map layer; this repository's copy is the audited snapshot, and the kit copy is the canonical source named by the PLAN source anchor"
+  },
+  "why": "The CSS manifest is the original ASX format, and PLAN's canonical model calls CSS compression part of ASX symbolic compression law rather than a disconnected UI concern. It was ungated: nothing checked that the manifest still carries its key-grammar chain, its eight-stage syntax compiler, its seven syntax unit kinds, or — most importantly — that it declares itself normalization-only. The white paper also fixes what the compression operates on: 2D relation vectors scored by cosine, not semantic tensors.",
+  "great_equation": {
+    "law": "ASX = XJSON(contracts) + SCX(compression) + Mx2LM(agents) + JS(runtime)",
+    "layers": {
+      "XJSON": "contracts",
+      "SCX": "compression",
+      "Mx2LM": "agents",
+      "JS": "runtime"
+    },
+    "source": "docs/asx-comresssion-white.html"
+  },
+  "pipeline": {
+    "law": "match → bind → filter → map → score → XCFE admission → K'UHUL phases → Ch'en observe → Xul commit",
+    "operators": {
+      "match": "recognize the key (⟁KEYGRAMMAR address)",
+      "bind": "resolve key → book → declared neighborhood",
+      "filter": "select the vectors whose score clears the declared threshold",
+      "map": "transform each surviving 2D vector",
+      "score": "score the relation vector by cosine G(q,b) in R^2"
+    },
+    "law_of_authority": "compression and scoring never admit: the phase gate, XCFE admission and Xul commit remain the only authority, and the manifest states the same boundary itself"
+  },
+  "manifest_surface": {
+    "required_sections": [
+      "⟁KEYGRAMMAR",
+      "⟁GRAMMARSYNTAXGRAPH",
+      "⟁AST",
+      "⟁SYNTAXCOMPILER",
+      "⟁SYNTAXUNITKINDS"
+    ],
+    "key_grammar": [
+      "key:address(book)",
+      "book:declared-neighborhood",
+      "grammar:constrained-book-traversal"
+    ],
+    "key_grammar_phases": [
+      "Wo",
+      "Yax",
+      "Ch'en"
+    ],
+    "syntax_graph": {
+      "nodes": "css-keys",
+      "edges": "key-expansion",
+      "graph": "persistent",
+      "unfold": "instance-tree"
+    },
+    "ast_declaration": {
+      "name": "Abstract Syntax Transpiler",
+      "direction": "html/css->canonical-keys",
+      "mode": "normalization-only",
+      "authority": "not:execution-authority"
+    },
+    "syntax_compiler_stages": [
+      "SyntaxParser",
+      "KeyResolver",
+      "BookExpander",
+      "RelationBinder",
+      "SyntaxGraphBuilder",
+      "FoldBuilder",
+      "SyntaxProjector"
+    ],
+    "syntax_compiler_stage_count": 8,
+    "syntax_compiler_note": "the shipped manifest lists eight entries; the eighth is the compiler entry point, so the stage set below the entry is the seven named passes",
+    "syntax_unit_kinds": [
+      "Atom",
+      "Snippet",
+      "Block",
+      "Component",
+      "Layout",
+      "File",
+      "Application"
+    ],
+    "type_entry_fields": {
+      "kind_prefix": "kind:",
+      "language": "css | html+css",
+      "glyph_prefix": "⟁",
+      "language_values": [
+        "css",
+        "html+css"
+      ]
+    }
+  },
+  "two_d_contract": {
+    "law": "unigrams, bigrams and trigrams have distinct responsibilities: the field combines symbolic graph topology with numeric 2D geometry, and semantic references are not automatically numeric tensors",
+    "records": {
+      "U1": "frozen corpus prior W_C(w)",
+      "B2": "ordered relation vector (x, y)",
+      "T3": "stored phase theta plus an executable FoldRef"
+    },
+    "relation_vector": "B2(w_i, w_j) → v_b = (x_b, y_b) ∈ R^2",
+    "score": "G(q, b) = (v_q · v_b) / (||v_q|| · ||v_b||)",
+    "effective_weight": "W_effective(w, t) = W_corpus(w) × W_learned(w, t)",
+    "operators": {
+      "fold": "contract a set of 2D vectors into one structural record (centroid + extent), which is how key grammar folds a neighborhood",
+      "map": "transform each 2D vector under the declared key parameters (scale, rotate, translate)",
+      "filter": "select the vectors whose cosine G(q, b) clears the declared threshold"
+    }
+  },
+  "scxq2_relationship": {
+    "law": "SCXQ2 remains an optional distinct encoding/execution path and is not this format",
+    "this_format": "ASX key-grammar symbolic compression: keys, folds, neighborhoods and 2D relation vectors",
+    "scxq2": "ASXG container compression profile (data/grammar/scxq2.contracts.json)"
+  },
+  "status_vocabulary": [
+    "ok",
+    "manifest_unreadable",
+    "section_missing",
+    "key_grammar_incomplete",
+    "phase_not_declared",
+    "compiler_stage_missing",
+    "unit_kind_unknown",
+    "type_entry_malformed",
+    "authority_claimed",
+    "vector_dimension_invalid",
+    "threshold_out_of_range"
+  ],
+  "invariants": {
+    "AC1": "the manifest declares the five required sections, and a missing or renamed section is a typed refusal rather than a silent gap",
+    "AC2": "the key grammar keeps its key→book→grammar chain and declares only canonical C6 phases; an undeclared or aliased phase is refused",
+    "AC3": "the syntax compiler keeps its declared stage set, in order; a missing or reordered pass is refused",
+    "AC4": "every ⟁TYPE entry declares a kind from the seven syntax unit kinds, a css-bearing language (language:css for pure CSS units, language:html+css for composite units), and its glyph",
+    "AC5": "the manifest is normalisation only: it declares `not:execution-authority`, and any entry claiming execution or commit authority is refused",
+    "AC6": "the compression pipeline runs match → bind → filter → map → score and never skips the phase gate or the XCFE admission that follows it",
+    "AC7": "2D relation vectors live in R^2 and are scored by the cosine G(q, b); a vector is a relation vector and never silently becomes a semantic tensor",
+    "AC8": "SCXQ2 stays a separate optional encoding path; this contract does not absorb it and does not claim its authority",
+    "AC9": "one key expands into a declared field: expansion reads the records that declare their vectors, never invents a member, and an unnamed record is not part of a field",
+    "AC10": "the field is deterministic: the signature is a function of (key, catalog version, sorted entries), the order is producer-then-ref, and the same inputs reproduce the same signature",
+    "AC11": "a preset vector is either declared by its record or deterministically derived and labelled preset_derived; no learned embedding enters the expansion and W_learned stays separate",
+    "AC12": "an application is not a special case: a unit of kind `application` expands into its own field of units and projects by the same HTMLBIND rule and SyntaxProjector stage"
+  },
+  "field_expansion": {
+    "law": "one key addresses a declared book, the book declares the neighbourhood, and unfolding the persistent graph yields an instance tree: a key expands into a whole field of preset vectors, it does not denote one style",
+    "manifest_keys": [
+      "key:address(book)",
+      "book:declared-neighborhood",
+      "unfold:instance-tree"
+    ],
+    "model": "vector-field compression by 2D word association: the key's association vector locates the field, and each member of the field carries the preset 2D vector its record declares",
+    "populated_by": {
+      "cfpc": "CfpcContextField — field_keys accumulated across BFS hops, reachable micronaut ids, and generated questions",
+      "eliza": "Eliza-1 operator surfaces",
+      "alice": "AIML pattern bank (Alice corpus)",
+      "question": "question engine records",
+      "micronaut": "micronaut registry / track records, including their declared vector.x/.y",
+      "intent": "intent classification"
+    },
+    "preset_vectors": {
+      "declared": "a record that declares x/y contributes that preset verbatim (W_corpus)",
+      "derived": "a record that declares none contributes a deterministic point derived from (key, ref), labelled preset_derived rather than presented as declared",
+      "learned": "no learned embedding enters this path: W_learned stays a separate weight (W_effective = W_corpus × W_learned)"
+    },
+    "determinism": "the field signature is sha256 over (key, catalog version, sorted entries), so one key plus one catalog revision reproduces exactly one field",
+    "apps": "an application is the same mechanism one level up: a unit of kind `application` expands into its own field of units (snippet / block / component / layout) and projects through `⟁HTMLBIND` (html:element->css:key) and the SyntaxProjector stage",
+    "does_not": [
+      "no interpretation: expansion materialises declared records, it does not invent members",
+      "no authority: the field is evidence for routing and projection, never an admission"
+    ]
+  }
+}

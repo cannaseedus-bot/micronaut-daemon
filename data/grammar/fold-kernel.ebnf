@@ -1,0 +1,209 @@
+(* ============================================================ *)
+(* Fold Kernel Grammar                                           *)
+(* Concrete JSON syntax plus Abstract semantic structure.         *)
+(* ============================================================ *)
+
+(* A Fold Kernel is a State-dependent JSON record.  It is the lifecycle
+   envelope for a learned fold: learned pattern evidence, backend binding,
+   observation proof, XCFE policy, and XCFE route grow as @state advances.
+
+   Fold Kernel != Fold Binding.
+   Fold Binding binds (alpha, theta) to a backend entrypoint.
+   Fold Kernel records the lifecycle state that decides whether that binding
+   may be observed, validated, or routed autonomously. *)
+
+(* ============================================================ *)
+(* 1. CONCRETE GRAMMAR — JSON SHAPE                              *)
+(* ============================================================ *)
+
+FoldKernel      ::= "{" MemberList "}" ;
+
+MemberList      ::= Member ( "," Member )* ;
+
+Member          ::= FoldKey
+                  | PhaseKey
+                  | SemanticKey
+                  | StateKey
+                  | LearnedKey
+                  | BindingKey
+                  | EvidenceKey
+                  | PolicyKey
+                  | RouteKey
+                  | UIKey
+                  | ExtensionKey ;
+
+(* Required core keys. *)
+FoldKey         ::= '"@fold"'     ":" String ;
+PhaseKey        ::= '"@phase"'    ":" Phase ;
+SemanticKey     ::= '"@semantic"' ":" String ;
+StateKey        ::= '"@state"'    ":" State ;
+
+Phase           ::= '"Pop"'
+                  | '"Wo"'
+                  | '"Yax"'
+                  | '"Sek"'
+                  | '"Ch\'en"'
+                  | '"Xul"' ;
+
+State           ::= '"unbound"'
+                  | '"observed"'
+                  | '"learned"'
+                  | '"bound"'
+                  | '"validated"'
+                  | '"autonomous"' ;
+
+(* Optional shape keys. Semantic validity makes some of these required by
+   state. *)
+LearnedKey      ::= '"@learned"'  ":" ( Learned | Null ) ;
+BindingKey      ::= '"@binding"'  ":" ( Binding | Null ) ;
+EvidenceKey     ::= '"@evidence"' ":" ( Evidence | Null ) ;
+PolicyKey       ::= '"@policy"'   ":" ( Policy | Null ) ;
+RouteKey        ::= '"@route"'    ":" ( Route | Null ) ;
+UIKey           ::= '"@ui"'       ":" ( UI | Null ) ;
+ExtensionKey    ::= '"@"' Identifier ":" Value ;
+
+Learned         ::= "{" LearnedMember ( "," LearnedMember )* "}" ;
+LearnedMember   ::= PatternKey | NgramsKey | SignatureKey | LearnedExtKey ;
+PatternKey      ::= '"@pattern"'   ":" String ;
+NgramsKey       ::= '"@ngrams"'    ":" Array ;
+SignatureKey    ::= '"@signature"' ":" String ;
+LearnedExtKey   ::= '"@"' Identifier ":" Value ;
+
+Binding         ::= "{" BindingMember ( "," BindingMember )* "}" ;
+BindingMember   ::= BackendKey | EntryKey | DispatchKey | ContractKey | BindingExtKey ;
+BackendKey      ::= '"@backend"'  ":" String ;
+EntryKey        ::= '"@entry"'    ":" String ;
+DispatchKey     ::= '"@dispatch"' ":" Dim3 ;
+ContractKey     ::= '"@contract"' ":" Contract ;
+BindingExtKey   ::= '"@"' Identifier ":" Value ;
+Dim3            ::= "[" Integer "," Integer "," Integer "]" ;
+Contract        ::= "{" '"pre"' ":" String "," '"post"' ":" String "}" ;
+
+Evidence        ::= "{" EvidenceMember ( "," EvidenceMember )* "}" ;
+EvidenceMember  ::= ObservationsKey
+                  | SupportKey
+                  | ExceptionsKey
+                  | ValidatedKey
+                  | FailuresKey
+                  | ConfidenceKey
+                  | EvidenceExtKey ;
+ObservationsKey ::= '"@observations"' ":" Integer ;
+SupportKey      ::= '"@support"'      ":" Integer ;
+ExceptionsKey   ::= '"@exceptions"'   ":" Integer ;
+ValidatedKey    ::= '"@validated"'    ":" Integer ;
+FailuresKey     ::= '"@failures"'     ":" Integer ;
+ConfidenceKey   ::= '"@confidence"'   ":" Number ;
+EvidenceExtKey  ::= '"@"' Identifier ":" Value ;
+
+Policy          ::= XCFEPolicy ;
+XCFEPolicy      ::= ? see data/grammar/xcfe-policy.ebnf ;
+(* @policy is data. XCFE is the evaluator. Policy != Control != Execution. *)
+
+Routes          ::= "{" RoutesMember ( "," RoutesMember )* "}" ;
+RoutesMember    ::= AutonomousRouteKey | ValidatedRouteKey | DefaultRouteKey ;
+AutonomousRouteKey ::= '"@autonomous"' ":" RouteTarget ;
+ValidatedRouteKey  ::= '"@validated"'  ":" RouteTarget ;
+DefaultRouteKey    ::= '"@default"'    ":" RouteTarget ;
+
+Route           ::= "{" RouteMember ( "," RouteMember )* "}" ;
+RouteMember     ::= AuthorityKey | TargetKey | ExecutorKey | ReasonKey | RouteExtKey ;
+AuthorityKey    ::= '"@authority"' ":" '"XCFE"' ;
+TargetKey       ::= '"@target"'    ":" RouteTarget ;
+ExecutorKey     ::= '"@executor"'  ":" String ;
+ReasonKey       ::= '"@reason"'    ":" String ;
+RouteExtKey     ::= '"@"' Identifier ":" Value ;
+
+RouteTarget     ::= '"local"' | '"local-test"' | '"fallback"' ;
+
+UI              ::= "{" UIMember ( "," UIMember )* "}" ;
+UIMember        ::= DisplayKey | ColorKey | IconKey | UIExtKey ;
+DisplayKey      ::= '"@display"' ":" String ;
+ColorKey        ::= '"@color"'   ":" String ;
+IconKey         ::= '"@icon"'    ":" String ;
+UIExtKey        ::= '"@"' Identifier ":" Value ;
+
+String          ::= JSON_String ;
+Number          ::= JSON_Number ;
+Integer         ::= JSON_Integer ;
+Object          ::= JSON_Object ;
+Array           ::= JSON_Array ;
+Value           ::= JSON_Value ;
+Null            ::= JSON_Null ;
+Identifier      ::= JSON_String_Match([A-Za-z][A-Za-z0-9_]*) ;
+
+
+(* ============================================================ *)
+(* 2. ABSTRACT GRAMMAR — SEMANTIC RECORD                         *)
+(* ============================================================ *)
+
+FoldKernelADT   ::= "<"
+                      "fold" ":" FoldId ","
+                      "phase" ":" Phase ","
+                      "semantic" ":" SemanticTag ","
+                      "state" ":" State ","
+                      "learned" ":" OptionalLearned ","
+                      "binding" ":" OptionalBinding ","
+                      "evidence" ":" OptionalEvidence ","
+                      "policy" ":" OptionalPolicy ","
+                      "route" ":" OptionalRoute ","
+                      "ui" ":" OptionalUI
+                    ">" ;
+
+FoldId          ::= Identifier ;
+SemanticTag     ::= String ;
+
+LearnedADT      ::= "<" "pattern" ":" PatternId ","
+                         "ngrams" ":" "[" Ngram* "]" ","
+                         "signature" ":" Digest ">" ;
+
+BindingADT      ::= "<" "backend" ":" BackendId ","
+                         "entry" ":" EntryId ","
+                         "dispatch" ":" Dim3 ","
+                         "contract" ":" Contract ">" ;
+
+EvidenceADT     ::= "<" "observations" ":" Nat ","
+                         "support" ":" Nat ","
+                         "exceptions" ":" Nat ","
+                         "validated" ":" Nat ","
+                         "failures" ":" Nat ">" ;
+
+PolicyADT       ::= XCFEPolicyADT ;
+XCFEPolicyADT   ::= ? see data/grammar/xcfe-policy.ebnf abstract grammar ;
+
+RouteADT        ::= "<" "authority" ":" "XCFE" ","
+                         "target" ":" RouteTarget ","
+                         "executor" ":" ExecutorId ","
+                         "reason" ":" Reason ">" ;
+
+OptionalLearned  ::= LearnedADT | Null ;
+OptionalBinding  ::= BindingADT | Null ;
+OptionalEvidence ::= EvidenceADT | Null ;
+OptionalPolicy   ::= PolicyADT | Null ;
+OptionalRoute    ::= RouteADT | Null ;
+OptionalUI       ::= UI | Null ;
+
+
+(* ============================================================ *)
+(* 3. SEMANTIC INVARIANTS — VALIDITY RULES                       *)
+(* ============================================================ *)
+
+I1 ::= evidence.observations = evidence.support + evidence.exceptions ;
+I2 ::= evidence.validated >= evidence.failures ;
+I3 ::= XCFEPolicy.W1 weight normalization ;
+I4 ::= XCFEPolicy.W3 threshold ordering ;
+I5 ::= evidence.confidence in [0, 1] ;
+
+S1 ::= state in { learned, bound, validated, autonomous } implies learned != null ;
+S2 ::= state in { bound, validated, autonomous } implies binding != null ;
+S3 ::= state in { validated, autonomous } implies evidence != null ;
+S4 ::= state = autonomous implies policy != null ;
+S5 ::= state in { validated, autonomous } implies route != null ;
+
+A1 ::= route != null implies route.authority = "XCFE" ;
+A2 ::= evidence.confidence = XCFEPolicy(evidence) ;
+A3 ::= state = XCFE(previous_state, event, evidence, policy) ;
+
+P1 ::= phase in phase_cycle implies fold in compatible_folds(phase) ;
+P2 ::= semantic in semantic_tags(phase) ;
+
+TypeJudgment ::= "⊢" FoldKernelADT ":" "FoldKernel" ;

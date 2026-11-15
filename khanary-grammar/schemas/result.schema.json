@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Typed CFPC Result",
+  "type": "object",
+  "properties": {
+    "@kind": {
+      "const": "cfpc.result.v1"
+    },
+    "@findings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "@hypotheses": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "@contradictions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "@unresolved": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "@queries": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "@objections": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "@support": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "@shadow_candidates": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "@provenance_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "@status": {
+      "enum": [
+        "complete",
+        "partial",
+        "unresolved",
+        "Bottom"
+      ]
+    }
+  },
+  "required": [
+    "@kind",
+    "@status"
+  ],
+  "additionalProperties": false
+}

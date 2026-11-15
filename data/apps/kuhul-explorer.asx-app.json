@@ -1,0 +1,18 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@version": "1.0.0",
+  "@id": "kuhul-explorer",
+  "@key": "⟁APP:KUHUL_EXPLORER",
+  "@mount": "⟁ROOT:KUHUL_EXPLORER",
+  "@state": {"selected_phase":"Pop"},
+  "@components": {
+    "⟁ROOT:KUHUL_EXPLORER": {"@type":"runtime-infographic","@children":["⟁WIDGET:PHASE_MAP","⟁WIDGET:ADMISSION_BOUNDARY","⟁WIDGET:TRACKS"]},
+    "⟁WIDGET:PHASE_MAP": {"@type":"svg-runtime-map","@source":"data/apps/kuhul-infographic.svg","@png":"data/apps/kuhul-infographic.png","@converter":"tools/render-kuhul-infographic.ps1","@data":"data/apps/kuhul-explorer.data.json#phase_sequence"},
+    "⟁WIDGET:ADMISSION_BOUNDARY": {"@type":"execution-boundary","@data":"data/apps/kuhul-explorer.data.json#boundaries"},
+    "⟁WIDGET:TRACKS": {"@type":"semantic-track-index","@source":"data/tracks/"}
+  },
+  "@imports":["data/facts/kuhul-runtime.json","data/apps/kuhul-field.xaiml"],
+  "@permissions":{"network":"none","tools":false,"semantic_commit":false},
+  "@lifecycle":{"mount":"projection_only","unmount":"discard_state"},
+  "@epistemic":{"repository_definition":true,"execution_authority":false}
+}

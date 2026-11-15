@@ -1,0 +1,174 @@
+(* ============================================================ *)
+(* Fold Space Grammar                                           *)
+(* Navigable K'UHUL semantic state space.                       *)
+(* ============================================================ *)
+
+(* Fold Space is the umbrella coordinate model over Fold topology,
+   semantic tracks, K'UHUL phase position, fold/unfold extent,
+   optional N-Gram Burner competence, and mutable runtime state:
+
+       F_K = K'UHUL Fold Space
+       p_t = (h, phi, T, s, X_t)
+       p_t = (h, phi, T, s, sigma, X_t) when learning is tracked
+
+   Fold Lattice K = (theta, sigma) is the phase/competence slice of
+   Fold Space, not the full position.  C6 is the authoritative execution
+   coordinate; S1/angle geometry is a projection.  Fold Space != Fold Lattice != Fold Kernel != XCFE Policy != Execution. *)
+
+(* ============================================================ *)
+(* 1. CONCRETE GRAMMAR — JSON SHAPE                              *)
+(* ============================================================ *)
+
+FoldSpace       ::= "{" FoldSpaceMember ( "," FoldSpaceMember )* "}" ;
+FoldSpaceMember ::= TypeKey
+                  | CoordinateKey
+                  | MovementsKey
+                  | BookKey
+                  | DistancesKey
+                  | PipelineKey
+                  | AuthorityKey
+                  | LatticeRefKey
+                  | ExtensionKey ;
+
+TypeKey         ::= '"@type"' ":" '"khanary.fold_space.v1"' ;
+CoordinateKey   ::= '"@coordinate"' ":" Position ;
+MovementsKey    ::= '"@movements"' ":" MovementList ;
+BookKey         ::= '"@book"' ":" BookDecl ;
+DistancesKey    ::= '"@distances"' ":" DistanceList ;
+PipelineKey     ::= '"@pipeline"' ":" PipelineList ;
+AuthorityKey    ::= '"@authority"' ":" AuthorityDecl ;
+LatticeRefKey   ::= '"@lattice_ref"' ":" String ;
+ExtensionKey    ::= '"@"' Identifier ":" Value ;
+
+Position        ::= "{" PositionMember ( "," PositionMember )* "}" ;
+PositionMember  ::= HandleKey
+                  | PhaseKey
+                  | TrackKey
+                  | FoldStateKey
+                  | CompetenceKey
+                  | RuntimeStateKey
+                  | PositionExtKey ;
+HandleKey       ::= '"@h"' ":" String ;
+PhaseKey        ::= '"@phase"' ":" Phase ;
+TrackKey        ::= '"@track"' ":" String ;
+FoldStateKey    ::= '"@fold_state"' ":" FoldState ;
+CompetenceKey   ::= '"@competence"' ":" Competence ;
+RuntimeStateKey ::= '"@runtime_state"' ":" RuntimeState ;
+PositionExtKey  ::= '"@"' Identifier ":" Value ;
+
+Phase           ::= '"Pop"' | '"Wo"' | '"Yax"' | '"Sek"' | '"Ch\'en"' | '"Xul"' ;
+FoldState       ::= '"folded"' | '"unfolded"' ;
+Competence      ::= '"unbound"' | '"observed"' | '"learned"' | '"bound"' | '"validated"' | '"autonomous"' ;
+RuntimeState    ::= "{" RuntimeStateMember ( "," RuntimeStateMember )* "}" ;
+RuntimeStateMember ::= '"@mutable"' ":" Boolean
+                     | '"@state_id"' ":" String
+                     | '"@digest"' ":" String
+                     | '"@"' Identifier ":" Value ;
+
+MovementList    ::= "[" Movement ( "," Movement )* "]" ;
+Movement        ::= "{" MovementMember ( "," MovementMember )* "}" ;
+MovementMember  ::= MovementTypeKey | FromKey | ToKey | MovementExtKey ;
+MovementTypeKey ::= '"@type"' ":" MovementType ;
+FromKey         ::= '"@from"' ":" Position ;
+ToKey           ::= '"@to"' ":" Position ;
+MovementExtKey  ::= '"@"' Identifier ":" Value ;
+MovementType    ::= '"horizontal"' | '"vertical"' | '"radial"' ;
+
+BookDecl        ::= "{" BookMember ( "," BookMember )* "}" ;
+BookMember      ::= BookHandleKey
+                  | NeighborhoodKey
+                  | BoundedByKey
+                  | OpenOperationKey
+                  | CloseOperationKey
+                  | BookExtKey ;
+BookHandleKey   ::= '"@handle"' ":" String ;
+NeighborhoodKey ::= '"@neighborhood"' ":" String ;
+BoundedByKey    ::= '"@bounded_by"' ":" String ;
+OpenOperationKey ::= '"@open"' ":" '"UNFOLD"' ;
+CloseOperationKey ::= '"@close"' ":" '"FOLD"' ;
+BookExtKey      ::= '"@"' Identifier ":" Value ;
+
+DistanceList    ::= "[" DistanceDecl ( "," DistanceDecl )* "]" ;
+DistanceDecl    ::= "{" DistanceMember ( "," DistanceMember )* "}" ;
+DistanceMember  ::= DistanceTypeKey | DistanceFormulaKey | TypedKey | DistanceExtKey ;
+DistanceTypeKey ::= '"@type"' ":" DistanceType ;
+DistanceFormulaKey ::= '"@formula"' ":" String ;
+TypedKey        ::= '"@typed"' ":" Boolean ;
+DistanceExtKey  ::= '"@"' Identifier ":" Value ;
+DistanceType    ::= '"semantic"' | '"phase"' | '"track"' | '"behavior"' ;
+
+PipelineList    ::= "[" '"LOCATE"' "," '"UNFOLD"' "," '"NAVIGATE"' "," '"OPERATE"' "," '"VERIFY"' "," '"FOLD"' "," '"XUL"' "]" ;
+
+AuthorityDecl   ::= "{" AuthorityMember ( "," AuthorityMember )* "}" ;
+AuthorityMember ::= C6AuthorityKey
+                  | S1ProjectionKey
+                  | SemanticAuthorityKey
+                  | RouteAuthorityKey
+                  | ProofBoundaryKey
+                  | AuthorityExtKey ;
+C6AuthorityKey  ::= '"@c6_authority"' ":" Boolean ;
+S1ProjectionKey ::= '"@s1_projection_only"' ":" Boolean ;
+SemanticAuthorityKey ::= '"@semantic_authority"' ":" Boolean ;
+RouteAuthorityKey ::= '"@route_authority"' ":" '"XCFE"' ;
+ProofBoundaryKey ::= '"@proof_boundary"' ":" String ;
+AuthorityExtKey ::= '"@"' Identifier ":" Value ;
+
+String          ::= JSON_String ;
+Boolean         ::= JSON_Boolean ;
+Value           ::= JSON_Value ;
+Identifier      ::= JSON_String_Match([A-Za-z][A-Za-z0-9_]*) ;
+
+
+(* ============================================================ *)
+(* 2. ABSTRACT GRAMMAR — NAVIGABLE SPACE                         *)
+(* ============================================================ *)
+
+FoldSpaceADT    ::= "<" "space" ":" "F_K" ","
+                         "position" ":" PositionADT ","
+                         "movements" ":" "[" MovementADT* "]" ","
+                         "book" ":" BookADT ","
+                         "distances" ":" "[" TypedDistance* "]" ">" ;
+
+PositionADT     ::= "p_t" "=" "(" Handle "," Phase "," Track "," FoldState "," RuntimeState ")"
+                  | "p_t" "=" "(" Handle "," Phase "," Track "," FoldState "," Competence "," RuntimeState ")" ;
+Coordinate      ::= "p_t" "=" "(" "h" "," "phi" "," "T" "," "s" "," "X_t" ")" ;
+LearningCoordinate ::= "p_t" "=" "(" "h" "," "phi" "," "T" "," "s" "," "sigma" "," "X_t" ")" ;
+LatticeSlice    ::= "K" "=" "(" "theta" "," "sigma" ")" ;
+(* K = (theta, sigma) is a slice of p_t = (h, phi, T, s, sigma, X_t) *)
+
+MovementADT     ::= Horizontal | Vertical | Radial ;
+Horizontal      ::= "DeltaT" ":" "(" "phi" "," "T_A" ")" "->" "(" "phi" "," "T_B" ")" ;
+Vertical        ::= "Deltaphi" ":" "(" "phi" "," "T" ")" "->" "(" "phi+pi/3" "," "T" ")" ;
+Radial          ::= "Deltas" ":" "folded" "<->" "unfolded" ;
+
+BookADT         ::= "Book" "(" Handle ")" "≡" "N" "(" Handle ")" ;
+UnfoldLaw       ::= "Unfold" "(" "h" "," "tau" ")" "=" "{" "e" "|" "B_tau[h,e] != 0" "}" ;
+TypedDistance   ::= "D" "(" "u" "," "v" "|" "tau" "," "Q" "," "phi" ")" ;
+Pipeline        ::= "LOCATE" "->" "UNFOLD" "->" "NAVIGATE" "->" "OPERATE" "->" "VERIFY" "->" "FOLD" "->" "XUL" ;
+
+
+(* ============================================================ *)
+(* 3. SEMANTIC INVARIANTS                                        *)
+(* ============================================================ *)
+
+FS1  ::= h identifies a semantic Fold/handle ;
+FS2  ::= phi in C6 phase_cycle ;
+FS3  ::= T identifies an active semantic track ;
+FS4  ::= s in { folded, unfolded } ;
+FS5  ::= X_t is mutable runtime state, not semantic topology ;
+FS6  ::= sigma is optional, but if present sigma in competence_axis ;
+FS7  ::= horizontal movement changes T while holding phi ;
+FS8  ::= vertical movement advances phi by one C6 step while holding T ;
+FS9  ::= radial movement toggles s while holding phi and T ;
+FS10 ::= C6 is authoritative execution coordinate; S1 angle is projection only ;
+FS11 ::= Book(h) = N(h) and Unfold(h,tau) is bounded by B_tau[h,e] != 0 ;
+FS12 ::= distance is typed: semantic, phase, track, or behavior; no universal metric is implied ;
+FS13 ::= navigation order is LOCATE -> UNFOLD -> NAVIGATE -> OPERATE -> VERIFY -> FOLD -> XUL ;
+FS14 ::= Fold != Xul ;
+FS15 ::= Sek proposes, Ch'en proves, XCFE authorizes, Xul commits ;
+FS16 ::= FoldField F_i = (node_id_i, theta_i, W_i, C_i, R_i) is a vertex in G_runtime = G_semantic □ G_phase ;
+FS17 ::= fold_relevance(a, b) = sqrt(Wa·Wb)·sqrt(Ca·Cb)·cos(Δθ) is the approximate product-graph edge weight ;
+FS18 ::= fold_distance(a, b, alpha) = alpha·d_field + (1−alpha)·d_wcr normalised to [0, 1] ;
+FS19 ::= ConvergenceTest tracks Kleene fixed-point iteration: ITERATING | CONVERGED | DIVERGING | MAX_ITER ;
+
+TypeJudgment     ::= "⊢" FoldSpaceADT ":" "FoldSpace" ;

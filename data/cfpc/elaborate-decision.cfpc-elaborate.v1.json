@@ -1,0 +1,10 @@
+{
+    "@kind": "semantic.elaborate.v1",
+    "@id": "elaborate-decision-001",
+    "@owner": "REASON-µ",
+    "@subject": "decision_semantics",
+    "@intent": "expand",
+    "@modes": ["explain", "compare"],
+    "@backend": {"type": "micronaut", "capability": "pattern_discovery"},
+    "@policy": {"max_depth": 3, "max_operations": 6, "cycle_detection": true}
+}

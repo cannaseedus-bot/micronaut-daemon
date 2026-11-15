@@ -1,0 +1,252 @@
+{
+  "@no-eval": true,
+  "id": "SEMANTIC-FOLD-µ",
+
+  "schemes": ["semantic-fold"],
+  "description": "Semantic fold domain — fold_graph topology, phase transitions, fold_lattice, delta_z, incidence algebra, Xul gate.",
+  "phase": "Sek",
+  "category": "structural",
+  "confidence": 0.88,
+  "static_weight": 0.92,
+  "health": 1.0,
+  "governs": [
+    "fold",
+    "fold graph",
+    "fold_graph",
+    "fold lattice",
+    "fold_lattice",
+    "fold kernel",
+    "fold space",
+    "fold event",
+    "semantic fold",
+    "topology",
+    "topological",
+    "phase transition",
+    "delta z",
+    "delta_z",
+    "incidence",
+    "incidence matrix",
+    "incidence algebra",
+    "b b^t",
+    "b^t b",
+    "projection surface",
+    "fold surface",
+    "xul gate",
+    "commit authority",
+    "phase engine",
+    "@fold",
+    "fold:"
+  ],
+  "capabilities": [
+    "FOLD_DEFINE",
+    "FOLD_TOPOLOGY_CHANGE",
+    "FOLD_PHASE_QUERY",
+    "FOLD_CROSS_DOMAIN",
+    "FOLD_LATTICE_PROJECT",
+    "FOLD_GRAPH_QUERY",
+    "FOLD_DELTA_Z"
+  ],
+  "conformance": {
+    "questions": [
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is a semantic fold in KHANARY?",
+        "expected_key": "fold_graph topological operation phase transition delta_z",
+        "delta_r": 0.09
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is the difference between a fold and a relation?",
+        "expected_key": "fold changes topology relation records structure",
+        "delta_r": 0.07
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "How does a fold relate to a phase transition?",
+        "expected_key": "from_phase to_phase weight accumulates delta_z",
+        "relation_confirmed": "GRAPH-THEORY-µ",
+        "delta_w": 0.11
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is the relation between fold_lattice and the incidence matrix?",
+        "expected_key": "B B^T fold overlap B^T B phase reachability",
+        "relation_confirmed": "FIELD-GEOMETRY-µ",
+        "delta_w": 0.13
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "Is the fold kernel deterministic under the same input?",
+        "expected_key": "pure function identical inputs same fold sequence",
+        "delta_c": 0.1
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "Does the fold_graph preserve orientation under symmetric fold?",
+        "expected_key": "explicit from_phase to_phase symmetry design choice",
+        "delta_c": 0.06
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does the semantic fold relate to the phase transitions in KHANARY?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "Can the incidence algebra be used to describe the structure of a fold in the fold_graph topology?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What role does the Xul gate play in maintaining consistency within the fold lattice?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "Is there a way to determine determinism of the fold kernel across different input configurations?",
+        "expected_key": "",
+        "delta_r": 0.08
+      }
+    ],
+    "jokes": [
+      {
+        "pattern": "WHY DID THE FOLD GRAPH GO TO THERAPY",
+        "punchline": "It kept losing track of its own topology.",
+        "frame": "humor_frame",
+        "semantic_key": "fold_topology_loss"
+      },
+      {
+        "pattern": "WHAT DO YOU CALL A SEMANTIC FOLD THAT NEVER CHANGES PHASE",
+        "punchline": "A flat fold — stuck at Pop forever.",
+        "frame": "pun_naming_frame",
+        "semantic_key": "flat_fold_no_phase"
+      },
+      {
+        "pattern": "WHY IS THE FOLD LATTICE A TERRIBLE DINNER GUEST",
+        "punchline": "It brings its transpose and decomposes everything on the table.",
+        "frame": "pun_bridge",
+        "semantic_key": "lattice_transpose_dinner"
+      },
+      {
+        "pattern": "WHAT DID THE XUL GATE SAY TO THE PROPOSAL",
+        "punchline": "Verified, authorized, scoped — but are you really a commit?",
+        "frame": "delivery_frame",
+        "semantic_key": "xul_commit_commitment"
+      },
+      {
+        "pattern": "WHY DID THE FOLD GRAPH SUBMIT TO THERAPY",
+        "punchline": "Because it kept losing track of its own topology — a clear sign of phase transition failure.",
+        "frame": "humor_frame",
+        "semantic_key": "why_did_the_fold_graph_submit_to_therapy_"
+      },
+      {
+        "pattern": "WHAT HAPPENS WHEN YOU APPLY A DELTA_Z TO A FOLD LATTICE",
+        "punchline": "It redefines its structure — but only if you're ready for an incidence algebra makeover.",
+        "frame": "humor_frame",
+        "semantic_key": "what_happens_when_you_apply_a_delta_z_to_a_fold_la"
+      },
+      {
+        "pattern": "WHY IS THE XUL GATE SO PRECISE",
+        "punchline": "Because it knows how to navigate the fold lattice with surgical accuracy.",
+        "frame": "humor_frame",
+        "semantic_key": "why_is_the_xul_gate_so_precise_"
+      },
+      {
+        "pattern": "HOW DOES A FOLD LATTICE BEHAVE DURING A PHASE TRANSITION",
+        "punchline": "It shifts its topology like a delta_z in a semantic fold — elegant, if a bit chaotic.",
+        "frame": "humor_frame",
+        "semantic_key": "how_does_a_fold_lattice_behave_during_a_phase_tran"
+      }
+    ]
+  },
+  "relations": [
+    {
+      "target": "GRAPH-THEORY-µ",
+      "verb": "@extends",
+      "directed": true
+    },
+    {
+      "target": "FIELD-GEOMETRY-µ",
+      "verb": "@supports",
+      "directed": true
+    },
+    {
+      "target": "INFER-µ",
+      "verb": "@delegates_to",
+      "directed": true
+    },
+    {
+      "target": "DECISION-µ",
+      "verb": "@informs",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "gramRead",
+      "key": "fold_query",
+      "weight": 1.0
+    },
+    {
+      "phase": "Wo",
+      "op": "lower_fold_aiml",
+      "note": "L_A fold ISA",
+      "weight": 1.0
+    },
+    {
+      "phase": "Yax",
+      "op": "derive_fold_pattern",
+      "note": "R alignment via B",
+      "weight": 1.0
+    },
+    {
+      "phase": "Sek",
+      "op": "resolve_fold_relation",
+      "note": "W arc via B^T*B",
+      "weight": 1.0
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_fold_confidence",
+      "note": "C authority gate",
+      "weight": 1.0
+    },
+    {
+      "phase": "Xul",
+      "op": "emit_answer",
+      "scope": "local",
+      "weight": 1.0
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "SEMANTIC-FOLD-µ",
+    "manifest_access": [
+      "words",
+      "micronaut",
+      "kuhul",
+      "fold_graph"
+    ],
+    "effects": [
+      "gramRead",
+      "gramWrite",
+      "fold:query",
+      "fold:topology"
+    ],
+    "ports": [],
+    "coordinator": false
+  }
+}

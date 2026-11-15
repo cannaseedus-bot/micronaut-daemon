@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "job-board",
+  "@key": "⟁APP:JOB_BOARD",
+  "@mount": "⟁ROOT:JOB_BOARD",
+  "@theme": { "accent": "#38bdf8", "bg": "#040e1a", "surface": "#081a2a", "text": "#e0f2fe", "hero_phase": "Sek", "tagline": "The right role, right now" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "listings", "component": "⟁WIDGET:LISTINGS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "listings": [], "search": "", "filter_type": null, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:JOB_BOARD": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:POST_JOB"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:POST_JOB": { "@type": "button", "@text": "Post a Job", "@on": { "click": "jobs.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:LISTINGS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:LISTINGS": { "@type": "feed", "@bind": "state.listings", "@children": ["⟁WIDGET:JOB_CARD"] },
+    "⟁WIDGET:JOB_CARD": { "@type": "content-card", "@bind": "listing", "@on": { "apply": "jobs.apply", "view": "jobs.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:TYPES", "⟁WIDGET:SKILLS"] },
+    "⟁WIDGET:TYPES": { "@type": "tag-cloud", "@bind": "data.types" },
+    "⟁WIDGET:SKILLS": { "@type": "tag-cloud", "@bind": "data.skills" }
+  },
+  "@programs": {
+    "jobs.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "jobs.apply": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "jobs.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "jobs.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "job.apply": "jobs.apply", "job.view": "jobs.view", "compose.open": "jobs.open_compose", "search.input": "jobs.search" },
+  "@imports": [{ "ref": "listing", "mode": "schema_table" }, { "ref": "application", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "cv-upload", "name": "CV Upload", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Let applicants attach a resume to their application." },
+      { "id": "match-bot", "name": "Match Bot", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Auto-score applicant fit based on listed requirements." },
+      { "id": "email-alert", "name": "New Job Alert", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Notify subscribers when matching jobs are posted." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "jobs.post", "pattern": "POST JOB|LIST OPENING|ADD POSITION", "intent": "open_compose" },
+      { "id": "jobs.search", "pattern": "FIND JOB *|SEARCH JOBS *|SHOW * JOBS", "intent": "filter_listings" }
+    ]
+  },
+  "@data": {
+    "types": ["Full-time", "Part-time", "Contract", "Remote", "Internship"],
+    "skills": ["React", "Python", "Figma", "Go", "DevOps"],
+    "spotlight": [
+      { "id": "sp1", "title": "Senior Frontend Engineer — Remote", "company": "Kuhul Labs", "badge": "Featured", "type": "Full-time", "excerpt": "Build the future of the KHANARY visual runtime." },
+      { "id": "sp2", "title": "Product Designer — Contract", "company": "Craft Studio", "badge": "New", "type": "Contract", "excerpt": "6-month contract to redesign onboarding flow. Portfolio required." },
+      { "id": "sp3", "title": "DevOps Engineer — Hybrid", "company": "Scale Works", "badge": "Urgent", "type": "Full-time", "excerpt": "Kubernetes, CI/CD, AWS. You know the stack." }
+    ],
+    "schema": {
+      "listing": { "primaryKey": "listing_id", "fields": { "listing_id": { "type": "string" }, "title": { "type": "string", "required": true }, "company": { "type": "string", "required": true }, "description": { "type": "textarea", "required": true }, "type": { "type": "string" }, "location": { "type": "string" }, "salary_range": { "type": "string" }, "skills": { "type": "json" }, "posted_at": { "type": "datetime" } } },
+      "application": { "primaryKey": "application_id", "fields": { "application_id": { "type": "string" }, "listing_id": { "type": "string", "required": true }, "user_id": { "type": "string" }, "cover_letter": { "type": "textarea" }, "status": { "type": "string" }, "applied_at": { "type": "datetime" } } }
+    }
+  }
+}

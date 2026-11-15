@@ -1,0 +1,255 @@
+{
+  "schema": "kuhul.advisor-map.v1",
+  "source_schema": "key.grammar.advisor_bootstrap.v1",
+  "source_hash": "85ec67bc3d155e64d31435b54b2f053f5b1f9505fe074a05f1fb2c2941866a6e",
+  "micronaut": "ADVISOR-µ",
+  "authority": "none",
+  "xcfe": {
+    "admission": "required",
+    "dispatch": "host_controlled",
+    "route_authority": "proposal_only"
+  },
+  "routes": {
+    "math": {
+      "expert": "MATH-µ",
+      "phase": "Yax",
+      "next": "Sek",
+      "dispatch_policy": "xcfe_gated",
+      "patterns": [
+        {
+          "pattern": "ADVISE MATH *",
+          "wildcards": true,
+          "specificity": 2,
+          "dispatch_policy": "xcfe_gated"
+        }
+      ]
+    },
+    "code": {
+      "expert": "coder",
+      "phase": "Yax",
+      "next": "Sek",
+      "dispatch_policy": "xcfe_gated",
+      "patterns": [
+        {
+          "pattern": "ADVISE CODE *",
+          "wildcards": true,
+          "specificity": 2,
+          "dispatch_policy": "xcfe_gated"
+        }
+      ]
+    },
+    "research": {
+      "expert": "WEB-RESEARCH-µ",
+      "phase": "Yax",
+      "next": "Ch'en",
+      "dispatch_policy": "xcfe_gated",
+      "patterns": [
+        {
+          "pattern": "ADVISE RESEARCH FACT MISS",
+          "wildcards": false,
+          "specificity": 4,
+          "dispatch_policy": "xcfe_gated"
+        },
+        {
+          "pattern": "ADVISE RESEARCH FACT MISS *",
+          "wildcards": true,
+          "specificity": 4,
+          "dispatch_policy": "xcfe_gated"
+        },
+        {
+          "pattern": "ADVISE RESEARCH *",
+          "wildcards": true,
+          "specificity": 2,
+          "dispatch_policy": "xcfe_gated"
+        }
+      ]
+    },
+    "research_cue": {
+      "expert": "WEB-RESEARCH-µ",
+      "phase": "Yax",
+      "next": "Ch'en",
+      "dispatch_policy": "cue_only",
+      "patterns": [
+        {
+          "pattern": "I DO NOT KNOW THE ANSWER TO THAT QUESTION",
+          "wildcards": false,
+          "specificity": 9,
+          "dispatch_policy": "cue_only"
+        },
+        {
+          "pattern": "LET ME SEARCH THE WEB AND ASK MY ADVISOR",
+          "wildcards": false,
+          "specificity": 9,
+          "dispatch_policy": "cue_only"
+        },
+        {
+          "pattern": "I DON'T KNOW THE ANSWER TO THAT QUESTION",
+          "wildcards": false,
+          "specificity": 8,
+          "dispatch_policy": "cue_only"
+        },
+        {
+          "pattern": "I DO NOT KNOW THE ANSWER TO THAT QUESTION *",
+          "wildcards": true,
+          "specificity": 9,
+          "dispatch_policy": "cue_only"
+        },
+        {
+          "pattern": "LET ME SEARCH THE WEB AND ASK MY ADVISOR *",
+          "wildcards": true,
+          "specificity": 9,
+          "dispatch_policy": "cue_only"
+        },
+        {
+          "pattern": "I DON'T KNOW THE ANSWER TO THAT QUESTION *",
+          "wildcards": true,
+          "specificity": 8,
+          "dispatch_policy": "cue_only"
+        }
+      ],
+      "cue_event": "advisor_web_research_trigger",
+      "cue_type": "miss_low_confidence"
+    },
+    "explain": {
+      "expert": "reasoner",
+      "phase": "Yax",
+      "next": "Sek",
+      "dispatch_policy": "xcfe_gated",
+      "patterns": [
+        {
+          "pattern": "ADVISE EXPLAIN *",
+          "wildcards": true,
+          "specificity": 2,
+          "dispatch_policy": "xcfe_gated"
+        }
+      ]
+    },
+    "tool_help": {
+      "expert": "CHAT-u",
+      "phase": "Wo",
+      "next": "Sek",
+      "dispatch_policy": "xcfe_gated",
+      "patterns": [
+        {
+          "pattern": "ADVISE TOOL HELP LFM",
+          "wildcards": false,
+          "specificity": 4,
+          "dispatch_policy": "xcfe_gated"
+        },
+        {
+          "pattern": "ADVISE TOOL HELP LFM *",
+          "wildcards": true,
+          "specificity": 4,
+          "dispatch_policy": "xcfe_gated"
+        }
+      ]
+    },
+    "tool_help_cue": {
+      "expert": "CHAT-u",
+      "phase": "Wo",
+      "next": "Sek",
+      "dispatch_policy": "cue_only",
+      "patterns": [
+        {
+          "pattern": "I AM NOT SURE WHAT TOOL TO USE",
+          "wildcards": false,
+          "specificity": 8,
+          "dispatch_policy": "cue_only"
+        },
+        {
+          "pattern": "I'M NOT SURE WHAT TOOL TO USE",
+          "wildcards": false,
+          "specificity": 7,
+          "dispatch_policy": "cue_only"
+        },
+        {
+          "pattern": "LET ME ASK FOR HELP FROM LFM",
+          "wildcards": false,
+          "specificity": 7,
+          "dispatch_policy": "cue_only"
+        },
+        {
+          "pattern": "I AM NOT SURE WHAT TOOL TO USE *",
+          "wildcards": true,
+          "specificity": 8,
+          "dispatch_policy": "cue_only"
+        },
+        {
+          "pattern": "I'M NOT SURE WHAT TOOL TO USE *",
+          "wildcards": true,
+          "specificity": 7,
+          "dispatch_policy": "cue_only"
+        },
+        {
+          "pattern": "LET ME ASK FOR HELP FROM LFM *",
+          "wildcards": true,
+          "specificity": 7,
+          "dispatch_policy": "cue_only"
+        }
+      ],
+      "cue_event": "lfm_tool_help_trigger",
+      "cue_type": "tool_uncertain"
+    },
+    "plan": {
+      "expert": "Coordinator",
+      "phase": "Wo",
+      "next": "Ch'en",
+      "dispatch_policy": "xcfe_gated",
+      "patterns": [
+        {
+          "pattern": "I NEED HELP WITH *",
+          "wildcards": true,
+          "specificity": 4,
+          "dispatch_policy": "xcfe_gated"
+        },
+        {
+          "pattern": "WHO CAN HELP WITH *",
+          "wildcards": true,
+          "specificity": 4,
+          "dispatch_policy": "xcfe_gated"
+        },
+        {
+          "pattern": "HELP ME WITH *",
+          "wildcards": true,
+          "specificity": 3,
+          "dispatch_policy": "xcfe_gated"
+        },
+        {
+          "pattern": "ADVISE PLAN *",
+          "wildcards": true,
+          "specificity": 2,
+          "dispatch_policy": "xcfe_gated"
+        },
+        {
+          "pattern": "ADVISE *",
+          "wildcards": true,
+          "specificity": 1,
+          "dispatch_policy": "xcfe_gated"
+        }
+      ]
+    },
+    "qwen_escalate": {
+      "expert":          "ADVISOR-µ",
+      "model":           "Qwen3-4B",
+      "endpoint":        "http://127.0.0.1:8081",
+      "script":          "agents/advisor_bot.py",
+      "phase":           "Sek",
+      "next":            "Ch'en",
+      "dispatch_policy": "xcfe_gated",
+      "cues":            ["coding", "reasoning", "general"],
+      "patterns": [
+        {"pattern": "ADVISE QWEN *",        "wildcards": true,  "specificity": 2, "dispatch_policy": "xcfe_gated"},
+        {"pattern": "ADVISOR ESCALATE *",   "wildcards": true,  "specificity": 2, "dispatch_policy": "xcfe_gated"},
+        {"pattern": "GEMMA MISS CODING *",  "wildcards": true,  "specificity": 3, "dispatch_policy": "xcfe_gated", "cue": "coding"},
+        {"pattern": "GEMMA MISS REASON *",  "wildcards": true,  "specificity": 3, "dispatch_policy": "xcfe_gated", "cue": "reasoning"},
+        {"pattern": "GEMMA MISS DEEP *",    "wildcards": true,  "specificity": 3, "dispatch_policy": "xcfe_gated", "cue": "reasoning"}
+      ],
+      "cue_event":       "qwen_escalation_trigger",
+      "miss_kind_match": ["code", "coding", "compile", "syntax", "impl", "reason", "infer", "analyze", "deep", "proof", "derive"]
+    }
+  },
+  "precedence_validation": {
+    "checked": true,
+    "issues": []
+  }
+}

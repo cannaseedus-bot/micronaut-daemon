@@ -1,0 +1,57 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "nutrition-db",
+  "@key": "⟁APP:NUTRITION_DB",
+  "@mount": "⟁ROOT:NUTRITION_DB",
+  "@theme": { "accent": "#fb923c", "bg": "#0c0600", "surface": "#1a0e00", "text": "#fff7ed", "hero_phase": "Yax", "tagline": "Know what you eat" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "foods", "component": "⟁WIDGET:FOODS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "foods": [], "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:NUTRITION_DB": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:ADD_FOOD"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@placeholder": "Search foods...", "@on": { "input": "nutr.search" } },
+    "⟁ACTION:ADD_FOOD": { "@type": "button", "@text": "Add Food", "@on": { "click": "nutr.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:FOODS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:FOODS": { "@type": "grid", "@bind": "state.foods", "@children": ["⟁WIDGET:FOOD_CARD"] },
+    "⟁WIDGET:FOOD_CARD": { "@type": "content-card", "@bind": "food", "@on": { "view": "nutr.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:MACRO_TOTALS", "⟁WIDGET:CATEGORIES"] },
+    "⟁WIDGET:MACRO_TOTALS": { "@type": "stat", "@bind": "data.macros" },
+    "⟁WIDGET:CATEGORIES": { "@type": "tag-cloud", "@bind": "data.categories" }
+  },
+  "@programs": {
+    "nutr.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] },
+    "nutr.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "nutr.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "search.input": "nutr.search", "food.add": "nutr.open_compose", "food.view": "nutr.view" },
+  "@imports": [{ "ref": "food", "mode": "schema_table" }, { "ref": "log_entry", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "barcode-scan", "name": "Barcode Scanner", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Scan barcodes to autofill nutrition data." },
+      { "id": "macro-goals", "name": "Macro Goal Tracker", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Set and track daily protein, carb, and fat targets." },
+      { "id": "recipe-analyze", "name": "Recipe Analyzer", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Paste a recipe and calculate per-serving macros." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "nutr.search", "pattern": "SEARCH FOOD *|LOOK UP *|CALORIES IN *", "intent": "search" },
+      { "id": "nutr.log", "pattern": "LOG FOOD|ATE * TODAY|TRACK MEAL", "intent": "open_log" }
+    ]
+  },
+  "@data": {
+    "macros": { "protein_g": 182, "carbs_g": 245, "fat_g": 78, "calories": 2388 },
+    "categories": ["Proteins", "Vegetables", "Grains", "Dairy", "Snacks", "Drinks"],
+    "spotlight": [
+      { "id": "sp1", "title": "Chicken Breast (100g)", "badge": "High Protein", "calories": 165, "protein_g": 31, "excerpt": "Lean protein staple. 31g protein per 100g serving." },
+      { "id": "sp2", "title": "Greek Yogurt (150g)", "badge": "Protein + Probiotics", "calories": 88, "protein_g": 13, "excerpt": "Great post-workout snack. Low sugar, high satiety." },
+      { "id": "sp3", "title": "Oats (80g dry)", "badge": "Complex Carbs", "calories": 310, "carbs_g": 54, "excerpt": "Slow-release carbs. Great for morning energy." }
+    ],
+    "schema": {
+      "food": { "primaryKey": "food_id", "fields": { "food_id": { "type": "string" }, "name": { "type": "string", "required": true }, "serving_g": { "type": "float", "required": true }, "calories": { "type": "float", "required": true }, "protein_g": { "type": "float" }, "carbs_g": { "type": "float" }, "fat_g": { "type": "float" }, "fiber_g": { "type": "float" }, "category": { "type": "string" }, "barcode": { "type": "string" } } },
+      "log_entry": { "primaryKey": "log_id", "fields": { "log_id": { "type": "string" }, "food_id": { "type": "string", "required": true }, "serving_multiplier": { "type": "float", "required": true }, "meal": { "type": "string" }, "logged_at": { "type": "datetime", "required": true } } }
+    }
+  }
+}

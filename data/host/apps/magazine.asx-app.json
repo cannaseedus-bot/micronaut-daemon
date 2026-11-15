@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "magazine",
+  "@key": "⟁APP:MAGAZINE",
+  "@mount": "⟁ROOT:MAGAZINE",
+  "@theme": { "accent": "#e11d48", "bg": "#0f0305", "surface": "#1a050c", "text": "#ffe4e6", "hero_phase": "Ch'en", "tagline": "Editorial authority, online presence" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "articles", "component": "⟁WIDGET:ARTICLES", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "articles": [], "search": "", "edition": "latest", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:MAGAZINE": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:NEW_ARTICLE", "⟁ACTION:EDITION"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:NEW_ARTICLE": { "@type": "button", "@text": "Write Article", "@on": { "click": "magazine.open_compose" } },
+    "⟁ACTION:EDITION": { "@type": "select", "@bind": "state.edition", "@options": ["latest", "archive"] },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:ARTICLES", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:ARTICLES": { "@type": "feed", "@bind": "state.articles", "@children": ["⟁WIDGET:ARTICLE_CARD"] },
+    "⟁WIDGET:ARTICLE_CARD": { "@type": "content-card", "@bind": "article", "@on": { "read": "magazine.read" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:BYLINES", "⟁WIDGET:SECTIONS"] },
+    "⟁WIDGET:BYLINES": { "@type": "list", "@bind": "data.bylines" },
+    "⟁WIDGET:SECTIONS": { "@type": "tag-cloud", "@bind": "data.sections" }
+  },
+  "@programs": {
+    "magazine.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "magazine.read": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "magazine.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "article.read": "magazine.read", "compose.open": "magazine.open_compose", "search.input": "magazine.search" },
+  "@imports": [{ "ref": "article", "mode": "schema_table" }, { "ref": "edition", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "paywall", "name": "Member Paywall", "category": "commerce", "price": "free", "status": "setup_required", "description": "Gate premium articles behind a membership paywall." },
+      { "id": "letters-editor", "name": "Letters to the Editor", "category": "community", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Curated reader responses published per edition." },
+      { "id": "layout-bot", "name": "Layout Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Auto-layout article drafts into print-ready templates." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "magazine.write", "pattern": "WRITE ARTICLE|NEW ARTICLE|SUBMIT PIECE", "intent": "open_compose" },
+      { "id": "magazine.search", "pattern": "FIND ARTICLE *|SEARCH *", "intent": "filter_articles" }
+    ]
+  },
+  "@data": {
+    "sections": ["Opinion", "Tech", "Culture", "Science", "Finance"],
+    "bylines": ["Staff Writer", "Guest Contributor", "Editor-in-Chief"],
+    "spotlight": [
+      { "id": "sp1", "title": "The Attention Economy Is Over", "section": "Opinion", "badge": "Cover Story", "excerpt": "Why the metrics we optimised for are now working against us." },
+      { "id": "sp2", "title": "Inside the AI Labs Race", "section": "Tech", "badge": "Investigation", "excerpt": "Six months behind closed doors at three frontier labs." },
+      { "id": "sp3", "title": "The Return of the Craft Economy", "section": "Culture", "badge": "Feature", "excerpt": "People are paying more for things made slowly." }
+    ],
+    "schema": {
+      "article": { "primaryKey": "article_id", "fields": { "article_id": { "type": "string" }, "title": { "type": "string", "required": true }, "byline": { "type": "string" }, "section": { "type": "string" }, "body": { "type": "textarea", "required": true }, "edition_id": { "type": "string" }, "published_at": { "type": "datetime" } } },
+      "edition": { "primaryKey": "edition_id", "fields": { "edition_id": { "type": "string" }, "title": { "type": "string", "required": true }, "published_date": { "type": "datetime" }, "cover_article_id": { "type": "string" } } }
+    }
+  }
+}

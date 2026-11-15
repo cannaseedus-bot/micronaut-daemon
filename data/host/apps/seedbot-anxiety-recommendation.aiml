@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0" xmlns:xcfe="urn:kuhul:xcfe:aiml:1.0">
+  <category>
+    <pattern>RECOMMEND SOMETHING FOR ANXIETY</pattern>
+    <template>
+      Based on what you're looking for, these are my top picks for anxiety:
+      <xcfe:product-rail ids="octane-cbd-h,strawberry-cbd-h,alien-og"
+                          catalog="⟁APP:SEED_STORE/catalog.products"
+                          projection="asx.product-rail"
+                          authority="observation_only"/>
+    </template>
+  </category>
+</aiml>

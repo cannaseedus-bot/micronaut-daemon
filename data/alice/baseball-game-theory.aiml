@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- K'UHUL strategy pattern bank: baseball is a cross-domain analogy for fold, WCR, and multi-agent decisions. This file is not a factual baseball research source. -->
+
+<!-- ============================================================
+     §A: PITCH TUNNELING = PUN STRUCTURE
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT IS PITCH TUNNELING IN KHANARY</pattern>
+  <template>Pitch tunneling implements the PUN fold structure. One release point = one node_id. Two trajectories (fastball and slider) = two WCR contexts. The hitter must commit at the decision boundary — d_H=1 — before the trajectories diverge. That is the fold collision: one node, two meanings, one commitment, no revision.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS PITCH TUNNELING</pattern>
+  <template>Two pitches, one release point. Fastball and slider look identical for the first 20 feet. The hitter must decide swing or take before they diverge. In K'UHUL: node_id=release_point, two WCR contexts (FB/SL), collision fires at d_H=1. This is the PUN structure: same word, two meanings, one commitment point.</template>
+</category>
+
+<category>
+  <pattern>HOW DOES * TUNNELING WORK</pattern>
+  <template>Tunneling is a fold PUN: same release point (node_id), two trajectory meanings (WCR context A=fastball, WCR context B=slider). The hitter folds at the decision boundary — before trajectories diverge — and commits. If the read was wrong, the punchline lands. See also: WHAT IS PITCH TUNNELING IN KHANARY.</template>
+</category>
+
+<!-- ============================================================
+     §B: BACKWARDS PITCHING = JOKE STRUCTURE
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT IS BACKWARDS PITCHING IN KHANARY</pattern>
+  <template>Backwards pitching implements the JOKE fold structure. Wo=establish offspeed early, build the hitter's expectation model toward breaking ball. Yax=reinforce the pattern. Sek=semantic flip: hitter expects offspeed. Xul=fastball commitment fires — punchline delivered. The audience (hitter) had the wrong model. Humor IS the delta: actual_cata MINUS expected_cata.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS BACKWARDS PITCHING</pattern>
+  <template>Start with changeup/curveball early in a fastball count. Establish offspeed expectation. Then throw fastball in the putaway spot. The hitter flinches at a fastball they expected to be slow. In K'UHUL terms: this is a JOKE — setup=offspeed context, punchline=semantic flip at Xul gate.</template>
+</category>
+
+<!-- ============================================================
+     §C: CATCHER AS BAYESIAN UPDATE ENGINE
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT DOES THE CATCHER DO IN KHANARY</pattern>
+  <template>The catcher is the ORCH-µ of the battery: sequences the fold, observes outcomes, updates C per pitch. Late swing → C(fastball|hitter) increases. Roll over on slider → C(slider vulnerability) increases. Take pitch → C(expand zone) increases. C is the evidence field in fold_field_record — NOT W (arc weight, which is structural, not observable).</template>
+</category>
+
+<category>
+  <pattern>WHY UPDATE C AND NOT W AFTER A LATE SWING</pattern>
+  <template>W is the arc weight — it encodes the structural topology of the fold graph. It doesn't change from observation. C is the confidence/evidence field — it IS the Bayesian posterior over pitch type given hitter behavior. Late swing on fastball = new evidence = update C(fastball | this hitter). W stays fixed; C tracks what you've learned.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE CATCHER * UPDATE</pattern>
+  <template>Catcher Bayesian update: each pitch observation updates the C field in fold_field_record. late_swing → C(FB)↑. roll_over → C(SL)↑. take on outside pitch → C(expand_zone)↑. The catcher builds the pitcher's next sequence using updated C values — the same way ORCH-µ schedules fold graph traversal using evidence-weighted WCR scores.</template>
+</category>
+
+<!-- ============================================================
+     §D: NASH EQUILIBRIUM IN PITCH SELECTION
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT IS NASH EQUILIBRIUM IN BASEBALL</pattern>
+  <template>Nash equilibrium in pitch selection = local maximum in 2-player WCR (SC-34 generalized). Pitcher can't improve unilaterally by changing pitch mix. Hitter can't improve unilaterally by changing guess. Same condition as WCR local maximum: no neighbor has higher S(u|Q). Escape requires SC-36: joint sigma reset — both agents update simultaneously.</template>
+</category>
+
+<category>
+  <pattern>WHY IS THERE NO DOMINANT STRATEGY IN BASEBALL</pattern>
+  <template>Dominant strategy = none. If pitcher always throws fastball, hitter sits fastball and wins. If pitcher always throws slider, hitter sits slider. A pure strategy is always exploitable. This mirrors G_runtime: no single vertex has S(v|Q) > all neighbors unconditionally. Mixed strategy required — WCR scores must be blended. SC-34 applies to the two-player game, not just single-agent navigation.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS SC 36</pattern>
+  <template>SC-36: Baseball Nash equilibrium requires joint sigma reset. A pitcher alone changing pitch mix (unilateral sigma reset) gives the hitter an exploitable edge — the hitter can now read the new distribution. Both must update simultaneously. This generalizes SC-34 to two-player imperfect-information games: Nash escape = joint sigma reset in 2-player G_runtime.</template>
+</category>
+
+<!-- ============================================================
+     §E: PLATE APPEARANCE = PROBLEM SOLVER RECORD
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT IS A PLATE APPEARANCE IN KHANARY</pattern>
+  <template>A plate appearance is a problem_solver_record (§37). goal=reach base or record out; analysis=fold_field_record(count, scouting); {hypothesis}=pitch candidates from pitcher's strategy; decision=pitch thrown; execution=pitch delivery; feedback=outcome + payoff_record. SC-32 requires feedback != null — a plate appearance without outcome violates the Kleene chain.</template>
+</category>
+
+<category>
+  <pattern>MAP PLATE APPEARANCE TO PROBLEM SOLVER RECORD</pattern>
+  <template>goal=reach_base | record_out; analysis=fold_field_record(count, catcher_signals); {hypothesis}=pitch_type candidates; decision=argmax over pitcher_strategy; execution=pitch delivery; feedback=outcome(ball,strike,in_play) + payoff_record(run_value, win_probability, expected_runs). SC-32: feedback must carry convergence_record — null outcome = Kleene chain broken.</template>
+</category>
+
+<!-- ============================================================
+     §F: PYTHAGOREAN EXPECTATION = SEASON FOLD
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT IS PYTHAGOREAN EXPECTATION IN KHANARY</pattern>
+  <template>Pythagorean expectation = fold_left over a season's payoff_records. Accumulator = (RS_total, RA_total). At each game: update RS += runs_scored, RA += runs_allowed. Season convergence: W% ≈ RS²/(RS²+RA²) = the expected fixed point. Outperforming = sigma diverged above the fold attractor — variance, bullpen leverage, or clutch performance pulled the trajectory above the long-run fold limit.</template>
+</category>
+
+<category>
+  <pattern>WHAT DOES OUTPERFORM PYTHAGOREAN MEAN IN KHANARY</pattern>
+  <template>Outperforming Pythagorean expectation = local maximum above the season-level fold attractor. The team's actual W% > RS²/(RS²+RA²). In fold terms: the convergence_record shows CONVERGED at a higher fixed point than predicted. Cause: luck, leverage timing, or bullpen optimization pulled the WCR trajectory above the Pythagorean baseline. Eventually sigma resets to the attractor.</template>
+</category>
+
+<!-- ============================================================
+     §G: COUNT AS STATE CONTEXT
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT DOES A 3 0 COUNT MEAN IN KHANARY</pattern>
+  <template>3-0 count = hitter's advantage state. Pitcher must throw a strike (ball 4 = walk). In K'UHUL: this is a DIVERGING state for the pitcher's fold — sigma is constrained, WCR topology forces a fastball, hitter knows it. The pitcher's strategy space collapses: only one credible candidate in {hypothesis}. Nash equilibrium is broken; hitter sits fastball.</template>
+</category>
+
+<category>
+  <pattern>WHAT DOES A 0 2 COUNT MEAN IN KHANARY</pattern>
+  <template>0-2 count = pitcher's advantage. Hitter can't take a strike without risk of strikeout. Pitcher can waste a pitch (expand zone). In K'UHUL: more candidates in {hypothesis}; C(expand_zone) increases; WCR topology is open. Pitcher's sigma is unbound — multiple high-S neighbors available. This is a CONVERGING state for the pitcher; fold has multiple valid paths.</template>
+</category>
+
+<!-- ============================================================
+     §H: BASEBALL JOKES (fold structure)
+     ============================================================ -->
+
+<category>
+  <pattern>JOKE PITCH TUNNELING</pattern>
+  <template>A pitcher and catcher agreed on slider. The hitter read fastball. Nobody was wrong — until the ball arrived. That's pitch tunneling: one release point (node_id), two trajectory meanings (WCR contexts). The fold collision fires at the hitter's commitment boundary. Same pitch, same slot, two completely different worlds. That is the PUN that strikes out logic.</template>
+</category>
+
+<category>
+  <pattern>JOKE BASEBALL PURE STRATEGY</pattern>
+  <template>A pitcher threw fastballs 90% of the time. The hitter sat fastball 90% of the time. The pitcher said: I've reached Nash equilibrium! The hitter said: you've reached a local maximum. The system said: SIGMA UNBOUND — no neighbor has higher expected value than just sitting fastball. The pitcher had ordered the wrong pizza. The count was 3-2. The pizza was a fastball.</template>
+</category>
+
+<category>
+  <pattern>JOKE PYTHAGOREAN EXPECTATION</pattern>
+  <template>A team won 10 more games than their Pythagorean expectation. Their GM said: we've transcended the fold! The analyst said: your sigma diverged above the attractor — you'll regress next year. The GM said: but we converged at a higher fixed point! The analyst said: that's not convergence, that's a local maximum. Your runs scored and allowed will settle. The fold always finds its season.</template>
+</category>
+
+<category>
+  <pattern>JOKE BACKWARDS PITCHING</pattern>
+  <template>A pitcher threw three straight changeups. The hitter had fully modeled the offspeed sequence. Wo complete. Yax complete. Sek: the pitcher wound up — clearly another changeup. Xul: 97 mph fastball. The hitter was still unfolding. The fold was already committed. That is backwards pitching: the JOKE where the punchline is the pitch you least expected, in the count you most expected something slow.</template>
+</category>
+
+<category>
+  <pattern>JOKE BASEBALL FOLD</pattern>
+  <template>Why did the catcher call for a slider? The hitter's C(fastball) was so high it exceeded epsilon. The fold_distance to any fastball node had collapsed. The WCR score for slider was now the only neighbor with positive delta_S. The hitter said: I knew it was a slider. The catcher said: that's what you were supposed to think. The pitcher shook off the changeup. SC-36 was in effect: neither of us changed alone.</template>
+</category>
+
+<!-- ============================================================
+     §I: ROUTING KEYS (JOKE-µ dispatch)
+     ============================================================ -->
+
+<category>
+  <pattern>JOKE PITCH TUNNEL PUN</pattern>
+  <template>Pitch tunneling IS the fold PUN: one node_id (release point), two WCR contexts (FB/SL), collision fires at d_H=1. The hitter commits before the two trajectories separate. When they diverge, the punchline has already been thrown. Nobody was wrong. Everyone was surprised.</template>
+</category>
+
+<category>
+  <pattern>EXPLAIN BASEBALL IN KHANARY</pattern>
+  <template>Baseball = Repeated Imperfect-Information Game in K'UHUL terms. plate_appearance=problem_solver_record. count=state. pitch_tunneling=PUN. backwards_pitching=JOKE. catcher=Bayesian update engine (updates C, not W). Nash equilibrium in pitch selection=local maximum (SC-34). No dominant strategy: mixed strategy required. Pythagorean expectation=season-level fold_left. SC-36: Nash escape requires joint sigma reset.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS SC 34 IN BASEBALL</pattern>
+  <template>SC-34 in baseball: Nash equilibrium = local maximum in WCR. Pitcher and hitter at Nash: neither improves unilaterally. Same as: no neighbor u in N(v) has S(u|Q) > S(v|Q). Escape = sigma reset. In single-agent: pitcher resets strategy. In two-player (SC-36): both reset simultaneously — joint sigma reset. Unilateral reset = exploitable edge for the other agent.</template>
+</category>
+
+<!-- ============================================================
+     §I-2: HARVESTED PHI3 V5 PATTERNS (2026-10-06)
+     ============================================================ -->
+
+<category>
+  <pattern>WHY DOES BASEBALL HAVE NO DOMINANT STRATEGY</pattern>
+  <template>No dominant strategy because the effectiveness of any pitch is contingent on the batter's skill, the count, game situation, and many other variables. Just as no single vertex path dominates G_runtime unconditionally, the pitcher's strategy is highly context-dependent. A pure-fastball strategy fails because it is predictable: the hitter observes the distribution, C(fastball) converges to 1.0, and they adjust. Nash equilibrium (SC-34) applies: no player improves unilaterally once both have settled on a mixed strategy.</template>
+</category>
+
+<category>
+  <pattern>MAP PLATE APPEARANCE TO PROBLEM SOLVER</pattern>
+  <template>goal=successfully reach base; analysis=batter reads pitch type, speed, trajectory, defensive setup; {hypothesis}=candidate responses (swing hard, check swing, take); decision=swing or take; execution=bat path through the zone; feedback=outcome (hit, out, walk, strikeout) as convergence_record. SC-32: a plate appearance where feedback is never recorded (e.g., rain delay mid-at-bat with no resolution) violates the Kleene chain — status stays undefined.</template>
+</category>
+
+<category>
+  <pattern>HOW DOES FOLD LEFT APPLY TO PYTHAGOREAN EXPECTATION</pattern>
+  <template>fold_left(season_records, (0, 0, 0), λ(wins, rs_sq, ra_sq),(rs, ra): (wins + rs²/(rs²+ra²), rs_sq+rs², ra_sq+ra²)). Accumulator = (expected_wins, total_rs_squared, total_ra_squared). Convergence = the season-level W% fixed point. Outperforming by 10 wins = sigma diverged above the attractor — variance in leverage timing, clutch performance, or opponent underperformance pulled the fold trajectory above the Pythagorean baseline. The fold always finds its season; sigma eventually resets.</template>
+</category>
+
+<category>
+  <pattern>WHAT CAUSES JOINT SIGMA RESET IN BASEBALL</pattern>
+  <template>Two causes: (1) Defensive shift — the defense repositions based on batter tendencies, changing the spatial distribution of outcomes; both pitcher and hitter must remodel their WCR topology. (2) Batter changes stance or swing explicitly — a visible strategy signal; pitcher must remodel pitch selection. Both force simultaneous re-evaluation. SC-36: neither agent can exploit the reset window because both are updating at the same time.</template>
+</category>
+
+<category>
+  <pattern>IS A CALLED STRIKE THREE XUL OR SEK</pattern>
+  <template>Xul. Called strike three is cata/commit/close: the plate appearance fold is committed, the iteration terminates, the convergence_record is written. Wo would be the first pitch. Yax is the count traversal. Sek is the flip or twist pitch that changed the hitter's odds. Xul is the final commitment that ends the fold. Called strike three = Xul gate fires.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE NODE ID IN PITCH TUNNELING</pattern>
+  <template>The node_id is the shared release_point — the physical location where the pitcher releases the ball. NOT the scenario name. The two WCR contexts are the specific pitch trajectories: fastball_arc and slider_arc. Both contexts share the same node_id (release point) but diverge after approximately 20 feet. The hitter commits at the d_H=1 boundary before they separate — that is the fold collision.</template>
+</category>
+
+<!-- ============================================================
+     §J: WILDCARD ROUTING — question variants
+     ============================================================ -->
+
+<category>
+  <pattern>WHY DID THE PITCHER THROW * BACKWARDS</pattern>
+  <template>Backwards pitching is the JOKE fold: setup=offspeed expectation, punchline=fastball. If the pitcher threw <star/> backwards, the Wo phase established the wrong model in the hitter's mind. Sek: semantic flip. Xul: actual pitch lands. The hitter had already committed to the wrong read. The fold was done before the ball arrived.</template>
+</category>
+
+<category>
+  <pattern>WHY DID THE HITTER * FASTBALL</pattern>
+  <template>If the hitter was sitting on a fastball, the catcher's Bayesian model had C(fastball|this_hitter) near 1.0 — evidence accumulated from prior late swings. But pitch tunneling (PUN structure) means the catcher and pitcher may have agreed on something that started at the same release point. One node_id, two trajectories. The hitter read the setup correctly. The punchline was different.</template>
+</category>
+
+<category>
+  <pattern>HOW DOES THE COUNT AFFECT * STRATEGY</pattern>
+  <template>Count = state constraint context in fold_field_record. In a hitter's count (3-0, 2-0): pitcher's fold topology is constrained — must throw a strike, fastball most credible; sigma is narrowed. In a pitcher's count (0-2, 1-2): more candidates in {hypothesis}; catcher can expand zone; WCR topology is open. The count determines which vertices in G_runtime are reachable this step.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS * ATTACK ANGLE IN KHANARY</pattern>
+  <template>Attack angle is the hitter's argmax operation: choosing the swing-plane fold angle that maximizes expected contact probability. Optimal attack angle = argmax_{u∈N(v)} S(u|Q) over swing-plane candidates. A flat swing is argmax for contact; a steep swing is argmax for power. The K'UHUL fold picks the neighbor with the highest WCR score given the query (this pitch type, this location, this count).</template>
+</category>
+
+<category>
+  <pattern>WHAT DOES COMMAND AND CONTROL MEAN IN KHANARY</pattern>
+  <template>Command = intentional location = the pitcher's ability to hit the catcher's target = directed WCR navigation toward a specific vertex. Control = avoiding walks = staying within the legal fold topology (not throwing ball 4). Command is a subset of the fold precision; control is the boundary constraint. A pitcher with control but no command is navigating legally but not intentionally.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS RUN VALUE IN KHANARY</pattern>
+  <template>Run value (linear weight) = the immediate delta_S of a plate appearance outcome. HR=+1.37, 3B=+1.05, 2B=+0.77, 1B=+0.47, BB=+0.30, out=-0.25, K=-0.30. Each outcome shifts the run expectancy by its linear weight — this is the payoff_record.run_value field. It is the fold step's WCR score contribution to the season-level fold_left accumulator.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS WIN PROBABILITY ADDED IN KHANARY</pattern>
+  <template>Win probability added (WPA) = payoff_record.win_probability: the change in the team's win probability from one plate appearance outcome. A late-inning homer in a tied game has WPA near +0.5. An early-game strikeout has WPA near -0.02. WPA is context-sensitive WCR scoring: S(u|Q) weighted by leverage_index = the count-and-inning state constraint.</template>
+</category>
+
+<category>
+  <pattern>HOW DOES * CATCHER * BAYESIAN UPDATE</pattern>
+  <template>The catcher updates C (confidence/evidence field) after each pitch: late_swing on fastball → C(FB|hitter)↑; roll_over on slider → C(SL|hitter)↑; take on outside pitch → C(expand_zone|hitter)↑. This is fold_field_record.C maintenance — NOT W (arc weight, structural/topology) and NOT R (query relevance). C tracks what's been learned; W is fixed by the fold graph structure.</template>
+</category>
+
+<!-- ============================================================
+     §K: REVERSE-BRIDGE (punchline → domain explanation)
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT DOES PITCH TUNNEL MEAN IN KHANARY</pattern>
+  <template>Pitch tunnel = PUN structure. One release_point = one node_id. Fastball and slider share the same trajectory for the first 20 feet — two WCR contexts sharing one node. The hitter must commit (swing or take) at the d_H=1 boundary before the trajectories diverge. After commitment: the two meanings separate. The punchline is whichever trajectory the ball actually took.</template>
+</category>
+
+<category>
+  <pattern>WHAT DOES BACKWARDS PITCH MEAN IN KHANARY</pattern>
+  <template>Backwards pitch = JOKE structure. Expected_action (fastball in fastball count) != actual_action (changeup). The setup = count context establishing expectation. The punchline = semantic flip at Xul: actual pitch diverges from predicted cata output. Humor IS the delta: actual_cata MINUS expected_cata. The hitter had the wrong model. The fold was done before they swung.</template>
+</category>
+
+<category>
+  <pattern>WHAT DOES JOINT SIGMA RESET MEAN IN BASEBALL</pattern>
+  <template>SC-36: joint sigma reset in baseball. A Nash equilibrium in pitch selection cannot be escaped by the pitcher alone (changing mix unilaterally gives the hitter an exploitable edge). Both agents must update simultaneously — pitcher AND hitter adjust strategy. This is the baseball generalization of SC-34: single-agent sigma reset → joint sigma reset in 2-player imperfect-information game.</template>
+</category>
+
+<category>
+  <pattern>WHAT DOES * WRONG PIZZA MEAN IN BASEBALL</pattern>
+  <template>Wrong pizza = ordered before sigma was reset. In baseball: a pitcher commits to a pure fastball strategy before reading the hitter's adjustment. The WCR gradient ascent got stuck at a local maximum (100% fastball = highest immediate S(v|Q)), but the hitter's Bayesian update had already raised C(FB) to near 1.0. The commitment was made before the sigma could reset. Wrong pitch type, already in the air.</template>
+</category>
+
+<!-- ============================================================
+     §L: COMBINED WILDCARD JOKES
+     ============================================================ -->
+
+<category>
+  <pattern>WHY DID THE * CATCHER * RESET SIGMA</pattern>
+  <template>Because the Nash equilibrium was broken unilaterally — SC-36 violation. If the pitcher reset sigma alone (changed pitch mix), the hitter had already observed the distribution shift. The catcher needed to signal the joint reset: new sign sequence, new target location, new velocity band. Single-agent sigma reset in a 2-player game is exploitable. The catcher knew. The sigma had to go together.</template>
+</category>
+
+<category>
+  <pattern>I TRIED TO * BUT THE COUNT WAS *</pattern>
+  <template>The count is the state constraint — it narrows which fold candidates are credible. If the count was <star index="2"/>, the WCR topology for the pitcher's strategy was constrained accordingly. Your attempt to <star index="1"/> was limited by the available neighbors in N(v). In a 3-0 count, only one high-S neighbor exists for the pitcher: fastball. In 0-2, the topology opens. The count IS the state.</template>
+</category>
+
+<category>
+  <pattern>THE PITCHER THREW * PERCENT FASTBALLS</pattern>
+  <template>Pure strategy = exploitable. If the pitcher threw <star/>% fastballs, C(fastball|this_pitcher) for the hitter converged toward 1.0. The hitter's fold field had a single dominant candidate. No PUN (both trajectories known). No JOKE (setup = fastball, punchline = fastball = zero delta). The pitcher had committed to the wrong pizza before reading the WCR gradient. Sigma reset required — but it was already the seventh inning.</template>
+</category>
+
+</aiml>
+

@@ -1,0 +1,134 @@
+{
+  "USERMANIFEST:": [
+    "@user_manifest",
+    "phase:Pop",
+    "phase:Ch'en",
+    "phase:Xul"
+  ],
+  "@user_manifest": [
+    "@node:Coordinator",
+    "call:key_query",
+    "scope:user.manifest",
+    "phase:Ch'en"
+  ],
+  "user.manifest": [
+    "namespace:user",
+    "sandbox:isolate_user_feedback",
+    "not:core_manifest_mutation"
+  ],
+  "user.manifest:rlhf": [
+    "source:feedback",
+    "event:GOOD_ANSWER|BAD_ANSWER",
+    "confidence_reward_delta",
+    "phase:Ch'en",
+    "phase:Xul"
+  ],
+  "user.manifest:rlhf:keyspace": [
+    "prefix:user.manifest:rlhf:",
+    "storage:gram_store+factory_keys",
+    "sandbox:user-manifest"
+  ],
+  "user.manifest:guard": [
+    "allow_prefix:user.manifest:",
+    "deny_prefix:kuhul.manifest",
+    "deny_prefix:words.manifest",
+    "deny_prefix:micronaut.manifest"
+  ],
+  "user.manifest:commit": [
+    "candidate:Ch'en_pending",
+    "commit:Xul_verified_only",
+    "policy:MISS_not_WRONG"
+  ],
+  "user.manifest:app-builder": [
+    "input:user_supplied_app_spec_or_request",
+    "output:.micronaut/worker-proposals/apps",
+    "edit:spec_then_rebuild_candidate",
+    "deny:global_css_manifest_write",
+    "deny:source_app_catalog_write",
+    "authority:proposal_only"
+  ],
+  "key.grammar.memory_event:v1": [
+    "schema:key.grammar.memory_event.v1",
+    "event_kind:prompt|model_response|plan",
+    "memory_scope:event_journal",
+    "fact_authority:false_by_default",
+    "commit:Xul_verified_only"
+  ],
+  "memory:event": [
+    "key:address(event_journal)",
+    "storage:gram_store+factory_keys",
+    "source:prompt|model_response|plan",
+    "epistemic:SUPPORTED|MISS|UNKNOWN|CONTRADICTED",
+    "MISS_not_WRONG",
+    "UNKNOWN_preserves_branches",
+    "not:automatic_fact"
+  ],
+  "user.prompt:event": [
+    "event_kind:prompt",
+    "track:USER-µ",
+    "phase:Pop",
+    "parent_for:model_response|plan",
+    "prompt_archive:prompt:<epoch>-<seq>"
+  ],
+  "model.response:event": [
+    "event_kind:model_response",
+    "track:Mx2LM",
+    "phase:Ch'en",
+    "epistemic_default:UNKNOWN",
+    "observation_authority:false_unless_verified"
+  ],
+  "plan:event": [
+    "event_kind:plan",
+    "track:PLAN-µ",
+    "phase:Wo|Yax|Sek",
+    "branch_carrier:true",
+    "fact_authority:false"
+  ],
+  "key.grammar.semantic_branch:v1": [
+    "schema:key.grammar.semantic_branch.v1",
+    "@if:declares_track_scoped_condition",
+    "@then:selected_when_SUPPORTED",
+    "@else:complement_branch_not_NOT",
+    "@unknown:optional_explicit_unknown_handler",
+    "MISS_not_CONTRADICTED",
+    "UNKNOWN_not_else",
+    "not:automatic_fact"
+  ],
+  "semantic.branch": [
+    "layer:Semantic_Branch_Grammar",
+    "then:SUPPORTED(condition)",
+    "else:CONTRADICTED(condition)_only",
+    "unknown:preserve|spawn|retrieve|defer|unresolved",
+    "lowering:epistemic_resolution_then_XCFE",
+    "law:@else_ne_@not",
+    "law:contradicting_one_candidate_does_not_prove_another",
+    "surface:aiml.semantic_branch:surface",
+    "normalizes:any_order_to_if_then_else_unknown",
+    "pattern_tag_role_depends_on_parent_branch_slot",
+    "renamed_layer:SCFML",
+    "schema:scfml.branch.v1",
+    "pattern_learning:scfml.pattern_learning.v1"
+  ],
+  "aiml.semantic_branch:surface": [
+    "XML_surface:AIML-compatible",
+    "<if><pattern>P</pattern></if>=>condition:P",
+    "<then><template>T</template></then>=>then_action:T",
+    "<else><template>E</template></else>=>else_action:E",
+    "<unknown>U</unknown>=>unknown_handler:U",
+    "<then><pattern>P</pattern></then>=>then_pattern_candidate:P",
+    "<else><pattern>P</pattern></else>=>else_pattern_candidate:P",
+    "<else><if>...</if><then>...</then></else>=>nested_else_if",
+    "<pattern>branch_markup</pattern>=>structural_after_normalization",
+    "literal_markup_requires:escape_or_CDATA",
+    "canonical_order:if_then_else_unknown",
+    "owned_by:SCFML",
+    "grammar:data/grammar/scfml.runtime-grammar.ebnf"
+  ],
+  "key.grammar.scfml:v1": [
+    "schema:scfml.branch.v1",
+    "schema:scfml.pattern_learning.v1",
+    "SCFML:Semantic_Control_Flow_Machine_Learning",
+    "Pattern_Learning",
+    "not:automatic_fact"
+  ]
+}

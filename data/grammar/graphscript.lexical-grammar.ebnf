@@ -1,0 +1,38 @@
+# Lexical lane companion to graphscript.runtime-grammar.ebnf.
+# 
+# The program grammar is the authored spec lane (checked by
+# tools/check_graphscript_grammar.py). This companion file is the compiled
+# lane: its §0.1 syntactic sugar and §12 lexical terminals declared as @lex
+# classes, compiled by tools/ebnf_to_code_grammar.py into
+# graphscript.lexical-grammar.json and scannable by src/util/lexicon.cpp.
+#
+# Class actions: skip  discards the match (separator run)
+#                text  records it, lowercased under the profile
+#                atom  records it verbatim
+#                punct records it verbatim, one token per match
+# Profile keep order is match priority: at each byte position the kept
+# classes are tried in order and the first match wins; bytes matched by no
+# kept class are separators.
+
+# ── §12 terminals ─────────────────────────────────────────────────────────
+@lex string       /"[^"]*"/    action=text   role=string
+@lex number       /[0-9]+/     action=text   role=number
+@lex identifier   /[A-Za-z_][A-Za-z0-9_]*/   action=text   role=ident
+@lex punctuation  /[^\sA-Za-z0-9"]/          action=punct  role=punct
+@lex space        /[ \t]+/                   action=skip   role=separator
+@lex newline      /(?:\r\n|\n)/              action=skip   role=separator
+
+# ── §0.1 syntactic sugar ──────────────────────────────────────────────────
+# \b guards keep single-letter sugar ("a") from matching inside larger words.
+# The sugar words never collide with the §12 keyword set, but they DO collide
+# with identifier — so sugar must outrank identifier wherever it is kept.
+@lex sugar_text   /\b(?:a|an|the|to|into|named|called|is|equals|then|do|with|having|where|such that|matches|binds)\b/   action=text   role=sugar
+@lex sugar_skip   /\b(?:a|an|the|to|into|named|called|is|equals|then|do|with|having|where|such that|matches|binds)\b/   action=skip   role=sugar
+
+# ── Profiles ──────────────────────────────────────────────────────────────
+# default:    full fidelity — sugar words surface as sugar tokens.
+# sugar_drop: the §0.1 contract — filler words are dropped after recognition:
+#             they become separators at the lexical layer, so the parser lane
+#             never sees them. Grammar-declared semantics, zero parser code.
+@profile default      lower=on keep=sugar_text,string,number,identifier,punctuation
+@profile sugar_drop   lower=on keep=sugar_skip,string,number,identifier,punctuation

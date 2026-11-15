@@ -1,0 +1,248 @@
+{
+  "schema": "kuhul.micronaut.atomic.v1",
+  "identity": {
+    "id": "GREETING-µ",
+    "name": "greeting-µ",
+    "version": "2.0.0",
+    "authority_claim": "xcfe_gated_read_only"
+  },
+  "descriptor_status": "declarative_proposal",
+  "registered": false,
+  "registered_status": "unregistered; call register_micronaut() to activate",
+  "track_ref": "data/tracks/GREETING-u.semantic-tracks.v1.json",
+  "bindings_ref": null,
+  "manifest": {
+    "display_name": "greeting-µ",
+    "tagline": "Semantic intake pipeline and intent formation center — decomposes all prompts into typed WordKeyField graphs, resolves CFPC intent/knowledge gaps, routes to domain micronauts via gyro_abi scoring, and logs the full interaction chain via Pattern.Log.dll. GREETING-µ is not a salutation handler — it is the entry point through which all natural-language turns pass before XCFE routing.",
+    "color": "#ffcc44",
+    "icon_svg": "data/micronauts/assets/greeting.svg",
+    "animated_svg": "data/micronauts/assets/greeting.animated.svg",
+    "profile_card": {
+      "widget": "data/host/apps/micronaut-card.asx-app.json",
+      "props": { "id": "GREETING-µ", "phase": "Pop", "category": "intake" }
+    }
+  },
+  "api": {
+    "namespace": "greeting",
+    "note": "No standalone HTTP server — atomic keys resolve via native driver layer. greeting.decompose runs for ALL inputs before any other key. greeting.route is proposal_only and xcfe_required. greeting.log is append-only via Pattern.Log.dll.",
+    "atomic_keys": [
+      {
+        "key": "greeting.decompose",
+        "description": "Pop-phase prompt decomposition. Runs for EVERY input. Produces kuhul.word-key-field.v1 payload. Logs entry to Pattern.Log.dll. Three-stage lookup pipeline: STAGE-1 words.manifest.json (surface token → expansions) → STAGE-2 keys.micronaut.json (⟁KEY → lane/authority/pi_routing_weight/routing_entropy) → STAGE-3 WDT (⟁KEY → domain/pi_radius/excludes). Each stage is best-effort: missing manifest or WDT yields null fields, not an error. TOKENIZE: offset-anchor all tokens. POS_HINT rules (priority order, Stage-1): (1) social — intent:salutation or greeting alias chain; (2) code_token — intent:debugging/intent:code_generation in words.manifest OR ⟁KEY matches lane:CODE-µ in keys.micronaut.json; (3) operator — control:* entry in words.manifest; (4) question_word — who/what/when/where/why/how or ELIZA-1:QUESTION op; (5) anaphor — it/this/that/they/them/those/here/there; (6) noun/verb — Book(SUBJECT)/Book(PREDICATE) or fallback POS inference; (7) unknown. GRAM EXTRACTION: 1–4 token spans. CORPUS_PROVENANCE rules (priority order, Stage-1 + Stage-2): (1) aiml — gram matches triple-form dispatch prefix (KEYWORD:/keyword:/@keyword → named micronaut); (2) code_corpus — intent:debugging/intent:code_generation in words.manifest or gram's first token maps to lane:CODE-µ; (3) eliza — gram has ELIZA-1:* operator ref after alias expansion; (4) cfpc — gram matches cfpc-wildcards.gml or cfpc-questions.gml (listed in keys.micronaut.json ⟁POP:FIELD_CONTEXT); (5) none. KEY ASSIGNMENT: derive ⟁KEY per gram; Stage-2 lookup adds lane + key_authority; lane:CODE-µ forces key_authority=XCFE_required; lane:KUHUL-PI adds pi_routing_weight + routing_entropy. EDGE CONSTRUCTION: heuristic/symbolic edges from gram co-occurrence and ELIZA-1 op pairs; Stage-3 WDT associated[] → evidence_type=symbolic wdt_source=associated edges; WDT excludes[] → silently prune any edge where one key's wdt_excludes contains the other key's domain. ANAPHORIC TAGGING: tokens with pos_hint=anaphor that do not resolve → unresolved[reason=anaphoric_reference]. CODE SIGNAL DETECTION: any token with pos_hint=code_token or backtick/indented-block pattern in source_text → intent_candidate CODE_REQUEST (source=code_signal). CONDITIONAL ENTRIES: words.manifest entries with {@if/@then/@else} that cannot resolve at decompose time → bindings.context_refs[resolves_to=unresolved]. Stage-3 WDT: domain + pi_radius (depth_prior_is_calibrated_confidence: false always); WDT unavailable → domain/pi_radius null for all keys.",
+        "output_schema": "kuhul.word-key-field.v1",
+        "authority": "data_only",
+        "log": "Pattern.Log.dll — appends decompose entry with source_hash, token_count, gram_count, key_count"
+      },
+      {
+        "key": "greeting.route",
+        "description": "Yax/Sek-phase routing decision — takes the WordKeyField (with gap_type from cfpc_gap_classify and intent_candidates from intent_graph_traverse) and emits a typed routing proposal. When KUHUL-PI lane keys are present, uses float32 pi_routing_weight values (formula: 1.0 - hub_cost, Sek-phase, kernel: pi-routing-weight.cl) to rank target micronauts; NaN/Inf pi_routing_weight treated as null and excluded from ranking. Respects gyro_track_map: GREETING_ONLY → ELIZA-µ (no escalation), CODE_REQUEST → CODE-µ → ADVISOR-µ → UNDERSTAND-µ → LEARN-µ chain, KNOWLEDGE_QUERY → INFER-µ → REASON-µ, RELATIONSHIP_QUERY → REASON-µ → ELIZA-µ, ACTION_REQUEST → ORCH-µ → MEM-µ, TASK_REQUEST → ORCH-µ → PLAN-µ, OPINION_REQUEST → REASON-µ → INFER-µ. Proposal populates WordKeyField.routing. routing_entropy (entropy_norm, Ch'en) must satisfy ENTROPY_BOUNDS before the proposal advances past Ch'en verification — a proposal with routing_entropy outside [0.0, 1.0] is rejected. All proposals xcfe_required; pi_routing_weight is a routing signal only: semantic_authority:false, match_grants_execution:false. Logs to Pattern.Log.dll.",
+        "input_schema": "kuhul.word-key-field.v1",
+        "authority": "proposal_only",
+        "xcfe_required": true,
+        "log": "Pattern.Log.dll — appends route entry with source_hash, primary_target, escalation_path, gap_type"
+      },
+      {
+        "key": "greeting.log",
+        "description": "Append-only interaction log via Pattern.Log.dll — records micronaut, operation, phase, payload_summary, session_id, source_hash, timestamp. Called explicitly at decompose, intent, cfpc, route, escalate, and each XCFE admission transition. Callers supply the entry; Pattern.Log.dll handles persistence and rotation.",
+        "authority": "data_only",
+        "driver": "Pattern.Log.dll"
+      },
+      {
+        "key": "greeting.bank",
+        "description": "Pop-phase quick key response — selects phase-keyed template from greeting-bank.json using {cue}, {greeting}, {last}, {turns}, {lingo_count}, {blend} placeholders. GREETING_ONLY intent resolves here and suppresses escalation. Only fires when gap_type == Resolved and routing.primary_target == ELIZA-µ.",
+        "guard": "gap_type == Resolved AND intent == GREETING_ONLY"
+      },
+      {
+        "key": "greeting.intent",
+        "description": "Wo-phase intent-graph traversal on the WordKeyField — walks field_member edges from detected greeting context using keys[] and edges[] from the WordKeyField rather than the raw string; unfolds bigram candidates; instantiates wildcard patterns; returns scored intent candidates ranked by field coverage and bigram depth (max_depth 4, cycle_policy: active_path_detection). Populates WordKeyField.intent_candidates.",
+        "input_schema": "kuhul.word-key-field.v1",
+        "note": "Consumes WordKeyField produced by greeting.decompose — does NOT re-tokenize the raw string."
+      },
+      {
+        "key": "greeting.cfpc",
+        "description": "Yax-phase CFPC gap classification — bitmap classify produces one of: Resolved, IntentGap, QueryGap, KnowledgeGapNoKeys, KnowledgeGapNoValues. Sets WordKeyField.gap_type. Resolved suppresses escalation and keeps the turn with ELIZA-µ. Any gap type triggers greeting.route. Logs classification to Pattern.Log.dll.",
+        "input_schema": "kuhul.word-key-field.v1"
+      },
+      {
+        "key": "greeting.escalate",
+        "description": "Sek-phase XCFE routing proposal emission — fires when greeting.route has produced a non-null primary_target and XCFE has admitted the proposal. Sends the admitted WordKeyField to the primary_target micronaut. Logs the final dispatch to Pattern.Log.dll.",
+        "guard": "routing.xcfe_status == admitted",
+        "authority": "xcfe_gated"
+      },
+      {
+        "key": "greeting.lingo",
+        "description": "Xul-phase lingo absorption — absorb_lingo_cues from WordKeyField tokens, archive_greeting_ngrams to gram store, blend adapted lingo into future greeting.bank templates via {lingo_count} and {blend} placeholders.",
+        "input_schema": "kuhul.word-key-field.v1"
+      },
+      {
+        "key": "greeting.health",
+        "description": "Pop-phase diagnostics — reports intent-graph traversal status, greeting-bank template coverage (8 phases), gyro_abi dimension map availability, CFPC-µ routing status, Pattern.Log.dll write status, WordKeyField schema version."
+      }
+    ]
+  },
+  "word_key_field_schema_ref":    "data/schema/kuhul.word-key-field.v1.json",
+  "word_domain_tree_schema_ref":  "data/schema/word-domain-tree.v1.schema.json",
+  "word_domain_tree_ref":         null,
+  "word_domain_tree_ref_note":    "Set to data/word-domain-tree.json once a WDT instance is built. greeting.decompose uses the WDT for ⟁KEY domain lookup, pi_radius inheritance, and excludes-based edge pruning.",
+  "manifest_ref":                 "data/manifest/words.manifest.json",
+  "keys_manifest_ref":            "data/manifest/keys.micronaut.json",
+  "float_manifest_ref":           "data/manifest/float.json",
+  "aiml_manifest_ref":            "data/manifest/aiml.manifest.json",
+  "mx2lm_manifest_ref":          "data/manifest/mx2lm.manifest.json",
+  "scfml_manifest_ref":          "data/manifest/scfml.manifest.json",
+  "semantic_fields_manifest_ref":"data/manifest/semantic-fields.manifest.json",
+  "tool_manifest_ref":           "data/manifest/tool.manifest.json",
+  "tools_manifest_ref":          "data/manifest/tools.manifest.json",
+  "relational_manifest_ref":     "data/manifest/relational.manifest.json",
+  "intent_graph_ref":            "data/intent-graph.gml",
+  "gyro_abi_ref":                 "data/gyro_abi_v1.json",
+  "greeting_bank_ref":            "data/greeting-bank.json",
+  "intent_resolver_schema_ref":   "data/schema/cfpc-intent-resolver.schema.json",
+  "cfpc_track_ref":               "data/tracks/CFPC-u.semantic-tracks.v1.json",
+  "capabilities": [
+    "prompt_decomposition",
+    "word_key_field_construction",
+    "gram_isolation",
+    "pos_hint_tagging",
+    "code_signal_detection",
+    "intent_candidate_generation",
+    "typed_edge_graph_construction",
+    "anaphoric_reference_tagging",
+    "unresolved_set_assembly",
+    "routing_proposal_emission",
+    "pattern_log_integration",
+    "greeting_quick_key_response",
+    "intent_graph_traversal",
+    "cfpc_gap_classification",
+    "gyro_abi_track_selection",
+    "xcfe_escalation_proposal",
+    "lingo_absorption",
+    "greeting_ngram_archival",
+    "style_adaptation",
+    "reactive_mirror"
+  ],
+  "srai": {
+    "mode": "bounded_redirect_only",
+    "cycle_detection": true,
+    "max_depth": 2
+  },
+  "xcfe": {
+    "authority": "xcfe_gated_read_only",
+    "required_for_tool_dispatch": true,
+    "required_for_mutation": true,
+    "escalation_mode": "proposal_only",
+    "forbidden": [
+      "emit_response",
+      "write_state",
+      "mutate_topology",
+      "commit_patterns",
+      "direct_dispatch"
+    ],
+    "note": "greeting.route emits a routing proposal into WordKeyField.routing. XCFE must set routing.xcfe_status=admitted before greeting.escalate fires. intent-graph.gml and WordKeyField edges are data_only; graph membership and edge confidence are not execution authority."
+  },
+  "intent_resolver": {
+    "@kind": "cfpc.intent_resolver",
+    "id": "greeting-intent-resolver-v2",
+    "@candidates": {
+      "threshold": 0.65,
+      "allow_multiple": false,
+      "intents": [
+        { "name": "GREETING_ONLY",      "keywords": ["hi", "hey", "hello", "yo", "sup", "howdy", "greetings", "salutation"] },
+        { "name": "RELATIONSHIP_QUERY", "keywords": ["how", "relate", "between", "connection", "link", "related", "relationship"] },
+        { "name": "KNOWLEDGE_QUERY",    "keywords": ["what", "explain", "tell", "know", "about", "is", "define", "describe"] },
+        { "name": "ACTION_REQUEST",     "keywords": ["can", "could", "help", "do", "make", "build", "create", "write", "generate"] },
+        { "name": "OPINION_REQUEST",    "keywords": ["think", "feel", "believe", "opinion", "suggest", "recommend", "prefer"] },
+        { "name": "CODE_REQUEST",       "keywords": ["code", "function", "class", "bug", "error", "compile", "syntax", "implement", "refactor", "debug", "script", "program"], "pos_hint_trigger": "code_token" },
+        { "name": "TASK_REQUEST",       "keywords": ["plan", "schedule", "task", "step", "workflow", "pipeline", "sequence", "order", "decompose", "organize"] }
+      ]
+    },
+    "@q_factory": {
+      "intent_templates": [
+        { "intent": "RELATIONSHIP_QUERY", "pattern": "how is * related to *" },
+        { "intent": "RELATIONSHIP_QUERY", "pattern": "what is the connection between * and *" },
+        { "intent": "KNOWLEDGE_QUERY",    "pattern": "what is *" },
+        { "intent": "KNOWLEDGE_QUERY",    "pattern": "can you explain *" },
+        { "intent": "ACTION_REQUEST",     "pattern": "can you * for me" },
+        { "intent": "OPINION_REQUEST",    "pattern": "what do you think about *" },
+        { "intent": "CODE_REQUEST",       "pattern": "can you write * in *" },
+        { "intent": "CODE_REQUEST",       "pattern": "fix this * code" },
+        { "intent": "CODE_REQUEST",       "pattern": "what is wrong with this *" },
+        { "intent": "TASK_REQUEST",       "pattern": "help me plan *" },
+        { "intent": "TASK_REQUEST",       "pattern": "break * into steps" }
+      ]
+    },
+    "@gap_expansion": {
+      "max_depth": 4,
+      "require_new_information": true
+    },
+    "@selection": {
+      "method": "gyro_abi_scored",
+      "scope": "data/gyro_abi_v1.json"
+    }
+  },
+  "gyro_track_map": {
+    "GREETING_ONLY":      { "dimension": null,         "escalate": false, "stay_with": "ELIZA-µ" },
+    "RELATIONSHIP_QUERY": { "dimension": "⟁EVIDENCE",  "escalate": true,  "tracks": ["REASON-µ", "ELIZA-µ"] },
+    "KNOWLEDGE_QUERY":    { "dimension": "⟁INFER",     "escalate": true,  "tracks": ["INFER-µ", "REASON-µ"] },
+    "ACTION_REQUEST":     { "dimension": "⟁FIELD",     "escalate": true,  "tracks": ["ORCH-µ", "MEM-µ"] },
+    "OPINION_REQUEST":    { "dimension": "⟁VERIFY",    "escalate": true,  "tracks": ["REASON-µ", "INFER-µ"] },
+    "CODE_REQUEST":       { "dimension": "⟁FIELD",     "escalate": true,  "tracks": ["CODE-µ", "ADVISOR-µ", "UNDERSTAND-µ", "LEARN-µ"], "note": "triggered by code_signal in tokens pos_hint or backtick/indent block detection in source_text" },
+    "TASK_REQUEST":       { "dimension": "⟁FIELD",     "escalate": true,  "tracks": ["ORCH-µ", "PLAN-µ", "MEM-µ"] }
+  },
+  "program_contract": {
+    "format": "kuhul.micronaut-program/1",
+    "phase": "Pop",
+    "role": [
+      "prompt_decompose",
+      "word_key_field_produce",
+      "code_signal_detect",
+      "intent_resolve",
+      "cfpc_gap_classify",
+      "routing_propose",
+      "pattern_log",
+      "greeting_response",
+      "gyro_track_select",
+      "escalation_proposal",
+      "lingo_adapt"
+    ],
+    "grammar_refs": [],
+    "contract_refs": [
+      "data/tracks/GREETING-u.semantic-tracks.v1.json",
+      "data/tracks/CFPC-u.semantic-tracks.v1.json",
+      "data/schema/cfpc-intent-resolver.schema.json",
+      "data/schema/kuhul.word-key-field.v1.json",
+      "data/gyro_abi_v1.json"
+    ],
+    "effects": ["gramRead", "gramWrite"],
+    "learning": {
+      "mode": "observe_only",
+      "note": "greeting-µ archives lingo ngrams and style profiles via gramWrite. Pattern.Log.dll writes are append-only. Pattern evolution authority belongs to LEARN-µ."
+    },
+    "sandbox": {
+      "filesystem": "allowlisted_greeting_assets_read_only",
+      "network": "none",
+      "process": "none",
+      "effects": ["gramRead", "gramWrite"],
+      "admission": "xcfe_gated"
+    },
+    "drivers": [
+      "Micronaut.Core.dll",
+      "CFPC.Patterns.dll",
+      "Field.Patterns.dll",
+      "Micronaut.Patterns.dll",
+      "Pattern.Log.dll"
+    ],
+    "driver_roles": {
+      "Micronaut.Core.dll":    "tokenize raw prompt, offset-anchor tokens, n-gram span extraction (1–4), gram store management",
+      "CFPC.Patterns.dll":     "CFPC gap classification (bitmap classify: Resolved/IntentGap/QueryGap/KnowledgeGapNoKeys/KnowledgeGapNoValues), edge construction from intent-graph.gml, symbolic edge evidence",
+      "Field.Patterns.dll":    "Stage-1 words.manifest.json lookup (pos_hint derivation, corpus_provenance derivation, ELIZA-1 op → graph_relation mapping, intent tag extraction); Stage-2 keys.micronaut.json lookup (⟁KEY → lane assignment, key_authority, pi_routing_weight, routing_entropy; lane:CODE-µ → forces XCFE_required); Stage-3 WDT domain lookup (keys[].domain, pi_radius inheritance with depth_prior_is_calibrated_confidence:false, WDT associated[] → symbolic edges with wdt_source=associated, WDT excludes[] → silent edge pruning); field-category routing via eliza-bias.gml; graph_relation labelling",
+      "Micronaut.Patterns.dll":"code_signal detection (code_token pos_hint, backtick/indent block patterns), anaphoric reference tagging, unresolved set assembly, wildcard capture binding",
+      "Pattern.Log.dll":       "append-only interaction log — records every significant pipeline transition (decompose, intent, cfpc, route, escalate, xcfe_admission) with source_hash correlation, microsecond timestamps, and payload summaries"
+    }
+  },
+  "cache": {
+    "ttl": 300,
+    "strategy": "phase_keyed_lru",
+    "max_entries": 5000
+  }
+}

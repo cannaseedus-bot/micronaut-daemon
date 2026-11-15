@@ -1,0 +1,951 @@
+{
+  "@type": "mx2lm.dataset_ngram_summary.v1",
+  "admission": "candidate",
+  "binary_top_k_per_section": 50000,
+  "emitted_channel_counts": {
+    "bigram": 512,
+    "coarse_gram": 512,
+    "function_gram": 512,
+    "quadgram": 512,
+    "tool_gram": 512,
+    "trigram": 512,
+    "unigram": 512
+  },
+  "observed_binary_channel_counts": {
+    "coarse_bigram": 6608,
+    "coarse_trigram": 38354
+  },
+  "observed_total_unique_grams": 16433808,
+  "observed_unique_channel_counts": {
+    "bigram": 2328295,
+    "coarse_gram": 44962,
+    "function_gram": 23467,
+    "quadgram": 8077122,
+    "tool_gram": 11958,
+    "trigram": 5770306,
+    "unigram": 177698
+  },
+  "selection_policy": "emit_top_k_per_channel; observed_unique_channel_counts records the pre-cap population",
+  "semantic_authority": false,
+  "source_manifest": "data\\ingest\\khanary_dataset_sources.json",
+  "top": {
+    "bigram": [
+      {
+        "count": 85066,
+        "gram": "of the"
+      },
+      {
+        "count": 63528,
+        "gram": "in the"
+      },
+      {
+        "count": 47006,
+        "gram": "i 1"
+      },
+      {
+        "count": 42176,
+        "gram": "to the"
+      },
+      {
+        "count": 33721,
+        "gram": "1 1"
+      },
+      {
+        "count": 32673,
+        "gram": "1 2"
+      },
+      {
+        "count": 32016,
+        "gram": "number of"
+      },
+      {
+        "count": 31551,
+        "gram": "is the"
+      },
+      {
+        "count": 30114,
+        "gram": "0 0"
+      },
+      {
+        "count": 28021,
+        "gram": "if the"
+      },
+      {
+        "count": 27885,
+        "gram": "for i"
+      },
+      {
+        "count": 27337,
+        "gram": "i j"
+      },
+      {
+        "count": 26906,
+        "gram": "you are"
+      },
+      {
+        "count": 25576,
+        "gram": "is a"
+      },
+      {
+        "count": 24651,
+        "gram": "n 1"
+      },
+      {
+        "count": 24286,
+        "gram": "2 3"
+      },
+      {
+        "count": 23691,
+        "gram": "0 1"
+      },
+      {
+        "count": 23678,
+        "gram": "the following"
+      },
+      {
+        "count": 22461,
+        "gram": "i 0"
+      },
+      {
+        "count": 22280,
+        "gram": "and the"
+      },
+      {
+        "count": 21302,
+        "gram": "on the"
+      },
+      {
+        "count": 21243,
+        "gram": "with the"
+      },
+      {
+        "count": 20974,
+        "gram": "1 0"
+      },
+      {
+        "count": 20086,
+        "gram": "the number"
+      },
+      {
+        "count": 19529,
+        "gram": "for the"
+      },
+      {
+        "count": 18861,
+        "gram": "j 1"
+      },
+      {
+        "count": 17629,
+        "gram": "the current"
+      },
+      {
+        "count": 17437,
+        "gram": "from the"
+      },
+      {
+        "count": 17006,
+        "gram": "' '"
+      },
+      {
+        "count": 16528,
+        "gram": "the function"
+      },
+      {
+        "count": 16473,
+        "gram": "for each"
+      },
+      {
+        "count": 16358,
+        "gram": "nums i"
+      }
+    ],
+    "coarse_gram": [
+      {
+        "count": 7331131,
+        "gram": "c c"
+      },
+      {
+        "count": 5012782,
+        "gram": "c c c"
+      },
+      {
+        "count": 977475,
+        "gram": "f:the c"
+      },
+      {
+        "count": 599861,
+        "gram": "f:the c c"
+      },
+      {
+        "count": 488950,
+        "gram": "c f:the"
+      },
+      {
+        "count": 486266,
+        "gram": "c f:the c"
+      },
+      {
+        "count": 316979,
+        "gram": "c f:of"
+      },
+      {
+        "count": 287384,
+        "gram": "c f:and"
+      },
+      {
+        "count": 263016,
+        "gram": "c c f:the"
+      },
+      {
+        "count": 259640,
+        "gram": "c f:to"
+      },
+      {
+        "count": 240044,
+        "gram": "f:and c"
+      },
+      {
+        "count": 225097,
+        "gram": "f:to c"
+      },
+      {
+        "count": 224934,
+        "gram": "c f:and c"
+      },
+      {
+        "count": 200647,
+        "gram": "f:of c"
+      },
+      {
+        "count": 200623,
+        "gram": "c f:in"
+      },
+      {
+        "count": 198193,
+        "gram": "c f:of c"
+      },
+      {
+        "count": 195053,
+        "gram": "c f:to c"
+      },
+      {
+        "count": 174551,
+        "gram": "c f:is"
+      },
+      {
+        "count": 174275,
+        "gram": "c c f:and"
+      },
+      {
+        "count": 167299,
+        "gram": "f:is c"
+      },
+      {
+        "count": 161052,
+        "gram": "c f:for"
+      },
+      {
+        "count": 156758,
+        "gram": "f:in c"
+      },
+      {
+        "count": 155188,
+        "gram": "c c f:of"
+      },
+      {
+        "count": 142820,
+        "gram": "c f:if"
+      },
+      {
+        "count": 141866,
+        "gram": "c c f:to"
+      },
+      {
+        "count": 140488,
+        "gram": "f:and c c"
+      },
+      {
+        "count": 132179,
+        "gram": "f:for c"
+      },
+      {
+        "count": 124838,
+        "gram": "c f:in c"
+      },
+      {
+        "count": 123536,
+        "gram": "f:if c"
+      },
+      {
+        "count": 122735,
+        "gram": "c f:is c"
+      },
+      {
+        "count": 120321,
+        "gram": "f:of c c"
+      },
+      {
+        "count": 119572,
+        "gram": "c c f:in"
+      }
+    ],
+    "function_gram": [
+      {
+        "count": 982239,
+        "gram": "the"
+      },
+      {
+        "count": 326549,
+        "gram": "a"
+      },
+      {
+        "count": 321150,
+        "gram": "of"
+      },
+      {
+        "count": 312707,
+        "gram": "and"
+      },
+      {
+        "count": 306455,
+        "gram": "to"
+      },
+      {
+        "count": 305163,
+        "gram": "i"
+      },
+      {
+        "count": 253896,
+        "gram": "is"
+      },
+      {
+        "count": 244225,
+        "gram": "in"
+      },
+      {
+        "count": 203087,
+        "gram": "for"
+      },
+      {
+        "count": 198860,
+        "gram": "if"
+      },
+      {
+        "count": 96424,
+        "gram": "this"
+      },
+      {
+        "count": 91752,
+        "gram": "that"
+      },
+      {
+        "count": 90774,
+        "gram": "are"
+      },
+      {
+        "count": 90658,
+        "gram": "with"
+      },
+      {
+        "count": 85066,
+        "gram": "of the"
+      },
+      {
+        "count": 84740,
+        "gram": "it"
+      },
+      {
+        "count": 76699,
+        "gram": "you"
+      },
+      {
+        "count": 75892,
+        "gram": "as"
+      },
+      {
+        "count": 73225,
+        "gram": "we"
+      },
+      {
+        "count": 72220,
+        "gram": "be"
+      },
+      {
+        "count": 67717,
+        "gram": "from"
+      },
+      {
+        "count": 63528,
+        "gram": "in the"
+      },
+      {
+        "count": 62915,
+        "gram": "or"
+      },
+      {
+        "count": 58022,
+        "gram": "can"
+      },
+      {
+        "count": 57507,
+        "gram": "an"
+      },
+      {
+        "count": 54413,
+        "gram": "by"
+      },
+      {
+        "count": 50910,
+        "gram": "not"
+      },
+      {
+        "count": 48845,
+        "gram": "on"
+      },
+      {
+        "count": 42436,
+        "gram": "at"
+      },
+      {
+        "count": 42176,
+        "gram": "to the"
+      },
+      {
+        "count": 37532,
+        "gram": "then"
+      },
+      {
+        "count": 32930,
+        "gram": "will"
+      }
+    ],
+    "quadgram": [
+      {
+        "count": 11225,
+        "gram": "and provide code in"
+      },
+      {
+        "count": 7875,
+        "gram": "0 0 0 0"
+      },
+      {
+        "count": 6711,
+        "gram": "you are a helpful"
+      },
+      {
+        "count": 6702,
+        "gram": "a helpful ai assistant"
+      },
+      {
+        "count": 6702,
+        "gram": "are a helpful ai"
+      },
+      {
+        "count": 6321,
+        "gram": "for i in range"
+      },
+      {
+        "count": 5581,
+        "gram": "1 2 3 4"
+      },
+      {
+        "count": 5534,
+        "gram": "please explain the following"
+      },
+      {
+        "count": 4791,
+        "gram": "1 1 1 1"
+      },
+      {
+        "count": 4438,
+        "gram": "for i 1 to"
+      },
+      {
+        "count": 3949,
+        "gram": "2 3 4 5"
+      },
+      {
+        "count": 3892,
+        "gram": "for int i 0"
+      },
+      {
+        "count": 3867,
+        "gram": "int i 0 i"
+      },
+      {
+        "count": 3776,
+        "gram": "of this problem and"
+      },
+      {
+        "count": 3775,
+        "gram": "please focus on the"
+      },
+      {
+        "count": 3775,
+        "gram": "problem and provide code"
+      },
+      {
+        "count": 3775,
+        "gram": "this problem and provide"
+      },
+      {
+        "count": 3741,
+        "gram": "the reasoning behind the"
+      },
+      {
+        "count": 3734,
+        "gram": "for i 0 to"
+      },
+      {
+        "count": 3733,
+        "gram": "explain the reasoning behind"
+      },
+      {
+        "count": 3725,
+        "gram": "behind the following solution"
+      },
+      {
+        "count": 3725,
+        "gram": "detail and provide code"
+      },
+      {
+        "count": 3725,
+        "gram": "explain the following problem"
+      },
+      {
+        "count": 3725,
+        "gram": "following problem in detail"
+      },
+      {
+        "count": 3725,
+        "gram": "following solution and provide"
+      },
+      {
+        "count": 3725,
+        "gram": "in detail and provide"
+      },
+      {
+        "count": 3725,
+        "gram": "please explain the reasoning"
+      },
+      {
+        "count": 3725,
+        "gram": "problem in detail and"
+      },
+      {
+        "count": 3725,
+        "gram": "reasoning behind the following"
+      },
+      {
+        "count": 3725,
+        "gram": "solution and provide code"
+      },
+      {
+        "count": 3725,
+        "gram": "the following problem in"
+      },
+      {
+        "count": 3725,
+        "gram": "the following solution and"
+      }
+    ],
+    "tool_gram": [
+      {
+        "count": 67829,
+        "gram": "function"
+      },
+      {
+        "count": 12246,
+        "gram": "test"
+      },
+      {
+        "count": 11365,
+        "gram": "write"
+      },
+      {
+        "count": 11281,
+        "gram": "query"
+      },
+      {
+        "count": 10175,
+        "gram": "file"
+      },
+      {
+        "count": 8679,
+        "gram": "search"
+      },
+      {
+        "count": 6929,
+        "gram": "convert"
+      },
+      {
+        "count": 6647,
+        "gram": "run"
+      },
+      {
+        "count": 6337,
+        "gram": "call"
+      },
+      {
+        "count": 4830,
+        "gram": "api"
+      },
+      {
+        "count": 4741,
+        "gram": "execute"
+      },
+      {
+        "count": 4572,
+        "gram": "functions"
+      },
+      {
+        "count": 3192,
+        "gram": "read"
+      },
+      {
+        "count": 3119,
+        "gram": "build"
+      },
+      {
+        "count": 2959,
+        "gram": "command"
+      },
+      {
+        "count": 2282,
+        "gram": "web"
+      },
+      {
+        "count": 1943,
+        "gram": "runtime"
+      },
+      {
+        "count": 1846,
+        "gram": "plan"
+      },
+      {
+        "count": 1518,
+        "gram": "route"
+      },
+      {
+        "count": 1328,
+        "gram": "fetch"
+      },
+      {
+        "count": 1186,
+        "gram": "test the function"
+      },
+      {
+        "count": 1168,
+        "gram": "research"
+      },
+      {
+        "count": 1159,
+        "gram": "tools"
+      },
+      {
+        "count": 1136,
+        "gram": "compile"
+      },
+      {
+        "count": 1127,
+        "gram": "tool"
+      },
+      {
+        "count": 1079,
+        "gram": "commands"
+      },
+      {
+        "count": 997,
+        "gram": "terminal"
+      },
+      {
+        "count": 810,
+        "gram": "write a function"
+      },
+      {
+        "count": 657,
+        "gram": "dispatch"
+      },
+      {
+        "count": 597,
+        "gram": "shell"
+      },
+      {
+        "count": 584,
+        "gram": "router"
+      },
+      {
+        "count": 554,
+        "gram": "deploy"
+      }
+    ],
+    "trigram": [
+      {
+        "count": 16366,
+        "gram": "the number of"
+      },
+      {
+        "count": 13971,
+        "gram": "you are a"
+      },
+      {
+        "count": 12581,
+        "gram": "0 0 0"
+      },
+      {
+        "count": 11231,
+        "gram": "and provide code"
+      },
+      {
+        "count": 11225,
+        "gram": "provide code in"
+      },
+      {
+        "count": 11161,
+        "gram": "1 2 3"
+      },
+      {
+        "count": 10669,
+        "gram": "for i in"
+      },
+      {
+        "count": 10142,
+        "gram": "1 1 1"
+      },
+      {
+        "count": 9261,
+        "gram": "please explain the"
+      },
+      {
+        "count": 7650,
+        "gram": "example 1 input"
+      },
+      {
+        "count": 7605,
+        "gram": "i 0 i"
+      },
+      {
+        "count": 7535,
+        "gram": "2 3 4"
+      },
+      {
+        "count": 7398,
+        "gram": "you are given"
+      },
+      {
+        "count": 7373,
+        "gram": "what is the"
+      },
+      {
+        "count": 7343,
+        "gram": "the following solution"
+      },
+      {
+        "count": 7295,
+        "gram": "example 2 input"
+      },
+      {
+        "count": 6882,
+        "gram": "the sum of"
+      },
+      {
+        "count": 6711,
+        "gram": "are a helpful"
+      },
+      {
+        "count": 6703,
+        "gram": "a helpful ai"
+      },
+      {
+        "count": 6702,
+        "gram": "helpful ai assistant"
+      },
+      {
+        "count": 6667,
+        "gram": "i 1 j"
+      },
+      {
+        "count": 6341,
+        "gram": "i in range"
+      },
+      {
+        "count": 5901,
+        "gram": "for i 1"
+      },
+      {
+        "count": 5791,
+        "gram": "dp i j"
+      },
+      {
+        "count": 5664,
+        "gram": "for int i"
+      },
+      {
+        "count": 5535,
+        "gram": "explain the following"
+      },
+      {
+        "count": 5515,
+        "gram": "for i 0"
+      },
+      {
+        "count": 5414,
+        "gram": "0 1 1"
+      },
+      {
+        "count": 5250,
+        "gram": "0 0 1"
+      },
+      {
+        "count": 5110,
+        "gram": "i 1 to"
+      },
+      {
+        "count": 4986,
+        "gram": "i j 1"
+      },
+      {
+        "count": 4984,
+        "gram": "1 0 1"
+      }
+    ],
+    "unigram": [
+      {
+        "count": 982239,
+        "gram": "the"
+      },
+      {
+        "count": 492684,
+        "gram": "1"
+      },
+      {
+        "count": 326549,
+        "gram": "a"
+      },
+      {
+        "count": 321150,
+        "gram": "of"
+      },
+      {
+        "count": 312707,
+        "gram": "and"
+      },
+      {
+        "count": 306455,
+        "gram": "to"
+      },
+      {
+        "count": 305163,
+        "gram": "i"
+      },
+      {
+        "count": 300312,
+        "gram": "0"
+      },
+      {
+        "count": 266722,
+        "gram": "2"
+      },
+      {
+        "count": 253896,
+        "gram": "is"
+      },
+      {
+        "count": 244225,
+        "gram": "in"
+      },
+      {
+        "count": 203087,
+        "gram": "for"
+      },
+      {
+        "count": 198860,
+        "gram": "if"
+      },
+      {
+        "count": 162201,
+        "gram": "n"
+      },
+      {
+        "count": 161280,
+        "gram": "3"
+      },
+      {
+        "count": 138190,
+        "gram": "return"
+      },
+      {
+        "count": 106783,
+        "gram": "j"
+      },
+      {
+        "count": 102659,
+        "gram": "4"
+      },
+      {
+        "count": 96424,
+        "gram": "this"
+      },
+      {
+        "count": 91752,
+        "gram": "that"
+      },
+      {
+        "count": 91372,
+        "gram": "code"
+      },
+      {
+        "count": 90774,
+        "gram": "are"
+      },
+      {
+        "count": 90658,
+        "gram": "with"
+      },
+      {
+        "count": 90113,
+        "gram": "5"
+      },
+      {
+        "count": 84740,
+        "gram": "it"
+      },
+      {
+        "count": 83213,
+        "gram": "int"
+      },
+      {
+        "count": 76699,
+        "gram": "you"
+      },
+      {
+        "count": 75892,
+        "gram": "as"
+      },
+      {
+        "count": 75669,
+        "gram": "nums"
+      },
+      {
+        "count": 74309,
+        "gram": "length"
+      },
+      {
+        "count": 74284,
+        "gram": "k"
+      },
+      {
+        "count": 73225,
+        "gram": "we"
+      }
+    ]
+  },
+  "top_k_per_channel": 512,
+  "total_grams": 3584,
+  "totals": {
+    "lexical_units": 19350903,
+    "rows_seen": 720537,
+    "rows_used": 634583
+  },
+  "track": "ADVISOR-µ"
+}

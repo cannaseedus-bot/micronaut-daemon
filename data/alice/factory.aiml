@@ -1,0 +1,204 @@
+<aiml version="1.0.1">
+  <!-- FACTORY-µ AIML patterns.
+       Pattern engine: ELIZA/AIML.  Execution authority: K'UHUL via XulGate commit.
+       All templates wrap into <mx2lm>factory-u ...</mx2lm> for micronaut routing.
+       Mutation path: propose_create/propose_evolve → Ch'en verify → XulGate → commit.
+       Persistence writes: factory:commit:{id}, factory:status:{id} in gram store. -->
+
+  <!-- ── Canonical entry point ───────────────────────────────────────────── -->
+  <category>
+    <pattern>FACTORY BANK</pattern>
+    <template><mx2lm>factory-u op=list phase=Pop bank=micronaut_registry card_view=true</mx2lm></template>
+  </category>
+
+  <!-- ── Propose create ────────────────────────────────────────────────────
+       Returns a FactoryCandidate; does not write to registry. -->
+  <category>
+    <pattern>FACTORY CREATE *</pattern>
+    <template><mx2lm>factory-u op=propose_create phase=Wo id=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CREATE MICRONAUT *</pattern>
+    <template><mx2lm>factory-u op=propose_create phase=Wo id=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>SPAWN MICRONAUT *</pattern>
+    <template><mx2lm>factory-u op=propose_create phase=Wo id=<star/></mx2lm></template>
+  </category>
+
+  <!-- ── Propose evolve ────────────────────────────────────────────────────
+       Reads current entry, computes merged snapshot; does not write to registry. -->
+  <category>
+    <pattern>FACTORY EVOLVE * WITH *</pattern>
+    <template><mx2lm>factory-u op=propose_evolve phase=Yax id=<star index="1"/> params=<star index="2"/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FACTORY EVOLVE *</pattern>
+    <template><mx2lm>factory-u op=propose_evolve phase=Yax id=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>EVOLVE MICRONAUT * WITH *</pattern>
+    <template><mx2lm>factory-u op=propose_evolve phase=Yax id=<star index="1"/> params=<star index="2"/></mx2lm></template>
+  </category>
+
+  <!-- ── Generic propose ───────────────────────────────────────────────────
+       Routes to propose_create or propose_evolve based on registry state. -->
+  <category>
+    <pattern>FACTORY PROPOSE CREATE *</pattern>
+    <template><mx2lm>factory-u op=propose_create phase=Wo id=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FACTORY PROPOSE EVOLVE *</pattern>
+    <template><mx2lm>factory-u op=propose_evolve phase=Yax id=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FACTORY PROPOSE *</pattern>
+    <template><mx2lm>factory-u op=propose phase=Wo target=<star/></mx2lm></template>
+  </category>
+
+  <!-- ── Commit candidate ───────────────────────────────────────────────────
+       Applies a pending FactoryCandidate under XulGate CommitAuthority. -->
+  <category>
+    <pattern>FACTORY COMMIT *</pattern>
+    <template><mx2lm>factory-u op=commit phase=Xul candidate=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FACTORY COMMIT</pattern>
+    <template><mx2lm>factory-u op=commit phase=Xul candidate=last</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>COMMIT MICRONAUT *</pattern>
+    <template><mx2lm>factory-u op=commit phase=Xul candidate=<star/></mx2lm></template>
+  </category>
+
+  <!-- ── List / read ────────────────────────────────────────────────────── -->
+  <category>
+    <pattern>FACTORY LIST</pattern>
+    <template><mx2lm>factory-u op=list phase=Pop card_view=true</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>LIST MICRONAUTS</pattern>
+    <template><mx2lm>factory-u op=list phase=Pop card_view=true</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FACTORY READ *</pattern>
+    <template><mx2lm>factory-u op=read phase=Pop id=<star/> card_view=true</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>SHOW MICRONAUT *</pattern>
+    <template><mx2lm>factory-u op=read phase=Pop id=<star/> card_view=true</mx2lm></template>
+  </category>
+
+  <!-- ── Edit / patch ───────────────────────────────────────────────────── -->
+  <category>
+    <pattern>FACTORY EDIT * WITH *</pattern>
+    <template><mx2lm>factory-u op=edit phase=Sek id=<star index="1"/> capabilities=<star index="2"/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FACTORY PATCH * CONFIDENCE *</pattern>
+    <template><mx2lm>factory-u op=patch phase=Sek id=<star index="1"/> confidence=<star index="2"/></mx2lm></template>
+  </category>
+
+  <!-- ── Status / delete ────────────────────────────────────────────────── -->
+  <category>
+    <pattern>FACTORY STATUS *</pattern>
+    <template><mx2lm>factory-u op=status phase=Ch'en id=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FACTORY STATUS</pattern>
+    <template><mx2lm>factory-u op=status phase=Pop id=all card_view=true</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FACTORY DELETE *</pattern>
+    <template><mx2lm>factory-u op=delete phase=Xul id=<star/></mx2lm></template>
+  </category>
+
+  <!-- ── Key store ──────────────────────────────────────────────────────── -->
+  <category>
+    <pattern>FACTORY KEY BANK</pattern>
+    <template><mx2lm>factory-u op=list_keys phase=Pop card_view=true</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FACTORY RECORD KEY * AS *</pattern>
+    <template><mx2lm>factory-u op=record_key phase=Wo key=<star index="1"/> response=<star index="2"/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FACTORY LOOKUP *</pattern>
+    <template><mx2lm>factory-u op=lookup_key phase=Pop query=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FACTORY PEEK *</pattern>
+    <template><mx2lm>factory-u op=peek_key phase=Pop key=<star/></mx2lm></template>
+  </category>
+
+  <!-- ── UI card display ────────────────────────────────────────────────── -->
+  <category>
+    <pattern>FACTORY CARDS</pattern>
+    <template><mx2lm>factory-u op=list phase=Pop card_view=true category=all</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FACTORY CARD *</pattern>
+    <template><mx2lm>factory-u op=read phase=Pop id=<star/> card_view=true</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>SHOW FACTORY CARDS</pattern>
+    <template><mx2lm>factory-u op=list phase=Pop card_view=true</mx2lm></template>
+  </category>
+
+  <!-- ── Phase-explicit surface ────────────────────────────────────────────
+       Allows direct phase-addressed factory operations for pipeline debugging. -->
+  <category>
+    <pattern>FACTORY POP *</pattern>
+    <template><mx2lm>factory-u op=read phase=Pop id=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FACTORY WO *</pattern>
+    <template><mx2lm>factory-u op=propose_create phase=Wo id=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FACTORY YAX *</pattern>
+    <template><mx2lm>factory-u op=propose_evolve phase=Yax id=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FACTORY SEK *</pattern>
+    <template><mx2lm>factory-u op=edit phase=Sek id=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FACTORY CHEN *</pattern>
+    <template><mx2lm>factory-u op=verify_candidate phase=Ch'en candidate=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FACTORY XUL *</pattern>
+    <template><mx2lm>factory-u op=commit phase=Xul candidate=<star/></mx2lm></template>
+  </category>
+
+  <!-- ── Fallback ───────────────────────────────────────────────────────── -->
+  <category>
+    <pattern>FACTORY *</pattern>
+    <template><mx2lm>factory-u hint FACTORY BANK for op=propose_create|propose_evolve|commit|list|read|status|delete <star/></mx2lm></template>
+  </category>
+</aiml>

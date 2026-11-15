@@ -1,0 +1,127 @@
+{
+  "@program": "kuhul.atomic.workflow",
+  "@kind": "kuhul.atomic.workflow.v1",
+  "@version": "1.0.0",
+  "@authority": "XCFE",
+  "@execution_default": "DATA_ONLY",
+  "@identity_model": "atomic_id",
+  "@role": "Graph orchestration — entry points, dependencies, lifecycle. Workflow orchestrates.",
+  "@phase_order": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"],
+
+  "@module_contract": {
+    "schema": "kuhul.atomic.workflow.v1",
+    "shared_identity": "atomic_id",
+    "note": "A workflow node references a pipeline by its atomic_id. Pipelines reference blocks by atomic_id. The same atomic_id keys the canvas node, pipeline stage, and workflow step.",
+    "phase_hooks": {
+      "Pop":   "receive workflow declaration; resolve workflow.id as atomic_id",
+      "Wo":    "bind nodes and edges; validate atomic_id refs exist in block/pipeline registry",
+      "Yax":   "resolve dependencies; topological sort; detect cycles",
+      "Sek":   "propose execution schedule; require XCFE admission for each node",
+      "Ch'en": "verify DAG integrity; confirm all entry and terminal nodes; check admission grants",
+      "Xul":   "emit validated workflow plan; write phase log entry"
+    },
+    "on_failure_policy": ["halt", "retry", "skip"],
+    "xcfe": {
+      "authority": "xcfe_gated_orchestrator",
+      "forbidden": ["execute_node_directly", "mutate_pipeline", "emit_facts"],
+      "note": "Workflow proposes a schedule. XCFE authorizes each node individually at Sek."
+    }
+  },
+
+  "@types": {
+    "WorkflowId":   { "base": "string", "pattern": "^workflow\\." },
+    "PipelineRef":  { "base": "string", "pattern": "^pipeline\\." },
+    "WorkflowEdge": { "from": "PipelineRef", "to": "PipelineRef", "label": "string?" },
+    "WorkflowPlan": {
+      "workflow_id":     "WorkflowId",
+      "schedule":        "PipelineRef[]",
+      "edges":           "WorkflowEdge[]",
+      "admission_state": "object",
+      "phase":           "string"
+    }
+  },
+
+  "@state": {
+    "workflow_id":     null,
+    "entry":           null,
+    "nodes":           [],
+    "edges":           [],
+    "on_failure":      "halt",
+    "schedule":        null,
+    "admission_state": {},
+    "phase":           "Pop"
+  },
+
+  "@control": [
+    {
+      "@phase": "Pop",
+      "@op": "FOLD_ENTER",
+      "@fold": "Pop",
+      "@node": "workflow-receive",
+      "@desc": "receive workflow declaration; bind workflow.id as atomic_id"
+    },
+    {
+      "@phase": "Wo",
+      "@op": "SEQUENCE",
+      "@steps": [
+        { "@op": "ASSIGN", "@key": "workflow_id", "@from": "$input.workflow.id" },
+        { "@op": "ASSIGN", "@key": "entry",       "@from": "$input.workflow.entry" },
+        { "@op": "ASSIGN", "@key": "nodes",        "@from": "$input.workflow.nodes" },
+        { "@op": "ASSIGN", "@key": "edges",        "@from": "$input.workflow.edges" },
+        { "@op": "ASSIGN", "@key": "on_failure",   "@from": "$input.workflow.on_failure" },
+        { "@op": "LOG",    "@args": ["Wo: workflow bindings complete — id=$workflow_id nodes=$nodes.length"] }
+      ]
+    },
+    {
+      "@phase": "Yax",
+      "@op": "CALL",
+      "@fn": "resolve_dependencies",
+      "@in":  ["nodes", "edges"],
+      "@out": "schedule",
+      "@desc": "topological sort; detect cycles; halt if cycle found"
+    },
+    {
+      "@phase": "Sek",
+      "@op": "CALL",
+      "@fn": "propose_schedule",
+      "@in":  ["schedule", "entry"],
+      "@out": "admission_state",
+      "@desc": "require XCFE admission for each scheduled node; store admission_state"
+    },
+    {
+      "@phase": "Ch'en",
+      "@op": "CALL",
+      "@fn": "verify_graph_and_admission",
+      "@in":  ["schedule", "admission_state", "edges"],
+      "@out": "verified_plan",
+      "@desc": "confirm DAG integrity; all entry/terminal nodes present; all admissions granted"
+    },
+    {
+      "@phase": "Xul",
+      "@op": "FOLD_EXIT",
+      "@fold": "Xul",
+      "@node": "workflow-emit",
+      "@args": ["verified_plan"],
+      "@desc": "emit WorkflowPlan; write phase log"
+    }
+  ],
+
+  "@example": {
+    "workflow.id":        "workflow.echo",
+    "workflow.entry":     "pipeline.echo",
+    "workflow.nodes":     ["pipeline.echo"],
+    "workflow.edges":     [],
+    "workflow.on_failure": "halt",
+    "expected_plan": {
+      "schedule": ["pipeline.echo"],
+      "edges":    [],
+      "admission_state": {}
+    }
+  },
+
+  "@refs": {
+    "blocks_module":   "data/programs/kuhul.atomic.blocks.json",
+    "pipeline_module": "data/programs/kuhul.atomic.pipeline.json",
+    "canvas_module":   "data/programs/kuhul.atomic.canvas.json"
+  }
+}

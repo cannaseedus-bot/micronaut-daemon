@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "poll-app",
+  "@key": "⟁APP:POLL_APP",
+  "@mount": "⟁ROOT:POLL_APP",
+  "@theme": { "accent": "#818cf8", "bg": "#080a1a", "surface": "#101328", "text": "#e0e7ff", "hero_phase": "Yax", "tagline": "Ask. Vote. Decide." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "polls", "component": "⟁WIDGET:POLLS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "polls": [], "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:POLL_APP": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:CREATE_POLL"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:CREATE_POLL": { "@type": "button", "@text": "Create Poll", "@on": { "click": "polls.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:POLLS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:POLLS": { "@type": "feed", "@bind": "state.polls", "@children": ["⟁WIDGET:POLL_CARD"] },
+    "⟁WIDGET:POLL_CARD": { "@type": "content-card", "@bind": "poll", "@on": { "vote": "polls.vote", "view": "polls.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:TRENDING", "⟁WIDGET:RECENT_RESULTS"] },
+    "⟁WIDGET:TRENDING": { "@type": "list", "@bind": "data.trending" },
+    "⟁WIDGET:RECENT_RESULTS": { "@type": "list", "@bind": "data.recent_results" }
+  },
+  "@programs": {
+    "polls.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "polls.vote": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "polls.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "polls.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "poll.vote": "polls.vote", "poll.view": "polls.view", "compose.open": "polls.open_compose", "search.input": "polls.search" },
+  "@imports": [{ "ref": "poll", "mode": "schema_table" }, { "ref": "vote", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "anonymous-voting", "name": "Anonymous Voting", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Hide voter identities while keeping results accurate." },
+      { "id": "ranked-choice", "name": "Ranked Choice Voting", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Let voters rank options in order of preference." },
+      { "id": "analysis-bot", "name": "Results Analysis Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Auto-generate a plain-English summary of poll results." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "polls.create", "pattern": "CREATE POLL|NEW POLL|START VOTE", "intent": "open_compose" },
+      { "id": "polls.vote", "pattern": "VOTE *|CAST VOTE|PICK OPTION *", "intent": "open_vote" }
+    ]
+  },
+  "@data": {
+    "trending": ["Dark mode or light mode?", "Best frontend framework 2025", "Remote or hybrid?"],
+    "recent_results": ["Dark mode won (78%)", "TypeScript: Always (65%)"],
+    "spotlight": [
+      { "id": "sp1", "title": "Dark mode or light mode?", "slug": "dark-light-mode", "badge": "Trending", "total_votes": 2841, "excerpt": "One of the oldest debates in the industry." },
+      { "id": "sp2", "title": "Best frontend framework 2025", "slug": "frontend-fw-2025", "badge": "Hot", "total_votes": 1523, "excerpt": "React, Vue, Svelte, Solid, or something else?" },
+      { "id": "sp3", "title": "Would you use an AI pair programmer daily?", "slug": "ai-pair-programmer", "badge": "New", "total_votes": 87, "excerpt": "Early results are surprising." }
+    ],
+    "schema": {
+      "poll": { "primaryKey": "poll_id", "fields": { "poll_id": { "type": "string" }, "question": { "type": "string", "required": true }, "options": { "type": "json", "required": true }, "total_votes": { "type": "integer" }, "closes_at": { "type": "datetime" }, "created_at": { "type": "datetime" } } },
+      "vote": { "primaryKey": "vote_id", "fields": { "vote_id": { "type": "string" }, "poll_id": { "type": "string", "required": true }, "option_index": { "type": "integer", "required": true }, "user_id": { "type": "string" }, "voted_at": { "type": "datetime" } } }
+    }
+  }
+}

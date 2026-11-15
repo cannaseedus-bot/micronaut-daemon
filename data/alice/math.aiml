@@ -1,0 +1,94 @@
+<aiml version="1.0.1">
+  <category>
+    <pattern>MATH *</pattern>
+    <template>MATH-µ domain=math query=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ PLUS _</pattern>
+    <template><srai>EVALUATE <star/> + <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ MINUS _</pattern>
+    <template><srai>EVALUATE <star/> - <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ TIMES _</pattern>
+    <template><srai>EVALUATE <star/> * <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ DIVIDED BY _</pattern>
+    <template><srai>EVALUATE <star/> / <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ TO THE POWER OF _</pattern>
+    <template><srai>EVALUATE <star/> ^ <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ SQUARED</pattern>
+    <template><srai>EVALUATE <star/> ^ 2</srai></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ CUBED</pattern>
+    <template><srai>EVALUATE <star/> ^ 3</srai></template>
+  </category>
+  <category>
+    <pattern>WHAT IS SQUARE ROOT OF _</pattern>
+    <template><srai>EVALUATE sqrt(<star/>)</srai></template>
+  </category>
+  <category>
+    <pattern>WHAT IS CUBE ROOT OF _</pattern>
+    <template><srai>EVALUATE cbrt(<star/>)</srai></template>
+  </category>
+  <category>
+    <pattern>CALCULATE _</pattern>
+    <template><srai>EVALUATE <star/></srai></template>
+  </category>
+  <category>
+    <pattern>COMPUTE _</pattern>
+    <template><srai>EVALUATE <star/></srai></template>
+  </category>
+  <category>
+    <pattern>@MATH *</pattern>
+    <template>MATH-µ domain=math query=<star/></template>
+  </category>
+  <category>
+    <pattern>MATH SYNONYMIZE *</pattern>
+    <template>MATH-µ domain=math lexical_equivalence=true query=<star/></template>
+  </category>
+  <category>
+    <pattern>REWORD MATH *</pattern>
+    <template>MATH-µ domain=math lexical_equivalence=true query=<star/></template>
+  </category>
+  <category>
+    <pattern>SOLVE * EQUALS *</pattern>
+    <template>MATH-µ graphplan_op=SOLVE mathml=apply(solve,eq(<star index="1"/>,<star index="2"/>),x) resolver=symbolic_math</template>
+  </category>
+  <category>
+    <pattern>SIMPLIFY *</pattern>
+    <template>MATH-µ graphplan_op=SIMPLIFY mathml=apply(simplify,<star/>) resolver=symbolic_math</template>
+  </category>
+  <category>
+    <pattern>FACTOR *</pattern>
+    <template>MATH-µ graphplan_op=FACTOR mathml=apply(factor,<star/>) resolver=symbolic_math</template>
+  </category>
+  <category>
+    <pattern>EXPAND *</pattern>
+    <template>MATH-µ graphplan_op=EXPAND mathml=apply(expand,<star/>) resolver=symbolic_math</template>
+  </category>
+  <category>
+    <pattern>EVALUATE *</pattern>
+    <template>MATH-µ graphplan_op=EVALUATE mathml=apply(evaluate,<star/>) resolver=symbolic_math</template>
+  </category>
+  <category>
+    <pattern>SOLVE LINEAR SYSTEM *</pattern>
+    <template>MATH-µ graphplan_op=SOLVE_LINEAR mathml=apply(solve,<star/>) resolver=matrix_buffer op=MATRIX_BUFFER_SOLVE</template>
+  </category>
+  <category>
+    <pattern>MATRIX MULTIPLY *</pattern>
+    <template>MATH-µ graphplan_op=MATMUL mathml=apply(times,<star/>) resolver=matrix_buffer op=MATRIX_BUFFER_MATMUL</template>
+  </category>
+  <category>
+    <pattern>COMPUTE EIGENVALUES OF *</pattern>
+    <template>MATH-µ graphplan_op=EIGENVALUES mathml=apply(eigenvalues,<star/>) resolver=matrix_buffer op=MATRIX_BUFFER_EIGEN</template>
+  </category>
+</aiml>

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "asx://schema/micronaut-delegation-envelope-v1",
+  "title": "MicronautDelegationEnvelope v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "@kind", "delegation_id", "parent_delegation_id", "caller_ref", "callee_ref",
+    "allowed_capabilities", "remaining_step_budget", "max_call_depth", "call_depth",
+    "objective_ref", "permitted_subobjective_refs", "context_scope_ref", "evidence_scope_ref",
+    "admission_ref", "provenance_ref", "proposal_only"
+  ],
+  "properties": {
+    "@kind": { "const": "asx.micronaut.delegation-envelope.v1" },
+    "delegation_id": { "type": "string", "minLength": 1 },
+    "parent_delegation_id": { "type": "string" },
+    "caller_ref": { "type": "string", "minLength": 1 },
+    "callee_ref": { "type": "string", "minLength": 1 },
+    "allowed_capabilities": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[^#\\s]+#@[a-z][a-z0-9_]*$" }
+    },
+    "remaining_step_budget": {
+      "type": "integer", "minimum": 0,
+      "description": "Immutable issuance snapshot. The budget ledger is authoritative for current remaining budget."
+    },
+    "max_call_depth": { "type": "integer", "minimum": 1 },
+    "call_depth": { "type": "integer", "minimum": 0 },
+    "objective_ref": { "type": "string", "minLength": 1 },
+    "permitted_subobjective_refs": {
+      "type": "array", "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "context_scope_ref": { "type": "string", "minLength": 1 },
+    "evidence_scope_ref": { "type": "string", "minLength": 1 },
+    "admission_ref": {
+      "type": "string", "minLength": 1,
+      "description": "Reference only. It is not transferable execution permission."
+    },
+    "provenance_ref": { "type": "string", "minLength": 1 },
+    "proposal_only": { "const": true }
+  }
+}

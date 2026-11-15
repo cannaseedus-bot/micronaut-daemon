@@ -1,0 +1,36 @@
+{
+  "@kind":"asx.mini-app.v1",
+  "@version":"1.0.0",
+  "@id":"seed-store",
+  "@key":"⟁APP:SEED_STORE",
+  "@mount":"⟁ROOT:SEED_STORE",
+  "@state":{"search":"","theme":"dark","cart":[],"shipping":15.0,"status":null,"sidebar_open":false},
+  "@components":{
+    "⟁ROOT:SEED_STORE":{"@type":"commerce-app","@children":["⟁WIDGET:STORE_HEADER","⟁WIDGET:STORE_HERO","⟁WIDGET:PRODUCT_GRID","⟁WIDGET:CART","⟁WIDGET:CHECKOUT","⟁WIDGET:STORE_FOOTER"]},
+    "⟁WIDGET:STORE_HEADER":{"@type":"toolbar","@children":["⟁INPUT:STORE_SEARCH","⟁ACTION:STORE_THEME","⟁ACTION:STORE_CART"]},
+    "⟁INPUT:STORE_SEARCH":{"@type":"search","@bind":"state.search","@placeholder":"Search strains"},
+    "⟁ACTION:STORE_THEME":{"@type":"button","@on":{"click":"store.toggle_theme"}},
+    "⟁ACTION:STORE_CART":{"@type":"button","@on":{"click":"store.toggle_cart"}},
+    "⟁WIDGET:STORE_HERO":{"@type":"hero"},
+    "⟁WIDGET:PRODUCT_GRID":{"@type":"product-grid","@source":"catalog.products","@on":{"add":"store.add_to_cart"}},
+    "⟁WIDGET:CART":{"@type":"cart","@bind":"state.cart","@on":{"quantity":"store.set_quantity","remove":"store.remove_item","clear":"store.clear_cart"}},
+    "⟁WIDGET:CHECKOUT":{"@type":"checkout-form","@bind":"state.cart","@on":{"submit":"store.submit_order"}},
+    "⟁WIDGET:STORE_FOOTER":{"@type":"footer"}
+  },
+  "@programs":{
+    "store.search":{"@kind":"asx.state-program.v1","@executor":"mx.run","@authority":"observation_only","@operations":["SET"]},
+    "store.toggle_theme":{"@kind":"asx.state-program.v1","@executor":"mx.run","@authority":"observation_only","@operations":["SET"]},
+    "store.toggle_cart":{"@kind":"asx.state-program.v1","@executor":"mx.run","@authority":"observation_only","@operations":["SET"]},
+    "store.add_to_cart":{"@kind":"asx.state-program.v1","@executor":"mx.run","@authority":"observation_only","@operations":["APPEND","SET"]},
+    "store.set_quantity":{"@kind":"asx.state-program.v1","@executor":"mx.run","@authority":"observation_only","@operations":["SET"]},
+    "store.remove_item":{"@kind":"asx.state-program.v1","@executor":"mx.run","@authority":"observation_only","@operations":["SET"]},
+    "store.clear_cart":{"@kind":"asx.state-program.v1","@executor":"mx.run","@authority":"observation_only","@operations":["SET"]},
+    "store.submit_order":{"@kind":"semantic.json-program.v1","@executor":"mx.run","@route":"commerce.order","@verb":"POST","@operation":"submit","@authority":"observation_only","@input":"checkout.form","@cart":"state.cart","@output":"order.receipt","@promote":false}
+  },
+  "@events":{"search.input":"store.search","theme.toggle":"store.toggle_theme","cart.toggle":"store.toggle_cart","product.add":"store.add_to_cart","cart.quantity":"store.set_quantity","cart.remove":"store.remove_item","cart.clear":"store.clear_cart","checkout.submit":"store.submit_order"},
+  "@imports":["catalog.seed-store.v1","commerce.order.contract.v1"],
+  "@permissions":{"network":"authorized_order_endpoint_only","tools":false,"semantic_commit":false,"payment_credentials":"never_in_browser","state_scope":"request_scoped"},
+  "@lifecycle":{"mount":"projection_only","unmount":"discard_state"},
+  "@pwa":{"name":"Cannabis Seed Store","short_name":"Seed Store","display":"standalone","theme_color":"#f39c12","background_color":"#141414"},
+  "@catalog":{"products":[{"id":"jelly-donutz","name":"Jelly Donutz","price":59.99,"seed_count":10,"type":"hybrid","details":["THC: 30%","CBD: <1%","8-9 Weeks","High Yield"]},{"id":"hella-jelly","name":"Hella Jelly","price":59.99,"seed_count":10,"type":"sativa","details":["THC: 28%","CBD: <1%","8-9 Weeks","High Yield"]},{"id":"octane-cbd-h","name":"Octane CBD-H","price":29.99,"seed_count":10,"type":"hybrid","details":["THC: 0.05%","CBD-H: 21%","9 Weeks"]},{"id":"alien-og","name":"Alien OG","price":199.99,"seed_count":100,"type":"indica","details":["THC: 32%","CBD: <1%","8 Weeks","High Yield"]},{"id":"pineapple-express","name":"Pineapple Express","price":199.99,"seed_count":10,"type":"sativa","details":["THC: 26%","CBD: <1%","8-9 Weeks"]},{"id":"strawberry-cbd-h","name":"Strawberry CBD-H","price":29.99,"seed_count":100,"type":"sativa","details":["THC: 0.05%","CBD-H: 21%","9 Weeks"]}]}
+}

@@ -1,0 +1,28 @@
+{
+  "@kind": "khanary.task.v1",
+  "id": "verify-decision",
+  "intent": "verify",
+  "capability": "semantic_verification",
+  "@query": {
+    "pattern": "what is {subject}",
+    "captures": {
+      "subject": "decision"
+    }
+  },
+  "@micronauts": [
+    {
+      "selector": "dispatch_blend",
+      "capability": "pattern_discovery"
+    }
+  ],
+  "@policy": {
+    "max_depth": 3,
+    "cycle_detection": true,
+    "promote_generated_facts": false
+  },
+  "@result": {
+    "retain_provenance": true,
+    "retain_gaps": true,
+    "allow_pattern_candidates": false
+  }
+}

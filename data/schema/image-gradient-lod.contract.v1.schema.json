@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kuhul.dev/schema/image-gradient-lod.contract.v1.schema.json",
+  "title": "Image Gradient LOD Kernel Contract v1",
+  "type": "object",
+  "required": [
+    "$schema",
+    "@kind",
+    "id",
+    "version",
+    "status",
+    "authority",
+    "dispatch",
+    "purpose",
+    "program",
+    "types",
+    "kernel_signature",
+    "algorithm",
+    "preconditions",
+    "postconditions",
+    "training"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "https://kuhul.dev/schema/image-gradient-lod.contract.v1.schema.json"
+    },
+    "@kind": {
+      "const": "kuhul.gpu-kernel-contract.v1"
+    },
+    "id": {
+      "const": "kernel:image-gradient-lod"
+    },
+    "version": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "declarative_proposal",
+        "implemented",
+        "validated"
+      ]
+    },
+    "authority": {
+      "const": "data_only"
+    },
+    "dispatch": {
+      "const": "host_controlled_xcfe_required"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "program": {
+      "type": "object",
+      "required": [
+        "micronaut_ref",
+        "role",
+        "backend_status",
+        "source_ref"
+      ],
+      "properties": {
+        "micronaut_ref": {
+          "const": "micronaut:IMAGE-SAMPLER"
+        },
+        "role": {
+          "const": "estimate_sampling_resolution"
+        },
+        "backend_status": {
+          "enum": [
+            "not_implemented",
+            "source_present",
+            "registered",
+            "validated"
+          ]
+        },
+        "source_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "types": {
+      "type": "object",
+      "required": [
+        "uv",
+        "dx",
+        "dy",
+        "image_dimensions",
+        "mip_level_count",
+        "output"
+      ],
+      "properties": {
+        "uv": {
+          "type": "string"
+        },
+        "dx": {
+          "type": "string"
+        },
+        "dy": {
+          "type": "string"
+        },
+        "image_dimensions": {
+          "type": "string"
+        },
+        "mip_level_count": {
+          "type": "string"
+        },
+        "output": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "kernel_signature": {
+      "type": "string"
+    },
+    "algorithm": {
+      "type": "object",
+      "required": [
+        "gx",
+        "gy",
+        "rho",
+        "raw_lod",
+        "lod"
+      ],
+      "properties": {
+        "gx": {
+          "type": "string"
+        },
+        "gy": {
+          "type": "string"
+        },
+        "rho": {
+          "type": "string"
+        },
+        "raw_lod": {
+          "type": "string"
+        },
+        "lod": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "preconditions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "postconditions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "training": {
+      "type": "object",
+      "required": [
+        "mode",
+        "backward_status",
+        "trainable_targets",
+        "gradient_outputs",
+        "notes",
+        "learning_owner_ref",
+        "commit_requirement"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "forward_only",
+            "forward_and_backward"
+          ]
+        },
+        "backward_status": {
+          "enum": [
+            "not_implemented",
+            "declared",
+            "registered",
+            "validated"
+          ]
+        },
+        "trainable_targets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "gradient_outputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "learning_owner_ref": {
+          "type": "string"
+        },
+        "commit_requirement": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

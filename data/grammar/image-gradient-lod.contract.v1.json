@@ -1,0 +1,56 @@
+{
+  "$schema": "https://kuhul.dev/schema/image-gradient-lod.contract.v1.schema.json",
+  "@kind": "kuhul.gpu-kernel-contract.v1",
+  "id": "kernel:image-gradient-lod",
+  "version": "1.0.0",
+  "status": "declarative_proposal",
+  "authority": "data_only",
+  "dispatch": "host_controlled_xcfe_required",
+  "purpose": "Estimate a bounded mip LOD from explicit screen-space texture-coordinate derivatives. This kernel does not sample a texture.",
+  "program": {
+    "micronaut_ref": "micronaut:IMAGE-SAMPLER",
+    "role": "estimate_sampling_resolution",
+    "backend_status": "not_implemented",
+    "source_ref": null
+  },
+  "types": {
+    "uv": "float2 normalized texture coordinate",
+    "dx": "float2 partial derivative of uv with respect to screen x",
+    "dy": "float2 partial derivative of uv with respect to screen y",
+    "image_dimensions": "uint2(width,height), both positive",
+    "mip_level_count": "uint, at least 1",
+    "output": "float LOD in [0,mip_level_count-1]"
+  },
+  "kernel_signature": "estimate_lod(float2 dx, float2 dy, uint2 image_dimensions, uint mip_level_count) -> float",
+  "algorithm": {
+    "gx": "dx * float2(width,height)",
+    "gy": "dy * float2(width,height)",
+    "rho": "max(length(gx),length(gy))",
+    "raw_lod": "log2(max(rho,1.0))",
+    "lod": "clamp(raw_lod,0.0,float(mip_level_count-1))"
+  },
+  "preconditions": [
+    "all derivative components are finite",
+    "image width and height are positive",
+    "mip_level_count is at least 1"
+  ],
+  "postconditions": [
+    "output is finite",
+    "output lies between zero and the final available mip level",
+    "no image read, write, or mip sampling occurs"
+  ],
+  "training": {
+    "mode": "forward_only",
+    "backward_status": "not_implemented",
+    "trainable_targets": [],
+    "gradient_outputs": [],
+    "notes": [
+      "dx and dy are screen-space coordinate derivatives used for footprint estimation; they are not learned weights.",
+      "A discrete mip-level choice is not differentiable at level boundaries.",
+      "Training a sampler requires a separate backward contract for dL/dUV and dL/dTexture; LOD gradients require an explicit trilinear, stop-gradient, or custom-gradient policy.",
+      "LearningLane and track:GRADIENT remain separate; any future gradient proposal must pass their verification and authorized commit gates."
+    ],
+    "learning_owner_ref": "micronaut:LEARNING",
+    "commit_requirement": "separate_admission_chen_verification_authorized_xul"
+  }
+}

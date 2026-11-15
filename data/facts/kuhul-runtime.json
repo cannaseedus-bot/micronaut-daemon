@@ -1,0 +1,18 @@
+{
+  "@kind": "kuhul.stable.fact.v1",
+  "key": "fact:KUHUL_RUNTIME_DEFINITION",
+  "manifest_ref": "data/manifest/facts.manifest.json#fact:KUHUL_RUNTIME_DEFINITION",
+  "question": "What is K'UHUL?",
+  "aliases": ["What is Kuhul?", "What is K-UHUL?", "Explain the K'UHUL runtime"],
+  "subject_key": "entity:KUHUL_RUNTIME",
+  "temporal_class": "STABLE_REPOSITORY_DEFINITION",
+  "answer": "In this repository, K'UHUL is a typed semantic runtime and language stack. It organizes typed keys and fields into bounded Micronaut programs, advances work through Pop → Wo → Yax → Sek → Ch'en → Xul, and leaves host capability admission to runtime contracts and XCFE.",
+  "phase_sequence": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"],
+  "provenance": {
+    "source_type": "repository_definition",
+    "sources": ["data/apps/kuhul-field.xaiml", "INFOGRPHIC.md"],
+    "verification_scope": "repository_definition",
+    "verified": true
+  },
+  "authority": "descriptive_reference_only"
+}

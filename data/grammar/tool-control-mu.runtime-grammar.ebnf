@@ -1,0 +1,181 @@
+(* tool-control-µ program grammar v1.0
+   Defines the notation for tool-call programs processed by the tool-control micronaut.
+   Grammar defines notation and static type rules only.
+   No dispatch, mutation, or write authority is implied.
+   XCFE admission is required before any Candidate result may be persisted.
+   Phase assignments are described in the Static Signatures section. *)
+
+
+(* ================================================================
+   Tool-Control Program Syntax
+   ================================================================
+   A tool-control program is a sequence of statements.
+   Statements are tool calls, local bindings, conditionals, or comments.
+   Statements are separated by newlines or semicolons.
+   ================================================================ *)
+
+program           = { statement } ;
+statement         = tool_call
+                  | binding_stmt
+                  | conditional_stmt
+                  | comment
+                  | newline
+                  ;
+comment           = "#", { any_line_char }, newline ;
+
+
+(* ----------------------------------------------------------------
+   Tool calls
+   The verb determines the operation, its required arguments,
+   and the phase at which the call is dispatched (see Static Signatures).
+   "as" binds the result value to a local name for later use.
+   ---------------------------------------------------------------- *)
+tool_call         = verb, ws, call_args, [ ws, "as", ws, identifier ] ;
+
+verb              = "GET"     (* Pop  — resource → Observation   *)
+                  | "READ"    (* Pop  — path → Observation        *)
+                  | "LIST"    (* Pop  — resource → Observation    *)
+                  | "HEALTH"  (* Pop  — service → Observation     *)
+                  | "INSPECT" (* Wo   — resource → Observation    *)
+                  | "SEARCH"  (* Yax  — query → Evidence          *)
+                  | "POST"    (* Sek  — resource + payload → Candidate *)
+                  | "WRITE"   (* Sek  — path + payload → Candidate    *)
+                  | "PATCH"   (* Sek  — path + delta → Candidate      *)
+                  | "RUN"     (* Sek  — program → Candidate           *)
+                  | "COMPILE" (* Sek  — source → Artifact             *)
+                  | "CALL"    (* Sek  — program + arguments → Candidate *)
+                  ;
+
+call_args         = named_args | positional_args ;
+
+(* Named form: resource: "/api/users", payload: { name: "alice" } *)
+named_args        = named_arg, { ws, ",", ws, named_arg } ;
+named_arg         = arg_name, ws, ":", ws, arg_expr ;
+arg_name          = "resource" | "path" | "payload" | "delta" | "program"
+                  | "source"   | "service" | "query" | "arguments"
+                  | identifier
+                  ;
+
+(* Positional form: "/api/users" { name: "alice" } — order per verb signature *)
+positional_args   = arg_expr, { ws, arg_expr } ;
+
+arg_expr          = string_literal
+                  | qualified_key
+                  | variable_ref
+                  | object_literal
+                  | "null"
+                  ;
+
+(* Qualified gram-store key: namespace:name[:sub] *)
+qualified_key     = identifier, ":", identifier, { ":", ( identifier | wildcard_seg ) } ;
+wildcard_seg      = "*" ;
+
+(* Variable reference — $name refers to a result bound by "as" *)
+variable_ref      = "$", identifier ;
+
+(* Inline object literal for payload and arguments *)
+object_literal    = "{", ws, "}"
+                  | "{", ws, object_field, { ws, ",", ws, object_field }, ws, "}"
+                  ;
+object_field      = ( identifier | string_literal ), ws, ":", ws, arg_expr ;
+
+
+(* ----------------------------------------------------------------
+   Local binding  — assign an expression to a name (no tool call)
+   ---------------------------------------------------------------- *)
+binding_stmt      = "let", ws, identifier, ws, "=", ws, arg_expr ;
+
+
+(* ----------------------------------------------------------------
+   Conditional — branch on the outcome of the previous tool call
+   ---------------------------------------------------------------- *)
+conditional_stmt  = "if", ws, condition_expr, ws, "then", newline,
+                      ws, statement,
+                    [ ws, "else", newline, ws, statement ]
+                  ;
+condition_expr    = "ok"              (* last call returned a result        *)
+                  | "fail"            (* last call returned an error        *)
+                  | "has", ws, qualified_key   (* a gram key is present     *)
+                  | "not", ws, condition_expr  (* negation                  *)
+                  | identifier                 (* named boolean binding      *)
+                  ;
+
+
+(* ----------------------------------------------------------------
+   Literals and lexical basics
+   ---------------------------------------------------------------- *)
+string_literal    = '"', { string_char_dq }, '"'
+                  | "'", { string_char_sq }, "'"
+                  ;
+identifier        = letter, { letter | digit | "_" | "-" } ;
+letter            = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J"
+                  | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T"
+                  | "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d"
+                  | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n"
+                  | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x"
+                  | "y" | "z" ;
+digit             = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+newline           = "\n" | "\r\n" | ";" ;  (* ";" acts as a statement separator *)
+ws                = " " | "\t", { " " | "\t" } ;
+any_line_char     = ? any Unicode scalar except newline ? ;
+(* string_char_dq: any Unicode scalar except unescaped double-quote or backslash.
+   string_char_sq: any Unicode scalar except unescaped single-quote or backslash. *)
+
+
+(* ================================================================
+   Static Signatures  (declarative type rules; no execution authority)
+   ================================================================
+
+   Result types:
+     Observation   — read-only snapshot; no XCFE admission required
+     Candidate     — write proposal; XCFE admission required before persistence
+     Artifact      — produced object (e.g., compiled output); read-only unless committed
+     Evidence      — ranked search results; no admission required
+
+   Verb signatures and phase assignments:
+     GET     (resource: String | QualifiedKey) -> Observation   [phase Pop]
+     READ    (path: String | QualifiedKey)     -> Observation   [phase Pop]
+     LIST    (resource: String | QualifiedKey) -> Observation   [phase Pop]
+     HEALTH  (service: String)                 -> Observation   [phase Pop]
+     INSPECT (resource: String | QualifiedKey) -> Observation   [phase Wo]
+     SEARCH  (query: String)                   -> Evidence      [phase Yax]
+     POST    (resource: String | QualifiedKey,
+              payload:  Object | String)        -> Candidate     [phase Sek]
+     WRITE   (path:    String | QualifiedKey,
+              payload: Object | String)         -> Candidate     [phase Sek]
+     PATCH   (path:  String | QualifiedKey,
+              delta: Object | String)           -> Candidate     [phase Sek]
+     RUN     (program: String | QualifiedKey)   -> Candidate    [phase Sek]
+     COMPILE (source: String | QualifiedKey)    -> Artifact     [phase Sek]
+     CALL    (program:   String | QualifiedKey,
+              arguments: Object | String)        -> Candidate    [phase Sek]
+
+   Positional-argument binding (when named_args are not used):
+     GET / READ / LIST / HEALTH / INSPECT / RUN / COMPILE / SEARCH:
+       first arg → first required param
+     POST / WRITE / PATCH / CALL:
+       first arg → first required param, second arg → second required param
+
+   Binding invariant:
+     Every variable_ref ($name) must resolve to a name introduced by an
+     earlier "as" clause or a "let" statement in the same program.
+     Forward references are a static error.
+
+   Candidate persistence invariant:
+     A Candidate result may not be written to the gram store without
+     XCFE admission and an authorized Xul fold.  Passing a Candidate
+     directly as a payload to a subsequent Sek verb without
+     intermediate admission is a static warning.
+
+   Gram-key namespace constraint (from sandbox):
+     Qualified keys used in call_args must be in the "tool:" namespace
+     or declared in the program's manifest_access list.
+     Keys in the "xcfe.", "fold.", or "mem:" namespaces are denied.
+
+   Authority:
+     Parsing this grammar and checking these type rules produces
+     a parse tree and a diagnostic list only.
+     No dispatch, mutation, or write authorization is granted.
+     XCFE admission and an authorized Xul fold are required for
+     any persistent state change.
+   ================================================================ *)

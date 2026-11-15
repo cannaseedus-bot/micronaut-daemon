@@ -1,0 +1,686 @@
+{
+  "format": "kuhul.xaiml.pattern-bank.v1",
+  "version": 1,
+  "name": "eliza-reasoning-control-board",
+  "authority": "reasoning_route_candidate_only",
+  "recursion": {
+    "max_depth": 4,
+    "cycle_policy": "active_pattern_path_detection",
+    "evidence_budget": 8
+  },
+  "patterns": [
+    {
+      "id": "eliza.reasoning.why.need.dependency",
+      "pattern": "WHY DOES * NEED *",
+      "phase": "Pop",
+      "reasoning": {
+        "operator": "DEPENDENCY",
+        "program": "REASON-µ.DEPENDENCY",
+        "sraiTemplate": "REASON DEPENDENCY SUBJECT {1} OBJECT {2}",
+        "terminalPatternId": "eliza.reasoning.program.dependency",
+        "slots": [
+          "subject",
+          "object"
+        ],
+        "piRoute": "PI_TRIANGLE"
+      },
+      "template": [
+        {
+          "tag": "srai",
+          "children": [
+            {
+              "tag": "text",
+              "value": "REASON DEPENDENCY SUBJECT "
+            },
+            {
+              "tag": "star",
+              "index": 1
+            },
+            {
+              "tag": "text",
+              "value": " OBJECT "
+            },
+            {
+              "tag": "star",
+              "index": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.does.need.dependency",
+      "pattern": "DOES * NEED *",
+      "phase": "Pop",
+      "reasoning": {
+        "operator": "DEPENDENCY",
+        "program": "REASON-µ.DEPENDENCY",
+        "sraiTemplate": "REASON DEPENDENCY SUBJECT {1} OBJECT {2}",
+        "terminalPatternId": "eliza.reasoning.program.dependency",
+        "slots": [
+          "subject",
+          "object"
+        ],
+        "piRoute": "PI_TRIANGLE"
+      },
+      "template": [
+        {
+          "tag": "srai",
+          "children": [
+            {
+              "tag": "text",
+              "value": "REASON DEPENDENCY SUBJECT "
+            },
+            {
+              "tag": "star",
+              "index": 1
+            },
+            {
+              "tag": "text",
+              "value": " OBJECT "
+            },
+            {
+              "tag": "star",
+              "index": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.why.cause",
+      "pattern": "WHY DOES *",
+      "phase": "Pop",
+      "reasoning": {
+        "operator": "CAUSE",
+        "program": "REASON-µ.CAUSE",
+        "sraiTemplate": "REASON CAUSE SUBJECT {1}",
+        "terminalPatternId": "eliza.reasoning.program.cause",
+        "slots": [
+          "subject"
+        ],
+        "piRoute": "PI_TRIANGLE"
+      },
+      "template": [
+        {
+          "tag": "srai",
+          "children": [
+            {
+              "tag": "text",
+              "value": "REASON CAUSE SUBJECT "
+            },
+            {
+              "tag": "star",
+              "index": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.what.is.define",
+      "pattern": "WHAT IS *",
+      "phase": "Pop",
+      "reasoning": {
+        "operator": "DEFINE",
+        "program": "REASON-µ.DEFINE",
+        "sraiTemplate": "REASON DEFINE SUBJECT {1}",
+        "terminalPatternId": "eliza.reasoning.program.define",
+        "slots": [
+          "subject"
+        ],
+        "piRoute": "PI_TRIANGLE"
+      },
+      "template": [
+        {
+          "tag": "srai",
+          "children": [
+            {
+              "tag": "text",
+              "value": "REASON DEFINE SUBJECT "
+            },
+            {
+              "tag": "star",
+              "index": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.mechanism",
+      "pattern": "HOW DOES * WORK",
+      "phase": "Pop",
+      "reasoning": {
+        "operator": "MECHANISM",
+        "program": "REASON-µ.MECHANISM",
+        "sraiTemplate": "REASON MECHANISM SUBJECT {1}",
+        "terminalPatternId": "eliza.reasoning.program.mechanism",
+        "slots": [
+          "subject"
+        ],
+        "piRoute": "PI_TRIANGLE"
+      },
+      "template": [
+        {
+          "tag": "srai",
+          "children": [
+            {
+              "tag": "text",
+              "value": "REASON MECHANISM SUBJECT "
+            },
+            {
+              "tag": "star",
+              "index": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.contrast",
+      "pattern": "WHAT IS DIFFERENT BETWEEN * AND *",
+      "phase": "Pop",
+      "reasoning": {
+        "operator": "CONTRAST",
+        "program": "REASON-µ.CONTRAST",
+        "sraiTemplate": "REASON CONTRAST SUBJECT {1} OBJECT {2}",
+        "terminalPatternId": "eliza.reasoning.program.contrast",
+        "slots": [
+          "left",
+          "right"
+        ],
+        "piRoute": "PI_TRIANGLE"
+      },
+      "template": [
+        {
+          "tag": "srai",
+          "children": [
+            {
+              "tag": "text",
+              "value": "REASON CONTRAST SUBJECT "
+            },
+            {
+              "tag": "star",
+              "index": 1
+            },
+            {
+              "tag": "text",
+              "value": " OBJECT "
+            },
+            {
+              "tag": "star",
+              "index": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.what.if.counterfactual",
+      "pattern": "WHAT IF *",
+      "phase": "Pop",
+      "reasoning": {
+        "operator": "COUNTERFACTUAL",
+        "program": "REASON-µ.COUNTERFACTUAL",
+        "sraiTemplate": "REASON COUNTERFACTUAL SUBJECT {1}",
+        "terminalPatternId": "eliza.reasoning.program.counterfactual",
+        "slots": [
+          "scenario"
+        ],
+        "piRoute": "PI_TRIANGLE"
+      },
+      "template": [
+        {
+          "tag": "srai",
+          "children": [
+            {
+              "tag": "text",
+              "value": "REASON COUNTERFACTUAL SUBJECT "
+            },
+            {
+              "tag": "star",
+              "index": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.compare",
+      "pattern": "COMPARE * AND *",
+      "phase": "Pop",
+      "reasoning": {
+        "operator": "COMPARE",
+        "program": "REASON-µ.COMPARE",
+        "sraiTemplate": "REASON COMPARE SUBJECT {1} OBJECT {2}",
+        "terminalPatternId": "eliza.reasoning.program.compare",
+        "slots": [
+          "left",
+          "right"
+        ],
+        "piRoute": "PI_TRIANGLE"
+      },
+      "template": [
+        {
+          "tag": "srai",
+          "children": [
+            {
+              "tag": "text",
+              "value": "REASON COMPARE SUBJECT "
+            },
+            {
+              "tag": "star",
+              "index": 1
+            },
+            {
+              "tag": "text",
+              "value": " OBJECT "
+            },
+            {
+              "tag": "star",
+              "index": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.evidence",
+      "pattern": "WHAT EVIDENCE SUPPORTS *",
+      "phase": "Pop",
+      "reasoning": {
+        "operator": "EVIDENCE",
+        "program": "REASON-µ.EVIDENCE",
+        "sraiTemplate": "REASON EVIDENCE SUBJECT {1}",
+        "terminalPatternId": "eliza.reasoning.program.evidence",
+        "slots": [
+          "claim"
+        ],
+        "piRoute": "PI_TRIANGLE"
+      },
+      "template": [
+        {
+          "tag": "srai",
+          "children": [
+            {
+              "tag": "text",
+              "value": "REASON EVIDENCE SUBJECT "
+            },
+            {
+              "tag": "star",
+              "index": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.infer",
+      "pattern": "WHAT CAN WE INFER FROM *",
+      "phase": "Pop",
+      "reasoning": {
+        "operator": "INFER",
+        "program": "REASON-µ.INFER",
+        "sraiTemplate": "REASON INFER SUBJECT {1}",
+        "terminalPatternId": "eliza.reasoning.program.infer",
+        "slots": [
+          "evidence"
+        ],
+        "piRoute": "PI_TRIANGLE"
+      },
+      "template": [
+        {
+          "tag": "srai",
+          "children": [
+            {
+              "tag": "text",
+              "value": "REASON INFER SUBJECT "
+            },
+            {
+              "tag": "star",
+              "index": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.analogy",
+      "pattern": "WHAT IS * ANALOGOUS TO *",
+      "phase": "Pop",
+      "reasoning": {
+        "operator": "ANALOGY",
+        "program": "REASON-µ.ANALOGY",
+        "sraiTemplate": "REASON ANALOGY SUBJECT {1} OBJECT {2}",
+        "terminalPatternId": "eliza.reasoning.program.analogy",
+        "slots": [
+          "left",
+          "right"
+        ],
+        "piRoute": "PI_TRIANGLE"
+      },
+      "template": [
+        {
+          "tag": "srai",
+          "children": [
+            {
+              "tag": "text",
+              "value": "REASON ANALOGY SUBJECT "
+            },
+            {
+              "tag": "star",
+              "index": 1
+            },
+            {
+              "tag": "text",
+              "value": " OBJECT "
+            },
+            {
+              "tag": "star",
+              "index": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.question",
+      "pattern": "WHAT QUESTION SHOULD WE ASK ABOUT *",
+      "phase": "Pop",
+      "reasoning": {
+        "operator": "QUESTION",
+        "program": "REASON-µ.QUESTION",
+        "sraiTemplate": "REASON QUESTION SUBJECT {1}",
+        "terminalPatternId": "eliza.reasoning.program.question",
+        "slots": [
+          "topic"
+        ],
+        "piRoute": "PI_TRIANGLE"
+      },
+      "template": [
+        {
+          "tag": "srai",
+          "children": [
+            {
+              "tag": "text",
+              "value": "REASON QUESTION SUBJECT "
+            },
+            {
+              "tag": "star",
+              "index": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.synthesize",
+      "pattern": "SYNTHESIZE *",
+      "phase": "Pop",
+      "reasoning": {
+        "operator": "SYNTHESIZE",
+        "program": "REASON-µ.SYNTHESIZE",
+        "sraiTemplate": "REASON SYNTHESIZE SUBJECT {1}",
+        "terminalPatternId": "eliza.reasoning.program.synthesize",
+        "slots": [
+          "findings"
+        ],
+        "piRoute": "PI_TRIANGLE"
+      },
+      "template": [
+        {
+          "tag": "srai",
+          "children": [
+            {
+              "tag": "text",
+              "value": "REASON SYNTHESIZE SUBJECT "
+            },
+            {
+              "tag": "star",
+              "index": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.reflect",
+      "pattern": "REVIEW THE REASONING ABOUT *",
+      "phase": "Pop",
+      "reasoning": {
+        "operator": "REFLECT",
+        "program": "REASON-µ.REFLECT",
+        "sraiTemplate": "REASON REFLECT SUBJECT {1}",
+        "terminalPatternId": "eliza.reasoning.program.reflect",
+        "slots": [
+          "topic"
+        ],
+        "piRoute": "PI_TRIANGLE"
+      },
+      "template": [
+        {
+          "tag": "srai",
+          "children": [
+            {
+              "tag": "text",
+              "value": "REASON REFLECT SUBJECT "
+            },
+            {
+              "tag": "star",
+              "index": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.program.dependency",
+      "pattern": "REASON DEPENDENCY SUBJECT * OBJECT *",
+      "phase": "Yax",
+      "reasoning": {
+        "operator": "DEPENDENCY",
+        "program": "REASON-µ.DEPENDENCY",
+        "authority": "proposal_only"
+      },
+      "template": [
+        {
+          "tag": "text",
+          "value": "Dependency reasoning proposal ready. Typed-key resolution, π bridge ranking, and evidence verification remain pending; no dependency fact has been asserted."
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.program.cause",
+      "pattern": "REASON CAUSE SUBJECT *",
+      "phase": "Yax",
+      "reasoning": {
+        "operator": "CAUSE",
+        "program": "REASON-µ.CAUSE",
+        "authority": "proposal_only"
+      },
+      "template": [
+        {
+          "tag": "text",
+          "value": "Causal reasoning proposal ready. Candidate causes and evidence remain unresolved until verified."
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.program.define",
+      "pattern": "REASON DEFINE SUBJECT *",
+      "phase": "Yax",
+      "reasoning": {
+        "operator": "DEFINE",
+        "program": "REASON-µ.DEFINE",
+        "authority": "proposal_only"
+      },
+      "template": [
+        {
+          "tag": "text",
+          "value": "Definition reasoning proposal ready. Resolve the semantic field and source evidence before stating a definition."
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.program.mechanism",
+      "pattern": "REASON MECHANISM SUBJECT *",
+      "phase": "Yax",
+      "reasoning": {
+        "operator": "MECHANISM",
+        "program": "REASON-µ.MECHANISM",
+        "authority": "proposal_only"
+      },
+      "template": [
+        {
+          "tag": "text",
+          "value": "Mechanism reasoning proposal ready. Resolve component and sequence candidates, then verify them before stating how the system works."
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.program.contrast",
+      "pattern": "REASON CONTRAST SUBJECT * OBJECT *",
+      "phase": "Yax",
+      "reasoning": {
+        "operator": "CONTRAST",
+        "program": "REASON-µ.CONTRAST",
+        "authority": "proposal_only"
+      },
+      "template": [
+        {
+          "tag": "text",
+          "value": "Contrast reasoning proposal ready. The comparison dimensions and evidence remain pending."
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.program.counterfactual",
+      "pattern": "REASON COUNTERFACTUAL SUBJECT *",
+      "phase": "Yax",
+      "reasoning": {
+        "operator": "COUNTERFACTUAL",
+        "program": "REASON-µ.COUNTERFACTUAL",
+        "authority": "proposal_only"
+      },
+      "template": [
+        {
+          "tag": "text",
+          "value": "Counterfactual reasoning proposal ready. Assumptions and consequences remain hypothetical and require verification."
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.program.compare",
+      "pattern": "REASON COMPARE SUBJECT * OBJECT *",
+      "phase": "Yax",
+      "reasoning": {
+        "operator": "COMPARE",
+        "program": "REASON-µ.COMPARE",
+        "authority": "proposal_only"
+      },
+      "template": [
+        {
+          "tag": "text",
+          "value": "Comparison proposal ready. Candidate similarities and differences need typed-key resolution and evidence."
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.program.evidence",
+      "pattern": "REASON EVIDENCE SUBJECT *",
+      "phase": "Yax",
+      "reasoning": {
+        "operator": "EVIDENCE",
+        "program": "REASON-µ.EVIDENCE",
+        "authority": "proposal_only"
+      },
+      "template": [
+        {
+          "tag": "text",
+          "value": "Evidence review proposal ready. Supporting and counter-evidence have not yet been retrieved."
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.program.infer",
+      "pattern": "REASON INFER SUBJECT *",
+      "phase": "Yax",
+      "reasoning": {
+        "operator": "INFER",
+        "program": "REASON-µ.INFER",
+        "authority": "proposal_only"
+      },
+      "template": [
+        {
+          "tag": "text",
+          "value": "Inference proposal ready. No conclusion is asserted until evidence and alternatives are checked."
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.program.analogy",
+      "pattern": "REASON ANALOGY SUBJECT * OBJECT *",
+      "phase": "Yax",
+      "reasoning": {
+        "operator": "ANALOGY",
+        "program": "REASON-µ.ANALOGY",
+        "authority": "proposal_only"
+      },
+      "template": [
+        {
+          "tag": "text",
+          "value": "Analogy proposal ready. Structural correspondence and transfer limits remain unverified."
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.program.question",
+      "pattern": "REASON QUESTION SUBJECT *",
+      "phase": "Yax",
+      "reasoning": {
+        "operator": "QUESTION",
+        "program": "REASON-µ.QUESTION",
+        "authority": "proposal_only"
+      },
+      "template": [
+        {
+          "tag": "text",
+          "value": "Question-generation proposal ready. Missing information remains to be resolved."
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.program.synthesize",
+      "pattern": "REASON SYNTHESIZE SUBJECT *",
+      "phase": "Yax",
+      "reasoning": {
+        "operator": "SYNTHESIZE",
+        "program": "REASON-µ.SYNTHESIZE",
+        "authority": "proposal_only"
+      },
+      "template": [
+        {
+          "tag": "text",
+          "value": "Synthesis proposal ready. Only verified findings may be combined."
+        }
+      ]
+    },
+    {
+      "id": "eliza.reasoning.program.reflect",
+      "pattern": "REASON REFLECT SUBJECT *",
+      "phase": "Yax",
+      "reasoning": {
+        "operator": "REFLECT",
+        "program": "REASON-µ.REFLECT",
+        "authority": "proposal_only"
+      },
+      "template": [
+        {
+          "tag": "text",
+          "value": "Reasoning review proposal ready. The trace has not independently validated its premises."
+        }
+      ]
+    }
+  ]
+}

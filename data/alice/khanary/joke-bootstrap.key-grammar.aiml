@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Generated key lookup bank from joke-bootstrap.key-grammar.jsonl; entries are data, not execution authority.-->
+  <category>
+    <pattern>LOOK UP KEY JOKE-1</pattern>
+    <template>Key joke-1. definition: JOKE * -&gt; JOKE-µ (Yax-&gt;Ch'en) frame=humor_frame policy=ambiguity_permission pun_bridge_allowed punchline_compatible_sense_selection boundary=declared_frame_policy; semantic_note: JOKE-µ is a first-class reusable humor-frame routing track like PLAN-µ and ADVISOR-µ; it grants ambiguity permission, not freeform joke authoring.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY JOKE-2</pattern>
+    <template>Key joke-2. definition: TELL ME A JOKE ABOUT * -&gt; JOKE-µ (Yax-&gt;Ch'en) frame=humor_frame policy=ambiguity_permission pun_bridge_allowed punchline_compatible_sense_selection boundary=declared_frame_policy; semantic_note: JOKE-µ is a first-class reusable humor-frame routing track like PLAN-µ and ADVISOR-µ; it grants ambiguity permission, not freeform joke authoring.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY JOKE-3</pattern>
+    <template>Key joke-3. definition: WHAT DO YOU CALL * -&gt; JOKE-µ (Yax-&gt;Ch'en) frame=pun_naming_frame policy=ambiguity_permission pun_bridge_allowed punchline_compatible_sense_selection boundary=declared_frame_policy; semantic_note: JOKE-µ is a first-class reusable humor-frame routing track like PLAN-µ and ADVISOR-µ; it grants ambiguity permission, not freeform joke authoring.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY JOKE-4</pattern>
+    <template>Key joke-4. definition: WHERE DOES * MAKE * FROM -&gt; JOKE-µ (Yax-&gt;Ch'en) frame=action_source_frame policy=ambiguity_permission pun_bridge_allowed punchline_compatible_sense_selection boundary=declared_frame_policy; semantic_note: JOKE-µ is a first-class reusable humor-frame routing track like PLAN-µ and ADVISOR-µ; it grants ambiguity permission, not freeform joke authoring.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY JOKE-5</pattern>
+    <template>Key joke-5. definition: WIND UP PITCH SWING * -&gt; JOKE-µ (Yax-&gt;Ch'en) frame=delivery_frame policy=ambiguity_permission pun_bridge_allowed punchline_compatible_sense_selection boundary=declared_frame_policy; semantic_note: JOKE-µ is a first-class reusable humor-frame routing track like PLAN-µ and ADVISOR-µ; it grants ambiguity permission, not freeform joke authoring.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY JOKE-6</pattern>
+    <template>Key joke-6. definition: PUN * -&gt; JOKE-µ (Yax-&gt;Ch'en) frame=pun_bridge policy=ambiguity_permission pun_bridge_allowed punchline_compatible_sense_selection boundary=declared_frame_policy; semantic_note: JOKE-µ is a first-class reusable humor-frame routing track like PLAN-µ and ADVISOR-µ; it grants ambiguity permission, not freeform joke authoring.</template>
+  </category>
+</aiml>

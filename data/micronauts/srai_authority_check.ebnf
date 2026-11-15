@@ -1,0 +1,26 @@
+(* Static checks over declarations; a failed check rejects the program. *)
+admission-check = "admission-check", "{", "target", ":", identifier, ",",
+                  "checks", ":", "[", authority-check, { ",", authority-check }, "]",
+                  ",", "verdict", ":", ( "admit" | "reject" ), "}" ;
+authority-check = "{", "role", ":", role, ",", "required-authority", ":", authority,
+                  ",", "forbidden-capabilities", ":", string-array, "}" ;
+role = "aiml" | "srai" | "pi" | "xcfe" | "xul" | "learning" ;
+authority = "match_only" | "redirect_only" | "rank_only" | "admission_only" | "close_only" | "proposal_only" ;
+string-array = "[", [ string, { ",", string } ], "]" ;
+string = '"', { ? escaped Unicode string character ? }, '"' ;
+identifier = letter, { letter | digit | "_" | "-" } ;
+letter = "A".."Z" | "a".."z" ;
+digit = "0".."9" ;
+
+aiml-forbidden = ["execute", "write", "close"] ;
+srai-forbidden = ["execute", "write", "close"] ;
+pi-forbidden = ["execute", "write", "close"] ;
+xcfe-forbidden = ["execute", "write", "close"] ;
+xul-forbidden = ["execute", "write"], "commit:verified_data_only" ;
+learning-forbidden = ["execute", "write", "promote"] ;
+
+invariant-pattern-bank-owned-by-aiml = pattern_bank.owner == aiml.id ;
+invariant-route-graph-owned-by-srai = route_graph.owner == srai.id ;
+invariant-admission-owned-by-xcfe = admission_contracts.owner == xcfe.id ;
+invariant-no-layer-bypass = every route follows Pop -> Wo -> Yax -> Sek -> Ch'en -> Xul ;
+invariant-no-dispatch-in-aiml-api = api.dispatch == false ;

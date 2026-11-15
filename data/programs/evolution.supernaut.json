@@ -1,0 +1,94 @@
+{
+  "@program": "evolution.supernaut",
+  "@kind": "kuhul.supernaut.evolution.v1",
+  "@namespace": "https://kuhul.dev/",
+  "@stack": ["xjson", "xcfe", "scxq2", "kuhul", "supernaut"],
+  "@backend": {
+    "native_library": "supernaut_evolution",
+    "evolution_source": "dist/json-runtime/supernaut/model",
+    "io_source": "dist/json-runtime/supernaut/utils/io.cpp",
+    "io_header": "dist/json-runtime/supernaut/include/supernaut_io.h",
+    "checkpoint_format": "jsonl",
+    "snapshot_format": "bmp"
+  },
+  "@state": {
+    "phase": "Pop",
+    "generation": 0,
+    "population": null,
+    "best_program": null,
+    "best_score": 0.0,
+    "mutation_log": "evolution/evolution.log.jsonl",
+    "checkpoint_path": null
+  },
+  "@control": [
+    {
+      "@op": "FOLD_ENTER",
+      "@fold": "Pop",
+      "@node": "evolution.io.load"
+    },
+    {
+      "@op": "IO_READ",
+      "@path": "evolution/evolution.log.jsonl",
+      "@out": "mutation_log"
+    },
+    {
+      "@op": "FOLD_EXIT",
+      "@fold": "Wo",
+      "@node": "evolution.io.load",
+      "@args": ["$mutation_log"]
+    },
+    {
+      "@op": "FOLD_ENTER",
+      "@fold": "Sek",
+      "@node": "evolution.compute"
+    },
+    {
+      "@op": "CALL",
+      "@fn": "evolve_population",
+      "@args": ["$population", "$target_size", "$top_k"],
+      "@out": "evolved_population"
+    },
+    {
+      "@op": "EVAL",
+      "@fn": "evaluate_agent",
+      "@args": ["$evolved_population"],
+      "@out": "best_score"
+    },
+    {
+      "@op": "FOLD_EXIT",
+      "@fold": "Chen",
+      "@node": "evolution.compute",
+      "@args": ["$best_score"]
+    },
+    {
+      "@op": "FOLD_ENTER",
+      "@fold": "Xul",
+      "@node": "evolution.checkpoint"
+    },
+    {
+      "@op": "IO_APPEND",
+      "@path": "evolution/evolution.log.jsonl",
+      "@value": "$mutation_event",
+      "@out": "logged"
+    },
+    {
+      "@op": "IO_WRITE",
+      "@path": "$checkpoint_path",
+      "@value": "$evolved_population",
+      "@out": "checkpoint"
+    },
+    {
+      "@op": "FOLD_EXIT",
+      "@fold": "Xul",
+      "@node": "evolution.checkpoint",
+      "@args": ["$checkpoint"]
+    }
+  ],
+  "@invariants": {
+    "log_append_only": true,
+    "checkpoint_after_verification": true,
+    "io_backend": "supernaut_io",
+    "compression": "scxq2",
+    "no_webgpu": true
+  }
+}

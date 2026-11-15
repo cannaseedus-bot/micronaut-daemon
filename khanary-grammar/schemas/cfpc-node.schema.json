@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CFPC DOM Node",
+  "type": "object",
+  "properties": {
+    "@kind": {
+      "const": "cfpc.node"
+    },
+    "@id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "@element": {
+      "enum": [
+        "think",
+        "learn",
+        "function",
+        "task",
+        "elaborate",
+        "cheese",
+        "promote",
+        "fact",
+        "event",
+        "relation",
+        "tool",
+        "structure",
+        "template",
+        "user",
+        "assistant",
+        "instruct",
+        "micronaut"
+      ]
+    },
+    "@owner": {
+      "type": "string"
+    },
+    "@intent": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "@mode": {
+      "enum": [
+        "bounded",
+        "shadow",
+        "live",
+        "observation"
+      ]
+    },
+    "@phase": {
+      "enum": [
+        "Pop",
+        "Wo",
+        "Yax",
+        "Sek",
+        "Ch'en",
+        "Xul"
+      ]
+    },
+    "@children": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "@ref": {
+            "type": "string"
+          },
+          "@attach": {
+            "enum": [
+              "Pop",
+              "Wo",
+              "Yax",
+              "Sek",
+              "Ch'en",
+              "Xul"
+            ]
+          },
+          "@shadow": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "@ref",
+          "@attach"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "@policy": {
+      "type": "object",
+      "properties": {
+        "max_depth": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_candidates": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "preserve_provenance": {
+          "type": "boolean"
+        },
+        "promote_generated_facts": {
+          "const": false
+        },
+        "detect_cycles": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "@continuation": {
+      "type": "object",
+      "properties": {
+        "on_Xul": {
+          "enum": [
+            "return_to_parent",
+            "terminate_root"
+          ]
+        },
+        "on_empty": {
+          "enum": [
+            "close_self",
+            "return_bottom"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "@fields": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "@kind",
+    "@id",
+    "@element"
+  ],
+  "additionalProperties": false
+}

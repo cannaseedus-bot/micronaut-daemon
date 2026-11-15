@@ -1,0 +1,49 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "water-tracker",
+  "@key": "⟁APP:WATER_TRACKER",
+  "@mount": "⟁ROOT:WATER_TRACKER",
+  "@theme": { "accent": "#38bdf8", "bg": "#020a10", "surface": "#03121e", "text": "#e0f2fe", "hero_phase": "Pop", "tagline": "Stay hydrated. Stay focused." },
+  "@layout": { "mode": "single", "regions": [{ "id": "main", "component": "⟁WIDGET:MAIN", "position": "center" }], "responsive": { "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "logs": [], "today_ml": 0, "goal_ml": 2500, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:WATER_TRACKER": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:MAIN"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:ADD_WATER"] },
+    "⟁ACTION:ADD_WATER": { "@type": "button", "@text": "+ Add Water", "@on": { "click": "water.add" } },
+    "⟁WIDGET:MAIN": { "@type": "layout", "@children": ["⟁WIDGET:PROGRESS", "⟁WIDGET:QUICK_ADD", "⟁WIDGET:LOG"] },
+    "⟁WIDGET:PROGRESS": { "@type": "progress-ring", "@bind": "state.today_ml", "@max": "state.goal_ml" },
+    "⟁WIDGET:QUICK_ADD": { "@type": "button-group", "@options": ["150ml", "250ml", "330ml", "500ml"], "@on": { "click": "water.quick_add" } },
+    "⟁WIDGET:LOG": { "@type": "feed", "@bind": "state.logs" }
+  },
+  "@programs": {
+    "water.add": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "water.quick_add": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "ADD", "@in": ["event_today_ml", "event_amount"], "@out": "today_ml" }] }
+  },
+  "@events": { "water.add": "water.add", "water.quick": "water.quick_add" },
+  "@imports": [{ "ref": "water_log", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "reminders", "name": "Hydration Reminders", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Hourly nudges if you haven't logged water recently." },
+      { "id": "goal-adjust", "name": "Smart Goal Adjuster", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Adjust daily goal based on exercise and weather." },
+      { "id": "streak", "name": "Streak Tracker", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Track consecutive days meeting your water goal." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "water.log", "pattern": "LOG WATER|ADD WATER|DRANK * ML", "intent": "quick_add" },
+      { "id": "water.goal", "pattern": "SET WATER GOAL|GOAL * ML", "intent": "set_goal" }
+    ]
+  },
+  "@data": {
+    "spotlight": [
+      { "id": "sp1", "title": "Today's Goal: 2500ml", "badge": "On Track", "today_ml": 1800, "excerpt": "700ml remaining. Keep going." },
+      { "id": "sp2", "title": "7-Day Streak", "badge": "Streak", "streak_days": 7, "excerpt": "Hit your goal 7 days in a row." },
+      { "id": "sp3", "title": "Best Day: 3100ml", "badge": "Record", "excerpt": "Hit on a workout day last Friday." }
+    ],
+    "schema": {
+      "water_log": { "primaryKey": "log_id", "fields": { "log_id": { "type": "string" }, "amount_ml": { "type": "integer", "required": true }, "logged_at": { "type": "datetime", "required": true }, "note": { "type": "text" } } }
+    }
+  }
+}

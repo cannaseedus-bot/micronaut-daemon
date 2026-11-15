@@ -1,0 +1,28 @@
+<aiml version="1.0.1">
+  <!-- GENERATED from data/grammar/joke-bootstrap.json. -->
+  <category><pattern>JOKE BANK</pattern><template><mx2lm>joke: track=JOKE-µ phase=Yax card_view=true authority=none</mx2lm></template></category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=humor_frame card_view=true authority=none prompt=<star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>WHERE DOES * MAKE * FROM</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=action_source_frame card_view=true authority=none prompt=<star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>WHAT DO YOU CALL *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_naming_frame card_view=true authority=none prompt=<star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>WIND UP PITCH SWING *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=delivery_frame card_view=true authority=none prompt=<star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>JOKE *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=humor_frame card_view=true authority=none prompt=<star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>PUN *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none prompt=<star/></mx2lm></template>
+  </category>
+</aiml>

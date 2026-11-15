@@ -1,0 +1,63 @@
+{
+  "@kind": "semantic.think.v1",
+  "@id": "chat_context_resolve",
+  "@owner": "CHAT-µ",
+  "@mode": "context_resolve",
+  "@subject": "conversational_query",
+  "@context": "cfpc.field",
+  "@functions": [
+    {
+      "@kind": "semantic.function.v1",
+      "@id": "classify_op",
+      "@owner": "CHAT-µ",
+      "@governs": ["chat", "opinion", "assertion", "clarification", "continuation"],
+      "@capabilities": ["pattern_discovery"],
+      "@bindings": {
+        "input": {"type": "text", "required": true, "wildcard": "{input}"}
+      },
+      "@backend": {
+        "type": "micronaut",
+        "capability": "pattern_discovery"
+      },
+      "@policy": {
+        "max_depth": 2,
+        "cycle_detection": true,
+        "allow_dynamic_resolution": false
+      },
+      "@result": {
+        "retain_provenance": true,
+        "retain_gaps": true,
+        "allow_pattern_candidates": false
+      }
+    },
+    {
+      "@kind": "semantic.function.v1",
+      "@id": "thread_topic",
+      "@owner": "CHAT-µ",
+      "@governs": ["topic", "thread", "context", "pivot", "conversation"],
+      "@capabilities": ["pattern_discovery"],
+      "@bindings": {
+        "topic": {"type": "text", "required": false, "wildcard": "{topic}"}
+      },
+      "@backend": {
+        "type": "micronaut",
+        "capability": "pattern_discovery"
+      },
+      "@policy": {
+        "max_depth": 2,
+        "cycle_detection": true,
+        "allow_dynamic_resolution": false
+      },
+      "@result": {
+        "retain_provenance": false,
+        "retain_gaps": false,
+        "allow_pattern_candidates": false
+      }
+    }
+  ],
+  "@policy": {
+    "max_depth": 3,
+    "max_operations": 6,
+    "cycle_detection": true
+  }
+}

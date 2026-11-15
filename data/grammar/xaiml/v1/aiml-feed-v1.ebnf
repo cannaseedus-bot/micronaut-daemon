@@ -1,0 +1,20 @@
+(* XAIML feed extension v1. This is separate from the repository's AIML v4
+   category grammar. Address and digest rules are normative in
+   canonical-trigram-address.md. Serialization does not imply authority. *)
+aiml_feed_document = "<aiml-feed>", track_declaration, { phase_trigram }, "</aiml-feed>" ;
+track_declaration = "<track id=", string, " grammar_ref=", string,
+                    [ " vector_field_ref=", string ], "/>" ;
+phase_trigram = "<trigram track=", string,
+                ( " pattern=", trigram_pattern | { atom } ),
+                " phase=", phase_name, " fold_ref=", string,
+                [ " binding_ref=", string ], [ " template_ref=", string ],
+                { trigram_binding }, "/>" ;
+trigram_pattern = gram_atom, " ", gram_atom, " ", gram_atom ;
+atom = "<atom>", atom_text, "</atom>" ;
+trigram_binding = "<bind name=", string, " source=", binding_source,
+                  [ " index=", positive_integer ], "/>" ;
+phase_name = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul" ;
+binding_source = "capture" | "lm_chain" | "char_overlap" | "explicit" ;
+positive_integer = digit, { digit } ;
+(* Serializer additionally rejects zero binding indexes and requires exactly
+   three atoms, a non-empty fold_ref, valid UTF-8 components, and unique GUIDs. *)

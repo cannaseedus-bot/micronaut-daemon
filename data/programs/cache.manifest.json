@@ -1,0 +1,35 @@
+{
+  "@kind": "kuhul.cache.manifest.v1",
+  "model": {
+    "identity": "gpt-oss-20b-MXFP4",
+    "format": "SCXQDDS/DDS folds",
+    "canonical_manifest": "E:/models/GPT-DDS/GPT-OSS/model.scxqdds",
+    "canonical_weights": "E:/models/GPT-DDS/GPT-OSS/gpt-oss-20b-MXFP4.safetensors",
+    "tensor_count": 459,
+    "canonical_payload_bytes": 12096558336
+  },
+  "external_cache": {
+    "path": "C:/SCXQDDS-cache",
+    "role": "materialized fold cache for demand-driven paging",
+    "observed_fold_files": 31,
+    "observed_payload_bytes": 1967130312,
+    "observed_missing_folds": [20],
+    "complete_model": false,
+    "canonical_authority": "E:/models/GPT-DDS/GPT-OSS/model.scxqdds",
+    "note": "This root-level directory is a runtime cache selected by TieredSource; it is not the canonical model store and must not be treated as a complete model."
+  },
+  "tiers": {
+    "hot": { "backend": "gpu-vram", "size_mb": 128, "note": "mini + top-4 expert planes (128MB dedicated VRAM)" },
+    "warm": { "backend": "ram", "size_gb": 16, "note": "s7 micronauts + model cache (16GB RAM)" },
+    "cold": { "backend": "disk", "size_gb": 12, "note": "canonical weights (gpt-oss-20b safetensors)" }
+  },
+  "policy": {
+    "promotion": "reactive (demand-driven, D021)",
+    "eviction": "LRU",
+    "residency": "HOT=128MB VRAM, WARM=16GB RAM, COLD=disk"
+  },
+  "shard_jit": {
+    "loader": "dist/xvm-d3d12/src/shard_jit_loader.cpp",
+    "status": "Cold->Warm works; Warm->Hot is a stub (needs OpenCL/D3D11 buffers)"
+  }
+}

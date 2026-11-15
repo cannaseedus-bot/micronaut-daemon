@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Relation Definition",
+  "type": "object",
+  "properties": {
+    "@kind": {
+      "const": "semantic.relation.v1"
+    },
+    "@id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "@domain": {
+      "type": "string",
+      "minLength": 1
+    },
+    "@range": {
+      "type": "string",
+      "minLength": 1
+    },
+    "@transitive": {
+      "type": "boolean"
+    },
+    "@authority": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "@kind",
+    "@id",
+    "@domain",
+    "@range",
+    "@transitive"
+  ],
+  "additionalProperties": false
+}

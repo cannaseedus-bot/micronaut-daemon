@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  blog.aiml — App-scoped AIML patterns for the Personal Blog app.
+  Loaded after _template.aiml. More-specific patterns here shadow the generics.
+  Target: data/host/apps/blog.asx-app.json
+  Authority: data/grammar/app-aiml-addon.contracts.json
+-->
+<aiml version="1.0">
+
+  <!-- ── Post creation ───────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>ADD POST *</pattern>
+    <template>[XCFE:KEY_WRITE table=posts key=⟁WIDGET:FEED] {"title":"<star/>","status":"draft"}</template>
+  </category>
+
+  <category>
+    <pattern>NEW POST *</pattern>
+    <template><srai>ADD POST <star/></srai></template>
+  </category>
+
+  <category>
+    <pattern>WRITE POST * BODY *</pattern>
+    <template>[XCFE:KEY_WRITE table=posts key=⟁WIDGET:FEED] {"title":"<star index='1'/>","body":"<star index='2'/>","status":"draft"}</template>
+  </category>
+
+  <category>
+    <pattern>WRITE POST *</pattern>
+    <template>What would you like the body of "<star/>" to be? Say: WRITE POST <star/> BODY [your content]</template>
+  </category>
+
+  <!-- ── Publish (Xul gate) ───────────────────────────────────────────── -->
+
+  <category>
+    <pattern>PUBLISH POST *</pattern>
+    <template>[XCFE:KEY_WRITE table=posts key=⟁WIDGET:FEED] {"title":"<star/>","status":"published"}</template>
+  </category>
+
+  <category>
+    <pattern>PUBLISH *</pattern>
+    <template><srai>PUBLISH POST <star/></srai></template>
+  </category>
+
+  <!-- ── Post discovery (Pop/Yax) ────────────────────────────────────── -->
+
+  <category>
+    <pattern>SHOW POST *</pattern>
+    <template>[XCFE:KEY_READ key=⟁WIDGET:FEED] <star/></template>
+  </category>
+
+  <category>
+    <pattern>LIST POSTS</pattern>
+    <template>[XCFE:KEY_LIST table=posts key=⟁WIDGET:FEED]</template>
+  </category>
+
+  <category>
+    <pattern>LIST DRAFTS</pattern>
+    <template>[XCFE:KEY_LIST table=posts key=⟁WIDGET:FEED] status=draft</template>
+  </category>
+
+  <category>
+    <pattern>SEARCH POSTS *</pattern>
+    <template>[XCFE:KEY_LIST table=posts key=⟁WIDGET:FEED] <star/></template>
+  </category>
+
+  <category>
+    <pattern>FIND POSTS ABOUT *</pattern>
+    <template><srai>SEARCH POSTS <star/></srai></template>
+  </category>
+
+  <category>
+    <pattern>POSTS TAGGED *</pattern>
+    <template>[XCFE:KEY_LIST table=posts key=⟁WIDGET:FEED] tag=<star/></template>
+  </category>
+
+  <!-- ── Comments (free add-on) ──────────────────────────────────────── -->
+
+  <category>
+    <pattern>COMMENT ON * WITH *</pattern>
+    <template>[XCFE:KEY_APPEND table=comments key=⟁WIDGET:FEED] {"post_slug":"<star index='1'/>","body":"<star index='2'/>"}</template>
+  </category>
+
+  <category>
+    <pattern>ADD COMMENT * ON *</pattern>
+    <template>[XCFE:KEY_APPEND table=comments key=⟁WIDGET:FEED] {"body":"<star index='1'/>","post_slug":"<star index='2'/>"}</template>
+  </category>
+
+  <category>
+    <pattern>LIST COMMENTS FOR *</pattern>
+    <template>[XCFE:KEY_LIST table=comments key=⟁WIDGET:FEED] post_slug=<star/></template>
+  </category>
+
+  <!-- ── Tags ────────────────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>TAG * WITH *</pattern>
+    <template>[XCFE:KEY_WRITE table=posts key=⟁WIDGET:FEED] {"slug":"<star index='1'/>","add_tag":"<star index='2'/>"}</template>
+  </category>
+
+  <category>
+    <pattern>REMOVE TAG * FROM *</pattern>
+    <template>[XCFE:KEY_WRITE table=posts key=⟁WIDGET:FEED] {"slug":"<star index='2'/>","remove_tag":"<star index='1'/>"}</template>
+  </category>
+
+  <!-- ── Delete (guarded) ────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>DELETE POST *</pattern>
+    <template>Are you sure you want to delete the post "<star/>"? Say CONFIRM DELETE POST <star/> to proceed.</template>
+  </category>
+
+  <category>
+    <pattern>CONFIRM DELETE POST *</pattern>
+    <template>[XCFE:KEY_DELETE table=posts key=⟁WIDGET:FEED id="<star/>"]</template>
+  </category>
+
+  <!-- ── Prefs ───────────────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>SET BLOG THEME *</pattern>
+    <template>[XCFE:KEY_WRITE table=prefs key=⟁WIDGET:SETTINGS] {"theme":"<star/>"}</template>
+  </category>
+
+  <category>
+    <pattern>POSTS PER PAGE *</pattern>
+    <template>[XCFE:KEY_WRITE table=prefs key=⟁WIDGET:SETTINGS] {"posts_per_page":<star/>}</template>
+  </category>
+
+  <!-- ── Stats ───────────────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>HOW MANY POSTS</pattern>
+    <template>[XCFE:KEY_LIST table=posts key=⟁COUNTER]</template>
+  </category>
+
+  <category>
+    <pattern>BLOG STATS</pattern>
+    <template><srai>HOW MANY POSTS</srai></template>
+  </category>
+
+  <!-- ── Newsletter add-on bridge ────────────────────────────────────── -->
+
+  <category>
+    <pattern>DRAFT NEWSLETTER FROM RECENT POSTS</pattern>
+    <template>[XCFE:KEY_WRITE table=issues key=⟁WIDGET:FEED] {"source":"recent_posts","status":"draft"}</template>
+  </category>
+
+  <category>
+    <pattern>SEND NEWSLETTER *</pattern>
+    <template>[XCFE:KEY_WRITE table=issues key=⟁WIDGET:FEED] {"title":"<star/>","status":"queued"}</template>
+  </category>
+
+</aiml>

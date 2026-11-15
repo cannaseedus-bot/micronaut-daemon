@@ -1,0 +1,32 @@
+{
+  "@kind": "asx.atomic.runtime.manifest.v1",
+  "@version": "1.0.0",
+  "@authority": "manifest",
+  "@surface": "Atomics.js",
+  "@endpoint": "/api/kxml/exec",
+  "@keybase_endpoint": "/api/atomic/keybase",
+  "@atomic_call_endpoint": "/api/atomic/call",
+  "@semantic_endpoints": {
+    "admit": "/api/semantic/admit",
+    "authorize": "/api/semantic/authorize",
+    "dispatch": "/api/semantic/dispatch",
+    "dispatch_token_env": "KHANARY_SEMANTIC_DISPATCH_TOKEN",
+    "supported_capabilities": ["khanary.json.inline"]
+  },
+  "keys": {
+    "key-grammar.parse": { "route": "key-grammar.parse", "executor": "mx.run", "program": "key-grammar.parse", "authority": "observation_only" },
+    "aiml.match": { "route": "xaiml.unresolved", "executor": "mx.run", "program": "aiml.match", "authority": "observation_only" },
+    "aiml.template": { "route": "xaiml.unresolved", "executor": "mx.run", "program": "aiml.template", "authority": "observation_only" },
+    "app.call": { "route": "/api/atomic/call", "executor": "inproc.app_host", "authority": "app_host_manifest" },
+    "cdata.init": { "route": "/api/atomic/call", "executor": "inproc.app_host", "operation": "INIT_STORE", "authority": "app_host_store" },
+    "cdata.put": { "route": "/api/atomic/call", "executor": "inproc.app_host", "operation": "PUT", "authority": "app_host_store" },
+    "cdata.get_all": { "route": "/api/atomic/call", "executor": "inproc.app_host", "operation": "GET_ALL", "authority": "app_host_store" },
+    "pipeline.run": { "route": "micronaut.program", "executor": "mx.run", "program": "pipeline.run", "authority": "observation_only" },
+    "kuhul.execute": { "route": "kuhul.execute", "executor": "mx.run", "program": "kuhul.execute", "authority": "observation_only" },
+    "native.execute": { "route": "native.execute", "executor": "inproc.native", "bridge": { "type": "inproc", "binding": "native-exec" }, "authority": "observation_only" },
+    "semantic.admit": { "route": "semantic.admit", "executor": "inproc.app_host", "bridge": { "type": "inproc", "binding": "app-host" }, "authority": "server_validated" },
+    "semantic.authorize": { "route": "semantic.authorize", "executor": "inproc.app_host", "bridge": { "type": "inproc", "binding": "app-host" }, "authority": "local_operator_token" },
+    "semantic.dispatch": { "route": "semantic.dispatch", "executor": "inproc.app_host", "bridge": { "type": "inproc", "binding": "app-host" }, "authority": "explicit_permission_required", "supported_capabilities": ["khanary.json.inline"] },
+    "wasm.execute": { "route": "wasm.execute", "executor": "inproc.wasm", "bridge": { "type": "inproc", "binding": "wasm-exec" }, "authority": "observation_only" }
+  }
+}

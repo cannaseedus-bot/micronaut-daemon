@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "think.schema.json",
+  "title": "CfpcThinkContract",
+  "description": "K'UHUL semantic think contract. @kind must be semantic.think.v1. @functions must be inline definitions; @ref is not permitted (inline-only in Stage 3). @policy.promote_generated_facts=true is rejected at parse time (Pattern Induction Guard: think findings are provisional and cannot be promoted to FactIndex). @mode is stored metadata only; it does not alter dispatch in Stage 3.",
+  "type": "object",
+  "required": ["@kind", "@id", "@owner", "@mode"],
+  "additionalProperties": false,
+  "properties": {
+    "@kind": {
+      "type": "string",
+      "const": "semantic.think.v1"
+    },
+    "@id": {
+      "type": "string",
+      "description": "Unique think contract identifier.",
+      "pattern": "^[A-Za-z0-9_-]+"
+    },
+    "@owner": {
+      "type": "string",
+      "description": "Micronaut identifier that owns this think contract. Inherited by local functions that declare no @owner."
+    },
+    "@mode": {
+      "type": "string",
+      "description": "Reasoning mode: compare, counterexample, infer, diagnose. Stored metadata only; does not alter dispatch in Stage 3.",
+      "enum": ["compare", "counterexample", "infer", "diagnose"]
+    },
+    "@subject": {
+      "type": "string",
+      "description": "Subject entity or concept being reasoned about."
+    },
+    "@context": {
+      "type": "string",
+      "description": "Context field reference (e.g. 'cfpc.field')."
+    },
+    "@functions": {
+      "type": "array",
+      "description": "Inline local function definitions. @ref is not permitted (inline-only). Local functions are scoped to this think execution and are NOT published to FunctionRegistry.",
+      "items": {
+        "type": "object",
+        "description": "Inline CfpcFunctionContract. Must not contain @ref."
+      }
+    },
+    "@policy": {
+      "type": "object",
+      "description": "Execution policy. promote_generated_facts is not a valid field here (Pattern Induction Guard).",
+      "additionalProperties": false,
+      "properties": {
+        "max_depth": {
+          "type": "integer",
+          "description": "Maximum delegation depth per local function. <= 0 → immediate Failed (budget guard fires before any call).",
+          "default": 3
+        },
+        "max_operations": {
+          "type": "integer",
+          "description": "Maximum total local function dispatches before stopping.",
+          "default": 6
+        },
+        "cycle_detection": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    }
+  }
+}

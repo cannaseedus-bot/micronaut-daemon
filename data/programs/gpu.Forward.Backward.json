@@ -1,0 +1,48 @@
+{
+  "@program": "gpu.Forward.Backward",
+  "@fold": "Pop",
+  "@node": "gpu-forward-backward-root",
+  "@state": {
+    "model": "E:/models/GPT2/coder_micronaut/ultrachat_coder_slerp_0p35.webgl2.dashboard.safetensors",
+    "token_bin": "E:/models/GPT2/coder_micronaut/coder_ast_json_seq256_tokens.bin",
+    "output": "E:/models/GPT2/micronaut_four_lanes_v2",
+    "backend": "d3d11_xvm_fiber",
+    "forward_kernel": "gpt2_forward.hlsl",
+    "backward_kernel": "gpt2_backward.hlsl",
+    "forward": null,
+    "backward": null,
+    "updated": null,
+    "verified": false
+  },
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "gpu-forward-validate" },
+    { "@op": "CALL", "@fn": "validate_safetensors", "@args": ["$model"], "@out": "model_valid" },
+    { "@op": "CALL", "@fn": "validate_token_bin", "@args": ["$token_bin"], "@out": "dataset_valid" },
+    { "@op": "CALL", "@fn": "gpu_capability", "@args": ["$backend"], "@out": "gpu_ready" },
+    { "@op": "LOG", "@args": ["[gpu.Forward.Backward] inputs and GPU capability validated"] },
+    { "@op": "FOLD_EXIT", "@fold": "Wo", "@node": "gpu-forward-validate", "@args": ["$model_valid", "$dataset_valid", "$gpu_ready"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Wo", "@node": "gpu-forward" },
+    { "@op": "GPU_DISPATCH", "@args": ["$forward_kernel", "$model", "$token_bin", "$backend"], "@out": "forward" },
+    { "@op": "CALL", "@fn": "gpu_forward", "@args": ["$forward"], "@out": "forward_result" },
+    { "@op": "LOG", "@args": ["[gpu.Forward.Backward] forward pass dispatched"] },
+    { "@op": "FOLD_EXIT", "@fold": "Yax", "@node": "gpu-forward", "@args": ["$forward_result"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Yax", "@node": "gpu-backward" },
+    { "@op": "GPU_DISPATCH", "@args": ["$backward_kernel", "$forward_result", "$token_bin", "$backend"], "@out": "backward" },
+    { "@op": "CALL", "@fn": "gpu_backward", "@args": ["$backward"], "@out": "backward_result" },
+    { "@op": "LOG", "@args": ["[gpu.Forward.Backward] backward pass dispatched"] },
+    { "@op": "FOLD_EXIT", "@fold": "Sek", "@node": "gpu-backward", "@args": ["$backward_result"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Sek", "@node": "gpu-update" },
+    { "@op": "CALL", "@fn": "apply_gpu_gradients", "@args": ["$model", "$backward_result", "$output"], "@out": "updated" },
+    { "@op": "CALL", "@fn": "gpu_synchronize", "@args": ["$updated"], "@out": "synced" },
+    { "@op": "LOG", "@args": ["[gpu.Forward.Backward] gradients applied and synchronized"] },
+    { "@op": "FOLD_EXIT", "@fold": "Chen", "@node": "gpu-update", "@args": ["$synced"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Chen", "@node": "gpu-verify" },
+    { "@op": "CALL", "@fn": "verify_safetensors_output", "@args": ["$synced", "$output"], "@out": "verified" },
+    { "@op": "LOG", "@args": ["[gpu.Forward.Backward] output verified=$verified"] },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "gpu-verify", "@args": ["$synced", "$verified"] }
+  ]
+}

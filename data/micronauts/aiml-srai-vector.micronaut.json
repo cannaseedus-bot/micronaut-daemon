@@ -1,0 +1,103 @@
+{
+  "@kind": "kuhul.atomic.block.v1",
+  "id": "aiml.srai.vector",
+  "type": "atomic_block",
+  "phase": "Yax",
+  "model": "EmbeddingGemma",
+  "shared": true,
+  "consumers": ["ELIZA-µ", "VECTOR-µ", "PATTERNS-µ", "TOOL-µ"],
+  "description": "Shared semantic retrieval block: embeds a query with EmbeddingGemma, retrieves nearest AIML categories from the vectorized corpus, filters by structural constraints (wildcard count, field), ranks by cosine score, then routes via SRAI into the atomic fold stack. SRAI becomes the routing mechanism for atomic workflows, not just category redirects.",
+  "inputs": {
+    "query":           { "type": "text",   "description": "Raw or normalized user input or SRAI target string" },
+    "pattern_vectors": { "type": "tensor", "source": "io/aiml-embeddinggemma2-vectors/pattern_vectors.f32.npy",  "dims": 256 },
+    "template_vectors":{ "type": "tensor", "source": "io/aiml-embeddinggemma2-vectors/template_vectors.f32.npy", "dims": 256 },
+    "active_field":    { "type": "string", "optional": true, "description": "Field scope from ELIZA field_route — narrows retrieval to field-matching categories" },
+    "wildcard_captures":{ "type": "object", "optional": true, "description": "Captured wildcard values from upstream pattern match; must be preserved through SRAI chain" }
+  },
+  "operations": [
+    {
+      "op": "EMBED",
+      "description": "Encode query text with EmbeddingGemma → 256-dim L2-normalised float32 vector",
+      "model": "google/embeddinggemma-2",
+      "endpoint_env": "VECTOR_EMBED_URL",
+      "fallback": "zero_vector_stub"
+    },
+    {
+      "op": "RETRIEVE",
+      "description": "Cosine similarity search over A_pattern_context, B_template, or category_midpoint npy file",
+      "sources": ["A_pattern_context", "B_template", "category_midpoint"],
+      "topk": 5,
+      "authority": "data_only"
+    },
+    {
+      "op": "FILTER",
+      "description": "Remove candidates that cannot preserve wildcard_captures: wildcard_count must match capture count; structural constraints must be satisfiable",
+      "constraints": ["wildcard_count_match", "field_scope", "srai_safe"]
+    },
+    {
+      "op": "RANK",
+      "description": "Re-rank filtered candidates by cosine score; apply active_field default_bias if provided (formula: default_bias * cosine_score); tiebreak by projection_order ascending",
+      "formula": "default_bias * cosine_score",
+      "tiebreak": "projection_order ascending",
+      "authority": "data_only"
+    },
+    {
+      "op": "SRAI",
+      "description": "If top candidate template contains <srai>...</srai>, follow the SRAI chain (max_depth 3); each hop re-runs EMBED→RETRIEVE→FILTER→RANK on the resolved pattern text; returns the terminal template or the deepest resolved candidate",
+      "max_depth": 3,
+      "chain_policy": "resolve_terminal_or_deepest",
+      "xcfe_required": true,
+      "note": "SRAI is the routing mechanism for atomic workflows — a resolved SRAI target can select a Micronaut, propose a pipeline, or enter a workflow block"
+    },
+    {
+      "op": "FOLD",
+      "description": "Package SRAI-resolved candidate into a typed atomic proposal: { candidate, route, confidence, provenance }. XCFE admission required before the proposal advances to Sek dispatch.",
+      "output_type": "aiml.srai.vector.proposal"
+    }
+  ],
+  "outputs": {
+    "candidate":   { "type": "aiml.category",  "description": "Resolved AIML category with pattern + template" },
+    "route":       { "type": "srai.path",       "description": "Chain of SRAI hops taken to reach candidate" },
+    "confidence":  { "type": "float",           "description": "Final cosine score after RANK + bias" },
+    "provenance":  { "type": "record",          "description": "Query, source, field scope, wildcard captures, hop trace, scores" }
+  },
+  "output_schema": {
+    "@kind": "aiml.srai.vector.proposal",
+    "candidate": {
+      "pattern":        "string",
+      "template":       "string",
+      "pattern_id":     "string",
+      "field":          "string",
+      "default_bias":   "float",
+      "cosine_score":   "float",
+      "field_score":    "float",
+      "projection_order": "integer",
+      "wildcard_captures": "object"
+    },
+    "route": {
+      "source_query":  "string",
+      "hops":          "[{step, pattern, template, srai_target}]",
+      "terminal":      "boolean"
+    },
+    "confidence": "float",
+    "provenance": {
+      "block_id":    "aiml.srai.vector",
+      "source":      "string",
+      "active_field":"string",
+      "phase":       "Yax",
+      "xcfe_status": "pending_admission"
+    }
+  },
+  "execution": {
+    "mode": "propose",
+    "xcfe_required": true,
+    "authority": "data_only",
+    "forbidden": ["emit_response", "write_state", "mutate_topology", "direct_dispatch"],
+    "note": "Vector similarity alone does not establish that a template is executable or that its meaning is correct. XCFE must validate the resolved category, bindings, and permissions before Sek dispatch."
+  },
+  "implementation": {
+    "script": "agents/vector_match_bot.py",
+    "entry": "srai_chain",
+    "flags": ["--srai", "--source", "--topk", "--field", "--max-depth"]
+  }
+}

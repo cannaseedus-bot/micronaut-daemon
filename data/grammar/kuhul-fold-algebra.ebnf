@@ -1,0 +1,224 @@
+(* ============================================================ *)
+(* K'UHUL Fold Algebra Grammar (KFA)                            *)
+(* The composition law of typed state transitions.              *)
+(* ============================================================ *)
+
+(* A fold is a typed state transformation:
+
+       F_phi : S -> S          phi in {Pop, Wo, Yax, Sek, Ch'en, Xul}
+
+   and the cycle is a composition, rightmost executing first:
+
+       F_cycle = F_Xul . F_Ch'en . F_Sek . F_Yax . F_Wo . F_Pop
+
+   The set of legal total functions S -> S under composition is a monoid:
+   composition is associative and FOLD_IDENTITY is its unit. That much is
+   unconditional.
+
+   What is NOT unconditional is that two runtime folds compose. Phase order,
+   operand types and verification gating make only compatible transitions
+   composable, so KFA decides two separate things:
+
+       structural legality   the pair type-checks and the phases run forwards
+       admission              the pair crosses a phase boundary, which XCFE
+                              must still authorize
+
+   KFA is not a claim that the runtime is a K-algebra. Linear endomorphisms
+   End_K(V) form an associative unital algebra, but K'UHUL execution folds
+   include branching, verification, gating and memory effects, so they are not
+   linear transformations. The laws that do apply to individual operators are
+   the Algebraic Operator ISA's business; KFA consumes them only to report the
+   conservative rewrite licence of a whole plan.
+
+       KFA = typed fold composition + Algebraic Operator Contracts + XCFE admission
+
+   KFA != Fold Graph != Fold Lattice != Fold Kernel != Fold Space
+       != XCFE Policy != Execution. *)
+
+(* ============================================================ *)
+(* 1. CONCRETE GRAMMAR — JSON SHAPE                            *)
+(* ============================================================ *)
+
+FoldAlgebra     ::= "{" RegistryMember ( "," RegistryMember )* "}" ;
+RegistryMember  ::= TypeKey
+                  | IdKey
+                  | VersionKey
+                  | NameKey
+                  | DescriptionKey
+                  | AuthorityKey
+                  | BoundaryKey
+                  | CarrierKey
+                  | CompositionKey
+                  | PhaseOrderKey
+                  | TypesKey
+                  | PhasesKey
+                  | InnerOperatorsKey
+                  | OperatorFoldsKey
+                  | CanonicalPlansKey
+                  | InvariantsKey
+                  | ValidationKey ;
+
+TypeKey         ::= '"@type"' ":" '"kuhul.fold_algebra.v1"' ;
+IdKey           ::= '"id"' ":" String ;
+VersionKey      ::= '"version"' ":" String ;
+NameKey         ::= '"name"' ":" '"KFA"' ;
+DescriptionKey  ::= '"description"' ":" String ;
+CarrierKey      ::= '"carrier"' ":" '"typed_fold_state"' ;
+AuthorityKey    ::= '"authority"' ":" Object ;
+BoundaryKey     ::= '"boundary"' ":" Object ;
+ValidationKey   ::= '"validation"' ":" Object ;
+
+CompositionKey  ::= '"composition"' ":" Composition ;
+Composition     ::= "{" CompositionMember ( "," CompositionMember )* "}" ;
+CompositionMember ::= OperatorIdKey
+                  | IdentityKey
+                  | NotationKey
+                  | AssociativeKey
+                  | UnitalKey
+                  | CommutativeKey
+                  | RequiresTypesKey
+                  | RequiresAdmissionKey
+                  | IsAlgebraKey
+                  | LawsKey ;
+OperatorIdKey   ::= '"operator"' ":" '"FOLD_COMPOSE"' ;
+IdentityKey     ::= '"identity"' ":" '"FOLD_IDENTITY"' ;
+NotationKey     ::= '"notation"' ":" String ;
+AssociativeKey  ::= '"associative"' ":" Boolean ;
+UnitalKey       ::= '"unital"' ":" Boolean ;
+CommutativeKey  ::= '"commutative"' ":" Boolean ;
+RequiresTypesKey ::= '"requires_compatible_types"' ":" Boolean ;
+RequiresAdmissionKey ::= '"requires_xcfe_admission"' ":" Boolean ;
+IsAlgebraKey    ::= '"is_algebra_over_field"' ":" Boolean ;
+LawsKey         ::= '"laws"' ":" StringList ;
+
+PhaseOrderKey   ::= '"phase_order"' ":" PhaseList ;
+PhaseList       ::= "[" Phase ( "," Phase )* "]" ;
+
+TypesKey        ::= '"types"' ":" TypeTable ;
+TypeTable       ::= "{" ( TypeEntry ( "," TypeEntry )* )? "}" ;
+TypeEntry       ::= String ":" String ;
+
+PhasesKey       ::= '"phases"' ":" FoldList ;
+InnerOperatorsKey ::= '"inner_operators"' ":" FoldList ;
+OperatorFoldsKey ::= '"operator_folds"' ":" FoldList ;
+FoldList        ::= "[" Fold ( "," Fold )* "]" ;
+Fold            ::= "{" FoldMember ( "," FoldMember )* "}" ;
+FoldMember      ::= FoldIdKey
+                  | PhaseKey
+                  | InterpretationKey
+                  | InputTypesKey
+                  | OutputTypeKey
+                  | EffectsKey
+                  | PureKey
+                  | DetKey
+                  | RequiresVerificationKey
+                  | IsIdentityKey
+                  | AlgebraRefKey
+                  | OperatorsKey
+                  | FoldDescKey ;
+FoldIdKey       ::= '"fold"' ":" FoldName ;
+PhaseKey        ::= '"phase"' ":" ( Phase | '"any"' ) ;
+InterpretationKey ::= '"interpretation"' ":" String ;
+InputTypesKey   ::= '"input_types"' ":" TypeList ;
+OutputTypeKey   ::= '"output_type"' ":" TypeName ;
+EffectsKey      ::= '"effects"' ":" StringList ;
+PureKey         ::= '"pure"' ":" Boolean ;
+DetKey          ::= '"deterministic"' ":" Boolean ;
+RequiresVerificationKey ::= '"requires_verification"' ":" Boolean ;
+IsIdentityKey   ::= '"is_identity"' ":" Boolean ;
+AlgebraRefKey   ::= '"algebra_ref"' ":" String ;
+OperatorsKey    ::= '"operators"' ":" StringList ;
+FoldDescKey     ::= '"description"' ":" String ;
+
+CanonicalPlansKey ::= '"canonical_plans"' ":" PlanList ;
+PlanList        ::= "[" Plan ( "," Plan )* "]" ;
+Plan            ::= "{" PlanMember ( "," PlanMember )* "}" ;
+PlanMember      ::= PlanIdKey
+                  | PlanDescKey
+                  | SequenceKey
+                  | ExpectKey
+                  | ExpectCodeKey ;
+PlanIdKey       ::= '"id"' ":" String ;
+PlanDescKey     ::= '"description"' ":" String ;
+SequenceKey     ::= '"sequence"' ":" StringList ;
+ExpectKey       ::= '"expect"' ":" ( '"legal"' | '"illegal"' ) ;
+ExpectCodeKey   ::= '"expect_code"' ":" ViolationCode ;
+
+InvariantsKey   ::= '"invariants"' ":" StringList ;
+
+FoldName        ::= '"F_Pop"' | '"F_Wo"' | '"F_Yax"' | '"F_Sek"' | '"F_Ch\'en"'
+                  | '"F_Xul"' | '"FOLD_IDENTITY"' | '"MAP"' | '"FILTER"'
+                  | '"REDUCE"' | OperatorName ;
+Phase           ::= '"Pop"' | '"Wo"' | '"Yax"' | '"Sek"' | '"Ch\'en"' | '"Xul"' ;
+TypeList        ::= "[" TypeName ( "," TypeName )* "]" ;
+TypeName        ::= String | '"*"' ;
+OperatorName    ::= String ;
+ViolationCode   ::= '"TYPE_MISMATCH"' | '"PHASE_OUT_OF_ORDER"'
+                  | '"REQUIRES_VERIFICATION"' | '"EMPTY_SEQUENCE"'
+                  | '"UNKNOWN_FOLD_PHASE"' | '"FOLD_ID_MISSING"'
+                  | '"FOLD_INPUT_TYPES_MISSING"' | '"FOLD_OUTPUT_TYPE_MISSING"' ;
+StringList      ::= "[" ( String ( "," String )* )? "]" ;
+String          ::= JSON_String ;
+Boolean         ::= JSON_Boolean ;
+Object          ::= JSON_Object ;
+
+
+(* ============================================================ *)
+(* 2. ABSTRACT GRAMMAR — THE COMPOSITION MONOID                *)
+(* ============================================================ *)
+
+FoldADT         ::= "<" "fold:" FoldName ","
+                         "phase:" ( Phase | "any" ) ","
+                         "type:" TypeName "->" TypeName ","
+                         "effects:" "{" EffectList "}" ","
+                         "pure:" Bool ","
+                         "requires_verification:" Bool ">" ;
+
+ComposeADT      ::= "<" "compose:" FoldADT "," "after:" FoldADT ">" ;
+(* compose(after, before) = after . before; `before` executes first. *)
+
+CompositionMonoid ::= "(" FoldSet "," ".", "FOLD_IDENTITY" ")" ;
+Associativity   ::= "(" F "." G ")" "." H "=" F "." "(" G "." H ")" ;
+LeftUnit        ::= "FOLD_IDENTITY" "." F "=" F ;
+RightUnit       ::= F "." "FOLD_IDENTITY" "=" F ;
+NonCommutativity ::= F "." G "!=" G "." F ;
+Cycle           ::= F_Xul "." F_Ch'en "." F_Sek "." F_Yax "." F_Wo "." F_Pop ;
+
+(* The decision. Structural legality is a theorem over types and phase order;
+   admission is not KFA's to grant. *)
+StructurallyLegal ::= "output(before)" "in" "input_types(after)"
+                      "AND" "index(phase(after)) >= index(phase(before))" ;
+RequiresAdmission ::= "index(phase(after)) > index(phase(before))" ;
+RequiresVerification ::= "after.requires_verification"
+                         "IMPLIES" "output(before) = verified_outcome" ;
+PairwiseLocal   ::= "admissible" "(" F_1 ".." F_n ")" "iff"
+                    "forall i:" "compose" "(" F_i "," F_{i-1} ")" "legal" ;
+
+(* The two levels. Outer folds own the lifecycle; inner folds transform the
+   candidate set inside whatever phase hosts them. *)
+OuterFoldAlgebra ::= Cycle ;
+InnerFoldAlgebra ::= Map | Filter | Reduce ;
+SekExpansion    ::= "Sek" "(" C ")" "=" "Rank" "(" "Filter_XCFE" "(" "Map_WCR" "(" C ")" ")" ")" ;
+
+TypeJudgment    ::= "|-" FoldADT ":" FoldName ;
+PlanJudgment    ::= "|-" "[" FoldADT "]" ":" ( "legal" | ViolationCode ) ;
+
+
+(* ============================================================ *)
+(* 3. SEMANTIC INVARIANTS                                      *)
+(* ============================================================ *)
+
+K1  ::= a fold is a typed state transition F_phi : S -> S; composition is the only combinator ;
+K2  ::= a composition is structurally legal only when output(before) is in input_types(after) ;
+K3  ::= a plan traverses the cycle at most once and only forwards; a second traversal is a new plan ;
+K4  ::= a phase crossing is plannable but not authorized: requires_admission is true and XCFE owns the decision ;
+K5  ::= a fold declaring requires_verification composes legally only downstream of a verified_outcome ;
+K6  ::= FOLD_IDENTITY is the two-sided unit and is elided; a typed identity elides only where its types chain ;
+K7  ::= composition is associative unconditionally, because composition of total functions is ;
+K8  ::= composition is not commutative; operand order is the execution order ;
+K9  ::= a monoid of transitions is not an algebra over a field: no addition, no scalar multiplication, no bilinear product on folds ;
+K10 ::= composability is pairwise-local, so a plan is admissible exactly when every adjacent pair is ;
+K11 ::= the rewrite licence of a plan is the intersection of its members' licences ;
+K12 ::= KFA decides composition, XCFE decides admission, Ch'en decides verification, Xul decides commit ;
+K13 ::= every SRAI operator resolves to exactly one KFA fold whose phase, effects and algebra_ref match the other two registries ;
+K14 ::= the phase fold's operator set is exactly the SRAI operators declared at that phase ;

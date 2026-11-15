@@ -1,0 +1,951 @@
+{
+  "@type": "mx2lm.dataset_ngram_summary.v1",
+  "admission": "candidate",
+  "binary_top_k_per_section": 50000,
+  "emitted_channel_counts": {
+    "bigram": 512,
+    "coarse_gram": 512,
+    "function_gram": 512,
+    "quadgram": 512,
+    "tool_gram": 512,
+    "trigram": 512,
+    "unigram": 512
+  },
+  "observed_binary_channel_counts": {
+    "coarse_bigram": 1270,
+    "coarse_trigram": 4538
+  },
+  "observed_total_unique_grams": 265522,
+  "observed_unique_channel_counts": {
+    "bigram": 47562,
+    "coarse_gram": 5808,
+    "function_gram": 2191,
+    "quadgram": 113620,
+    "tool_gram": 1737,
+    "trigram": 88294,
+    "unigram": 6310
+  },
+  "selection_policy": "emit_top_k_per_channel; observed_unique_channel_counts records the pre-cap population",
+  "semantic_authority": false,
+  "source_manifest": "data\\ingest\\khanary_dataset_sources.json",
+  "top": {
+    "bigram": [
+      {
+        "count": 2111,
+        "gram": "the user"
+      },
+      {
+        "count": 889,
+        "gram": "but the"
+      },
+      {
+        "count": 861,
+        "gram": "1 2"
+      },
+      {
+        "count": 842,
+        "gram": "2 3"
+      },
+      {
+        "count": 774,
+        "gram": "the tool"
+      },
+      {
+        "count": 701,
+        "gram": "need to"
+      },
+      {
+        "count": 616,
+        "gram": "3 4"
+      },
+      {
+        "count": 594,
+        "gram": "i need"
+      },
+      {
+        "count": 533,
+        "gram": "let me"
+      },
+      {
+        "count": 524,
+        "gram": "for the"
+      },
+      {
+        "count": 497,
+        "gram": "so the"
+      },
+      {
+        "count": 484,
+        "gram": "tool_calling helpful"
+      },
+      {
+        "count": 468,
+        "gram": "with the"
+      },
+      {
+        "count": 465,
+        "gram": "wait the"
+      },
+      {
+        "count": 456,
+        "gram": "you have"
+      },
+      {
+        "count": 451,
+        "gram": "the assistant"
+      },
+      {
+        "count": 447,
+        "gram": "here you"
+      },
+      {
+        "count": 433,
+        "gram": "user is"
+      },
+      {
+        "count": 430,
+        "gram": "and the"
+      },
+      {
+        "count": 406,
+        "gram": "4 5"
+      },
+      {
+        "count": 399,
+        "gram": "maybe the"
+      },
+      {
+        "count": 391,
+        "gram": "of the"
+      },
+      {
+        "count": 389,
+        "gram": "think okay"
+      },
+      {
+        "count": 380,
+        "gram": "check the"
+      },
+      {
+        "count": 369,
+        "gram": "in the"
+      },
+      {
+        "count": 365,
+        "gram": "the parameters"
+      },
+      {
+        "count": 365,
+        "gram": "tool call"
+      },
+      {
+        "count": 362,
+        "gram": "function calls"
+      },
+      {
+        "count": 354,
+        "gram": "for each"
+      },
+      {
+        "count": 349,
+        "gram": "is asking"
+      },
+      {
+        "count": 348,
+        "gram": "so i"
+      },
+      {
+        "count": 347,
+        "gram": "the tool's"
+      }
+    ],
+    "coarse_gram": [
+      {
+        "count": 64614,
+        "gram": "c c"
+      },
+      {
+        "count": 39214,
+        "gram": "c c c"
+      },
+      {
+        "count": 14334,
+        "gram": "f:the c"
+      },
+      {
+        "count": 10538,
+        "gram": "f:the c c"
+      },
+      {
+        "count": 7651,
+        "gram": "c f:the"
+      },
+      {
+        "count": 7640,
+        "gram": "c f:the c"
+      },
+      {
+        "count": 3835,
+        "gram": "c c f:the"
+      },
+      {
+        "count": 2925,
+        "gram": "c f:and"
+      },
+      {
+        "count": 2884,
+        "gram": "f:to c"
+      },
+      {
+        "count": 2879,
+        "gram": "c f:is"
+      },
+      {
+        "count": 2722,
+        "gram": "c f:to"
+      },
+      {
+        "count": 2517,
+        "gram": "c f:for"
+      },
+      {
+        "count": 2431,
+        "gram": "f:is c"
+      },
+      {
+        "count": 2378,
+        "gram": "c f:to c"
+      },
+      {
+        "count": 2308,
+        "gram": "f:and c"
+      },
+      {
+        "count": 2275,
+        "gram": "c f:and c"
+      },
+      {
+        "count": 2181,
+        "gram": "c c f:and"
+      },
+      {
+        "count": 2179,
+        "gram": "c f:is c"
+      },
+      {
+        "count": 2099,
+        "gram": "c f:so"
+      },
+      {
+        "count": 1909,
+        "gram": "f:for c"
+      },
+      {
+        "count": 1679,
+        "gram": "c c f:to"
+      },
+      {
+        "count": 1623,
+        "gram": "c f:for c"
+      },
+      {
+        "count": 1610,
+        "gram": "c f:but"
+      },
+      {
+        "count": 1605,
+        "gram": "c c f:is"
+      },
+      {
+        "count": 1571,
+        "gram": "c c f:for"
+      },
+      {
+        "count": 1471,
+        "gram": "c f:with"
+      },
+      {
+        "count": 1418,
+        "gram": "f:for c c"
+      },
+      {
+        "count": 1287,
+        "gram": "c f:of"
+      },
+      {
+        "count": 1284,
+        "gram": "f:so c"
+      },
+      {
+        "count": 1261,
+        "gram": "c c f:so"
+      },
+      {
+        "count": 1246,
+        "gram": "f:and c c"
+      },
+      {
+        "count": 1203,
+        "gram": "c f:so c"
+      }
+    ],
+    "function_gram": [
+      {
+        "count": 14389,
+        "gram": "the"
+      },
+      {
+        "count": 3272,
+        "gram": "to"
+      },
+      {
+        "count": 3236,
+        "gram": "is"
+      },
+      {
+        "count": 3010,
+        "gram": "and"
+      },
+      {
+        "count": 2902,
+        "gram": "for"
+      },
+      {
+        "count": 2666,
+        "gram": "a"
+      },
+      {
+        "count": 2298,
+        "gram": "so"
+      },
+      {
+        "count": 1966,
+        "gram": "i"
+      },
+      {
+        "count": 1713,
+        "gram": "but"
+      },
+      {
+        "count": 1654,
+        "gram": "with"
+      },
+      {
+        "count": 1375,
+        "gram": "in"
+      },
+      {
+        "count": 1296,
+        "gram": "of"
+      },
+      {
+        "count": 1173,
+        "gram": "you"
+      },
+      {
+        "count": 945,
+        "gram": "that"
+      },
+      {
+        "count": 927,
+        "gram": "are"
+      },
+      {
+        "count": 889,
+        "gram": "but the"
+      },
+      {
+        "count": 887,
+        "gram": "me"
+      },
+      {
+        "count": 868,
+        "gram": "as"
+      },
+      {
+        "count": 868,
+        "gram": "should"
+      },
+      {
+        "count": 864,
+        "gram": "which"
+      },
+      {
+        "count": 860,
+        "gram": "have"
+      },
+      {
+        "count": 820,
+        "gram": "here"
+      },
+      {
+        "count": 761,
+        "gram": "be"
+      },
+      {
+        "count": 741,
+        "gram": "if"
+      },
+      {
+        "count": 698,
+        "gram": "can"
+      },
+      {
+        "count": 664,
+        "gram": "by"
+      },
+      {
+        "count": 644,
+        "gram": "it"
+      },
+      {
+        "count": 609,
+        "gram": "or"
+      },
+      {
+        "count": 559,
+        "gram": "they"
+      },
+      {
+        "count": 542,
+        "gram": "since"
+      },
+      {
+        "count": 524,
+        "gram": "for the"
+      },
+      {
+        "count": 497,
+        "gram": "so the"
+      }
+    ],
+    "quadgram": [
+      {
+        "count": 479,
+        "gram": "1 2 3 4"
+      },
+      {
+        "count": 344,
+        "gram": "the user is asking"
+      },
+      {
+        "count": 333,
+        "gram": "2 3 4 5"
+      },
+      {
+        "count": 238,
+        "gram": "user is asking for"
+      },
+      {
+        "count": 233,
+        "gram": "let me check the"
+      },
+      {
+        "count": 223,
+        "gram": "3 4 5 6"
+      },
+      {
+        "count": 189,
+        "gram": "think okay the user"
+      },
+      {
+        "count": 162,
+        "gram": "here you have the"
+      },
+      {
+        "count": 145,
+        "gram": "4 5 6 7"
+      },
+      {
+        "count": 144,
+        "gram": "let's see the user"
+      },
+      {
+        "count": 144,
+        "gram": "so i need to"
+      },
+      {
+        "count": 144,
+        "gram": "think okay let's see"
+      },
+      {
+        "count": 143,
+        "gram": "okay let's see the"
+      },
+      {
+        "count": 138,
+        "gram": "the user didn't specify"
+      },
+      {
+        "count": 134,
+        "gram": "sure here you have"
+      },
+      {
+        "count": 127,
+        "gram": "okay the user is"
+      },
+      {
+        "count": 124,
+        "gram": "check the available tools"
+      },
+      {
+        "count": 120,
+        "gram": "looking at the tools"
+      },
+      {
+        "count": 119,
+        "gram": "first i need to"
+      },
+      {
+        "count": 119,
+        "gram": "i need to check"
+      },
+      {
+        "count": 118,
+        "gram": "here you have a"
+      },
+      {
+        "count": 114,
+        "gram": "for i in range"
+      },
+      {
+        "count": 107,
+        "gram": "i need to make"
+      },
+      {
+        "count": 104,
+        "gram": "the provided call examples"
+      },
+      {
+        "count": 101,
+        "gram": "here you have some"
+      },
+      {
+        "count": 100,
+        "gram": "for each function call"
+      },
+      {
+        "count": 95,
+        "gram": "but the user didn't"
+      },
+      {
+        "count": 92,
+        "gram": "5 6 7 8"
+      },
+      {
+        "count": 90,
+        "gram": "absolutely here you have"
+      },
+      {
+        "count": 90,
+        "gram": "me check the available"
+      },
+      {
+        "count": 88,
+        "gram": "sure thing here you"
+      },
+      {
+        "count": 88,
+        "gram": "thing here you have"
+      }
+    ],
+    "tool_gram": [
+      {
+        "count": 1918,
+        "gram": "tool"
+      },
+      {
+        "count": 1795,
+        "gram": "call"
+      },
+      {
+        "count": 1666,
+        "gram": "function"
+      },
+      {
+        "count": 819,
+        "gram": "tools"
+      },
+      {
+        "count": 412,
+        "gram": "api"
+      },
+      {
+        "count": 365,
+        "gram": "tool call"
+      },
+      {
+        "count": 308,
+        "gram": "search"
+      },
+      {
+        "count": 304,
+        "gram": "function call"
+      },
+      {
+        "count": 224,
+        "gram": "each function call"
+      },
+      {
+        "count": 201,
+        "gram": "query"
+      },
+      {
+        "count": 197,
+        "gram": "the tool call"
+      },
+      {
+        "count": 107,
+        "gram": "fetch"
+      },
+      {
+        "count": 100,
+        "gram": "for each function call"
+      },
+      {
+        "count": 90,
+        "gram": "write"
+      },
+      {
+        "count": 85,
+        "gram": "functions"
+      },
+      {
+        "count": 78,
+        "gram": "call the tool"
+      },
+      {
+        "count": 69,
+        "gram": "of each function call"
+      },
+      {
+        "count": 67,
+        "gram": "so the tool call"
+      },
+      {
+        "count": 63,
+        "gram": "test"
+      },
+      {
+        "count": 60,
+        "gram": "tool call should"
+      },
+      {
+        "count": 55,
+        "gram": "the tool call should"
+      },
+      {
+        "count": 53,
+        "gram": "tool call is"
+      },
+      {
+        "count": 51,
+        "gram": "function call examples"
+      },
+      {
+        "count": 48,
+        "gram": "call the function"
+      },
+      {
+        "count": 47,
+        "gram": "tool call with"
+      },
+      {
+        "count": 46,
+        "gram": "structure the tool call"
+      },
+      {
+        "count": 44,
+        "gram": "plan"
+      },
+      {
+        "count": 42,
+        "gram": "a tool call"
+      },
+      {
+        "count": 39,
+        "gram": "function calls write"
+      },
+      {
+        "count": 37,
+        "gram": "by each function call"
+      },
+      {
+        "count": 37,
+        "gram": "execute"
+      },
+      {
+        "count": 36,
+        "gram": "convert"
+      }
+    ],
+    "trigram": [
+      {
+        "count": 735,
+        "gram": "1 2 3"
+      },
+      {
+        "count": 538,
+        "gram": "i need to"
+      },
+      {
+        "count": 536,
+        "gram": "2 3 4"
+      },
+      {
+        "count": 447,
+        "gram": "here you have"
+      },
+      {
+        "count": 430,
+        "gram": "the user is"
+      },
+      {
+        "count": 390,
+        "gram": "but the user"
+      },
+      {
+        "count": 380,
+        "gram": "3 4 5"
+      },
+      {
+        "count": 344,
+        "gram": "user is asking"
+      },
+      {
+        "count": 271,
+        "gram": "let me check"
+      },
+      {
+        "count": 256,
+        "gram": "the user didn't"
+      },
+      {
+        "count": 242,
+        "gram": "is asking for"
+      },
+      {
+        "count": 241,
+        "gram": "4 5 6"
+      },
+      {
+        "count": 239,
+        "gram": "looking at the"
+      },
+      {
+        "count": 237,
+        "gram": "me check the"
+      },
+      {
+        "count": 224,
+        "gram": "each function call"
+      },
+      {
+        "count": 209,
+        "gram": "the available tools"
+      },
+      {
+        "count": 207,
+        "gram": "the user wants"
+      },
+      {
+        "count": 200,
+        "gram": "the user provided"
+      },
+      {
+        "count": 197,
+        "gram": "the tool call"
+      },
+      {
+        "count": 189,
+        "gram": "okay the user"
+      },
+      {
+        "count": 189,
+        "gram": "since the user"
+      },
+      {
+        "count": 189,
+        "gram": "think okay the"
+      },
+      {
+        "count": 174,
+        "gram": "the assistant should"
+      },
+      {
+        "count": 164,
+        "gram": "think okay let's"
+      },
+      {
+        "count": 162,
+        "gram": "you have the"
+      },
+      {
+        "count": 160,
+        "gram": "the tools provided"
+      },
+      {
+        "count": 158,
+        "gram": "see the user"
+      },
+      {
+        "count": 149,
+        "gram": "5 6 7"
+      },
+      {
+        "count": 147,
+        "gram": "so i need"
+      },
+      {
+        "count": 145,
+        "gram": "wait the user"
+      },
+      {
+        "count": 144,
+        "gram": "for i in"
+      },
+      {
+        "count": 144,
+        "gram": "let's see the"
+      }
+    ],
+    "unigram": [
+      {
+        "count": 14389,
+        "gram": "the"
+      },
+      {
+        "count": 3272,
+        "gram": "to"
+      },
+      {
+        "count": 3236,
+        "gram": "is"
+      },
+      {
+        "count": 3010,
+        "gram": "and"
+      },
+      {
+        "count": 2902,
+        "gram": "for"
+      },
+      {
+        "count": 2666,
+        "gram": "a"
+      },
+      {
+        "count": 2323,
+        "gram": "user"
+      },
+      {
+        "count": 2298,
+        "gram": "so"
+      },
+      {
+        "count": 2127,
+        "gram": "1"
+      },
+      {
+        "count": 1966,
+        "gram": "i"
+      },
+      {
+        "count": 1918,
+        "gram": "tool"
+      },
+      {
+        "count": 1795,
+        "gram": "call"
+      },
+      {
+        "count": 1713,
+        "gram": "but"
+      },
+      {
+        "count": 1699,
+        "gram": "2"
+      },
+      {
+        "count": 1666,
+        "gram": "function"
+      },
+      {
+        "count": 1654,
+        "gram": "with"
+      },
+      {
+        "count": 1523,
+        "gram": "3"
+      },
+      {
+        "count": 1381,
+        "gram": "get"
+      },
+      {
+        "count": 1375,
+        "gram": "in"
+      },
+      {
+        "count": 1296,
+        "gram": "of"
+      },
+      {
+        "count": 1173,
+        "gram": "you"
+      },
+      {
+        "count": 1096,
+        "gram": "parameters"
+      },
+      {
+        "count": 1046,
+        "gram": "4"
+      },
+      {
+        "count": 1015,
+        "gram": "provided"
+      },
+      {
+        "count": 945,
+        "gram": "return"
+      },
+      {
+        "count": 945,
+        "gram": "that"
+      },
+      {
+        "count": 927,
+        "gram": "are"
+      },
+      {
+        "count": 904,
+        "gram": "each"
+      },
+      {
+        "count": 887,
+        "gram": "me"
+      },
+      {
+        "count": 882,
+        "gram": "need"
+      },
+      {
+        "count": 868,
+        "gram": "as"
+      },
+      {
+        "count": 868,
+        "gram": "should"
+      }
+    ]
+  },
+  "top_k_per_channel": 512,
+  "total_grams": 3584,
+  "totals": {
+    "lexical_units": 179205,
+    "rows_seen": 1000,
+    "rows_used": 1000
+  },
+  "track": "PLAN-µ"
+}

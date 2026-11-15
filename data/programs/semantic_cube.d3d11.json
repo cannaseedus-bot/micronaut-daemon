@@ -1,0 +1,126 @@
+{
+  "@program": "semantic_cube.d3d11",
+  "@kind": "kuhul.d3d11.semantic-cube.v1",
+  "@namespace": "https://kuhul.dev/",
+  "@backend": "d3d11_cs5",
+  "@state": {
+    "faces": 6,
+    "shape": [1024, 1024, 4],
+    "dtype": "float32",
+    "resource": "RWTexture2DArray<float4>",
+    "phase": "Pop",
+    "shader": "dist/GPU-TRAINER/semantic_cube.cso",
+    "shader_source": "dist/GPU-TRAINER/semantic_cube.hlsl",
+    "runtime_shaders": {
+      "evolve": "dist/GPU-TRAINER/semantic_TensorEvolve.cso",
+      "attention": "dist/GPU-TRAINER/semantic_TensorAttention.cso",
+      "convolve": "dist/GPU-TRAINER/semantic_TensorConvolve.cso",
+      "gradient": "dist/GPU-TRAINER/semantic_TensorGradient.cso"
+    },
+    "native_bridge": "desktop/semantic_engine/include/webx_compute.h"
+  },
+  "@semantic_sources": {
+    "field_graph": "desktop/semantic_engine/include/FieldGraph.kuhul",
+    "kxml_compiler": "desktop/semantic_engine/include/kxml/kxml_compiler.rs",
+    "kxml_directxmath_bridge": "desktop/semantic_engine/include/kxml/kxml_directxmath_bridge.h",
+    "kxml_directxmath_runtime": "desktop/semantic_engine/include/kxml/kxml_directxmath_runtime.h",
+    "pi_kuhul_bridge": "desktop/semantic_engine/include/pi_kuhul/pi_kuhul_bridge.h",
+    "pi_kuhul_physics": "desktop/semantic_engine/include/pi_kuhul/KuhulPhysics.h",
+    "geometry": "desktop/semantic_engine/include/pi_kuhul/Geometry.h",
+    "spherical_geometry": "desktop/semantic_engine/include/pi_kuhul/SphericalGeometryAVX2.h",
+    "directxmath_avx2": "desktop/semantic_engine/include/pi_kuhul/DirectXMathAVX2.h",
+    "fold_compiler": "desktop/semantic_engine/include/pi_kuhul/Fold2DCompiler.h",
+    "directx_sh": "desktop/semantic_engine/include/pi_kuhul/SHMath/DirectXSH.h",
+    "directx_sh_d3d11": "desktop/semantic_engine/include/pi_kuhul/SHMath/DirectXSHD3D11.cpp"
+  },
+  "@field_sidecars": {
+    "dds_residency": {
+      "provider_dll": "dist/kuhul-runtime-v1/drivers/scx_dds_loader.dll",
+      "provider_smoke": "dist/kuhul-runtime-v1/drivers/scx_dds_loader_smoke.exe",
+      "loader_header": "C:/Users/canna/.ASX.cpp/DirectXTK/Inc/DDSTextureLoader.h",
+      "loader_source": "C:/Users/canna/.ASX.cpp/DirectXTK/Src/DDSTextureLoader.cpp",
+      "header_format": "C:/Users/canna/.ASX.cpp/DirectXTK/Src/DDS.h",
+      "role": "load a validated DDS payload into a D3D11 texture resource",
+      "accepted_tensor_contract": "float32 or provider-supported DXGI format with declared shape/layout",
+      "abi": ["scx_dds_inspect_file", "scx_dds_load_texture", "scx_dds_loader_version"],
+      "custom_containers": {
+        "scxqdds_r32f": "accept project DDS-framed r32f payloads through the bounded R32_FLOAT fallback",
+        "gpt_oss_mxfp4": "requires SCXQDDS reader/dequantization provider; do not reinterpret MXFP4 payloads as R32_FLOAT"
+      },
+      "not_gradient_authority": true,
+      "hot_swap": "stage, validate, synchronize, then publish tensor revision"
+    },
+    "green_screen": {
+      "source": "desktop/semantic_engine/include/shaders/optical/vector_green_screen.hlsl",
+      "vertex_binary": "dist/GPU-TRAINER/vector_green_screen_vs.cso",
+      "pixel_binary": "dist/GPU-TRAINER/vector_green_screen_ps.cso",
+      "profile": "vs_5_0,ps_5_0",
+      "contract": "CPU uploads viewProj and invViewProj as float32 constants; ArcData is 48 bytes"
+    },
+    "d3d11_smoke": {
+      "source": "dist/GPU-TRAINER/semantic_TensorEvolve_smoke.hlsl",
+      "binary": "dist/GPU-TRAINER/semantic_TensorEvolve_smoke.cso",
+      "profile": "cs_5_0",
+      "contract": "SRV input to UAV output; six-face float32 tensor evolution readback for legacy D3D11 drivers"
+    },
+    "optimizer": {
+      "source": "desktop/semantic_engine/include/win2d/shaders/field_optimizer.hlsl",
+      "binary": "desktop/semantic_engine/include/win2d/shaders/field_optimizer.cso",
+      "role": "optional bounded optimizer projection"
+    },
+    "stabilize": {
+      "source": "desktop/semantic_engine/include/shaders/StabilizeCS.hlsl",
+      "binary": "desktop/semantic_engine/include/shaders/StabilizeCS.cso",
+      "profile": "cs_5_0",
+      "status": "compiled"
+    },
+    "fibonacci": {
+      "source": "desktop/semantic_engine/include/shaders/FibonacciCS.hlsl",
+      "binary": "desktop/semantic_engine/include/shaders/FibonacciCS.cso",
+      "profile": "cs_5_0",
+      "status": "compiled"
+    },
+    "field_specs": [
+      "desktop/semantic_engine/include/win2d/field_system/specs/scroll_inertia_field_spec.json",
+      "desktop/semantic_engine/include/win2d/field_system/specs/wind_field_spec.json",
+      "desktop/semantic_engine/include/win2d/field_system/specs/attraction_well_spec.json",
+      "desktop/semantic_engine/include/win2d/field_system/specs/navigation_force_spec.json"
+    ],
+    "win2d_host": "desktop/semantic_engine/include/win2d/cs/Program.cs"
+  },
+  "@graphics_material_shaders": {
+    "DGSLLambert": "C:/Users/canna/.ASX.cpp/DirectXTK/Src/Shaders/DGSLLambert.hlsl",
+    "DGSLPhong": "C:/Users/canna/.ASX.cpp/DirectXTK/Src/Shaders/DGSLPhong.hlsl",
+    "DGSLUnlit": "C:/Users/canna/.ASX.cpp/DirectXTK/Src/Shaders/DGSLUnlit.hlsl",
+    "role": "rendering materials only; excluded from tensor training and semantic-cube gradient updates"
+  },
+  "@faces": {
+    "0": "Phi",
+    "1": "Fold",
+    "2": "Gram",
+    "3": "Geodesic",
+    "4": "Projection",
+    "5": "Entropy"
+  },
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "semantic_cube.load" },
+    { "@op": "CALL", "@fn": "SemanticCubeMap::create", "@args": [1024, 1024], "@out": "cube" },
+    { "@op": "CALL", "@fn": "SemanticCubeMap::createViews", "@args": ["$cube"], "@out": "views" },
+    { "@op": "FOLD_EXIT", "@fold": "Wo", "@node": "semantic_cube.load", "@args": ["$views"] },
+    { "@op": "FOLD_ENTER", "@fold": "Sek", "@node": "semantic_cube.evolve" },
+    { "@op": "CALL", "@fn": "SemanticCubeMap::dispatch", "@args": ["$cube", "$constants"], "@out": "evolved" },
+    { "@op": "FOLD_EXIT", "@fold": "Chen", "@node": "semantic_cube.evolve", "@args": ["$evolved"] },
+    { "@op": "CALL", "@fn": "SemanticCubeMap::projectSH", "@args": ["$cube", "$order"], "@out": "sh_coefficients" },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "semantic_cube.emit", "@args": ["$sh_coefficients"] }
+  ],
+  "@invariants": {
+    "face_count": 6,
+    "cube_tensor_shape": [6, 1024, 1024, 4],
+    "shader_entry": "SemanticCubeShader",
+    "cpu_face_enum_matches_hlsl": true,
+    "no_webgpu": true,
+    "authoritative_tensor_update": "GPU-TRAINER or declared CPU reference",
+    "semantic_sources_are_projections": true,
+    "missing_sidecar_binaries_must_not_be_claimed_ready": true
+  }
+}

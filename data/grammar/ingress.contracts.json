@@ -1,0 +1,69 @@
+{
+  "@type": "khanary.ingress.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "the_boundary_admits_the_agent_cannot_weaken_it",
+  "lane": "KHANARY_INGRESS_TEST",
+  "owner": "src/kuhul/ingress.cpp",
+  "why": "Everything the fold later reasons over arrives here, so this is the one place where being lenient is unrecoverable. Two things must not be confused: hard validation, which is immutable enforcement, and adaptive extraction, which Ingress-µ may learn. An untrusted page may contain instructions as text, but those instructions must never become commands because a parser extracted them, and no learned rule may widen the boundary that authorized it.",
+  "envelope": {
+    "law": "an IngressEnvelope is an immutable boundary record, distinct from the mutable working accumulator",
+    "fields": [
+      "envelope_id", "source_type", "source_identity", "received_at", "content_type", "schema_id",
+      "payload_hash", "payload_length", "trust_level", "provenance", "declared_capabilities",
+      "authorized_capabilities", "validation_status", "quarantine_reason", "normalized_payload_ref",
+      "raw_ref"
+    ],
+    "authority": "`declared_capabilities` are what the sender requests; `authorized_capabilities` are what the trusted host grants. The sender never decides its own authority.",
+    "raw_preservation": "the raw payload (or an authorized immutable reference to it) is preserved so extraction mistakes can be audited afterwards"
+  },
+  "layers": {
+    "hard": {
+      "is": "immutable enforcement: binary bounds, schema invariants, permission checks, resource limits, source isolation, XCFE admission",
+      "learnable": false,
+      "law": "no learned rule, delta or extractor may change this layer"
+    },
+    "adaptive": {
+      "is": "source-specific parsing strategies, boilerplate detection, field extraction, content classification, confidence estimation",
+      "learnable": true,
+      "law": "Ingress-µ may propose a better extractor for a source; it cannot grant that source permission to execute K'uhul or mutate GramStore"
+    }
+  },
+  "reward": {
+    "formula": "R_ingress = alpha*F + beta*S + gamma*P - delta*N - epsilon*C",
+    "terms": {
+      "F": "extraction fidelity",
+      "S": "verified useful-signal yield",
+      "P": "provenance completeness",
+      "N": "noise retained",
+      "C": "processing cost"
+    },
+    "security_is_a_gate": {
+      "law": "a security violation is a hard rejection condition, not a negative reward term",
+      "reason": "otherwise a high-yield but unsafe extractor could outscore a secure one",
+      "rule": "an extractor with a violation is ineligible regardless of its score"
+    },
+    "entropy_is_not_noise": {
+      "law": "low entropy is not synonymous with noise",
+      "example": "a repetitive identifier, timestamp or protocol field can be essential evidence",
+      "rule": "fields declared essential are never truncatable at the gate"
+    }
+  },
+  "properties": {
+    "law": "well-formed is not authorized is not trustworthy is not true",
+    "distinct": ["well_formed", "authorized", "trustworthy", "true"],
+    "consequence": "an envelope can be structurally valid, admitted by policy, and still neither trustworthy nor true; Ch'en still needs independent evidence verification and provenance-aware credit assignment"
+  },
+  "invariants": {
+    "IN1": "an envelope is immutable once created, and the sender's declared capabilities are never the authority: effective capabilities are the host's grant",
+    "IN2": "hard validation is immutable and unlearnable: a delta or rule may not alter bounds, schema invariants, permission checks or source isolation",
+    "IN3": "adaptive extraction is learnable but confined to extraction: a learned rule may propose a selector for a source and may not grant it anything",
+    "IN4": "extracted text is data, never a command: an instruction found inside a payload does not become executable because a parser surfaced it",
+    "IN5": "a security violation is a hard rejection condition; an unsafe extractor is ineligible however high its reward",
+    "IN6": "low entropy is not noise: essential fields (identifiers, timestamps, provenance) are never truncated at the gate",
+    "IN7": "the raw payload or an authorized immutable reference to it is retained for audit; an envelope without it is rejected",
+    "IN8": "well-formed, authorized, trustworthy and true are four separate predicates, and admitting an envelope asserts only the first two",
+    "IN9": "a malformed, oversized or mismatched envelope is quarantined with a typed reason rather than silently normalized",
+    "IN10": "the boundary admits: Ingress-µ learns how to extract better and cannot weaken, bypass or re-authorize the boundary that admits it"
+  }
+}

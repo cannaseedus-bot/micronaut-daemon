@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+  <category>
+    <pattern>CREATE KEY APP *</pattern>
+    <template>create_key_app</template>
+  </category>
+  <category>
+    <pattern>BUILD KEY APP *</pattern>
+    <template>build_key_app</template>
+  </category>
+</aiml>

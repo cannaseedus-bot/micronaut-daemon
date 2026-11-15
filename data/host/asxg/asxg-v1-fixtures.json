@@ -1,0 +1,16 @@
+{
+  "@kind":"asxg.conformance.fixtures.v1",
+  "contract":{"magic":"ASXG","version":1,"interpretation":"explicit_only"},
+  "valid":[
+    {"id":"empty","magic":"ASXG","version":1,"glyphs":[],"edges":[],"tensor":null,"payload":[],"scxq2":{"algorithm":"SCXQ2","version":1,"decoded_bytes":0}},
+    {"id":"unicode_graph","magic":"ASXG","version":1,"glyphs":["⚛","π","⟁"],"edges":[{"source":"⚛","target":"π","relation":"projects"},{"source":"π","target":"⟁","relation":"routes"}],"tensor":null,"payload":[1,2,3],"scxq2":{"algorithm":"SCXQ2","version":1,"decoded_bytes":3}},
+    {"id":"typed_tensor","magic":"ASXG","version":1,"glyphs":["⚛"],"edges":[],"tensor":{"dtype":"u8","shape":[2,2],"bytes_per_element":1},"payload":[0,1,2,3],"scxq2":{"algorithm":"SCXQ2","version":1,"decoded_bytes":4}},
+    {"id":"scxq2_payload","magic":"ASXG","version":1,"glyphs":["⟁"],"edges":[],"tensor":null,"payload":[83,67,88,81,50],"scxq2":{"algorithm":"SCXQ2","version":1,"compressed":true,"original_bytes":5,"decoded_bytes":5}}
+  ],
+  "invalid":[
+    {"id":"bad_magic","magic":"NOPE","version":1,"glyphs":[],"edges":[],"payload":[]},
+    {"id":"bad_version","magic":"ASXG","version":2,"glyphs":[],"edges":[],"payload":[]},
+    {"id":"dangling_edge","magic":"ASXG","version":1,"glyphs":["⚛"],"edges":[{"source":"⚛","target":"π","relation":"projects"}],"payload":[]},
+    {"id":"bad_length","magic":"ASXG","version":1,"glyphs":[],"edges":[],"payload":[1],"scxq2":{"algorithm":"SCXQ2","version":1,"decoded_bytes":2}}
+  ]
+}

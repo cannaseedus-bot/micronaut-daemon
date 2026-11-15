@@ -1,0 +1,58 @@
+{
+  "@type": "khanary.factory_production.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "research_proposes_the_factory_produces_verification_and_authorization_admit",
+  "lane": "KHANARY_FACTORY_GATE_TEST",
+  "owner": "src/micronaut/factory_gate.cpp",
+  "why": "Web research can surface material good enough to become a Micronaut program, and producing programs is what the factory exists for. But research output is untrusted input: a page, a hallucinated relation or a circular self-generated hypothesis must never become callable merely because the fold that carried it reached Xul. So the factory produces *proposals*, a gate audits them against the operation and capability vocabulary, and only verification plus authorization plus a shipped driver make a program callable.",
+  "pipeline": {
+    "law": "research -> candidates -> gate -> best proposal -> Ch'en verification -> Xul authorization -> registration",
+    "research_phase": "Yax produces evidence with provenance; evidence that was never fetched is not evidence",
+    "factory_phase": "Wo produces candidates; the factory never registers, dispatches or executes",
+    "gate": "the audit that decides whether a candidate is *admissible material* at all, before any ranking",
+    "selection": "ranking picks the best proposal; being best is a preference, not a permission"
+  },
+  "candidate": {
+    "fields": {
+      "id": "the proposed Micronaut id",
+      "description": "what the program would do",
+      "operations": "the program opcodes it would use",
+      "capability_refs": "capabilities it would expose: `cap:<token>`, a registered name, or `new:<ns>.<token>`",
+      "evidence_refs": "the research references that justify it",
+      "declared_size": "how many operations it would contain"
+    },
+    "law": "a candidate is a description of a program, not a program: nothing about it is executable"
+  },
+  "audit": {
+    "operations": "a candidate may use only the audited opcode vocabulary the loader already enforces (ADD, MUL, CALL, LOG, CONVERT, FOLD_ENTER, FOLD_EXIT, SCO_RESOLVE, SYMBOL_RESOLVE, SET, APPEND, IMPORT, PATTERN_BANK); anything else is refused",
+    "capabilities": "an exposed capability must be already declared, or a namespaced `new:` token — which is then not callable until it is registered and a driver exists",
+    "authority": "a candidate may not declare phase, policy or commit authority: those belong to XCFE, not to a produced program",
+    "size": "a candidate is bounded; a runaway generated program is refused rather than truncated",
+    "self_modification": "a candidate may not target the factory itself unless the policy explicitly allows it",
+    "evidence": "every evidence reference must resolve to a fetched observation; a citation of something never retrieved is refused"
+  },
+  "ranking": {
+    "score": "evidence coverage x audit pass x capability reuse",
+    "coverage": "min(1, sum(confidence) / 2) over the cited observations — a saturating sum, never a mean, so corroboration cannot lower the score",
+    "audit_pass": "1 for a candidate that survived every gate check, 0 for a refused one",
+    "capability_reuse": "the fraction of exposed capabilities that already exist in the registry, or 0.5 for a candidate that exposes none",
+    "law": "ranking orders proposals; the highest score is not an admission, and the gate's refusals are not outvoted by it"
+  },
+  "registration": {
+    "law": "a produced program becomes callable only when the gate admitted it, verification passed, authorization was granted, and both a driver manifest and a micronaut manifest exist",
+    "why": "the cfpc/xcfe defect is the precedent: a registered capability with no driver is not runnable, so production must ship the driver or the program cannot act"
+  },
+  "invariants": {
+    "FR1": "research evidence is untrusted input: a candidate citing an unfetched or unresolved reference is refused",
+    "FR2": "the factory produces proposals only, and no path in this layer registers, dispatches or executes a program",
+    "FR3": "a candidate's operations must lie within the audited opcode vocabulary; an unknown opcode is refused",
+    "FR4": "an exposed capability must be already declared or a namespaced `new:` token, and a new token is not callable until registration plus a driver manifest exist",
+    "FR5": "a candidate may not claim phase, policy or commit authority; authority stays with XCFE",
+    "FR6": "a candidate is bounded in size, and an oversized or runaway program is refused rather than truncated",
+    "FR7": "a candidate may not target the factory itself unless the policy explicitly allows self-modification",
+    "FR8": "ranking is a preference: the best-scoring candidate is still a proposal, and admission requires verification plus authorization",
+    "FR9": "registration requires an admitted candidate, passed verification and authorization, and both manifests — a produced program without a driver is not runnable",
+    "FR10": "the gate is deterministic: the same evidence and candidates produce the same refusal or the same best proposal"
+  }
+}

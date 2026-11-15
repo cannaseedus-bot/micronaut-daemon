@@ -1,0 +1,113 @@
+(* ============================================================ *)
+(* Wildcard Control Flow Grammar (Q-Prime family)               *)
+(* Then / Else / But are three different continuations.         *)
+(* ============================================================ *)
+
+(* THIS IS NOT STANDARD AIML.
+
+   In AIML, <srai> belongs in a *template* and redirects text to another
+   pattern. It is not a control-flow token inside a <pattern>. The surface below
+   is an extended wildcard grammar and is parsed by its own parser, separate from
+   the AIML loader. Anything that folds <srai> into pattern matching silently
+   redefines AIML, which is why the separation is a rule here rather than a
+   convention.
+
+   Three productions, three meanings:
+
+       * IF * OR * THEN * AND *     consequence with a conjunctive continuation
+       * IF * OR * ELSE * AND *     alternative branch
+       * IF * OR * BUT * AND *      contrast or exception — NOT an alias for ELSE
+
+   The second form matters most: ELSE without a known preceding THEN branch is
+   incomplete as executable control flow. It can still be recognised as a
+   question pattern, and it must generate QUERY_GAP rather than invent the
+   missing branch. Likewise BUT must not be read as ELSE.
+
+   The architectural rule:
+
+       Wildcard Match  !=  Resolved Condition  !=  Authorized Execution
+
+   A pattern that matches has established nothing but that it matched. *)
+
+(* ============================================================ *)
+(* 1. CONCRETE GRAMMAR — THE PATTERN SURFACE                    *)
+(* ============================================================ *)
+
+Pattern         ::= LeadingCapture* "IF" Condition Marker Continuation ;
+LeadingCapture  ::= Wildcard ;
+Condition       ::= Operand CondOp Operand ;
+Continuation    ::= Operand ContOp Operand ;
+
+Operand         ::= Wildcard | SraiNode ;
+CondOp          ::= "OR" | "AND" ;
+ContOp          ::= "AND" | "OR" ;
+Marker          ::= "THEN" | "ELSE" | "BUT" ;
+
+Wildcard        ::= "*" | "_" ;
+SraiNode        ::= "<srai>" Target "</srai>" | "<srai/>" ;
+Target          ::= String ;
+
+(* A capture slot is assigned in order of appearance, 1-based, across leading
+   captures, condition operands and continuation operands. A self-closing
+   <srai/> has no target and therefore no resolution; it yields KNOWLEDGE_GAP. *)
+
+(* ============================================================ *)
+(* 2. ABSTRACT GRAMMAR — THE AST                                *)
+(* ============================================================ *)
+
+ControlFlowADT  ::= "<" "leading:" "[" CaptureSlot* "]" ","
+                        "condition:" ConditionNode ","
+                        "continuation:" ContinuationNode ">" ;
+
+CaptureSlot     ::= "slot" Integer ;
+
+ConditionNode   ::= "<" "op:" CondOp ","
+                        "operands:" "[" OperandADT ("," OperandADT)* "]" ">" ;
+
+ContinuationNode ::= "<" "marker:" Marker ","
+                         "op:" ContOp ","
+                         "operands:" "[" OperandADT ("," OperandADT)* "]" ">" ;
+
+OperandADT      ::= "<" "capture:" CaptureSlot ">"
+                  | "<" "srai_call:" ( Target | "unresolved" ) ">" ;
+
+TypeJudgment    ::= "|-" Pattern ":" ControlFlowADT ;
+
+
+(* ============================================================ *)
+(* 3. THE QUESTION FAMILY                                       *)
+(* ============================================================ *)
+
+QuestionFamily  ::= "qprime.wildcard_control_flow" ;
+Dimension       ::= "capture"      (* which wildcard matched which span *)
+                  | "binding"      (* same value or independent values *)
+                  | "condition"    (* what decides the branch *)
+                  | "continuation" (* execute, fallback, or contrast *)
+                  | "srai"         (* what the redirection resolves to *)
+                  | "legality" ;   (* is the branch allowed in this phase *)
+
+GapRoute        ::= "QUERY_GAP"      (* information missing from the pattern *)
+                  | "INTENT_GAP"     (* the operator or marker is ambiguous *)
+                  | "KNOWLEDGE_GAP"  (* an SRAI target is unknown *)
+                  | "XCFE_REJECT" ;  (* the branch is not permitted *)
+
+GapPrecedence   ::= "XCFE_REJECT" "<" "QUERY_GAP" "<" "KNOWLEDGE_GAP" "<" "INTENT_GAP" ;
+(* the first blocking gap wins *)
+
+
+(* ============================================================ *)
+(* 4. SEMANTIC INVARIANTS                                       *)
+(* ============================================================ *)
+
+W1  ::= wildcard match is not a resolved condition and not authorized execution ;
+W2  ::= THEN implies consequence, ELSE implies alternative, BUT implies contrast or exception ;
+W3  ::= BUT is never read as ELSE and never synthesizes a THEN branch ;
+W4  ::= ELSE without a known THEN yields QUERY_GAP, never an invented branch ;
+W5  ::= a self-closing <srai/> has no target and yields KNOWLEDGE_GAP ;
+W6  ::= <srai> is its own AST node; it is never folded into the condition operator ;
+W7  ::= this grammar is parsed separately from standard AIML, where <srai> lives in templates ;
+W8  ::= capture slots are numbered in order of appearance, 1-based ;
+W9  ::= the legality question is asked before any branch is proposed ;
+W10 ::= a refused proposed branch yields XCFE_REJECT and the refusal code is preserved ;
+W11 ::= analysis is proposal-only: no record produced here can execute a branch ;
+W12 ::= two patterns' capture masks are compared by XOR; a differing mask is a measurement about the encodings, not a claim that the branches conflict ;

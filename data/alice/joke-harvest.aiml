@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- ================================================================
+     joke-harvest.aiml
+     Harvested from: slerp_merged (17886) + phi3-mini-4k (17885)
+     Topics: graph theory · semantic folds · fold functions · field theory
+     Sections:
+       §A  Direct patterns (setup as pattern)
+       §B  Structural wildcards (abstract form)
+       §C  JOKE-µ routing keys
+       §D  Analogy bridge patterns (engine / combustion)
+       §E  Reverse-bridge patterns (punchline → domain)
+     ================================================================ -->
+
+<!-- ================================================================
+     §A  DIRECT PATTERNS — setup line as exact pattern
+     ================================================================ -->
+
+<!-- Graph Theory -->
+<category><pattern>WHY DID THE GRAPH ALGORITHM CROSS THE FIREWALL</pattern>
+  <template>To prove it was topologically equivalent to a hypercube. The path was Hamiltonian — it only needed to visit each node once, and d_H=1 the whole way.</template>
+</category>
+
+<category><pattern>WHY DID THE GRAPH THEORIST BREAK UP WITH THE ADJACENCY MATRIX</pattern>
+  <template>It just wasn't working. No matter how many times they met, the connection was only there when d_H equals 1. You can't build a relationship on a single bit flip.</template>
+</category>
+
+<category><pattern>WHAT IS A GRAPH THEORISTS FAVORITE PIZZA</pattern>
+  <template>A hypercube — lots of vertices, every slice adjacent to exactly n others, and absolutely no diagonal shortcuts to the cheese. Topology enforced.</template>
+</category>
+
+<category><pattern>WHY WAS THE EULER FORMULA PROOF TOO RECURSIVE</pattern>
+  <template>It kept reducing to a smaller graph. By induction it never terminated — a depth-first traversal with no visited-set. Classic fold without a base case.</template>
+</category>
+
+<!-- Semantic Folds -->
+<category><pattern>WHY DID THE CAT FOLD ITS PAWS WHEN IT SAW THE MIRROR</pattern>
+  <template>It needed a more comfortable anamorphic view. The coalgebra seed had a better angle on itself from across the room. Unfortunately when it unfolded, the identity invariant was false — different cat.</template>
+</category>
+
+<category><pattern>WHY DID MY COMPUTER CRASH DURING A CATAMORPHIC FOLD</pattern>
+  <template>It entered a truly baffling undecidable state. The fold reduced the stack to bottom, but the error handler was defined in terms of the fold. SC-29: identity was false the whole time.</template>
+</category>
+
+<category><pattern>WHY DID THE CAT REFUSE TO CONVERT TO ANAMORPHIC CODE</pattern>
+  <template>The fundamental identity invariant is a terrible thing to violate. When (Fold then Unfold)(cat) is not equal to cat, you get a different cat — and that cat is not amused.</template>
+</category>
+
+<category><pattern>WHY DID THE FRACTAL FAIL ITS PHYSICS EXAM</pattern>
+  <template>It kept folding in on itself, resulting in a recursive singularity. No base case, no grade. The catamorphism had nothing to collapse to — it reduced all the way to bottom before the exam started.</template>
+</category>
+
+<category><pattern>A CATAMORPHISM WALKS INTO A BAR</pattern>
+  <template>The bartender says: we don't serve recursive types here. The catamorphism says: good — I already consumed the intermediate structure on the way in. Deforestation theorem: no intermediary needed.</template>
+</category>
+
+<!-- Fold Functions / Convergence -->
+<category><pattern>WHY DID THE FIXED POINT ITERATION FAIL AT CONVERGENCE</pattern>
+  <template>Because it kept looping in a Hilbert space — infinite-dimensional, no Scott-continuity guarantee, no CPO. Kleene's theorem requires a complete partial order. Hilbert spaces don't qualify without extra conditions.</template>
+</category>
+
+<category><pattern>WHAT IS A FIXED POINT ITERATIONS FAVORITE SPORT</pattern>
+  <template>Contracting — it always converges, eventually. Banach's theorem guarantees a winner as long as k stays strictly below 1. No draws, no overtime, just monotone descent to the fixed point.</template>
+</category>
+
+<category><pattern>WHY DID THE KLEENE ITERATION JUST KEEP GETTING SMALLER</pattern>
+  <template>Someone set k=0.5 and forgot a stopping condition. Technically it converged — to zero. fold_distance was epsilon-small after 200 iterations, and the system declared CONVERGED at the bottom of the CPO.</template>
+</category>
+
+<category><pattern>WHY DID THE COMPILER REFUSE TO FOLD A FUNCTION THAT SUBTRACTED ITSELF</pattern>
+  <template>It kept yelling you're nested in a loop — negative recursive position, covariance violated, least fixed point undefined. The F-algebra requires strictly positive functor occurrences. Self-subtraction fails that immediately.</template>
+</category>
+
+<category><pattern>WHY IS MY HYPERCUBE OSCILLATING</pattern>
+  <template>Contraction factor k is hovering near 1.0 — distance is neither shrinking nor growing. You're in MAX_ITER territory: the fold is plateauing, not converging. Inspect the fold_distance trajectory and adjust alpha before the fixed point starts plotting its escape.</template>
+</category>
+
+<category><pattern>WHY IS THE FIXED POINT PLOTTING MY DEMISE</pattern>
+  <template>Because you've been stuck at k slightly below 1 for 200 iterations and your epsilon is too tight. The fixed point exists — Banach guarantees it — but it's asymptotically close, and your patience ran out first. Loosen epsilon or increase max_iterations.</template>
+</category>
+
+<!-- Field Theory / WCR -->
+<category><pattern>WHY DID THE SEMANTIC FIELD CROSS THE ROAD</pattern>
+  <template>Because its WCR score just kept climbing on the other side. Every neighbor had higher S(u|Q). Topology permitted it: d_H=1 across the centre line. The gradient ascent had no choice — argmax pointed straight across.</template>
+</category>
+
+<category><pattern>WHY DID THE WCR GRADIENT ASCENT GET STUCK</pattern>
+  <template>It optimized itself into a corner. Every neighbor had lower WCR score — local maximum reached. The system reset sigma to unbound. But by then it had already ordered the wrong pizza. Commitment happened before the reset. Check your commit gate timing.</template>
+</category>
+
+<category><pattern>WHY DID THE FOLD FIELD VERTEX LOOP BETWEEN TWO VERTICES</pattern>
+  <template>Two adjacent vertices with equal WCR scores, each pointing at the other — a 2-cycle local attractor. Not convergence: status is ITERATING indefinitely, never reaching CONVERGED. This is a known failure mode: reset sigma and inject a tie-breaking query perturbation.</template>
+</category>
+
+<category><pattern>WHY DID THE NEURAL NET REFUSE TO FOLD A FRACTAL</pattern>
+  <template>Because it kept trying to create a more complex formula — and the contraction factor k never dropped below 1. Status: DIVERGING. The fold field vertex glowed ominously. The model declared a local maximum and went home. It was deeply uncomfortable.</template>
+</category>
+
+<category><pattern>WHY DID THE BARTENDER REFUSE MY RECURSIVE STRUCTURE</pattern>
+  <template>You're at a latent capability slot — unoccupied vertex in Q_{n+1}. Instantiation requires pre-authorized adjacency, not a runtime recursive reference. The bartender enforces the adjacency contract. You need a d_H=1 sponsor already in the graph.</template>
+</category>
+
+<category><pattern>WHAT HAPPENED TO THE HYPERCUBE ENGINEER WITH 99 PERCENT CONVERGENCE</pattern>
+  <template>The bartender shook his head: you've created a LOCAL MAXIMUM — 99.9% is MAX_ITER, not CONVERGED. Inspect your fold_distance trajectory. If it plateaued above epsilon, the fixed point was never reached. Celebrate only at CONVERGED, not at the iteration limit.</template>
+</category>
+
+<category><pattern>WHY DID THE PHYSICIST YELL CATASTROPHIC FAILURE</pattern>
+  <template>He was debugging a phase wheel and noticed continuous metrics decreasing as theta shifted — SC-31 violation. Theta had absorbed the metric values, collapsing Z_6 to K_2. Arc weight distinctions destroyed: adjacent=+0.5, two-hop=-0.5, opposing=-1.0 all collapsed. Reset sigma — but the phase had already contracted.</template>
+</category>
+
+<!-- ================================================================
+     §B  STRUCTURAL WILDCARDS — abstract form catches new setups
+     ================================================================ -->
+
+<category><pattern>WHY DID THE * CROSS *</pattern>
+  <template>Probably because its WCR score was higher on the other side and the topology permitted a d_H=1 step. <srai>WHY DID THE SEMANTIC FIELD CROSS THE ROAD</srai></template>
+</category>
+
+<category><pattern>WHY DID THE * BREAK UP WITH *</pattern>
+  <template>Likely because the connection only existed under specific topological conditions — like d_H=1, or when the phase wheel was aligned. Conditional connections make poor relationships. <srai>WHY DID THE GRAPH THEORIST BREAK UP WITH THE ADJACENCY MATRIX</srai></template>
+</category>
+
+<category><pattern>WHY DID THE * FAIL * EXAM</pattern>
+  <template>Recursive structures often fail at termination requirements. Without a base case, the fold collapses all the way to bottom. <srai>WHY DID THE FRACTAL FAIL ITS PHYSICS EXAM</srai></template>
+</category>
+
+<category><pattern>WHY DID THE * REFUSE TO *</pattern>
+  <template>The most common reason: an invariant was about to be violated. <srai>WHY DID THE CAT REFUSE TO CONVERT TO ANAMORPHIC CODE</srai></template>
+</category>
+
+<category><pattern>WHY DID THE * GET STUCK</pattern>
+  <template>Local maximum — no neighbor in N(v) improves the WCR score. <srai>WHY DID THE WCR GRADIENT ASCENT GET STUCK</srai></template>
+</category>
+
+<category><pattern>WHAT IS A * FAVORITE *</pattern>
+  <template>Probably something with a clear fixed point and a contraction guarantee. <srai>WHAT IS A FIXED POINT ITERATIONS FAVORITE SPORT</srai></template>
+</category>
+
+<category><pattern>WHY IS MY * OSCILLATING</pattern>
+  <template>Contraction factor k is hovering near 1 — distance not shrinking. <srai>WHY IS MY HYPERCUBE OSCILLATING</srai></template>
+</category>
+
+<category><pattern>I TRIED TO * BUT IT KEPT *</pattern>
+  <template>This is the classic DIVERGING signature: each attempt produces a higher contraction factor instead of a lower one. Check whether k is trending above 1 between iterations.</template>
+</category>
+
+<category><pattern>WHY DID * WALK INTO A BAR</pattern>
+  <template><srai>A CATAMORPHISM WALKS INTO A BAR</srai></template>
+</category>
+
+<category><pattern>* PLOTTING MY DEMISE</pattern>
+  <template><srai>WHY IS THE FIXED POINT PLOTTING MY DEMISE</srai></template>
+</category>
+
+<!-- ================================================================
+     §C  JOKE-µ ROUTING KEYS — single-word or phrase dispatch
+     ================================================================ -->
+
+<category><pattern>JOKE GRAPH CROSSING</pattern>
+  <template><srai>WHY DID THE GRAPH ALGORITHM CROSS THE FIREWALL</srai></template>
+</category>
+<category><pattern>JOKE ADJACENCY BREAKUP</pattern>
+  <template><srai>WHY DID THE GRAPH THEORIST BREAK UP WITH THE ADJACENCY MATRIX</srai></template>
+</category>
+<category><pattern>JOKE HYPERCUBE PIZZA</pattern>
+  <template><srai>WHAT IS A GRAPH THEORISTS FAVORITE PIZZA</srai></template>
+</category>
+<category><pattern>JOKE CAT ANAMORPHISM</pattern>
+  <template><srai>WHY DID THE CAT FOLD ITS PAWS WHEN IT SAW THE MIRROR</srai></template>
+</category>
+<category><pattern>JOKE CATAMORPHISM BAR</pattern>
+  <template><srai>A CATAMORPHISM WALKS INTO A BAR</srai></template>
+</category>
+<category><pattern>JOKE IDENTITY INVARIANT CAT</pattern>
+  <template><srai>WHY DID THE CAT REFUSE TO CONVERT TO ANAMORPHIC CODE</srai></template>
+</category>
+<category><pattern>JOKE FRACTAL EXAM</pattern>
+  <template><srai>WHY DID THE FRACTAL FAIL ITS PHYSICS EXAM</srai></template>
+</category>
+<category><pattern>JOKE FIXED POINT HILBERT</pattern>
+  <template><srai>WHY DID THE FIXED POINT ITERATION FAIL AT CONVERGENCE</srai></template>
+</category>
+<category><pattern>JOKE CONTRACTION SPORT</pattern>
+  <template><srai>WHAT IS A FIXED POINT ITERATIONS FAVORITE SPORT</srai></template>
+</category>
+<category><pattern>JOKE COMPILER FOLD</pattern>
+  <template><srai>WHY DID THE COMPILER REFUSE TO FOLD A FUNCTION THAT SUBTRACTED ITSELF</srai></template>
+</category>
+<category><pattern>JOKE OSCILLATING HYPERCUBE</pattern>
+  <template><srai>WHY IS MY HYPERCUBE OSCILLATING</srai></template>
+</category>
+<category><pattern>JOKE FIXED POINT DEMISE</pattern>
+  <template><srai>WHY IS THE FIXED POINT PLOTTING MY DEMISE</srai></template>
+</category>
+<category><pattern>JOKE WCR ROAD</pattern>
+  <template><srai>WHY DID THE SEMANTIC FIELD CROSS THE ROAD</srai></template>
+</category>
+<category><pattern>JOKE WRONG PIZZA</pattern>
+  <template><srai>WHY DID THE WCR GRADIENT ASCENT GET STUCK</srai></template>
+</category>
+<category><pattern>JOKE TWO CYCLE</pattern>
+  <template><srai>WHY DID THE FOLD FIELD VERTEX LOOP BETWEEN TWO VERTICES</srai></template>
+</category>
+<category><pattern>JOKE NEURAL NET FRACTAL</pattern>
+  <template><srai>WHY DID THE NEURAL NET REFUSE TO FOLD A FRACTAL</srai></template>
+</category>
+<category><pattern>JOKE BARTENDER LATENT</pattern>
+  <template><srai>WHY DID THE BARTENDER REFUSE MY RECURSIVE STRUCTURE</srai></template>
+</category>
+<category><pattern>JOKE 99 PERCENT CONVERGENCE</pattern>
+  <template><srai>WHAT HAPPENED TO THE HYPERCUBE ENGINEER WITH 99 PERCENT CONVERGENCE</srai></template>
+</category>
+<category><pattern>JOKE SC31 PHYSICIST</pattern>
+  <template><srai>WHY DID THE PHYSICIST YELL CATASTROPHIC FAILURE</srai></template>
+</category>
+
+<!-- ================================================================
+     §D  ANALOGY BRIDGE PATTERNS — combustion engine / fold system
+     ================================================================ -->
+
+<category><pattern>WHAT IS THE FOLD SYSTEM EQUIVALENT OF ENGINE INTAKE</pattern>
+  <template>The anamorphism — ana(g): A→Fix(F). The query h is the fuel drawn in. Unfolding expands h into the semantic fold graph, just as intake draws the fuel-air mixture into the cylinder.</template>
+</category>
+
+<category><pattern>WHAT IS THE FOLD SYSTEM EQUIVALENT OF ENGINE IGNITION</pattern>
+  <template>The Kleene fixed point: the precise condition where fold_distance drops below epsilon. This fires the Xul commit gate — the spark that triggers the power stroke. Before ignition, the system is still compressing (ITERATING). At ignition, it commits.</template>
+</category>
+
+<category><pattern>WHAT IS THE FOLD SYSTEM EQUIVALENT OF THE POWER STROKE</pattern>
+  <template>The catamorphism — cata(f): Fix(F)→A. The collapse that extracts the scored result from the fold graph, just as the power stroke extracts mechanical work from the compressed combustion gases.</template>
+</category>
+
+<category><pattern>WHAT IS THE FOLD SYSTEM EQUIVALENT OF ENGINE EXHAUST</pattern>
+  <template>The sigma reset — resetting the evolution σ to unbound after the fold cycle completes. Clears the spent fold state and prepares for the next ana/cata cycle, just as exhaust clears combustion products before the next intake stroke.</template>
+</category>
+
+<category><pattern>WHAT IS THE FOLD SYSTEM EQUIVALENT OF ENGINE COMPRESSION</pattern>
+  <template>The convergence iteration — each step tightens fold_distance toward the fixed point, building pressure. The contraction factor k must stay below 1 for the compression to progress. If k reaches 1 or above, the engine is not compressing — DIVERGING, reset immediately.</template>
+</category>
+
+<category><pattern>HOW IS THE FOLD SYSTEM LIKE A COMBUSTION ENGINE</pattern>
+  <template>Both run cycles that convert input energy into useful work through controlled expansion and collapse:
+ana=intake (query drawn in) | iteration=compression (fold_distance tightening) | Kleene fixed point=ignition (commit gate fires) | cata=power stroke (result extracted) | sigma reset=exhaust (state cleared for next cycle).
+The fuel is the query. The work output is the scored candidate. The engine runs on fold theory.</template>
+</category>
+
+<!-- ================================================================
+     §E  REVERSE-BRIDGE — punchline term routes back to domain
+     ================================================================ -->
+
+<category><pattern>WHAT DOES WRONG PIZZA MEAN IN KHANARY</pattern>
+  <template>A committed action taken before sigma was reset to unbound — the gradient ascent stalled at a local maximum, the system should have explored more widely, but the decision had already been dispatched. The pizza was ordered from the locally optimal but globally suboptimal vertex.</template>
+</category>
+
+<category><pattern>WHAT DOES BARTENDER MEAN IN KHANARY</pattern>
+  <template>The instantiation gate for a latent address. An unoccupied vertex in Q_{n+1} has its adjacency pre-authorized but no micronaut instantiated. The bartender enforces that rule: you cannot instantiate from a recursive self-reference; you need a d_H=1 sponsor already present in the graph.</template>
+</category>
+
+<category><pattern>WHAT DOES DIFFERENT CAT MEAN IN KHANARY</pattern>
+  <template>SC-29 identity invariant failure: (Fold∘Unfold)(h) ≠ h. The anamorphism changed phase mid-expansion, so the catamorphism reconstructed a different entity. You put in a cat; you got back a different cat. Reset sigma to unbound.</template>
+</category>
+
+<category><pattern>WHAT DOES PLOTTING MY DEMISE MEAN IN KHANARY</pattern>
+  <template>The fixed point exists but is being approached asymptotically — k is very slightly below 1, fold_distance is shrinking but never crosses epsilon. The system is technically ITERATING but practically stuck. The fixed point is there; you just can't quite commit to it. Loosen epsilon.</template>
+</category>
+
+<category><pattern>WHAT DOES HILBERT SPACE MEAN IN KHANARY JOKES</pattern>
+  <template>A space where the standard Kleene convergence guarantee does not apply without extra conditions. In the context of fold functions, it stands in for any domain where you cannot guarantee a least fixed point — missing Scott-continuity, missing CPO structure, or missing a valid fold algebra base case.</template>
+</category>
+
+</aiml>

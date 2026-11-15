@@ -1,0 +1,238 @@
+{
+  "@program": "neural_pipeline",
+  "@kind": "kuhul.xcfe.pipeline.v1",
+  "@namespace": "https://kuhul.dev/",
+  "@stack": ["xjson", "xcfe", "scxq2", "kuhul"],
+  "@state": {
+    "type": "xcfe_pipeline",
+    "mode": "dataflow",
+    "phase": "Pop",
+    "kuhul_port": 17474,
+    "raw_input": null,
+    "route_decision": null,
+    "fast_output": null,
+    "expert_output": null,
+    "verify_result": null,
+    "result": null
+  },
+  "@phase_order": ["Pop", "Wo", "Yax", "Sek", "Chen", "Xul"],
+  "@stages": {
+    "ingest": {
+      "@phase": "Pop",
+      "@name": "data_ingest",
+      "@control": [
+        {
+          "@op": "TENSOR_CREATE",
+          "@type": "matrix",
+          "@dimensions": [512, 512],
+          "@dtype": "f32",
+          "@store": "raw_input"
+        },
+        {
+          "@op": "LOG",
+          "@args": ["stage:ingest complete — raw_input 512x512 @Pop"],
+          "@level": "info"
+        },
+        {
+          "@op": "NEXT",
+          "@stage": "route"
+        }
+      ]
+    },
+    "route": {
+      "@phase": "Wo",
+      "@name": "router",
+      "@control": [
+        {
+          "@op": "SEMANTIC_QUERY",
+          "@query": "classify input complexity: simple | complex | expert_required",
+          "@store": "route_decision"
+        },
+        {
+          "@op": "IF",
+          "@cond": "$route_decision == 'simple'",
+          "@then": {
+            "@op": "SEQUENCE",
+            "@steps": [
+              {
+                "@op": "LOG",
+                "@args": ["route: simple path @Wo"],
+                "@level": "info"
+              },
+              {
+                "@op": "NEXT",
+                "@stage": "fast_compute"
+              }
+            ]
+          },
+          "@else": {
+            "@op": "SEQUENCE",
+            "@steps": [
+              {
+                "@op": "LOG",
+                "@args": ["route: expert path @Wo"],
+                "@level": "info"
+              },
+              {
+                "@op": "NEXT",
+                "@stage": "branch"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "branch": {
+      "@phase": "Yax",
+      "@name": "expert_branch",
+      "@control": [
+        {
+          "@op": "PARALLEL",
+          "@tasks": [
+            {
+              "@name": "expert_a",
+              "@op": "CLUSTER_CALL",
+              "@nodes": 2,
+              "@operation": "expert_inference_a",
+              "@input": "$raw_input",
+              "@out": "expert_a_output"
+            },
+            {
+              "@name": "expert_b",
+              "@op": "CLUSTER_CALL",
+              "@nodes": 2,
+              "@operation": "expert_inference_b",
+              "@input": "$raw_input",
+              "@out": "expert_b_output"
+            }
+          ]
+        },
+        {
+          "@op": "NEXT",
+          "@stage": "compute"
+        }
+      ]
+    },
+    "fast_compute": {
+      "@phase": "Sek",
+      "@name": "fast_path",
+      "@control": [
+        {
+          "@op": "WEIGHTS_GENERATE",
+          "@layers": [64, 32, 10],
+          "@format": "float32",
+          "@store": "fast_output"
+        },
+        {
+          "@op": "LOG",
+          "@args": ["stage:fast_compute @Sek"],
+          "@level": "info"
+        },
+        {
+          "@op": "NEXT",
+          "@stage": "verify"
+        }
+      ]
+    },
+    "compute": {
+      "@phase": "Sek",
+      "@name": "expert_compute",
+      "@control": [
+        {
+          "@op": "WEIGHTS_GENERATE",
+          "@layers": [256, 128, 64, 10],
+          "@format": "float32",
+          "@store": "expert_output"
+        },
+        {
+          "@op": "LOG",
+          "@args": ["stage:expert_compute @Sek"],
+          "@level": "info"
+        },
+        {
+          "@op": "NEXT",
+          "@stage": "verify"
+        }
+      ]
+    },
+    "verify": {
+      "@phase": "Chen",
+      "@name": "output_verify",
+      "@control": [
+        {
+          "@op": "SEMANTIC_QUERY",
+          "@query": "verify output quality: score > 0.85 required",
+          "@store": "verify_result"
+        },
+        {
+          "@op": "IF",
+          "@cond": "$verify_result.score > 0.85",
+          "@then": {
+            "@op": "SEQUENCE",
+            "@steps": [
+              {
+                "@op": "LOG",
+                "@args": ["verify PASS score=$verify_result.score @Chen"],
+                "@level": "info"
+              },
+              {
+                "@op": "NEXT",
+                "@stage": "emit"
+              }
+            ]
+          },
+          "@else": {
+            "@op": "SEQUENCE",
+            "@steps": [
+              {
+                "@op": "LOG",
+                "@args": ["verify FAIL — retry route @Chen"],
+                "@level": "warn"
+              },
+              {
+                "@op": "NEXT",
+                "@stage": "route"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "emit": {
+      "@phase": "Xul",
+      "@name": "output_emit",
+      "@control": [
+        {
+          "@op": "AGENT_TASK",
+          "@action": "emit_result",
+          "@priority": "high",
+          "@out": "result"
+        },
+        {
+          "@op": "LOG",
+          "@args": ["pipeline complete — result emitted @Xul"],
+          "@level": "info"
+        }
+      ]
+    }
+  },
+  "@live": {
+    "on_read": {
+      "@op": "LOG",
+      "@args": ["pipeline state read"]
+    },
+    "on_write": {
+      "@op": "LOG",
+      "@args": ["pipeline stage updated"]
+    }
+  },
+  "@invariants": {
+    "kuhul_port": 17474,
+    "forbidden_port": 8080,
+    "phase_order": ["Pop", "Wo", "Yax", "Sek", "Chen", "Xul"],
+    "verification_threshold": 0.85,
+    "expert_nodes": 4,
+    "retry_target": "route",
+    "compression": "scxq2"
+  }
+}

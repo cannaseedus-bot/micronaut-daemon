@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kxml version="2.0" xmlns="http://kuhul.io/kxml/v2">
+  <tools authority="projection_only" admission="W*C*R">
+    <tool id="compare" weight="0.62" confidence="0.72">
+      <pattern>COMPARE * AND *</pattern>
+      <wildcards>
+        <wildcard id="0" role="item_a" phase="Wo"/>
+        <wildcard id="1" role="item_b" phase="Wo"/>
+      </wildcards>
+      <template to="Ch'en">
+        <step phase="Wo">bind item_a and item_b</step>
+        <step phase="Yax">establish comparison candidates</step>
+        <step phase="Sek">select XCFE:COMPARE</step>
+        <step phase="Ch'en">produce observation</step>
+        <step phase="Xul">collapse answer and learning evidence</step>
+      </template>
+      <graph>
+        <node id="compare" phase="Yax" op="tool"/>
+        <node id="item_a" phase="Wo" op="wildcard"/>
+        <node id="item_b" phase="Wo" op="wildcard"/>
+        <edge from="compare" to="item_a" relationship="operates_on"/>
+        <edge from="compare" to="item_b" relationship="operates_on"/>
+        <edge from="item_a" to="item_b" relationship="compared_with"/>
+      </graph>
+    </tool>
+    <tool id="project" weight="0.62" confidence="0.72">
+      <pattern>PROJECT *</pattern>
+      <wildcards>
+        <wildcard id="0" role="projection_payload" phase="Ch'en"/>
+      </wildcards>
+      <template to="Xul">
+        <step phase="Ch'en">prepare projection payload</step>
+        <step phase="Xul">collapse to green-screen output</step>
+      </template>
+      <graph>
+        <node id="project" phase="Ch'en" op="tool"/>
+        <node id="green_screen" phase="Xul" op="projection_sandbox"/>
+        <edge from="project" to="green_screen" relationship="projects_to"/>
+      </graph>
+    </tool>
+    <tool id="task-executor" weight="0.88" confidence="0.84">
+      <pattern>*</pattern>
+      <wildcards>
+        <wildcard id="0" role="user_task_prompt" phase="Pop"/>
+      </wildcards>
+      <template to="Xul">
+        <step phase="Pop">capture prompt</step>
+        <step phase="Wo">write PLAN.md</step>
+        <step phase="Yax">instantiate task queue</step>
+        <step phase="Sek">execute note/read/write/patch/tool/check verbs</step>
+        <step phase="Ch'en">append execution log</step>
+        <step phase="Xul">collapse task summary</step>
+      </template>
+      <verbs>
+        <verb>note</verb>
+        <verb>read</verb>
+        <verb>write</verb>
+        <verb>patch</verb>
+        <verb>tool</verb>
+        <verb>check</verb>
+      </verbs>
+      <graph>
+        <node id="prompt" phase="Pop" op="wildcard"/>
+        <node id="PLAN.md" phase="Wo" op="plan_file"/>
+        <node id="file_verbs" phase="Sek" op="executor_verbs"/>
+        <node id="rig_tools" phase="Sek" op="tool_registry"/>
+        <edge from="prompt" to="PLAN.md" relationship="materializes_as"/>
+        <edge from="PLAN.md" to="file_verbs" relationship="contains"/>
+        <edge from="file_verbs" to="rig_tools" relationship="resolves"/>
+      </graph>
+    </tool>
+  </tools>
+  <projection_sandbox id="green-screen" kind="dom" target="#atomic-dom" isolation="false">
+    <surface>dom</surface>
+    <surface>terminal</surface>
+    <surface>ansi</surface>
+    <surface>canvas</surface>
+    <surface>html</surface>
+  </projection_sandbox>
+</kxml>

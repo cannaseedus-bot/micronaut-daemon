@@ -1,0 +1,71 @@
+[
+  {
+    "text": "Scaffold MX-2 manifest",
+    "status": "done"
+  },
+  {
+    "text": "Wire bots.py to native CLI",
+    "status": "done"
+  },
+  {
+    "text": "Launch WPF chat UI",
+    "status": "done"
+  },
+  {
+    "text": "Hook ingest/train commands",
+    "status": "done"
+  },
+  {
+    "text": "Persist todo state to JSON",
+    "status": "done"
+  },
+  {
+    "text": "Add WPF question/options widget",
+    "status": "done"
+  },
+  {
+    "text": "kuhul-runtime: MemoryMappedFile bridge",
+    "status": "done"
+  },
+  {
+    "text": "kuhul-runtime: FLWOR/XPath + Stelae",
+    "status": "done"
+  },
+  {
+    "text": "Atomic pipeline ngram→agents→blocks",
+    "status": "done"
+  },
+  {
+    "text": "Route chat through KX-1 not PowerShell",
+    "status": "done",
+    "note": "Invoke-ModelChat → kuhul_engine:17474/v1/chat/completions (OpenAI-compat). Fallback: /tool/invoke kuhul_forge."
+  },
+  {
+    "text": "Replace PS subprocess with K'UHUL HTTP",
+    "status": "done",
+    "note": "micronaut-ui-chat-app.ps1 now routes all inference via kuhul_engine:17474. Port 9000 / gpt2_infer.json removed."
+  },
+  {
+    "text": "Trainer dashboard: update defaults to mm-coder paths",
+    "status": "done",
+    "note": "webgl2-trainer-dashboard.ps1 defaults now point to models/from_zero/trained/mm-coder_step500.safetensors + tokens/mm-coder.bin"
+  },
+  {
+    "text": "Micronaut factory + evolution dashboard",
+    "status": "done",
+    "note": "micronaut-factory-dashboard.ps1 — Factory tab (create/edit micronaut.v2 + registry), Evolution tab (lineage list + Train/Promote/Inspect), Training tab (live gpt2_trainer.exe stdout via ConcurrentQueue + DispatcherTimer). kuhul:17474, NEVER 8080."
+  },
+  {
+    "text": "Wire AtomicBlock feed to WPF live tape",
+    "status": "next"
+  },
+  {
+    "text": "fix swarm",
+    "status": "next"
+  },
+  {
+    "text": "Add mm-coder training progress to trainer dashboard event log",
+    "status": "next",
+    "note": "Poll gpt2_trainer.exe stdout (trainer step=N loss=X lines) and feed into EventsList. Requires wrapping gpt2_trainer.exe launch in dashboard similar to Start-NativeGpuTraining."
+  }
+]

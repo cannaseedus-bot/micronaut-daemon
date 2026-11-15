@@ -1,0 +1,337 @@
+{
+  "TOOL:": [
+    "@tool",
+    "tool:intent",
+    "tool:verb",
+    "tool:admission",
+    "track:tool",
+    "intent:tool_call_plan",
+    "phase:Wo",
+    "phase:Sek"
+  ],
+  "@tool": [
+    "TOOL:",
+    "intent:tool_call",
+    "route:tool-dispatch",
+    "emit:tool_call_candidate",
+    "not:direct_execution"
+  ],
+  "tool:intent": [
+    "required:one_intent_key",
+    "source:words.manifest.json",
+    "classify:requested_outcome",
+    "not:execution_authority"
+  ],
+  "tool:verb": [
+    "required:one_registered_verb",
+    "source:tool.manifest.json",
+    "classify:requested_operation",
+    "not:execution_authority"
+  ],
+  "tool:admission": [
+    "requires:intent+verb",
+    "requires:registered_command_track",
+    "boundary:InvocationValidationBoundary",
+    "authority:host_registry",
+    "emit:tool_call_candidate",
+    "not:direct_execution"
+  ],
+  "catalog:programs": [
+    "root:data/programs",
+    "registry:data/programs/actions.manifest.json",
+    "routes:data/programs/model-capability-routes.json",
+    "dispatcher:data/programs/programs_dispatcher.json",
+    "scope:declared_files_only",
+    "not:any_json_file"
+  ],
+  "catalog:micronauts": [
+    "root:data/micronauts",
+    "contract:data/micronauts/MICRONAUTS.ebnf",
+    "runtime-root:data/programs/micronauts",
+    "runtime-contract:data/programs/micronauts/MICRONAUTS.ebnf",
+    "scope:declared_micronauts_only",
+    "not:self_declared_authority"
+  ],
+  "track:tool": [
+    "id:TOOL-µ",
+    "track-ref:data/tracks/TOOL-u.semantic-tracks.v1.json",
+    "phase:Sek",
+    "role:command_admission"
+  ],
+  "track:codegen": [
+    "id:CODEGEN-µ",
+    "track-ref:data/tracks/CODEGEN-u.semantic-tracks.v1.json",
+    "phase:Wo",
+    "role:code_command_plan"
+  ],
+  "track:web-research": [
+    "id:WEB-RESEARCH-µ",
+    "track-ref:data/tracks/WEB-RESEARCH-u.semantic-tracks.v1.json",
+    "phase:Yax",
+    "role:retrieval_command_plan"
+  ],
+  "track:micronaut-program": [
+    "id:MICRONAUT-PROGRAM-µ",
+    "track-ref:data/tracks/MICRONAUT-PROGRAM-u.semantic-tracks.v1.json",
+    "phase:Sek",
+    "role:registered_program_dispatch"
+  ],
+  "template:micronaut-control": [
+    "template-ref:data/templates/micronaut-control.templates.json",
+    "schema-ref:data/schema/micronaut-control-template.schema.json",
+    "track:tool",
+    "track:codegen",
+    "track:web-research",
+    "track:micronaut-program",
+    "micronaut:WILDCARD-µ",
+    "micronaut:TEMPLATE-µ",
+    "hard-gate:current_phase_in_template.phases",
+    "learned-rank:DirectionStore.query_at_phase",
+    "delta-source:GOOD_FoldDelta.phase_position",
+    "not:direct_execution"
+  ],
+  "intent:tool_call": [
+    "family:tool",
+    "verb-required:true",
+    "track:tool",
+    "candidate-only:true"
+  ],
+  "intent:tool_status": [
+    "family:status",
+    "verb:GET",
+    "command:HEALTH",
+    "track:tool",
+    "candidate-only:true"
+  ],
+  "intent:tool_retrieve": [
+    "family:retrieval",
+    "verb:GET",
+    "track:tool",
+    "candidate-only:true"
+  ],
+  "intent:tool_invoke": [
+    "family:invocation",
+    "verb:POST",
+    "track:tool",
+    "candidate-only:true"
+  ],
+  "intent:tool_file_read": [
+    "family:file",
+    "verb:READ",
+    "track:tool",
+    "candidate-only:true"
+  ],
+  "intent:tool_file_write": [
+    "family:file",
+    "verb:WRITE",
+    "track:tool",
+    "track:codegen",
+    "candidate-only:true"
+  ],
+  "intent:tool_file_patch": [
+    "family:file",
+    "verb:PATCH",
+    "track:tool",
+    "track:codegen",
+    "candidate-only:true"
+  ],
+  "intent:tool_code": [
+    "family:code",
+    "verb:COMPILE",
+    "track:codegen",
+    "candidate-only:true"
+  ],
+  "intent:tool_research": [
+    "family:retrieval",
+    "verb:SEARCH",
+    "track:web-research",
+    "candidate-only:true"
+  ],
+  "intent:tool_program": [
+    "family:program",
+    "verb:RUN",
+    "track:micronaut-program",
+    "candidate-only:true"
+  ],
+  "GET": [
+    "intent:tool_retrieve",
+    "verb:GET",
+    "command-candidate:GET"
+  ],
+  "POST": [
+    "intent:tool_invoke",
+    "verb:POST",
+    "command-candidate:POST"
+  ],
+  "READ": [
+    "intent:tool_file_read",
+    "verb:READ",
+    "command-candidate:READ"
+  ],
+  "WRITE": [
+    "intent:tool_file_write",
+    "verb:WRITE",
+    "command-candidate:WRITE"
+  ],
+  "PATCH": [
+    "intent:tool_file_patch",
+    "verb:PATCH",
+    "command-candidate:PATCH"
+  ],
+  "verb:GET": [
+    "intent:tool_retrieve",
+    "command:GET",
+    "effect:read_only",
+    "track:tool",
+    "program-ref:data/programs/api.manifest.json",
+    "boundary:InvocationValidationBoundary",
+    "authority:host_registry",
+    "candidate-only:true"
+  ],
+  "verb:POST": [
+    "intent:tool_invoke",
+    "command:POST",
+    "effect:invoke_candidate",
+    "track:tool",
+    "track:micronaut-program",
+    "program-ref:data/programs/programs_dispatcher.json",
+    "boundary:InvocationValidationBoundary",
+    "authority:host_registry",
+    "candidate-only:true"
+  ],
+  "verb:READ": [
+    "intent:tool_file_read",
+    "command:READ",
+    "effect:file_read",
+    "scope:declared_root",
+    "track:tool",
+    "program-ref:data/programs/functions.manifest.json",
+    "boundary:InvocationValidationBoundary",
+    "authority:host_registry",
+    "candidate-only:true"
+  ],
+  "verb:WRITE": [
+    "intent:tool_file_write",
+    "command:WRITE",
+    "effect:file_write",
+    "scope:declared_root",
+    "track:tool",
+    "track:codegen",
+    "program-ref:data/programs/api.manifest.json",
+    "boundary:InvocationValidationBoundary",
+    "authority:host_registry",
+    "candidate-only:true"
+  ],
+  "verb:PATCH": [
+    "intent:tool_file_patch",
+    "command:PATCH",
+    "effect:file_patch",
+    "scope:declared_root",
+    "track:tool",
+    "track:codegen",
+    "program-ref:data/programs/model-capability-routes.json",
+    "boundary:InvocationValidationBoundary",
+    "authority:host_registry",
+    "candidate-only:true"
+  ],
+  "verb:LIST": [
+    "intent:tool_retrieve",
+    "command:LIST",
+    "effect:read_only",
+    "track:tool",
+    "program-ref:data/programs/actions.manifest.json",
+    "boundary:InvocationValidationBoundary",
+    "authority:host_registry",
+    "candidate-only:true"
+  ],
+  "verb:INSPECT": [
+    "intent:tool_retrieve",
+    "command:INSPECT",
+    "effect:read_only",
+    "track:tool",
+    "program-ref:data/programs/actions.manifest.json",
+    "boundary:InvocationValidationBoundary",
+    "authority:host_registry",
+    "candidate-only:true"
+  ],
+  "verb:RUN": [
+    "intent:tool_program",
+    "command:RUN",
+    "effect:program_dispatch",
+    "track:tool",
+    "track:micronaut-program",
+    "program-ref:data/programs/programs_dispatcher.json",
+    "boundary:InvocationValidationBoundary",
+    "authority:host_registry",
+    "candidate-only:true"
+  ],
+  "verb:COMPILE": [
+    "intent:tool_code",
+    "command:COMPILE",
+    "effect:code_compile",
+    "track:tool",
+    "track:codegen",
+    "program-ref:data/programs/api.manifest.json",
+    "boundary:InvocationValidationBoundary",
+    "authority:host_registry",
+    "candidate-only:true"
+  ],
+  "verb:CALL": [
+    "intent:tool_invoke",
+    "command:CALL",
+    "effect:registered_call",
+    "track:tool",
+    "track:micronaut-program",
+    "program-ref:data/programs/functions.manifest.json",
+    "boundary:InvocationValidationBoundary",
+    "authority:host_registry",
+    "candidate-only:true"
+  ],
+  "verb:HEALTH": [
+    "intent:tool_status",
+    "command:HEALTH",
+    "effect:read_only",
+    "track:tool",
+    "program-ref:data/programs/api.manifest.json",
+    "boundary:InvocationValidationBoundary",
+    "authority:host_registry",
+    "candidate-only:true"
+  ],
+  "verb:SEARCH": [
+    "intent:tool_research",
+    "command:SEARCH",
+    "effect:web_retrieval",
+    "track:tool",
+    "track:web-research",
+    "program-ref:data/programs/model-capability-routes.json",
+    "boundary:InvocationValidationBoundary",
+    "authority:host_registry",
+    "candidate-only:true"
+  ],
+  "route:tool-dispatch": [
+    "intent:tool_call",
+    "verb:registered",
+    "track:tool",
+    "program-ref:data/programs/programs_dispatcher.json",
+    "boundary:InvocationValidationBoundary",
+    "authority:host_registry",
+    "audit:jrom_required",
+    "candidate-only:true",
+    "semantic_commit:false"
+  ],
+  "tool:key-app-builder": [
+    "track:app-wizard",
+    "kgf:kgf-key-app-builder",
+    "aiml:data/apps/app-wizard.aiml",
+    "css:data/manifest/css.manifest.json",
+    "command:python worker.py --build-app-spec <spec.json>",
+    "command:python worker.py --edit-app-spec <edited-spec.json>",
+    "command:python worker.py --build-app-request <request>",
+    "command:python worker.py --validate-app <proposal.json>",
+    "effect:proposal_write_only",
+    "scope:.micronaut/worker-proposals/apps",
+    "not:catalog_write",
+    "not:semantic_commit",
+    "boundary:InvocationValidationBoundary"
+  ]
+}

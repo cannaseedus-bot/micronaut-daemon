@@ -1,0 +1,94 @@
+{
+  "@type": "khanary.field_edge_binding.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "measurement_binding_only_no_weight_no_orientation_no_admission",
+  "lane": "KHANARY_FIELD_MEASUREMENT_TEST",
+  "owner": "src/world/field_measurement.cpp",
+  "docs": [
+    "docs/GRADIENT-FIELD-ALGEBRA.md",
+    "docs/VECTOR_FIELD.md",
+    "docs/TENSOR_BUNDLE.md"
+  ],
+  "why": "Quantum-boundary and Euclidean-gradient values were loaded as typed FieldParamRecords but had no declared binding to runtime edges, so nothing could consume them and any consumer would have had to guess. docs/GRADIENT-FIELD-ALGEBRA.md already fixes the answer: a potential-derived edge quantity is an exact difference (FIELD_EDGE_DELTA), every field contract declares phase_policy: none, and a field measurement cannot authorize a phase crossing or a FoldGraph B transition.",
+  "binding": {
+    "edge_quantity": "FIELD_EDGE_DELTA",
+    "formula": "(grad_G Phi)(u, v) = Phi(v) - Phi(u)",
+    "nature": "exact difference, not a derivative: reversing the edge negates it exactly",
+    "node_quantities": ["divergence", "curl"],
+    "sources": {
+      "euclidean_gradient": {
+        "node_axes": ["x", "y", "z", "arc_length", "curvature", "scalar_potential"],
+        "edge_axes": ["vx", "vy", "vz", "potential_delta", "curl_x", "curl_y", "curl_z"],
+        "potential_axis": "scalar_potential",
+        "curl_axes": ["curl_x", "curl_y", "curl_z"]
+      },
+      "quantum_boundary": {
+        "node_axes": ["x", "y", "z", "vertex_pot", "phase_shift", "divergence"],
+        "edge_axes": ["refractive", "wave_number", "frequency", "amplitude_re", "amplitude_im"],
+        "potential_axis": "vertex_pot",
+        "curl_axes": []
+      },
+      "entropy_gradient": {
+        "node_axes": ["x", "y", "z", "local_entropy", "entropy_spike", "entropy_bound", "diffusion_beta_inv"],
+        "edge_axes": ["eh_x", "eh_y", "eh_z", "entropy_delta", "diffusion_beta_inv"],
+        "potential_axis": "local_entropy",
+        "curl_axes": []
+      },
+      "tensor_metric": {
+        "node_axes": ["jacobian_determinant", "riemann_curvature_scalar", "tensor_rank_p", "tensor_rank_q"],
+        "edge_axes": ["g_00", "g_01", "g_10", "g_11", "jacobian_w", "vx", "vy", "vz"],
+        "potential_axis": "jacobian_determinant",
+        "curl_axes": []
+      }
+    }
+  },
+  "separate_quantities": {
+    "law": "arc_weight and a potential difference are different quantities; neither may be substituted for the other",
+    "arc_weight": {
+      "formula": "cos(theta_to - theta_from)",
+      "cycle_sum": 3,
+      "structure": "a similarity on the cyclic phase graph, not a potential",
+      "owner": "src/world/field_dag.cpp"
+    },
+    "potential_difference": {
+      "formula": "Phi(v) - Phi(u)",
+      "cycle_sum": 0,
+      "structure": "conservative by construction",
+      "owner": "src/world/field_measurement.cpp"
+    },
+    "enforced_by": "FieldMeasurementTable exposes no weight, no orientation and no authorization surface, and the lane proves W_E / O_E / admission are unchanged after binding"
+  },
+  "authority": {
+    "phase_policy": "none",
+    "may_authorize_phase_crossing": false,
+    "may_authorize_foldgraph_B_transition": false,
+    "may_write_edge_weight": false,
+    "may_write_edge_orientation": false,
+    "may_gate_admission": false,
+    "registry_invariants": ["A27", "A28"],
+    "registry_invariant_meaning": "A27: XOR and gradient are both measurements; A28: a field measurement cannot authorize a phase crossing or a FoldGraph B transition"
+  },
+  "conservation": {
+    "law": "for a potential-derived field the integral between two points depends only on the endpoints, so every closed path sums to zero",
+    "cycle_sum_zero": true,
+    "endpoint_agreement": "two different paths between the same endpoints agree and equal Phi(end) - Phi(start)",
+    "non_conservative_detection": "a field whose declared curl is non-zero is reported is_conservative=false; the table never claims conservation it cannot prove"
+  },
+  "invariants": {
+    "FB1": "an edge measurement is the exact difference Phi(to) - Phi(from) over the typed record values, never a derivative and never a zero-filled default",
+    "FB2": "reversing an edge negates the measurement exactly",
+    "FB3": "every closed path over a conservative field sums to zero within 1e-9, and two paths between the same endpoints agree",
+    "FB4": "a field whose declared curl is non-zero is marked non-conservative; conservation is never asserted on its behalf",
+    "FB5": "binding measurements never writes an edge weight, an edge orientation, or an admission decision",
+    "FB6": "a field measurement authorizes nothing: phase_policy is none and the table exposes no authorization surface",
+    "FB7": "an unknown edge, a missing potential axis or a non-finite value is a typed refusal, not an empty measurement"
+  },
+  "status_vocabulary": [
+    "ok",
+    "no_records",
+    "unknown_edge",
+    "missing_potential",
+    "non_finite"
+  ]
+}

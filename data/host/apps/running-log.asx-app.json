@@ -1,0 +1,54 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "running-log",
+  "@key": "⟁APP:RUNNING_LOG",
+  "@mount": "⟁ROOT:RUNNING_LOG",
+  "@theme": { "accent": "#f97316", "bg": "#0c0500", "surface": "#1a0c00", "text": "#ffedd5", "hero_phase": "Sek", "tagline": "Every run tells a story" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "runs", "component": "⟁WIDGET:RUNS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "runs": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:RUNNING_LOG": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:LOG_RUN"] },
+    "⟁ACTION:LOG_RUN": { "@type": "button", "@text": "Log Run", "@on": { "click": "running.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:RUNS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:RUNS": { "@type": "feed", "@bind": "state.runs", "@children": ["⟁WIDGET:RUN_CARD"] },
+    "⟁WIDGET:RUN_CARD": { "@type": "content-card", "@bind": "run", "@on": { "view": "running.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:TOTALS", "⟁WIDGET:PR_LIST"] },
+    "⟁WIDGET:TOTALS": { "@type": "stat", "@bind": "data.totals" },
+    "⟁WIDGET:PR_LIST": { "@type": "list", "@bind": "data.personal_records" }
+  },
+  "@programs": {
+    "running.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "running.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "run.log": "running.open_compose", "run.view": "running.view" },
+  "@imports": [{ "ref": "run", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "route-map", "name": "Route Map", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Draw or import your run route on a map." },
+      { "id": "training-plan", "name": "Training Plan", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Auto-generate a 10K/half/marathon training schedule." },
+      { "id": "gpx-import", "name": "GPX Import", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Import runs from Garmin, Strava, or Apple Watch via GPX." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "running.log", "pattern": "LOG RUN|RECORD RUN|RAN * KM", "intent": "open_compose" },
+      { "id": "running.pr", "pattern": "PERSONAL BEST|MY FASTEST *|PR CHECK", "intent": "view_prs" }
+    ]
+  },
+  "@data": {
+    "totals": { "runs": 48, "total_km": 312, "this_month_km": 42 },
+    "personal_records": ["5K — 24:38", "10K — 52:14", "Half Marathon — 1:58:40"],
+    "spotlight": [
+      { "id": "sp1", "title": "5K Riverside — PR", "distance_km": 5.1, "badge": "Personal Best", "pace": "4:50/km", "excerpt": "Finally broke 25 minutes. Felt strong throughout." },
+      { "id": "sp2", "title": "10K Sunday Long Run", "distance_km": 10.3, "badge": "This Week", "pace": "5:20/km", "excerpt": "Easy effort. Good base-building session." },
+      { "id": "sp3", "title": "Track Intervals — 8×400m", "distance_km": 5.6, "badge": "Speed Work", "pace": "4:10/km", "excerpt": "Hardest session in two months. Splits all under 1:44." }
+    ],
+    "schema": {
+      "run": { "primaryKey": "run_id", "fields": { "run_id": { "type": "string" }, "date": { "type": "datetime", "required": true }, "distance_km": { "type": "float", "required": true }, "duration_sec": { "type": "integer", "required": true }, "pace_per_km": { "type": "string" }, "type": { "type": "string" }, "route": { "type": "string" }, "notes": { "type": "text" }, "hr_avg": { "type": "integer" } } }
+    }
+  }
+}

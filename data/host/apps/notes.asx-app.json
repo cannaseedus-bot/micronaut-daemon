@@ -1,0 +1,51 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "notes",
+  "@key": "⟁APP:NOTES",
+  "@mount": "⟁ROOT:NOTES",
+  "@theme": { "accent": "#facc15", "bg": "#080700", "surface": "#131100", "text": "#fefce8", "hero_phase": "Pop", "tagline": "Think faster. Forget less." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "note_list", "component": "⟁WIDGET:NOTE_LIST", "position": "left" }, { "id": "editor", "component": "⟁WIDGET:EDITOR", "position": "center" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "notes": [], "active_note": null, "search": "", "status": "idle" },
+  "@components": {
+    "⟁ROOT:NOTES": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:NEW_NOTE"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:NEW_NOTE": { "@type": "button", "@text": "New Note", "@on": { "click": "notes.new" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NOTE_LIST", "⟁WIDGET:EDITOR"] },
+    "⟁WIDGET:NOTE_LIST": { "@type": "navigation", "@bind": "state.notes", "@on": { "select": "notes.select" } },
+    "⟁WIDGET:EDITOR": { "@type": "markdown", "@bind": "state.active_note", "@on": { "save": "notes.save" } }
+  },
+  "@programs": {
+    "notes.new": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_note", "@out": "active_note" }] },
+    "notes.select": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_note", "@out": "active_note" }] },
+    "notes.save": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_note", "@out": "active_note" }] },
+    "notes.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "note.new": "notes.new", "note.select": "notes.select", "note.save": "notes.save", "search.input": "notes.search" },
+  "@imports": [{ "ref": "note", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "markdown-preview", "name": "Markdown Preview", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Live side-by-side markdown preview." },
+      { "id": "export-pdf", "name": "PDF Export", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Export any note as a styled PDF." },
+      { "id": "summary-bot", "name": "Note Summary Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Auto-summarise long notes into a bullet point list." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "notes.new", "pattern": "NEW NOTE|CREATE NOTE|ADD NOTE", "intent": "new_note" },
+      { "id": "notes.search", "pattern": "FIND NOTE *|SEARCH NOTES *", "intent": "search_notes" }
+    ]
+  },
+  "@data": {
+    "spotlight": [
+      { "id": "sp1", "title": "Launch Checklist", "slug": "launch-checklist", "badge": "Pinned", "excerpt": "Everything that needs to happen before v1.0 ships." },
+      { "id": "sp2", "title": "Meeting Notes — Oct 22", "slug": "meeting-oct-22", "badge": "Recent", "excerpt": "Roadmap discussion. Three priorities agreed." },
+      { "id": "sp3", "title": "Reading Notes — The Mom Test", "slug": "notes-mom-test", "badge": "Book Notes", "excerpt": "Key quotes and action items from the book." }
+    ],
+    "schema": {
+      "note": { "primaryKey": "note_id", "fields": { "note_id": { "type": "string" }, "title": { "type": "string", "required": true }, "body": { "type": "textarea" }, "tags": { "type": "json" }, "pinned": { "type": "bool" }, "created_at": { "type": "datetime" }, "updated_at": { "type": "datetime" } } }
+    }
+  }
+}

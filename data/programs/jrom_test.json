@@ -1,0 +1,11 @@
+{
+  "@program": "jrom_test",
+  "@state": {
+    "rom_path": "dist/micronauts/jrom/coder.rom"
+  },
+  "@control": [
+    { "@op": "LOG",       "@args": ["[jrom_test] decoding coder.rom..."] },
+    { "@op": "JROM_EXEC", "@path": "$rom_path", "@out": "exec_result" },
+    { "@op": "LOG",       "@args": ["[jrom_test] exec done"] }
+  ]
+}

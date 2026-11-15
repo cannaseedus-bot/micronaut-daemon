@@ -1,0 +1,26 @@
+(* KHANARY N-Gram Key Grammar Runtime *)
+ngram_key_grammar       = recognizer_section dictionary_section output_section interpretation_section higher_order_section authority_boundary_section ;
+recognizer_section      = "recognizer" "{" "algorithm" ":" "aho_corasick" "," trie_goto failure_links output_sets exhaustive_output "}" ;
+trie_goto               = "trie_goto" ":" true_lit ;
+failure_links           = "failure_links" ":" true_lit ;
+output_sets             = "output_sets" ":" true_lit ;
+exhaustive_output       = "emits_overlapping_matches" ":" true_lit ;
+dictionary_section      = "dictionary" "{" { ngram_key_decl } "}" ;
+ngram_key_decl          = key_id key_order key_surface semantic_book_ref ;
+key_id                  = "key" ":" string ;
+key_order               = "order" ":" ( "1" | "2" | "3" | "4" | "n" ) ;
+key_surface             = "surface" ":" string ;
+semantic_book_ref       = "book" ":" string ;
+output_section          = "output" "{" "bag_of_keys" ":" true_lit "," "overlap_allowed" ":" true_lit "}" ;
+interpretation_section  = "interpretation" "{" manifest_neighborhood geometry_neighborhood phase_arbitration fold_learning "}" ;
+manifest_neighborhood   = "N_M" "(" key_id ")" ;
+geometry_neighborhood   = "N_I" "(" key_id ")" ;
+phase_arbitration       = "phase_arbitration" ":" "WoYaxSekChenXul" ;
+fold_learning           = "learned_fold_algebra" ":" "phi_t" "," "psi_t" "," "WCR_t" ;
+higher_order_section    = "higher_order" "{" { hof_operation } "}" ;
+hof_operation           = "Map" | "Filter" | "Fold" | "Unfold" | "Ana" | "Cata" | "Hylo" | "Meta" ;
+(* Phase and higher-order operation are orthogonal: Sek[Filter] does not mean Sek=Filter. *)
+(* Aho-Corasick recognizes keys. K'UHUL interprets, verifies, and collapses them. *)
+
+(* Bag of n-gram keys is the exhaustive Aho-Corasick output surface before K'UHUL phase-bound interpretation. *)
+

@@ -1,0 +1,17 @@
+{
+  "schema": ["kgf.semantic-fields/2"],
+  "fields:⟁CAR": ["⟁CARRIAGE", "⟁AUTOMOBILE", "⟁GASOLINE", "⟁ELECTRIC"],
+  "fields:⟁COMBUSTION": ["⟁ROCKET", "⟁GUNPOWDER", "⟁ENGINE", "⟁GASOLINE"],
+  "fields:⟁GASOLINE": ["⟁AUTOMOBILE", "⟁ENGINE", "⟁PETROLEUM", "⟁ECONOMY"],
+  "fields:⟁ELECTRIC": ["⟁VOLTAGE", "⟁ENGINE", "⟁BATTERY", "⟁UTILITY"],
+  "relations:⟁CAR:⟁GASOLINE": ["fuel_option"],
+  "relations:⟁CAR:⟁ELECTRIC": ["propulsion_option"],
+  "relations:⟁CAR:⟁AUTOMOBILE": ["vehicle_category"],
+  "relations:⟁COMBUSTION:⟁ENGINE": ["mechanism"],
+  "relations:⟁COMBUSTION:⟁GASOLINE": ["fuel"],
+  "relations:⟁GASOLINE:⟁PETROLEUM": ["derived_from"],
+  "relations:⟁GASOLINE:⟁ECONOMY": ["economic_context"],
+  "relations:⟁ELECTRIC:⟁BATTERY": ["energy_storage"],
+  "relations:⟁ELECTRIC:⟁VOLTAGE": ["electrical_property"],
+  "relations:⟁ELECTRIC:⟁ENGINE": ["associated_powertrain"]
+}

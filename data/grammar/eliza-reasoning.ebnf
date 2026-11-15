@@ -1,0 +1,306 @@
+(* ELIZA-REASON / 1.0 — K'UHUL reasoning control board grammar.
+
+   ELIZA patterns are reasoning instructions, not response templates.
+   The triangle supplies geometric routing; ELIZA operators supply the
+   reasoning frame; XCFE verifies; K'UHUL phases sequence the pipeline.
+
+   EBNF describes syntax and operator structure, not execution authorization.
+   Authority: data_only throughout.  Conclusions are proposals until XCFE admission.
+   Phase sequence: Pop → Wo → Yax → Sek → Ch'en → Xul (canonical; no shortcuts).
+
+   Depends on kuhul-pi.ebnf for triangle geometry rules and verification_kind terminals.
+   Shared terminals (reference, glyph, identifier, etc.) are reproduced at the bottom.
+*)
+
+program               = header, { declaration },
+                        entity_phase,
+                        triangle_phase,
+                        operator_selection,
+                        { hypothesis_step },
+                        sek_stage, chen_stage, closure ;
+
+header                = "[Pop ELIZA-REASON]", newline ;
+
+declaration           = "[Wo", space, identifier, space, "=", space,
+                        value, "]", newline ;
+
+(* ── Entity and intent extraction ───────────────────────────────────────── *)
+
+(* ── AIML/SRAI dispatch layer ────────────────────────────────────────────────
+   AIML wildcards map user input to canonical reasoning requests.
+   SRAI redirects the named operator form to an XCFE reasoning program.
+   An AIML match may PROPOSE a Micronaut call; only an admitted XCFE program
+   may EXECUTE it. Symbolic redirection and executable dispatch are distinct.
+
+   Phase assignment:
+     Pop   — ingest user prompt, establish authority context
+     Wo    — bind wildcard captures as typed entities; set recursion guard
+     Yax   — expand SRAI redirects, generate reasoning candidates
+     Sek   — select compatible Micronauts and π routes
+     Ch'en — verify predicates, evidence, recursion limits
+     Xul   — return reasoning fold result
+*)
+
+entity_phase          = input_decl, authority_decl,
+                        recursion_guard,
+                        { mode_decl },
+                        "[Yax MATCH WILDCARD_PATTERNS]", newline,
+                        "[Yax MAP EXTRACT_ENTITIES]", newline,
+                        "[Yax EXPAND SRAI_REDIRECT]", newline,
+                        "[Yax MAP RESOLVE_INTENT]", newline ;
+
+input_decl            = "[Wo input =", space, value, "]", newline ;
+authority_decl        = "[Wo authority = \"data_only\"]", newline ;
+mode_decl             = "[Wo", space, mode_key, space, "=", space, value, "]", newline ;
+mode_key              = "reasoning.mode" | "reasoning.depth" | "reasoning.operator"
+                      | "reasoning.max_depth" | "reasoning.visited"
+                      | "reasoning.evidence_budget" ;
+
+(* Recursion guard is required; absence is a contract violation at Ch'en.
+   depth        — current SRAI depth, starts at 0
+   max_depth    — absolute recursion limit (default 4); Ch'en rejects if exceeded
+   visited      — JSON array of visited pattern keys; prevents cycle re-entry
+   evidence_budget — max evidence lookups per chain; prevents unbounded expansion *)
+
+recursion_guard       = "[Wo reasoning.depth =", space, integer, "]", newline,
+                        "[Wo reasoning.max_depth =", space, integer, "]", newline,
+                        "[Wo reasoning.visited = \"[]\"]", newline ;
+
+(* ── Triangle routing (see kuhul-pi.ebnf for full rule definitions) ─────── *)
+
+triangle_phase        = compare_triple,
+                        triangle_proximity,
+                        [ entropy_operations ] ;
+
+compare_triple        = "[Yax COMPARE_TRIANGLE", space,
+                        reference, space, reference, space, reference,
+                        "]", newline ;
+triangle_proximity    = "[Yax MAP PEER_ARC_WEIGHTS]", newline,
+                        "[Yax REDUCE HUB_COST]", newline,
+                        "[Yax MAP PI_ROUTING_WEIGHT]", newline ;
+entropy_operations    = "[Yax REDUCE ROUTING_ENTROPY]", newline,
+                        "[Yax MAP ENTROPY_TO_LEVITY]", newline,
+                        "[Yax MAP ENTROPY_TO_GRAVITY]", newline ;
+
+(* ── Operator selection (Sek dispatches the reasoning operator) ─────────── *)
+
+operator_selection    = "[Sek SELECT BRIDGE MAX_PI_ROUTING_WEIGHT]", newline,
+                        "[Sek SELECT REASONING_OPERATOR]", newline ;
+
+(* ── Hypothesis generation steps (Yax) ─────────────────────────────────── *)
+
+hypothesis_step       = generate_hypotheses
+                      | generate_counterexamples
+                      | generate_questions ;
+
+generate_hypotheses       = "[Yax GENERATE RELATION_HYPOTHESES]", newline ;
+generate_counterexamples  = "[Yax GENERATE COUNTEREXAMPLES]", newline ;
+generate_questions        = "[Yax GENERATE QUESTIONS]", newline ;
+
+(* ── Synchronization and inference candidates (Sek) ─────────────────────── *)
+
+sek_stage             = "[Sek SYNC REASONING_LANES]", newline,
+                        "[Sek PROPOSE INFERENCE_CANDIDATES]", newline ;
+
+(* ── Verification (Ch'en) ───────────────────────────────────────────────── *)
+
+chen_stage            = verification, { verification } ;
+verification          = "[Ch'en VERIFY", space, reasoning_check, "]", newline ;
+reasoning_check       = "EVIDENCE" | "PREDICATE_COMPATIBILITY" | "SCOPE"
+                      | "CONTRADICTIONS" | "VECTOR_SHAPE"
+                      | "TRIANGLE_CONSISTENCY" | "PROXIMITY_CONTRACT"
+                      | "ENTROPY_BOUNDS" | "RECURSION_LIMIT" | "CYCLE_ABSENCE" ;
+
+closure               = "[Xul FOLD REASONING_RESULT]", newline,
+                        "[Xul]", [ newline ] ;
+
+(* ── Reasoning operators ────────────────────────────────────────────────── *)
+
+(* Operators compile into existing XCFE programs and Micronaut calls.
+   They are control-board instructions, not new XCFE node classes.
+
+   | Operator       | Reasoning function                | XCFE behavior          |
+   | DEFINE         | Identify properties               | Identity               |
+   | COMPARE        | Find similarities and differences | Selection              |
+   | CAUSE          | Investigate mechanisms            | Causal                 |
+   | DEPENDENCY     | Determine prerequisites           | Condition              |
+   | CONTRAST       | Identify opposing properties      | Comparison             |
+   | EVIDENCE       | Examine supporting information    | Verification           |
+   | INFER          | Generate a hypothesis             | Candidate expansion    |
+   | COUNTERFACTUAL | Explore alternatives              | Conditional evaluation |
+   | ANALOGY        | Transfer relational structure     | Mapping                |
+   | QUESTION       | Identify missing information      | Question Engine        |
+   | SYNTHESIZE     | Combine verified findings         | Fold                   |
+   | REFLECT        | Evaluate reasoning quality        | Verification           |
+*)
+
+reasoning_operator    = "DEFINE" | "COMPARE" | "CAUSE" | "MECHANISM" | "DEPENDENCY"
+                      | "CONTRAST" | "EVIDENCE" | "INFER" | "COUNTERFACTUAL"
+                      | "ANALOGY" | "QUESTION" | "SYNTHESIZE" | "REFLECT" ;
+
+(* ── Relation hypothesis triples ────────────────────────────────────────── *)
+
+(* Each triple (subject, predicate, object) must carry scope and evidence status.
+   status = "hypothesis" at generation time; Ch'en VERIFY EVIDENCE must pass
+   before status can advance to "supported".
+
+   Transitivity rules:
+     PART_OF    — may be transitive under a part-whole ontology.
+     HAS_COMPONENT — transitive only when composition is uniform.
+     RELATED_TO — does not establish causality or transitivity.
+     DEPENDS_ON — transitive only under explicit scope constraint.
+   Chained triples A→B, B→C → A→C? require [Ch'en VERIFY PREDICATE_COMPATIBILITY].
+   The question mark is essential; transitivity is not assumed.
+*)
+
+predicate_kind        = "IS_A" | "HAS_COMPONENT" | "DEPENDS_ON" | "PRODUCES"
+                      | "CAUSES" | "REQUIRES" | "ENABLES" | "PREVENTS"
+                      | "ANALOGOUS_TO" | "CONTRASTS_WITH" | "PART_OF"
+                      | "RELATED_TO" ;
+
+(* ── Field state → operator selection mapping ───────────────────────────── *)
+
+(* Routing entropy is a control signal, not a truth measure.
+
+   | Routing state              | Entropy H_n | ELIZA behavior                        |
+   | Gravity   (low entropy)    | H_n < 0.33  | SYNTHESIZE / DEFINE strong path       |
+   | Neutral   (mid entropy)    | H_n ~ 0.5   | COMPARE / EVIDENCE competing hypotheses|
+   | Levity    (high entropy)   | H_n > 0.67  | QUESTION / INFER explore alternatives |
+
+   High entropy triggers investigation, not automatic reward of speculative reasoning.
+   High entropy may indicate a near-equilateral triangle (all weights similar),
+   ambiguous candidates, or insufficient evidence — not necessarily useful novelty.
+*)
+
+field_mode            = "GRAVITY" | "NEUTRAL" | "LEVITY" ;
+
+(* ── SRAI execution envelope schema ─────────────────────────────────────── *)
+
+(*
+  kuhul.srai.reasoning.v1 — attached to every SRAI redirect before dispatch.
+  Bridge value comes from a previously executed triangle, not a live model call.
+  {
+    "schema": "kuhul.srai.reasoning.v1",
+    "operator": "DEPENDENCY",
+    "input": { "A": "⟁CAR", "B": "⟁BATTERY" },
+    "routing": { "method": "PI_TRIANGLE", "bridge": "⟁ENGINE" },
+    "recursion": { "depth": 0, "max_depth": 4, "visited": [], "evidence_budget": 8 },
+    "verification": { "required": true, "status": "pending" },
+    "authority": "data_only"
+  }
+*)
+
+(* ── Example program ────────────────────────────────────────────────────── *)
+
+(*
+   [Pop ELIZA-REASON]
+   [Wo input = USER_PROMPT]
+   [Wo authority = "data_only"]
+   [Wo reasoning.depth = 0]
+   [Wo reasoning.max_depth = 4]
+   [Wo reasoning.visited = "[]"]
+   [Wo reasoning.mode = "triangle"]
+   [Wo reasoning.operator = "DEPENDENCY"]
+   [Yax MATCH WILDCARD_PATTERNS]
+   [Yax MAP EXTRACT_ENTITIES]
+   [Yax EXPAND SRAI_REDIRECT]
+   [Yax MAP RESOLVE_INTENT]
+   [Yax COMPARE_TRIANGLE ⟁CAR ⟁ENGINE ⟁BATTERY]
+   [Yax MAP PEER_ARC_WEIGHTS]
+   [Yax REDUCE HUB_COST]
+   [Yax MAP PI_ROUTING_WEIGHT]
+   [Yax REDUCE ROUTING_ENTROPY]
+   [Yax MAP ENTROPY_TO_LEVITY]
+   [Yax MAP ENTROPY_TO_GRAVITY]
+   [Sek SELECT BRIDGE MAX_PI_ROUTING_WEIGHT]
+   [Sek SELECT REASONING_OPERATOR]
+   [Yax GENERATE RELATION_HYPOTHESES]
+   [Yax GENERATE COUNTEREXAMPLES]
+   [Yax GENERATE QUESTIONS]
+   [Sek SYNC REASONING_LANES]
+   [Sek PROPOSE INFERENCE_CANDIDATES]
+   [Ch'en VERIFY EVIDENCE]
+   [Ch'en VERIFY PREDICATE_COMPATIBILITY]
+   [Ch'en VERIFY SCOPE]
+   [Ch'en VERIFY CONTRADICTIONS]
+   [Ch'en VERIFY TRIANGLE_CONSISTENCY]
+   [Ch'en VERIFY PROXIMITY_CONTRACT]
+   [Ch'en VERIFY RECURSION_LIMIT]
+   [Ch'en VERIFY CYCLE_ABSENCE]
+   [Xul FOLD REASONING_RESULT]
+   [Xul]
+*)
+
+(* ── kuhul.reasoning.v1 schema ───────────────────────────────────────────── *)
+
+(*
+  {
+    "schema": "kuhul.reasoning.v1",
+    "fold_key": "<sha256[:16]>",
+    "intent": "EXPLAIN",
+    "entities": ["⟁CAR", "⟁ENGINE", "⟁BATTERY"],
+    "triangle": {
+      "bridge": "⟁ENGINE",
+      "pi_routing_weight": 0.84681589,
+      "field_state": {
+        "entropy_norm": 0.984,
+        "levity": 0.984,
+        "gravity": 0.016,
+        "field_mode": "LEVITY"
+      }
+    },
+    "reasoning": {
+      "operator": "DEPENDENCY",
+      "hypotheses": [
+        {
+          "subject": "⟁CAR",
+          "predicate": "HAS_COMPONENT",
+          "object": "⟁ENGINE",
+          "scope": "combustion_vehicles",
+          "status": "hypothesis"
+        },
+        {
+          "subject": "⟁ENGINE",
+          "predicate": "DEPENDS_ON",
+          "object": "⟁BATTERY",
+          "scope": "combustion_vehicles",
+          "status": "hypothesis",
+          "note": "not universally true; scope constrains engine type and system"
+        }
+      ],
+      "supporting_evidence": [],
+      "counter_evidence": [],
+      "unresolved_questions": [
+        "Does an electric engine depend on a battery?",
+        "Do all cars require an internal combustion engine?",
+        "Is the dependency DEPENDS_ON transitive across HAS_COMPONENT here?"
+      ],
+      "verified_conclusions": []
+    },
+    "learning": {
+      "bias_delta": 0.0,
+      "commit_authorized": false
+    },
+    "authority": "data_only"
+  }
+*)
+
+(* ── Shared terminal definitions ─────────────────────────────────────────── *)
+
+reference             = glyph | identifier ;
+glyph                 = "⟁", identifier ;
+value                 = reference | integer | decimal | quoted ;
+identifier            = letter, { letter | digit | "_" | "-" | "." | ":" } ;
+integer               = digit, { digit } ;
+decimal               = integer, ".", integer ;
+quoted                = '"', { quoted_char }, '"' ;
+quoted_char           = letter | digit | space | "_" | "-" | "." | "/" | ":" ;
+letter                = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I"
+                      | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R"
+                      | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z"
+                      | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i"
+                      | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r"
+                      | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" ;
+digit                 = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+space                 = " ", { " " } ;
+newline               = "\n" ;

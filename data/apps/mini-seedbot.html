@@ -1,0 +1,7 @@
+<div id="mini-seedbot-widget" data-asx-key="⟁APP:MINI_SEEDBOT/⟁ROOT:MINI_SEEDBOT">
+  <form data-asx-key="⟁APP:MINI_SEEDBOT/⟁WIDGET:MSB_FORM" data-bind="state.question" data-event="form.submit" action="/p/seed-bot.html" method="get"><label for="msb-input">Ask Seed Bot anything</label><input id="msb-input" name="q" required placeholder="e.g. Recommend something for anxiety" /><input type="hidden" name="anchor" value="seedbot-chat" /><button type="submit">Ask</button></form>
+  <nav data-asx-key="⟁APP:MINI_SEEDBOT/⟁WIDGET:MSB_SUGGESTIONS" data-source="suggestions" data-event="suggestion.select"></nav>
+  <button data-asx-key="⟁APP:MINI_SEEDBOT/⟁ACTION:MSB_FLOATER" data-event="modal.open" aria-label="Open Seed Bot chat">?</button>
+  <dialog data-asx-key="⟁APP:MINI_SEEDBOT/⟁WIDGET:MSB_MODAL" data-event="modal.close" aria-label="Ask Seed Bot"><form data-bind="state.question" data-event="form.submit"><input name="q" required placeholder="Ask Seed Bot anything" /><button type="submit">Ask</button></form></dialog>
+</div>
+<script type="application/json" id="asx-json-runtime">{"@kind":"asx.key-runtime.binding.v1","@app":"⟁APP:MINI_SEEDBOT","@manifest":"data/host/apps/mini-seedbot.asx-app.json","@executor":"mx.run","@authority":"projection_only","@state":"request_scoped","@semantic_commit":false}</script>

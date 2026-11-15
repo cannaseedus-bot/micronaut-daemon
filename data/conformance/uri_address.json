@@ -1,0 +1,243 @@
+{
+  "@kind": "khanary.conformance.uri_address_fixtures.v1",
+  "contract": "data/grammar/uri-address.contracts.json",
+  "native_suite": "router",
+  "note": "These ids are the executed case ids in src/tests/test_router_policy.cpp (`KHANARY_ROUTER_TEST`). The checker binds every id here to that source and every declared reject reason to src/io/request_router.cpp, so the grammar, the implementation and the executed fixtures cannot drift apart.",
+  "cases": [
+    {
+      "id": "uri/scheme_reported",
+      "expect": "PASS",
+      "note": "math://solve -> scheme math"
+    },
+    {
+      "id": "uri/authority_reported",
+      "expect": "PASS",
+      "note": "math://solve -> authority solve"
+    },
+    {
+      "id": "uri/operation_reported",
+      "expect": "PASS",
+      "note": "math://solve -> operation solve"
+    },
+    {
+      "id": "uri/kind_is_action",
+      "expect": "PASS",
+      "note": "no pattern/verb/template/grammar segment"
+    },
+    {
+      "id": "uri/accepted_has_no_reject_reason",
+      "expect": "PASS",
+      "note": "accepted addresses carry an empty reason"
+    },
+    {
+      "id": "uri/accepted_dispatches",
+      "expect": "PASS",
+      "note": "declared scheme seeds the field"
+    },
+    {
+      "id": "uri/query_is_not_the_operation",
+      "expect": "PASS",
+      "note": "math://solve?expr=2%2B2 -> solve"
+    },
+    {
+      "id": "uri/query_still_routes",
+      "expect": "PASS",
+      "note": "a query does not disable routing"
+    },
+    {
+      "id": "uri/fragment_ignored",
+      "expect": "PASS",
+      "note": "math://solve#top -> solve"
+    },
+    {
+      "id": "uri/trailing_punctuation_stripped",
+      "expect": "PASS",
+      "note": "math://solve. -> solve"
+    },
+    {
+      "id": "uri/trailing_prose_keeps_address",
+      "expect": "PASS",
+      "note": "math://solve algebra -> solve"
+    },
+    {
+      "id": "uri/scheme_lowercased",
+      "expect": "PASS",
+      "note": "MATH://SOLVE -> math"
+    },
+    {
+      "id": "uri/operation_lowercased",
+      "expect": "PASS",
+      "note": "MATH://SOLVE -> solve"
+    },
+    {
+      "id": "uri/percent_escape_decoded_in_operation",
+      "expect": "PASS",
+      "note": "math://sol%76e -> solve"
+    },
+    {
+      "id": "uri/pattern_kind_reported",
+      "expect": "PASS",
+      "note": "math://pattern/solve -> kind pattern"
+    },
+    {
+      "id": "uri/pattern_operation_reported",
+      "expect": "PASS",
+      "note": "math://pattern/solve -> operation solve"
+    },
+    {
+      "id": "uri/percent_escape_in_scheme_rejected",
+      "expect": "REJECT:scheme_invalid",
+      "note": "ma%74h://solve"
+    },
+    {
+      "id": "uri/empty_authority_rejected",
+      "expect": "REJECT:authority_missing",
+      "note": "math:///solve"
+    },
+    {
+      "id": "uri/bare_scheme_rejected",
+      "expect": "REJECT:authority_missing",
+      "note": "math://"
+    },
+    {
+      "id": "uri/truncated_percent_escape_rejected",
+      "expect": "REJECT:malformed_percent_escape",
+      "note": "math://sol%7"
+    },
+    {
+      "id": "uri/malformed_percent_escape_in_query_rejected",
+      "expect": "REJECT:malformed_percent_escape",
+      "note": "math://solve?q=%zz1"
+    },
+    {
+      "id": "uri/glued_prefix_rejected_as_scheme_invalid",
+      "expect": "REJECT:scheme_invalid",
+      "note": "x(math://solve)"
+    },
+    {
+      "id": "uri/punctuated_scheme_rejected",
+      "expect": "REJECT:scheme_invalid",
+      "note": "a=math://solve"
+    },
+    {
+      "id": "uri/control_character_rejected",
+      "expect": "REJECT:control_character",
+      "note": "math://so\\x01lve"
+    },
+    {
+      "id": "uri/overlong_address_rejected",
+      "expect": "REJECT:uri_too_long",
+      "note": "math:// + 600 chars"
+    },
+    {
+      "id": "uri/prose_url_parsed_as_address",
+      "expect": "PASS",
+      "note": "https://example.com is parsed, scheme reported"
+    },
+    {
+      "id": "uri/prose_url_scheme_is_not_declared",
+      "expect": "REJECT:scheme_not_declared",
+      "note": "no micronaut declares https"
+    },
+    {
+      "id": "uri/prose_url_contributes_no_operation",
+      "expect": "PASS",
+      "note": "an undeclared scheme contributes no operation"
+    },
+    {
+      "id": "uri/plain_text_has_no_uri_diagnostic",
+      "expect": "PASS",
+      "note": "no :// means no address and no refusal"
+    },
+    {
+      "id": "ops/declared_pattern_op_routes",
+      "expect": "PASS",
+      "note": "math://pattern/solve with pattern_ops {solve}"
+    },
+    {
+      "id": "ops/declared_pattern_op_reported",
+      "expect": "PASS",
+      "note": "kind pattern, operation solve"
+    },
+    {
+      "id": "ops/undeclared_pattern_op_refused",
+      "expect": "PASS",
+      "note": "math://pattern/factor does not resolve"
+    },
+    {
+      "id": "ops/declared_template_op_routes",
+      "expect": "PASS",
+      "note": "math://template/explain with template_ops {explain}"
+    },
+    {
+      "id": "ops/undeclared_template_op_refused",
+      "expect": "PASS",
+      "note": "math://template/other does not resolve"
+    },
+    {
+      "id": "ops/pattern_catalogue_is_not_an_address",
+      "expect": "PASS",
+      "note": "a catalogue without declared ops has no addressable op"
+    },
+    {
+      "id": "ops/raw_pattern_text_matches_exactly",
+      "expect": "PASS",
+      "note": "exact AIML pattern text is a declared operation"
+    },
+    {
+      "id": "ownership/declared_scheme_wins_over_heavier_derivation",
+      "expect": "PASS",
+      "note": "declaration beats a heavier derived claim"
+    },
+    {
+      "id": "ownership/declared_source_reported",
+      "expect": "PASS",
+      "note": "uri_scheme_source == declared"
+    },
+    {
+      "id": "ownership/diagnostics_lists_declared_scheme",
+      "expect": "PASS",
+      "note": "SchemeDiagnostics.declared"
+    },
+    {
+      "id": "ownership/diagnostics_lists_undeclared_entry",
+      "expect": "PASS",
+      "note": "SchemeDiagnostics.entries_without_declared"
+    },
+    {
+      "id": "ownership/diagnostics_reports_compat_alias",
+      "expect": "PASS",
+      "note": "SchemeDiagnostics.compatibility_only"
+    },
+    {
+      "id": "ownership/compat_alias_still_routes",
+      "expect": "PASS",
+      "note": "a lone derived alias still resolves"
+    },
+    {
+      "id": "ownership/compat_source_reported",
+      "expect": "PASS",
+      "note": "uri_scheme_source == derived_compat"
+    },
+    {
+      "id": "ownership/compat_cause_recorded",
+      "expect": "PASS",
+      "note": "scheme_derived_compat:<scheme> cause"
+    },
+    {
+      "id": "ownership/ambiguous_alias_refused",
+      "expect": "REJECT:scheme_ambiguous",
+      "note": "two derived claims, no declaration"
+    },
+    {
+      "id": "ownership/ambiguous_alias_does_not_dispatch",
+      "expect": "PASS",
+      "note": "ambiguity cannot dispatch"
+    },
+    {
+      "id": "ownership/diagnostics_lists_ambiguous_alias",
+      "expect": "PASS",
+      "note": "SchemeDiagnostics.ambiguous"
+    }
+  ]
+}

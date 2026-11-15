@@ -1,0 +1,91 @@
+keygraph "aiml-functions" version "1.0";
+
+// Function catalog aligned with AIML runtime grammar and language.micronauts.v1.
+// This graph describes function shapes and effects; it is not an invocation grant.
+
+namespace function:core domain custom;
+namespace aiml:core domain custom;
+namespace srilm:core domain custom;
+namespace collection:core domain custom;
+namespace xpath:core domain custom;
+namespace effect:core domain custom;
+namespace xcfe:core domain xcfe;
+
+key function:AIML_NORMALIZE kind pattern value "normalize(input_text) -> normalized_text; effect=pure";
+key function:AIML_MATCH kind pattern value "match(input_text, that_context, topic_context) -> category_ref+captures; effect=read";
+key function:AIML_EXPAND kind pattern value "expand(template_ref, captures, session_scope) -> response_candidate; effect=session_scoped";
+key function:XAIML_GML_READ kind function value "read_gml(declared_graph_ref, start_key, relation_allowlist, depth, limit) -> typed_graph_records; status=DECLARED; effect=read_only; scope=pattern_sync";
+key function:XAIML_FIELD_READ kind function value "read_field(declared_field_ref, semantic_key, field_allowlist) -> typed_field_records; status=DECLARED; effect=read_only; scope=pattern_sync";
+key function:XAIML_KEY_RESOLVE kind function value "resolve_key(registered_key_book, query_keys) -> key_records+provenance; status=DECLARED; effect=read_only";
+key function:XAIML_FEED_BUILD kind function value "build_response_feed(query, typed_records, matched_patterns, captures, template_ref, limit) -> response_feed_candidate; status=DECLARED; effect=read_only; provenance=required";
+key function:SRAI kind pattern value "srai(pattern_text, session_scope, recursion_budget) -> redirected_match; effect=bounded_recursive_read";
+key function:AIML_GET kind pattern value "get(name, session_scope) -> value; effect=session_read";
+key function:AIML_SET kind pattern value "set(name, value, session_scope) -> proposed_session_delta; effect=session_scoped_write";
+key function:AIML_PERSIST kind pattern value "persist(session_delta, commit_authority) -> commit_result; phase=Xul; effect=authorized_write";
+
+key function:SRILM_HEALTH kind pattern value "health() -> service_status; effect=read";
+key function:SRILM_MODELS kind pattern value "models() -> model_refs; effect=read";
+key function:SRILM_COUNT kind pattern value "count(tokens, model_ref) -> count_evidence; effect=read";
+key function:SRILM_SCORE kind pattern value "score(tokens, model_ref) -> log_probability_evidence; effect=read";
+key function:SRILM_RANK kind pattern value "rank(candidates, model_ref) -> ranked_candidates; effect=read";
+key function:SRILM_DECODE kind pattern value "decode(context, model_ref, budget) -> token_candidates; effect=bounded_read";
+key function:SRILM_TRAIN kind pattern value "train(corpus_ref, training_config) -> training_proposal; effect=state_changing; admission=required";
+
+key function:MAP kind pattern value "map(collection, pure_transform) -> collection; preserves_item_order";
+key function:FILTER kind pattern value "filter(collection, pure_predicate) -> subsequence; preserves_item_order";
+key function:FOLD kind pattern value "fold(collection, initial_accumulator, pure_step) -> accumulator; order=declared";
+key function:REDUCE kind pattern value "reduce(collection, reducer, initial_accumulator) -> result; source_immutable=true";
+
+// XPath-inspired XAIML function keys. DECLARED means signature/mapping only;
+// host registration is still required before any function can be invoked.
+key xpath:FN_FOR_EACH kind function value "fn:for-each(sequence<T>, registered_transform<T,U>) -> sequence<U>; operator=MAP; status=DECLARED; effect=PURE; preserves_order=true";
+key xpath:FN_FILTER kind function value "fn:filter(sequence<T>, registered_predicate<T>) -> sequence<T>; operator=FILTER; status=DECLARED; effect=PURE; preserves_order=true";
+key xpath:FN_FOLD_LEFT kind function value "fn:fold-left(sequence<T>, initial<A>, registered_step<A,T>) -> A; operator=FOLD; status=DECLARED; effect=PURE; direction=left";
+key xpath:FN_FOLD_RIGHT kind function value "fn:fold-right(sequence<T>, initial<A>, registered_step<T,A>) -> A; operator=FOLD; status=DECLARED; effect=PURE; direction=right";
+key xpath:FN_DISTINCT_VALUES kind function value "fn:distinct-values(sequence<T>, equality_policy) -> sequence<T>; operator=REDUCE; status=DECLARED; effect=PURE; preserves_first_occurrence=true";
+key xpath:FN_SORT kind function value "fn:sort(sequence<T>, collation, comparator?) -> sequence<T>; operator=REDUCE; status=DECLARED; effect=PURE; deterministic_policy_required=true";
+key xpath:FN_SUM kind function value "fn:sum(sequence<numeric>, zero?) -> numeric; operator=REDUCE; status=DECLARED; effect=PURE; accumulation_order=declared";
+key xpath:FN_AVG kind function value "fn:avg(sequence<numeric>) -> numeric_or_empty; operator=REDUCE; status=DECLARED; effect=PURE";
+key xpath:FN_COUNT kind function value "fn:count(sequence<T>) -> integer; operator=REDUCE; status=DECLARED; effect=PURE";
+key xpath:FN_DEEP_EQUAL kind function value "fn:deep-equal(item*, item*, collation?) -> boolean; operator=REDUCE; status=DECLARED; typed_equality_policy_required=true";
+key xpath:MAP_GET kind function value "map:get(map<K,V>, K) -> sequence<V>; operator=MAP; status=DECLARED; effect=PURE; source_immutable=true";
+key xpath:MAP_KEYS kind function value "map:keys(map<K,V>) -> sequence<K>; operator=MAP; status=DECLARED; effect=PURE; order_policy_required=true";
+key xpath:MAP_CONTAINS kind function value "map:contains(map<K,V>, K) -> boolean; operator=MAP; status=DECLARED; effect=PURE";
+key xpath:ARRAY_GET kind function value "array:get(array<T>, integer) -> sequence<T>; operator=MAP; status=DECLARED; effect=PURE";
+key xpath:ARRAY_FLATTEN kind function value "array:flatten(array<item*>) -> sequence<item>; operator=FOLD; status=DECLARED; effect=PURE; array_sequence_distinction=preserved";
+key xpath:ARRAY_FOLD_LEFT kind function value "array:fold-left(array<T>, initial<A>, registered_step<A,T>) -> A; operator=FOLD; status=DECLARED; effect=PURE; direction=left";
+key xpath:FN_CURRENT_DATETIME kind function value "fn:current-dateTime(evaluation_context) -> dateTime; operator=context_read; status=DECLARED; effect=CONTEXT_READ; ingress_clock_binding=required";
+
+key function:SRAI_SCORE kind pattern value "target=SCORE; input=candidates+query_vector+context; output=scored_candidates; phase=Sek; effect=read+measure";
+key function:SRAI_RANK kind pattern value "target=RANK; input=scored_candidates; output=ranked_candidates; phase=Sek; effect=read+order";
+key function:SRAI_TRAIN kind pattern value "target=TRAIN; input=verified_feedback; output=proposed_learned_weight_delta; phase=Ch'en; effect=propose_only; commit=Xul+authorization";
+key function:SRAI_COMPARE kind pattern value "target=COMPARE; input=typed_candidates+evidence; output=comparison_report; phase=Sek; effect=read+measure";
+key function:SRAI_VERIFY kind pattern value "target=VERIFY; input=candidate+verification_contract; output=verification_record; phase=Ch'en; effect=read+measure";
+key function:SRAI_RECALL kind pattern value "target=RECALL; input=query+memory_scope; output=evidence_records; phase=Wo; effect=scoped_read";
+key function:SRAI_PROJECT kind pattern value "target=PROJECT; input=typed_source+projection_contract; output=projection_candidate; phase=Yax; effect=propose_only";
+key function:SRAI_QUESTION kind pattern value "target=QUESTION; input=field+intent_gap+budget; output=question_candidates; phase=Yax; effect=propose_only";
+key function:SRAI_COLLAPSE kind pattern value "target=COLLAPSE; input=verified_evidence+collapse_contract; output=collapsed_result; phase=Xul; effect=authorized_commit_required";
+key function:SRAI_RELATION_DELEGATES_TO kind pattern value "target=RELATION DELEGATES TO; input=subject+object; output=relation_query_frame:@delegates_to; phase=Yax; effect=read";
+key function:SRAI_RELATION_HAS_PROPERTY kind pattern value "target=RELATION HAS PROPERTY; input=subject+object; output=relation_query_frame:@has_property; phase=Yax; effect=read";
+key function:SRAI_RELATION_POSSESSES kind pattern value "target=RELATION POSSESSES; input=subject+object; output=relation_query_frame:@possesses; phase=Yax; effect=read";
+key function:SRAI_RELATION_VALUE kind pattern value "target=RELATION VALUE; input=subject+object; output=relation_query_frame:@value; phase=Yax; effect=read";
+key function:SRAI_RELATION_IMPORTS kind pattern value "target=RELATION IMPORTS; input=subject+object; output=relation_query_frame:@imports; phase=Yax; effect=read";
+key function:SRAI_RELATION_CALLS kind pattern value "target=RELATION CALLS; input=subject+object; output=relation_query_frame:@calls; phase=Yax; effect=read";
+key function:SRAI_RELATION_EXPOSES kind pattern value "target=RELATION EXPOSES; input=subject+object; output=relation_query_frame:@exposes; phase=Yax; effect=read";
+
+key effect:PURE kind contract value "no_external_side_effects; no_persistent_state_write";
+key effect:SESSION_SCOPED kind contract value "read_or_propose_delta_within_bound_session";
+key effect:AUTHORIZED_WRITE kind contract value "requires_explicit_commit_authority; Xul_boundary";
+key effect:STATE_CHANGING kind contract value "requires_registered_action_and_XCFE_admission";
+key xcfe:FUNCTION_ADMISSION kind contract value "validate_registration+arguments+scope+budget+effect_policy";
+key xcfe:SRAI_DISPATCH kind contract value "resolve_typed_operator+bindings; validate_local_registration+phase+scope+budget+capabilities";
+
+key aiml:SRAI_SEMANTICS kind pattern value "redirect input to another AIML match; recursion is bounded; not an external tool call";
+key srilm:SRLM_ALIAS kind pattern value "SRLM is accepted as a shorthand label for the registered SRILM service; canonical service id=SRILM-µ";
+key collection:ORDER_SEMANTICS kind contract value "map/filter preserve source order; fold uses its declared traversal order";
+key collection:COMPOSITION_SEMANTICS kind contract value "map/filter/fold compose over typed values; composition does not imply program execution authority";
+key collection:MATHML_CONTRACT kind contract value "see data/grammar/map-filter-fold.mml; MathML expression is declarative until parsed, type-checked, effect-checked, and admitted";
+key aiml:SRAI_ROUTING kind contract value "SRAI symbolic redirect resolves an operator target; typed-frame dispatch requires a registered handler";
+key aiml:SCORE_RANK_TRAIN kind contract value "SCORE measures; RANK orders eligible candidates; TRAIN consumes verified feedback and proposes learned-weight delta only";
+key aiml:WEIGHT_SEPARATION kind contract value "effective_weight=corpus_weight*learned_weight; update learned weight only; corpus weight is immutable";
+key aiml:DISPATCH_BOUNDARY kind contract value "redirect_text_is_not_execution; local_XCFE_admission_and_host_authorization_required";

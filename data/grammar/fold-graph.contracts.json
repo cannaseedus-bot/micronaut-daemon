@@ -1,0 +1,123 @@
+{
+  "@type": "khanary.fold_graph_contracts.v1",
+  "semantic_authority": false,
+  "doc": "docs/FOLD_GRAPH.md",
+  "source_topology": "data/grammar/fold_graph.xml",
+  "fold_space_contract": "data/grammar/fold-space.contracts.json",
+  "fold_event_contract": "data/grammar/fold-event.contracts.json",
+  "law": {
+    "name": "Fold Graph recoverable contraction",
+    "primitive": "Unfold(h,tau) = { e | B_tau[h,e] != 0 }",
+    "shape": "G_F(h) = (V_h, E→_h, B_h, W_h, tau_h, Theta_h)",
+    "base_shape": "G_F(h) = (V_h, E_h, B_h, W_h, tau_h)",
+    "orientation": "O_E is permitted traversal direction; W_E is only relationship strength",
+    "phase_forward": "runtime paths satisfy semantic edge orientation plus C6 phase-forward law",
+    "active_shape": "G_F^Q(h) = Active Fold Graph",
+    "handle": "Handle(h) is an addressable contracted graph state",
+    "recoverability": "Unfold(Fold(G_F)) ~= G_F",
+    "equivalence": "semantic/topological equivalence under the Fold contract, not necessarily byte identity",
+    "locality": "Local Fold Validity + Boundary Compatibility => Composable Fold Validity",
+    "analogy_boundary": "Demaine/Abel graph-folding analogy is useful but non-equivalent and non-authoritative",
+    "unfold_does_not_create_relationships": true,
+    "fold_does_not_destroy_graph": true,
+    "xul_topology_boundary": "Only verified/authorized Xul can persist delta_B",
+    "pattern_lineage": "regex -> SNOBOL -> FoldGraph: pattern_as_syntax -> pattern_as_composable_value -> pattern_as_graph_generating_constraint",
+    "foldgraph_2d_bit_pattern": "Anaψ=sliding window generation; Pattern=((window ^ pattern) & mask); Attention=popcount score; Cataφ=argmax reduction.",
+    "inference_field_2d_surface": "The inference field provides the graph/matrix surface for 2D FoldGraph bit-pattern matching."
+  },
+  "layers": {
+    "Fold": "bounded semantic structure",
+    "FoldGraph": "unfolded relational structure",
+    "ActiveFoldGraph": "query-conditioned unfolded relational structure",
+    "FoldSpace": "navigable Fold coordinates/states",
+    "FoldField": "vertex in G_runtime = G_semantic □ G_phase; fields: node_id, theta, W, C, R; score()=W*C*R",
+    "ProductGraph": "G_runtime = G_semantic □ G_phase; vertex=(node_id, phase); edge=W_arc·cos(Δθ)",
+    "ConvergenceTest": "Kleene iteration tracker over FoldStates; CONVERGED when d<epsilon; k=d_n/d_{n-1}<k_max",
+    "FoldEvent": "typed movement/change"
+  },
+  "shape_fields": [
+    "V_h",
+    "E→_h",
+    "B_h",
+    "W_h",
+    "tau_h",
+    "Theta_h"
+  ],
+  "required_record_keys": [
+    "@type",
+    "@handle",
+    "@nodes",
+    "@edges",
+    "@incidence",
+    "@weights",
+    "@tau",
+    "@projection",
+    "@query_conditioned",
+    "@active",
+    "@recoverability",
+    "@authority",
+    "@boundary",
+    "@fold_field",
+    "@product_graph",
+    "@convergence"
+  ],
+  "projection_modes": [
+    "canonical-incidence",
+    "json-book",
+    "tensor",
+    "svg3d",
+    "scxq2"
+  ],
+  "orientation_modes": [
+    "forward",
+    "reverse",
+    "bidirectional",
+    "blocked"
+  ],
+  "phase_orientation": "C6 phase-forward: Pop -> Wo -> Yax -> Sek -> Ch'en -> Xul -> Pop'",
+  "authority_required": {
+    "semantic_authority": false,
+    "xul_required_for_delta_B": true,
+    "topology_commit_phase": "Xul"
+  },
+  "invariants": {
+    "FG1": "Fold Graph is not Fold Space, Fold Field, Fold Event, or persistent global topology",
+    "FG2": "Unfold(h,tau) reveals relationships represented by B_tau[h,e] != 0; it does not create semantic relationships",
+    "FG3": "G_F(h) = (V_h, E_h, B_h, W_h, tau_h)",
+    "FG4": "Yax derives G_F^Q(h) from G_F(h) using a query gate; it does not unfold the whole universe",
+    "FG5": "Sek operates on Active Fold Graph, not persistent topology directly",
+    "FG6": "Handle(h) is an addressable contracted graph state",
+    "FG7": "Unfold(Fold(G_F)) ~= G_F under semantic/topological Fold contract equivalence",
+    "FG8": "JSON Book projections may be lossy while canonical incidence/bytecode preserves recoverable structure",
+    "FG9": "Local Fold Validity + Boundary Compatibility => Composable Fold Validity",
+    "FG10": "Fold does not destroy the graph",
+    "FG11": "Only verified/authorized Xul can persist delta_B",
+    "FG12": "Demaine/Abel graph-folding is analogy only, not a claimed equivalence or source of authority",
+    "FG13": "Edge weight W_E does not imply traversal permission; O_E declares legal direction",
+    "FG14": "A valid runtime path must satisfy semantic edge orientation and C6 phase-forward orientation",
+    "FG15": "@node is the root of a Fold; the Fold is the algebra applied to the structure rooted there. @node != fold.",
+    "FG16": "G_runtime = G_semantic □ G_phase. FoldField vertex = (node_id, theta, W, C, R). Edge weight = W_arc·cos(θ_b−θ_a).",
+    "FG17": "Kleene iteration: µf = ⊔{f^n(⊥)|n≥0}. Xul is the least fixed point. (Fold∘Unfold)(h)≡h identity invariant; violation drops sigma to UNBOUND.",
+    "FG18": "§60: Pattern lineage is regex syntax -> SNOBOL first-class composable value -> FoldGraph graph-generating constraint; FoldGraph ranks candidates by WCR instead of committing to first success.",
+    "FG19": "2D FoldGraph bit-pattern matching is a projection over an inference field: Anaψ generates sliding windows, the pattern layer applies ((window ^ pattern) & mask), Attention uses popcount scoring, and Cataφ selects argmax."
+  },
+  "ancestry": {
+    "section": "§60",
+    "name": "SNOBOL ancestry",
+    "lineage": [
+      "regex: pattern as syntax",
+      "SNOBOL: pattern as first-class composable runtime value",
+      "FoldGraph: pattern as graph-generating constraint"
+    ],
+    "foldgraph_law": "P(Q,B) -> Ana -> F_Q -> WCR -> F*_Q -> Cata -> C_Q",
+    "aiml_mapping": {
+      "pattern": "recognize_or_constrain",
+      "wildcard": "explicit_unresolved_variable_SC37",
+      "template": "stored_structural_transform_post_cata"
+    },
+    "wild_correction": {
+      "WILD_RETAIN": "C < tau -> retained_wildcard",
+      "WILD_RESOLVE": "C >= tau -> resolved_known"
+    }
+  }
+}

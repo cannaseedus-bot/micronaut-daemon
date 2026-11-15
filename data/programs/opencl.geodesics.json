@@ -1,0 +1,51 @@
+{
+  "@program": "opencl.geodesics",
+  "@schema": "kuhul.opencl.geodesics.v1",
+  "@version": "1.0.0",
+  "@description": "OpenCL C 1.2 geodesic distance dispatch for metric fieldgraph tensors.",
+  "backend": {
+    "name": "opencl_1_2",
+    "language": "OpenCL C 1.2",
+    "build_options": ["-cl-std=CL1.2"],
+    "source": "drivers/opencl_1_2/geodesic_distance.cl",
+    "entry": "geodesic_distance",
+    "registry": "programs/opencl.kernel.json",
+    "fallback": "cpu_reference.geodesic_distance"
+  },
+  "inputs": {
+    "metric": { "dtype": "f32", "shape": ["batch", "hidden", "hidden"], "access": "read" },
+    "positions": { "dtype": "f32", "shape": ["batch", "hidden"], "access": "read" },
+    "batch": { "dtype": "i32", "shape": [1], "access": "uniform" },
+    "hidden": { "dtype": "i32", "shape": [1], "access": "uniform" }
+  },
+  "outputs": {
+    "distances": { "dtype": "f32", "shape": ["batch", "batch"], "access": "write" }
+  },
+  "phase_hooks": {
+    "Pop": "allocate_metric_and_position_buffers",
+    "Wo": "bind_geodesic_arguments",
+    "Yax": "select_opencl_1_2",
+    "Sek": "enqueue_geodesic_distance",
+    "Chen": "clFinish_and_validate_finite_distances",
+    "Xul": "commit_fieldgraph_distance_matrix"
+  },
+  "dispatch": [
+    { "@op": "OPENCL_BUILD", "@source": "drivers/opencl_1_2/geodesic_distance.cl", "@options": "-cl-std=CL1.2", "@out": "program" },
+    { "@op": "OPENCL_KERNEL", "@program": "$program", "@entry": "geodesic_distance", "@out": "kernel" },
+    { "@op": "OPENCL_SET_ARGS", "@kernel": "$kernel", "@args": ["$metric", "$positions", "$distances", "$batch", "$hidden"], "@out": "bound" },
+    { "@op": "OPENCL_NDRANGE", "@kernel": "$bound", "@global": ["$batch"], "@out": "event" },
+    { "@op": "OPENCL_READBACK", "@event": "$event", "@buffer": "$distances", "@out": "result" }
+  ],
+  "constraints": {
+    "opencl_version": "1.2",
+    "metric_layout": "row_major_batched",
+    "distance_clamp": "max(sum, 0) + 1e-8 before sqrt",
+    "no_opencl_2_features": true,
+    "fieldgraph_source": "models/from_zero/fieldgraph/ast_fieldgraph_100d.s7"
+  },
+  "validation": {
+    "compile_smoke": "scratch/opencl_compile_kernels.exe",
+    "source_entry": "geodesic_distance",
+    "expected_status": "compiled_and_kernel_created"
+  }
+}

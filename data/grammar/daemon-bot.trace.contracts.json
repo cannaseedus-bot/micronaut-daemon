@@ -1,0 +1,137 @@
+{
+  "@type": "khanary.daemon_bot_trace.v1",
+  "id": "urn:kuhul:daemon-bot:trace:v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "commit_authorized": false,
+  "authority_boundary": "a_trace_records_what_happened_it_never_authorizes_what_may_happen",
+  "lane": "KHANARY_DAEMON_BOT_TRACE_TEST",
+  "owner": "daemon.js",
+  "emitters": [
+    "daemon.js",
+    "micronaut/xaiml/chat-frame.js"
+  ],
+  "consumers": [
+    "DaemonBotWidget.tsx",
+    "chat.html"
+  ],
+  "purpose": "One record per reply that names the normalization, the matched category, the phase walk, the SRAI hops, the XCFE dispatches, the predicate traffic and the admission/commit outcome — so a reply can be audited without replaying the conversation.",
+  "why": "The daemon has several observation surfaces (a route string, a selection score, a predicate map) and none of them says which phase produced which value. A trace makes the phase walk explicit and keeps the authority chain visible: every recorded admission is false unless a host callback said otherwise, and every recorded commit is false because a pattern engine has no commit path.",
+
+  "boundary": {
+    "is_not": ["an authorization", "a verification", "a commit receipt", "a semantic authority"],
+    "observation_only": true,
+    "may_grant_admission": false,
+    "may_authorize_commit": false,
+    "may_promote_facts": false,
+    "note": "A trace may be written to memory or shown in the UI. It may not be replayed as evidence of admission, and a recorded XCFE dispatch is a call attempt, not a granted operation."
+  },
+
+  "schema": {
+    "schema": "constant: daemon-bot.reply-trace.v1",
+    "id": "string; unique within the emitting engine instance, monotonic",
+    "parent": "string|null; the trace id of the SRAI parent, null for a top-level reply",
+    "depth": "integer 0..16; SRAI recursion depth, MAX_DEPTH is 16",
+    "input": {
+      "raw": "string; the utterance exactly as received",
+      "normalized": "string; the case-folded, substitute-applied, punctuation-collapsed form the matcher used",
+      "substitutions": "array of {find, replace}; one entry per substitution rule that fired"
+    },
+    "phases": "array of 6 {phase, status, detail} in the canonical order; status is entered|skipped|failed|not_reached",
+    "match": "null | {id, pattern, topic, phase, source, specificity}; null means no category matched",
+    "captures": "array of {slot, value}; slot is 1-based, matching W8 of wildcard-control-flow",
+    "srai": "array of {target, depth, child, matched, status}; one entry per redirect",
+    "children": "array of nested reply traces, one per SRAI hop; bounded by depth",
+    "xcfe": "array of {op, admitted, authority, dispatch}; admitted is false for a pattern engine, dispatch is host|unbound",
+    "predicates": {
+      "get": "array of {name, found}; found means the predicate existed, not that its value was verified",
+      "set": "array of {name, value}; a write is recorded, never treated as learning"
+    },
+    "conditions": "array of {name, value, matched, fallback}; one entry per <condition> evaluated",
+    "mode": {
+      "family": "constant: behavior",
+      "value": "string|null; the behavior mode that filtered candidate selection",
+      "narrows_only": "constant true; a mode narrows selection and never grants admission"
+    },
+    "admission": "constant {owner: XCFE, admitted: false, reason: pattern_match_only}",
+    "commit": "constant {authorized: false, phase: Xul, reason: trace_is_observation_only}",
+    "status": "ok|no_match|recursion_limit|render_error",
+    "steps": "array of {seq, phase, event, detail}; the ordered execution log, seq starts at 1"
+  },
+
+  "phase_walk": {
+    "order": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"],
+    "status_vocabulary": ["entered", "skipped", "failed", "not_reached"],
+    "canonical_name": "Ch'en",
+    "phase_identity": "Chen / Ch_en / Ch'en are one phase, canonicalised at the parser boundary (world::canonical_phase_name)",
+    "laws": {
+      "T1": "every reply records exactly one entry per canonical phase, in canonical order, and every entry carries a status",
+      "T2": "a skipped phase states why it was skipped; Yax is skipped because a deterministic rule match has no generation stage",
+      "T3": "the phase walk is recorded, not performed: recording a Ch'en entry does not verify anything and recording a Xul entry does not commit",
+      "T4": "the trace never wraps Xul to Pop inside one record; a redirect starts a child trace with parent set, which is the new-execution boundary of runtime-graph"
+    }
+  },
+
+  "contributors": {
+    "data/grammar/scfml.normalization.json": {
+      "fields": ["input.raw", "input.normalized", "input.substitutions"],
+      "law": "MISS is recorded as no_match, never as a contradicted condition; UNKNOWN is not recorded as else"
+    },
+    "data/grammar/wildcard-control-flow.contracts.json": {
+      "fields": ["captures", "match.specificity"],
+      "law": "a capture is recorded as a capture; it is never recorded as a resolved condition (W1)"
+    },
+    "data/grammar/srai-operators.contracts.json": {
+      "fields": ["srai", "children", "xcfe"],
+      "law": "a hop is recorded before the child text is emitted; an operator without a host dispatch records dispatch:unbound and stays a proposal"
+    },
+    "data/grammar/runtime-graph.contracts.json": {
+      "fields": ["phases", "steps"],
+      "law": "a recorded phase step is a candidate route, never an authorization (RG6)"
+    },
+    "data/grammar/xcfe-aiml.contract.json": {
+      "fields": ["phases", "admission", "commit", "conditions"],
+      "law": "the pattern engine has no XCFE callback, so admission.admitted and commit.authorized stay false"
+    },
+    "data/grammar/xcfe-modes.contracts.json": {
+      "fields": ["mode", "steps"],
+      "law": "a mode filters candidate selection and is recorded as narrowing only (M1, MODE4)"
+    },
+    "data/grammar/operator-algebra.contracts.json": {
+      "fields": ["xcfe", "steps"],
+      "law": "operators declare and are recorded; none of them admits or commits (OA6)"
+    },
+    "data/grammar/relation-aliases.contracts.json": {
+      "fields": ["xcfe"],
+      "law": "a recorded RELATION dispatch never promotes an alias spelling to a VerifiedRelation"
+    }
+  },
+
+  "status_vocabulary": [
+    "ok",
+    "no_match",
+    "recursion_limit",
+    "render_error"
+  ],
+
+  "invariants": {
+    "TR1": "one trace per reply; SRAI children are nested, never spliced into the parent",
+    "TR2": "the schema field is exactly daemon-bot.reply-trace.v1 and the phase order is exactly Pop, Wo, Yax, Sek, Ch'en, Xul",
+    "TR3": "input.normalized is the value the matcher used; a trace whose normalized form differs from the matched input is invalid",
+    "TR4": "admission.admitted and commit.authorized are false unless a host callback set them; a pattern engine sets neither",
+    "TR5": "no trace field may be read back as permission, verification or a committed fact",
+    "TR6": "a render failure records render_error, marks Xul failed and rethrows; a failed trace is never reported as ok",
+    "TR7": "trace ids are monotonic within one engine instance and unique across a conversation"
+  },
+
+  "conformance": {
+    "checker": "node --test tests/*.test.cjs",
+    "fixtures": [
+      "reply with an SRAI redirect records srai[0].child and children[0].parent = trace.id",
+      "reply with no match records status no_match and no capture",
+      "reply with a substitution records input.substitutions",
+      "reply with a <condition> records conditions[0]",
+      "reply with an <xcfe> node records xcfe[0].admitted = false"
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "cycle_0": { "input": { "@xjson_type": "user_function", "code": "function add(a, b) { return a + b; }", "complexity": 1.0 } },
+  "analysis_phase": { "structure_complexity": 0.2, "execution_potential": 0.8, "unification_score": 0.5 },
+  "kuhul_generation": { "blocks": ["[Pop add]", "  [Sek a + b]→[Ch'en sum]", "  [Wo sum]→[Xul return]", "[Xul]"], "atomic_ops": ["Sek", "Wo", "Xul"] },
+  "ast_transformation": { "nodes": 5, "depth": 2, "optimizations": ["inline_variables", "simplify_returns"] },
+  "compilation": { "output": { "@xjson_type": "optimized_function", "@generation": 1, "code": "[Pop add]→[Wo a+b]→[Xul]", "compression_ratio": 0.4, "authority": "observation_only" } }
+}

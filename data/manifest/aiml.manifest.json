@@ -1,0 +1,31 @@
+{
+  "AIML:": ["@aiml", "AIML-µ", "pattern", "template", "intent:aiml_dispatch", "⟁Pop", "⟁Sek"],
+  "@aiml": ["@node:AIML-µ", "AIML:", "aiml:pattern", "aiml:template", "aiml:wildcard", "aiml:topic", "aiml:that"],
+  "AIML-µ": ["AIML:", "@aiml", "intent-matching", "pattern-response", "symbolic-routing"],
+  "aiml:pattern": ["match", "category", "token-sequence", "phase:Pop"],
+  "aiml:template": ["response", "emit", "phase:Xul"],
+  "aiml:wildcard": ["*", "_", "capture", "phase:Wo"],
+  "aiml:topic": ["context-scope", "selector", "phase:Yax"],
+  "aiml:that": ["conversation-state", "prior-response", "phase:Ch'en"],
+  "aiml:graph": ["nodes", "relations", "pattern-links", "phase:Sek"],
+  "aiml:relation": ["@related_to", "@depends_on", "@supports", "phase:Yax"]
+  ,"aiml:relation_verbs": ["relation-verbs.aiml", "@delegates_to", "@has_property", "@possesses", "@value", "@imports", "@calls", "@exposes", "intent:relation_query", "phase:Yax", "effect:read", "commit:none"]
+  ,"RELATION-µ": ["relation-verbs.aiml", "relation-query-surface", "op:query", "peer:AIML-µ", "not:edge-authoring", "phase:Yax", "effect:read", "commit:none"]
+  ,"ADVISOR-µ": ["advisor.aiml", "expert-routing", "wpf-card", "phase:Yax", "phase:Sek"]
+  ,"advisor:math": ["MATH-µ", "math:", "card_view=true"]
+  ,"advisor:code": ["coder", "code:", "card_view=true"]
+  ,"advisor:research": ["WEB-RESEARCH-µ", "search:", "card_view=true"]
+  ,"advisor:explain": ["reasoner", "explain:", "card_view=true"]
+  ,"advisor:plan": ["Coordinator", "plan:", "card_view=true"]
+  ,"JOKE-µ": ["joke.aiml", "first-class-µ-track", "peer:PLAN-µ", "peer:ADVISOR-µ", "availability:all-domains", "humor-frame-routing", "ambiguity-permission", "delivery-frame-routing", "pun-bridge", "punchline-compatible-sense-selection", "not:joke-authoring", "phase:Yax", "phase:Ch'en"]
+  ,"joke.aiml": ["JOKE-µ", "intent:joke", "pattern:WHAT_DO_YOU_CALL_*", "pattern:WHERE_DOES_*", "pattern:WIND_UP_PITCH_SWING_*", "template:surface-answer", "projection:not-authority"]
+  ,"joke:frame": ["intent:joke", "allow:pun_bridge", "keep:multiple_senses_active", "admit:surface_ambiguity", "preserve:semantic_key_and_surface_answer"]
+  ,"joke:delivery_frame": ["frame:joke_setup", "frame:timed_delivery", "frame:collapse", "boundary:no-token-promotion", "phase:Pop", "phase:Wo", "phase:Yax", "phase:Sek", "phase:Ch'en"]
+  ,"joke:pun_bridge": ["surface-ambiguity", "candidate-sense-field", "punchline-compatible-collapse", "phase:Yax"]
+  ,"joke:answer_surface": ["rendered-template", "not:semantic-authority", "phase:Xul"]
+  ,"SCFML-µ": ["semantic-control-classes.aiml", "track:data/tracks/SCFML-u.semantic-tracks.v1.json", "epistemic-branch-reasoning", "proposal_only"]
+  ,"XCFE-µ": ["semantic-control-classes.aiml", "track:data/tracks/XCFE-u.semantic-tracks.v1.json", "host-policy-gate", "execution-authority"]
+  ,"CFPC-µ": ["semantic-control-classes.aiml", "track:data/tracks/CFPC-u.semantic-tracks.v1.json", "deterministic-context-field-classification", "route_proposal_only"]
+  ,"ELIZA-REASON-µ": ["reasoning-board.aiml", "triangle-routing", "xcfe-dispatch", "data_only", "phase:Wo", "phase:Yax", "phase:Sek", "phase:Ch'en", "phase:Xul"]
+  ,"reasoning-board.aiml": ["ELIZA-REASON-µ", "intent:reason", "pattern:WHAT_IS_*", "pattern:COMPARE_*_AND_*", "pattern:WHY_DOES_*", "template:xcfe-dispatch", "authority:data_only", "match_grants_execution:false"]
+}

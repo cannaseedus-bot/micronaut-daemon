@@ -1,0 +1,72 @@
+{
+  "@kind": "kuhul.micronaut.program.v1",
+  "@id": "SHEOG-1",
+  "@version": "1.0.0",
+  "description": "Sheogorath entropy engine — Xul-fold possibility generator, CHEESE reinforcement scoring, and NPC personality factory. Candidate states only; no factual authority.",
+  "micronaut": {
+    "id": "SHEOG-1",
+    "name": "SheogorathMicronaut",
+    "fold": "Xul",
+    "phase_angle_deg": 300,
+    "port": 3213,
+    "bots": "dist/sheogorath-micronaut/bots.py",
+    "brain": "ELIZA-1",
+    "sub_brain": "ALICE-1"
+  },
+  "personality": {
+    "D_divergence":    0.99,
+    "A_association":   0.98,
+    "N_novelty":       0.97,
+    "S_systemization": 0.99,
+    "V_verification":  0.94,
+    "C_closure":       0.86
+  },
+  "tasks": {
+    "imagine": {
+      "description": "Generate candidate idea states from a prompt using entropy-weighted divergence.",
+      "payload": { "prompt": "string", "temperature": "float (default 0.97)" },
+      "output": ["candidates", "entropy_score", "eliza_intent", "eliza_domain"],
+      "eliza": "intent() → constrains temperature for plan/clarification"
+    },
+    "cheese": {
+      "description": "Score a candidate on the CHEESE reinforcement signal (novelty × coherence geometric mean).",
+      "payload": { "candidate": "string", "context": "string" },
+      "output": ["score", "novelty", "coherence", "verdict", "eliza"],
+      "eliza": "plan() → wrong/right annotations on the candidate"
+    },
+    "expand": {
+      "description": "Return n semantic associations that maximise distance from the input concept.",
+      "payload": { "concept": "string", "n": "int (default 5)" },
+      "output": ["associations[{concept, distance, bridge?}]"]
+    },
+    "npc": {
+      "description": "Generate a deterministic NPC personality profile from a seed string.",
+      "payload": { "seed": "string", "archetype": "string (default balanced)" },
+      "output": ["name", "personality_scores", "traits", "dialog_seed"]
+    },
+    "health": {
+      "description": "Return micronaut health: CHEESE balance, Jyggalag threshold, ELIZA wiring status.",
+      "output": ["status", "id", "fold", "personality", "cheese_balance", "jyggalag_threshold", "eliza"]
+    }
+  },
+  "reinforcement": {
+    "signal": "CHEESE",
+    "formula": "sqrt(novelty * coherence)",
+    "jyggalag_threshold": 0.85,
+    "note": "Candidates below 0.85 coherence are dropped during Jyggalag total-order collapse (JYGG-1 greymarch)."
+  },
+  "folds": {
+    "Xul": "entropy emission — candidate generation, divergence, CHEESE reward",
+    "Chen": "ELIZA metacognitive interpretation of imagination output"
+  },
+  "cluster_domains": ["math", "myth", "code", "cognition", "game", "physics", "food"],
+  "bridge_pairs": [
+    ["tensor", "cheese"], ["shader", "realm"], ["fold", "madness"],
+    ["entropy", "order"], ["daedra", "kernel"], ["possibility", "proof"],
+    ["divergence", "collapse"], ["mania", "convergence"], ["geometry", "lore"]
+  ],
+  "integration": {
+    "ELIZA-1": "intent classification constrains temperature; plan() annotates CHEESE output",
+    "JYGG-1": "greymarch receives SHEOG-1 candidates; drops below coherence threshold"
+  }
+}

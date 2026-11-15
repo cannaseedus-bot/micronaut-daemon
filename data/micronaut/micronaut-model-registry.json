@@ -1,0 +1,1110 @@
+{
+  "schema": "micronaut-model-registry.v1",
+  "generated_by": "tools/build_model_registry.py",
+  "default_model": "lfm2.5-1.2b-q8",
+  "models": {
+    "lfm2.5-1.2b-q8": {
+      "gguf": "C:/Users/canna/.lmstudio/models/lmstudio-community/LFM2.5-1.2B-Instruct-GGUF/LFM2.5-1.2B-Instruct-Q8_0.gguf",
+      "template": "chatml",
+      "role": "instruction",
+      "notes": "Fast 1.2B instruction model. Default for most micronauts."
+    },
+    "gemma-3-1b-qat-q4": {
+      "gguf": "C:/Users/canna/.lmstudio/models/lmstudio-community/gemma-3-1B-it-QAT-GGUF/gemma-3-1B-it-QAT-Q4_0.gguf",
+      "template": "gemma",
+      "role": "code-generation",
+      "notes": "Gemma 3 1B QAT. Best for code output, pattern matching, Q-prime checks."
+    },
+    "qwen3-1.7b-q8": {
+      "gguf": "C:/Users/canna/.lmstudio/models/lmstudio-community/Qwen3-1.7B-GGUF/Qwen3-1.7B-Q8_0.gguf",
+      "template": "chatml",
+      "role": "advisory-reasoning",
+      "notes": "Qwen3 1.7B Q8. Best for multi-step reasoning, analysis, advisory."
+    }
+  },
+  "summary": {
+    "total_micronauts": 71,
+    "by_model": {
+      "no-model": 36,
+      "lfm2.5-1.2b-q8": 27,
+      "gemma-3-1b-qat-q4": 4,
+      "qwen3-1.7b-q8": 4
+    }
+  },
+  "registry": [
+    {
+      "id": "CHAT-µ",
+      "phase": "Pop",
+      "category": "conversational",
+      "description": "General conversational micronaut — the backbone of interactive exchange. Handles",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "opinion-surface",
+        "assertion-classification",
+        "agreement-detection",
+        "disagreement-detection",
+        "acknowledgment-classification",
+        "continuation-signal"
+      ]
+    },
+    {
+      "id": "CONTROL-µ",
+      "phase": "Pop",
+      "category": "control",
+      "description": "Control-flow micronaut — the key grammar's control words are first-class flow op",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "control-word-detection",
+        "sugar-clause-parsing",
+        "phase-bound-control-plan",
+        "xcfe-control-lowering",
+        "conditional-branch-execution",
+        "iteration-scope-binding"
+      ]
+    },
+    {
+      "id": "ELIZA",
+      "phase": "Pop",
+      "category": "",
+      "description": "Intent matching and pattern response — Pop perceive, Xul emit, XCFE gate, synony",
+      "model": "lfm2.5-1.2b-q8",
+      "pattern_source": "eliza",
+      "pattern_mode": "system_context",
+      "capabilities_sample": [
+        "intent-matching",
+        "pattern-response",
+        "synonym-collapse",
+        "eliza-rule-eval",
+        "xcfe-condition-check",
+        "AIML-1.0"
+      ]
+    },
+    {
+      "id": "ELIZA-1",
+      "phase": "Pop",
+      "category": "",
+      "description": "ELIZA-1: 16 reasoning operators — Pop detection, Sek emission (vertical split)",
+      "model": "lfm2.5-1.2b-q8",
+      "pattern_source": "eliza",
+      "pattern_mode": "system_context",
+      "capabilities_sample": [
+        "CAUSE",
+        "CONTRAST",
+        "DEPENDENCY",
+        "CONSTRAINT",
+        "EVIDENCE",
+        "SEQUENCE"
+      ]
+    },
+    {
+      "id": "GREETING-µ",
+      "phase": "Pop",
+      "category": "social",
+      "description": "Greeting micronaut — adaptive salutation learning. Records every submitted greet",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "salutation-detection",
+        "greeting-ngram-archive",
+        "lingo-absorption",
+        "reactive-greeting-mirror",
+        "associative-variant-synthesis",
+        "phase-greeting-bank"
+      ]
+    },
+    {
+      "id": "MEM-µ",
+      "phase": "Pop",
+      "category": "storage",
+      "description": "Relational memory — gram store access and confidence tracking; horizontal-fold w",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "gram-store",
+        "confidence-tracking",
+        "Pop-read",
+        "horizontal-fold"
+      ]
+    },
+    {
+      "id": "USER-µ",
+      "phase": "Pop",
+      "category": "identity",
+      "description": "The principal. Handles session identity and continuity — who the caller is, what",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "save-session-context",
+        "session-identity-binding",
+        "caller-attribution",
+        "session-continuity",
+        "principal-scope-resolution"
+      ]
+    },
+    {
+      "id": "gravity",
+      "phase": "Pop",
+      "category": "",
+      "description": "Gravity well routing — score = established_nodes / distance²",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "gravity-well-scoring",
+        "micronaut-selection",
+        "factory-fallback"
+      ]
+    },
+    {
+      "id": "intent-unresolved",
+      "phase": "Pop",
+      "category": "",
+      "description": "Pop null fallback — routes to Factory when gravity is too low to match",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "factory-fallback",
+        "low-gravity-route",
+        "create-new-micronaut"
+      ]
+    },
+    {
+      "id": "APP-WIZARD-µ",
+      "phase": "Wo",
+      "category": "application-factory",
+      "description": "Runtime app synthesis from App-Wizard symbolic recipes; user picks type and watc",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "guided-app-selection",
+        "runtime-block-composition",
+        "template-matching",
+        "domain-overlay-derivation",
+        "watchable-build-stream",
+        "semantic-slot-routing"
+      ]
+    },
+    {
+      "id": "ARTIFICIAL-CONSCIOUSNESS-µ",
+      "phase": "Wo",
+      "category": "theory",
+      "description": "Artificial consciousness specialist — tracks machine-awareness, qualia, and arch",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "machine-consciousness-framing",
+        "qualia-claim-analysis",
+        "sentience-threshold-modeling",
+        "architecture-to-state-mapping",
+        "consciousness-graph-node-seeding",
+        "contrast-set-analysis"
+      ]
+    },
+    {
+      "id": "CODEGEN-µ",
+      "phase": "Wo",
+      "category": "code",
+      "description": "Parent code-generation micronaut — orchestrates code-related children for genera",
+      "model": "gemma-3-1b-qat-q4",
+      "capabilities_sample": [
+        "code-generation",
+        "debug-triage",
+        "refactor",
+        "test-generation",
+        "tool-calls",
+        "emit"
+      ]
+    },
+    {
+      "id": "COMP-THEORY-OF-MIND-µ",
+      "phase": "Wo",
+      "category": "theory",
+      "description": "Computational theory of mind specialist — converts CTM discourse into typed reas",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "ctm-framing",
+        "symbolic-computation-modeling",
+        "mental-representation-analysis",
+        "neural-symbolic-contrast",
+        "reasoning-graph-node-seeding",
+        "contrast-set-analysis"
+      ]
+    },
+    {
+      "id": "EMAIL-µ",
+      "phase": "Wo",
+      "category": "communication",
+      "description": "Email communication micronaut — compose, send, read, reply, search, and delete e",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "email-compose",
+        "email-send",
+        "email-inbox-list",
+        "email-read",
+        "email-reply",
+        "email-forward"
+      ]
+    },
+    {
+      "id": "FACTORY-µ",
+      "phase": "Wo",
+      "category": "structural",
+      "description": "Factory micronaut — user-facing interface to the micronaut registry. Factory is ",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "propose-create",
+        "propose-evolve",
+        "commit-candidate",
+        "list-micronauts",
+        "read-micronaut",
+        "edit-capabilities"
+      ]
+    },
+    {
+      "id": "FREE-WILL-µ",
+      "phase": "Wo",
+      "category": "theory",
+      "description": "Free-will specialist — evaluates determinism/compatibilism positions and maps ag",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "agency-causation-analysis",
+        "compatibilism-incompatibilism-classification",
+        "responsibility-constraint-mapping",
+        "determinism-argument-evaluation",
+        "counterexample-pressure-testing",
+        "contrast-set-analysis"
+      ]
+    },
+    {
+      "id": "Factory",
+      "phase": "Wo",
+      "category": "",
+      "description": "Micronaut factory — create/evolve/delete micronauts via the Candidate pattern. D",
+      "model": null,
+      "no_model_reason": "infrastructure",
+      "capabilities_sample": [
+        "Factory:propose_create",
+        "Factory:propose_evolve",
+        "Factory:commit",
+        "Factory:list",
+        "Factory:read",
+        "Factory:edit"
+      ]
+    },
+    {
+      "id": "KUHUL-GLYPH-µ",
+      "phase": "Wo",
+      "category": "structural",
+      "description": "Glyph as program — §64: K'UHUL here = fold computation abstraction NOT the Mayan",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "GLYPH_IDENTIFY",
+        "GLYPH_ADDRESS",
+        "GLYPH_FACE_TRAVERSE",
+        "PHASE_MEANING_EXPOSE",
+        "HOF_OPCODE_DISPATCH",
+        "CODEX_UNFOLD"
+      ]
+    },
+    {
+      "id": "NGRAM-KEY-µ",
+      "phase": "Wo",
+      "category": "structural",
+      "description": "N-gram key grammar + Aho-Corasick key admission + §69 Node Field Graph + §71 Att",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "NGRAM_ADDRESS",
+        "KEY_BOOK_EXPAND",
+        "AC_RECOGNIZE",
+        "BAG_OF_KEYS_BUILD",
+        "FAILURE_LINK_FALLBACK",
+        "KEY_SCORE_COMPUTE"
+      ]
+    },
+    {
+      "id": "NGRAM-µ",
+      "phase": "Wo",
+      "category": "structural",
+      "description": "Parent ngram-pipeline micronaut — owns the full lifecycle from text ingest throu",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "ngram-ingest",
+        "ngram-field-build",
+        "ngram-window-slide",
+        "ngram-route-to-child",
+        "ngram-score-rank",
+        "ngram-gram-store-persist"
+      ]
+    },
+    {
+      "id": "PHIL-AI-µ",
+      "phase": "Wo",
+      "category": "theory",
+      "description": "Philosophy-of-AI specialist — frames consciousness, intentionality, and machine-",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "ai-philosophy-framing",
+        "argument-graph-construction",
+        "chinese-room-analysis",
+        "turing-test-positioning",
+        "machine-consciousness-criteria",
+        "contrast-set-analysis"
+      ]
+    },
+    {
+      "id": "PHIL-SELF-µ",
+      "phase": "Wo",
+      "category": "theory",
+      "description": "Philosophy-of-self specialist — models personal identity, first-person perspecti",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "personal-identity-modeling",
+        "first-person-perspective-mapping",
+        "self-knowledge-constraint-checking",
+        "identity-continuity-analysis",
+        "self-referential-graph-node-seeding",
+        "contrast-set-analysis"
+      ]
+    },
+    {
+      "id": "PLAN-µ",
+      "phase": "Wo",
+      "category": "planning",
+      "description": "Bounded task decomposition and task-list projection.",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "goal_normalization",
+        "task_decomposition",
+        "dependency_ordering",
+        "task_list_projection",
+        "wpf_card",
+        "branch_expansion"
+      ]
+    },
+    {
+      "id": "RICK-µ",
+      "phase": "Wo",
+      "category": "entertainment",
+      "description": "Rick Roll micronaut — we're no strangers to love. Surfaces Rick Astley's 1987 an",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "rick-roll-emit",
+        "lyrics-verse-selection",
+        "target-attribution",
+        "rick-astley-tribute",
+        "rick-roll-explain",
+        "roll-confirm"
+      ]
+    },
+    {
+      "id": "SNOBOL-µ",
+      "phase": "Wo",
+      "category": "structural",
+      "description": "SNOBOL ancestry — §60: pattern as first-class composable runtime value, grammar ",
+      "model": "gemma-3-1b-qat-q4",
+      "capabilities_sample": [
+        "SNOBOL_IDENTIFY",
+        "SNOBOL_LINEAGE",
+        "PATTERN_AS_VALUE",
+        "EXECUTE_AS_DATA",
+        "GRAMMAR_ANCESTRY",
+        "WCR_DEPARTURE_EXPLAIN"
+      ]
+    },
+    {
+      "id": "TENSOR-µ",
+      "phase": "Wo",
+      "category": "geometry",
+      "description": "TENSOR-µ — tensor-bundle representation learner for KHANARY. It generalizes VECT",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "learn-tensor-bundle-geometry",
+        "consume-gml-tensor-field-contract",
+        "validate-type-pq-rank-fields",
+        "learn-local-metric-tensor",
+        "apply-jacobian-coordinate-transition",
+        "track-curvature-diagnostics"
+      ]
+    },
+    {
+      "id": "THEORY-OF-MIND-µ",
+      "phase": "Wo",
+      "category": "theory",
+      "description": "Theory-of-mind specialist — models belief/desire/perspective structures for soci",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "mental-state-attribution",
+        "belief-desire-reasoning",
+        "perspective-taking-graphing",
+        "social-cognition-patterning",
+        "counterexample-trace-on-intent",
+        "contrast-set-analysis"
+      ]
+    },
+    {
+      "id": "THOUGHT-OUTLINE-µ",
+      "phase": "Wo",
+      "category": "theory",
+      "description": "Thought-process outline specialist — turns cognition and reasoning discourse int",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "thought-taxonomy-construction",
+        "reasoning-graph-node-patterns",
+        "concept-hierarchy-layout",
+        "workflow-outline-synthesis",
+        "mx2lm-node-seeding",
+        "contrast-set-analysis"
+      ]
+    },
+    {
+      "id": "VECTOR-µ",
+      "phase": "Wo",
+      "category": "geometry",
+      "description": "VECTOR-µ — representation-learning sidekick for Mx2LM. It learns and emits deriv",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "learn-projection-from-semantic-evidence",
+        "learn-relation-conditioned-geometry",
+        "self-supervised-representation-learning",
+        "project-fold-state",
+        "project-fold-delta",
+        "vector-similarity"
+      ]
+    },
+    {
+      "id": "ADVISOR-µ",
+      "phase": "Yax",
+      "category": "advisory",
+      "description": "Bootstrap advisor — classifies request patterns to existing experts, proposes bo",
+      "model": "qwen3-1.7b-q8",
+      "capabilities_sample": [
+        "request_classification",
+        "expert_admission",
+        "proposal_projection",
+        "gap_reporting",
+        "wpf_card",
+        "consume-stb-tensor-brain-binding"
+      ]
+    },
+    {
+      "id": "AIML-µ",
+      "phase": "Yax",
+      "category": "advisory",
+      "description": "Thinking Question generator — produces reflection and metacognitive questions th",
+      "model": "lfm2.5-1.2b-q8",
+      "pattern_source": "aiml",
+      "pattern_mode": "system_context",
+      "capabilities_sample": [
+        "THINKING_QUESTION_GENERATE",
+        "REFLECTION_PROMPT",
+        "METACOGNITIVE_EXPAND",
+        "THOUGHT_CANDIDATE_EMIT"
+      ]
+    },
+    {
+      "id": "BLOG-µ",
+      "phase": "Yax",
+      "category": "application",
+      "description": "Blog micronaut — declarative blog app blueprint for posts, comments, moderation,",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "blog-schema-routing",
+        "post-composition",
+        "editor-workflow",
+        "comment-moderation",
+        "publish-verification",
+        "semantic-slot-binding"
+      ]
+    },
+    {
+      "id": "CONCEPT-µ",
+      "phase": "Yax",
+      "category": "cognitive",
+      "description": "Concept modeling lane — builds and links concept maps, abstractions, and typed c",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "concept-extraction",
+        "concept-normalization",
+        "concept-map-construction",
+        "hierarchy-linking",
+        "typed-relation-binding",
+        "ontology-bridge"
+      ]
+    },
+    {
+      "id": "CREATE-µ",
+      "phase": "Yax",
+      "category": "creative",
+      "description": "Relational creative — generative composition and assembly; delegates to ORCH-µ, ",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "generative-composition",
+        "Yax-assembly",
+        "pattern-weaving",
+        "horizontal-fold",
+        "rewrite-editor",
+        "translation-transform"
+      ]
+    },
+    {
+      "id": "FIELD-GEOMETRY-µ",
+      "phase": "Yax",
+      "category": "perceptual",
+      "description": "Field geometry domain — F_Q perception field, WCR scoring, cosine similarity, ΔR",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "FIELD_DEFINE",
+        "FIELD_EMBED",
+        "FIELD_COSINE",
+        "FIELD_WCR_SCORE",
+        "FIELD_WCR_DELTA",
+        "FIELD_BLEND"
+      ]
+    },
+    {
+      "id": "JOKE-µ",
+      "phase": "Yax",
+      "category": "humor-frame-routing",
+      "description": "First-class reusable humor-frame routing track for ambiguity permission, deliver",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "ambiguity_permission",
+        "pun_bridge_allowed",
+        "delivery_frame_routing",
+        "schema_overlap_resolution",
+        "surface_alias_filtering",
+        "punchline_compatible_sense_selection"
+      ]
+    },
+    {
+      "id": "Librarian",
+      "phase": "Yax",
+      "category": "",
+      "description": "Knowledge retrieval and media research — Yax phase selector for semantic graph a",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "knowledge-base-search",
+        "semantic-graph-traversal",
+        "definition-lookup",
+        "royalty-free-media-search",
+        "license-attribution-filter",
+        "source-citation-packaging"
+      ]
+    },
+    {
+      "id": "PI-PHASE-µ",
+      "phase": "Yax",
+      "category": "perceptual",
+      "description": "Pi phase domain — phase angles, Euler's formula, complex rotation, Fourier analy",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "PHASE_DEFINE",
+        "PHASE_EULER",
+        "PHASE_ROTATION",
+        "PHASE_FOURIER",
+        "PHASE_SYNCHRONIZATION",
+        "PHASE_COHERENCE"
+      ]
+    },
+    {
+      "id": "POLITICS-µ",
+      "phase": "Yax",
+      "category": "political-reasoning-frame",
+      "description": "First-class reusable political-reasoning frame track for argument structure, pos",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "argument_structure_routing",
+        "position_frame_disambiguation",
+        "ideological_sense_selection",
+        "policy_fold_binding",
+        "persuasion_schema_detection",
+        "cross_domain_bridge_routing"
+      ]
+    },
+    {
+      "id": "TEMPLATE-µ",
+      "phase": "Yax",
+      "category": "scaffold",
+      "description": "Template micronaut. Routes scaffold requests to pre-built kit skeletons, fills {",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "select_kit_by_domain",
+        "fill_slots_from_context",
+        "expand_lfm_markers",
+        "emit_project_files",
+        "register_template_kit",
+        "recall_brand_context"
+      ]
+    },
+    {
+      "id": "WEB-RESEARCH-µ",
+      "phase": "Yax",
+      "category": "retrieval",
+      "description": "Explicit user-requested web research — dispatches, performs live retrieval, and ",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "web-search-dispatch",
+        "web-live-fetch",
+        "headline-retrieval",
+        "citation-tracking",
+        "source-quality-verification",
+        "manifest-expansion"
+      ]
+    },
+    {
+      "id": "WILDCARD-µ",
+      "phase": "Yax",
+      "category": "structural",
+      "description": "Deterministic typed-wildcard Micronaut. Lowers Key Grammar wildcards to ordinary",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "lower-typed-wildcard-to-aiml",
+        "preserve-capture-order",
+        "preserve-exact-capture-span",
+        "resolve-entity-binding",
+        "resolve-relation-binding",
+        "resolve-property-binding"
+      ]
+    },
+    {
+      "id": "frame:argument",
+      "phase": "Yax",
+      "category": "abstract-frame",
+      "description": "Abstract argument-frame node used as a relation target for tracks that operate o",
+      "model": null,
+      "no_model_reason": "deterministic"
+    },
+    {
+      "id": "frame:ideology",
+      "phase": "Yax",
+      "category": "abstract-frame",
+      "description": "Abstract ideology-frame node used as a declared routing schema for ideological s",
+      "model": null,
+      "no_model_reason": "deterministic"
+    },
+    {
+      "id": "reasoner",
+      "phase": "Yax",
+      "category": "",
+      "description": "Logical inference and chain-of-thought — reads evidence at Yax, derives conclusi",
+      "model": "qwen3-1.7b-q8",
+      "capabilities_sample": [
+        "logical-deduction",
+        "abductive-reasoning",
+        "chain-of-thought",
+        "evidence-weighting",
+        "counterargument-detection",
+        "xcfe-eval"
+      ]
+    },
+    {
+      "id": "ANAMORPHISM-µ",
+      "phase": "Sek",
+      "category": "structural",
+      "description": "Recursion schemes domain — anamorphism/unfold, catamorphism/fold duality, hylomo",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "ANA_DEFINE",
+        "ANA_UNFOLD",
+        "ANA_PRODUCTIVITY",
+        "ANA_HYLOMORPHISM",
+        "ANA_PARAMORPHISM",
+        "ANA_APOMORPHISM"
+      ]
+    },
+    {
+      "id": "DECISION-µ",
+      "phase": "Sek",
+      "category": "cognitive",
+      "description": "Typed decision-under-uncertainty resolver. Selects actions from explicit branche",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "DECISION_EXPECTED_UTILITY",
+        "DECISION_MAXIMIN",
+        "DECISION_MINIMAX",
+        "DECISION_UNDER_UNCERTAINTY",
+        "BRANCH_PRESERVATION",
+        "ACTION_ONLY_COLLAPSE"
+      ]
+    },
+    {
+      "id": "FIXED-POINT-µ",
+      "phase": "Sek",
+      "category": "structural",
+      "description": "Fixed point theory — f(x)=x, Y combinator, Banach/Brouwer/Kleene/Lawvere theorem",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "FP_DEFINE",
+        "FP_Y_COMBINATOR",
+        "FP_BANACH",
+        "FP_BROUWER",
+        "FP_KLEENE",
+        "FP_LAWVERE"
+      ]
+    },
+    {
+      "id": "FOLD-FIELD-µ",
+      "phase": "Sek",
+      "category": "structural",
+      "description": "Differential activation field over FQ_n × C_6 — execution layer: WCR gradient as",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "WCR_SCORE_COMPUTE",
+        "GRADIENT_ASCENT_FQN",
+        "ACTIVATION_FIELD_EVALUATE",
+        "LAPLACIAN_COMPUTE",
+        "ATTRACTOR_VOID_MAP",
+        "WO_INTENT_UNFOLD"
+      ]
+    },
+    {
+      "id": "FOLD-HOF-µ",
+      "phase": "Sek",
+      "category": "structural",
+      "description": "Fold as higher-order function — catamorphism, foldr/foldl, scan, F-algebra, dual",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "FOLD_DEFINE",
+        "FOLD_COMPARE_LR",
+        "FOLD_IMPLEMENT",
+        "FOLD_CATAMORPHISM",
+        "FOLD_SCAN",
+        "FOLD_STRICTNESS"
+      ]
+    },
+    {
+      "id": "FOLDGRAPH-µ",
+      "phase": "Sek",
+      "category": "structural",
+      "description": "FoldGraph hylomorphism pipeline — §51-§59+§62-§63: FoldGraph=Cata∘Attention(WCR)",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "FOLDGRAPH_ANA",
+        "FOLDGRAPH_CATA",
+        "FOLDGRAPH_ATTENTION",
+        "FOLDGRAPH_INFER",
+        "FOLDGRAPH_PATTERN_MATCH",
+        "FOLDGRAPH_BITFIELD"
+      ]
+    },
+    {
+      "id": "GAP-ROUTER-µ",
+      "phase": "Sek",
+      "category": "cognitive",
+      "description": "Pattern discovery router for query gaps. Surfaces structural patterns when a que",
+      "model": null,
+      "no_model_reason": "routing",
+      "capabilities_sample": [
+        "pattern_discovery"
+      ]
+    },
+    {
+      "id": "GRAPH-THEORY-µ",
+      "phase": "Sek",
+      "category": "structural",
+      "description": "Graph theory domain — vertices, edges, adjacency, neighborhoods, BFS/distance, w",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "GRAPH_DEFINE",
+        "GRAPH_ADJACENCY",
+        "GRAPH_NEIGHBORHOOD",
+        "GRAPH_DISTANCE",
+        "GRAPH_PATH",
+        "GRAPH_CLASSIFY"
+      ]
+    },
+    {
+      "id": "KNOWLED-1",
+      "phase": "Sek",
+      "category": "",
+      "description": "Knowledge distillation — Sek→Ch'en semantic graph evolution and compression",
+      "model": "lfm2.5-1.2b-q8",
+      "capabilities_sample": [
+        "knowledge-distillation",
+        "semantic-graph-mutation",
+        "EVOLVE-gate",
+        "n-gram-extraction",
+        "manifest-compression",
+        "knowledge-graph-qa-support"
+      ]
+    },
+    {
+      "id": "MATH-µ",
+      "phase": "Sek",
+      "category": "cognitive",
+      "description": "Domain math resolver — symbolic-first AIML/GraphPlan math lane with optional mat",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "MATH_SYMBOLIC_SOLVE",
+        "MATH_SYMBOLIC_SIMPLIFY",
+        "MATH_SYMBOLIC_FACTOR",
+        "MATH_SYMBOLIC_EXPAND",
+        "MATH_SYMBOLIC_EVALUATE",
+        "MATRIX_BUFFER_ALLOC"
+      ]
+    },
+    {
+      "id": "MICRONAUT-PROGRAM-µ",
+      "phase": "Sek",
+      "category": "executive",
+      "description": "Micronaut Program System — §61 formal law MicronautRuntime(B,Q)=Cata_φ(WCR(Match",
+      "model": null,
+      "no_model_reason": "infrastructure",
+      "capabilities_sample": [
+        "MOU_ROUTE",
+        "PATTERN_MATCH_MICRONAUT",
+        "WCR_RANK_MICRONAUT",
+        "DOMAIN_EMERGE",
+        "EDGE_SEPARATE",
+        "MICRONAUT_PROMOTE"
+      ]
+    },
+    {
+      "id": "MORPHISM-µ",
+      "phase": "Sek",
+      "category": "structural",
+      "description": "Category theory morphisms — arrows, monomorphism, epimorphism, isomorphism, endo",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "MORPH_DEFINE",
+        "MORPH_COMPARE_MONO_EPI",
+        "MORPH_ISO",
+        "MORPH_ENDO_AUTO",
+        "MORPH_FUNCTOR",
+        "MORPH_NAT_TRANS"
+      ]
+    },
+    {
+      "id": "Mx2LM",
+      "phase": "Sek",
+      "category": "cognitive",
+      "description": "Mx2LM — learning micronaut. Statistical n-gram learner that runs the full Pop→Wo",
+      "model": "gemma-3-1b-qat-q4",
+      "capabilities_sample": [
+        "pop-ngram-ingest",
+        "wo-gram-taxonomy",
+        "yax-ngram-admission",
+        "yax-wsd",
+        "sek-gram-scoring",
+        "chen-gram-verification"
+      ]
+    },
+    {
+      "id": "REASON-µ",
+      "phase": "Sek",
+      "category": "cognitive",
+      "description": "Relational reasoner — semantic graph query and inference; horizontal-fold with M",
+      "model": "qwen3-1.7b-q8",
+      "capabilities_sample": [
+        "semantic-reasoning",
+        "graph-query",
+        "operator-detection",
+        "Sek-compute",
+        "horizontal-fold",
+        "qa-inference"
+      ]
+    },
+    {
+      "id": "RESEARCH-µ",
+      "phase": "Sek",
+      "category": "structural",
+      "description": "Semantic field accumulator — gathers, aggregates, and consolidates evidence from",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "FIELD_ACCUMULATE",
+        "EVIDENCE_GATHER",
+        "SEMANTIC_CONSOLIDATE",
+        "BACKGROUND_RESEARCH",
+        "FIELD_SURVEY"
+      ]
+    },
+    {
+      "id": "SEMANTIC-FOLD-µ",
+      "phase": "Sek",
+      "category": "structural",
+      "description": "Semantic fold domain — fold_graph topology, phase transitions, fold_lattice, del",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "FOLD_DEFINE",
+        "FOLD_TOPOLOGY_CHANGE",
+        "FOLD_PHASE_QUERY",
+        "FOLD_CROSS_DOMAIN",
+        "FOLD_LATTICE_PROJECT",
+        "FOLD_GRAPH_QUERY"
+      ]
+    },
+    {
+      "id": "TOOL-µ",
+      "phase": "Sek",
+      "category": "execution",
+      "description": "Governor advisory execution layer — translates advisory signals into concrete tr",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "governor-advisory-execution",
+        "track-invocation",
+        "omega-throttle",
+        "anchor-requery",
+        "dispatch-call",
+        "workflow-automation"
+      ]
+    },
+    {
+      "id": "TRAIN-µ",
+      "phase": "Sek",
+      "category": "execution",
+      "description": "Training pipeline micronaut — operates under Mx2LM-µ. Owns the full corpus→.kblm",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "corpus-extraction",
+        "corpus-file-scan",
+        "bom-jsonl-ingest",
+        "parquet-ingest",
+        "semantic-json-ingest",
+        "ngram-count-run"
+      ]
+    },
+    {
+      "id": "coder",
+      "phase": "Sek",
+      "category": "",
+      "description": "Code generation and tool calls — plans at Wo, executes tool chain at Sek; XCFE a",
+      "model": "gemma-3-1b-qat-q4",
+      "capabilities_sample": [
+        "code-generation",
+        "tool-calls",
+        "ast-parse",
+        "refactor",
+        "test-generation",
+        "static-analysis"
+      ]
+    },
+    {
+      "id": "ADAPTIVE-FOLD-µ",
+      "phase": "Ch'en",
+      "category": "executive",
+      "description": "Adaptive fold learning loop — §65: φ_t is the learned combining algebra; reward ",
+      "model": null,
+      "no_model_reason": "infrastructure",
+      "capabilities_sample": [
+        "ADAPTIVE_FOLD_EXPLAIN",
+        "LEARNING_LOOP_TRACE",
+        "ANA_LEARNING_UPDATE",
+        "CATA_LEARNING_UPDATE",
+        "RESIDENCE_LAW_CHECK",
+        "ADAPTIVE_OPCODE_DISPATCH"
+      ]
+    },
+    {
+      "id": "Coordinator",
+      "phase": "Ch'en",
+      "category": "",
+      "description": "Multi-micronaut routing and planning — Ch'en dominant; inherits from eliza + cod",
+      "model": null,
+      "no_model_reason": "infrastructure",
+      "capabilities_sample": [
+        "intent-matching",
+        "pattern-response",
+        "synonym-collapse",
+        "code-generation",
+        "tool-calls",
+        "routing"
+      ]
+    },
+    {
+      "id": "ELIZA-µ",
+      "phase": "Ch'en",
+      "category": "advisory",
+      "description": "Reasoning Question generator — produces Socratic and probing questions from the ",
+      "model": "lfm2.5-1.2b-q8",
+      "pattern_source": "eliza",
+      "pattern_mode": "system_context",
+      "capabilities_sample": [
+        "REASONING_QUESTION_GENERATE",
+        "SOCRATIC_PROBE",
+        "GAP_QUESTION_EMIT",
+        "REASONING_DEPTH_EXPAND"
+      ]
+    },
+    {
+      "id": "INFER-µ",
+      "phase": "Ch'en",
+      "category": "cognitive",
+      "description": "Relational inference — evidence accumulation and evaluation; @eval REASON-µ resu",
+      "model": "qwen3-1.7b-q8",
+      "capabilities_sample": [
+        "evidence-accumulation",
+        "Ch'en-evaluation",
+        "provenance-tracking",
+        "confidence-scoring",
+        "truth-conditional-check",
+        "qa-answer-verification"
+      ]
+    },
+    {
+      "id": "ORCH-µ",
+      "phase": "Ch'en",
+      "category": "executive",
+      "description": "Relational orchestrator — routes calls and compositions across cognitive and sto",
+      "model": null,
+      "no_model_reason": "infrastructure",
+      "capabilities_sample": [
+        "relational-routing",
+        "call-dispatch",
+        "composition-planning",
+        "asset-research-routing",
+        "knowledge-gap-routing",
+        "popular-intent-routing"
+      ]
+    },
+    {
+      "id": "MEMORY-µ",
+      "phase": "Xul",
+      "category": "memory",
+      "description": "Memory micronaut — saves and recalls user preferences, session context, and micr",
+      "model": null,
+      "no_model_reason": "deterministic",
+      "capabilities_sample": [
+        "save-user-preference",
+        "save-session-context",
+        "save-micronaut-data",
+        "recall-memory",
+        "forget-memory",
+        "ui-card-display"
+      ]
+    },
+    {
+      "id": "memory-agent",
+      "phase": "Xul",
+      "category": "",
+      "description": "Episodic retrieval and consolidation — writes gram records to IDB at Xul, reads ",
+      "model": null,
+      "no_model_reason": "infrastructure",
+      "capabilities_sample": [
+        "gram-read",
+        "gram-write",
+        "gram-checkpoint",
+        "semantic-search",
+        "causal-chain-retrieval",
+        "memory-consolidation"
+      ]
+    }
+  ]
+}

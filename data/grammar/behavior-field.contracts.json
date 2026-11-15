@@ -1,0 +1,75 @@
+{
+  "@type": "khanary.behavior_field.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "a_mode_shift_never_changes_phase_authority",
+  "lane": "KHANARY_BEHAVIOR_FIELD_TEST",
+  "owner": "src/kuhul/behavior_field.cpp",
+  "why": "A conversation was being assigned one personality for its whole length, which is both less flexible than the phase model allows and unsafe in the other direction: if 'set the mode' could also move the phase, behaviour would be granting execution authority. The state is two independent variables — phase and mode — and the transition law is (phi_t, m_t) -> (phi_t+1, m_t+1) where either may change without the other. A mode shift is a proposal that changes behaviour only; a phase advance goes through the phase driver and XCFE.",
+  "state": {
+    "variables": [
+      "phase (canonical C6)",
+      "mode (one of the 68 profiles, or a mixture)"
+    ],
+    "independence": "a mode may change while the phase stays fixed; a phase may advance while the mode stays unchanged",
+    "example_arc": [
+      "Pop:listener",
+      "Wo:counselor",
+      "Yax:investigator",
+      "Sek:debugger",
+      "Ch'en:skeptic",
+      "Xul:coach"
+    ],
+    "intra_phase_example": "Yax may pass through brainstormer -> socratic -> critic before Sek selects a candidate"
+  },
+  "scoring": {
+    "law": "S(m_j) = alpha*A_j + beta*G_ij + gamma*C_j + delta*R_j, then the switching penalty below",
+    "terms": {
+      "A_j": "AIML pattern affinity (W_prior)",
+      "G_ij": "GML transition weight from the current mode (W_graph)",
+      "C_j": "contextual relevance (W_context)",
+      "R_j": "learned reward preference (W_learned)"
+    },
+    "coefficients": {
+      "alpha": 0.4,
+      "beta": 0.3,
+      "gamma": 0.2,
+      "delta": 0.1
+    },
+    "coefficient_authority": "MML declares the coefficients; a missing or non-finite coefficient is a refusal, never a default at runtime",
+    "reward_provenance": "R_j only counts when the evidence carries its own provenance; an inferred reward contributes nothing (see BM5/BM6)"
+  },
+  "hysteresis": {
+    "law": "S'(m_j) = S(m_j) - lambda * 1[m_j != m_t], and a switch additionally requires S'(best) - S(current) >= minimum_margin",
+    "defaults": {
+      "lambda": 0.06,
+      "minimum_margin": 0.03
+    },
+    "why": "without a penalty the daemon bounces between buddy and counselor whenever a slightly different pattern matches",
+    "determinism": "the rule is evidence and margin based, never elapsed time: a fold that depends on a clock is not reproducible, so there are no dwell timers in this contract",
+    "calibration": "the four score weights sum to 1, so S lives on [0, 1]; a switching penalty is a fraction of that scale and must stay well below the smallest decisive affinity gap. At lambda 0.25 no candidate can clear the penalty plus the margin, so every shift is refused and hysteresis silently becomes a permanent lock. 0.06 suppresses marginal candidates (0.60 vs 0.50 affinity) while letting meaningful evidence through (0.95 vs 0.30)."
+  },
+  "authority": {
+    "law": "a candidate is a proposal, not a transition",
+    "mode_shift": "changes behaviour only; the phase is invariant across any number of mode shifts",
+    "phase_advance": "requires the phase driver and XCFE authorization; assigning a phase value never grants execution authority",
+    "phase_direction": "forward-only to the adjacent C6 phase inside one execution; a wrap needs a new execution, as in the lane-plan contract"
+  },
+  "structure": {
+    "phases": 6,
+    "xcfe_node_classes": 14,
+    "law": "the six phases and the fourteen node classes stay fixed; modes are overlays that alter pattern activation, question generation, scoring and response style — no new node class is introduced"
+  },
+  "invariants": {
+    "BF1": "phase and mode are independent: a mode may change within a fixed phase, and a phase may advance with the mode unchanged",
+    "BF2": "a mode shift never changes the phase, and no mode may claim phase or commit authority",
+    "BF3": "a candidate is a proposal: without XCFE authorization nothing changes, and an unauthorized proposal leaves the state untouched",
+    "BF4": "a phase advance requires the phase driver's authorization, is forward-only to the adjacent phase, and carries the current mode over unchanged",
+    "BF5": "the switching penalty applies before comparison, and a switch additionally needs the declared score margin, so a marginal candidate does not win",
+    "BF6": "hysteresis is evidence and margin based, never timed: identical evidence always yields the identical decision",
+    "BF7": "a learned reward term counts only with its own provenance; an inferred reward contributes nothing",
+    "BF8": "the coefficients come from the declared contract; a missing, negative or non-finite coefficient is a refusal",
+    "BF9": "a mode not in the catalog is refused rather than invented",
+    "BF10": "the six C6 phases and the closed 14-class XCFE node ISA are unchanged by this layer"
+  }
+}

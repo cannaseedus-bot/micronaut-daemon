@@ -1,0 +1,82 @@
+{
+  "language": "code",
+  "version": "1.0",
+  "tokens": [],
+  "edges": [],
+  "lexicon": {
+    "classes": [
+      {
+        "name": "string",
+        "pattern": "\"[^\"]*\"",
+        "action": "text",
+        "role": "string"
+      },
+      {
+        "name": "number",
+        "pattern": "[0-9]+",
+        "action": "text",
+        "role": "number"
+      },
+      {
+        "name": "identifier",
+        "pattern": "[A-Za-z_][A-Za-z0-9_]*",
+        "action": "text",
+        "role": "ident"
+      },
+      {
+        "name": "punctuation",
+        "pattern": "[^\\sA-Za-z0-9\"]",
+        "action": "punct",
+        "role": "punct"
+      },
+      {
+        "name": "space",
+        "pattern": "[ \\t]+",
+        "action": "skip",
+        "role": "separator"
+      },
+      {
+        "name": "newline",
+        "pattern": "(?:\\r\\n|\\n)",
+        "action": "skip",
+        "role": "separator"
+      },
+      {
+        "name": "sugar_text",
+        "pattern": "\\b(?:a|an|the|to|into|named|called|is|equals|then|do|with|having|where|such that|matches|binds)\\b",
+        "action": "text",
+        "role": "sugar"
+      },
+      {
+        "name": "sugar_skip",
+        "pattern": "\\b(?:a|an|the|to|into|named|called|is|equals|then|do|with|having|where|such that|matches|binds)\\b",
+        "action": "skip",
+        "role": "sugar"
+      }
+    ],
+    "profiles": {
+      "default": {
+        "lower": true,
+        "min_len": 1,
+        "keep": [
+          "sugar_text",
+          "string",
+          "number",
+          "identifier",
+          "punctuation"
+        ]
+      },
+      "sugar_drop": {
+        "lower": true,
+        "min_len": 1,
+        "keep": [
+          "sugar_skip",
+          "string",
+          "number",
+          "identifier",
+          "punctuation"
+        ]
+      }
+    }
+  }
+}

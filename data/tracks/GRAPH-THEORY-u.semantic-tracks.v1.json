@@ -1,0 +1,242 @@
+{
+  "@no-eval": true,
+  "id": "GRAPH-THEORY-µ",
+
+  "schemes": ["graph-theory"],
+  "description": "Graph theory domain — vertices, edges, adjacency, neighborhoods, BFS/distance, weighted graphs, spectral structure.",
+  "phase": "Sek",
+  "category": "structural",
+  "confidence": 0.85,
+  "static_weight": 0.9,
+  "health": 1.0,
+  "governs": [
+    "graph",
+    "vertex",
+    "edge",
+    "node",
+    "adjacency",
+    "neighborhood",
+    "path",
+    "cycle",
+    "tree",
+    "forest",
+    "connected",
+    "directed",
+    "undirected",
+    "weight",
+    "arc",
+    "arc weight",
+    "book",
+    "bfs",
+    "dfs",
+    "distance",
+    "hamiltonian",
+    "eulerian",
+    "spectral",
+    "laplacian",
+    "eigenvalue",
+    "complete graph",
+    "bipartite",
+    "clique",
+    "matching",
+    "k_n",
+    "graph theory",
+    "@graph",
+    "graph:"
+  ],
+  "capabilities": [
+    "GRAPH_DEFINE",
+    "GRAPH_ADJACENCY",
+    "GRAPH_NEIGHBORHOOD",
+    "GRAPH_DISTANCE",
+    "GRAPH_PATH",
+    "GRAPH_CLASSIFY",
+    "GRAPH_COUNT_EDGES",
+    "GRAPH_SPECTRAL",
+    "GRAPH_CROSS_DOMAIN"
+  ],
+  "conformance": {
+    "questions": [
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is a graph in mathematics?",
+        "expected_key": "G=(V,E) vertices edges structure",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is the difference between directed and undirected graphs?",
+        "expected_key": "directed symmetric orientation",
+        "delta_r": 0.06
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "How does a semantic graph relate to knowledge representation?",
+        "expected_key": "book(v) adjacency manifest neighborhood",
+        "relation_confirmed": "SEMANTIC-FOLD-µ",
+        "delta_w": 0.12
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "How does BFS distance define reachability in a micronaut network?",
+        "expected_key": "delta_z = 1/(1+d) reachability weight",
+        "relation_confirmed": "FIELD-GEOMETRY-µ",
+        "delta_w": 0.1
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "Is a tree a connected acyclic graph?",
+        "expected_key": "n vertices n-1 edges connected acyclic",
+        "delta_c": 0.09
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "Is spectral clustering a reliable method for community detection?",
+        "expected_key": "Laplacian eigenvectors well-separated clusters",
+        "delta_c": 0.07
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does the concept of spectral structure influence the analysis of graph properties in weighted networks?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What role do neighborhoods play in determining the efficiency of BFS traversal across different graph densities?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "Can you explain how adjacency matrices relate to the representation of graph connectivity in a micronaut system?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How might the difference between directed and undirected graphs affect the interpretation of reachability in a BFS process?",
+        "expected_key": "",
+        "delta_r": 0.08
+      }
+    ],
+    "jokes": [
+      {
+        "pattern": "WHY DID THE GRAPH REFUSE TO WORK WITH A TREE",
+        "punchline": "Already has too many branches — none of which form a cycle.",
+        "frame": "humor_frame",
+        "semantic_key": "tree_branches_cycle"
+      },
+      {
+        "pattern": "WHAT DO YOU CALL A GRAPH WHERE EVERY NODE HAS EXACTLY ONE FRIEND",
+        "punchline": "A perfect matching.",
+        "frame": "pun_naming_frame",
+        "semantic_key": "matching_friendship"
+      },
+      {
+        "pattern": "WHY WAS K N SO POPULAR AT PARTIES",
+        "punchline": "Every vertex knows every other vertex — total social saturation.",
+        "frame": "pun_bridge",
+        "semantic_key": "complete_graph_social"
+      },
+      {
+        "pattern": "WHAT DID THE HAMILTONIAN PATH SAY TO THE EULERIAN CIRCUIT",
+        "punchline": "I visit everyone once. You visit every edge and come home. Who is really committed?",
+        "frame": "delivery_frame",
+        "semantic_key": "hamiltonian_eulerian_commitment"
+      },
+      {
+        "pattern": "WHAT DOES A GRAPH CALL A NODE WITH EXACTLY ONE FRIEND",
+        "punchline": "A perfect matching — where every adjacency is perfectly balanced.",
+        "frame": "humor_frame",
+        "semantic_key": "what_does_a_graph_call_a_node_with_exactly_one_fri"
+      }
+    ]
+  },
+  "relations": [
+    {
+      "target": "SEMANTIC-FOLD-µ",
+      "verb": "@supports",
+      "directed": true
+    },
+    {
+      "target": "FIELD-GEOMETRY-µ",
+      "verb": "@supports",
+      "directed": true
+    },
+    {
+      "target": "MATH-µ",
+      "verb": "@delegates_to",
+      "directed": true
+    },
+    {
+      "target": "INFER-µ",
+      "verb": "@delegates_to",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "gramRead",
+      "key": "graph_query",
+      "weight": 1.0
+    },
+    {
+      "phase": "Wo",
+      "op": "lower_graph_aiml",
+      "note": "L_A graph ISA",
+      "weight": 1.0
+    },
+    {
+      "phase": "Yax",
+      "op": "derive_graph_pattern",
+      "note": "R alignment",
+      "weight": 1.0
+    },
+    {
+      "phase": "Sek",
+      "op": "resolve_graph_relation",
+      "note": "W arc update",
+      "weight": 1.0
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_graph_confidence",
+      "note": "C authority gate",
+      "weight": 1.0
+    },
+    {
+      "phase": "Xul",
+      "op": "emit_answer",
+      "scope": "local",
+      "weight": 1.0
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "GRAPH-THEORY-µ",
+    "manifest_access": [
+      "words",
+      "micronaut",
+      "kuhul"
+    ],
+    "effects": [
+      "gramRead",
+      "gramWrite",
+      "graph:query",
+      "graph:adjacency"
+    ],
+    "ports": [],
+    "coordinator": false
+  }
+}

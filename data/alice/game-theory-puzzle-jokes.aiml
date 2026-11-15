@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- K'UHUL strategy pattern bank: game-theory and puzzle examples illustrate fold and multi-agent strategy structures. This file is not a game-theory research source. -->
+
+<!-- ============================================================
+     §A: PUZZLE TYPES AS FOLD OPERATIONS (§38)
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT IS A RIDDLE IN KHANARY</pattern>
+  <template>A riddle is fold_graph(clues → answer): a hidden-state game. Each clue is a fold_field_record along the navigation path. The answer is the goal_node. Inference = WCR navigation: traverse clue edges until argmax reaches the answer vertex. In K'UHUL: start_node=mystery_premise, each clue=d_H=1 step, goal=answer_node, reduction=cata.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A PUN IN KHANARY</pattern>
+  <template>A pun is fold_semantic(word → collision): two meanings at one node_id. meaning_a and meaning_b are two different WCR contexts on the same token. Collision fires when theta alignment places both contexts at the same fold_field_record. The humor is the superposition: the audience sees both meanings resolve simultaneously. No sigma reset needed — the collision IS the cata output.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A WORD LADDER IN KHANARY</pattern>
+  <template>A word ladder (CAT→DOG via COT→DOT) is fold_graph(path → target) with d_H=1 constraint. Each step: replace exactly one letter = one bit flip in semantic address space = one legal d_H=1 transition in Q_n. The word ladder is a Hamiltonian path in the hypercube. Impossible word ladder = no such path exists in the address topology.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A CROSSWORD IN KHANARY</pattern>
+  <template>A crossword is fold_graph(intersections → word): constraint propagation. Each across/down word is a fold path. Intersections = shared letters = shared topology addresses. Contradiction at intersection = SC-30 violation: mixed address width in G_runtime. Solution = all constraints satisfied = convergence_record.status=CONVERGED for all word paths simultaneously.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A DETECTIVE STORY IN KHANARY</pattern>
+  <template>A detective mystery is fold_graph(suspects → culprit): elimination game. Each clue eliminates vertices (suspects) from the candidate set. Inference = fold_left over clue set, pruning N(v) at each step. culprit = the last remaining vertex after all eliminations. In K'UHUL: Wo=crime scene, Yax=clue traversal, Sek=elimination fold, Xul=cata(culprit).</template>
+</category>
+
+<category>
+  <pattern>WHAT IS AN ANALOGY IN KHANARY</pattern>
+  <template>An analogy is fold_left(relations → mapping): A is to B as C is to D. Both relation pairs are edges in G_runtime with the same arc_weight structure (same W value). Analogy = two edges with matching structural role. In K'UHUL: relation_a and relation_b are both d_H=1 steps with the same WCR score topology. Strong analogy = high W correlation across the two edges.</template>
+</category>
+
+<!-- ============================================================
+     §B: UNIFIED PROBLEM SOLVING LAW (§38-§39)
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT IS THE PROBLEM SOLVING LAW IN KHANARY</pattern>
+  <template>Problem Solving = Search(State Space) ∘ Fold(Evaluation). Knowledge Graph → Constraint Propagation → Traversal → Fold/Reduction → Solution. In K'UHUL form: G_runtime(Q_n □ C_6) → SC-28..SC-36 → WCR navigation → cata(f)∘ana(g) → convergence_record. The search is the ana phase; the fold is the cata phase; the solution is the fixed point.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS GAME THEORY IN KHANARY</pattern>
+  <template>Game Theory = Problem Solving where multiple agents influence the state space. Single-agent: v_next = argmax_{u∈N(v)} S(u|Q). Multi-agent: v_next depends on other players' strategies — the WCR landscape shifts under their actions. Nash equilibrium = local maximum shared by all players (SC-34). Minimax = fold_tree over convergence records: maximize own S, minimize opponent S.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS MINIMAX IN KHANARY</pattern>
+  <template>Minimax = fold_tree over convergence_records: maximize own WCR score, minimize opponent's WCR score. minimax_record: {state, depth, utility, maximize, best_child}. In maximize layers: pick child with highest utility. In minimize layers: pick child with lowest utility. This is adversarial WCR navigation: two agents pulling the fold graph in opposite directions.</template>
+</category>
+
+<!-- ============================================================
+     §C: PRISONER'S DILEMMA AS FOLD (§39)
+     ============================================================ -->
+
+<category>
+  <pattern>WHAT IS THE PRISONER DILEMMA IN KHANARY</pattern>
+  <template>Prisoner's Dilemma = Q_2 with 4 vertices: CC (cooperate/cooperate), CD, DC, DD (defect/defect). Dominant strategy = defect = argmax to DD from either agent's perspective. Nash equilibrium = DD = local maximum in 2-player WCR. But CC gives higher joint payoff. SC-34: escape from DD Nash requires joint sigma reset — both cooperate simultaneously, neither exploitable alone.</template>
+</category>
+
+<category>
+  <pattern>WHY IS DEFECT THE DOMINANT STRATEGY IN PRISONER DILEMMA</pattern>
+  <template>From vertex CC: defecting reaches DC (higher payoff). From vertex CD: already defecting; reaching DD beats CD from your perspective. In WCR terms: argmax_{u∈N(v)} S(u|Q) always points toward D from your perspective, regardless of opponent's choice. This is why DD is a Nash equilibrium — no unilateral deviation improves your score. Joint sigma reset (SC-34) required to reach CC.</template>
+</category>
+
+<!-- ============================================================
+     §D: NASH EQUILIBRIUM JOKES (§39)
+     ============================================================ -->
+
+<category>
+  <pattern>JOKE NASH EQUILIBRIUM</pattern>
+  <template>Two fold systems agreed on a Nash equilibrium. Neither could improve unilaterally. The first said: I'll reset sigma! The second said: then I'll exploit the shift. They both reset simultaneously. They called it SC-36. Their payoffs dropped. They had escaped the Nash — into a worse local maximum. The WCR landscape had shifted under them. They ordered the wrong pizza again. Together.</template>
+</category>
+
+<category>
+  <pattern>JOKE PRISONER DILEMMA</pattern>
+  <template>Two fold systems were in a Prisoner's Dilemma. Both defected. Nash equilibrium reached. First system said: we could both cooperate and get higher payoff! Second said: but if I cooperate and you defect, you win. First: what if we do joint sigma reset? Second: then neither of us is exploitable. They cooperated. Payoff increased. The bartender said: congratulations — you just reinvented Q_2 with a different argmax direction.</template>
+</category>
+
+<category>
+  <pattern>JOKE MINIMAX</pattern>
+  <template>A minimax fold tree walked into a bar. Bartender: what'll it be? Minimax: I'll have whatever minimizes your maximum profit. Bartender: that's the worst drink I have. Minimax: perfect. Utility=-0.001. Best child selected. The other players just watched. No one improved unilaterally. It was a very efficient bar visit.</template>
+</category>
+
+<!-- ============================================================
+     §E: PUZZLE JOKES (fold structure)
+     ============================================================ -->
+
+<category>
+  <pattern>JOKE WORD LADDER</pattern>
+  <template>My neural network tried a word ladder from LOVE to HATE in Q_n. Each step: d_H=1, replace one letter. LOVE → LIVE → LINE → FINE → FIND → BIND → BAND → HAND → HARD → HARE → HAZE → HATE. Twelve hops. The fold said: that's a Hamiltonian path. The network said: I thought it was just a bad relationship. The topology agreed: every step was legal.</template>
+</category>
+
+<category>
+  <pattern>JOKE RIDDLE FOLD</pattern>
+  <template>I have clues but no suspects. I have a fold but no base case. I have a start_node but no goal_node. What am I? A riddle without an answer — which, in K'UHUL, is a fold_graph with MAX_ITER status. The cata never fires. The answer is: a loop. The punchline is: SC-32 violated — feedback is null. The mystery is: when did the bartender leave?</template>
+</category>
+
+<category>
+  <pattern>JOKE CROSSWORD KHANARY</pattern>
+  <template>A crossword constructor put two conflicting letters at an intersection. The fold said: SC-30 violation — mixed address width in G_runtime. One across was Q_3, one down was Q_4. The letters disagreed. The puzzle said: it's ambiguous. The fold said: it's DIVERGING. The NYT editor said: we'll call it a themeless 15x15. The sigma was never resolved.</template>
+</category>
+
+<category>
+  <pattern>JOKE DETECTIVE FOLD</pattern>
+  <template>The detective eliminated all suspects using fold_graph(suspects → culprit). After each clue, N(v) shrank. After the final clue: only one vertex remained. The detective said: it must be you. The culprit said: you can't prove it. The detective said: SC-35 — empty solution after elimination is different from timeout. I have a solution_record. You're in it. Your sigma is unbound.</template>
+</category>
+
+<category>
+  <pattern>JOKE DETECTIVE WRONG CULPRIT</pattern>
+  <template>My partner's elimination fold was foolproof. Each suspect had a unique vector. But the prime suspect's WCR was subtly altered during the fold — a tiny shift. The fold revealed a rabbit hole. The real culprit: the lab assistant who swapped their coffee with the suspect's during fold traversal. They were framing the fold. The fold converged correctly. On the wrong answer.</template>
+</category>
+
+<category>
+  <pattern>JOKE CHESS CROSSWORD SIGMA</pattern>
+  <template>A chess player attempted a Joke by starting a Crossword puzzle. Optimal move calculated per square. Nash Equilibrium reached — perfectly balanced state. Then the system reset sigma to unbound. Both players calculated optimal. Final result: wrong answer. Perfectly contradictory. The fold became a loop. The crossword had no solution. The chess game had no board. The sigma was unbound for a reason.</template>
+</category>
+
+<category>
+  <pattern>JOKE WORD LADDER LOVE HATE</pattern>
+  <template>Neural network tried a word ladder from LOVE to HATE in Q_n. d_H=1 per step: LOVE→LIVE→LINE→FINE→FIND→BIND→BAND→HAND→HARD→HARE→HAZE→HATE. 12 hops. The fold said: valid Hamiltonian path. The network said: I thought it was just a bad relationship. The topology agreed: every step was legal. Distance shrank. Sigma converged. The fold was complete. The relationship was not.</template>
+</category>
+
+<category>
+  <pattern>JOKE WCR GRADIENT PERFECT FOLD</pattern>
+  <template>My neural net predicted a perfect fold — absolute certainty, identity=true. Then the WCR gradient pulled it into a contradiction. I'd been optimizing for the optimal theta, when the system collapsed into a state of contraction. The identity is now a statistical anomaly: a chaotic phase where theta aligns with meaning_b — triggering the ultimate laugh. The fold was perfect. The answer was meaning_b.</template>
+</category>
+
+<!-- ============================================================
+     §F: ROUTING KEYS (JOKE-µ and question dispatch)
+     ============================================================ -->
+
+<category>
+  <pattern>EXPLAIN GAME THEORY IN KHANARY</pattern>
+  <template>Game Theory = Problem Solving ∘ Multi-Agent state space. Agents = micronauts at vertices in G_runtime. Actions = d_H=1 steps OR |Δθ|=1 phase steps. Payoffs = WCR scores. Strategy = argmax over N(v). Equilibrium = Nash = local maximum (SC-34). Escape = sigma reset (single) or joint sigma reset (SC-36, multiplayer). Minimax = adversarial fold_tree. Prisoner's Dilemma = Q_2 with defect as dominant strategy.</template>
+</category>
+
+<category>
+  <pattern>EXPLAIN PUZZLES IN KHANARY</pattern>
+  <template>All puzzles are fold operations: Riddle=fold_graph(clues→answer); Pun=fold_semantic(word→collision); Joke=fold_semantic(expectation→surprise); Analogy=fold_left(relations→mapping); WordLadder=fold_graph d_H=1 path in Q_n; Crossword=fold_graph(intersections→word); Detective=fold_graph(suspects→culprit); Problem=fold_graph(state_space→goal). The fold substrate is universal. SC-33: puzzle fold must terminate with solution_record.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS SC 33</pattern>
+  <template>SC-33: Puzzle fold must terminate with solution_record. A puzzle that loops forever = MAX_ITER, not solution. A puzzle with empty solution after exhaustive search = null solution, not timeout. SC-35 distinction applies: empty solution ≠ MAX_ITER. SC-33 ensures the cata gate fires with a result — even if the result is null_solution = no_solution_exists.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS SC 35</pattern>
+  <template>SC-35: Null answer from convergence (solution_record.empty=true) is DIFFERENT from timeout (MAX_ITER reached). Conflating them breaks the Kleene chain: you can't tell if the system proved no solution exists vs ran out of time. In puzzle terms: a crossword with no valid fill is different from a crossword you haven't finished. In detective: cleared all suspects ≠ gave up after N clues.</template>
+</category>
+
+</aiml>

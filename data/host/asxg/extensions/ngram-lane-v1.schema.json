@@ -1,0 +1,288 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "asx://schema/ngram-lane-v1",
+  "title": "ASXG NGramLane v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "@id",
+    "@type",
+    "@phase",
+    "@field",
+    "@ngram",
+    "@source_class",
+    "@scope_id",
+    "@learning_state"
+  ],
+  "properties": {
+    "@id": {
+      "type": "string",
+      "pattern": "^lane\\.[a-z0-9_.-]+$"
+    },
+    "@type": {
+      "const": "NGramLane"
+    },
+    "@phase": {
+      "enum": [
+        "Pop",
+        "Wo",
+        "Yax",
+        "Sek",
+        "Ch'en",
+        "Xul"
+      ]
+    },
+    "@field": {
+      "type": "string",
+      "minLength": 1
+    },
+    "@ngram": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "@probability_orders",
+        "@retrieval_min_order",
+        "@key_refs"
+      ],
+      "properties": {
+        "@probability_orders": {
+          "const": [
+            1,
+            2,
+            3
+          ]
+        },
+        "@retrieval_min_order": {
+          "const": 4
+        },
+        "@key_refs": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "@key_ref",
+                  "@order",
+                  "@sequence_length",
+                  "@layer",
+                  "@measure_ref",
+                  "@bandwidth"
+                ],
+                "properties": {
+                  "@key_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "@order": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 3
+                  },
+                  "@sequence_length": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 3
+                  },
+                  "@layer": {
+                    "const": "probability"
+                  },
+                  "@measure_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "@bandwidth": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  },
+                  "@evidence_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "@key_ref",
+                  "@order",
+                  "@sequence_length",
+                  "@layer",
+                  "@key_type",
+                  "@store_ref",
+                  "@backoff"
+                ],
+                "properties": {
+                  "@key_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "@order": {
+                    "type": "integer",
+                    "minimum": 4
+                  },
+                  "@sequence_length": {
+                    "type": "integer",
+                    "minimum": 4
+                  },
+                  "@layer": {
+                    "const": "retrieval"
+                  },
+                  "@key_type": {
+                    "enum": [
+                      "exact_hash",
+                      "rolling_hash",
+                      "suffix_automaton",
+                      "inverted_index"
+                    ]
+                  },
+                  "@store_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "@backoff": {
+                    "const": "probability_layer"
+                  },
+                  "@evidence_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            ]
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "@source_class": {
+      "enum": [
+        "user_prompt",
+        "model_response",
+        "web_research",
+        "user_memory",
+        "project_history",
+        "system_corpus"
+      ]
+    },
+    "@scope_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "@learning_state": {
+      "enum": [
+        "approval_gated",
+        "evidence_only",
+        "user_scoped_memory",
+        "project_scoped_history"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "@source_class": {
+            "const": "user_prompt"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "@learning_state": {
+            "const": "approval_gated"
+          },
+          "@scope_id": {
+            "pattern": "^conversation:"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "@source_class": {
+            "enum": [
+              "model_response",
+              "web_research",
+              "system_corpus"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "@learning_state": {
+            "const": "evidence_only"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "@source_class": {
+            "const": "user_memory"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "@learning_state": {
+            "const": "user_scoped_memory"
+          },
+          "@scope_id": {
+            "pattern": "^user:"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "@source_class": {
+            "const": "project_history"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "@learning_state": {
+            "const": "project_scoped_history"
+          },
+          "@scope_id": {
+            "pattern": "^project:"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "@source_class": {
+            "const": "web_research"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "@ngram": {
+            "properties": {
+              "@key_refs": {
+                "items": {
+                  "required": [
+                    "@evidence_ref"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "@program": "batches.compute",
+  "@kind": "kuhul.opencl.compute.v1",
+  "@backend": "opencl_1_2",
+  "@fallback": "opencl_1_2_cpu",
+  "@kernel": {
+    "source": "drivers/opencl_1_2/training.cl",
+    "entry": "softmax_forward",
+    "work_dimensions": 1,
+    "work_item": "one batch row"
+  },
+  "@state": { "phase": "Pop", "input": null, "output": null, "batch": 0, "classes": 0 },
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "batches.bind" },
+    { "@op": "OPENCL_BIND", "@args": ["$input", "read", "$output", "write"], "@out": "bindings" },
+    { "@op": "FOLD_EXIT", "@fold": "Wo", "@node": "batches.bind", "@args": ["$bindings"] },
+    { "@op": "OPENCL_BUILD", "@source": "drivers/opencl_1_2/training.cl", "@options": "-cl-std=CL1.2", "@out": "kernel" },
+    { "@op": "OPENCL_DISPATCH", "@kernel": "softmax_forward", "@args": ["$input", "$output", "$batch", "$classes"], "@out": "result" },
+    { "@op": "FOLD_EXIT", "@fold": "Chen", "@node": "batches.verify", "@args": ["$result"] },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "batches.commit", "@args": ["$result"] }
+  ]
+}

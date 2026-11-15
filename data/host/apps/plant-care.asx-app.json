@@ -1,0 +1,56 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "plant-care",
+  "@key": "⟁APP:PLANT_CARE",
+  "@mount": "⟁ROOT:PLANT_CARE",
+  "@theme": { "accent": "#4ade80", "bg": "#010c02", "surface": "#02180a", "text": "#dcfce7", "hero_phase": "Wo", "tagline": "Happy plants. Green life." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "plants", "component": "⟁WIDGET:PLANTS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "plants": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:PLANT_CARE": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:ADD_PLANT"] },
+    "⟁ACTION:ADD_PLANT": { "@type": "button", "@text": "Add Plant", "@on": { "click": "pl.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:PLANTS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:PLANTS": { "@type": "grid", "@bind": "state.plants", "@children": ["⟁WIDGET:PLANT_CARD"] },
+    "⟁WIDGET:PLANT_CARD": { "@type": "media-card", "@bind": "plant", "@on": { "view": "pl.view", "water": "pl.water" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:WATER_DUE", "⟁WIDGET:LOCATIONS"] },
+    "⟁WIDGET:WATER_DUE": { "@type": "list", "@bind": "data.water_due" },
+    "⟁WIDGET:LOCATIONS": { "@type": "tag-cloud", "@bind": "data.locations" }
+  },
+  "@programs": {
+    "pl.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "pl.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "pl.water": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_watered", "@out": "last_watered" }] }
+  },
+  "@events": { "plant.add": "pl.open_compose", "plant.view": "pl.view", "plant.water": "pl.water" },
+  "@imports": [{ "ref": "plant", "mode": "schema_table" }, { "ref": "care_log", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "water-reminders", "name": "Watering Reminders", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Get notified when each plant needs water based on its schedule." },
+      { "id": "plant-id", "name": "Plant Identifier", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Identify a plant from a photo and get care instructions." },
+      { "id": "growth-log", "name": "Growth Photo Log", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Time-lapse photo journal of each plant's growth." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "pl.water", "pattern": "WATER PLANT *|WATERED * TODAY|LOG WATERING", "intent": "log_water" },
+      { "id": "pl.due", "pattern": "WHAT NEEDS WATERING|DUE FOR WATER|PLANT REMINDERS", "intent": "view_water_due" }
+    ]
+  },
+  "@data": {
+    "water_due": [{ "name": "Monstera", "location": "Living room", "due": "Today" }, { "name": "Peace Lily", "location": "Bedroom", "due": "Tomorrow" }],
+    "locations": ["Living room", "Bedroom", "Kitchen", "Bathroom", "Balcony", "Garden"],
+    "spotlight": [
+      { "id": "sp1", "title": "Monstera Deliciosa", "location": "Living room", "badge": "Water Due", "age_months": 18, "excerpt": "Water every 7 days. New leaf emerging from third node." },
+      { "id": "sp2", "title": "Pothos 'Marble Queen'", "location": "Kitchen", "badge": "Thriving", "age_months": 8, "excerpt": "Fastest grower in the collection. 6 new leaves this month." },
+      { "id": "sp3", "title": "Fiddle Leaf Fig", "location": "Bedroom", "badge": "Watch", "age_months": 4, "excerpt": "Dropped 2 leaves last week. Possibly overwatered. Reducing to 10 days." }
+    ],
+    "schema": {
+      "plant": { "primaryKey": "plant_id", "fields": { "plant_id": { "type": "string" }, "name": { "type": "string", "required": true }, "species": { "type": "string" }, "location": { "type": "string" }, "water_days": { "type": "integer" }, "last_watered": { "type": "datetime" }, "notes": { "type": "text" }, "photo_url": { "type": "string" } } },
+      "care_log": { "primaryKey": "log_id", "fields": { "log_id": { "type": "string" }, "plant_id": { "type": "string", "required": true }, "action": { "type": "string", "required": true }, "note": { "type": "text" }, "logged_at": { "type": "datetime", "required": true } } }
+    }
+  }
+}

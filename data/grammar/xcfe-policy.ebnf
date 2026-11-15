@@ -1,0 +1,182 @@
+(* ============================================================ *)
+(* XCFE Policy Grammar                                           *)
+(* Concrete JSON syntax plus abstract control semantics.          *)
+(* ============================================================ *)
+
+(* A policy is data. XCFE is the evaluator. Backends do not execute policy,
+   folds do not store policy state, and policy never creates semantic truth.
+   Given evidence E, a prior state s, and an event e, XCFE evaluates:
+
+       Π(E, s, e) = (s', route)
+
+   Policy != Control != Execution. *)
+
+(* ============================================================ *)
+(* 1. CONCRETE GRAMMAR — JSON SHAPE                              *)
+(* ============================================================ *)
+
+Policy          ::= "{" PolicyMember ( "," PolicyMember )* "}" ;
+
+PolicyMember    ::= RefKey
+                  | EvidenceKey
+                  | WeightsKey
+                  | ThresholdsKey
+                  | RoutesKey
+                  | GuardKey
+                  | ExtensionKey ;
+
+RefKey          ::= '"@ref"' ":" PolicyRef ;
+PolicyRef       ::= String ; (* form: "xcfe://namespace/name[@version]" *)
+
+EvidenceKey     ::= '"@evidence"' ":" EvidenceSpec ;
+EvidenceSpec    ::= "{" EvidenceMember ( "," EvidenceMember )* "}" ;
+EvidenceMember  ::= InputsKey | DeriveKey ;
+InputsKey       ::= '"@inputs"' ":" InputList ;
+InputList       ::= "[" EvidenceField ( "," EvidenceField )* "]" ;
+EvidenceField   ::= '"observations"'
+                  | '"support"'
+                  | '"exceptions"'
+                  | '"validated"'
+                  | '"failures"' ;
+
+DeriveKey       ::= '"@derive"' ":" DeriveSpec ;
+DeriveSpec      ::= "{" '"@confidence"' ":" Expr "}" ;
+
+Expr            ::= Term ( ( "+" | "-" ) Term )* ;
+Term            ::= Factor ( ( "*" | "/" ) Factor )* ;
+Factor          ::= Number
+                  | Var
+                  | "(" Expr ")"
+                  | Function "(" ExprList ")" ;
+Var             ::= EvidenceField | WeightField | '"confidence"' ;
+WeightField     ::= '"alpha"' | '"beta"' | '"gamma"' | '"delta"' | '"epsilon"' ;
+Function        ::= "clamp" | "min" | "max" | "sqrt" | "log" | "exp" ;
+ExprList        ::= Expr ( "," Expr )* ;
+
+WeightsKey      ::= '"@weights"' ":" Weights ;
+Weights         ::= "{" WeightMember ( "," WeightMember )* "}" ;
+WeightMember    ::= AlphaKey | BetaKey | GammaKey | DeltaKey | EpsilonKey ;
+AlphaKey        ::= '"@alpha"'   ":" Number ;
+BetaKey         ::= '"@beta"'    ":" Number ;
+GammaKey        ::= '"@gamma"'   ":" Number ;
+DeltaKey        ::= '"@delta"'   ":" Number ;
+EpsilonKey      ::= '"@epsilon"' ":" Number ;
+
+ThresholdsKey   ::= '"@thresholds"' ":" Thresholds ;
+Thresholds      ::= "{" ThresholdMember ( "," ThresholdMember )* "}" ;
+ThresholdMember ::= AutonomyKey | FallbackKey | FailureLimitKey | HysteresisKey ;
+AutonomyKey     ::= '"@autonomy"'      ":" Number ;
+FallbackKey     ::= '"@fallback"'      ":" Number ;
+FailureLimitKey ::= '"@failure_limit"' ":" Integer ;
+HysteresisKey   ::= '"@hysteresis"'    ":" Number ;
+
+RoutesKey       ::= '"@routes"' ":" Routes ;
+Routes          ::= "{" RouteMember ( "," RouteMember )* "}" ;
+RouteMember     ::= AutonomousKey | ValidatedKey | DefaultKey ;
+AutonomousKey   ::= '"@autonomous"' ":" RouteTarget ;
+ValidatedKey    ::= '"@validated"'  ":" RouteTarget ;
+DefaultKey      ::= '"@default"'    ":" RouteTarget ;
+RouteTarget     ::= '"local"' | '"local-test"' | '"fallback"' ;
+
+GuardKey        ::= '"@guard"' ":" GuardList ;
+GuardList       ::= "[" Guard ( "," Guard )* "]" ;
+Guard           ::= "{" GuardMember ( "," GuardMember )* "}" ;
+GuardMember     ::= WhenKey | RequireKey | RejectKey ;
+WhenKey         ::= '"@when"'    ":" Condition ;
+RequireKey      ::= '"@require"' ":" Condition ;
+RejectKey       ::= '"@reject"'  ":" ( Condition | EventName ) ;
+Condition       ::= Expr ( "<" | "<=" | "=" | ">=" | ">" ) Expr ;
+EventName       ::= String ;
+
+ExtensionKey    ::= '"@"' Identifier ":" Value ;
+
+String          ::= JSON_String ;
+Number          ::= JSON_Number ;
+Integer         ::= JSON_Integer ;
+Value           ::= JSON_Value ;
+Identifier      ::= JSON_String_Match([A-Za-z][A-Za-z0-9_]*) ;
+
+
+(* ============================================================ *)
+(* 2. ABSTRACT GRAMMAR — CONTROL OBJECT                          *)
+(* ============================================================ *)
+
+PolicyADT       ::= "<"
+                      "ref" ":" PolicyRef ","
+                      "evidence" ":" EvidenceSpecADT ","
+                      "weights" ":" OptionalWeights ","
+                      "thresholds" ":" ThresholdsADT ","
+                      "routes" ":" RoutesADT ","
+                      "guards" ":" OptionalGuardList
+                    ">" ;
+
+EvidenceSpecADT ::= "<" "inputs" ":" "[" EvidenceField* "]" ","
+                         "derive" ":" ExprADT ">" ;
+
+ExprADT         ::= Const(R)
+                  | Var(EvidenceField)
+                  | Add(ExprADT, ExprADT)
+                  | Sub(ExprADT, ExprADT)
+                  | Mul(ExprADT, ExprADT)
+                  | Div(ExprADT, ExprADT)
+                  | Clamp(ExprADT, R, R)
+                  | Min(ExprADT, ExprADT)
+                  | Max(ExprADT, ExprADT)
+                  | Sqrt(ExprADT)
+                  | Log(ExprADT)
+                  | Exp(ExprADT) ;
+
+WeightsADT      ::= "<" "alpha" ":" R_nonnegative ","
+                         "beta" ":" R_nonnegative ","
+                         "gamma" ":" R_nonnegative ","
+                         "delta" ":" R_nonnegative ","
+                         "epsilon" ":" R_positive ">" ;
+
+ThresholdsADT   ::= "<" "autonomy" ":" Probability ","
+                         "fallback" ":" Probability ","
+                         "failure_limit" ":" Nat ","
+                         "hysteresis" ":" Probability ">" ;
+
+RoutesADT       ::= "<" "autonomous" ":" RouteTarget ","
+                         "validated" ":" RouteTarget ","
+                         "default" ":" RouteTarget ">" ;
+
+GuardADT        ::= "<" "when" ":" OptionalCondition ","
+                         "require" ":" OptionalCondition ","
+                         "reject" ":" OptionalConditionOrEvent ">" ;
+
+OptionalWeights ::= WeightsADT | Null ;
+OptionalGuardList ::= "[" GuardADT* "]" | Null ;
+
+
+(* ============================================================ *)
+(* 3. SEMANTICS AND VALIDITY RULES                               *)
+(* ============================================================ *)
+
+DefaultConfidence ::= "clamp(alpha * support / (observations + epsilon)"
+                    "+ beta * validated / (validated + failures + epsilon)"
+                    "- gamma * exceptions / (observations + epsilon)"
+                    "- delta * failures / (validated + epsilon), 0, 1)" ;
+
+W1  ::= alpha + beta + gamma + delta = 1 ;
+W2  ::= epsilon > 0 ;
+W3  ::= fallback <= autonomy ;
+W4  ::= hysteresis <= autonomy - fallback ;
+W5  ::= alpha >= 0 and beta >= 0 and gamma >= 0 and delta >= 0 ;
+W6  ::= failure_limit >= 0 ;
+W7  ::= routes covers { autonomous, validated, default } ;
+W8  ::= inputs subset_of { observations, support, exceptions, validated, failures } ;
+W9  ::= evidence_vars(derive) subset_of inputs ;
+W10 ::= vars(guards) subset_of inputs union { confidence } ;
+
+ControlFunction ::= "Π" "(" "Evidence" "," "State" "," "Event" ")" "->" "(" "State" "," "Route" ")" ;
+
+AuthorizeRule ::= "VALIDATED" "," "C >= autonomy" "," "failures <= failure_limit"
+                  "=>" "(" "AUTONOMOUS" "," "routes.autonomous" ")" ;
+
+FallbackRule  ::= "AUTONOMOUS" "," "C < fallback"
+                  "=>" "(" "BOUND" "," "routes.default" ")" ;
+
+GuardRejectRule ::= "guard.reject(event,E) => (LEARNED, routes.default)" ;
+
+TypeJudgment ::= "⊢" PolicyADT ":" "Policy" ;

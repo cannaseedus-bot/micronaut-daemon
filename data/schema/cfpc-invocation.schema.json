@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "cfpc-invocation.schema.json",
+  "title": "CfpcInvocationContract",
+  "description": "Micronaut-to-Micronaut invocation contract. @kind must be micronaut.invocation. Pattern Induction Guard: promote_generated_facts MUST be false — any other value is a schema violation.",
+  "type": "object",
+  "required": ["@kind", "caller", "intent", "@query", "@route", "@execution", "@result"],
+  "additionalProperties": false,
+  "properties": {
+    "@kind": {
+      "type": "string",
+      "const": "micronaut.invocation"
+    },
+    "caller": {
+      "type": "string",
+      "description": "Identifier of the calling micronaut (CallerRef without -µ suffix in JSON).",
+      "pattern": "^[A-Za-z0-9_-]+"
+    },
+    "intent": {
+      "type": "string",
+      "enum": ["define", "explain", "verify", "resolve", "generate"]
+    },
+    "@query": {
+      "type": "object",
+      "required": ["pattern"],
+      "additionalProperties": false,
+      "properties": {
+        "pattern": { "type": "string" },
+        "captures": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "context": { "type": "string" }
+      }
+    },
+    "@route": {
+      "type": "object",
+      "required": ["max_depth", "cycle_detection", "authority"],
+      "additionalProperties": false,
+      "properties": {
+        "max_depth": { "type": "integer", "minimum": 0 },
+        "cycle_detection": { "type": "boolean" },
+        "authority": {
+          "type": "string",
+          "enum": ["read_only", "read_write", "authoritative"]
+        }
+      }
+    },
+    "@execution": {
+      "type": "object",
+      "required": ["verb"],
+      "additionalProperties": false,
+      "properties": {
+        "verb": { "type": "string" },
+        "params": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "@result": {
+      "type": "object",
+      "required": [
+        "retain_provenance",
+        "retain_gaps",
+        "allow_pattern_candidates",
+        "promote_generated_facts"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "retain_provenance":        { "type": "boolean" },
+        "retain_gaps":              { "type": "boolean" },
+        "allow_pattern_candidates": { "type": "boolean" },
+        "promote_generated_facts": {
+          "const": false,
+          "description": "Pattern Induction Guard — MUST be false. This is a grammar-level invariant, not a runtime policy. No parser may accept true."
+        }
+      }
+    }
+  }
+}

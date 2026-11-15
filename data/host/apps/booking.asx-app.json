@@ -1,0 +1,54 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "booking",
+  "@key": "⟁APP:BOOKING",
+  "@mount": "⟁ROOT:BOOKING",
+  "@theme": { "accent": "#34d399", "bg": "#030f09", "surface": "#071a10", "text": "#d1fae5", "hero_phase": "Sek", "tagline": "Book the moment that matters" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "services", "component": "⟁WIDGET:SERVICES", "position": "center" }, { "id": "calendar", "component": "⟁WIDGET:CALENDAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "services": [], "selected_service": null, "selected_slot": null, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:BOOKING": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:ADD_SERVICE"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:ADD_SERVICE": { "@type": "button", "@text": "Add Service", "@on": { "click": "booking.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:SERVICES", "⟁WIDGET:CALENDAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:SERVICES": { "@type": "grid", "@bind": "state.services", "@children": ["⟁WIDGET:SERVICE_CARD"] },
+    "⟁WIDGET:SERVICE_CARD": { "@type": "media-card", "@bind": "service", "@on": { "book": "booking.select_service", "view": "booking.view" } },
+    "⟁WIDGET:CALENDAR": { "@type": "calendar", "@bind": "state.selected_slot", "@on": { "select": "booking.select_slot" } }
+  },
+  "@programs": {
+    "booking.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "booking.select_service": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_service", "@out": "selected_service" }] },
+    "booking.select_slot": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_slot", "@out": "selected_slot" }] },
+    "booking.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "service.book": "booking.select_service", "slot.select": "booking.select_slot", "service.view": "booking.view", "compose.open": "booking.open_compose" },
+  "@imports": [{ "ref": "service", "mode": "schema_table" }, { "ref": "booking_record", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "stripe-payments", "name": "Stripe Payments", "category": "payments", "price": "free", "status": "setup_required", "description": "Take deposits or full payments at booking time." },
+      { "id": "reminder-bot", "name": "Reminder Bot", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Auto-send reminder emails 24h before appointments." },
+      { "id": "cancellation-policy", "name": "Cancellation Policy", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Define and enforce cancellation windows per service." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "booking.book", "pattern": "BOOK * APPOINTMENT|SCHEDULE *|RESERVE SLOT", "intent": "select_service" },
+      { "id": "booking.view", "pattern": "VIEW BOOKINGS|MY APPOINTMENTS|UPCOMING SESSIONS", "intent": "view_bookings" }
+    ]
+  },
+  "@data": {
+    "spotlight": [
+      { "id": "sp1", "title": "90-Min Deep Tissue Massage", "slug": "deep-tissue-90", "badge": "Most Booked", "price": 120, "duration_min": 90, "excerpt": "Full-body session targeting chronic tension. Limited slots." },
+      { "id": "sp2", "title": "Strategy Consultation (1hr)", "slug": "strategy-1hr", "badge": "New", "price": 200, "duration_min": 60, "excerpt": "One-on-one business strategy session. Zoom or in-person." },
+      { "id": "sp3", "title": "Photo Session (2hr)", "slug": "photo-session-2hr", "badge": "Weekend Only", "price": 350, "duration_min": 120, "excerpt": "Outdoor portrait or product session. Includes 20 edited images." }
+    ],
+    "schema": {
+      "service": { "primaryKey": "service_id", "fields": { "service_id": { "type": "string" }, "name": { "type": "string", "required": true }, "description": { "type": "textarea" }, "price": { "type": "float", "required": true }, "duration_min": { "type": "integer", "required": true }, "category": { "type": "string" }, "image_url": { "type": "uri" } } },
+      "booking_record": { "primaryKey": "booking_id", "fields": { "booking_id": { "type": "string" }, "service_id": { "type": "string", "required": true }, "user_id": { "type": "string" }, "name": { "type": "string", "required": true }, "email": { "type": "email", "required": true }, "slot_start": { "type": "datetime", "required": true }, "status": { "type": "string" }, "notes": { "type": "text" } } }
+    }
+  }
+}

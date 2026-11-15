@@ -1,0 +1,1587 @@
+{
+  "@type": "khanary.fold_lattice.conformance.v1",
+  "cases": [
+    {
+      "id": "valid_phase_granular_runtime_lattice",
+      "expect": "PASS",
+      "lattice": {
+        "@type": "khanary.fold_lattice.v1",
+        "@fold": "reasoning",
+        "@generation": 1,
+        "@axes": {
+          "@theta": [
+            "Pop",
+            "Wo",
+            "Yax",
+            "Sek",
+            "Ch'en",
+            "Xul"
+          ],
+          "@sigma": [
+            "unbound",
+            "observed",
+            "learned",
+            "bound",
+            "validated",
+            "autonomous"
+          ]
+        },
+        "@cells": [
+          {
+            "@phase": "Pop",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Wo",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Yax",
+            "@competence": "validated",
+            "@substrate": "local-test",
+            "@callback": "dual_run",
+            "@route_hint": "local-test",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Sek",
+            "@competence": "learned",
+            "@substrate": "teacher",
+            "@callback": "teacher_pairing",
+            "@route_hint": "teacher",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Ch'en",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Xul",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": true
+          }
+        ],
+        "@metrics": {
+          "@observations": 32,
+          "@support_rate": 0.82,
+          "@exception_rate": 0.05,
+          "@contract_pass_rate": 0.96,
+          "@teacher_distance": 0.18,
+          "@policy_agreement": 0.96
+        },
+        "@policy_ref": "xcfe://autonomy/default@1.0.0",
+        "@track": "REASON-\u00b5",
+        "@fold_state": "unfolded",
+        "@runtime_state": {
+          "@mutable": true,
+          "@state_id": "runtime:fold-lattice:test"
+        }
+      },
+      "expect_recommendations": [
+        "observed_to_learned",
+        "learned_to_bound",
+        "bound_to_validated",
+        "validated_to_autonomous"
+      ]
+    },
+    {
+      "id": "valid_sek_learned_teacher_callback",
+      "expect": "PASS",
+      "lattice": {
+        "@type": "khanary.fold_lattice.v1",
+        "@fold": "reasoning",
+        "@generation": 1,
+        "@axes": {
+          "@theta": [
+            "Pop",
+            "Wo",
+            "Yax",
+            "Sek",
+            "Ch'en",
+            "Xul"
+          ],
+          "@sigma": [
+            "unbound",
+            "observed",
+            "learned",
+            "bound",
+            "validated",
+            "autonomous"
+          ]
+        },
+        "@cells": [
+          {
+            "@phase": "Sek",
+            "@competence": "learned",
+            "@substrate": "teacher",
+            "@callback": "teacher_pairing",
+            "@route_hint": "teacher",
+            "@policy_gate": false
+          }
+        ],
+        "@metrics": {
+          "@observations": 32,
+          "@support_rate": 0.82,
+          "@exception_rate": 0.05,
+          "@contract_pass_rate": 0.96,
+          "@teacher_distance": 0.18,
+          "@policy_agreement": 0.96
+        },
+        "@policy_ref": "xcfe://autonomy/default@1.0.0",
+        "@track": "REASON-\u00b5",
+        "@fold_state": "unfolded",
+        "@runtime_state": {
+          "@mutable": true,
+          "@state_id": "runtime:fold-lattice:test"
+        }
+      }
+    },
+    {
+      "id": "valid_yax_validated_dual_run",
+      "expect": "PASS",
+      "lattice": {
+        "@type": "khanary.fold_lattice.v1",
+        "@fold": "reasoning",
+        "@generation": 1,
+        "@axes": {
+          "@theta": [
+            "Pop",
+            "Wo",
+            "Yax",
+            "Sek",
+            "Ch'en",
+            "Xul"
+          ],
+          "@sigma": [
+            "unbound",
+            "observed",
+            "learned",
+            "bound",
+            "validated",
+            "autonomous"
+          ]
+        },
+        "@cells": [
+          {
+            "@phase": "Yax",
+            "@competence": "validated",
+            "@substrate": "local-test",
+            "@callback": "dual_run",
+            "@route_hint": "local-test",
+            "@policy_gate": false
+          }
+        ],
+        "@metrics": {
+          "@observations": 32,
+          "@support_rate": 0.82,
+          "@exception_rate": 0.05,
+          "@contract_pass_rate": 0.96,
+          "@teacher_distance": 0.18,
+          "@policy_agreement": 0.96
+        },
+        "@policy_ref": "xcfe://autonomy/default@1.0.0",
+        "@track": "REASON-\u00b5",
+        "@fold_state": "unfolded",
+        "@runtime_state": {
+          "@mutable": true,
+          "@state_id": "runtime:fold-lattice:test"
+        }
+      }
+    },
+    {
+      "id": "invalid_phase",
+      "expect": "FAIL",
+      "error": "INVALID_PHASE",
+      "lattice": {
+        "@type": "khanary.fold_lattice.v1",
+        "@fold": "reasoning",
+        "@generation": 1,
+        "@axes": {
+          "@theta": [
+            "Pop",
+            "Wo",
+            "Yax",
+            "Sek",
+            "Ch'en",
+            "Xul"
+          ],
+          "@sigma": [
+            "unbound",
+            "observed",
+            "learned",
+            "bound",
+            "validated",
+            "autonomous"
+          ]
+        },
+        "@cells": [
+          {
+            "@phase": "BadPhase",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Wo",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Yax",
+            "@competence": "validated",
+            "@substrate": "local-test",
+            "@callback": "dual_run",
+            "@route_hint": "local-test",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Sek",
+            "@competence": "learned",
+            "@substrate": "teacher",
+            "@callback": "teacher_pairing",
+            "@route_hint": "teacher",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Ch'en",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Xul",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": true
+          }
+        ],
+        "@metrics": {
+          "@observations": 32,
+          "@support_rate": 0.82,
+          "@exception_rate": 0.05,
+          "@contract_pass_rate": 0.96,
+          "@teacher_distance": 0.18,
+          "@policy_agreement": 0.96
+        },
+        "@policy_ref": "xcfe://autonomy/default@1.0.0",
+        "@track": "REASON-\u00b5",
+        "@fold_state": "unfolded",
+        "@runtime_state": {
+          "@mutable": true,
+          "@state_id": "runtime:fold-lattice:test"
+        }
+      }
+    },
+    {
+      "id": "invalid_competence",
+      "expect": "FAIL",
+      "error": "INVALID_COMPETENCE",
+      "lattice": {
+        "@type": "khanary.fold_lattice.v1",
+        "@fold": "reasoning",
+        "@generation": 1,
+        "@axes": {
+          "@theta": [
+            "Pop",
+            "Wo",
+            "Yax",
+            "Sek",
+            "Ch'en",
+            "Xul"
+          ],
+          "@sigma": [
+            "unbound",
+            "observed",
+            "learned",
+            "bound",
+            "validated",
+            "autonomous"
+          ]
+        },
+        "@cells": [
+          {
+            "@phase": "Pop",
+            "@competence": "mastered",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Wo",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Yax",
+            "@competence": "validated",
+            "@substrate": "local-test",
+            "@callback": "dual_run",
+            "@route_hint": "local-test",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Sek",
+            "@competence": "learned",
+            "@substrate": "teacher",
+            "@callback": "teacher_pairing",
+            "@route_hint": "teacher",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Ch'en",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Xul",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": true
+          }
+        ],
+        "@metrics": {
+          "@observations": 32,
+          "@support_rate": 0.82,
+          "@exception_rate": 0.05,
+          "@contract_pass_rate": 0.96,
+          "@teacher_distance": 0.18,
+          "@policy_agreement": 0.96
+        },
+        "@policy_ref": "xcfe://autonomy/default@1.0.0",
+        "@track": "REASON-\u00b5",
+        "@fold_state": "unfolded",
+        "@runtime_state": {
+          "@mutable": true,
+          "@state_id": "runtime:fold-lattice:test"
+        }
+      }
+    },
+    {
+      "id": "duplicate_coordinate",
+      "expect": "FAIL",
+      "error": "DUPLICATE_COORDINATE",
+      "lattice": {
+        "@type": "khanary.fold_lattice.v1",
+        "@fold": "reasoning",
+        "@generation": 1,
+        "@axes": {
+          "@theta": [
+            "Pop",
+            "Wo",
+            "Yax",
+            "Sek",
+            "Ch'en",
+            "Xul"
+          ],
+          "@sigma": [
+            "unbound",
+            "observed",
+            "learned",
+            "bound",
+            "validated",
+            "autonomous"
+          ]
+        },
+        "@cells": [
+          {
+            "@phase": "Pop",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Pop",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Yax",
+            "@competence": "validated",
+            "@substrate": "local-test",
+            "@callback": "dual_run",
+            "@route_hint": "local-test",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Sek",
+            "@competence": "learned",
+            "@substrate": "teacher",
+            "@callback": "teacher_pairing",
+            "@route_hint": "teacher",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Ch'en",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Xul",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": true
+          }
+        ],
+        "@metrics": {
+          "@observations": 32,
+          "@support_rate": 0.82,
+          "@exception_rate": 0.05,
+          "@contract_pass_rate": 0.96,
+          "@teacher_distance": 0.18,
+          "@policy_agreement": 0.96
+        },
+        "@policy_ref": "xcfe://autonomy/default@1.0.0",
+        "@track": "REASON-\u00b5",
+        "@fold_state": "unfolded",
+        "@runtime_state": {
+          "@mutable": true,
+          "@state_id": "runtime:fold-lattice:test"
+        }
+      }
+    },
+    {
+      "id": "invalid_substrate",
+      "expect": "FAIL",
+      "error": "INVALID_SUBSTRATE",
+      "lattice": {
+        "@type": "khanary.fold_lattice.v1",
+        "@fold": "reasoning",
+        "@generation": 1,
+        "@axes": {
+          "@theta": [
+            "Pop",
+            "Wo",
+            "Yax",
+            "Sek",
+            "Ch'en",
+            "Xul"
+          ],
+          "@sigma": [
+            "unbound",
+            "observed",
+            "learned",
+            "bound",
+            "validated",
+            "autonomous"
+          ]
+        },
+        "@cells": [
+          {
+            "@phase": "Pop",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Wo",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Yax",
+            "@competence": "validated",
+            "@substrate": "local-test",
+            "@callback": "dual_run",
+            "@route_hint": "local-test",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Sek",
+            "@competence": "learned",
+            "@substrate": "remote-root",
+            "@callback": "teacher_pairing",
+            "@route_hint": "teacher",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Ch'en",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Xul",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": true
+          }
+        ],
+        "@metrics": {
+          "@observations": 32,
+          "@support_rate": 0.82,
+          "@exception_rate": 0.05,
+          "@contract_pass_rate": 0.96,
+          "@teacher_distance": 0.18,
+          "@policy_agreement": 0.96
+        },
+        "@policy_ref": "xcfe://autonomy/default@1.0.0",
+        "@track": "REASON-\u00b5",
+        "@fold_state": "unfolded",
+        "@runtime_state": {
+          "@mutable": true,
+          "@state_id": "runtime:fold-lattice:test"
+        }
+      }
+    },
+    {
+      "id": "subautonomous_missing_callback",
+      "expect": "FAIL",
+      "error": "SUBAUTONOMOUS_REQUIRES_CALLBACK",
+      "lattice": {
+        "@type": "khanary.fold_lattice.v1",
+        "@fold": "reasoning",
+        "@generation": 1,
+        "@axes": {
+          "@theta": [
+            "Pop",
+            "Wo",
+            "Yax",
+            "Sek",
+            "Ch'en",
+            "Xul"
+          ],
+          "@sigma": [
+            "unbound",
+            "observed",
+            "learned",
+            "bound",
+            "validated",
+            "autonomous"
+          ]
+        },
+        "@cells": [
+          {
+            "@phase": "Pop",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Wo",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Yax",
+            "@competence": "validated",
+            "@substrate": "local-test",
+            "@callback": "dual_run",
+            "@route_hint": "local-test",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Sek",
+            "@competence": "learned",
+            "@substrate": "teacher",
+            "@callback": "none",
+            "@route_hint": "teacher",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Ch'en",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Xul",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": true
+          }
+        ],
+        "@metrics": {
+          "@observations": 32,
+          "@support_rate": 0.82,
+          "@exception_rate": 0.05,
+          "@contract_pass_rate": 0.96,
+          "@teacher_distance": 0.18,
+          "@policy_agreement": 0.96
+        },
+        "@policy_ref": "xcfe://autonomy/default@1.0.0",
+        "@track": "REASON-\u00b5",
+        "@fold_state": "unfolded",
+        "@runtime_state": {
+          "@mutable": true,
+          "@state_id": "runtime:fold-lattice:test"
+        }
+      }
+    },
+    {
+      "id": "autonomous_has_callback",
+      "expect": "FAIL",
+      "error": "AUTONOMOUS_CALLBACK_NOT_NONE",
+      "lattice": {
+        "@type": "khanary.fold_lattice.v1",
+        "@fold": "reasoning",
+        "@generation": 1,
+        "@axes": {
+          "@theta": [
+            "Pop",
+            "Wo",
+            "Yax",
+            "Sek",
+            "Ch'en",
+            "Xul"
+          ],
+          "@sigma": [
+            "unbound",
+            "observed",
+            "learned",
+            "bound",
+            "validated",
+            "autonomous"
+          ]
+        },
+        "@cells": [
+          {
+            "@phase": "Pop",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "record_observation",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Wo",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Yax",
+            "@competence": "validated",
+            "@substrate": "local-test",
+            "@callback": "dual_run",
+            "@route_hint": "local-test",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Sek",
+            "@competence": "learned",
+            "@substrate": "teacher",
+            "@callback": "teacher_pairing",
+            "@route_hint": "teacher",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Ch'en",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Xul",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": true
+          }
+        ],
+        "@metrics": {
+          "@observations": 32,
+          "@support_rate": 0.82,
+          "@exception_rate": 0.05,
+          "@contract_pass_rate": 0.96,
+          "@teacher_distance": 0.18,
+          "@policy_agreement": 0.96
+        },
+        "@policy_ref": "xcfe://autonomy/default@1.0.0",
+        "@track": "REASON-\u00b5",
+        "@fold_state": "unfolded",
+        "@runtime_state": {
+          "@mutable": true,
+          "@state_id": "runtime:fold-lattice:test"
+        }
+      }
+    },
+    {
+      "id": "xul_autonomous_without_policy_gate",
+      "expect": "FAIL",
+      "error": "XUL_AUTONOMOUS_REQUIRES_POLICY_GATE",
+      "lattice": {
+        "@type": "khanary.fold_lattice.v1",
+        "@fold": "reasoning",
+        "@generation": 1,
+        "@axes": {
+          "@theta": [
+            "Pop",
+            "Wo",
+            "Yax",
+            "Sek",
+            "Ch'en",
+            "Xul"
+          ],
+          "@sigma": [
+            "unbound",
+            "observed",
+            "learned",
+            "bound",
+            "validated",
+            "autonomous"
+          ]
+        },
+        "@cells": [
+          {
+            "@phase": "Pop",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Wo",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Yax",
+            "@competence": "validated",
+            "@substrate": "local-test",
+            "@callback": "dual_run",
+            "@route_hint": "local-test",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Sek",
+            "@competence": "learned",
+            "@substrate": "teacher",
+            "@callback": "teacher_pairing",
+            "@route_hint": "teacher",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Ch'en",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Xul",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          }
+        ],
+        "@metrics": {
+          "@observations": 32,
+          "@support_rate": 0.82,
+          "@exception_rate": 0.05,
+          "@contract_pass_rate": 0.96,
+          "@teacher_distance": 0.18,
+          "@policy_agreement": 0.96
+        },
+        "@policy_ref": "xcfe://autonomy/default@1.0.0",
+        "@track": "REASON-\u00b5",
+        "@fold_state": "unfolded",
+        "@runtime_state": {
+          "@mutable": true,
+          "@state_id": "runtime:fold-lattice:test"
+        }
+      }
+    },
+    {
+      "id": "metric_rate_out_of_range",
+      "expect": "FAIL",
+      "error": "METRIC_RATE_OUT_OF_RANGE",
+      "lattice": {
+        "@type": "khanary.fold_lattice.v1",
+        "@fold": "reasoning",
+        "@generation": 1,
+        "@axes": {
+          "@theta": [
+            "Pop",
+            "Wo",
+            "Yax",
+            "Sek",
+            "Ch'en",
+            "Xul"
+          ],
+          "@sigma": [
+            "unbound",
+            "observed",
+            "learned",
+            "bound",
+            "validated",
+            "autonomous"
+          ]
+        },
+        "@cells": [
+          {
+            "@phase": "Pop",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Wo",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Yax",
+            "@competence": "validated",
+            "@substrate": "local-test",
+            "@callback": "dual_run",
+            "@route_hint": "local-test",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Sek",
+            "@competence": "learned",
+            "@substrate": "teacher",
+            "@callback": "teacher_pairing",
+            "@route_hint": "teacher",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Ch'en",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Xul",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": true
+          }
+        ],
+        "@metrics": {
+          "@observations": 32,
+          "@support_rate": 1.4,
+          "@exception_rate": 0.05,
+          "@contract_pass_rate": 0.96,
+          "@teacher_distance": 0.18,
+          "@policy_agreement": 0.96
+        },
+        "@policy_ref": "xcfe://autonomy/default@1.0.0",
+        "@track": "REASON-\u00b5",
+        "@fold_state": "unfolded",
+        "@runtime_state": {
+          "@mutable": true,
+          "@state_id": "runtime:fold-lattice:test"
+        }
+      }
+    },
+    {
+      "id": "teacher_distance_negative",
+      "expect": "FAIL",
+      "error": "METRIC_NEGATIVE",
+      "lattice": {
+        "@type": "khanary.fold_lattice.v1",
+        "@fold": "reasoning",
+        "@generation": 1,
+        "@axes": {
+          "@theta": [
+            "Pop",
+            "Wo",
+            "Yax",
+            "Sek",
+            "Ch'en",
+            "Xul"
+          ],
+          "@sigma": [
+            "unbound",
+            "observed",
+            "learned",
+            "bound",
+            "validated",
+            "autonomous"
+          ]
+        },
+        "@cells": [
+          {
+            "@phase": "Pop",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Wo",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Yax",
+            "@competence": "validated",
+            "@substrate": "local-test",
+            "@callback": "dual_run",
+            "@route_hint": "local-test",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Sek",
+            "@competence": "learned",
+            "@substrate": "teacher",
+            "@callback": "teacher_pairing",
+            "@route_hint": "teacher",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Ch'en",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Xul",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": true
+          }
+        ],
+        "@metrics": {
+          "@observations": 32,
+          "@support_rate": 0.82,
+          "@exception_rate": 0.05,
+          "@contract_pass_rate": 0.96,
+          "@teacher_distance": -0.1,
+          "@policy_agreement": 0.96
+        },
+        "@policy_ref": "xcfe://autonomy/default@1.0.0",
+        "@track": "REASON-\u00b5",
+        "@fold_state": "unfolded",
+        "@runtime_state": {
+          "@mutable": true,
+          "@state_id": "runtime:fold-lattice:test"
+        }
+      }
+    },
+    {
+      "id": "theta_axis_mismatch",
+      "expect": "FAIL",
+      "error": "THETA_AXIS_MISMATCH",
+      "lattice": {
+        "@type": "khanary.fold_lattice.v1",
+        "@fold": "reasoning",
+        "@generation": 1,
+        "@axes": {
+          "@theta": [
+            "Pop"
+          ],
+          "@sigma": [
+            "unbound",
+            "observed",
+            "learned",
+            "bound",
+            "validated",
+            "autonomous"
+          ]
+        },
+        "@cells": [
+          {
+            "@phase": "Pop",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Wo",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Yax",
+            "@competence": "validated",
+            "@substrate": "local-test",
+            "@callback": "dual_run",
+            "@route_hint": "local-test",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Sek",
+            "@competence": "learned",
+            "@substrate": "teacher",
+            "@callback": "teacher_pairing",
+            "@route_hint": "teacher",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Ch'en",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Xul",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": true
+          }
+        ],
+        "@metrics": {
+          "@observations": 32,
+          "@support_rate": 0.82,
+          "@exception_rate": 0.05,
+          "@contract_pass_rate": 0.96,
+          "@teacher_distance": 0.18,
+          "@policy_agreement": 0.96
+        },
+        "@policy_ref": "xcfe://autonomy/default@1.0.0",
+        "@track": "REASON-\u00b5",
+        "@fold_state": "unfolded",
+        "@runtime_state": {
+          "@mutable": true,
+          "@state_id": "runtime:fold-lattice:test"
+        }
+      }
+    },
+    {
+      "id": "missing_policy_ref",
+      "expect": "FAIL",
+      "error": "MISSING_POLICY_REF",
+      "lattice": {
+        "@type": "khanary.fold_lattice.v1",
+        "@fold": "reasoning",
+        "@generation": 1,
+        "@axes": {
+          "@theta": [
+            "Pop",
+            "Wo",
+            "Yax",
+            "Sek",
+            "Ch'en",
+            "Xul"
+          ],
+          "@sigma": [
+            "unbound",
+            "observed",
+            "learned",
+            "bound",
+            "validated",
+            "autonomous"
+          ]
+        },
+        "@cells": [
+          {
+            "@phase": "Pop",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Wo",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Yax",
+            "@competence": "validated",
+            "@substrate": "local-test",
+            "@callback": "dual_run",
+            "@route_hint": "local-test",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Sek",
+            "@competence": "learned",
+            "@substrate": "teacher",
+            "@callback": "teacher_pairing",
+            "@route_hint": "teacher",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Ch'en",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Xul",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": true
+          }
+        ],
+        "@metrics": {
+          "@observations": 32,
+          "@support_rate": 0.82,
+          "@exception_rate": 0.05,
+          "@contract_pass_rate": 0.96,
+          "@teacher_distance": 0.18,
+          "@policy_agreement": 0.96
+        },
+        "@track": "REASON-\u00b5",
+        "@fold_state": "unfolded",
+        "@runtime_state": {
+          "@mutable": true,
+          "@state_id": "runtime:fold-lattice:test"
+        }
+      }
+    },
+    {
+      "id": "full_lattice_missing_phase",
+      "expect": "FAIL",
+      "error": "FULL_LATTICE_REQUIRES_ONE_CELL_PER_PHASE",
+      "lattice": {
+        "@type": "khanary.fold_lattice.v1",
+        "@fold": "reasoning",
+        "@generation": 1,
+        "@axes": {
+          "@theta": [
+            "Pop",
+            "Wo",
+            "Yax",
+            "Sek",
+            "Ch'en",
+            "Xul"
+          ],
+          "@sigma": [
+            "unbound",
+            "observed",
+            "learned",
+            "bound",
+            "validated",
+            "autonomous"
+          ]
+        },
+        "@cells": [
+          {
+            "@phase": "Pop",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Wo",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Yax",
+            "@competence": "validated",
+            "@substrate": "local-test",
+            "@callback": "dual_run",
+            "@route_hint": "local-test",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Sek",
+            "@competence": "learned",
+            "@substrate": "teacher",
+            "@callback": "teacher_pairing",
+            "@route_hint": "teacher",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Ch'en",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          }
+        ],
+        "@metrics": {
+          "@observations": 32,
+          "@support_rate": 0.82,
+          "@exception_rate": 0.05,
+          "@contract_pass_rate": 0.96,
+          "@teacher_distance": 0.18,
+          "@policy_agreement": 0.96
+        },
+        "@policy_ref": "xcfe://autonomy/default@1.0.0",
+        "@track": "REASON-\u00b5",
+        "@fold_state": "unfolded",
+        "@runtime_state": {
+          "@mutable": true,
+          "@state_id": "runtime:fold-lattice:test"
+        }
+      }
+    },
+    {
+      "id": "invalid_fold_state",
+      "expect": "FAIL",
+      "error": "INVALID_FOLD_STATE",
+      "lattice": {
+        "@type": "khanary.fold_lattice.v1",
+        "@fold": "reasoning",
+        "@generation": 1,
+        "@axes": {
+          "@theta": [
+            "Pop",
+            "Wo",
+            "Yax",
+            "Sek",
+            "Ch'en",
+            "Xul"
+          ],
+          "@sigma": [
+            "unbound",
+            "observed",
+            "learned",
+            "bound",
+            "validated",
+            "autonomous"
+          ]
+        },
+        "@cells": [
+          {
+            "@phase": "Pop",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Wo",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Yax",
+            "@competence": "validated",
+            "@substrate": "local-test",
+            "@callback": "dual_run",
+            "@route_hint": "local-test",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Sek",
+            "@competence": "learned",
+            "@substrate": "teacher",
+            "@callback": "teacher_pairing",
+            "@route_hint": "teacher",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Ch'en",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Xul",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": true
+          }
+        ],
+        "@metrics": {
+          "@observations": 32,
+          "@support_rate": 0.82,
+          "@exception_rate": 0.05,
+          "@contract_pass_rate": 0.96,
+          "@teacher_distance": 0.18,
+          "@policy_agreement": 0.96
+        },
+        "@policy_ref": "xcfe://autonomy/default@1.0.0",
+        "@track": "REASON-\u00b5",
+        "@fold_state": "collapsed",
+        "@runtime_state": {
+          "@mutable": true,
+          "@state_id": "runtime:fold-lattice:test"
+        }
+      }
+    },
+    {
+      "id": "invalid_runtime_state_mutable",
+      "expect": "FAIL",
+      "error": "INVALID_RUNTIME_STATE",
+      "lattice": {
+        "@type": "khanary.fold_lattice.v1",
+        "@fold": "reasoning",
+        "@generation": 1,
+        "@axes": {
+          "@theta": [
+            "Pop",
+            "Wo",
+            "Yax",
+            "Sek",
+            "Ch'en",
+            "Xul"
+          ],
+          "@sigma": [
+            "unbound",
+            "observed",
+            "learned",
+            "bound",
+            "validated",
+            "autonomous"
+          ]
+        },
+        "@cells": [
+          {
+            "@phase": "Pop",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Wo",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Yax",
+            "@competence": "validated",
+            "@substrate": "local-test",
+            "@callback": "dual_run",
+            "@route_hint": "local-test",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Sek",
+            "@competence": "learned",
+            "@substrate": "teacher",
+            "@callback": "teacher_pairing",
+            "@route_hint": "teacher",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Ch'en",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Xul",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": true
+          }
+        ],
+        "@metrics": {
+          "@observations": 32,
+          "@support_rate": 0.82,
+          "@exception_rate": 0.05,
+          "@contract_pass_rate": 0.96,
+          "@teacher_distance": 0.18,
+          "@policy_agreement": 0.96
+        },
+        "@policy_ref": "xcfe://autonomy/default@1.0.0",
+        "@track": "REASON-\u00b5",
+        "@fold_state": "unfolded",
+        "@runtime_state": {
+          "@mutable": "yes",
+          "@state_id": "runtime:bad"
+        }
+      }
+    },
+    {
+      "id": "missing_track",
+      "expect": "FAIL",
+      "error": "INVALID_TRACK",
+      "lattice": {
+        "@type": "khanary.fold_lattice.v1",
+        "@fold": "reasoning",
+        "@generation": 1,
+        "@axes": {
+          "@theta": [
+            "Pop",
+            "Wo",
+            "Yax",
+            "Sek",
+            "Ch'en",
+            "Xul"
+          ],
+          "@sigma": [
+            "unbound",
+            "observed",
+            "learned",
+            "bound",
+            "validated",
+            "autonomous"
+          ]
+        },
+        "@cells": [
+          {
+            "@phase": "Pop",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Wo",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Yax",
+            "@competence": "validated",
+            "@substrate": "local-test",
+            "@callback": "dual_run",
+            "@route_hint": "local-test",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Sek",
+            "@competence": "learned",
+            "@substrate": "teacher",
+            "@callback": "teacher_pairing",
+            "@route_hint": "teacher",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Ch'en",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": false
+          },
+          {
+            "@phase": "Xul",
+            "@competence": "autonomous",
+            "@substrate": "local",
+            "@callback": "none",
+            "@route_hint": "local",
+            "@policy_gate": true
+          }
+        ],
+        "@metrics": {
+          "@observations": 32,
+          "@support_rate": 0.82,
+          "@exception_rate": 0.05,
+          "@contract_pass_rate": 0.96,
+          "@teacher_distance": 0.18,
+          "@policy_agreement": 0.96
+        },
+        "@policy_ref": "xcfe://autonomy/default@1.0.0",
+        "@fold_state": "unfolded",
+        "@runtime_state": {
+          "@mutable": true,
+          "@state_id": "runtime:fold-lattice:test"
+        }
+      }
+    }
+  ]
+}

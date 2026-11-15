@@ -1,0 +1,88 @@
+{
+  "@program": "semantic_cube.tool-router",
+  "@schema": "kuhul.semantic-cube.tool-router.v1",
+  "@version": "1.0.0",
+  "@description": "Semantic-cube state routing for safe KAST tool calls.",
+  "correction_corpus": "micronauts/semantic/tool-routing-corrections.manifest.json",
+  "correction_authority": "Chen validation plus replay record",
+  "cube": {
+    "program": "programs/semantic_cube.d3d11.json",
+    "faces": {
+      "Phi": "intent and model confidence",
+      "Fold": "Pop/Wo/Yax/Sek/Chen/Xul execution phase",
+      "Gram": "AST/KSON/tool grammar compatibility",
+      "Geodesic": "distance from the current valid tool path",
+      "Projection": "tool arguments and runtime target",
+      "Entropy": "uncertainty and refusal threshold"
+    },
+    "channels": ["primary", "gradient", "curvature", "confidence"]
+  },
+  "tool_call_record": {
+    "required": ["id", "verb", "target", "args", "phase", "lane"],
+    "optional": ["preconditions", "approval", "result", "error", "trace"],
+    "lanes": ["TOOL", "VERB", "AST", "KSON"],
+    "phases": ["Pop", "Wo", "Yax", "Sek", "Chen", "Xul"]
+  },
+  "routing": {
+    "Pop": "parse_request_and_read_capabilities",
+    "Wo": "map_verb_to_registered_tool",
+    "Yax": "score_candidates_in_semantic_cube",
+    "Sek": "execute_only_selected_tool",
+    "Chen": "validate_result_and_replay_record",
+    "Xul": "emit_result_or_error"
+  },
+  "tool_uri_routes": {
+    "tool://coder": { "lane": "CODE", "requires": ["approved_folder", "edit_capability"] },
+    "tool://micronaut-coder/review": { "lane": "CODE", "phase": "Sek", "requires": ["approved_folder"] },
+    "tool://micronaut-coder/todos-universal": { "lane": "CODE", "phase": "Sek", "requires": ["approved_folder"] },
+    "tool://micronaut-coder/v6-hashes": { "lane": "CODE", "phase": "Sek", "requires": ["approved_folder"] },
+    "tool://micronaut-coder/pipeline": { "lane": "CODE", "phase": "Sek", "requires": [] },
+    "tool://micronaut-coder/codegen": { "lane": "CODE", "phase": "Sek", "requires": [] },
+    "micronaut://code-micronaut-native": { "lane": "CODE", "phase": "Sek", "requires": [] },
+    "tool://wwa/host": { "lane": "TOOL", "phase": "Sek", "requires": ["approved_folder"] },
+    "tool://wwa/launch": { "lane": "TOOL", "phase": "Sek", "requires": ["approved_folder"] },
+    "tool://wwa/package": { "lane": "TOOL", "phase": "Sek", "effect": "write", "requires": ["approved_folder", "allow_edits", "Chen_validation"] },
+    "jrom://replay": { "lane": "MEMORY", "phase": "Chen", "effect": "write", "requires": ["Chen_validation"] },
+    "tool://micronaut-factory/native": { "lane": "TOOL", "phase": "Yax", "requires": ["approved_folder"] },
+    "tool://micronaut-evolution/native": { "lane": "MEMORY", "phase": "Chen", "requires": ["approved_folder"] },
+    "think://reason": { "lane": "REASON", "micronaut": "µ-reason", "requires": ["read_capability"] },
+    "tool://verb": { "lane": "VERB", "requires": ["registered_verb"] },
+    "openai://completions": { "lane": "CHATML", "requires": ["model_endpoint"] },
+    "lmstudio://tools": { "lane": "TOOL", "requires": ["lmstudio_endpoint"] },
+    "mayan://orchestrate": { "lane": "VERB", "phase": "Wo", "requires": ["chen_verified_plan"] },
+    "micronaut://factory": { "lane": "TOOL", "phase": "Yax", "requires": ["explicit_create_intent"] },
+    "micronaut://evolution": { "lane": "TOOL", "phase": "Chen", "requires": ["replayable_evidence"] },
+    "expert://semantic-cube-shader": { "lane": "AST", "phase": "Sek", "requires": ["tensor_or_score_correction"] },
+    "micronaut://v4/runtime": { "lane": "TOOL", "phase": "Sek", "effect": "write", "requires": ["allow_edits", "approved_folder", "Chen_validation"] },
+    "micronaut://v4/pwa": { "lane": "TOOL", "phase": "Wo", "effect": "read_only", "requires": [] },
+    "micronaut://v4/nnc": { "lane": "MEMORY", "phase": "Wo", "effect": "read_only", "requires": ["approved_folder"] },
+    "micronaut://v4/chat": { "lane": "CHATML", "phase": "Sek", "effect": "read_only", "requires": [] },
+    "micronaut://v4/user": { "lane": "MEMORY", "phase": "Wo", "effect": "read_only", "requires": [] },
+    "micronaut://v4/oauth": { "lane": "TOOL", "phase": "Wo", "effect": "read_only", "requires": [] },
+    "micronaut://v4/eliza": { "lane": "REASON", "phase": "Yax", "effect": "read_only", "requires": [] },
+    "micronaut://v4/drivers": { "lane": "AST", "phase": "Sek", "effect": "read_only", "requires": [] },
+    "micronaut://v4/kxc": { "lane": "AST", "phase": "Yax", "effect": "read_only", "requires": [] },
+    "tool://kxc/compile": { "lane": "AST", "phase": "Yax", "effect": "write", "requires": ["approved_folder"] },
+    "tool://dag/build": { "lane": "AST", "phase": "Yax", "effect": "write", "requires": ["approved_folder"] },
+    "micronaut://v4/node": { "lane": "MEMORY", "phase": "Sek", "effect": "read_only", "requires": [] },
+    "micronaut://v4/confidence": { "lane": "MEMORY", "phase": "Sek", "effect": "write", "requires": [] },
+    "micronaut://v4/agents": { "lane": "TOOL", "phase": "Sek", "effect": "write_if_approved", "requires": ["allow_edits", "approved_folder", "Chen_validation"] },
+    "micronaut://v4/supernaut": { "lane": "SKILLS", "phase": "Sek", "effect": "write_if_approved", "requires": ["allow_edits", "approved_folder", "Chen_validation"] },
+    "micronaut://v4/adam-m": { "lane": "TOOL", "phase": "Sek", "effect": "write_if_approved", "requires": ["allow_edits","approved_folder","Chen_validation"] }
+
+  },
+  "safety": {
+    "default_effect": "read_only",
+    "writes_require": ["allow_edits", "approved_folder", "Chen_validation"],
+    "network_requires": ["explicit_endpoint", "registered_route"],
+    "never_infer_from_text": ["filesystem_scope", "approval", "credentials"]
+  },
+  "control": [
+    { "@op": "CUBE_READ", "@faces": ["Phi", "Fold", "Gram", "Entropy"], "@out": "state" },
+    { "@op": "TOOL_ROUTE", "@input": "$state", "@verb": "$verb", "@out": "candidate" },
+    { "@op": "CUBE_PROJECT", "@input": "$candidate", "@faces": ["Projection", "Geodesic"], "@out": "route" },
+    { "@op": "TOOL_EXECUTE", "@route": "$route", "@out": "result" },
+    { "@op": "TOOL_VERIFY", "@result": "$result", "@out": "verified" },
+    { "@op": "TOOL_EMIT", "@result": "$verified" }
+  ]
+}

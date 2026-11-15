@@ -1,0 +1,34 @@
+{
+  "format": "arpa-3layer-trigram",
+  "node_count": 4300980,
+  "edge_count": 3542274,
+  "phase_map": {
+    "0": "Pop",
+    "1": "Wo",
+    "2": "Yax",
+    "3": "Sek",
+    "4": "Ch'en",
+    "5": "Xul"
+  },
+  "z_map": {
+    "0": 0.0,
+    "1": 0.167,
+    "2": 0.333,
+    "3": 0.5,
+    "4": 0.667,
+    "5": 0.833
+  },
+  "layer_counts": {
+    "Pop": 31760,
+    "Wo": 2665260,
+    "Yax": 1603960
+  },
+  "tensors": {
+    "node_positions": "float32 [N, 3]  (x, y, z) — FNV-1a hash → (x,y); phase → z",
+    "node_weights": "float32 [N]     P(ngram) — WCR static_weight W component",
+    "node_phase": "int32   [N]     0=Pop 1=Wo 2=Yax 3=Sek 4=Ch'en 5=Xul",
+    "edge_index": "int64   [2, E]  (source, target) COO sparse format",
+    "edge_weights": "float32 [E]     P(w_n | context) conditional probability"
+  },
+  "description": "SRILM trigram LM three-layer overlay: Pop=relevance(P(w)), Wo=relativity(P(w1,w2)), Yax=probability(P(w1,w2,w3)). Edge weights = P(w_n | context). Coordinates are FNV-1a hash projections. Labels in companion *.labels.json, index aligned with tensor rows."
+}

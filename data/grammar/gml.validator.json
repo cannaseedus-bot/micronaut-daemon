@@ -1,0 +1,1059 @@
+{
+  "id": "gml.validator.v1",
+  "kind": "gml_semantic_validator",
+  "version": "1.0.0",
+  "classification": {
+    "gml_is": "serialization/projection of graph structure",
+    "gml_is_not": "B itself",
+    "law": "ParsedGraph ≠ VerifiedGraph ≠ B"
+  },
+  "pipeline": [
+    {
+      "stage": "ParseGML",
+      "input": "GML text",
+      "output": "ParsedGraph",
+      "gate": "gml.khanary.ebnf — permissive, lenient parser"
+    },
+    {
+      "stage": "ValidateGML",
+      "input": "ParsedGraph",
+      "output": "VerifiedGraph",
+      "gate": "this contract — semantic checks; grade VALID required"
+    },
+    {
+      "stage": "Proposal",
+      "input": "VerifiedGraph",
+      "output": "Candidate",
+      "gate": "field_dag: build FieldNodes + overlay IDs"
+    },
+    {
+      "stage": "Ch'en",
+      "input": "Candidate",
+      "output": "Certificate",
+      "gate": "assert_and_verify_candidate"
+    },
+    {
+      "stage": "XCFE",
+      "input": "Certificate",
+      "output": "Authorization",
+      "gate": "dispatch authority check"
+    },
+    {
+      "stage": "XulGate",
+      "input": "Authorization",
+      "output": "B'",
+      "gate": "compare_and_commit — only topology mutation"
+    }
+  ],
+  "admission_boundary": {
+    "rule": "A VerifiedGraph does not automatically update B. Grade VALID is a necessary but not sufficient condition for topology admission.",
+    "path": "Proposal → Ch'en → XCFE → XulGate → B'",
+    "gate": "existing CommitAuthority / XulGate commit path in src/kuhul/xul_gate.h",
+    "corollary": "Importing a GML file at startup (field_dag.load_gml) populates the in-memory overlay; persisting that to B requires an explicit Xul commit."
+  },
+  "validation_checks": {
+    "V1": {
+      "layer": "structural",
+      "name": "node_id_required",
+      "formal": "NodeValid(n) ⟹ ∃!id(n)",
+      "check": "Every node block must contain exactly one 'id' attribute. Zero → MISSING_NODE_ID. Two or more → DUPLICATE_NODE_ID.",
+      "severity": "FATAL",
+      "error": [
+        "MISSING_NODE_ID",
+        "DUPLICATE_NODE_ID"
+      ]
+    },
+    "V2": {
+      "layer": "structural",
+      "name": "edge_endpoints_required",
+      "formal": "EdgeValid(e) ⟹ source(e) ∧ target(e)",
+      "check": "Every edge block must contain exactly one 'source' and exactly one 'target'. Missing either → MISSING_EDGE_ENDPOINT.",
+      "severity": "FATAL",
+      "error": "MISSING_EDGE_ENDPOINT"
+    },
+    "V3": {
+      "layer": "structural",
+      "name": "edge_endpoints_resolve",
+      "check": "source(e) and target(e) must be integer IDs that exist in the node table of this graph.",
+      "severity": "FATAL",
+      "error": "INVALID_EDGE_ENDPOINT"
+    },
+    "V4": {
+      "layer": "structural",
+      "name": "overlay_id_unique_within_file",
+      "check": "Within a single GML file, every node must have a unique integer id. Duplicate integers → OVERLAY_ID_COLLISION_INTRA.",
+      "severity": "FATAL",
+      "error": "OVERLAY_ID_COLLISION_INTRA",
+      "note": "Cross-file uniqueness is guaranteed by the file-stem namespace @node:gml:{stem}:{id}. field_dag.cpp:29 enforces this. This check validates the intra-file half."
+    },
+    "V5": {
+      "layer": "structural",
+      "name": "stem_ident_safe",
+      "check": "The file stem derived from the GML filename (lowercase, non-alnum → '_') must not start with a digit. A filename like '123.gml' produces stem '123', which is not a valid ident. Prepend '_' to produce '_123' to form a valid overlay ID prefix.",
+      "severity": "ERROR",
+      "error": "STEM_STARTS_WITH_DIGIT",
+      "note": "gml_overlay_id = '@node:gml:' + file_stem + ':' + integer. file_stem is declared as ident in the EBNF. Stems beginning with a digit break the ident production. The validator normalises the stem rather than rejecting the file."
+    },
+    "R1": {
+      "layer": "relation",
+      "name": "verb_wins",
+      "formal": "verb present ⟹ verb wins; relation attribute ignored",
+      "check": "When both 'verb' and 'relation' are present on an edge, 'verb' takes precedence. 'relation' is silently dropped. Emit warning BOTH_VERB_AND_RELATION_PRESENT.",
+      "severity": "WARNING",
+      "error": "BOTH_VERB_AND_RELATION_PRESENT"
+    },
+    "R2": {
+      "layer": "relation",
+      "name": "relation_is_candidate",
+      "formal": "¬verb ∧ relation present ⟹ relation becomes RelationCandidate (not VerifiedRelation)",
+      "check": "When only 'relation' is present, its value feeds infer_relation_from_lexical(). The result is a RelationCandidate, not a VerifiedRelation. Emit RELATION_ALIAS_USED.",
+      "severity": "WARNING",
+      "error": "RELATION_ALIAS_USED"
+    },
+    "R3": {
+      "layer": "relation",
+      "name": "default_weak_association",
+      "check": "When neither 'verb' nor 'relation' is present, the edge receives @related_to as weak association default.",
+      "severity": "INFO",
+      "error": "NONE"
+    },
+    "R4": {
+      "layer": "relation",
+      "name": "non_canonical_verb_is_candidate",
+      "formal": "verb ∉ relation_isa.canonical ⟹ infer_relation_from_lexical(verb) → RelationCandidate",
+      "check": "If 'verb' value is not in the canonical set defined in src/micronaut/relation_isa.h, the verb is treated as a string literal passed to infer_relation_from_lexical(). The result is a RelationCandidate, not a VerifiedRelation. Emit INFER_CANDIDATE_USED.",
+      "severity": "WARNING",
+      "error": "INFER_CANDIDATE_USED"
+    },
+    "R5": {
+      "layer": "relation",
+      "name": "near_miss_verb_is_not_canonical",
+      "formal": "infer_relation_from_lexical(x) ≠ VerifiedRelation(x)",
+      "check": "A verb that is lexically similar to a canonical verb (e.g. '@relateed_to' ~ '@related_to') is a RelationCandidate with a lower confidence score — it is NOT equivalent to the canonical verb. The validator emits NEAR_MISS_VERB alongside INFER_CANDIDATE_USED. Confidence of the inferred candidate must not be promoted to 1.0.",
+      "severity": "WARNING",
+      "error": "NEAR_MISS_VERB",
+      "law": "Representation → Relevance → Candidate → Verification, not → Truth"
+    },
+    "W1": {
+      "layer": "wcr",
+      "name": "confidence_range",
+      "check": "confidence ∈ [0.0, 1.0] when present",
+      "severity": "ERROR",
+      "error": "CONFIDENCE_OUT_OF_RANGE"
+    },
+    "W2": {
+      "layer": "wcr",
+      "name": "static_weight_range",
+      "check": "static_weight ∈ [0.0, 1.0] when present",
+      "severity": "ERROR",
+      "error": "STATIC_WEIGHT_OUT_OF_RANGE"
+    },
+    "W3": {
+      "layer": "wcr",
+      "name": "health_range",
+      "check": "health ∈ [0.0, 1.0] when present",
+      "severity": "ERROR",
+      "error": "HEALTH_OUT_OF_RANGE"
+    },
+    "W4": {
+      "layer": "wcr",
+      "name": "edge_weight_range",
+      "check": "edge weight ∈ [0.0, 1.0] when present",
+      "severity": "ERROR",
+      "error": "EDGE_WEIGHT_OUT_OF_RANGE"
+    },
+    "G1": {
+      "layer": "geometry",
+      "name": "coordinates_finite",
+      "check": "x, y, z must be finite IEEE-754 floats. NaN and Inf are rejected.",
+      "severity": "ERROR",
+      "error": "COORDINATE_NOT_FINITE"
+    },
+    "G2": {
+      "layer": "geometry",
+      "name": "coordinate_vector_complete",
+      "check": "If any of x/y/z is present, all three should be present. A partial vector (e.g. only x, y) gets a default of 0.0 for the missing component with a warning.",
+      "severity": "WARNING",
+      "error": "PARTIAL_COORDINATE_VECTOR"
+    },
+    "S1": {
+      "layer": "statistical_decision",
+      "name": "prior_mass_range",
+      "formal": "0 <= Λ(θ) <= 1",
+      "check": "prior_mass ∈ [0.0, 1.0] when present on a node. It is antecedent prior density only; it does not verify semantic truth.",
+      "severity": "ERROR",
+      "error": "PRIOR_MASS_OUT_OF_RANGE"
+    },
+    "S2": {
+      "layer": "statistical_decision",
+      "name": "risk_bound_range",
+      "formal": "0 <= risk_bound <= 1",
+      "check": "risk_bound ∈ [0.0, 1.0] when present on a node. It bounds representation risk; it does not authorize topology mutation.",
+      "severity": "ERROR",
+      "error": "RISK_BOUND_OUT_OF_RANGE"
+    },
+    "S3": {
+      "layer": "statistical_decision",
+      "name": "loss_cost_range",
+      "formal": "0 <= L(θ,a) <= 1",
+      "check": "loss_cost ∈ [0.0, 1.0] when present on an edge. High loss restricts VECTOR-µ geometry; it is not a Ch'en proof.",
+      "severity": "ERROR",
+      "error": "LOSS_COST_OUT_OF_RANGE"
+    },
+    "S4": {
+      "layer": "statistical_decision",
+      "name": "inadmissible_vector_rule_flag",
+      "formal": "risk_bound(n) < loss_cost(e) for incident e => InadmissibleCandidate(e)",
+      "check": "If an edge loss_cost exceeds both endpoint risk_bound values when those bounds are declared, emit INADMISSIBLE_VECTOR_RULE. This blocks the projection rule from being treated as admissible geometry during startup validation.",
+      "severity": "ERROR",
+      "error": "INADMISSIBLE_VECTOR_RULE"
+    },
+    "D1": {
+      "layer": "differential_graph",
+      "name": "mutation_enum",
+      "check": "mutation must be one of insert/delete/modify/unchanged when present on a node or edge.",
+      "severity": "ERROR",
+      "error": "INVALID_MUTATION_OP"
+    },
+    "D2": {
+      "layer": "differential_graph",
+      "name": "base_version_nonnegative",
+      "check": "base_version must be a non-negative integer when present on a node.",
+      "severity": "ERROR",
+      "error": "BASE_VERSION_NEGATIVE"
+    },
+    "D3": {
+      "layer": "dual_comparison",
+      "name": "dual_twin_resolves",
+      "check": "dual_twin must point to an edge id in the same graph when present.",
+      "severity": "ERROR",
+      "error": "DUAL_TWIN_UNRESOLVED"
+    },
+    "D4": {
+      "layer": "dual_comparison",
+      "name": "dual_twin_reciprocal_warning",
+      "check": "If edge e declares dual_twin=t and edge t exists but does not point back to e.id, emit DUAL_TWIN_NOT_RECIPROCAL warning.",
+      "severity": "WARNING",
+      "error": "DUAL_TWIN_NOT_RECIPROCAL"
+    },
+    "Q1": {
+      "layer": "quantum_graph",
+      "name": "vertex_boundary_condition_enum",
+      "check": "boundary_type must be one of kirchhoff/dirichlet/robin when present on a node.",
+      "severity": "ERROR",
+      "error": "INVALID_BOUNDARY_TYPE"
+    },
+    "Q2": {
+      "layer": "quantum_graph",
+      "name": "edge_metric_length_positive",
+      "formal": "L_e > 0",
+      "check": "length must be a positive finite number when present on an edge.",
+      "severity": "ERROR",
+      "error": "EDGE_LENGTH_NONPOSITIVE"
+    },
+    "Q3": {
+      "layer": "quantum_graph",
+      "name": "refractive_positive",
+      "check": "refractive must be a positive finite number when present on an edge.",
+      "severity": "ERROR",
+      "error": "REFRACTIVE_NONPOSITIVE"
+    },
+    "Q4": {
+      "layer": "continuous_field",
+      "name": "singularity_enum",
+      "check": "singularity must be one of source/sink/saddle/ordinary when present on a node.",
+      "severity": "ERROR",
+      "error": "INVALID_SINGULARITY_TYPE"
+    },
+    "Q5": {
+      "layer": "continuous_field",
+      "name": "velocity_vector_complete",
+      "check": "If any of vx/vy/vz is present on an edge, all three should be present. Missing components emit PARTIAL_VELOCITY_VECTOR.",
+      "severity": "WARNING",
+      "error": "PARTIAL_VELOCITY_VECTOR"
+    },
+    "Q6": {
+      "layer": "plane_wave",
+      "name": "frequency_positive",
+      "formal": "omega > 0",
+      "check": "frequency must be a positive finite number when present on an edge.",
+      "severity": "ERROR",
+      "error": "FREQUENCY_NONPOSITIVE"
+    },
+    "Q7": {
+      "layer": "text_boundary_field",
+      "name": "text_boundary_enum",
+      "check": "text_boundary must be one of sentence/paragraph/article/section/none when present on a node.",
+      "severity": "ERROR",
+      "error": "INVALID_TEXT_BOUNDARY"
+    },
+    "Q8": {
+      "layer": "authority_boundary",
+      "name": "continuous_field_projection_only",
+      "check": "Quantum graph, plane-wave, flow-field, and text-boundary attributes constrain derived VECTOR-µ/METRIC-µ geometry only; they cannot verify relation truth or commit FoldGraph B.",
+      "severity": "INFO",
+      "error": "UNKNOWN_ATTRIBUTE_SKIPPED"
+    },
+    "Q9": {
+      "layer": "differentiable_curve",
+      "name": "curve_parameter_finite",
+      "formal": "t in I subset R",
+      "check": "parameter_t, t0, and t1 must be finite numbers when present.",
+      "severity": "ERROR",
+      "error": "CURVE_PARAMETER_NOT_NUMERIC"
+    },
+    "Q10": {
+      "layer": "differentiable_curve",
+      "name": "arc_length_nonnegative",
+      "formal": "s >= 0",
+      "check": "arc_length must be a nonnegative finite number when present.",
+      "severity": "ERROR",
+      "error": "ARC_LENGTH_NEGATIVE"
+    },
+    "Q11": {
+      "layer": "differentiable_curve",
+      "name": "curvature_nonnegative",
+      "formal": "kappa(t) >= 0",
+      "check": "curvature must be a nonnegative finite number when present.",
+      "severity": "ERROR",
+      "error": "CURVATURE_NEGATIVE"
+    },
+    "Q12": {
+      "layer": "differentiable_curve",
+      "name": "curve_interval_forward",
+      "formal": "t1 > t0",
+      "check": "An edge declaring both t0 and t1 must use t1 > t0 for the forward parameterized curve segment.",
+      "severity": "ERROR",
+      "error": "CURVE_INTERVAL_INVALID"
+    },
+    "Q13": {
+      "layer": "euclidean_gradient_field",
+      "name": "field_kind_enum",
+      "check": "field_kind must be one of flow/trajectory/euclidean_gradient/entropy_gradient/free_energy/riemannian_flow/plane_wave/quantum/tensor_field/hyperbolic_event.",
+      "severity": "ERROR",
+      "error": "INVALID_FIELD_KIND"
+    },
+    "Q14": {
+      "layer": "euclidean_gradient_field",
+      "name": "zero_curl_constraint",
+      "formal": "curl(grad f)=0 and partial_i V_j = partial_j V_i",
+      "check": "For field_kind=euclidean_gradient, declared curl_x/curl_y/curl_z components must be zero when present.",
+      "severity": "ERROR",
+      "error": "EUCLIDEAN_CURL_NONZERO"
+    },
+    "H1": {
+      "layer": "gpu_hardware_layer",
+      "name": "cdata_cso_integrity_enforced",
+      "formal": "CDATA(kernel) => cso_id == cso://SHA256(Unwrap(CDATA(kernel)))",
+      "check": "When a GML or network manifest provides an inline hardware execution script in kernel_source or shader_source using CDATA, cso_id or @id must equal the SHA-256 content address of the unwrapped code. Missing or mismatched identity fails closed before GPU compilation.",
+      "severity": "FATAL",
+      "error": "CSO_INTEGRITY_MISMATCH"
+    },
+    "L1": {
+      "layer": "deductive_system",
+      "name": "semantic_completeness_requires_proof_trace",
+      "formal": "Sigma models phi => Sigma proves phi",
+      "check": "A GML item that declares logical_consequence, semantic_entails, models_phi, or sigma_models_phi must also declare a deductive_proof, proof_trace, phase_proof_trace, or sigma_proves_phi. Projection geometry may discover a route, but a supported claim needs a trace.",
+      "severity": "ERROR",
+      "error": "DEDUCTIVE_PROOF_REQUIRED"
+    },
+    "L2": {
+      "layer": "deductive_system",
+      "name": "miss_is_not_contradiction",
+      "formal": "MISS != CONTRADICTED",
+      "check": "MISS records an observation or retrieval deficit. It must not be collapsed into CONTRADICTED unless a separate negative-evidence verdict is supplied outside the MISS state.",
+      "severity": "ERROR",
+      "error": "MISS_COLLAPSED_TO_CONTRADICTION"
+    },
+    "L3": {
+      "layer": "deductive_system",
+      "name": "axiom_extension_must_not_break_laws",
+      "formal": "Sigma_extension and contradicts_law => reject",
+      "check": "Non-logical axiom extensions may add domain state only when they do not contradict the primary law layer Lambda from fold_graph.xml and gml.validator.json.",
+      "severity": "ERROR",
+      "error": "AXIOM_EXTENSION_CONTRADICTS_LAW"
+    },
+    "A1": {
+      "layer": "algebraic_interpretation_layer",
+      "name": "signature_isomorphism_preserved",
+      "formal": "∀α, ∃Isomorphism(F(B)) ⟹ MatrixRank(T_transformed) == MatrixRank(T_substrate)",
+      "check": "When an interpretation algebra (α) maps a structural neighborhood across a phase boundary, the transformation must act as a true functor: preserving the underlying signature edge connectivity and relational rank invariants. Any supplied transformed rank that differs from the substrate rank is inadmissible, protecting the base Fold topology B from algebraic signature corruption.",
+      "severity": "FATAL",
+      "error": "SIGNATURE_FUNCTOR_FRACTION"
+    },
+    "HE1": {
+      "layer": "hyperbolic_key_grammar_event",
+      "name": "space_signature_valid",
+      "formal": "signature in {(-,+,+,+),(+,-,-,-)}",
+      "check": "space_signature must be a recognized Minkowski signature when declared. The default runtime event substrate is Minkowski_Minus_Plus_Plus_Plus.",
+      "severity": "ERROR",
+      "error": "SPACE_SIGNATURE_INVALID"
+    },
+    "HE2": {
+      "layer": "hyperbolic_key_grammar_event",
+      "name": "rapidity_nonnegative",
+      "formal": "rho >= 0",
+      "check": "rapidity_rho must be a nonnegative finite number. Rapidity is additive progression evidence, not semantic truth.",
+      "severity": "ERROR",
+      "error": "RAPIDITY_RHO_NEGATIVE"
+    },
+    "HE3": {
+      "layer": "hyperbolic_key_grammar_event",
+      "name": "minkowski_interval_numeric",
+      "formal": "B(u,u) in R",
+      "check": "minkowski_interval must be finite numeric when present.",
+      "severity": "ERROR",
+      "error": "MINKOWSKI_INTERVAL_NOT_NUMERIC"
+    },
+    "HE4": {
+      "layer": "hyperbolic_key_grammar_event",
+      "name": "interval_class_matches_sign",
+      "formal": "B<0 => timelike, B=0 => lightlike, B>0 => spacelike",
+      "check": "interval_class must match the sign of minkowski_interval unless interval_class is unclassified.",
+      "severity": "ERROR",
+      "error": [
+        "INVALID_INTERVAL_CLASS",
+        "MINKOWSKI_INTERVAL_CLASS_MISMATCH"
+      ]
+    },
+    "HE5": {
+      "layer": "hyperbolic_key_grammar_event",
+      "name": "event_vector_interval_consistent",
+      "formal": "B(u,u)=-t^2+x^2+y^2+z^2 for Minkowski_Minus_Plus_Plus_Plus",
+      "check": "When minkowski_t/x/y/z and minkowski_interval are both present, the stored interval must match the bilinear form under the declared signature. A partial event vector is accepted with PARTIAL_MINKOWSKI_EVENT_VECTOR only when the record makes no dispatch claim; a dispatchable event is rejected under HE8.",
+      "severity": "ERROR",
+      "error": [
+        "MINKOWSKI_EVENT_VECTOR_NOT_NUMERIC",
+        "MINKOWSKI_INTERVAL_MISMATCH",
+        "PARTIAL_MINKOWSKI_EVENT_VECTOR"
+      ]
+    },
+    "HE6": {
+      "layer": "hyperbolic_key_grammar_event",
+      "name": "hyperbolic_event_projection_only",
+      "formal": "HyperbolicEvent => semantic_authority=false and topology_authority=false",
+      "check": "Hyperbolic event geometry can route or rank candidate continuations only. It cannot claim semantic, topology, verification, or commit authority.",
+      "authority_keys": [
+        "semantic_authority",
+        "topology_authority",
+        "commit_authority",
+        "verification_authority"
+      ],
+      "severity": "ERROR",
+      "error": "HYPERBOLIC_EVENT_AUTHORITY_FORBIDDEN"
+    },
+    "HE7": {
+      "layer": "hyperbolic_key_grammar_event",
+      "name": "direction_and_distance_valid",
+      "formal": "direction in R^3\\{0}, d>=0",
+      "check": "direction_x/y/z must be a complete nonzero finite vector when present; hyperbolic_distance must be nonnegative when supplied by a provider. A partial direction is accepted with PARTIAL_HYPERBOLIC_DIRECTION only when the record makes no dispatch claim; a dispatchable event is rejected under HE8.",
+      "severity": "ERROR",
+      "error": [
+        "HYPERBOLIC_DIRECTION_NOT_NUMERIC",
+        "HYPERBOLIC_DIRECTION_ZERO",
+        "PARTIAL_HYPERBOLIC_DIRECTION",
+        "HYPERBOLIC_DISTANCE_NEGATIVE"
+      ]
+    },
+    "HE8": {
+      "layer": "hyperbolic_key_grammar_event",
+      "name": "dispatch_requires_complete_event",
+      "formal": "dispatchable(e) => finite(x0..x3) and direction in R^3\\{0} and rho>=0 and B(u,u) in R and interval_class and epistemic_state in {SUPPORTED,MISS,UNKNOWN,CONTRADICTED}",
+      "check": "An event that claims dispatch (declares event_role, or dispatchable 1/true) is a candidate continuation entering attention/routing, so an incomplete vector, missing interval, missing/zero direction, zero rapidity bound violation, missing interval_class or missing/epistemic-invalid epistemic_state is a DISPATCH REJECTION (HYPERBOLIC_EVENT_INCOMPLETE / EPISTEMIC_STATE_MISSING / EPISTEMIC_STATE_INVALID), never a warning. A record that makes no dispatch claim stays an observation and keeps the partial-field warnings — a warning would otherwise let a half-filled event reach the shader.",
+      "severity": "ERROR",
+      "error": [
+        "HYPERBOLIC_EVENT_INCOMPLETE",
+        "EPISTEMIC_STATE_MISSING",
+        "EPISTEMIC_STATE_INVALID"
+      ]
+    },
+    "LB1": {
+      "layer": "lorentz_transition_tensor",
+      "name": "boost_rows_finite_and_complete",
+      "formal": "L in R^4x4",
+      "check": "lorentz_boost row0..row3 must each contain four finite numeric components when the transition is enabled. Missing or malformed rows emit LORENTZ_ROW_INCOMPLETE or LORENTZ_ROW_NOT_NUMERIC.",
+      "severity": "ERROR",
+      "error": [
+        "LORENTZ_ROW_INCOMPLETE",
+        "LORENTZ_ROW_NOT_NUMERIC"
+      ]
+    },
+    "LB2": {
+      "layer": "lorentz_transition_tensor",
+      "name": "boost_controls_bounded",
+      "formal": "enabled in {0,1}, alignment_mix in [0,1], mass_scale >= 0",
+      "check": "lorentz_boost.enabled must be boolean/0/1, alignment_mix must remain in [0,1], and mass_scale must be nonnegative finite. These controls modulate projection geometry only.",
+      "severity": "ERROR",
+      "error": [
+        "LORENTZ_ENABLED_NOT_BOOL",
+        "LORENTZ_ALIGNMENT_OUT_OF_RANGE",
+        "LORENTZ_MASS_SCALE_NEGATIVE"
+      ]
+    },
+    "LB3": {
+      "layer": "lorentz_transition_tensor",
+      "name": "identity_when_disabled",
+      "formal": "enabled=0 => L=I",
+      "check": "When lorentz_boost.enabled is false, row0..row3 must be identity rows within tolerance so a disabled transition cannot silently alter event vectors.",
+      "severity": "ERROR",
+      "error": "LORENTZ_NOT_IDENTITY_WHEN_DISABLED"
+    },
+    "P1": {
+      "layer": "micronaut_profile",
+      "name": "profile_projection_not_authority",
+      "formal": "brain_profile/personality/progression/capability_grams => not semantic_authority and not topology_authority and not commit_authority",
+      "check": "Profile, personality, progression, and capability gram fields may bias routing or presentation, but they must not claim semantic authority, topology authority, verification authority, or commit authority.",
+      "severity": "ERROR",
+      "error": "PROFILE_AUTHORITY_FORBIDDEN"
+    },
+    "P2": {
+      "layer": "micronaut_profile",
+      "name": "profile_metrics_bounded",
+      "formal": "capability_grams in [0,1] and progression.level >= 0",
+      "check": "Capability gram scores must be finite values in [0,1], and progression level must be a nonnegative finite number. These metrics are progression signals, not eligibility authority.",
+      "severity": "ERROR",
+      "error": "PROFILE_METRIC_OUT_OF_RANGE"
+    },
+    "T1": {
+      "layer": "training_gradient",
+      "name": "parameter_generation_nonnegative",
+      "formal": "generation >= 0",
+      "check": "parameter_generation must be a nonnegative integer when present.",
+      "severity": "ERROR",
+      "error": "PARAMETER_GENERATION_NEGATIVE"
+    },
+    "T2": {
+      "layer": "training_gradient",
+      "name": "training_step_nonnegative",
+      "formal": "step >= 0",
+      "check": "training_step must be a nonnegative integer when present.",
+      "severity": "ERROR",
+      "error": "TRAINING_STEP_NEGATIVE"
+    },
+    "T3": {
+      "layer": "training_gradient",
+      "name": "loss_value_nonnegative",
+      "formal": "L >= 0",
+      "check": "loss_value must be a nonnegative finite number when present.",
+      "severity": "ERROR",
+      "error": "LOSS_VALUE_NEGATIVE"
+    },
+    "T4": {
+      "layer": "training_gradient",
+      "name": "gradient_norm_nonnegative",
+      "formal": "||grad_phi L|| >= 0",
+      "check": "grad_norm must be a nonnegative finite number when present.",
+      "severity": "ERROR",
+      "error": "GRADIENT_NORM_NEGATIVE"
+    },
+    "T5": {
+      "layer": "training_gradient",
+      "name": "learning_rate_positive",
+      "formal": "eta > 0",
+      "check": "learning_rate must be a positive finite number when present.",
+      "severity": "ERROR",
+      "error": "LEARNING_RATE_NONPOSITIVE"
+    },
+    "T6": {
+      "layer": "training_gradient",
+      "name": "gradient_clip_positive",
+      "formal": "clip > 0",
+      "check": "gradient_clip must be a positive finite number when present.",
+      "severity": "ERROR",
+      "error": "GRADIENT_CLIP_NONPOSITIVE"
+    },
+    "T7": {
+      "layer": "training_gradient",
+      "name": "training_gradient_projection_only",
+      "formal": "grad_phi L != DeltaF and grad_phi L != DeltaB",
+      "check": "Training gradients may update provider parameters only; they cannot verify relations or commit FoldGraph topology.",
+      "severity": "INFO",
+      "error": "UNKNOWN_ATTRIBUTE_SKIPPED"
+    },
+    "E1": {
+      "layer": "entropy_gradient",
+      "name": "local_entropy_nonnegative",
+      "formal": "H(x) >= 0",
+      "check": "local_entropy must be a nonnegative finite number when present.",
+      "severity": "ERROR",
+      "error": "LOCAL_ENTROPY_NEGATIVE"
+    },
+    "E2": {
+      "layer": "entropy_gradient",
+      "name": "entropy_spike_nonnegative",
+      "formal": "DeltaH >= 0",
+      "check": "entropy_spike must be a nonnegative finite number when present.",
+      "severity": "ERROR",
+      "error": "ENTROPY_SPIKE_NEGATIVE"
+    },
+    "E3": {
+      "layer": "entropy_gradient",
+      "name": "entropy_bound_positive",
+      "formal": "H_max > 0",
+      "check": "entropy_bound must be a positive finite number when present.",
+      "severity": "ERROR",
+      "error": "ENTROPY_BOUND_NONPOSITIVE"
+    },
+    "E4": {
+      "layer": "entropy_gradient",
+      "name": "entropy_bound_gate",
+      "formal": "H(x) <= H_max",
+      "check": "If local_entropy and entropy_bound are both present, local_entropy must not exceed entropy_bound.",
+      "severity": "ERROR",
+      "error": "ENTROPY_BOUND_EXCEEDED"
+    },
+    "E5": {
+      "layer": "entropy_gradient",
+      "name": "entropy_gradient_complete",
+      "check": "If any of eh_x/eh_y/eh_z is present on an edge, all three should be present. Missing components emit PARTIAL_ENTROPY_GRADIENT.",
+      "severity": "WARNING",
+      "error": "PARTIAL_ENTROPY_GRADIENT"
+    },
+    "E6": {
+      "layer": "entropy_gradient",
+      "name": "entropy_gradient_numeric",
+      "formal": "grad H in R^3",
+      "check": "eh_x/eh_y/eh_z and entropy_delta must be finite numbers when present.",
+      "severity": "ERROR",
+      "error": "ENTROPY_GRADIENT_NOT_NUMERIC"
+    },
+    "E7": {
+      "layer": "free_energy_flow",
+      "name": "diffusion_scale_nonnegative",
+      "formal": "beta^-1 >= 0",
+      "check": "diffusion_beta_inv must be a nonnegative finite number when present.",
+      "severity": "ERROR",
+      "error": "DIFFUSION_BETA_INV_NEGATIVE"
+    },
+    "E8": {
+      "layer": "simplicial_mesh",
+      "name": "mesh_radii_nonnegative",
+      "formal": "R >= 0 and r >= 0",
+      "check": "circumradius_R and inradius_r must be nonnegative finite numbers when present on a node.",
+      "severity": "ERROR",
+      "error": [
+        "CIRCUMRADIUS_NEGATIVE",
+        "INRADIUS_NEGATIVE"
+      ]
+    },
+    "E9": {
+      "layer": "simplicial_mesh",
+      "name": "euler_triangle_inequality",
+      "formal": "R >= 2r",
+      "check": "When circumradius_R and inradius_r are both present and nonzero, the local triangular mesh must satisfy Euler triangle inequality R >= 2r.",
+      "severity": "ERROR",
+      "error": "EULER_TRIANGLE_INEQUALITY_BREACH"
+    },
+    "TB1": {
+      "layer": "tensor_bundle",
+      "name": "tensor_rank_pair",
+      "formal": "rank(T)=(p,q), p,q in N",
+      "check": "tensor_rank_p and tensor_rank_q must be declared together and both must be nonnegative integers.",
+      "severity": "ERROR",
+      "error": [
+        "TENSOR_RANK_INCOMPLETE",
+        "TENSOR_RANK_NEGATIVE"
+      ]
+    },
+    "TB2": {
+      "layer": "tensor_bundle",
+      "name": "smooth_section_flag",
+      "formal": "is_smooth_section in {0,1}",
+      "check": "is_smooth_section is a 0/1 projection flag. It does not prove C^infinity smoothness; it admits the node to tensor-bundle projection checks.",
+      "severity": "ERROR",
+      "error": "SMOOTH_SECTION_NOT_BOOL"
+    },
+    "TB3": {
+      "layer": "tensor_bundle",
+      "name": "jacobian_determinant_nonzero",
+      "formal": "det(J) != 0",
+      "check": "jacobian_determinant must be finite and nonzero when present so coordinate transition is locally invertible.",
+      "severity": "ERROR",
+      "error": [
+        "JACOBIAN_DETERMINANT_NOT_NUMERIC",
+        "JACOBIAN_DETERMINANT_ZERO"
+      ]
+    },
+    "TB4": {
+      "layer": "tensor_bundle",
+      "name": "metric_tensor_components_numeric",
+      "formal": "g_ij in R",
+      "check": "g_00/g_01/g_10/g_11 must be numeric when present. Partial metric tensor declarations are accepted with PARTIAL_METRIC_TENSOR warning for lenient parsing.",
+      "severity": "ERROR",
+      "error": [
+        "METRIC_TENSOR_NOT_NUMERIC",
+        "PARTIAL_METRIC_TENSOR"
+      ]
+    },
+    "TB5": {
+      "layer": "tensor_bundle",
+      "name": "metric_tensor_symmetric",
+      "formal": "g_01 = g_10",
+      "check": "The local metric tensor is symmetric. If both mixed components are present and differ, emit METRIC_TENSOR_ASYMMETRIC.",
+      "severity": "ERROR",
+      "error": "METRIC_TENSOR_ASYMMETRIC"
+    },
+    "TB6": {
+      "layer": "tensor_bundle",
+      "name": "metric_tensor_nondegenerate",
+      "formal": "det(g) != 0",
+      "check": "A fully declared 2x2 local metric tensor must be nondegenerate so it can raise/lower indices and support coordinate transitions.",
+      "severity": "ERROR",
+      "error": "METRIC_TENSOR_DEGENERATE"
+    },
+    "TB7": {
+      "layer": "tensor_bundle",
+      "name": "jacobian_weight_positive",
+      "formal": "jacobian_w > 0",
+      "check": "jacobian_w is the positive density/weight factor used by tensor projection providers during coordinate transport.",
+      "severity": "ERROR",
+      "error": [
+        "JACOBIAN_WEIGHT_NOT_NUMERIC",
+        "JACOBIAN_WEIGHT_NONPOSITIVE"
+      ]
+    },
+    "TB8": {
+      "layer": "tensor_bundle",
+      "name": "christoffel_finite",
+      "formal": "Gamma^k_ij in R",
+      "check": "Every christoffel gamma_k_i_j coefficient must be finite numeric when declared. Connection coefficients are geometric diagnostics, not semantic authority.",
+      "severity": "ERROR",
+      "error": "CHRISTOFFEL_NOT_NUMERIC"
+    },
+    "TB9": {
+      "layer": "tensor_bundle",
+      "name": "christoffel_torsion_free",
+      "formal": "Gamma^k_ij = Gamma^k_ji",
+      "check": "Levi-Civita transport requires lower-index symmetry within the declared tolerance. If gamma_k_i_j and gamma_k_j_i are both present and differ beyond ricci_tolerance, emit CHRISTOFFEL_TORSION_NONZERO.",
+      "severity": "ERROR",
+      "error": "CHRISTOFFEL_TORSION_NONZERO"
+    },
+    "TB10": {
+      "layer": "tensor_bundle",
+      "name": "covariant_rank_increment",
+      "formal": "nabla: T^(p,q) -> T^(p,q+1)",
+      "check": "covariant_derivative blocks must preserve contravariant rank p and increase covariant rank q by exactly 1. Mismatch emits COVARIANT_RANK_DRIFT.",
+      "severity": "ERROR",
+      "error": "COVARIANT_RANK_DRIFT"
+    },
+    "TB11": {
+      "layer": "tensor_bundle",
+      "name": "ricci_identity_residual_bounded",
+      "formal": "|[nabla_mu,nabla_nu]V - R V| <= tolerance",
+      "check": "ricci_identity_residual or covariant_derivative.residual must be finite and within ricci_tolerance (default 1e-4). Violations emit RICCI_IDENTITY_VIOLATION.",
+      "severity": "ERROR",
+      "error": "RICCI_IDENTITY_VIOLATION"
+    }
+  },
+  "relation_authority": {
+    "VerifiedRelation": {
+      "definition": "Canonical verb, exact case-sensitive string match against src/micronaut/relation_isa.h",
+      "confidence": 1.0,
+      "path": "direct match — no inference required"
+    },
+    "RelationCandidate": {
+      "definition": "Output of infer_relation_from_lexical() or 'relation' alias. Must pass Ch'en verification before use in B.",
+      "confidence": "< 1.0; assigned by infer_relation_from_lexical() based on lexical similarity",
+      "path": "Candidate → Ch'en → Xul before B update"
+    },
+    "law": "Representation → Relevance → Candidate → Verification — not → Truth",
+    "corollary": "A near-miss verb is a RelationCandidate with reduced confidence, not a VerifiedRelation with a typo. No silent promotion."
+  },
+  "error_taxonomy": {
+    "FATAL": [
+      "MISSING_NODE_ID",
+      "DUPLICATE_NODE_ID",
+      "MISSING_EDGE_ENDPOINT",
+      "INVALID_EDGE_ENDPOINT",
+      "OVERLAY_ID_COLLISION_INTRA",
+      "SIGNATURE_FUNCTOR_FRACTION"
+    ],
+    "ERROR": [
+      "CONFIDENCE_OUT_OF_RANGE",
+      "STATIC_WEIGHT_OUT_OF_RANGE",
+      "HEALTH_OUT_OF_RANGE",
+      "EDGE_WEIGHT_OUT_OF_RANGE",
+      "COORDINATE_NOT_FINITE",
+      "STEM_STARTS_WITH_DIGIT",
+      "PRIOR_MASS_OUT_OF_RANGE",
+      "RISK_BOUND_OUT_OF_RANGE",
+      "LOSS_COST_OUT_OF_RANGE",
+      "INADMISSIBLE_VECTOR_RULE",
+      "INVALID_MUTATION_OP",
+      "BASE_VERSION_NEGATIVE",
+      "DUAL_TWIN_UNRESOLVED",
+      "INVALID_BOUNDARY_TYPE",
+      "EDGE_LENGTH_NONPOSITIVE",
+      "REFRACTIVE_NONPOSITIVE",
+      "INVALID_SINGULARITY_TYPE",
+      "FREQUENCY_NONPOSITIVE",
+      "INVALID_TEXT_BOUNDARY",
+      "VERTEX_POTENTIAL_NOT_NUMERIC",
+      "PHASE_SHIFT_NOT_NUMERIC",
+      "DIVERGENCE_NOT_NUMERIC",
+      "EDGE_POTENTIAL_NOT_NUMERIC",
+      "WAVE_NUMBER_NOT_NUMERIC",
+      "AMPLITUDE_NOT_NUMERIC",
+      "VELOCITY_COMPONENT_NOT_NUMERIC",
+      "CURVE_PARAMETER_NOT_NUMERIC",
+      "ARC_LENGTH_NEGATIVE",
+      "CURVATURE_NEGATIVE",
+      "SCALAR_POTENTIAL_NOT_NUMERIC",
+      "CURVE_INTERVAL_INVALID",
+      "INVALID_FIELD_KIND",
+      "POTENTIAL_DELTA_NOT_NUMERIC",
+      "CURL_COMPONENT_NOT_NUMERIC",
+      "EUCLIDEAN_CURL_NONZERO",
+      "PARAMETER_GENERATION_NEGATIVE",
+      "TRAINING_STEP_NEGATIVE",
+      "LOSS_VALUE_NEGATIVE",
+      "GRADIENT_NORM_NEGATIVE",
+      "LEARNING_RATE_NONPOSITIVE",
+      "GRADIENT_CLIP_NONPOSITIVE",
+      "LOCAL_ENTROPY_NEGATIVE",
+      "ENTROPY_SPIKE_NEGATIVE",
+      "ENTROPY_BOUND_NONPOSITIVE",
+      "ENTROPY_BOUND_EXCEEDED",
+      "ENTROPY_GRADIENT_NOT_NUMERIC",
+      "DIFFUSION_BETA_INV_NEGATIVE",
+      "DEDUCTIVE_PROOF_REQUIRED",
+      "MISS_COLLAPSED_TO_CONTRADICTION",
+      "AXIOM_EXTENSION_CONTRADICTS_LAW",
+      "CHRISTOFFEL_NOT_NUMERIC",
+      "CHRISTOFFEL_TORSION_NONZERO",
+      "COVARIANT_RANK_DRIFT",
+      "RICCI_IDENTITY_VIOLATION",
+      "SPACE_SIGNATURE_INVALID",
+      "RAPIDITY_RHO_NEGATIVE",
+      "MINKOWSKI_INTERVAL_NOT_NUMERIC",
+      "INVALID_INTERVAL_CLASS",
+      "MINKOWSKI_INTERVAL_CLASS_MISMATCH",
+      "MINKOWSKI_EVENT_VECTOR_NOT_NUMERIC",
+      "MINKOWSKI_INTERVAL_MISMATCH",
+      "HYPERBOLIC_EVENT_AUTHORITY_FORBIDDEN",
+      "HYPERBOLIC_DIRECTION_NOT_NUMERIC",
+      "HYPERBOLIC_DIRECTION_ZERO",
+      "HYPERBOLIC_DISTANCE_NEGATIVE",
+      "LORENTZ_ROW_INCOMPLETE",
+      "LORENTZ_ROW_NOT_NUMERIC",
+      "LORENTZ_ENABLED_NOT_BOOL",
+      "LORENTZ_ALIGNMENT_OUT_OF_RANGE",
+      "LORENTZ_MASS_SCALE_NEGATIVE",
+      "LORENTZ_NOT_IDENTITY_WHEN_DISABLED",
+      "HYPERBOLIC_EVENT_INCOMPLETE",
+      "EPISTEMIC_STATE_MISSING",
+      "EPISTEMIC_STATE_INVALID"
+    ],
+    "WARNING": [
+      "BOTH_VERB_AND_RELATION_PRESENT",
+      "RELATION_ALIAS_USED",
+      "INFER_CANDIDATE_USED",
+      "NEAR_MISS_VERB",
+      "PARTIAL_COORDINATE_VECTOR",
+      "DUAL_TWIN_NOT_RECIPROCAL",
+      "PARTIAL_VELOCITY_VECTOR",
+      "PARTIAL_ENTROPY_GRADIENT",
+      "PARTIAL_MINKOWSKI_EVENT_VECTOR",
+      "PARTIAL_HYPERBOLIC_DIRECTION"
+    ],
+    "INFO": [
+      "UNKNOWN_ATTRIBUTE_SKIPPED"
+    ]
+  },
+  "grade": {
+    "PARSED": "Syntactically valid per gml.khanary.ebnf. ParsedGraph produced. No semantic guarantees.",
+    "VALID": "All FATAL and ERROR checks pass. VerifiedGraph produced. WARNINGs permitted.",
+    "ADMITTED": "VerifiedGraph accepted into B' via Proposal → Ch'en → XCFE → XulGate. This grade is assigned by the Xul commit path, not by this validator."
+  },
+  "ebnf_observations": {
+    "id_required_not_in_syntax": {
+      "observation": "node 'id' and edge 'source'/'target' are described as required in comments but not enforced by the EBNF (zero-or-more node_attr).",
+      "resolution": "Semantic validator checks V1, V2, V3. Grammar remains permissive for ingestion; the validator enforces semantic requirements. No EBNF change needed."
+    },
+    "verb_relation_precedence": {
+      "observation": "The 'verb wins over relation' rule is semantic, not in the EBNF.",
+      "resolution": "Checks R1, R2 enforce this at the validator layer."
+    },
+    "relation_verb_catch_all": {
+      "observation": "relation_verb production includes a string catch-all, so @relateed_to parses cleanly and reaches infer_relation_from_lexical().",
+      "resolution": "Checks R4, R5 classify the result as RelationCandidate with reduced confidence. relation_authority law prevents silent promotion to VerifiedRelation."
+    },
+    "file_stem_digit_prefix": {
+      "observation": "file_stem is declared as ident in the EBNF (requires letter or underscore prefix), but the derivation rule allows stems starting with a digit (e.g. filename '123.gml' → stem '123').",
+      "resolution": "Check V5 normalises the stem by prepending '_' and emits STEM_STARTS_WITH_DIGIT. Overlay IDs remain valid idents after normalisation."
+    },
+    "float_1_dot": {
+      "observation": "The float production allows '1.' (digits + dot + zero fractional digits) via zero-or-more { digit }.",
+      "resolution": "Accepted as valid. No validator action required. Parser must handle it."
+    },
+    "escape_seq_passthrough": {
+      "observation": "Unknown escape sequences (e.g. \\q) are passed through literally — the prose is ambiguous about whether the backslash is retained.",
+      "resolution": "Parser-layer concern, not validator-layer. Validator receives parsed string values; the escape handling is completed before validation runs."
+    }
+  },
+  "related": [
+    "data/grammar/gml.khanary.ebnf",
+    "data/grammar/fold_graph.xml",
+    "data/grammar/vectors.mml",
+    "data/manifest/gml.manifest.json",
+    "src/world/gml_parser.cpp",
+    "src/world/field_dag.cpp",
+    "src/micronaut/relation_isa.h"
+  ],
+  "decision_theory": {
+    "theta": "authoritative latent semantic state preserved by FoldGraph B",
+    "decision_rule": "δ(x) maps observed GML/Fold/episode evidence to a derived VECTOR-µ geometry action",
+    "loss": "L(θ,a) is represented by edge loss_cost or learned risk telemetry",
+    "risk": "R(θ,δ)=E_{x|θ}[L(θ,δ(x))]",
+    "bayes": "minimize integrated Bayes risk against prior_mass Λ(θ)",
+    "minimax": "minimize maximum structural loss; flags INADMISSIBLE_VECTOR_RULE before Ch'en/Xul admission",
+    "authority_boundary": "Statistical risk constrains projection admissibility only. It cannot verify a relation or commit B."
+  },
+  "differential_comparison": {
+    "delta_graph": "ΔG=G_B\\G_A=<ΔV,ΔE>",
+    "mutation_ops": [
+      "insert",
+      "delete",
+      "modify",
+      "unchanged"
+    ],
+    "loss": "L_diff(ΔG,ΔF)=||Proj(ΔG)-ΔF||^2",
+    "authority_boundary": "Differential comparison tracks structural drift; XulGate remains the only topology mutation path."
+  },
+  "quantum_graph": {
+    "graph": "Metric graph Gamma=(V,E) with each edge e represented by interval [0,L_e].",
+    "operator": "GraphHamiltonian psi_e = -d^2 psi_e/dx^2 + U_e psi_e",
+    "boundary_conditions": [
+      "kirchhoff",
+      "dirichlet",
+      "robin"
+    ],
+    "authority_boundary": "Quantum graph fields are projection geometry only; FoldGraph B and RelationISA remain semantic authority."
+  },
+  "plane_wave_field": {
+    "edge_wave": "psi_e(x,t)=A_e exp(i(k_e x - omega t))",
+    "standing_wave": "psi_e(x)=A_e exp(i k_e x)+B_e exp(-i k_e x)",
+    "scattering": "S_mj^(v)=2/d_v-delta_mj under Kirchhoff/Neumann vertex matching",
+    "authority_boundary": "Scattering and resonance supply relevance geometry only."
+  },
+  "continuous_vector_field": {
+    "field": "V=sum_i V_i(x) partial/partial x_i",
+    "gradient_flow": "gamma'(t)=V(gamma(t))",
+    "lie_bracket": "[X,Y](f)=X(Y(f))-Y(X(f))",
+    "index_law": "sum_z LocalIndex(z,V)=EulerCharacteristic(M)",
+    "authority_boundary": "Flow fields guide derived trajectories; they do not mutate topology."
+  },
+  "structural_boundaries": {
+    "tokens": [
+      "◄art►",
+      "◄par►",
+      "◄s►",
+      "◄/s►",
+      "◄/par►",
+      "◄/art►"
+    ],
+    "role": "Boundary tokens reset local n-gram context and act as declared field sinks.",
+    "law": "N-gram context may not bleed across article/paragraph/sentence boundaries without an admitted boundary transition."
+  },
+  "differentiable_curve": {
+    "curve": "gamma:I->X maps token/gram progression to a derived trajectory over VECTOR-µ geometry.",
+    "tangent_velocity": "V(t)=d gamma(t)/dt lives in T_gamma(t)(M_mu).",
+    "line_integral": "DeltaF_curve=int_gamma V(s) dot ds tracks projection displacement only.",
+    "curvature": "kappa(t) marks structural-scale changes such as paragraph inflection and article termination.",
+    "authority_boundary": "A differentiable curve is provider geometry over B; it cannot verify or commit FoldGraph topology."
+  },
+  "euclidean_gradient_field": {
+    "field": "V(x)=grad f(x) in flat R^n with g_ij=delta_ij.",
+    "conservative_integral": "int_gamma grad f dot ds = f(gamma(b))-f(gamma(a)).",
+    "zero_curl": "curl(grad f)=0; declared curl components must be zero for certified euclidean_gradient edges.",
+    "fast_path": "Factory may use this flat provider path before Riemannian/quantum providers, because Gamma^k_ij=0.",
+    "authority_boundary": "Euclidean gradient checks validate projection geometry only; Ch'en/Xul remain semantic authority."
+  },
+  "training_gradients": {
+    "parameters": "phi denotes provider parameters for VECTOR-µ/METRIC-µ projection geometry.",
+    "loss": "L_total may combine contrastive, bridge, differential, and risk terms.",
+    "gradient": "g_phi = grad_phi L_total tunes provider geometry only.",
+    "update": "phi_next = phi - eta * clip(g_phi, clip).",
+    "authority_boundary": "TrainingGradient != FoldDelta and ParameterUpdate != topology commit; Ch'en/Xul remain semantic authority."
+  },
+  "entropy_gradient": {
+    "entropy": "H(x)=-sum_w P(w|x) log P(w|x).",
+    "gradient": "grad H(x)=(dH/dx_1,...,dH/dx_n), stored on GML edges as eh_x/eh_y/eh_z.",
+    "spike": "entropy_spike is a nonnegative structural uncertainty jump used for gating/repair.",
+    "bound": "entropy_bound is an optional maximum admitted entropy; breach emits ENTROPY_BOUND_EXCEEDED.",
+    "authority_boundary": "Entropy gradients shape exploration/repair geometry only; they cannot verify relations or commit B."
+  },
+  "free_energy_flow": {
+    "flow": "V(x)=-grad f(x)+beta^-1 grad H(x).",
+    "fokker_planck": "partial_t rho = div(rho grad f)+beta^-1 Delta rho.",
+    "diffusion_scale": "diffusion_beta_inv stores beta^-1 and must be nonnegative.",
+    "authority_boundary": "Free-energy flow combines relevance and entropy projection fields; Ch'en/Xul remain semantic authority."
+  },
+  "tensor_bundle": {
+    "component": "TENSOR-µ",
+    "field_kind": "tensor_field",
+    "rank": "(p,q)",
+    "metric": "g_ij",
+    "transform": "T^{i_prime}_{j_prime}=T^i_j*(dx^{i_prime}/dx^i)*(dx^j/dx^{j_prime})",
+    "authority_boundary": "TENSOR-µ learns tensor-bundle projection geometry over B; it cannot verify semantic truth, rewrite RelationISA, or commit topology."
+  },
+  "micronaut_attraction": {
+    "component": "Micronaut as phase-scoped execution container",
+    "law": "Phi_mu(Q)=Mass_mu*cos(Q,K_mu)*(W_mu*C_mu*R_mu)",
+    "mass_source": "Derived from co-occurrence mass M_{Y,X}, governs/tokens neighborhoods, folds, and static_weight; Mass_mu is projection evidence, not fact authority.",
+    "anchor": "K_mu is the vector_meta/coordinate anchor for the Micronaut attraction basin.",
+    "basin": "governs/tokens describe the catchment neighborhood; capabilities/sandbox define the execution boundary.",
+    "capture_gate": "CaptureGate(Q,mu) requires Phi_mu(Q) >= EntropyDiffusion_mu AND policy_ok AND capable AND xcfe_ok.",
+    "authority_boundary": "Micronaut attraction pulls attention and admits candidates into a sandbox. Ch'en verifies results and Xul is the only persistence/topology commit boundary."
+  },
+  "deductive_system": {
+    "formal_system": "D=<Lambda,Sigma,{(Gamma,phi)}>",
+    "logical_axioms_lambda": "Primary runtime laws from fold_graph.xml and gml.validator.json.",
+    "nonlogical_axioms_sigma": "Verified base topology B and admitted domain relations from GML assets.",
+    "rules_of_inference": "K'UHUL phase contracts and Micronaut proof traces.",
+    "semantic_completeness_boundary": "If Sigma models phi inside the current verified context, a deductive proof trace must exist before the claim is exposed as SUPPORTED.",
+    "axiomatic_incompleteness_boundary": "UNKNOWN and MISS preserve unresolved alternatives; they do not imply phi or not phi.",
+    "authority_boundary": "TENSOR/METRIC/GPU projections can propose or rank proof routes, but Ch'en verifies and Xul commits."
+  },
+  "algebraic_interpretation": {
+    "signature": "F",
+    "algebra": "alpha",
+    "phase": "theta",
+    "fold": "Fold_alpha(N(k), theta)",
+    "collapse": "Xul(Fold_alpha(N(k), theta)) -> k_prime",
+    "rank_invariant": "MatrixRank(T_transformed) == MatrixRank(T_substrate)",
+    "authority_boundary": "Algebraic folds are interpretation/projection contracts. They preserve structural signature F and cannot mutate Fold topology B without Ch'en, XCFE, and Xul authority."
+  },
+  "hyperbolic_key_grammar_event": {
+    "component": "Key-grammar hyperbolic event projection",
+    "schema": "urn:kuhul:khanary:schema:key-grammar-event:v1",
+    "space_signature": "Minkowski_Minus_Plus_Plus_Plus",
+    "bilinear_form": "B(u,v)=-u0*v0+u1*v1+u2*v2+u3*v3",
+    "distance": "d(u,v)=arcosh(-B(u,v))",
+    "interval_classes": {
+      "timelike_candidate": "B<0: causally admissible candidate continuation",
+      "lightlike_boundary": "B=0: light-cone boundary guard",
+      "spacelike_candidate": "B>0: isolated or unreachable corridor",
+      "unclassified": "interval not yet classified by Ch'en or projection provider"
+    },
+    "authority_boundary": "Hyperbolic events are future-directed candidate observations. They may guide routing but semantic_authority remains false; Ch'en verifies and Xul commits."
+  },
+  "hyperbolic_dispatch": {
+    "rule": "dispatchable(e) => complete(e)",
+    "dispatch_claim_keys": ["event_role", "dispatchable"],
+    "required_fields": [
+      "minkowski_t", "minkowski_x", "minkowski_y", "minkowski_z",
+      "direction_x", "direction_y", "direction_z",
+      "rapidity_rho", "minkowski_interval", "interval_class", "epistemic_state"
+    ],
+    "epistemic_states": ["SUPPORTED", "MISS", "UNKNOWN", "CONTRADICTED"],
+    "errors": [
+      "HYPERBOLIC_EVENT_INCOMPLETE",
+      "EPISTEMIC_STATE_MISSING",
+      "EPISTEMIC_STATE_INVALID"
+    ],
+    "observation_boundary": "A record that makes no dispatch claim is an observation: it may carry partial geometry and is reported with PARTIAL_MINKOWSKI_EVENT_VECTOR / PARTIAL_HYPERBOLIC_DIRECTION. The moment it claims dispatch (event_role present, or dispatchable 1/true), every required field becomes mandatory and any gap is a rejection.",
+    "runtime_mirror": "src/world/vector_projection.cpp admit_hyperbolic_event() enforces the same rule before any record is packed for attention.hlsl; pack_hyperbolic_attention_records_checked() reports the rejects instead of coercing them into the pack.",
+    "authority_boundary": "Completeness is an admission precondition for projection geometry. It is not verification: Ch'en asserts, XCFE authorizes, Xul commits."
+  }
+}

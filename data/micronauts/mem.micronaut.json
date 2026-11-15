@@ -1,0 +1,61 @@
+{
+  "@kind": "kuhul.micronaut.atomic.v1",
+  "id": "MEM-µ",
+  "descriptor_status": "active",
+  "track_ref": "data/tracks/MEM-u.semantic-tracks.v1.json",
+  "manifest": {
+    "name": "MEM-µ",
+    "version": "1.0.0",
+    "description": "Gram-store memory micronaut — Pop-phase gramRead/gramWrite, confidence-keyed retrieval, interaction replay. Horizontal fold: single-turn memory access with confidence tracking."
+  },
+  "api": {
+    "namespace": "mem",
+    "atomic_keys": ["mem.read", "mem.store", "mem.recall", "mem.replay", "mem.health"],
+    "verb_surface": ["MEM READ *", "MEM STORE *", "MEM RECALL *", "MEM REPLAY *", "MEM STATUS"]
+  },
+  "xcfe": {
+    "mode": "xcfe_gated_read_only",
+    "escalation_mode": "proposal_only",
+    "authority": "xcfe_gated_read_only",
+    "forbidden": ["emit_response", "mutate_topology", "commit_patterns", "direct_dispatch"]
+  },
+  "atomic_key_defs": {
+    "mem.read": {
+      "@type": "gram_read",
+      "description": "Pop-phase: read value from gram store by key and namespace. Returns stored value with confidence score and phase provenance.",
+      "phases": ["Pop"],
+      "authority": "data_only"
+    },
+    "mem.store": {
+      "@type": "gram_write",
+      "description": "Pop/Xul-phase: write value to gram store with confidence score, phase tag, and source micronaut. xcfe_required for write ops.",
+      "phases": ["Pop", "Xul"],
+      "xcfe_required": true,
+      "authority": "xcfe_gated"
+    },
+    "mem.recall": {
+      "@type": "confidence_recall",
+      "description": "Pop-phase: retrieve entries from gram store filtered by namespace, confidence threshold, and phase. Returns ranked list of matching entries.",
+      "phases": ["Pop"],
+      "authority": "data_only"
+    },
+    "mem.replay": {
+      "@type": "replay_interactions",
+      "description": "Pop/Wo-phase: replay a sequence of gram-stored interactions by session ID or topic. Returns ordered interaction records.",
+      "phases": ["Pop", "Wo"],
+      "authority": "data_only"
+    },
+    "mem.health": {
+      "@type": "status",
+      "description": "Pop-phase: reports gram store size, namespace coverage, confidence distribution, and replay buffer depth.",
+      "phases": ["Pop"]
+    }
+  },
+  "program_contract": {
+    "drivers": ["Micronaut.Core.dll", "Micronaut.Memory.dll"],
+    "sandbox": "xcfe_gated_read_only",
+    "learning": false
+  },
+  "srai": { "enabled": false },
+  "capabilities": ["gram-store", "confidence-tracking", "Pop-read", "horizontal-fold", "interaction-replay"]
+}

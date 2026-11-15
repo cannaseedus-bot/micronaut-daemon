@@ -1,0 +1,22 @@
+{
+  "@program": "threads.compute",
+  "@kind": "kuhul.opencl.compute.v1",
+  "@backend": "opencl_1_2",
+  "@fallback": "opencl_1_2_cpu",
+  "@kernel": {
+    "source": "drivers/opencl_1_2/tensor_evolve.cl",
+    "entry": "tensor_evolve",
+    "work_dimensions": 1,
+    "work_item": "one tensor element"
+  },
+  "@state": { "phase": "Pop", "tensor": null, "scratch": null, "result": null },
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "threads.bind" },
+    { "@op": "OPENCL_BIND", "@args": ["$tensor", "read_write", "$scratch", "read_write"], "@out": "bindings" },
+    { "@op": "FOLD_EXIT", "@fold": "Wo", "@node": "threads.bind", "@args": ["$bindings"] },
+    { "@op": "OPENCL_BUILD", "@source": "drivers/opencl_1_2/tensor_evolve.cl", "@options": "-cl-std=CL1.2", "@out": "kernel" },
+    { "@op": "OPENCL_DISPATCH", "@kernel": "tensor_evolve", "@args": ["$tensor", "$scratch", "$batch", "$sequence", "$hidden", "$dt", "$damping"], "@out": "result" },
+    { "@op": "FOLD_EXIT", "@fold": "Chen", "@node": "threads.verify", "@args": ["$result"] },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "threads.commit", "@args": ["$result"] }
+  ]
+}

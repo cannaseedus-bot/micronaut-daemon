@@ -1,0 +1,287 @@
+{
+  "@no-eval": true,
+  "id": "TRAIN-µ",
+
+  "schemes": ["train"],
+  "description": "Training pipeline micronaut — operates under Mx2LM. Owns the full corpus→.kblm lifecycle: corpus extraction (extract_corpus.py), n-gram counting, ARPA model build, and KBLM pack (pack_srilm.py). Dispatched when a user asks to retrain, rebuild the language model, add corpus files, or when Mx2LM detects its .kblm is stale. AIML patterns in data/alice/train-u.aiml. Produces bin/mx2lm.kblm which Mx2LM consumes for candidate scoring.",
+  "phase": "Sek",
+  "pipeline_phases": [
+    "Pop",
+    "Wo",
+    "Yax",
+    "Sek",
+    "Ch'en",
+    "Xul"
+  ],
+  "category": "execution",
+  "confidence": 1.0,
+  "parent_micronaut": "Mx2LM",
+  "governs": [
+    "train",
+    "retrain",
+    "rebuild",
+    "rebuild corpus",
+    "rebuild model",
+    "rebuild lm",
+    "rebuild language model",
+    "retrain lm",
+    "retrain language model",
+    "rebuild kblm",
+    "train srilm",
+    "train mx2lm",
+    "extract corpus",
+    "add corpus",
+    "corpus update",
+    "corpus rebuild",
+    "new corpus",
+    "update training data",
+    "add training data",
+    "training pipeline",
+    "train ngram",
+    "train n-gram",
+    "pack srilm",
+    "pack arpa",
+    "pack kblm",
+    "arpa",
+    "kblm",
+    "mx2lm train",
+    "mx2lm rebuild",
+    "mx2lm retrain",
+    "language model train",
+    "lm train",
+    "ngram count",
+    "ngram-count",
+    "train_srilm",
+    "srilm",
+    "corpus extraction",
+    "train-µ",
+    "train-u"
+  ],
+  "capabilities": [
+    "corpus-extraction",
+    "corpus-file-scan",
+    "bom-jsonl-ingest",
+    "parquet-ingest",
+    "semantic-json-ingest",
+    "ngram-count-run",
+    "arpa-build",
+    "kblm-pack",
+    "kblm-verify",
+    "kblm-commit",
+    "training-log-write",
+    "Sek-compute",
+    "chen-kblm-verification",
+    "xul-model-commit",
+    "aiml-pattern-train"
+  ],
+  "pipeline": {
+    "pop": {
+      "op": "TrainPop::scan_corpus_sources",
+      "description": "Ingest the corpus source list from srilm.sources in the track file. Detect which files are new or modified since the last training run (stored in gram key train:last_run). Emit a change manifest.",
+      "gram_key": "train:corpus_manifest"
+    },
+    "wo": {
+      "op": "TrainWo::build_file_manifest",
+      "description": "Build ordered file manifest across all source types: directory (*.jsonl scan), parquet (.parquet), flat JSONL. Annotate each entry with schema type so extract_corpus.py can route correctly.",
+      "gram_key": "train:file_manifest"
+    },
+    "yax": {
+      "op": "TrainYax::admission_gate",
+      "description": "Admission gate: accept only sources that exist on disk and have content. Skip sources that are unchanged since train:last_run (mtime-based). Load semantic bias evidence from bias_log_reference (field/distilled/compare.bias.jsonl) and store in train:bias_evidence for use at Sek. Emit the admitted file list.",
+      "gram_key": "train:admitted_files",
+      "bias_log_reference": "field/distilled/compare.bias.jsonl",
+      "bias_gram_key": "train:bias_evidence"
+    },
+    "sek": {
+      "op": "TrainSek::run_pipeline",
+      "description": "Execute the 3-step pipeline: (1) py -3 tools\\extract_corpus.py <admitted_files> --append -o tools\\corpus.txt, (2) ngram-count.exe -text corpus.txt -order 3 -write srilm.counts, (3) ngram-count.exe -read srilm.counts -lm mx2lm.arpa -unk -cdiscount 0.5. Streams stdout to gram key train:pipeline_log.",
+      "gram_key": "train:pipeline_log",
+      "tools": [
+        "tools\\extract_corpus.py",
+        "C:\\Users\\canna\\.AIML\\runtime\\bin\\ngram-count.exe"
+      ]
+    },
+    "chen": {
+      "op": "TrainChen::verify_kblm",
+      "description": "Run pack_srilm.py --verify on the output ARPA, then verify the produced .kblm CRC32. Read bin/mx2lm.kblm header: check magic=='KBLM', vocab_size > 0, total_ngrams > 0. If verification fails, status = CONTRADICTED and pipeline is blocked at Ch'en.",
+      "gram_key": "train:kblm_verify_status",
+      "pass_status": "SUPPORTED",
+      "fail_status": "CONTRADICTED"
+    },
+    "xul": {
+      "op": "TrainXul::commit_model",
+      "description": "Commit the new .kblm: write train:last_run timestamp to gram store, update train:model_path, notify Mx2LM via gram key mx2lm:kblm_ready = true. Xul is the only phase that writes the training outcome to persistent state.",
+      "gram_key": "train:last_run",
+      "notifies": "mx2lm:kblm_ready"
+    }
+  },
+  "corpus_sources": [
+    {
+      "path": "E:\\data\\coder_outputs",
+      "kind": "directory",
+      "schema": "messages_bom",
+      "note": "chunk_1.jsonl .. chunk_35.jsonl, UTF-8 BOM, messages format"
+    },
+    {
+      "path": "E:\\data\\KodCode\\train-00000-of-00001.parquet",
+      "kind": "parquet",
+      "schema": "kodcode",
+      "note": "question/solution/test columns; requires pyarrow"
+    },
+    {
+      "path": "E:\\data\\math_data\\merged_for_gpt2.refined.jsonl",
+      "kind": "file",
+      "schema": "prompt_response",
+      "note": "prompt/response flat format"
+    },
+    {
+      "path": "E:\\data\\semantic-json",
+      "kind": "directory",
+      "schema": "semantic_json",
+      "note": "AST/math semantic gold mine; coarse_gram dot-paths, id labels, NL strings"
+    },
+    {
+      "path": "E:\\data\\smgm16_gpu_bridge\\coder_outputs.train.jsonl",
+      "kind": "file",
+      "schema": "messages_plus_flat",
+      "note": "messages array + input/output/question at top level"
+    },
+    {
+      "path": "E:\\data\\smgm16_gpu_bridge\\coder_outputs.val.jsonl",
+      "kind": "file",
+      "schema": "messages_plus_flat"
+    },
+    {
+      "path": "E:\\data\\smgm16_gpu_bridge\\basic_chat\\basic_chat.train.jsonl",
+      "kind": "file",
+      "schema": "prompt_response"
+    },
+    {
+      "path": "E:\\data\\smgm16_gpu_bridge\\basic_chat\\basic_chat.val.jsonl",
+      "kind": "file",
+      "schema": "prompt_response"
+    },
+    {
+      "path": "C:\\Users\\canna\\.AIML\\runtime\\bin\\data",
+      "kind": "directory",
+      "schema": "auto",
+      "note": "original SRILM runtime corpora: wikitext2, squad, ag_news, english-triples"
+    }
+  ],
+  "output": {
+    "kblm": "bin/mx2lm.kblm",
+    "arpa": "tools/mx2lm.arpa",
+    "counts": "tools/srilm.counts",
+    "corpus": "tools/corpus.txt",
+    "log": "data/journal/train-events.jsonl",
+    "bias_log_reference": "field/distilled/compare.bias.jsonl"
+  },
+  "gram_key_schema": {
+    "last_run":          "train:last_run",
+    "corpus_manifest":   "train:corpus_manifest",
+    "file_manifest":     "train:file_manifest",
+    "admitted_files":    "train:admitted_files",
+    "pipeline_log":      "train:pipeline_log",
+    "kblm_verify":       "train:kblm_verify_status",
+    "model_path":        "train:model_path",
+    "sentence_count":    "train:sentence_count",
+    "kblm_ready_notify": "mx2lm:kblm_ready",
+    "bias_evidence":     "train:bias_evidence"
+  },
+  "trigger_conditions": [
+    "user explicitly asks to train, retrain, or rebuild the language model",
+    "user adds new corpus files and asks to update the model",
+    "mx2lm:kblm_ready is false and Mx2LM is dispatched",
+    "train:last_run is older than 7 days (advisory, not enforced — Ch'en verifies)"
+  ],
+  "epistemic_states": {
+    "SUPPORTED": "kblm CRC verified, vocab_size > 0, total_ngrams > 0",
+    "MISS":      "one or more corpus sources not found on disk",
+    "UNKNOWN":   "pipeline ran but kblm verification not yet performed",
+    "CONTRADICTED": "kblm CRC mismatch or ngram-count.exe failed"
+  },
+  "relations": [
+    {
+      "target": "Mx2LM",
+      "verb": "@produces",
+      "directed": true,
+      "note": "TRAIN-µ builds the .kblm that Mx2LM consumes for candidate scoring"
+    },
+    {
+      "target": "Mx2LM",
+      "verb": "@supervised_by",
+      "directed": true,
+      "note": "Mx2LM is the parent; TRAIN-µ operates in its authority domain"
+    },
+    {
+      "target": "TOOL-µ",
+      "verb": "@delegates_to",
+      "directed": true,
+      "note": "shell execution (ngram-count.exe, py -3) routed through TOOL-µ"
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "TrainPop::scan_corpus_sources",
+      "key": "train:corpus_manifest",
+      "class": "khanary::kuhul::TrainPop"
+    },
+    {
+      "phase": "Wo",
+      "op": "TrainWo::build_file_manifest",
+      "key": "train:file_manifest",
+      "class": "khanary::kuhul::TrainWo"
+    },
+    {
+      "phase": "Yax",
+      "op": "TrainYax::admission_gate",
+      "key": "train:admitted_files",
+      "class": "khanary::kuhul::TrainYax"
+    },
+    {
+      "phase": "Sek",
+      "op": "TrainSek::run_pipeline",
+      "key": "train:pipeline_log",
+      "class": "khanary::kuhul::TrainSek"
+    },
+    {
+      "phase": "Ch'en",
+      "op": "TrainChen::verify_kblm",
+      "key": "train:kblm_verify_status",
+      "class": "khanary::kuhul::TrainChen"
+    },
+    {
+      "phase": "Xul",
+      "op": "TrainXul::commit_model",
+      "key": "train:last_run",
+      "class": "khanary::kuhul::TrainXul"
+    }
+  ],
+  "pattern_source": "aiml",
+  "aiml_file": "data/alice/train-u.aiml",
+  "memory_patterns": [
+    "train:last_run",
+    "train:model_path",
+    "train:sentence_count",
+    "train:kblm_verify_status"
+  ],
+  "sandbox": {
+    "gram_ns": "TRAIN",
+    "manifest_access": ["words", "micronaut", "kuhul"],
+    "effects": [
+      "gramRead",
+      "gramWrite",
+      "gramRead:bias-log",
+      "shell:ngram-count",
+      "shell:py-extract-corpus",
+      "shell:py-pack-srilm",
+      "file:corpus.txt",
+      "file:mx2lm.arpa",
+      "file:mx2lm.kblm",
+      "file:field/distilled/compare.bias.jsonl:read"
+    ],
+    "ports": [],
+    "coordinator": false
+  }
+}

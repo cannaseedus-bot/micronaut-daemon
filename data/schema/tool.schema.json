@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:khanary:schema:tool:1",
+  "title": "ToolDef",
+  "description": "Schema for semantic.tool.v1 catalog declarations. host_approved is not admissible in XJSON — it is set by ToolRegistry.register_tool() out-of-band. Self-declared host approval is rejected at parse time (Declared Role != Verified Authority).",
+  "type": "object",
+  "required": ["@kind", "@id", "@capability"],
+  "properties": {
+    "@kind":          { "type": "string", "const": "semantic.tool.v1" },
+    "@id":            { "type": "string" },
+    "@capability":    { "type": "string" },
+    "@role": {
+      "type": "string",
+      "enum": ["parse", "compile", "generate", "transform", "validate", "analyze", "retrieve", "classify", "rank", "route", "orchestrate", "execute"],
+      "description": "Primary responsibility of this contract, not an authority grant. Different tools owned by one Micronaut may have different roles."
+    },
+    "@provider_ref":  { "type": "string", "description": "Registered provider id; resolved at dispatch time by ToolRegistry." },
+    "@provider_type": { "type": "string", "enum": ["system", "host", "plugin"] },
+    "@governs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "@description":   { "type": "string" },
+    "@sandbox": {
+      "type": "object",
+      "required": ["filesystem", "network", "process", "effects", "admission"],
+      "properties": {
+        "filesystem": { "enum": ["none", "input_only", "host_temp_only", "host_managed"] },
+        "network": { "enum": ["none", "host_allowlist", "host_managed"] },
+        "process": { "enum": ["none", "host_allowlist", "host_managed"] },
+        "effects": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+        "admission": { "const": "host_policy" }
+      },
+      "additionalProperties": false,
+      "description": "Requested operational envelope for the provider. Host policy remains authoritative."
+    },
+    "@field_relativity": {
+      "type": "object",
+      "required": ["anchor", "scope", "relation_types", "max_hops", "cross_track"],
+      "properties": {
+        "anchor": { "type": "string", "minLength": 1 },
+        "scope": { "enum": ["input", "local_field", "neighbor_fields", "track", "graph"] },
+        "relation_types": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+        "max_hops": { "type": "integer", "minimum": 0, "maximum": 64 },
+        "cross_track": { "enum": ["deny", "references_only", "host_gated"] }
+      },
+      "additionalProperties": false,
+      "description": "Declares the semantic context a provider may consider. This is not WCR relativity (R), a capability grant, or XCFE admission."
+    }
+  },
+  "not": {
+    "required": ["@host_approved"],
+    "properties": {
+      "@host_approved": { "type": "boolean", "const": true }
+    }
+  }
+}

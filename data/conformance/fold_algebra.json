@@ -1,0 +1,98 @@
+{
+  "description": "Conformance fixtures for K'UHUL Fold Algebra. Each case is an execution-ordered fold sequence plus the verdict the composition law must reach. Contract authority: data/grammar/kuhul-fold-algebra.contracts.json and data/grammar/kuhul-fold-algebra.ebnf.",
+
+  "legal": [
+    {
+      "id": "kfa-legal-001",
+      "description": "The six-fold cycle: Pop -> Wo -> Yax -> Sek -> Ch'en -> Xul. Structurally legal, five crossings, each still owed to XCFE.",
+      "sequence": ["F_Pop", "F_Wo", "F_Yax", "F_Sek", "F_Ch'en", "F_Xul"],
+      "expect_phase_crossings": 5,
+      "expect_admission": true,
+      "expect_pure": false
+    },
+    {
+      "id": "kfa-legal-002",
+      "description": "The SRAI dispatch pipeline is legal end to end, because VERIFY stands between RANK and TRAIN.",
+      "sequence": ["SCORE", "RANK", "COLLAPSE", "VERIFY", "TRAIN"],
+      "expect_phase_crossings": 2,
+      "expect_admission": true,
+      "expect_pure": false,
+      "expect_rewrites": { "regroup": false, "reorder": false, "distribute": false }
+    },
+    {
+      "id": "kfa-legal-003",
+      "description": "Sek(C) = Rank(Filter(Map(C))). Inner operators are phase-agnostic, so this crosses no boundary at all.",
+      "sequence": ["MAP", "FILTER", "RANK"],
+      "expect_phase_crossings": 0,
+      "expect_admission": false
+    },
+    {
+      "id": "kfa-legal-004",
+      "description": "The identity is the unit: composing it into a plan changes nothing but the elision list.",
+      "sequence": ["FOLD_IDENTITY", "F_Pop", "FOLD_IDENTITY", "F_Wo"],
+      "expect_phase_crossings": 1,
+      "expect_elided": ["FOLD_IDENTITY", "FOLD_IDENTITY"]
+    },
+    {
+      "id": "kfa-legal-005",
+      "description": "TRAIN reached through VERIFY, which is the only composition that satisfies the verification rule.",
+      "sequence": ["VERIFY", "TRAIN"],
+      "expect_phase_crossings": 1,
+      "expect_admission": true
+    },
+    {
+      "id": "kfa-legal-006",
+      "description": "A single fold is a legal plan of length one and crosses nothing.",
+      "sequence": ["SCORE"],
+      "expect_phase_crossings": 0,
+      "expect_admission": false
+    },
+    {
+      "id": "kfa-legal-007",
+      "description": "Two folds inside the same phase compose with no admission and no boundary.",
+      "sequence": ["SCORE", "RANK"],
+      "expect_phase_crossings": 0,
+      "expect_admission": false
+    },
+    {
+      "id": "kfa-legal-008",
+      "description": "A plan of identities only is the identity: legal, inert, and phase-free.",
+      "sequence": ["FOLD_IDENTITY"],
+      "expect_phase_crossings": 0,
+      "expect_admission": false
+    }
+  ],
+
+  "illegal": [
+    {
+      "id": "kfa-illegal-001",
+      "description": "TRAIN fed straight from SCORE. The types chain, so this is exactly the case where only the verification rule saves it: raw rank alone does not authorize learning.",
+      "sequence": ["SCORE", "TRAIN"],
+      "expect_code": "REQUIRES_VERIFICATION"
+    },
+    {
+      "id": "kfa-illegal-002",
+      "description": "Running Xul before Sek traverses the cycle backwards.",
+      "sequence": ["TRAIN", "SCORE"],
+      "expect_code": "PHASE_OUT_OF_ORDER"
+    },
+    {
+      "id": "kfa-illegal-003",
+      "description": "Xul is the end of the cycle. Wrapping round to Pop inside one plan is a second traversal, not a longer composition.",
+      "sequence": ["F_Xul", "F_Pop"],
+      "expect_code": "PHASE_OUT_OF_ORDER"
+    },
+    {
+      "id": "kfa-illegal-004",
+      "description": "A typed identity only elides where its carrier chains: a state identity does not carry a candidate set.",
+      "sequence": ["IDENTITY_STATE", "SCORE"],
+      "expect_code": "TYPE_MISMATCH"
+    },
+    {
+      "id": "kfa-illegal-005",
+      "description": "COLLAPSE produces one collapsed candidate; RANK consumes sets, not a single candidate.",
+      "sequence": ["COLLAPSE", "RANK"],
+      "expect_code": "TYPE_MISMATCH"
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "@kind": "khanary.xcfe-kxml-lowering.contract.v1",
+  "@version": "1.0.0",
+  "source_ir": "semantic.xcfe-node-graph.v1",
+  "target_ir": "semantic.kxml.projection-program.v1",
+  "tape_format": "KXML+CBOR/v1",
+  "executor": "MicroXcfe",
+  "formula": "LowerToKXML(n) iff Admitted(n) && ProjectionSafe(n) && SupportedByMicroXcfe(n)",
+  "semantic_authority": false,
+  "phase_authority": false,
+  "promotion_authority": false,
+  "compile_route_is_encoder": true,
+  "lower_route": "/api/kxml/lower",
+  "compile_route": "/api/kxml/compile",
+  "container_role": "versioned portable projection program tape",
+  "payload_class_matrix": {
+    "value": {"modes": ["inline", "reference"], "execution": "state_binding", "authority": "none"},
+    "symbol_table": {
+      "modes": ["typed_addresses"],
+      "execution": "symbol_resolution_only",
+      "authority": "none",
+      "types": ["record_ref", "field_ref", "uri", "string", "uint16", "program_ref", "pattern_book_ref", "workspace_ref"],
+      "literal_types": ["uri", "string", "uint16"],
+      "ref_prefixes": {
+        "record_ref": "db:",
+        "field_ref": "db:",
+        "program_ref": "micronaut:",
+        "pattern_book_ref": "book:",
+        "workspace_ref": "workspace:"
+      },
+      "dereference": false
+    },
+    "tensor_descriptor": {"modes": ["external_ref"], "execution": "reference_only", "authority": "none", "large_weights_inline": false},
+    "ui_projection": {"modes": ["projection_only"], "execution": "registered_executor_required", "executor": "json.ui", "authority": "observation_only"},
+    "database_request": {"modes": ["request_only"], "execution": "registered_executor_required", "authority": "request_only"},
+    "semantic_graph": {"modes": ["data_only"], "execution": "not_executable", "authority": "none"},
+    "event_reference": {"modes": ["reference_only"], "execution": "not_executable", "authority": "none", "journal": "JROM"}
+  },
+  "payload_laws": [
+    "container capability does not imply executor capability",
+    "symbol tables carry typed addresses; SYMBOL_RESOLVE returns a descriptor and never dereferences it",
+    "tensor descriptors reference hash-verified external assets; weights are not embedded",
+    "UI and database payloads are requests for registered executors, not MicroXcfe instructions",
+    "executor references inside a payload are unverified until the host registry resolves them",
+    "semantic graphs serialize as data and do not become executable",
+    "execution history remains in JROM; KXML carries references only"
+  ],
+  "node_contract": {
+    "required": ["id", "class", "operator", "flow_phase", "authority_phase", "admitted", "projection_safe", "projection"],
+    "admitted": {"const": true},
+    "projection_safe": {"const": true},
+    "projection": "exact MicroXcfe instruction; @op must equal operator when present",
+    "authority_phase": "must equal the canonical phase of class",
+    "flow_phase": "observation only; never grants authority"
+  },
+  "supported_node_matrix": {
+    "CONDITION":     {"authority_phase": "Wo",    "status": "reject", "operators": [], "reason": "semantic condition evaluation is not implemented by MicroXcfe"},
+    "ROUTING":       {"authority_phase": "Wo",    "status": "reject", "operators": [], "reason": "semantic routing remains in XCFE"},
+    "CAUSAL":        {"authority_phase": "Wo",    "status": "reject", "operators": [], "reason": "causal reasoning cannot be projected"},
+    "STRUCTURE":     {"authority_phase": "Wo",    "status": "annotation_only", "operators": ["FOLD_ENTER", "FOLD_EXIT"], "reason": "fold markers record boundaries and never authorize phases"},
+    "SELECTION":     {"authority_phase": "Yax",   "status": "projection", "operators": ["PATTERN_BANK"], "reason": "deterministic registered pattern-bank selection"},
+    "EXECUTION":     {"authority_phase": "Sek",   "status": "projection", "operators": ["ADD", "MUL", "CALL", "LOG", "CONVERT", "SET", "APPEND"], "reason": "bounded deterministic execution"},
+    "CAPABILITY":    {"authority_phase": "Sek",   "status": "projection", "operators": ["SCO_RESOLVE", "SYMBOL_RESOLVE"], "reason": "registry-backed identity or typed address resolution without dereference"},
+    "TRANSFORM":     {"authority_phase": "Sek",   "status": "projection", "operators": ["ADD", "MUL", "CALL", "CONVERT", "SET", "APPEND"], "reason": "bounded deterministic transform"},
+    "VERIFICATION":  {"authority_phase": "Ch'en", "status": "reject", "operators": [], "reason": "MicroXcfe cannot issue Ch'en verification"},
+    "CONSEQUENCE":   {"authority_phase": "Ch'en", "status": "reject", "operators": [], "reason": "semantic consequence evaluation remains in XCFE"},
+    "COMMIT":        {"authority_phase": "Xul",   "status": "forbidden", "operators": [], "reason": "MicroXcfe has no commit path"},
+    "MEMORY":        {"authority_phase": "Pop",   "status": "program_scoped_only", "operators": ["SET", "APPEND"], "reason": "state is discarded after each MicroXcfe request"},
+    "NEGATION":      {"authority_phase": "Pop",   "status": "reject", "operators": [], "reason": "semantic negation remains in XCFE"},
+    "KUHUL_RUNTIME": {"authority_phase": "Pop",   "status": "reject", "operators": [], "reason": "K'UHUL runtime control cannot be projected"}
+  },
+  "projection_context_allowlist": ["@patterns", "@CDATA", "@SVG", "@XML", "@fold", "@node"],
+  "forbidden_semantic_effects": ["phase_transition", "transition", "next_phase", "to_phase", "delta_B", "semantic_commit", "commit"],
+  "call_policy": {
+    "builtins": ["add", "mul", "square", "sub", "div"],
+    "extensions": "host-loaded stdlib @ops[].name only",
+    "self_declared_allowlist": false
+  },
+  "rejection_reasons": {
+    "KXML_INVALID_SOURCE_KIND": "input is not semantic.xcfe-node-graph.v1",
+    "KXML_INVALID_NODE_GRAPH": "nodes is missing or not an array",
+    "KXML_INVALID_NODE": "node is malformed",
+    "KXML_UNKNOWN_NODE_CLASS": "class is outside the closed 14-class XCFE set",
+    "KXML_NODE_NOT_ADMITTED": "XCFE admission proof is absent or false",
+    "KXML_NODE_NOT_PROJECTION_SAFE": "operation still requires semantic reasoning or unsafe effects",
+    "KXML_AUTHORITY_PHASE_MISMATCH": "authority phase differs from the class canonical phase",
+    "KXML_PHASE_TRANSITION_FORBIDDEN": "projection requests semantic phase movement",
+    "KXML_UNSUPPORTED_NODE_CLASS": "class has no MicroXcfe projection",
+    "KXML_UNSUPPORTED_OPERATOR": "operator is outside the class projection subset",
+    "KXML_OPERATOR_PROJECTION_MISMATCH": "projection @op differs from the admitted operator",
+    "KXML_INVALID_PROJECTION": "projection operands or context are malformed",
+    "KXML_INVALID_PAYLOAD": "typed tape payload is malformed or undeclared",
+    "KXML_PAYLOAD_EXECUTOR_REQUIRED": "UI or database request lacks a registered executor reference",
+    "KXML_PAYLOAD_STATE_COLLISION": "inline value conflicts with an existing projection_state binding",
+    "KXML_SYMBOL_COLLISION": "typed symbol key has conflicting declarations",
+    "KXML_INLINE_TENSOR_FORBIDDEN": "tensor weights must remain external hash-addressed assets",
+    "KXML_LOWERING_CONTRACT_INVALID": "host lowering contract is missing or malformed",
+    "KXML_CALL_NOT_ALLOWLISTED": "CALL target is absent from builtin and host stdlib allow-lists",
+    "KXML_COMMIT_FORBIDDEN": "Xul commit cannot lower to MicroXcfe",
+    "KXML_PERSISTENT_MEMORY_FORBIDDEN": "MEMORY projection is not program-scoped",
+    "KXML_LOWERING_REQUIRED": "raw XCFE graph was sent to a KXML encode or execution route"
+  },
+  "invariants": {
+    "L1": "admission is established by XCFE before lowering",
+    "L2": "projection safety is independent of admission",
+    "L3": "MicroXcfe support is independent of admission and safety",
+    "L4": "KXML tape content never establishes semantic authority",
+    "L5": "FOLD_ENTER and FOLD_EXIT are annotations only",
+    "L6": "CALL uses the host registry and cannot self-declare an allow-list",
+    "L7": "MEMORY is request-local and cannot persist topology",
+    "L8": "COMMIT and phase transitions never lower"
+  }
+}

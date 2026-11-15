@@ -1,0 +1,75 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "quest",
+  "@key": "⟁APP:QUEST",
+  "@mount": "⟁ROOT:QUEST",
+  "@state": {
+    "scene": "intro",
+    "hero": null,
+    "xp": 0,
+    "inventory": [],
+    "quests": []
+  },
+  "@components": {
+    "⟁ROOT:QUEST": {
+      "@type": "app",
+      "@children": ["⟁WIDGET:SCENE", "⟁WIDGET:HERO", "⟁WIDGET:CHOICES"]
+    },
+    "⟁WIDGET:SCENE": {
+      "@type": "scene",
+      "@bind": "state.scene",
+      "@children": []
+    },
+    "⟁WIDGET:HERO": {
+      "@type": "card",
+      "@bind": "state.hero",
+      "@children": []
+    },
+    "⟁WIDGET:CHOICES": {
+      "@type": "choice-list",
+      "@bind": "SCENES[state.scene].choices",
+      "@children": [],
+      "@on": {
+        "select": "quest.examine-choice"
+      }
+    }
+  },
+  "@programs": {
+    "quest.examine-choice": {
+      "@kind": "semantic.json-program.v1",
+      "@route": "micronaut.program",
+      "@verb": "POST",
+      "@operation": "run",
+      "@authority": "observation_only",
+      "@micronaut": "eliza",
+      "@program": "reason",
+      "@state": {
+        "input": "$event.value"
+      }
+    }
+  },
+  "@events": {
+    "choice.select": "quest.examine-choice"
+  },
+  "@imports": [
+    { "ref": "SCENES", "mode": "reference" },
+    { "ref": "HEROES", "mode": "reference" },
+    { "ref": "ITEMS", "mode": "reference" },
+    { "ref": "NPCS", "mode": "reference" },
+    { "ref": "QUESTS", "mode": "reference" },
+    { "ref": "TOWNS", "mode": "reference" },
+    { "ref": "ROUTES", "mode": "reference" }
+  ],
+  "@permissions": {
+    "network": false,
+    "storage": "request_scoped",
+    "tools": [],
+    "semantic_commit": false
+  },
+  "@lifecycle": {
+    "load": "compile",
+    "mount": "project",
+    "event": "dispatch",
+    "unmount": "discard_request_state"
+  }
+}

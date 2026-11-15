@@ -1,0 +1,177 @@
+{
+  "KGF:": [
+    "@kgf",
+    "format:2d-key-graph-execution-field.runtime-grammar.v2",
+    "phase:Wo",
+    "phase:Yax",
+    "phase:Sek",
+    "phase:Ch'en"
+  ],
+  "@kgf": [
+    "grammar:2d-key-graph-execution-field.runtime-grammar.ebnf",
+    "authority:projection_only",
+    "semantic_commit:false",
+    "boundary:InvocationValidationBoundary"
+  ],
+  "kgf:question-engine": [
+    "file:kuhul-question-engine.kgf",
+    "phases:Pop/Wo/Yax/Sek/Ch'en/Xul",
+    "programs:phase-owned-question-responsibilities",
+    "max_depth:4"
+  ],
+  "kgf:temporal-facts": [
+    "file:data/manifest/facts.manifest.json",
+    "records:data/facts/",
+    "lookup:key_based",
+    "selection:verified_temporally_eligible_observations_only",
+    "authority:reference_only",
+    "learning_write:separate_xcfe_admission_required"
+  ],
+  "kgf:character-model": [
+    "file:data/manifest/characters.manifest.json",
+    "format:kuhul.character-model.v1",
+    "mapping:input_character_glyph_phoneme_collation_codepoint_byte",
+    "semantic_identity:exact_keyed_binding",
+    "normalization:profile_specific",
+    "authority:read_only_no_execution"
+  ],
+  "kgf:semantic-fields": [
+    "file:data/manifest/semantic-fields.manifest.json",
+    "schema:data/schema/kgf.semantic-fields.v2.schema.json",
+    "format:kgf.semantic-fields/2",
+    "fields:key_to_key_arrays",
+    "relations:typed_labels_over_field_membership",
+    "embedding:field/field-distill.py_candidate_projection_only",
+    "authority:source_relations_are_host_owned"
+  ],
+  "kgf:wildcard-micronauts": [
+    "file:wildcard-micronauts.kgf",
+    "patterns:affect/related/differ",
+    "unresolved:defer",
+    "binding-authority:host-registry"
+  ],
+  "kgf:tool-control": [
+    "file:tool-control.kgf",
+    "verbs:GET/POST/READ/WRITE/PATCH/LIST/INSPECT/RUN/COMPILE/CALL/HEALTH/SEARCH/ALERT",
+    "alert:fires-at-Xul-emits-xcfe:ALERT_EVENT-to-JROM",
+    "candidate-only:true",
+    "boundary:InvocationValidationBoundary"
+  ],
+  "kgf:dynamic-bindings": [
+    "file:dynamic-bindings.kgf",
+    "verbs:GATHER/PROBE/FILTER/SELECT/FLOAT/REBIND/LOCK/EMIT",
+    "phases:Pop/Wo/Yax/Sek/Ch'en/Xul",
+    "contracts:xcfe:BIND_ADMISSION/xcfe:BINDING_LOCK",
+    "max_depth:2",
+    "commit_phase:Xul",
+    "candidate-only:true",
+    "boundary:InvocationValidationBoundary"
+  ],
+  "kgf:geometric-coder": [
+    "file:geometric-coder.kgf",
+    "programs:ANALYZE/GENERATE",
+    "bias:legal-set-ranking-only",
+    "buffers:projection_only",
+    "provider-authority:false"
+  ],
+  "kgf:learning-lane": [
+    "file:learning-lane.kgf",
+    "programs:PROPOSE/ACCUMULATE/VERIFY/CLOSE",
+    "phases:Yax/Sek/Ch'en/Xul",
+    "score:wcr",
+    "commit_phase:Xul",
+    "proposal_only:true",
+    "envelope:LearningProposal<ScoredCandidate{W,C,R,G,S},provenance,proposal_id>",
+    "accumulator:host:WCRFoldAccumulator",
+    "requires:GOOD-FoldDelta+Chen-evidence+Xul-authority+idempotent-storage",
+    "rejects:replayed-proposal-id",
+    "grammar-gap:lane-declaration+propose-resolver-mode",
+    "boundary:InvocationValidationBoundary"
+  ],
+  "kgf:gradient-lane": [
+    "file:gradient-lane.kgf",
+    "programs:DERIVE/SELECT/VERIFY/CLOSE",
+    "phases:Yax/Sek/Ch'en/Xul",
+    "rule:target_minus_prediction",
+    "learning_rate:0.05",
+    "output:learning:GRADIENT",
+    "proposal_only:true",
+    "persistence:none",
+    "boundary:InvocationValidationBoundary"
+  ],
+  "kgf:parameter-mapping": [
+    "file:parameter-mapping.kgf",
+    "programs:MAP/SELECT/VERIFY/CLOSE",
+    "phases:Yax/Sek/Ch'en/Xul",
+    "rule:softmax_feature_gradient",
+    "learning_rate:0.05",
+    "max_step:0.25",
+    "parameter_family:ngram_weights",
+    "update_target:W_learned",
+    "corpus_prior:immutable",
+    "output:learning:DELTA",
+    "proposal_only:true",
+    "boundary:InvocationValidationBoundary"
+  ],
+  "kgf:autocomplete-lane": [
+    "file:autocomplete-lane.kgf",
+    "programs:SUGGEST/FILTER/RANK",
+    "phases:Yax/Sek",
+    "inputs:ngrams+data/autocomplete.wildcard.gml",
+    "syllable:data/syllable.gml",
+    "constraint:syllable-retrieval-only",
+    "match_policy:exact",
+    "bias:data/continuation-bias.gml",
+    "output:autocomplete:SUGGESTIONS",
+    "read_only:true",
+    "persistence:none",
+    "authority:none",
+    "boundary:InvocationValidationBoundary"
+  ],
+  "kgf:law": [
+    "phase-legality-before-bias",
+    "bias-never-expands-legal-set",
+    "provider-never-claims-semantic-authority",
+    "kernel-write-never-mutates-topology",
+    "GOOD-FoldDelta-plus-Ch'en-plus-Xul-required-for-learned-bias"
+  ],
+  "kgf:key-app-builder": [
+    "file:data/micronauts/key-app-builder.kgf",
+    "programs:BUILD/EDIT_CANDIDATE/VALIDATE/INSPECT",
+    "sources:css.manifest.json+asx-mini-app.key-grammar.jsonl+app-wizard.aiml",
+    "output:asx.mini-app.v1+html-preview",
+    "write_scope:.micronaut/worker-proposals/apps",
+    "authority:proposal_only",
+    "semantic_commit:false",
+    "host:AtomicRuntime+AppHostSemanticBridge+XCFE"
+  ],
+  "kgf:kuhul-field": [
+    "file:../../kuhul-field.json",
+    "field:⟁KUHUL",
+    "graph:data/intent-graph.gml",
+    "patterns:data/apps/kuhul-field.xaiml",
+    "page:kuhul-field-math.html",
+    "page_role:semantic_field_mathematics_reference",
+    "phase_authority:PHASE-RUNTIME.md+data/drivers/phases/phase-drivers.v2.json",
+    "phase:Pop",
+    "mathml:data/grammar/mathml.parser.ebnf+mathml.compiler.ebnf+mathml.generator.ebnf",
+    "authority:data_only",
+    "semantic_commit:false"
+  ],
+  "kgf:kuhul-pi-comparison": [
+    "grammar:kuhul-pi.ebnf",
+    "examples:pairwise_and_triangle_comparison_in_grammar_comments",
+    "pop:embedgemma_field_vectors",
+    "input:paired_embedding_vectors_from_pop",
+    "geometry:cosine+angular_separation+normalized_radius",
+    "yax:pairwise_or_triangle_compare+peer_arc_weights+hub_cost+pi_routing_weight+optional_routing_entropy+attend+gradient+typed_neighbor_filter",
+    "sek:synchronize_compatible_lanes+select_provisional_bridge+select_field_mode+propose_bias_log+propose_semantic_proximity",
+    "chen:verify_vector_shape+graph_evidence+provenance+score_bounds+triangle_consistency+bias_log+proximity_contract+entropy_bounds",
+    "xul:close_ephemeral_comparison_or_triangle_result",
+    "bridge:medoid_like_retrieval_signal_not_causal_evidence",
+    "entropy:softmax_of_pi_routing_weights;gravity_and_levity_are_separate_signals",
+    "cache:comparison_version+peer_set_hash",
+    "persistence:separate_host_xcfe_authorization_required",
+    "authority:candidate_only"
+  ]
+}

@@ -1,0 +1,100 @@
+(* 2D Key-Graph Execution Field — Runtime Grammar v1.0
+   Proposed additive syntax. EBNF specifies structure; host validates semantics.
+   Namespace-qualified graph references are not automatically executable.
+   2D vectors are numeric geometry, not semantic graph triples.
+*)
+
+Document         = Header, { Declaration } ;
+Header           = "keygraph", String, "version", String, ";" ;
+Declaration      = NamespaceDecl | KeyDecl | EdgeDecl | VectorDecl
+                 | TemplateDecl | TrigramDecl | TrackDecl | ContextDecl
+                 | ResolverDecl | MicronautDecl | PolicyDecl ;
+
+NamespaceDecl    = "namespace", QName, "domain", Domain, ";" ;
+Domain           = "css" | "aiml" | "gram" | "fold" | "micro"
+                 | "track" | "xcfe" | "scfml" | "regex" | "custom" ;
+KeyDecl          = "key", QName, "kind", KeyKind, [ "value", Value ], ";" ;
+KeyKind          = "primitive" | "composite" | "pattern" | "relation"
+                 | "program" | "contract" | "field" ;
+
+(* Ordered graph edges. 'requires' expands every dependency in declaration order.
+   'candidate' may be scored; 'calls' is an execution dependency, gated by XCFE. *)
+EdgeDecl         = "edge", QName, "->", QName, "type", EdgeKind,
+                   [ "order", Integer ], [ "weight", Number ], ";" ;
+EdgeKind         = "requires" | "candidate" | "calls" | "references"
+                 | "governs" | "observes" ;
+VectorDecl       = "vector2", QName, "(", Number, ",", Number, ")", ";" ;
+
+(* Reusable templates do not assign or override trigram phase. *)
+TemplateDecl     = "template", QName, "domain", Domain, "{",
+                   { TemplateItem }, "}", ";" ;
+TemplateItem     = "requires", QName, ";"
+                 | "inline", String, ";"
+                 | "operator", Identifier, ";"
+                 | "input", Identifier, ";"
+                 | "output", Identifier, ";" ;
+
+(* Each executable trigram stores an immutable phase-qualified address. *)
+TrigramDecl      = "trigram", QName, "(", Atom, ",", Atom, ",", Atom, ")",
+                   "phase", Phase, "fold", QName,
+                   [ "bindings", "[", Binding, { ",", Binding }, "]" ], ";" ;
+Phase            = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul" ;
+Binding          = Identifier, ":", BindingSource ;
+BindingSource    = "capture" | "lm_chain" | "char_overlap" | "explicit" ;
+Atom             = Identifier | String | "*" ;
+
+TrackDecl        = "track", QName, "{", { "include", QName, ";" }, "}", ";" ;
+ContextDecl      = "context", QName, "track", QName, "{",
+                   [ "query", String, ";" ], { "bind", Identifier, "=", Value, ";" },
+                   "}", ";" ;
+
+(* Resolver strategy is explicit: deterministic expansion vs scored routing
+   vs authorized execution. No scorer may omit a required dependency. *)
+ResolverDecl     = "resolver", QName, "domain", Domain,
+                   "mode", ResolverMode, [ "policy", QName ], ";" ;
+ResolverMode     = "expand" | "select" | "execute" | "match" | "lookup" ;
+PolicyDecl       = "policy", QName, "{", { PolicyRule }, "}", ";" ;
+PolicyRule       = "score", ScoreKind, ";"
+                 | "admission", QName, ";"
+                 | "max_depth", Integer, ";"
+                 | "allow_cycle", Boolean, ";"
+                 | "commit_phase", Phase, ";" ;
+ScoreKind        = "wcr" | "vector_cosine" | "wcr_vector" | "custom" ;
+MicronautDecl    = "micronaut", QName, "track", QName,
+                   "resolver", QName, [ "vector", QName ], ";" ;
+
+Value            = String | Number | Boolean | QName ;
+QName            = Identifier, ":", Identifier, { ".", Identifier } ;
+Identifier       = Letter, { Letter | Digit | "_" | "-" } ;
+String           = '"', { StringCharacter }, '"' ;
+StringCharacter  = ? any Unicode scalar value except unescaped double quote and control characters ? ;
+Number           = [ "-" ], Digit, { Digit }, [ ".", Digit, { Digit } ] ;
+Integer          = Digit, { Digit } ;
+Boolean          = "true" | "false" ;
+Letter           = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z"
+                 | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" ;
+Digit            = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+
+(* HOST VALIDATION INVARIANTS
+  1. All QNames resolve; namespace domains and resolver modes are compatible.
+  2. 'requires' dependencies expand completely in order; cycles rejected unless
+     a domain-specific bounded strategy is explicitly supported.
+  3. 'candidate' edges are scored only after XCFE/host eligibility filtering.
+  4. 'calls' edges enforce admission, bounded recursion, and side-effect policy.
+  5. A vector2 record has exactly two finite numeric coordinates; zero-length
+     cosine similarity is handled explicitly by host policy.
+  6. WCR factors and geometric scores are separately typed and normalized before
+     combining. A_ij is graph adjacency, not itself an execution instruction.
+  7. Each trigram stores exactly one phase; templates cannot override it.
+  8. Phase codes: Pop=000 Wo=001 Yax=010 Sek=011 Ch'en=100 Xul=101.
+  9. Wildcard capture arity, binding source, and reference compatibility checked.
+ 10. Corpus prior W_C is immutable; learned W_L stored separately. Updates require
+     observation at Ch'en and authorized commit at Xul.
+ 11. BSON is default semantic-document storage; CBOR optional transport; SCXQ2
+     optional distinct graph-chunk/executable-lane encoding with round-trip tests.
+ 12. Map/Filter/collection Fold are not automatically six-phase K'UHUL execution.
+ 13. CSS composition respects ordered declarations and cascade; scoring never
+     drops mandatory style dependencies.
+ 14. Key reference graph topology, geometric neighborhood, and XCFE execution
+     authority remain independently inspectable.
+*)

@@ -1,0 +1,21 @@
+(* Authority bindings, v1.1. Each row has one fixed admissible form. *)
+authority-matrix = aiml-authority, srai-authority, pi-authority, xcfe-authority,
+                   xul-authority, learning-authority, guard-authority,
+                   dispatch-authority, closure-authority ;
+aiml-authority = "aiml", "{mode:match_only,execute:false,write:false,close:false}" ;
+srai-authority = "srai", "{mode:redirect_only,execute:false,write:false,close:false,returns:candidate}" ;
+pi-authority = "pi", "{mode:rank_only,execute:false,write:false,close:false,returns:ranked_candidates}" ;
+xcfe-authority = "xcfe", "{mode:admit_only,execute:false,write:false,close:false,returns:admission_decision}" ;
+xul-authority = "xul", "{mode:close_only,execute:true,write:true,close:true,returns:closure}" ;
+learning-authority = "learning", "{mode:propose_only,execute:false,write:false,close:false,promote:false,returns:proposal}" ;
+guard-authority = "session-guard", "{mode:state_only,execute:false,write:false,close:false,returns:guard_state}" ;
+dispatch-authority = "reason-dispatch", "{mode:dispatch_only,execute:false,write:false,close:false,returns:envelope}" ;
+closure-authority = "closure", "{mode:close_only,declared_by:xul,execute:true,write:true,close:true}" ;
+
+guard-binding = depth-binding, visited-binding, state-binding ;
+depth-binding = "reasoning.depth", ":integer[0..", positive-integer, "]" ;
+visited-binding = "reasoning.visited:string:append-only" ;
+state-binding = "reasoning.guard:enum(open,closed)" ;
+positive-integer = nonzero-digit, { digit } ;
+digit = "0" | nonzero-digit ;
+nonzero-digit = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;

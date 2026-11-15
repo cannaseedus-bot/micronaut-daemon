@@ -1,0 +1,13 @@
+(* KHANARY / CFPC grammar package — proposed syntax contract v0.1. *)
+(* EBNF conventions: { X } repetition, [ X ] optional, | alternation. *)
+(* Quoted XML tags are literal terminals. Character data is parsed by the XML host. *)
+(* Structural productions describe parsed XML elements, not raw XML tokenization. *)
+document = "<cfpc>", { declaration | message | semantic_node | observation }, "</cfpc>" ;
+declaration = relation | function | tool | micronaut | structure | template ;
+semantic_node = think | learn | task | elaborate | cheese | promote ;
+message = user_message | assistant_message | instruction_message ;
+observation = fact | event ;
+(* Node attributes: id required, owner/intent/mode optional, phase runtime-owned. *)
+node_attribute = "id" | "owner" | "intent" | "mode" ;
+phase = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul" ;
+(* @phase is runtime state, not author-provided executable control. *)

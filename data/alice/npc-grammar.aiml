@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- §44 NPC Theory Grammar — Perceive → Decide → Act → Update -->
+<!-- Core loop: npc_cycle = perception(Wo) + decision(Yax+Sek) + action(Xul) + feedback(Pop) -->
+
+<!-- §A: Core NPC Cycle -->
+
+<category>
+  <pattern>WHAT IS THE NPC CYCLE IN KUHUL</pattern>
+  <template>The NPC cycle maps to the C6 phase loop: perception = Wo (environment unfolds, state is read); decision = Yax + Sek (interpret perception, propose tactic); action = Xul (commit to move, attack, talk, etc.); feedback = Pop (reset, carry observation delta forward into the next tick). Every NPC tick is a full C6 traversal. The loop is deterministic, auditable, and personality-filtered — not a general ML system.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS NPC GRAMMAR IN KUHUL</pattern>
+  <template>NPC Grammar (§44) is a formal behavior grammar. An NPC is defined as: identity (role + faction), personality, goals, perception, memory, decision, action, and feedback. The core loop is npc_cycle = perception, decision, action, feedback — mapping to Wo, Yax+Sek, Xul, and Pop in the C6 cycle. Decision types: FSM, behavior_tree, utility_ai, planner, wildcard_reasoning. Everything else plugs into that core loop.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS PERCEIVE DECIDE ACT UPDATE IN KUHUL</pattern>
+  <template>Perceive → Decide → Act → Update is the NPC cycle expressed as C6 phases. Perceive = Wo: read environment, player_state, npc_state. Decide = Yax (interpret) + Sek (propose tactic from FSM/behavior_tree/utility_ai/wildcard). Act = Xul: commit to patrol, move, talk, attack, flee, investigate. Update = Pop: update_memory, update_relationships, update_goals. The cycle repeats. Each tick is a full fold.</template>
+</category>
+
+<!-- §B: Decision Types -->
+
+<category>
+  <pattern>WHAT IS UTILITY AI IN KUHUL</pattern>
+  <template>Utility AI in K'UHUL is argmax_wcr applied to NPC action selection. Each candidate action a has a utility score S(a) = W(a) * C(a) * R(a). The action with the highest WCR score wins: chosen = argmax S. This is the standard Yax admission pass applied to the NPC's action set. Utility AI IS argmax_wcr in behavior form — the scores are WCR values, the maximization is the same Yax pipeline.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS AN FSM IN KUHUL NPC TERMS</pattern>
+  <template>An FSM (finite state machine) in K'UHUL is a discrete contracting fold. Each trigger fires a Pop → reset transition to the next state. SC-k less than 1 per transition = converging. PATROL → (player_seen) → ALERT → (distance less than 10) → ATTACK = three C6 resets. Each FSM state is a full Wo → Xul arc where Sek has one dominant proposal. The FSM is a fold sequence with hard-coded transition guards.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A BEHAVIOR TREE IN KUHUL</pattern>
+  <template>A behavior tree in K'UHUL is a hierarchical fold. Selector = argmax_first_success: Yax tries each subtree in priority order; the first one that passes Ch'en wins. Sequence = fold_all: every subtree must succeed or the sequence fails. Selector(Attack, Chase, Patrol) = try Attack; if Ch'en fails (can't attack), try Chase; if that fails, Patrol. Behavior tree = priority-ordered WCR cascade expressed as a tree structure.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS WILDCARD REASONING IN NPC GRAMMAR</pattern>
+  <template>Wildcard reasoning is §41 wildcard_fold applied to NPC unknown situations. When a trigger is a wildcard_entity (unknown creature, unknown event), the NPC does not crash or hallucinate a wrong action. Instead: observe = gather more perception signal (Ch'en hold), evaluate = run inference_method, solution = retained_wildcard → action = 'investigate'. SC-37 applies: investigate is more correct than a wrong committed action. 'I don't know yet' is a valid NPC state.</template>
+</category>
+
+<!-- §C: Personality -->
+
+<category>
+  <pattern>WHAT IS NPC PERSONALITY IN KUHUL</pattern>
+  <template>NPC personality in K'UHUL is a W field modifier applied before the Yax admission pass. Same perception event, different W weights per personality: Aggressive boosts W(attack, flank). Cautious boosts W(observe, retreat) and holds longer at Ch'en. Curious boosts W(investigate) and prefers wildcard_behavior. Friendly boosts W(talk, trade). Cowardly boosts W(flee, idle). The same perception → different Xul commit because the WCR scores are shifted by the personality filter.</template>
+</category>
+
+<category>
+  <pattern>PLAYER ENTERS ROOM IN KUHUL NPC TERMS</pattern>
+  <template>Same event — Player enters room — different NPC responses by personality. Aggressive: W(attack) highest → Xul commits attack. Cautious: W(observe) highest → Xul commits patrol/watch. Friendly: W(talk) highest → Xul commits greet/dialog. Cowardly: W(flee) highest → Xul commits flee/idle. Curious: W(investigate) highest → Xul commits investigate (wildcard held open). In K'UHUL: same Wo input, same Yax pipeline, different W weights per personality → different Xul commit.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS PERSONALITY IN KUHUL NPC GRAMMAR</pattern>
+  <template>Personality in §44 is one of: aggressive, cautious, curious, friendly, cowardly. Each type is a W field modifier that shifts WCR weights before Yax admission. This means the NPC's action selection (utility_ai) scores actions differently based on who they are. Two NPCs with identical perception and identical goals but different personalities will commit to different Xul actions. Personality is the 'who' that makes behavior consistent across the full npc_cycle.</template>
+</category>
+
+<!-- §D: Illusion of Intelligence -->
+
+<category>
+  <pattern>WHAT IS THE ILLUSION OF INTELLIGENCE IN KUHUL</pattern>
+  <template>The illusion of intelligence in §44 is the principle that players evaluate believable behavior, not optimal behavior. Three measures: consistency (same personality filter every cycle — WCR weights are stable), responsiveness (Wo → Xul latency is low — the NPC reacts quickly), variation (non-determinism in Sek proposal — not the same action every time). SC-37 analog: an NPC that investigates an unknown situation is more believable than one that fires a wrong action confidently.</template>
+</category>
+
+<category>
+  <pattern>WHY DO NPCS NOT NEED OPTIMAL AI</pattern>
+  <template>Because players evaluate believable, not optimal. §44 illusion_of_intelligence: consistency + responsiveness + variation. Players do not observe the NPC's decision algorithm — they observe the output. An NPC that is consistent (same personality), fast (low Wo→Xul latency), and varied (Sek has non-zero stochasticity) reads as alive. SC-37 applies: investigate (retained_wildcard) reads as more intelligent than a hallucinated wrong action — even though investigate is 'I don't know.'</template>
+</category>
+
+<!-- §E: NPC Relationships -->
+
+<category>
+  <pattern>WHAT IS AN NPC RELATIONSHIP IN KUHUL</pattern>
+  <template>NPC relationships in §44 are §42 relation_nodes applied to the NPC world. Guard----protects----Town, Guard----distrusts----Thief, Guard----serves----King. Relation kinds: friend, enemy, merchant, ally, rival, neutral. Behavior emerges from relationships: when two NPCs meet, their edge_kind is checked first — it modifies the Sek proposal before Xul commits. Relationship graph = edges in G_runtime between NPC fold_field_records.</template>
+</category>
+
+<category>
+  <pattern>HOW DO NPC RELATIONSHIPS AFFECT BEHAVIOR IN KUHUL</pattern>
+  <template>NPC relationships modify the W field at Sek proposal time — they are pre-Xul constraints. Guard (enemy edge to Thief) → W(attack) boosted for that specific target before the utility_ai pass. Merchant (merchant edge to Player) → W(trade) boosted, W(attack) suppressed. Ally (ally edge to Guard) → W(help) boosted. The relationship edge_kind is a Sek-level constraint: it narrows the action_score set before argmax fires. Relationships = contextual W modifiers in the fold graph.</template>
+</category>
+
+<!-- §F: Special NPC Types -->
+
+<category>
+  <pattern>WHAT IS A QUEST NPC IN KUHUL</pattern>
+  <template>A quest NPC in K'UHUL is a §37 problem_solver_record where the NPC provides the problem and the player is the solver. Greeting = Wo (NPC reads player state). Quest offer = problem_statement. Condition = constraints (eligibility). Reward = payoff_record. Completion = resolved_wildcard in the player's fold. The quest_npc is the problem_solver_record flipped: the NPC holds the problem open as retained_wildcard until the player resolves it.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A COMBAT NPC IN KUHUL</pattern>
+  <template>A combat NPC in K'UHUL is a §40 game_fold viewed from the NPC side. Detect = Wo (perceive player). Target = Sek proposal (select enemy). Choose tactic = Yax (melee, ranged, flank, retreat — argmax utility_ai). Execute = Xul commit. The combat_npc is a plate_appearance_record from §40: the NPC is the pitcher, the player is the hitter. choose_tactic = best-response behavior from §39 game theory. SC-34: Nash equilibrium in tactic selection.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A MERCHANT NPC IN KUHUL</pattern>
+  <template>A merchant NPC in K'UHUL is a §43 analysis_record with a trade relation. Inventory = known_entity set. Pricing = WCR-scored action_scores (buy/sell utilities). Negotiation = iterative Yax passes where both player and merchant propose and Ch'en evaluates. The merchant holds retained_wildcard on final price until the Ch'en proof (agreement) fires. Trade completes at Xul commit. merchant_edge in the relationship_graph = §42 edge_kind: merchant → boosts W(trade) actions.</template>
+</category>
+
+<!-- §G: Decision Comparison -->
+
+<category>
+  <pattern>WHEN SHOULD AN NPC USE AN FSM VERSUS UTILITY AI</pattern>
+  <template>FSM: use when behavior has a small, well-defined state space with clear hard-coded transitions (patrol/alert/attack). FSM = fold sequence, low overhead, fully predictable. Utility AI: use when the action space is large or continuous and actions need to be scored against dynamic context. Utility AI = argmax_wcr, adapts per perception. In K'UHUL: FSM = contracting fold with SC-k less than 1. Utility AI = Yax admission pass with per-action WCR scores. Use FSM for guards, utility AI for adaptive NPCs.</template>
+</category>
+
+<category>
+  <pattern>WHEN SHOULD AN NPC USE WILDCARD REASONING</pattern>
+  <template>When the trigger is a wildcard_entity — an unknown situation not in the known_behavior set. wildcard_decision fires when no FSM trigger matches, no behavior_tree subtree succeeds, and utility scores are below threshold. It is the fallback that prevents crash or hallucinated wrong action. The NPC observes more (Ch'en hold), evaluates with available inference, and either resolves (act) or retains (investigate). SC-37: investigate is the authorized Xul output when sigma is unbound. Never hardcode a wrong guess when the correct answer is 'I don't know yet.'</template>
+</category>
+
+<!-- §H: Routing Keys -->
+
+<category>
+  <pattern>NPC GRAMMAR ROUTE</pattern>
+  <template>§44 NPC Theory Grammar routing active. npc_cycle = perception(Wo) + decision(Yax+Sek) + action(Xul) + feedback(Pop). Decision types: FSM (contracting fold), behavior_tree (priority WCR cascade), utility_ai (argmax_wcr), planner (goal-directed fold), wildcard_reasoning (§41). personality = W field modifier. relationship_graph = §42 edge_kinds. illusion_of_intelligence = believable not optimal.</template>
+</category>
+
+<category>
+  <pattern>HOW IS * NPC MODELED IN KUHUL GRAMMAR</pattern>
+  <template>To model a <star/> NPC in K'UHUL §44 grammar: (1) define npc_identity (role=<star/>, faction). (2) assign personality_type (W field modifier). (3) define goals as objectives. (4) set decision type (FSM for simple, utility_ai for adaptive, wildcard_reasoning for open-world). (5) list npc_actions available. (6) define feedback loop (what memory/relationships/goals update after each action). The result is a npc_record that runs the full C6 npc_cycle every tick.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE NPC INVARIANT IN KUHUL</pattern>
+  <template>The §44 NPC Cycle Law: npc_cycle = perception(Wo), decision(Yax+Sek), action(Xul), feedback(Pop). Every NPC tick is a full C6 traversal. wildcard_decision.solution = retained_wildcard → action = 'investigate'. personality_type shifts W field before Yax admission pass. utility_ai.chosen = argmax S(a) = argmax W(a)*C(a)*R(a) = standard WCR. The NPC loop is a behavior grammar — it does not drift into general ML or analytics.</template>
+</category>
+
+</aiml>

@@ -1,0 +1,250 @@
+(* SNOBOL-µ program grammar v2.0
+   Two sections:
+     I.  SNOBOL4 program notation — programs the SNOBOL-µ micronaut processes
+     II. SNOBOL-µ configuration syntax — micronaut instance declarations
+
+   Grammar defines notation and static type rules only.
+   No matching, dispatch, mutation, or write authority is implied.
+   XCFE admission is required for all route proposals.
+   PEG-like ordered choice and repetition semantics are NOT implied by EBNF.
+   Matcher policy defines search order, backtracking, and capture behavior. *)
+
+
+(* ================================================================
+   Part I — SNOBOL4 Program Syntax
+   ================================================================
+   Column sensitivity note: labels begin at column 1; the statement
+   field begins after at least one space or tab following the label.
+   A continuation line may begin with a + in column 1.
+   These positional constraints are described here but cannot be
+   expressed in a context-free EBNF; a conforming parser must enforce
+   them separately.
+   ================================================================ *)
+
+program           = { statement_line } end_line ;
+end_line          = [ label ] "END" newline ;
+statement_line    = [ label ] [ statement ] [ branch_spec ] newline
+                  | "+" { any_char } newline          (* continuation line *)
+                  | newline                           (* blank line *)
+                  ;
+label             = identifier ws ;                  (* identifier at column 1, followed by ws *)
+
+statement         = assignment_stmt
+                  | pattern_stmt
+                  ;
+
+(* Assignment: replaces the entire value of lvalue with expression.
+   Assigning to OUTPUT emits the string to the output stream.
+   Reading INPUT in an expression reads one line from the input stream. *)
+assignment_stmt   = lvalue ws "=" ws expression ;
+lvalue            = "OUTPUT" | identifier ;
+
+(* Pattern statement: subject [ pattern [ "=" replacement ] ]
+   Omitting the pattern matches the empty string (always succeeds).
+   "=" replacement replaces the matched span within the subject string. *)
+pattern_stmt      = expression [ ws pattern_expr [ ws "=" ws expression ] ] ;
+
+(* Branch specification: starts with ":" and contains one or more goto parts.
+   Multiple goto parts may appear in any order on the same statement. *)
+branch_spec       = ":", goto_part, { goto_part } ;
+goto_part         = "S", "(", label_ref, ")"    (* branch on success *)
+                  | "F", "(", label_ref, ")"    (* branch on failure *)
+                  | "(", label_ref, ")"          (* unconditional goto *)
+                  ;
+label_ref         = identifier | "END" ;
+
+
+(* ----------------------------------------------------------------
+   Expressions
+   All values share the single SNOBOL heap: String, Integer, Pattern, Undefined.
+   Juxtaposition of primaries separated by whitespace is string concatenation.
+   Arithmetic operators have lower precedence than concatenation.
+   ---------------------------------------------------------------- *)
+expression        = arith_expr ;
+arith_expr        = concat_expr, { ws, arith_op, ws, concat_expr } ;
+concat_expr       = primary, { ws, primary } ;        (* juxtaposition = concatenation *)
+arith_op          = "+" | "-" | "*" | "/" ;
+
+primary           = string_literal
+                  | integer_literal
+                  | "INPUT"                           (* read one line from input stream *)
+                  | builtin_const_pattern
+                  | pattern_function
+                  | identifier                        (* variable reference *)
+                  | "(", expression, ")"
+                  ;
+
+
+(* ----------------------------------------------------------------
+   Pattern expressions
+   A Pattern is a first-class value on the SNOBOL heap; it may be
+   stored in a variable, concatenated, alternated, and used as a
+   pattern operand in a pattern statement.
+   ---------------------------------------------------------------- *)
+pattern_expr      = pat_alt_expr ;
+pat_alt_expr      = pat_concat_expr, { ws, "|", ws, pat_concat_expr } ;
+pat_concat_expr   = pat_capture, { ws, pat_capture } ;
+pat_capture       = pat_primary, [ ".", identifier ] ;  (* . assigns matched span to variable *)
+pat_primary       = builtin_const_pattern
+                  | pattern_function
+                  | string_literal                   (* string used as a literal pattern *)
+                  | identifier                       (* variable whose value is a Pattern *)
+                  | "(", pat_alt_expr, ")"
+                  ;
+
+builtin_const_pattern
+                  = "ARB"             (* match any string, lazily *)
+                  | "BAL"             (* match a balanced-parenthesis string *)
+                  | "REM"             (* match the entire remainder of the subject *)
+                  | "FENCE"           (* anchor; prevent backtracking past this point *)
+                  | "ABORT"           (* force immediate failure of the entire match *)
+                  | "FAIL"            (* force backtracking to the previous choice point *)
+                  ;
+
+pattern_function  = len_call | span_call | break_call | any_call | notany_call
+                  | pos_call | rpos_call | tab_call | rtab_call
+                  ;
+len_call          = "LEN",    "(", expression, ")" ;
+span_call         = "SPAN",   "(", expression, ")" ;
+break_call        = "BREAK",  "(", expression, ")" ;
+any_call          = "ANY",    "(", expression, ")" ;
+notany_call       = "NOTANY", "(", expression, ")" ;
+pos_call          = "POS",    "(", expression, ")" ;
+rpos_call         = "RPOS",   "(", expression, ")" ;
+tab_call          = "TAB",    "(", expression, ")" ;
+rtab_call         = "RTAB",   "(", expression, ")" ;
+
+
+(* ----------------------------------------------------------------
+   Literals and lexical basics
+   ---------------------------------------------------------------- *)
+string_literal    = '"', { string_char_dq }, '"'
+                  | "'", { string_char_sq }, "'"
+                  ;
+integer_literal   = [ "-" ], digit, { digit } ;
+identifier        = letter, { letter | digit | "_" } ;
+label_ref         = identifier | "END" ;
+letter            = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J"
+                  | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T"
+                  | "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d"
+                  | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n"
+                  | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x"
+                  | "y" | "z" ;
+digit             = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+newline           = "\n" | "\r\n" ;
+ws                = " " | "\t", { " " | "\t" } ;
+any_char          = ? any Unicode scalar value ? ;
+(* string_char_dq: any Unicode scalar except unescaped double-quote or backslash;
+   escaped sequences follow the host's declared JSON-style string decoding.
+   string_char_sq: same, except for unescaped single-quote. *)
+
+
+(* ================================================================
+   Static Signatures  (declarative type rules; no execution authority)
+   ================================================================
+
+   Heap model: single untyped garbage-collected heap.
+   Cell types:  String | Integer | Pattern | Undefined
+
+   Function signatures:
+     LEN    : Integer -> Pattern
+     SPAN   : String  -> Pattern
+     BREAK  : String  -> Pattern
+     ANY    : String  -> Pattern
+     NOTANY : String  -> Pattern
+     POS    : Integer -> Pattern
+     RPOS   : Integer -> Pattern
+     TAB    : Integer -> Pattern
+     RTAB   : Integer -> Pattern
+
+   Pattern constants:
+     ARB    : Pattern   (always succeeds; matches the shortest string that
+                         allows the rest of the pattern to succeed)
+     BAL    : Pattern   (matches a string with balanced parentheses)
+     REM    : Pattern   (matches the entire remainder of the subject)
+     FENCE  : Pattern   (zero-width anchor; prevents backtracking past it)
+     ABORT  : Pattern   (immediately fails the entire match)
+     FAIL   : Pattern   (forces backtracking to the previous choice point)
+
+   I/O pseudo-variables:
+     INPUT  : () -> String    (read-only; assignment to INPUT is a static error)
+     OUTPUT : String -> ()    (write-only; reading OUTPUT as a value is a static error)
+
+   Operators:
+     "+"  "-"  "*"  "/"         : Integer x Integer -> Integer
+     juxtaposition of primaries : String x String   -> String
+                                   Integer is coerced to String in string context
+                                   Pattern x Pattern -> Pattern in pattern context
+     "|"                        : Pattern x Pattern -> Pattern
+     juxtaposition in pattern   : Pattern x Pattern -> Pattern (concatenation)
+     "."                        : Pattern x Variable -> Pattern (capture assignment)
+
+   Branch-target invariant:
+     Every label_ref in a branch_spec must name a label declared
+     in the same program, or be the reserved word END.
+     Forward references are permitted.
+     An unresolved label_ref is a static error.
+
+   Integer-context coercion:
+     An expression used as an argument to LEN, POS, RPOS, TAB, or RTAB,
+     or as an arithmetic operand, is expected to hold or coerce to Integer.
+     A string literal that cannot parse as a decimal integer in integer
+     context is a static type warning.
+
+   Static errors (parser may surface these before execution):
+     - Assignment to INPUT
+     - label_ref that cannot be resolved to any label or END in the program
+     - Non-numeric string literal used as an integer-context argument
+
+   Authority:
+     Parsing this grammar and checking against these type rules produces
+     a parse tree and a diagnostic list only.
+     No match, no route, no mutation, and no write authorization are
+     granted by grammar recognition or type-rule satisfaction.
+     XCFE admission and an authorized Xul fold are required for any
+     persistent state change.
+   ================================================================ *)
+
+
+(* ================================================================
+   Part II — SNOBOL-µ Configuration Syntax (v1.0, unchanged)
+   ================================================================
+   This section defines the syntax for configuring a SNOBOL-µ
+   micronaut instance: declaring patterns, rules, and bindings.
+   It does not define SNOBOL4 program syntax (see Part I above).
+   ================================================================ *)
+
+mu_document       = { mu_declaration } ;
+mu_declaration    = micronaut_decl | pattern_decl | rule_decl | binding_decl ;
+micronaut_decl    = "micronaut", ws, "SNOBOL-µ", ws, "{", ws,
+                    "grammar", ws, ":", ws, string_literal, ws, ";", ws,
+                    "version", ws, ":", ws, string_literal, ws, ";", ws,
+                    "authority", ws, ":", ws, "proposal_only", ws, ";", ws, "}" ;
+pattern_decl      = "pattern", ws, identifier, ws, "=", ws, mu_expression, ws, ";" ;
+rule_decl         = "rule", ws, identifier, ws, "{", ws,
+                    "subject", ws, ":", ws, mu_expression, ws, ";", ws,
+                    "match", ws, ":", ws, mu_expression, ws, ";", ws,
+                    [ "replace", ws, ":", ws, mu_expression, ws, ";", ws ],
+                    [ "emit", ws, ":", ws, mu_emission, ws, ";", ws ],
+                    "}" ;
+binding_decl      = "binding", ws, identifier, ws, "->", ws, identifier, ws, ";" ;
+
+mu_expression     = mu_alternative ;
+mu_alternative    = mu_sequence, { ws, "|", ws, mu_sequence } ;
+mu_sequence       = mu_term, { ws, "&", ws, mu_term } ;
+mu_term           = mu_primary, [ mu_quantifier ], [ mu_capture ] ;
+mu_primary        = string_literal | mu_pattern_ref | mu_wildcard | mu_char_class
+                  | mu_function_call | "(", ws, mu_expression, ws, ")" ;
+mu_pattern_ref    = "$", identifier ;
+mu_wildcard       = "*" | "?" ;
+mu_char_class     = "[", { class_character }, "]" ;
+mu_function_call  = identifier, "(", [ mu_expression, { ",", ws, mu_expression } ], ")" ;
+mu_quantifier     = "*" | "+" | "?" | "{", integer_literal, [ ",", [ integer_literal ] ], "}" ;
+mu_capture        = "=>", ws, identifier ;
+mu_emission       = "cue", "(", string_literal, ")"
+                  | "question", "(", mu_expression, ")"
+                  | "candidate", "(", identifier, ")"
+                  | "route_proposal", "(", identifier, ")" ;
+mu_identifier     = mu_letter, { mu_letter | digit | "_" | "-" | ":" } ;
+mu_letter         = letter | "µ" ;
+(* class_character: any Unicode scalar except unescaped closing bracket. *)

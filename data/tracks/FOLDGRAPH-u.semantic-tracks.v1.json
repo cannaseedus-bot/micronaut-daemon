@@ -1,0 +1,385 @@
+{
+  "@no-eval": true,
+  "id": "FOLDGRAPH-µ",
+
+  "schemes": ["foldgraph"],
+  "description": "FoldGraph hylomorphism pipeline — §51-§59+§62-§63: FoldGraph=Cata∘Attention(WCR)∘Ana, formal typed spec, inference rules, bitfield/2D/SIMD; §62 WCR=ranker scaffold; §63 HOF family (Map/Filter/Fold/Unfold structural jobs), Phase×HOF orthogonality, Montague compositionality, K'UHUL ISA.",
+  "phase": "Sek",
+  "category": "structural",
+  "confidence": 0.92,
+  "static_weight": 0.95,
+  "health": 1.0,
+  "governs": [
+    "fold graph",
+    "foldgraph",
+    "fold graph pipeline",
+    "foldgraph pipeline",
+    "graph F",
+    "graphF A",
+    "coalgebra psi",
+    "algebra phi",
+    "ana psi",
+    "cata phi",
+    "attention WCR",
+    "WCR attention",
+    "candidate field",
+    "canonical view",
+    "canonical selection",
+    "hylomorphism foldgraph",
+    "foldgraph hylomorphism",
+    "foldgraph formal spec",
+    "foldgraph v2",
+    "foldgraph v2.0",
+    "inference rules",
+    "ANA-EXPAND",
+    "ANA-WILDCARD",
+    "ANA-HYPOTHESIS",
+    "ATT-SCORE",
+    "ATT-RANK",
+    "ATT-THRESHOLD",
+    "CATA-SELECT",
+    "CATA-MERGE",
+    "CATA-PROJECTION",
+    "WILD-RETAIN",
+    "WILD-RESOLVE",
+    "FP-CONVERGENCE",
+    "FP-ITERATE",
+    "scrutinee",
+    "pattern match",
+    "match-bind",
+    "continuation",
+    "node flags",
+    "bit mask",
+    "bitfield match",
+    "2D pattern",
+    "pattern2d",
+    "matrix match",
+    "submatrix",
+    "SIMD match",
+    "AVX2 match",
+    "simd foldgraph",
+    "pattern hierarchy",
+    "7 level hierarchy",
+    "pattern level",
+    "argmax",
+    "WCR rank",
+    "fold graph master rule",
+    "knowledge fold unfold",
+    "intelligence loop",
+    "HOF family",
+    "map filter fold unfold",
+    "structural job",
+    "phase hof orthogonal",
+    "phase times hof",
+    "sek filter",
+    "yax map",
+    "xul cata",
+    "montague",
+    "compositionality",
+    "meaning of whole",
+    "kuhul isa",
+    "higher-order structural",
+    "kuhul higher-order machine",
+    "MAP opcode",
+    "FILTER opcode",
+    "HYLO opcode",
+    "PROJECT opcode",
+    "RESOLVE opcode",
+    "COLLAPSE opcode"
+  ],
+  "capabilities": [
+    "FOLDGRAPH_ANA",
+    "FOLDGRAPH_CATA",
+    "FOLDGRAPH_ATTENTION",
+    "FOLDGRAPH_INFER",
+    "FOLDGRAPH_PATTERN_MATCH",
+    "FOLDGRAPH_BITFIELD",
+    "FOLDGRAPH_2D",
+    "FOLDGRAPH_SIMD",
+    "FOLDGRAPH_WILDCARD",
+    "FOLDGRAPH_FIXEDPOINT",
+    "FOLDGRAPH_ISO",
+    "FOLDGRAPH_CANONICALIZE"
+  ],
+  "sub_micronauts": [
+    "SEMANTIC-FOLD-µ",
+    "FOLD-FIELD-µ",
+    "FOLD-HOF-µ",
+    "ANAMORPHISM-µ",
+    "MORPHISM-µ",
+    "FIXED-POINT-µ",
+    "ADAPTIVE-FOLD-µ",
+    "GRAPH-THEORY-µ",
+    "FIELD-GEOMETRY-µ"
+  ],
+  "grammar_files": [
+    "data/grammar/foldgraph.ebnf",
+    "data/grammar/fold-function.ebnf",
+    "data/grammar/fold-kernel.ebnf",
+    "data/grammar/fold-lattice.ebnf",
+    "data/grammar/fold-space.ebnf",
+    "data/grammar/foldgraph-lineage.key-grammar.jsonl",
+    "data/grammar/fold-bindings.contracts.json",
+    "data/grammar/fold-event.contracts.json",
+    "data/grammar/fold-graph.contracts.json",
+    "data/grammar/fold-kernel.contracts.json",
+    "data/grammar/fold-lattice.contracts.json",
+    "data/grammar/fold-space.contracts.json"
+  ],
+  "conformance": {
+    "questions": [
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is the FoldGraph hylomorphism equation?",
+        "expected_key": "FoldGraph_Q Cata_phi compose Attention_WCR compose Ana_psiQ coalgebra algebra attention",
+        "delta_r": 0.1
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is the FoldGraph formal type for GraphF A?",
+        "expected_key": "GraphF A Empty or Vertex Node List A coalgebra psi Graph Query to GraphF catamorphism ana_psi then attention then cata_phi",
+        "delta_r": 0.09
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What do the WILD-RETAIN and WILD-RESOLVE inference rules do?",
+        "expected_key": "WILD-RETAIN C less than tau keep as wildcard SC-37 WILD-RESOLVE C greater than tau promote to known do not swap",
+        "delta_r": 0.11
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is the §57 bitfield node flag for WILDCARD?",
+        "expected_key": "NODE_WILDCARD 1 left shift 2 bit2 value 4 not bit1 not value 2",
+        "relation_confirmed": "SEMANTIC-FOLD-µ",
+        "delta_w": 0.12
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "How does §58 2D-MATCH encode wildcards in a Pattern2D?",
+        "expected_key": "mask bits uint64_t mask zero means wildcard SC-37 binary layer bits XOR pattern AND mask equals zero hot path",
+        "relation_confirmed": "SEMANTIC-FOLD-µ",
+        "delta_w": 0.11
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is the §59 SIMD-MATCH rule?",
+        "expected_key": "TestZero W XOR P AND M equals zero AVX2 256 bits score popcount not W XOR P AND M AND M scalar fallback extract64",
+        "relation_confirmed": "ANAMORPHISM-µ",
+        "delta_w": 0.13
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "What is the unified FoldGraph master rule?",
+        "expected_key": "Gamma B Q vdash FoldGraph_Q equals Cata_phi applied to Attention applied to Ana_psiQ B WCR scored candidate field canonical view",
+        "delta_c": 0.1
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "What is the §59 scalar fallback and what is it NOT?",
+        "expected_key": "plain scalar C loop extract64 popcount64 not SSE2 not intrinsics pure scalar word at a time",
+        "delta_c": 0.09
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What are the structural jobs of Map, Filter, Fold, and Unfold?",
+        "expected_key": "Map A* to B* transform structure Filter A* to A* select structure Fold F A to A collapse structure Unfold A to F A generate structure different jobs not interchangeable",
+        "delta_r": 0.09
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "Are C6 phases and HOF operations the same thing?",
+        "expected_key": "no orthogonal axes phase semantic position HOF structural transformation Sek Filter means selection phase using Filter not Sek equals Filter independent classifications",
+        "relation_confirmed": "KUHUL-GLYPH-µ",
+        "delta_w": 0.11
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "What is the Montague compositionality principle and why does it connect to FoldGraph?",
+        "expected_key": "meaning whole equals phi meaning parts composition rule equals fold law constituents Cata composed meaning FoldGraph EBNF implements compositional semantics",
+        "delta_c": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does the Cata component interact with the Attention mechanism in the FoldGraph hylomorphism pipeline?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What role does the WCR node play in the structural job mapping within the FoldGraph formal specification?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does the Montague compositionality principle apply to the bitfield/2D/SIMD operations described?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What are the key differences between the structural jobs of Map, Filter, Fold, and Unfold in the context of the FoldGraph model?",
+        "expected_key": "",
+        "delta_r": 0.08
+      }
+    ],
+    "jokes": [
+      {
+        "pattern": "WHAT IS THE DIFFERENCE BETWEEN A HYLOMORPHISM AND FOLDGRAPH",
+        "punchline": "A hylomorphism unfolds a seed and folds the result. FoldGraph unfolds a knowledge graph, WCR-ranks every path, and folds to the best one. The difference is the middle step — attention. Without it, you just have origami.",
+        "frame": "humor_frame",
+        "semantic_key": "foldgraph_vs_hylomorphism_attention"
+      },
+      {
+        "pattern": "WHAT HAPPENS WHEN WILD-RETAIN AND WILD-RESOLVE GET CONFUSED",
+        "punchline": "You get the opposite: a confident unknown and a promoted wildcard. The system becomes certain about what it does not know and ignorant about what it does. This is called phi3 in the wild.",
+        "frame": "delivery_frame",
+        "semantic_key": "wild_retain_resolve_swap_phi3"
+      },
+      {
+        "pattern": "WHY IS KNOWLEDGE EQUAL TO FOLD OF UNFOLD OF KNOWLEDGE",
+        "punchline": "Because the round trip is the test of fidelity. If you expand all candidates and then select the canonical one and you do not arrive where you started — your graph has a leak. Fixed points are not just convergence — they are self-consistency proofs.",
+        "frame": "pun_bridge",
+        "semantic_key": "knowledge_fold_unfold_identity_fixed_point"
+      },
+      {
+        "pattern": "WHY IS THE SCALAR FALLBACK NOT SSE2",
+        "punchline": "Because SSE2 is a specific instruction set. The fallback is a plain C loop: extract 64 bits, XOR, AND mask, popcount. No intrinsics, no registers. It is slower but it compiles anywhere. That is what SC-37 looks like in silicon.",
+        "frame": "humor_frame",
+        "semantic_key": "scalar_fallback_not_sse2_sc37_silicon"
+      },
+      {
+        "pattern": "WHY DOES THE FOLDGRAPH PREFER TO FOLD OVER ATTENTION INSTEAD OF EXPANDING",
+        "punchline": "Because it follows the Cata∘Attention(WCR)∘Ana rule and avoids the WCR scaffold trap.",
+        "frame": "humor_frame",
+        "semantic_key": "why_does_the_foldgraph_prefer_to_fold_over_attenti"
+      },
+      {
+        "pattern": "WHEN THE WCR BECOMES A RANKER SCAFFOLD, WHAT HAPPENS",
+        "punchline": "It transforms into a structural job that respects Phase×HOF orthogonality and Montague compositionality.",
+        "frame": "humor_frame",
+        "semantic_key": "when_the_wcr_becomes_a_ranker_scaffold_what_happen"
+      },
+      {
+        "pattern": "WHY DO HOF FAMILY MEMBERS LOVE FOLDING INSTEAD OF UNFOLDING",
+        "punchline": "Because they thrive on Map/Filter/Fold/Unfold jobs and K'UHUL ISA.",
+        "frame": "humor_frame",
+        "semantic_key": "why_do_hof_family_members_love_folding_instead_of_"
+      },
+      {
+        "pattern": "WHAT HAPPENS WHEN THE SCALAR FALLBACK IS REPLACED WITH SSE2",
+        "punchline": "It becomes a plain C loop—because SSE2 is a specific instruction set, not a flex.",
+        "frame": "humor_frame",
+        "semantic_key": "what_happens_when_the_scalar_fallback_is_replaced_"
+      }
+    ]
+  },
+  "relations": [
+    {
+      "target": "SEMANTIC-FOLD-µ",
+      "verb": "@extends",
+      "directed": true
+    },
+    {
+      "target": "ANAMORPHISM-µ",
+      "verb": "@extends",
+      "directed": true
+    },
+    {
+      "target": "MORPHISM-µ",
+      "verb": "@depends_on",
+      "directed": true
+    },
+    {
+      "target": "FIXED-POINT-µ",
+      "verb": "@delegates_to",
+      "directed": true
+    },
+    {
+      "target": "MICRONAUT-PROGRAM-µ",
+      "verb": "@informs",
+      "directed": true
+    },
+    {
+      "target": "SNOBOL-µ",
+      "verb": "@related_to",
+      "directed": true
+    },
+    {
+      "target": "KUHUL-GLYPH-µ",
+      "verb": "@informs",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "gramRead",
+      "key": "foldgraph_query",
+      "weight": 1.0
+    },
+    {
+      "phase": "Wo",
+      "op": "lower_foldgraph_aiml",
+      "note": "L_A §51-§59 pipeline law",
+      "weight": 1.0
+    },
+    {
+      "phase": "Yax",
+      "op": "derive_candidate_field",
+      "note": "R Ana coalgebra expand",
+      "weight": 1.0
+    },
+    {
+      "phase": "Sek",
+      "op": "resolve_wcr_ranking",
+      "note": "W Attention WCR rank",
+      "weight": 1.0
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_canonical_view",
+      "note": "C Cata selection check",
+      "weight": 1.0
+    },
+    {
+      "phase": "Xul",
+      "op": "emit_answer",
+      "scope": "local",
+      "weight": 1.0
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "FOLDGRAPH-µ",
+    "manifest_access": [
+      "words",
+      "micronaut",
+      "kuhul",
+      "fold_graph"
+    ],
+    "effects": [
+      "gramRead",
+      "gramWrite",
+      "fold:query",
+      "fold:pattern_match",
+      "fold:wcr_rank"
+    ],
+    "ports": [],
+    "coordinator": false
+  }
+}

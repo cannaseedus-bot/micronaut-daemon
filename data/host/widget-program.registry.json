@@ -1,0 +1,28 @@
+{
+  "@kind": "asx.widget-program.registry.v1",
+  "@version": "1.0.0",
+  "authority": "observation_only",
+  "programs": {
+    "svg.field": {
+      "type": "svg",
+      "renderer": "native-svg",
+      "authority": "observation_only",
+      "compute": {
+        "backend": "d3d11",
+        "runtime": "khanary::gpu::SvgComputeRuntime",
+        "shader": "data/shaders/svg_compute.hlsl",
+        "sha256": "sha256:197c240032c16af7a2f6c7639171ca05b95fd8e60cadff4573576ba31790a3f7",
+        "entries": {
+          "nodes": "CSProjectNodes",
+          "edges": "CSProjectEdges"
+        },
+        "topology": "field_graph"
+      },
+      "output": {
+        "binding": "geometry",
+        "projection": "svg.nodes_edges"
+      },
+      "semantic_topology_mutation": false
+    }
+  }
+}

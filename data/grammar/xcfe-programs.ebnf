@@ -1,0 +1,299 @@
+(* ============================================================ *)
+(* XCFE Program Grammar                                          *)
+(* Declarative descriptors compiled to KuhulVM bracket programs. *)
+(* ============================================================ *)
+
+(* A program descriptor is data. XCFE is the evaluator.
+   The grammar governs the valid forms; the descriptors are instances.
+
+   Each program_class owns a named syntactic lane. A lane declares:
+     - the canonical entry phase (authority phase for that class)
+     - the permitted ForwardC6Subset (which C6 phases steps may use)
+     - any binding admission constraint (e.g. LEARNING requires verified_outcome)
+
+   "Syncable" means:
+     every descriptor in data/programs/xcfe.*.json must satisfy the lane
+     grammar for its declared program_class, and every lane in this grammar
+     must have at least one corresponding descriptor. The conformance checker
+     (tools/check_xcfe_programs.py) runs this sync in both directions.
+
+   The authority block is an invariant enforced by the schema and the lane
+   grammar — not by execution:
+
+       semantic_authority = false
+       topology_mutation  = false
+       commit_authorized  = false
+
+   Policy != Control != Execution.
+   The descriptor governs the lane form; XCFE governs execution. *)
+
+(* ============================================================ *)
+(* 1. CONCRETE GRAMMAR — JSON SHAPE                              *)
+(* ============================================================ *)
+
+Program         ::= "{" ProgramMember ( "," ProgramMember )* "}" ;
+
+ProgramMember   ::= TypeKey
+                  | NoEvalKey
+                  | IdKey
+                  | ProgramClassKey
+                  | PhaseKey
+                  | InputRoleKey
+                  | OutputRoleKey
+                  | AdmissionKey
+                  | ExecutorKey
+                  | DescriptionKey
+                  | StepsKey
+                  | AuthorityKey
+                  | ExtensionKey ;
+
+TypeKey         ::= '"@type"' ":" '"khanary.xcfe_program.v1"' ;
+NoEvalKey       ::= '"@no-eval"' ":" 'true' ;
+IdKey           ::= '"id"' ":" ProgramId ;
+ProgramClassKey ::= '"program_class"' ":" ProgramClass ;
+PhaseKey        ::= '"phase"' ":" Phase ;
+InputRoleKey    ::= '"input_role"' ":" String ;
+OutputRoleKey   ::= '"output_role"' ":" String ;
+AdmissionKey    ::= '"admission"' ":" AdmissionKind ;
+ExecutorKey     ::= '"executor"' ":" String ;    (* hint only; XCFE owns routing *)
+DescriptionKey  ::= '"description"' ":" String ;
+StepsKey        ::= '"steps"' ":" StepList ;
+AuthorityKey    ::= '"authority"' ":" Authority ;
+ExtensionKey    ::= String ":" Value ;
+
+ProgramId       ::= '"xcfe."' [a-z] [a-z0-9._-]* ;
+                    (* exact match with filename stem enforced by read_descriptor() *)
+
+ProgramClass    ::= '"CONDITION"'
+                  | '"SELECTION"'
+                  | '"CAUSAL"'
+                  | '"TRANSFORM"'
+                  | '"ITERATION"'
+                  | '"COMPOSITION"'
+                  | '"VERIFICATION"'
+                  | '"LEARNING"'
+                  | '"ROUTE"'
+                  | '"RETURN"' ;
+
+Phase           ::= '"Pop"' | '"Wo"' | '"Yax"' | '"Sek"' | '"Ch\'en"' | '"Xul"' ;
+
+AdmissionKind   ::= '"explicit"'
+                  | '"verified_outcome_required"'
+                  | '"xcfe_authorized"'
+                  | '"xul_only"' ;
+
+StepList        ::= "[" Step ( "," Step )* "]" ;
+
+Step            ::= "{" StepMember ( "," StepMember )* "}" ;
+StepMember      ::= StepPhaseKey
+                  | StepOpKey
+                  | StepIdKey
+                  | StepTypeKey
+                  | StepArgsKey ;
+
+StepPhaseKey    ::= '"phase"' ":" Phase ;
+StepOpKey       ::= '"op"' ":" String ;     (* documentation label; not compiled *)
+StepIdKey       ::= '"id"' ":" String ;     (* maps to Instruction.id — the real operand *)
+StepTypeKey     ::= '"type"' ":" String ;   (* maps to Instruction.type *)
+StepArgsKey     ::= '"args"' ":" "[" ( String ( "," String )* )? "]" ;
+
+Authority       ::= "{" AuthorityMember ( "," AuthorityMember )* "}" ;
+AuthorityMember ::= SemanticAuthorityKey
+                  | TopologyMutationKey
+                  | CommitAuthorizedKey ;
+
+SemanticAuthorityKey ::= '"semantic_authority"' ":" 'false' ;
+TopologyMutationKey  ::= '"topology_mutation"'  ":" 'false' ;
+CommitAuthorizedKey  ::= '"commit_authorized"'  ":" 'false' ;
+
+String          ::= JSON_String ;
+Value           ::= JSON_Value ;
+
+
+(* ============================================================ *)
+(* 2. LANE GRAMMAR — PER-CLASS SYNCABLE PROGRAM FORMS            *)
+(*                                                               *)
+(* Each program_class governs one named lane.                    *)
+(* A lane binds: canonical entry phase, permitted step subset,   *)
+(* and any admission gate.                                       *)
+(*                                                               *)
+(* ForwardC6Subset(S) means steps use only phases from S and     *)
+(* are non-decreasing in C6 order. S ⊆ {Pop,Wo,Yax,Sek,Ch'en,Xul} *)
+(* C6 order: Pop < Wo < Yax < Sek < Ch'en < Xul.                *)
+(*                                                               *)
+(* ★ = program-descriptor class only; not in xcfe_node_class.h  *)
+(* ============================================================ *)
+
+(* — CONDITION — canonical phase Wo — maps to node ISA class Condition — *)
+(* Evaluates @if/@then/@else predicate; produces branch result.           *)
+
+ConditionProgram    ::= Program
+                        where program_class = "CONDITION"
+                          and phase         = "Wo"
+                          and steps ∈ ForwardC6Subset( {Pop, Wo, Yax, Xul} ) ;
+
+
+(* — SELECTION — canonical phase Yax — maps to node ISA class Selection — *)
+(* W·C·R candidate scoring from the active fold graph.                    *)
+
+SelectionProgram    ::= Program
+                        where program_class = "SELECTION"
+                          and phase         = "Yax"
+                          and steps ∈ ForwardC6Subset( {Pop, Wo, Yax, Sek, Xul} ) ;
+
+
+(* — CAUSAL — canonical phase Wo — maps to node ISA class Causal — *)
+(* Binds cause at Wo; dispatches causal consequence at Sek;        *)
+(* records effect at Xul.                                          *)
+
+CausalProgram       ::= Program
+                        where program_class = "CAUSAL"
+                          and phase         = "Wo"
+                          and steps ∈ ForwardC6Subset( {Pop, Wo, Sek, Ch'en, Xul} ) ;
+
+
+(* — TRANSFORM — canonical phase Sek — maps to node ISA class Transform — *)
+(* Structural transformation applied at Sek; verified at Ch'en.           *)
+
+TransformProgram    ::= Program
+                        where program_class = "TRANSFORM"
+                          and phase         = "Sek"
+                          and steps ∈ ForwardC6Subset( {Pop, Sek, Ch'en, Xul} ) ;
+
+
+(* — ITERATION ★ — canonical phase Sek — descriptor level only — *)
+(* Drives @for loop over a declared range; binds range at Wo.     *)
+
+IterationProgram    ::= Program
+                        where program_class = "ITERATION"
+                          and phase         = "Sek"
+                          and steps ∈ ForwardC6Subset( {Pop, Wo, Sek, Xul} ) ;
+
+
+(* — COMPOSITION ★ — canonical phase Sek — descriptor level only — *)
+(* Assembles candidate sub-programs at Yax; composes at Sek.       *)
+
+CompositionProgram  ::= Program
+                        where program_class = "COMPOSITION"
+                          and phase         = "Sek"
+                          and steps ∈ ForwardC6Subset( {Pop, Yax, Sek, Ch'en, Xul} ) ;
+
+
+(* — VERIFICATION — canonical phase Ch'en — maps to node ISA class Verification — *)
+(* Sek proposes; Ch'en proves. ParsedGraph → VerifiedGraph boundary.              *)
+
+VerificationProgram ::= Program
+                        where program_class = "VERIFICATION"
+                          and phase         = "Ch'en"
+                          and steps ∈ ForwardC6Subset( {Pop, Sek, Ch'en, Xul} ) ;
+
+
+(* — LEARNING ★ — canonical phase Xul — descriptor level only — *)
+(* Promotes verified outcomes; never bypasses Ch'en.            *)
+(* admission = verified_outcome_required is a binding constraint *)
+(* on this lane: LEARNING may not lower its guard to "explicit". *)
+
+LearningProgram     ::= Program
+                        where program_class = "LEARNING"
+                          and phase         = "Xul"
+                          and admission     = "verified_outcome_required"
+                          and steps ∈ ForwardC6Subset( {Pop, Ch'en, Xul} ) ;
+
+
+(* — ROUTE ★ — canonical phase Yax — descriptor level only — *)
+(* Resolves gap/intent to a dispatch route via W·C·R scoring.  *)
+(* XCFE owns route authority; this lane expresses the surface.  *)
+
+RouteProgram        ::= Program
+                        where program_class = "ROUTE"
+                          and phase         = "Yax"
+                          and steps ∈ ForwardC6Subset( {Pop, Wo, Yax, Sek, Xul} ) ;
+
+
+(* — RETURN — canonical phase Xul — descriptor level only — *)
+(* Terminal collapse to a return value; prior verification    *)
+(* required by the step structure.                           *)
+
+ReturnProgram       ::= Program
+                        where program_class = "RETURN"
+                          and phase         = "Xul"
+                          and steps ∈ ForwardC6Subset( {Pop, Ch'en, Xul} ) ;
+
+
+(* ============================================================ *)
+(* 3. ABSTRACT GRAMMAR — PROGRAM AND LANE                        *)
+(* ============================================================ *)
+
+ProgramADT      ::= "<" "id"            ":" ProgramId ","
+                        "program_class" ":" ProgramClass ","
+                        "phase"         ":" Phase ","
+                        "input_role"    ":" String ","
+                        "output_role"   ":" String ","
+                        "admission"     ":" AdmissionKind ","
+                        "steps"         ":" "[" StepADT* "]" ","
+                        "authority"     ":" AuthorityADT ">" ;
+
+StepADT         ::= "<" "phase" ":" Phase ","
+                        "id"    ":" String ","
+                        "type"  ":" String ","
+                        "args"  ":" "[" String* "]" ">" ;
+                    (* "op" is documentation; absent from the ADT *)
+
+AuthorityADT    ::= "<" "semantic_authority" ":" False ","
+                        "topology_mutation"  ":" False ","
+                        "commit_authorized"  ":" False ">" ;
+
+LaneADT         ::= "<" "class"      ":" ProgramClass ","
+                        "phase"      ":" Phase ","
+                        "step_set"   ":" ForwardC6Subset ","
+                        "admission"  ":" AdmissionKind ","
+                        "isa_bound"  ":" Bool ">" ;
+                    (* isa_bound = true iff ProgramClass maps to xcfe_node_class.h *)
+
+ForwardC6Subset ::= Subset( Phase* )
+                    where phases are non-decreasing in C6 order ;
+
+C6Order         ::= Pop "=" 0 | Wo "=" 1 | Yax "=" 2
+                  | Sek "=" 3 | Ch'en "=" 4 | Xul "=" 5 ;
+
+LaneRegistry    ::= "[" LaneADT* "]" ;
+ProgramRegistry ::= "[" ProgramADT* "]" ;
+
+SyncCheck       ::= "∀ p ∈ ProgramRegistry: ∃ l ∈ LaneRegistry: l.class = p.program_class"
+                  | "∀ l ∈ LaneRegistry: ∃ p ∈ ProgramRegistry: p.program_class = l.class" ;
+
+
+(* ============================================================ *)
+(* 4. SEMANTIC INVARIANTS                                        *)
+(* ============================================================ *)
+
+P1  ::= "@type" = "khanary.xcfe_program.v1" for all program descriptors ;
+P2  ::= id matches filename stem; enforced by read_descriptor() id-consistency check ;
+P3  ::= id starts with "xcfe." with no path separators or ".." segments ;
+P4  ::= program_class ∈ { CONDITION, SELECTION, CAUSAL, TRANSFORM, ITERATION,
+                           COMPOSITION, VERIFICATION, LEARNING, ROUTE, RETURN } ;
+P5  ::= phase = CanonicalPhase(program_class) ;
+        (* CanonicalPhase: CONDITION→Wo, SELECTION→Yax, CAUSAL→Wo, TRANSFORM→Sek,
+           ITERATION→Sek, COMPOSITION→Sek, VERIFICATION→Ch'en,
+           LEARNING→Xul, ROUTE→Yax, RETURN→Xul *)
+P6  ::= steps form ForwardC6Subset of the lane's declared permitted phase set ;
+        (* C6 order: Pop < Wo < Yax < Sek < Ch'en < Xul;
+           phase_order(steps[i]) <= phase_order(steps[i+1]) for all i *)
+P7  ::= step "op" field is documentation only; Instruction.id carries the real operand ;
+P8  ::= semantic_authority = false ; (* const in schema — not a softened constraint *)
+P9  ::= topology_mutation  = false ; (* delta_B != 0 commits only under Verified ∧ Authorized ∧ Fresh ∧ Xul *)
+P10 ::= commit_authorized  = false ; (* commit authority belongs to Xul alone *)
+P11 ::= LEARNING.admission = "verified_outcome_required" ;
+        (* LEARNING may not lower its guard; this is a binding lane constraint *)
+P12 ::= FoldGate enforces ForwardC6Law at runtime; the grammar states the law statically ;
+P13 ::= { ITERATION, COMPOSITION, ROUTE, LEARNING, RETURN } ∩ xcfe_node_class.h = ∅ ;
+        (* these are program-descriptor classes only *)
+P14 ::= { CONDITION, SELECTION, CAUSAL, TRANSFORM, VERIFICATION } ⊆ xcfe_node_class.h ;
+        (* these map to the 14-class node ISA; canonical phase must agree *)
+P15 ::= SyncCheck holds: lane registry ↔ program registry are in bijection by class ;
+
+AuthorityLaw    ::= "descriptor governs the lane form; XCFE governs execution" ;
+                    (* a descriptor cannot self-authorize, commit topology,
+                       or grant semantic authority by containing the authority block *)
+
+TypeJudgment    ::= "⊢" ProgramADT ":" Program "under" LaneADT ;

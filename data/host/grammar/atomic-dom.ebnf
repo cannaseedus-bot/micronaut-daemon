@@ -1,0 +1,328 @@
+(* =========================================================
+   ATOMIC DOM GRAMMAR
+   Version: 0.2.0
+
+   Projection-only · Runtime green-screen capable · Tool grammar aware
+
+   This grammar is a source artifact for Atomic DOM. It describes how ASXR,
+   KXML categories, tools, projection sandboxes, and fold fields relate. It
+   does not grant semantic authority or host commit authority.
+   ========================================================= *)
+
+AtomicProgram
+  ::= Statement* ;
+
+Statement
+  ::= AtomicBlock
+    | DomBlock
+    | ComponentBlock
+    | StateProposal
+    | PluginDirective
+    | ControlStatement
+    | ServerCall
+    | ReactorBlock
+    | KXMLCategory
+    | ToolDefinition
+    | ProjectionSandbox
+    | TaskExecutorPlan
+    | RigToolRegistry ;
+
+(* ---------------------------------------------------------
+   ASXR ATOMIC BLOCKS
+   --------------------------------------------------------- *)
+
+AtomicBlock
+  ::= "@atomic" BlockId? "{" BlockBody "}"
+    | "@block" BlockId? "{" BlockBody "}"
+    | "@" BlockType BlockId? "{" BlockBody "}" ;
+
+DomBlock
+  ::= "@dom" BlockId? "{" BlockBody "}" ;
+
+ComponentBlock
+  ::= "@component" Identifier "{" BlockBody "}" ;
+
+BlockType
+  ::= QualifiedIdentifier | StringLiteral ;
+
+BlockId
+  ::= "[" Identifier "]" ;
+
+BlockBody
+  ::= (PropertyAssignment | ControlStatement | Expression | AtomicBlock | DomBlock | ServerCall | ReactorBlock)* ;
+
+PropertyAssignment
+  ::= PropertyName ":" Value ";" ;
+
+PropertyName
+  ::= QualifiedIdentifier | "@" QualifiedIdentifier ;
+
+Value
+  ::= Literal | Reference | BlockReference | Expression ;
+
+Reference
+  ::= "{{" PathExpression "}}" ;
+
+BlockReference
+  ::= "#" Identifier ;
+
+(* ---------------------------------------------------------
+   STATE / CONTROL / DAEMON SURFACES
+   --------------------------------------------------------- *)
+
+StateProposal
+  ::= "@propose" "{" "prior" ":" StateHash "," "next" ":" StateDefinition "," "constraints" ":" "[" ConstraintList? "]" "}" ;
+
+StateDefinition
+  ::= "{" "blocks" ":" "[" AtomicBlock ("," AtomicBlock)* "]" "," "phase" ":" PhaseName "," "epoch" ":" Integer "}" ;
+
+ControlStatement
+  ::= IfStatement | ForStatement | WhileStatement | SwitchStatement | DoWhileStatement | Assignment ;
+
+IfStatement
+  ::= "@if" "(" Expression ")" BlockBodyOrBlock ("@else" BlockBodyOrBlock)? ;
+
+ForStatement
+  ::= "@for" "(" ForSpec ")" BlockBodyOrBlock ;
+
+WhileStatement
+  ::= "@while" "(" Expression ")" BlockBodyOrBlock ;
+
+DoWhileStatement
+  ::= "@do" BlockBodyOrBlock "@while" "(" Expression ")" ;
+
+SwitchStatement
+  ::= "@switch" "(" Expression ")" "{" CaseClause* DefaultClause? "}" ;
+
+Assignment
+  ::= "@set" Identifier "=" Expression ";" ;
+
+ServerCall
+  ::= "@call" CallId CallModifiers? "(" Arguments? ")" ("->" ReturnHandler)? ";" ;
+
+ReactorBlock
+  ::= "@reactor" Identifier? "{" ReactorRule* "}" ;
+
+(* ---------------------------------------------------------
+   KXML CATEGORY AND TRACK GRAMMAR
+   --------------------------------------------------------- *)
+
+KXMLCategory
+  ::= "<category" PhaseAttribute PriorityAttribute? IntentAttribute? ">" Pattern Template "</category>" ;
+
+Pattern
+  ::= "<pattern" PatternAttributes? ">" PatternExpression "</pattern>" ;
+
+Template
+  ::= "<template" TemplateAttributes? ">" TemplateBody "</template>" ;
+
+TemplateBody
+  ::= (Output | Route | Constraint | TrackStep | WildcardGraph | ToolGraph | ProjectionSandbox)* ;
+
+TrackStep
+  ::= "<" StepName PhaseAttribute? StepAttributes? ">" Text? "</" StepName ">" ;
+
+WildcardGraph
+  ::= "<wildcard_graph>" (WildcardNode | GraphEdge | LiteralNode)* "</wildcard_graph>" ;
+
+WildcardNode
+  ::= "<wildcard" IdAttribute RoleAttribute TypeAttribute? PhaseAttribute? "/>" ;
+
+LiteralNode
+  ::= "<literal" IdAttribute ValueAttribute RoleAttribute? PhaseAttribute? "/>" ;
+
+GraphEdge
+  ::= "<edge" FromAttribute ToAttribute RelationshipAttribute WeightAttribute? "/>" ;
+
+(* ---------------------------------------------------------
+   TOOL GRAMMAR
+   --------------------------------------------------------- *)
+
+ToolDefinition
+  ::= "<tool" IdAttribute ToolAttributes? ">" ToolBody "</tool>" ;
+
+ToolBody
+  ::= Pattern Wildcards? Template ToolGraph? ProjectionOperator? TaskExecutorVerbs? ;
+
+Wildcards
+  ::= "<wildcards>" WildcardNode* "</wildcards>" ;
+
+ToolGraph
+  ::= "<graph>" (ToolNode | GraphEdge)* "</graph>" ;
+
+ToolNode
+  ::= "<node" IdAttribute PhaseAttribute OpAttribute? LabelAttribute? "/>" ;
+
+ProjectionOperator
+  ::= "<projection" MapsAttribute PhaseAttribute ProjectiveAttribute? ">" PatternExpression "</projection>" ;
+
+(* Tool admission uses the same relational scoring law as patterns and graph nodes:
+   S(tool|Q) = W_tool * C_tool * R(Q,K_tool) *)
+
+(* ---------------------------------------------------------
+   TASK EXECUTOR / PLAN.md GRAMMAR
+   --------------------------------------------------------- *)
+
+TaskExecutorPlan
+  ::= "PLAN.md" TaskList ExecutionLog RigToolRegistry ;
+
+TaskList
+  ::= TaskStep* ;
+
+TaskStep
+  ::= TaskId TaskExecutorVerb TaskStatus TaskPayload? ;
+
+TaskExecutorVerbs
+  ::= "<verbs>" TaskExecutorVerb* "</verbs>" ;
+
+TaskExecutorVerb
+  ::= "note" | "read" | "write" | "patch" | "tool" | "check" ;
+
+TaskPayload
+  ::= PathExpression | PatchExpression | ToolReference | Text ;
+
+PatchExpression
+  ::= "search" Text "replace" Text ;
+
+ToolReference
+  ::= QualifiedIdentifier ;
+
+TaskStatus
+  ::= "pending" | "running" | "complete" | "blocked" | "skipped" | "failed" ;
+
+ExecutionLog
+  ::= Text* ;
+
+TaskId
+  ::= Identifier ;
+
+RigToolRegistry
+  ::= "<rig_tools>" RigTool* "</rig_tools>" ;
+
+RigTool
+  ::= "<rig_tool" IdAttribute KindAttribute PathAttribute PhaseAttribute? "/>" ;
+
+(* ---------------------------------------------------------
+   GREEN-SCREEN RUNTIME PROJECTION SANDBOX
+   --------------------------------------------------------- *)
+
+ProjectionSandbox
+  ::= "<projection_sandbox" SandboxAttributes ">" ProjectionSurface* "</projection_sandbox>" ;
+
+SandboxAttributes
+  ::= IdAttribute KindAttribute TargetAttribute IsolationAttribute? ;
+
+ProjectionSurface
+  ::= "dom" | "terminal" | "ansi" | "canvas" | "html" | "custom" ;
+
+(* Green screen is a runtime projection target, not a security isolation boundary. *)
+
+(* ---------------------------------------------------------
+   FIELD PROJECTION TOKENS
+   --------------------------------------------------------- *)
+
+PatternExpression
+  ::= RegexAtom+ ;
+
+RegexAtom
+  ::= LiteralText
+    | CaptureGroup
+    | CharacterClass
+    | Quantifier
+    | Anchor
+    | Alternation ;
+
+CaptureGroup
+  ::= "(" PatternExpression ")" | "*" ;
+
+CharacterClass
+  ::= "\\d" | "\\w" | "\\s" | "[" ClassBody "]" ;
+
+Quantifier
+  ::= "*" | "+" | "?" | "{" Integer ("," Integer?)? "}" ;
+
+Anchor
+  ::= "^" | "$" ;
+
+Alternation
+  ::= PatternExpression "|" PatternExpression ;
+
+(* Pattern matching is represented as P_pattern: N(k) -> B_theta. The current
+   implementation may execute using ordinary string/regex matching, but the
+   grammar records the projection role explicitly. *)
+
+(* ---------------------------------------------------------
+   LEXICAL RULES
+   --------------------------------------------------------- *)
+
+PhaseName
+  ::= "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul" ;
+
+Identifier
+  ::= Letter (Letter | Digit | "-" | "_")* ;
+
+QualifiedIdentifier
+  ::= Identifier ("." Identifier)* ;
+
+PathExpression
+  ::= Identifier ("." Identifier)* ;
+
+Literal
+  ::= StringLiteral | NumberLiteral | BooleanLiteral | NullLiteral ;
+
+StringLiteral
+  ::= '"' StringChar* '"' | "'" StringChar* "'" ;
+
+NumberLiteral
+  ::= Integer | Float ;
+
+BooleanLiteral
+  ::= "true" | "false" ;
+
+NullLiteral
+  ::= "null" ;
+
+Integer
+  ::= Digit+ ;
+
+Float
+  ::= Digit+ "." Digit+ ;
+
+Letter
+  ::= [a-zA-Z] ;
+
+Digit
+  ::= [0-9] ;
+
+Text
+  ::= StringChar+ ;
+
+(* Attribute aliases are conventional XML-style attributes used by KXML. *)
+IdAttribute           ::= "id" "=" StringLiteral ;
+PhaseAttribute        ::= "phase" "=" StringLiteral ;
+PriorityAttribute     ::= "priority" "=" StringLiteral ;
+IntentAttribute       ::= "intent" "=" StringLiteral ;
+RoleAttribute         ::= "role" "=" StringLiteral ;
+TypeAttribute         ::= "type" "=" StringLiteral ;
+ValueAttribute        ::= "value" "=" StringLiteral ;
+FromAttribute         ::= "from" "=" StringLiteral ;
+ToAttribute           ::= "to" "=" StringLiteral ;
+RelationshipAttribute ::= "relationship" "=" StringLiteral ;
+WeightAttribute       ::= "weight" "=" StringLiteral ;
+KindAttribute         ::= "kind" "=" StringLiteral ;
+PathAttribute         ::= "path" "=" StringLiteral ;
+TargetAttribute       ::= "target" "=" StringLiteral ;
+IsolationAttribute    ::= "isolation" "=" ("false" | "true") ;
+MapsAttribute         ::= "maps" "=" StringLiteral ;
+ProjectiveAttribute   ::= "projective" "=" ("true" | "false") ;
+OpAttribute           ::= "op" "=" StringLiteral ;
+LabelAttribute        ::= "label" "=" StringLiteral ;
+ToolAttributes        ::= Attribute* ;
+PatternAttributes     ::= Attribute* ;
+TemplateAttributes    ::= Attribute* ;
+StepAttributes        ::= Attribute* ;
+Attribute             ::= Identifier "=" StringLiteral ;
+
+(* =========================================================
+   END ATOMIC DOM GRAMMAR
+   ========================================================= *)

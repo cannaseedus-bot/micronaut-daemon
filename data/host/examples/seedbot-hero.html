@@ -1,0 +1,19 @@
+<section id="seedbot-hero" data-asx-key="⟁APP:SEEDBOT_HERO/⟁ROOT:SEEDBOT_HERO" aria-label="Seed Bot smart assistant">
+  <header data-asx-key="⟁APP:SEEDBOT_HERO/⟁WIDGET:SEEDBOT_HERO">
+    <span>🌿 AI-powered · Live catalog · Real-time blog</span>
+    <h1>Seed Bot — Your smart grow assistant</h1>
+    <p>Ask about seeds, strains, recommendations, blog posts, cart actions, and checkout.</p>
+    <a href="/p/seedbot.html" data-event="hero.try">Try Seed Bot Now →</a>
+  </header>
+  <section data-asx-key="⟁APP:SEEDBOT_HERO/⟁WIDGET:SEEDBOT_CAPABILITIES">
+    <h2>What It Can Do</h2>
+    <input data-asx-key="⟁APP:SEEDBOT_HERO/⟁INPUT:SEEDBOT_SEARCH" type="search" placeholder="Search capabilities" data-bind="state.search" />
+    <button data-asx-key="⟁APP:SEEDBOT_HERO/⟁ACTION:SEEDBOT_THEME" data-event="theme.toggle">Theme</button>
+  </section>
+  <nav data-asx-key="⟁APP:SEEDBOT_HERO/⟁NAV:SEEDBOT_CAPABILITIES" data-source="capabilities" data-bind="state.active_capability" data-event="capability.select" role="tablist"></nav>
+  <article data-asx-key="⟁APP:SEEDBOT_HERO/⟁WIDGET:SEEDBOT_DETAIL" data-source="capabilities" data-bind="state.active_capability"></article>
+  <section data-asx-key="⟁APP:SEEDBOT_HERO/⟁WIDGET:SEEDBOT_CTA"><a href="/p/seedbot.html" data-event="cta.open">🚀 Open Seed Bot</a></section>
+</section>
+<script type="application/json" id="asx-json-runtime">
+{"@kind":"asx.key-runtime.binding.v1","@app":"⟁APP:SEEDBOT_HERO","@manifest":"data/host/apps/seedbot-hero.asx-app.json","@executor":"mx.run","@authority":"projection_only","@state":"request_scoped","@semantic_commit":false,"@events":{"search.input":"seedbot.search","theme.toggle":"seedbot.toggle_theme","capability.select":"seedbot.select_capability","hero.try":"seedbot.open","cta.open":"seedbot.open"}}
+</script>

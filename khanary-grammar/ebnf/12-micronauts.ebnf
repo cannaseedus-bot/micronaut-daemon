@@ -1,0 +1,7 @@
+(* KHANARY / CFPC grammar package — proposed syntax contract v0.1. *)
+(* EBNF conventions: { X } repetition, [ X ] optional, | alternation. *)
+(* Quoted XML tags are literal terminals. Character data is parsed by the XML host. *)
+micronaut = "<micronaut>", { governs | capability | pattern | function_ref | policy }, "</micronaut>" ;
+(* Micronaut = callable program + vector + field + evolution. *)
+(* WCR = W * C * cosine(Q, K_mu), only among eligible micronauts. *)
+(* Capability routing success is not a verification verdict. *)

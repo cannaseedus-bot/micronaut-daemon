@@ -1,0 +1,27 @@
+<div id="seed-store" data-asx-key="⟁APP:SEED_STORE/⟁ROOT:SEED_STORE">
+  <header data-asx-key="⟁APP:SEED_STORE/⟁WIDGET:STORE_HEADER">
+    <h1>🌱 Cannabis Seed Store</h1>
+    <input data-asx-key="⟁APP:SEED_STORE/⟁INPUT:STORE_SEARCH" type="search" placeholder="Search strains" data-bind="state.search" />
+    <button data-asx-key="⟁APP:SEED_STORE/⟁ACTION:STORE_THEME" data-event="theme.toggle">Theme</button>
+    <button data-asx-key="⟁APP:SEED_STORE/⟁ACTION:STORE_CART" data-event="cart.toggle">Cart</button>
+  </header>
+  <section data-asx-key="⟁APP:SEED_STORE/⟁WIDGET:STORE_HERO"><h2>Premium seeds</h2><p>Availability and orders are subject to local laws and regulations.</p></section>
+  <main>
+    <section data-asx-key="⟁APP:SEED_STORE/⟁WIDGET:PRODUCT_GRID" data-source="catalog.products" data-event="product.add"></section>
+    <aside data-asx-key="⟁APP:SEED_STORE/⟁WIDGET:CART" data-bind="state.cart"></aside>
+    <form data-asx-key="⟁APP:SEED_STORE/⟁WIDGET:CHECKOUT" data-bind="state.cart" data-event="checkout.submit"></form>
+  </main>
+  <footer data-asx-key="⟁APP:SEED_STORE/⟁WIDGET:STORE_FOOTER">Seed Store · Authorized order processing only</footer>
+</div>
+<script type="application/json" id="asx-json-runtime">
+{
+  "@kind":"asx.key-runtime.binding.v1",
+  "@app":"⟁APP:SEED_STORE",
+  "@manifest":"data/host/apps/seed-store.asx-app.json",
+  "@executor":"mx.run",
+  "@authority":"projection_only",
+  "@state":"request_scoped",
+  "@semantic_commit":false,
+  "@events":{"search.input":"store.search","theme.toggle":"store.toggle_theme","cart.toggle":"store.toggle_cart","product.add":"store.add_to_cart","cart.quantity":"store.set_quantity","cart.remove":"store.remove_item","cart.clear":"store.clear_cart","checkout.submit":"store.submit_order"}
+}
+</script>

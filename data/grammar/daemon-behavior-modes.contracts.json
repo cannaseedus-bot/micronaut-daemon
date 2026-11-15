@@ -1,0 +1,177 @@
+{
+  "@type": "khanary.daemon_behavior_modes_contract.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "modes_describe_behavior_xcfe_admits_gxul_commits_learned_state_is_separate",
+  "lane": "KHANARY_BEHAVIOR_MODES_TEST",
+  "owner": "src/micronaut/behavior_modes.cpp",
+  "why": "The behavior-mode layer already ships — 68 modes, six behavior dimensions, a GML affinity graph, and a MathML policy declaring four weight classes and a bounded learning delta — but nothing gated it. Two hazards follow. First, the safeguards live only in prose annotations, so a caller could treat an affinity as a probability, a bias as a gradient, or a verified execution as helpfulness. Second, the repository now states **two different** W_effective laws, and conflating them would be a silent correctness error.",
+  "artifacts": {
+    "modes": "data/grammar/daemon-behavior-modes.v1.json",
+    "policy_mathml": "data/grammar/mml/v1/DaemonBehaviorModes.mml",
+    "graph": "data/daemon_behavior_modes.gml",
+    "aiml_patterns": "data/alice/daemon-modes.aiml",
+    "learned_state": "GramStore:daemon-modes"
+  },
+  "name_collision": {
+    "mml_here": "MathML — `data/grammar/mml/v1/` holds 43 MathML content dictionaries, one per daemon, with `csymbol cd=\"urn:kuhul:daemon-*:v1\"` symbols",
+    "proposed": "Micronaut Mode Markup, as a separate markup for mode configuration and learning policy",
+    "decision": "the established MML is MathML and is kept; mode configuration lives in the JSON + MathML policy pair above. A new markup would need its own extension (e.g. `M3`), not the name MML, because `*.mml` already means MathML content dictionaries here"
+  },
+  "weight_classes": {
+    "law": "the four weights are distinct feature sources, never one number, and none of them is a gradient",
+    "W_prior": {
+      "meaning": "bounded mode/pattern preference from AIML",
+      "storage": "aiml/mml",
+      "authority": "illustrative_prior"
+    },
+    "W_graph": {
+      "meaning": "mode relation and transition affinity",
+      "storage": "gml",
+      "authority": "affinity_never_probability"
+    },
+    "W_context": {
+      "meaning": "temporary session relevance",
+      "storage": "runtime",
+      "authority": "discarded_with_the_session_unless_separately_authorized"
+    },
+    "W_learned": {
+      "meaning": "provenance-bearing reinforcement from validated outcomes",
+      "storage": "gramstore",
+      "authority": "not_written_by_mode_selection"
+    },
+    "combination": "the MathML policy states W_effective as a sum of the four terms and requires that a runtime define normalization and combination before summing them; a sum without declared normalization is a typed refusal"
+  },
+  "two_effective_laws": {
+    "law": "this repository states two W_effective formulas for two different things, and they must not be conflated",
+    "behavior_modes": {
+      "formula": "W_effective = W_prior + W_graph + W_context + W_learned",
+      "meaning": "additive composition of four distinct feature sources",
+      "requirement": "declared normalization before summing"
+    },
+    "asx_corpus_gate": {
+      "formula": "W_effective(w, t) = W_corpus(w) × W_learned(w, t)",
+      "meaning": "a multiplicative gate: a frozen corpus prior scaled by a learned weight",
+      "contract": "data/grammar/asx-symbolic-compression.contracts.json"
+    },
+    "rule": "one is a sum of feature sources, the other is a product of a prior and a learned scale; a value computed under one must never be reported as the other"
+  },
+  "mode_selection": {
+    "declared": {
+      "explicit_override": "wins_style_selection",
+      "multiple_modes": "primary_plus_weighted_secondary",
+      "weights": "preference_only_not_probability",
+      "unknown_mode": "ask_or_use_neutral_default"
+    },
+    "law": "selection ranks modes by preference; it never renormalises a preference into a probability, never invents a mode that is not in the catalog, and never writes W_learned"
+  },
+  "learning_update": {
+    "formula": "W_learned' = clip(W_learned + eta * verified_reward * eligibility)",
+    "symbol": "ProposedBoundedLearningDelta",
+    "kind": "reward_and_eligibility_update",
+    "not_a_gradient": "this is not a differentiable gradient; calling it one would require a declared differentiable objective, which the contract does not have",
+    "safeguards": {
+      "provenance": "verified_reward needs its own provenance and must never be inferred merely from response verification",
+      "bounded": "the update is clipped to explicit bounds; an unbounded update is refused",
+      "validated_and_authorized": "a persistent update requires Ch'en validation and Xul authorization in addition to user/app policy",
+      "separate_from_patterns": "the learning layer never rewrites the pattern/grammar layer, so behaviour evolves without silently editing the templates"
+    }
+  },
+  "graph": {
+    "subject": "data/daemon_behavior_modes.gml",
+    "declared_comment": "edge weights are affinities, not probabilities or learned gradients, and XCFE decides whether a requested mode combination is admissible",
+    "relations": [
+      "alternative_analysis_affinity",
+      "can_pair_with",
+      "evidence_question_affinity",
+      "goal_support_affinity",
+      "hypothesis_support",
+      "optional_transition",
+      "question_style_affinity"
+    ],
+    "node_count_shipped": 12,
+    "edge_count_shipped": 9,
+    "coverage": "the shipped graph declares `id 68` but carries only 12 nodes and 9 edges, so it is an illustrative partial graph over the 68-mode catalog rather than a complete one; the gate checks the shipped set exactly so a silently truncated graph is caught"
+  },
+  "therapy_boundary": {
+    "mode": "non_clinical_support",
+    "diagnosis_or_treatment_claims": false,
+    "crisis_policy": "host_safety_policy",
+    "persistent_memory": "explicit_opt_in_only"
+  },
+  "authority": {
+    "semantic_authority": false,
+    "topology_authority": false,
+    "commit_authority": false,
+    "safety_policy": "host_owned_and_non_overridable",
+    "memory_access": "separately_authorized",
+    "tool_access": "separately_authorized"
+  },
+  "invariants": {
+    "BM1": "the catalog keeps 68 modes across the seven categories, each mode declares all six behavior dimensions with values from the declared dimension vocabularies, and an unknown dimension value is refused",
+    "BM2": "the four weight classes stay distinct; none is reported as a gradient, and an affinity is never reported as a probability",
+    "BM3": "W_learned is never written by mode selection, and the learning layer never rewrites the pattern layer",
+    "BM4": "a bounded learning delta is clipped to explicit bounds; an unbounded or out-of-bounds update is refused rather than clamped silently",
+    "BM5": "verified_reward requires its own provenance; a reward inferred from response verification alone is refused",
+    "BM6": "a persistent update requires Ch'en validation and Xul authorization as well as policy; without them nothing is written",
+    "BM7": "selection honours an explicit override, ranks a primary plus weighted secondaries without renormalising preferences into probabilities, and asks (or takes the neutral default) for an unknown mode instead of inventing one",
+    "BM8": "the two W_effective laws are kept apart: the additive four-source composition requires declared normalization, and neither may be reported as the other",
+    "BM9": "the therapy boundary holds: non-clinical support only, no diagnosis or treatment claims, crisis routed to the host safety policy, and persistent memory only on explicit opt-in",
+    "BM10": "the graph's edge weights are affinities within (0, 1) using only the four declared relations, and admissibility of a combination remains XCFE's decision",
+    "BM11": "every mode carries a unique pictogram in the declared form, and a pictogram never collides with an ASX unit glyph",
+    "BM12": "eight behavior dimensions are declared; memory and autonomy are among them, and both ship at their least-authority value with any raise being an explicit act",
+    "BM13": "every mode belongs to exactly one class (personality, task, metacognitive) derived from its category by the declared mapping, and the class carries no authority",
+    "BM14": "every mode's bias vector carries a provenance tag marking it an illustrative prior; a bias tagged as a learned weight is refused"
+  },
+  "dimensions": {
+    "count": 8,
+    "declared": [
+      "tone",
+      "initiative",
+      "reasoning",
+      "challenge",
+      "detail",
+      "interaction",
+      "memory",
+      "autonomy"
+    ],
+    "law": "eight dimensions, not one personality per mode: buddy + scientist + skeptic compose a research partner without a new personality bank",
+    "memory": [
+      "stateless",
+      "session_only",
+      "authorized_persistent"
+    ],
+    "autonomy": [
+      "suggest_only",
+      "request_approval",
+      "permitted_execution"
+    ]
+  },
+  "mode_classes": {
+    "vocabulary": [
+      "personality",
+      "task",
+      "metacognitive"
+    ],
+    "by_category": {
+      "emotional_interpersonal": "personality",
+      "creative_imaginative": "personality",
+      "learning_intellectual": "task",
+      "professional_productivity": "task",
+      "technical_computational": "task",
+      "daily_practical": "task",
+      "metacognitive_autonomous": "metacognitive"
+    },
+    "law": "each mode belongs to exactly one class; the class is a routing aid and carries no authority"
+  },
+  "pictograms": {
+    "rule": "glyph = U+27C1 followed by the mode id uppercased with hyphens replaced by underscores",
+    "law": "every mode carries exactly one pictogram, pictograms are unique, and none may equal an ASX unit glyph",
+    "count_shipped": 68
+  },
+  "least_authority_defaults": {
+    "law": "memory and autonomy default to the least authority that still works; raising either is an explicit per-mode act, never inferred from a mode's name or description",
+    "memory": "session_only",
+    "autonomy": "suggest_only"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "@no-eval": true,
+  "id": "RESEARCH-µ",
+
+  "schemes": ["research"],
+  "description": "Semantic field accumulator — gathers, aggregates, and consolidates evidence from the semantic field across queries and sources. Distinct from WEB-RESEARCH-µ (explicit live retrieval); operates on the internal semantic field and accumulated gram state.",
+  "phase": "Sek",
+  "category": "structural",
+  "confidence": 0.87,
+  "governs": [
+    "research",
+    "field accumulation",
+    "semantic gather",
+    "accumulate field",
+    "knowledge accumulation",
+    "evidence gather",
+    "field gather",
+    "semantic accumulation",
+    "study",
+    "investigate",
+    "explore field",
+    "gather evidence",
+    "accumulate evidence",
+    "background research",
+    "field survey"
+  ],
+  "capabilities": [
+    "FIELD_ACCUMULATE",
+    "EVIDENCE_GATHER",
+    "SEMANTIC_CONSOLIDATE",
+    "BACKGROUND_RESEARCH",
+    "FIELD_SURVEY"
+  ],
+  "relations": [
+    { "target": "WEB-RESEARCH-µ", "verb": "@related_to", "directed": false },
+    { "target": "ADVISOR-µ",      "verb": "@supports",   "directed": true  },
+    { "target": "REASON-µ",       "verb": "@supports",   "directed": true  }
+  ],
+  "folds": [
+    { "phase": "Pop",   "op": "gramRead",                 "key": "research_query" },
+    { "phase": "Wo",    "op": "identify_field_scope",     "note": "determine which semantic fields to accumulate" },
+    { "phase": "Yax",   "op": "expand_field_candidates",  "note": "R expand candidate neighborhoods" },
+    { "phase": "Sek",   "op": "accumulate_field_evidence","note": "W gather and score evidence" },
+    { "phase": "Ch'en", "op": "consolidate_field",        "note": "C verify field coherence" },
+    { "phase": "Xul",   "op": "emit_accumulated_field",   "scope": "local" }
+  ],
+  "sandbox": {
+    "gram_ns":         "RESEARCH-µ",
+    "manifest_access": ["words", "micronaut", "kuhul"],
+    "effects":         ["gramRead", "gramWrite", "field:accumulate", "field:survey"],
+    "ports":           [],
+    "coordinator":     false
+  }
+}

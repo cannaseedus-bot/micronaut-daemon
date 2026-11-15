@@ -1,0 +1,97 @@
+{
+  "id": "resolver-primitives.v1",
+  "kind": "resolver_primitive_vocabulary",
+  "description": "Declared execution primitives that resolvers may invoke. This vocabulary extends resolver capability surfaces without adding new attention layers.",
+  "dispatch_contract": {
+    "rule": "GraphPlan op -> resolver capability -> resolver primitive op",
+    "attention_invariance": "Runtime attention stays A(v)=R*U*D*P regardless of resolver primitive."
+  },
+  "primitives": [
+    {
+      "name": "symbolic_math",
+      "ops": [
+        "MATH_SYMBOLIC_SOLVE",
+        "MATH_SYMBOLIC_SIMPLIFY",
+        "MATH_SYMBOLIC_FACTOR",
+        "MATH_SYMBOLIC_EXPAND",
+        "MATH_SYMBOLIC_EVALUATE"
+      ],
+      "backends": [
+        "rule_rewrite",
+        "operator_pattern_graph"
+      ],
+      "best_for": [
+        "single_variable_equations",
+        "expression_rewrite",
+        "small_polynomial_manipulation"
+      ]
+    },
+    {
+      "name": "matrix_buffer",
+      "ops": [
+        "MATRIX_BUFFER_ALLOC",
+        "MATRIX_BUFFER_LOAD",
+        "MATRIX_BUFFER_MATMUL",
+        "MATRIX_BUFFER_SOLVE",
+        "MATRIX_BUFFER_APPLY_OP",
+        "MATRIX_BUFFER_READ"
+      ],
+      "backends": [
+        "gpu_tensor_buffer",
+        "cpu_dense_matrix"
+      ],
+      "best_for": [
+        "linear_systems",
+        "eigendecomposition",
+        "large_dense_matmul"
+      ]
+    },
+    {
+      "name": "dds_inference",
+      "ops": [
+        "DDS_SHARD_LOAD",
+        "DDS_INFER",
+        "DDS_CACHE_UPDATE"
+      ],
+      "backends": [
+        "gpu_dds",
+        "hybrid_cpu_gpu"
+      ]
+    },
+    {
+      "name": "svg_compute",
+      "ops": [
+        "SVG_COMPUTE_PROJECT",
+        "SVG_COMPUTE_RENDER"
+      ],
+      "backends": [
+        "hlsl_svg_kernel",
+        "cpu_projection_fallback"
+      ]
+    },
+    {
+      "name": "gram_store",
+      "ops": [
+        "GRAM_READ",
+        "GRAM_WRITE"
+      ],
+      "backends": [
+        "in_memory_map"
+      ]
+    }
+  ],
+  "domain_policy": {
+    "math": {
+      "symbolic_default": true,
+      "matrix_required_for": [
+        "linear_system_solve",
+        "eigenvalue",
+        "decomposition"
+      ],
+      "matrix_optional_for": [
+        "basic_algebra",
+        "small_simplification"
+      ]
+    }
+  }
+}

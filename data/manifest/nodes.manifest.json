@@ -1,0 +1,166 @@
+{
+  "NODES:": [
+    "@nodes",
+    "node:Coordinator",
+    "node:TOOL-µ",
+    "node:Mx2LM",
+    "node:VECTOR-µ",
+    "node:INFER-µ",
+    "node:WEB-RESEARCH-µ"
+  ],
+  "@nodes": [
+    "NODES:",
+    "node:registry-contract",
+    "node:routing",
+    "node:phase-affinity",
+    "phase:Wo",
+    "phase:Yax"
+  ],
+  "node:registry-contract": [
+    "node-id",
+    "role",
+    "phase-affinity",
+    "dispatch-capability",
+    "confidence-channel"
+  ],
+  "node:routing": [
+    "S_µ(Q)",
+    "gravity",
+    "manifest-expansion",
+    "phase:Yax"
+  ],
+  "node:phase-affinity": [
+    "Pop",
+    "Wo",
+    "Yax",
+    "Sek",
+    "Ch'en",
+    "Xul"
+  ],
+  "node:Coordinator": [
+    "@node:Coordinator",
+    "role:orchestration",
+    "phase:Wo",
+    "phase:Ch'en"
+  ],
+  "node:TOOL-µ": [
+    "@node:TOOL-µ",
+    "role:tooling",
+    "phase:Sek",
+    "phase:Ch'en"
+  ],
+  "node:Mx2LM": [
+    "@node:Mx2LM",
+    "role:ngram-and-fold-routing",
+    "phase:Sek",
+    "phase:Ch'en"
+  ],
+  "node:VECTOR-µ": [
+    "@node:VECTOR-µ",
+    "role:derived-geometry-projection",
+    "semantic_authority:false",
+    "phase:Wo",
+    "phase:Yax"
+  ],
+  "node:INFER-µ": [
+    "@node:INFER-µ",
+    "role:inference",
+    "phase:Sek",
+    "phase:Ch'en"
+  ],
+  "node:WEB-RESEARCH-µ": [
+    "@node:WEB-RESEARCH-µ",
+    "role:research",
+    "phase:Yax",
+    "phase:Ch'en"
+  ],
+  "node:BLOG-µ": [
+    "@node:BLOG-µ",
+    "role:blog-track",
+    "phase:Yax",
+    "phase:Sek"
+  ],
+  "node:APP-WIZARD-µ": [
+    "@node:APP-WIZARD-µ",
+    "role:app-wizard",
+    "phase:Wo",
+    "phase:Yax"
+  ],
+  "node:MEM-µ": [
+    "@node:MEM-µ",
+    "role:memory-replay",
+    "phase:Xul"
+  ],
+  "node:ORCH-µ": [
+    "@node:ORCH-µ",
+    "role:dispatch-orchestration",
+    "phase:Wo",
+    "phase:Sek"
+  ],
+  "node:reasoner": [
+    "@node:reasoner",
+    "role:reasoning",
+    "phase:Yax",
+    "phase:Sek"
+  ],
+  "node:coder": [
+    "@node:coder",
+    "role:coding",
+    "phase:Sek",
+    "phase:Ch'en"
+  ],
+  "node:CREATE-µ": [
+    "@node:CREATE-µ",
+    "role:generative-editing",
+    "phase:Yax",
+    "phase:Sek"
+  ],
+  "node:FGP-µ": [
+    "@node:FGP-µ",
+    "role:fold-graph-parser",
+    "phase:Wo",
+    "phase:Yax",
+    "phase:Ch'en"
+  ],
+  "node:ELIZA-µ": [
+    "@node:ELIZA-µ",
+    "role:operator-pattern-parser",
+    "phase:Pop",
+    "phase:Sek"
+  ],
+  "node:AIML-µ": [
+    "@node:AIML-µ",
+    "role:aiml-pattern-engine",
+    "phase:Pop",
+    "phase:Sek"
+  ],
+  "TENSOR:": [
+    "@tensor",
+    "TENSOR-µ",
+    "tensor-bundle",
+    "tensor:projection_container:v1",
+    "semantic_authority:false",
+    "⟁Wo",
+    "⟁Yax"
+  ],
+  "@tensor": [
+    "@node:TENSOR-µ",
+    "TENSOR:",
+    "tensor:field",
+    "tensor:metric",
+    "tensor:transform"
+  ],
+  "TENSOR-µ": [
+    "TENSOR:",
+    "@tensor",
+    "tensor-bundle-projection-track",
+    "VECTOR-µ:rank1-provider",
+    "semantic_authority:false"
+  ],
+  "tensor:projection_container:v1": [
+    "@type:tensor.projection_container.v1",
+    "owner:TENSOR-µ",
+    "legacy_container:vector:projection_container:v1",
+    "semantic_authority:false"
+  ]
+}

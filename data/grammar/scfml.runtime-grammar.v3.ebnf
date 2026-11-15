@@ -1,0 +1,239 @@
+(* KHANARY SCFML Runtime Grammar v1 *)
+(* SCFML = Semantic Control Flow Machine Learning.
+   It owns semantic control-flow surfaces and Pattern Learning admission.
+   SCFML is above XCFE: it declares branches/pattern candidates, resolves them
+   through epistemic state, then projects legal moves to XCFE. *)
+
+scfml_document = { scfml_unit } ;
+scfml_unit = scfml_branch_row | scfml_pattern_learning_row | scfml_xml_surface ;
+
+(* ── XML/AIML-compatible surface ─────────────────────────────────────── *)
+scfml_xml_surface = branch_element | detached_branch_sequence ;
+branch_element = "<branch", [ branch_attrs ], ">", { branch_part }, "</branch>" ;
+detached_branch_sequence = branch_part, { branch_part } ;
+branch_part = if_block | then_block | else_block | unknown_block ;
+if_block = "<if>", { branch_payload }, "</if>" ;
+then_block = "<then>", { branch_payload }, "</then>" ;
+else_block = "<else>", { branch_payload }, "</else>" ;
+unknown_block = "<unknown>", { branch_payload }, "</unknown>" ;
+branch_payload = aiml_pattern | aiml_template | scfml_xml_surface | branch_text ;
+aiml_pattern = "<pattern>", pattern_text, "</pattern>" ;
+aiml_template = "<template>", template_text, "</template>" ;
+branch_attrs = ? XML attributes; optional schema/key/track metadata ? ;
+branch_text = ? UTF-8 branch text excluding unmatched SCFML branch tags ? ;
+
+(* Surface normalization. Input children may arrive in any order; normalized
+   rows use canonical_order = if, then, else, unknown. *)
+normalization_rule =
+    "if/pattern=>condition"
+  | "then/template=>then_action"
+  | "else/template=>else_action"
+  | "unknown=>unknown_handler"
+  | "then/pattern=>then_pattern_candidate"
+  | "else/pattern=>else_pattern_candidate"
+  | "else/if/then=>nested_else_if"
+  | "pattern_with_branch_markup=>structural_after_normalization" ;
+
+(* ── JSON row emitted into key-grammar / gram-store surfaces ─────────── *)
+scfml_branch_row =
+    "{",
+      q_schema, ",", q_key, ",", q_condition, ",", q_then, ",", q_else,
+      [ ",", q_track ],
+      [ ",", q_epistemic_state ],
+      [ ",", q_unknown ],
+      [ ",", q_source_surface ],
+      [ ",", q_pattern_learning ],
+    "}" ;
+
+q_schema = "\"schema\":", ( "\"scfml.branch.v1\"" | "\"key.grammar.semantic_branch.v1\"" ) ;
+q_key = "\"key\":", scfml_branch_key ;
+q_condition = "\"condition\":", string ;
+q_then = "\"then\":", scfml_branch_target ;
+q_else = "\"else\":", scfml_branch_target ;
+q_track = "\"track\":", string ;
+q_epistemic_state = "\"epistemic_state\":", "\"", epistemic_state, "\"" ;
+q_unknown = "\"unknown\":", scfml_branch_target ;
+q_source_surface = "\"source_surface\":", ( "\"aiml\"" | "\"json\"" | "\"memory_event\"" ) ;
+q_pattern_learning = "\"pattern_learning\":", boolean ;
+scfml_branch_target = string | "null" ;
+scfml_branch_key = "scfml:branch:", epoch_ms, "-", sequence
+                 | "scfml:branch:", gram_text
+                 | "semantic_branch:", epoch_ms, "-", sequence
+                 | "semantic_branch:", gram_text ;
+
+(* ── Pattern Learning rows ───────────────────────────────────────────── *)
+scfml_pattern_learning_row =
+    "{",
+      "\"schema\":", "\"scfml.pattern_learning.v1\"", ",",
+      "\"source_event\":", string, ",",
+      "\"candidate_kind\":", pattern_candidate_kind, ",",
+      "\"requires\":", "\"SUPPORTED_or_user_verified\"",
+      [ ",", "\"target\":", string ],
+    "}" ;
+pattern_candidate_kind =
+    "\"aiml_pattern\"" | "\"aiml_template\"" | "\"semantic_branch\""
+  | "\"key_grammar\"" | "\"route_pattern\"" ;
+
+(* ── Epistemic branch laws ───────────────────────────────────────────── *)
+epistemic_state = "SUPPORTED" | "MISS" | "UNKNOWN" | "CONTRADICTED" ;
+scfml_law =
+    "SUPPORTED(P)=>then"
+  | "CONTRADICTED(P)=>else_as_complement"
+  | "MISS(P)!=CONTRADICTED(P)"
+  | "UNKNOWN(P)!=else"
+  | "else!=not"
+  | "contradicting_one_candidate_does_not_prove_another" ;
+
+(* ── Projection boundary ─────────────────────────────────────────────── *)
+scfml_pipeline =
+    "SCFML_surface", "->", "canonical_branch_row", "->",
+    "epistemic_resolution", "->", "XCFE_move_projection" ;
+xcfe_projection =
+    "guard" | "select_then" | "select_else" | "spawn_unknown" | "preserve"
+  | "retrieve" | "defer" | "merge" | "commit" | "rollback" ;
+
+boolean = "true" | "false" ;
+string = ? JSON string ? ;
+pattern_text = ? AIML pattern text ? ;
+template_text = ? AIML template text ? ;
+gram_text = ? ordered gram text; token order is semantic ? ;
+epoch_ms = ? milliseconds since UNIX epoch ? ;
+sequence = ? per-process sequence number ? ;
+
+
+(* =================================================================== *)
+(* v2 OPTIONAL PHASE-KEY / FIELD-OF-PLAY EXTENSION                       *)
+(* v1 branch, XML/AIML, epistemic and pattern-learning rules retained.  *)
+(* =================================================================== *)
+
+scfml_phase_extension = "scfml_phase_extension", "{",
+    scfml_track_field, scfml_active_context, scfml_unigram_bank,
+    scfml_bigram_bank, scfml_trigram_bank, scfml_binding_bank,
+    scfml_hof_pipeline, scfml_encoding_contract, "}" ;
+
+(* Track defines available semantic rules. Context is the current play. *)
+scfml_track_field = "track_field", "(", string, ",", "grammar_ref", "(", string, ")", ")" ;
+scfml_active_context = "active_context", "(", "query", "=", string,
+    [ ",", "capture_ref", "=", string ],
+    [ ",", "candidate_ref", "=", string ], ")" ;
+
+(* Immutable corpus priors; pattern learning is a distinct admitted pathway. *)
+scfml_unigram_bank = "unigrams", "{", { scfml_unigram }, "}" ;
+scfml_unigram = "unigram", "(", string, ",", scfml_number, ")" ;
+
+(* Ordered bigrams address vector geometry and relational neighborhoods. *)
+scfml_bigram_bank = "bigrams", "{", { scfml_bigram }, "}" ;
+scfml_bigram = "bigram", "(", string, ",", string, ",",
+    "vector_ref", "(", string, ")", ")" ;
+
+(* Trigrams own their stored phase. Branch evidence does not confer authority. *)
+scfml_trigram_bank = "trigrams", "{", { scfml_trigram }, "}" ;
+scfml_trigram = "trigram", "(", scfml_triple, ",", scfml_stored_phase, ",",
+    "fold_ref", "(", string, ")",
+    [ ",", "binding_ref", "(", string, ")" ],
+    [ ",", "template_ref", "(", string, ")" ], ")" ;
+scfml_triple = "[", scfml_atom, ",", scfml_atom, ",", scfml_atom, "]" ;
+scfml_atom = string | "*" | "?" ;
+scfml_stored_phase = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul" ;
+
+(* Binding sources match the established Key-Grammar vocabulary. *)
+scfml_binding_bank = "bindings", "{", { scfml_binding }, "}" ;
+scfml_binding = "bind", "(", string, ",", scfml_binding_source, ",", string, ")" ;
+scfml_binding_source = "capture" | "lm_chain" | "char_overlap" | "explicit" ;
+
+(* Filter/Map/functional Fold act on candidate collections, not as phases. *)
+scfml_hof_pipeline = "pipeline", "(", "Match", ",", "Bind", ",",
+    "Filter", ",", "Map", ",", "Score",
+    [ ",", "Fold" ], ",", "PhaseExecute", ")" ;
+
+scfml_encoding_contract = "encoding", "(", "container", "=", scfml_container,
+    ",", "preserve", "=", "key_value_phase_fold_binding", ")" ;
+scfml_container = "BSON" | "CBOR" | "SCXQ2" ;
+scfml_number = ? finite numeric literal ? ;
+
+(* HOST-ENFORCED INVARIANTS:
+   1. Existing SUPPORTED/MISS/UNKNOWN/CONTRADICTED branch laws remain authoritative.
+   2. UNKNOWN and MISS do not imply a contradicted condition or else branch.
+   3. Track bounds field of play; context activates records for one invocation.
+   4. Every executable trigram stores its own phase and fold reference.
+      Template and track metadata must never silently override that phase.
+   5. Wildcard capture arity, key references, vector refs, and fold refs validate.
+   6. SCFML proposes candidates and epistemic resolutions; XCFE admits moves.
+   7. Ch'en observes; Xul commits only through authorized existing gates.
+   8. Static unigram weights are immutable; learned evidence is separate.
+   9. Semantic vector geometry is not automatically a numeric tensor contract.
+  10. BSON/CBOR round trips preserve logical identities. Optional SCXQ2
+      field-chunk and executable-lane paths require separate validation.
+  11. EBNF syntax alone cannot enforce reference integrity or runtime legality.
+*)
+
+(* =================================================================== *)
+(* v3 SEMANTIC KEY-TO-KEY REASONING EXTENSION                             *)
+(* SCFML reasons over key relations; XCFE is not a reasoning-node graph. *)
+(* v1/v2 productions and their entry points remain unchanged.            *)
+(* =================================================================== *)
+
+scfml_reasoning_extension = "scfml_reasoning", "{",
+    scfml_reasoning_graph,
+    scfml_reasoning_context,
+    scfml_reasoning_rules,
+    [ scfml_reasoning_projection ],
+    "}" ;
+
+(* Key IDs are namespace-qualified. The resolver checks existence and type. *)
+scfml_reasoning_graph = "key_relations", "{", { scfml_semantic_edge }, "}" ;
+scfml_semantic_edge = "relation", "(",
+    scfml_key_ref, ",", scfml_relation_kind, ",", scfml_key_ref, ",",
+    scfml_edge_evidence, [ ",", scfml_edge_weight ],
+    [ ",", scfml_relation_guard ], ")" ;
+scfml_key_ref = "key_ref", "(", string, ")" ;
+scfml_relation_kind = "supports" | "contradicts" | "implies"
+    | "requires" | "questions" | "explains" | "causes"
+    | "qualifies" | "alternative_to" ;
+scfml_edge_evidence = "evidence", "(", scfml_epistemic,
+    [ ",", "source_ref", "(", string, ")" ], ")" ;
+scfml_epistemic = "SUPPORTED" | "MISS" | "UNKNOWN" | "CONTRADICTED" ;
+scfml_edge_weight = "weight", "(", scfml_number, ")" ;
+scfml_relation_guard = "guard_ref", "(", string, ")" ;
+
+(* Context selects the active reasoning neighborhood; vector evidence can
+   retrieve neighbors, but cannot itself prove entailment or truth. *)
+scfml_reasoning_context = "reason_context", "(",
+    "track_ref", "(", string, ")", ",",
+    "query_ref", "(", string, ")",
+    [ ",", "neighborhood_ref", "(", string, ")" ],
+    [ ",", "vector2_ref", "(", string, ")" ], ")" ;
+
+(* Rules reason about edges between keys, not about XCFE nodes. *)
+scfml_reasoning_rules = "reasoning_rules", "{", { scfml_reasoning_rule }, "}" ;
+scfml_reasoning_rule = "reason", "(",
+    scfml_key_ref, ",", scfml_relation_kind, ",", scfml_key_ref, ",",
+    "using", "(", scfml_reasoning_operator, ")", ",",
+    "result", "(", scfml_epistemic, ")",
+    [ ",", "candidate_ref", "(", string, ")" ], ")" ;
+scfml_reasoning_operator = "trace" | "compare" | "infer" | "verify"
+    | "counterexample" | "decompose" | "explain" | "question"
+    | "reconcile" ;
+
+(* A reasoning result may be projected as a candidate move, never as
+   autonomous permission to execute. Existing xcfe_projection stays intact. *)
+scfml_reasoning_projection = "project_to_xcfe", "(",
+    "candidate_ref", "(", string, ")", ",",
+    "policy_ref", "(", string, ")", ")" ;
+
+(* HOST VALIDATION FOR v3:
+   1. Key references resolve within a permitted track and namespace.
+   2. Semantic edges are directed and typed; inverse relations are not assumed.
+   3. SUPPORTED/MISS/UNKNOWN/CONTRADICTED preserve the v1 epistemic laws.
+   4. Missing evidence is not contradiction; UNKNOWN never selects ELSE alone.
+   5. Geometric proximity, cosine similarity, and weights retrieve/rank
+      candidates only; they do not establish logical implication.
+   6. Transitive inference (e.g. implies) requires an explicit sound rule,
+      compatible evidence and provenance; do not infer from edge labels alone.
+   7. No SCFML edge is an XCFE node. SCFML produces epistemic conclusions
+      and candidate moves; XCFE independently checks admission and authority.
+   8. Reasoning is side-effect-free until an authorized phase fold executes.
+   9. Every executable trigram keeps its own stored phase and fold_ref.
+  10. Cycles, evidence provenance, score domains and finite traversal budgets
+      are host-validated; EBNF cannot establish these semantic invariants.
+*)

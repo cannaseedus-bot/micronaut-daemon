@@ -1,0 +1,47 @@
+{
+  "@program": "training.from-zero.chat.layer-plan",
+  "@kind": "huggingface.gpt2.lora.v1",
+  "base_candidates": [
+    "models/from_zero/coder_skeleton.safetensors",
+    "models/from_zero/ts_coder_v0.1.safetensors"
+  ],
+  "chat_data": "models/from_zero/rlhf_clean.jsonl",
+  "coder_data": "models/from_zero/coder_ast_chunks/*.jsonl",
+  "kson_ast_data": {
+    "jsonl": "models/from_zero/coder_ast_chunks/kson_ast_lbs.jsonl",
+    "token_bin": "models/from_zero/tokens/mm-ast-kson-lbs.bin",
+    "manifest": "models/from_zero/coder_ast_chunks/kson_ast_lbs.manifest.json",
+    "format": "KSON kast/1 with fold/node LBS labels"
+  },
+  "parser_tree_data": {
+    "jsonl": "models/from_zero/coder_ast_chunks/kson_parser_tree.jsonl",
+    "token_bin": "models/from_zero/tokens/mm-ast-kson-parser-tree.bin",
+    "program": "programs/kson.parser-tree.json",
+    "builder": "tools/build_parser_tree_dataset.py",
+    "format": "KSON structural parser tree with JSON value subtrees"
+  },
+  "adapter": {
+    "method": "LoRA",
+    "rank": 8,
+    "alpha": 16,
+    "target_modules": ["attn.c_attn", "attn.c_proj", "mlp.c_fc", "mlp.c_proj"],
+    "layers": "8-11",
+    "reason": "Adapt the upper GPT-2 blocks for ChatML/JROM behavior while preserving the From-Zero semantic carrier."
+  },
+  "commands": {
+    "chat": "python tools/finetune_hf_tokenbin.py --base models/from_zero/coder_skeleton.safetensors --data models/from_zero/tokens/mm-research.bin models/from_zero/tokens/mm-toolcall.bin --out models/from_zero/trained/jrom-chat-lora --lora --lora-layers 20-23 --steps 200 --batch 1 --block 128 --save-every 50",
+    "coder": "python tools/finetune_hf_tokenbin.py --base models/from_zero/coder_skeleton.safetensors --data models/from_zero/tokens/mm-coder.bin --out models/from_zero/trained/ast-coder-lora --lora --lora-layers 20-23 --steps 200 --batch 1 --block 256 --save-every 50"
+    ,"kson_ast": "python tools/finetune_hf_tokenbin.py --base models/from_zero/trained/ast-coder-lora-stage2/model.safetensors --data models/from_zero/tokens/mm-ast-kson-lbs.bin --out models/from_zero/trained/ast-coder-kson-lora --lora --lora-layers 20-23 --steps 10000 --batch 1 --block 128 --save-every 500",
+    "kson_parser_tree": "python tools/finetune_hf_tokenbin.py --base models/from_zero/trained/ast-coder-kson-lora/model.safetensors --data models/from_zero/tokens/mm-ast-kson-parser-tree.bin --out models/from_zero/trained/ast-coder-kson-parser-tree-lora --lora --lora-layers 20-23 --steps 5000 --batch 1 --block 128 --save-every 500"
+  },
+  "promotion": {
+    "format": "safetensors_then_gguf",
+    "quantization": {
+      "training_master": "SafeTensors",
+      "deployment": "KHANARY KQZ q8/q4",
+      "direct_int8_training": "not_supported_by_finetune_hf_tokenbin"
+    },
+    "jrom_adapter": "programs/micronauts/mx2-brain-jrom-adapter.json",
+    "validation": ["llama.cpp load", "ChatML no-control-echo", "JROM three-step research", "coder AST smoke test"]
+  }
+}

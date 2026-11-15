@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kuhul:xaiml:xpath-function-lane:v1",
+  "@kind": "xaiml.xpath_function_lane.contract.v1",
+  "@version": "1.0.0",
+  "@status": "declaration_only",
+  "semantic_authority": false,
+  "authority_contribution": "Query results contribute typed, provenance-bearing evidence to XAIML validation and XCFE admission: source scope, key resolution, pattern matches, wildcard bindings, field/graph records, and response-template bindings.",
+  "description": "Broader XPath 3.1 expression grammar for the existing XAIML read, match, retrieve, rank, and response-template flow. It describes current source surfaces with richer standard syntax; it does not introduce a new authority model or install handlers.",
+  "authorities": {
+    "syntax_reference": "XPath 3.1 grammar and Functions and Operators specifications",
+    "function_keys": "data/grammar/aiml-functions.kgf",
+    "operator_algebra": "data/grammar/operator-algebra.contracts.json",
+    "fold_algebra": "data/grammar/kuhul-fold-algebra.contracts.json",
+    "execution_admission": "XCFE and host authorization",
+    "phase_lifecycle": "Pop -> Wo -> Yax -> Sek -> Ch'en -> Xul"
+  },
+  "surface": {
+    "owner": "XAIML-µ",
+    "registry_namespace": "xpath:core",
+    "xpath_version_reference": "3.1",
+    "grammar_profile": "XPath 3.1 EBNF; individual runtime functions and productions retain explicit implementation status",
+    "grammar_status": "DECLARED",
+    "runtime_handler_status": "not implied by grammar conformance",
+    "registered_function_keys_only": true,
+    "status_vocabulary": ["DECLARED", "IMPLEMENTED", "DISABLED"]
+  },
+  "operator_mapping": {
+    "MAP": "registered pure item transform or semantic key lookup",
+    "FILTER": "registered pure predicate over a typed sequence",
+    "FOLD": "ordered accumulation with explicit direction and initial value",
+    "REDUCE": "typed aggregation or deterministic ordering over a collection",
+    "context_read": "reads a value bound in the evaluation context; not an operator lane"
+  },
+  "query_sources": {
+    "source_scope": "A query may read only sources declared by the XAIML pattern's static sync bindings and admitted lane set.",
+    "read_only": true,
+    "source_kinds": [
+      {"kind":"GML_GRAPH","reads":["nodes","edges","relations","graph metadata"],"access":"declared graph reference and bounded traversal"},
+      {"kind":"FIELD_RECORD","reads":["typed field values","field metadata","provenance"],"access":"declared field key or field reference"},
+      {"kind":"AIML_PATTERN_BANK","reads":["patterns","templates","that/topic context","wildcard declarations"],"access":"registered AIML bank and its pattern matcher"},
+      {"kind":"KEY_GRAMMAR","reads":["semantic keys","typed relations","gram channels","key bindings"],"access":"registered key-book reference"}
+    ],
+    "wildcards": "A wildcard binds only captures produced by the matched XAIML/AIML pattern; every capture keeps its index, type, and source reference.",
+    "template_expansion": "AIML templates render matched, provenance-bearing records and captures; the template does not gain ambient file, network, or execution access.",
+    "query_language_boundary": "XPath 3.1 supplies the expression syntax (including paths, predicates, function calls, sequences, maps, arrays, and FLWOR forms). XAIML resolves those expressions against its existing declared GML/field/key/AIML sources and typed function registry; the grammar does not grant ambient file/network access or bypass existing XAIML/XCFE validation."
+  },
+  "source_adapters": [
+    {"key":"function:XAIML_GML_READ","source_kind":"GML_GRAPH","status":"DECLARED","operator":"MAP + FILTER","result":"graph records with relation and source identity"},
+    {"key":"function:XAIML_FIELD_READ","source_kind":"FIELD_RECORD","status":"DECLARED","operator":"MAP + FILTER","result":"typed field records with provenance"},
+    {"key":"function:XAIML_KEY_RESOLVE","source_kind":"KEY_GRAMMAR","status":"DECLARED","operator":"MAP","result":"registered key records and their grammar evidence"},
+    {"key":"function:AIML_MATCH","source_kind":"AIML_PATTERN_BANK","status":"existing declaration; host handler still required","operator":"FILTER","result":"matched pattern reference and indexed wildcard captures"},
+    {"key":"function:AIML_EXPAND","source_kind":"AIML_PATTERN_BANK","status":"existing declaration; host handler still required","operator":"MAP","result":"template-expanded response candidate"},
+    {"key":"function:XAIML_FEED_BUILD","source_kind":"typed query results","status":"DECLARED","operator":"FOLD","result":"bounded provenance-bearing response-feed candidate"}
+  ],
+  "retrieval_pipeline": [
+    {"phase":"Pop","operation":"normalize query and bind input provenance; derive candidate semantic keys and declared wildcard captures"},
+    {"phase":"Wo","operation":"bind only pattern-declared source references, lane modes, key scopes, and output template"},
+    {"phase":"Yax","operation":"read matching GML nodes/edges, field records, key rows, and AIML pattern candidates within the declared scope"},
+    {"phase":"Sek","operation":"apply typed predicates, deduplicate by declared identity policy, order deterministically, and enforce result limit"},
+    {"phase":"Ch'en","operation":"validate item types, capture bindings, source provenance, and response-template bindings; preserve misses and conflicts"},
+    {"phase":"Xul","operation":"emit the read-only response-feed candidate; persistence or external execution requires separate authorization"}
+  ],
+  "response_feed": {
+    "kind":"xaiml.response_feed.candidate.v1",
+    "rss_like":true,
+    "is_rss_standard_document":false,
+    "channel_fields":["query","query_keys","generated_at","item_count","status"],
+    "item_fields":["id","title","summary","content","source_kind","source_ref","key","pattern_ref","captures","phase","observed_at","evidence_refs"],
+    "ordering":"deterministic relevance/order policy with stable source-order tie-break",
+    "limit":"bounded by the XAIML query budget",
+    "provenance_required":true,
+    "missing_source_policy":"emit a typed miss or partial-feed status; never fabricate a source item",
+    "rendering":"A registered AIML template may render feed items into a user response while preserving item source references."
+  },
+  "provenance_and_scope": {
+    "every_item_requires":"source_kind + source_ref + evidence_refs",
+    "capture_requires":"pattern_ref + capture_index + capture_type + source_ref",
+    "graph_traversal_requires":"declared start key + allowed relation set + depth/limit bounds",
+    "field_read_requires":"declared field reference and permitted lane mode",
+    "pattern_match_requires":"registered pattern bank; matched template is data until validated and expanded",
+    "query_does_not_grant":"filesystem access, network access, execution, fact verification, or persistent write"
+  },
+  "functions": [
+    {"key":"xpath:FN_FOR_EACH","name":"fn:for-each","operator":"MAP","signature":"Sequence<T> × RegisteredTransform<T,U> → Sequence<U>","effect":"PURE","status":"DECLARED","order":"preserve source order"},
+    {"key":"xpath:FN_FILTER","name":"fn:filter","operator":"FILTER","signature":"Sequence<T> × RegisteredPredicate<T> → Sequence<T>","effect":"PURE","status":"DECLARED","order":"preserve source order"},
+    {"key":"xpath:FN_FOLD_LEFT","name":"fn:fold-left","operator":"FOLD","signature":"Sequence<T> × A × RegisteredStep<A,T> → A","effect":"PURE","status":"DECLARED","order":"left-to-right; do not rewrite as right fold"},
+    {"key":"xpath:FN_FOLD_RIGHT","name":"fn:fold-right","operator":"FOLD","signature":"Sequence<T> × A × RegisteredStep<T,A> → A","effect":"PURE","status":"DECLARED","order":"right-to-left; do not rewrite as left fold"},
+    {"key":"xpath:FN_DISTINCT_VALUES","name":"fn:distinct-values","operator":"REDUCE","signature":"Sequence<T> × EqualityPolicy → Sequence<T>","effect":"PURE","status":"DECLARED","equality":"typed equality and collation must be declared; preserve first occurrence"},
+    {"key":"xpath:FN_SORT","name":"fn:sort","operator":"REDUCE","signature":"Sequence<T> × Collation × Comparator? → Sequence<T>","effect":"PURE","status":"DECLARED","ordering":"deterministic collation/comparator required"},
+    {"key":"xpath:FN_SUM","name":"fn:sum","operator":"REDUCE","signature":"Sequence<Numeric> × Zero? → Numeric","effect":"PURE","status":"DECLARED","ordering":"accumulation order is explicit for non-associative numeric carriers"},
+    {"key":"xpath:FN_AVG","name":"fn:avg","operator":"REDUCE","signature":"Sequence<Numeric> → Numeric | Empty","effect":"PURE","status":"DECLARED"},
+    {"key":"xpath:FN_COUNT","name":"fn:count","operator":"REDUCE","signature":"Sequence<T> → Integer","effect":"PURE","status":"DECLARED"},
+    {"key":"xpath:FN_DEEP_EQUAL","name":"fn:deep-equal","operator":"REDUCE","signature":"Item* × Item* × Collation? → Boolean","effect":"PURE","status":"DECLARED","equality":"typed structural comparison; not string serialization comparison"},
+    {"key":"xpath:MAP_GET","name":"map:get","operator":"MAP","signature":"Map<K,V> × K → Sequence<V>","effect":"PURE","status":"DECLARED","immutability":"returns values; source map is unchanged"},
+    {"key":"xpath:MAP_KEYS","name":"map:keys","operator":"MAP","signature":"Map<K,V> → Sequence<K>","effect":"PURE","status":"DECLARED","ordering":"map key enumeration order must be explicit"},
+    {"key":"xpath:MAP_CONTAINS","name":"map:contains","operator":"MAP","signature":"Map<K,V> × K → Boolean","effect":"PURE","status":"DECLARED"},
+    {"key":"xpath:ARRAY_GET","name":"array:get","operator":"MAP","signature":"Array<T> × Integer → Sequence<T>","effect":"PURE","status":"DECLARED"},
+    {"key":"xpath:ARRAY_FLATTEN","name":"array:flatten","operator":"FOLD","signature":"Array<Item*> → Sequence<Item>","effect":"PURE","status":"DECLARED","type_law":"Array and Sequence are distinct carriers; flatten is explicit"},
+    {"key":"xpath:ARRAY_FOLD_LEFT","name":"array:fold-left","operator":"FOLD","signature":"Array<T> × A × RegisteredStep<A,T> → A","effect":"PURE","status":"DECLARED","order":"left-to-right"},
+    {"key":"xpath:FN_CURRENT_DATETIME","name":"fn:current-dateTime","operator":"context_read","signature":"EvaluationContext<BoundClock> → DateTime","effect":"CONTEXT_READ","status":"DECLARED","determinism":"clock value is captured once at ingress and reused during replay"}
+  ],
+  "function_items": {
+    "transform_and_predicate_values": "registered function keys only",
+    "inline_function_expressions": "represented by the XPath 3.1 grammar; execution requires static typing, effect checks, and an admitted implementation",
+    "dynamic_calls": "resolved only through registered function keys; unresolved targets fail XAIML validation",
+    "implementation_binding": "host registry maps a declared key to a native handler; grammar acceptance or a KGF edge alone does not register code"
+  },
+  "authority_boundary": {
+    "function_declaration_grants_execution": false,
+    "pattern_match_grants_execution": false,
+    "function_result_grants_admission": false,
+    "query_evidence_contributes_to_admission": true,
+    "admission_evidence_fields": ["declared_source_scope", "source_provenance", "pattern_ref", "typed_captures", "resolved_keys", "field_and_graph_bindings", "template_bindings"],
+    "verdict_owner": "XAIML validation plus XCFE admission contract",
+    "functions_may_write_persistent_state": false,
+    "xcfe_admission_required_for_execution": true,
+    "host_authorization_required_for_external_effects": true
+  },
+  "semantic_invariants": [
+    "Sequence<T> and Array<T> are separate types.",
+    "fold-left and fold-right preserve their different traversal directions.",
+    "distinct-values and deep-equal require an explicit typed equality/collation policy.",
+    "map:get and related map functions return values and do not mutate or persist the source map.",
+    "sort must declare deterministic ordering rules.",
+    "current-dateTime reads a clock value bound once to the evaluation context.",
+    "DECLARED does not mean IMPLEMENTED; handlers require trusted host registration.",
+    "function execution remains subject to XCFE admission and host authorization."
+  ]
+}

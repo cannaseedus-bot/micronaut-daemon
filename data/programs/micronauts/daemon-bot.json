@@ -1,0 +1,1208 @@
+{
+  "@kind": "kuhul.daemon-bot.kxml-pattern-bank.v1",
+  "@version": "1.0.0",
+  "@owner": "daemon_bot",
+  "@fold": "Ch'en",
+  "@node": "daemon_bot",
+  "@authority": "observation_only",
+  "@source": {
+    "aiml": "data/host/bots/daemon-bot-expanded.aiml",
+    "knowledge": "data/host/bots/daemon-bot-knowledge.json",
+    "category_count": 86,
+    "feed": "https://duhdank.blogspot.com/feeds/posts/default",
+    "feed_status": "not_verified_in_this_environment"
+  },
+  "@state": {
+    "input": "",
+    "track": "",
+    "never_executes": true,
+    "promote_generated_facts": false
+  },
+  "@patterns": [
+    {
+      "id": "daemon.definitions.001",
+      "track": "definitions",
+      "phase": "Wo",
+      "pattern": "WHAT IS A CANNABIS STRAIN",
+      "captures": [],
+      "template": "A strain is a commonly used name for a cannabis variety or cultivar. Names alone do not guarantee identical genetics or effects.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.definitions.002",
+      "track": "definitions",
+      "phase": "Wo",
+      "pattern": "WHAT IS A CULTIVAR",
+      "captures": [],
+      "template": "A cultivar is a cultivated plant variety selected for particular traits.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.definitions.003",
+      "track": "definitions",
+      "phase": "Wo",
+      "pattern": "WHAT IS THC",
+      "captures": [],
+      "template": "THC is a cannabinoid associated with intoxicating effects. Actual potency varies by product and laboratory results.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.definitions.004",
+      "track": "definitions",
+      "phase": "Wo",
+      "pattern": "WHAT IS CBD",
+      "captures": [],
+      "template": "CBD is a cannabinoid that is not typically intoxicating like THC. It can interact with medicines.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.definitions.005",
+      "track": "definitions",
+      "phase": "Wo",
+      "pattern": "WHAT ARE TERPENES",
+      "captures": [],
+      "template": "Terpenes are aromatic compounds found in many plants. Aroma does not reliably predict a specific medical effect.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.definitions.006",
+      "track": "definitions",
+      "phase": "Wo",
+      "pattern": "WHAT IS A FEMINIZED SEED",
+      "captures": [],
+      "template": "A feminized seed is produced to have a high likelihood of developing a female plant, but outcomes are not guaranteed.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.definitions.007",
+      "track": "definitions",
+      "phase": "Wo",
+      "pattern": "WHAT IS AN AUTOFLOWER",
+      "captures": [],
+      "template": "An autoflowering cannabis variety generally initiates flowering based more on age than on changing day length.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.definitions.008",
+      "track": "definitions",
+      "phase": "Wo",
+      "pattern": "WHAT IS PHOTOPERIOD",
+      "captures": [],
+      "template": "Photoperiod describes how plants respond to the length of light and darkness.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.definitions.009",
+      "track": "definitions",
+      "phase": "Wo",
+      "pattern": "WHAT IS A LANDRACE",
+      "captures": [],
+      "template": "A landrace is a locally adapted plant population associated with a geographic region and long-term selection.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.definitions.010",
+      "track": "definitions",
+      "phase": "Wo",
+      "pattern": "WHAT IS A HYBRID",
+      "captures": [],
+      "template": "A hybrid combines genetic ancestry from different lines; labels do not reliably predict experience.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.definitions.011",
+      "track": "definitions",
+      "phase": "Wo",
+      "pattern": "WHAT ARE TRICHOMES",
+      "captures": [],
+      "template": "Trichomes are small surface structures; glandular trichomes can produce cannabinoids and terpenes.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.definitions.012",
+      "track": "definitions",
+      "phase": "Wo",
+      "pattern": "WHAT IS GERMINATION",
+      "captures": [],
+      "template": "Germination is the process by which a viable seed begins growing.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.definitions.013",
+      "track": "definitions",
+      "phase": "Wo",
+      "pattern": "WHAT IS PH",
+      "captures": [],
+      "template": "pH measures acidity or alkalinity and influences nutrient availability in growing media.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.definitions.014",
+      "track": "definitions",
+      "phase": "Wo",
+      "pattern": "WHAT IS EC",
+      "captures": [],
+      "template": "Electrical conductivity, or EC, is a proxy for dissolved ion concentration in water or nutrient solution.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.definitions.015",
+      "track": "definitions",
+      "phase": "Wo",
+      "pattern": "WHAT IS A PHENOTYPE",
+      "captures": [],
+      "template": "A phenotype is the observable expression of genetics interacting with the environment.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.definitions.016",
+      "track": "definitions",
+      "phase": "Wo",
+      "pattern": "WHAT IS A GENOTYPE",
+      "captures": [],
+      "template": "A genotype is an organism’s genetic makeup.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.definitions.017",
+      "track": "definitions",
+      "phase": "Wo",
+      "pattern": "WHAT IS A SEED BANK",
+      "captures": [],
+      "template": "A seed bank preserves or distributes seeds; specific inventory and shipping policies vary.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.definitions.018",
+      "track": "definitions",
+      "phase": "Wo",
+      "pattern": "WHAT IS A COA",
+      "captures": [],
+      "template": "A certificate of analysis is a lab report for a tested sample. Check its batch identifier and date.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.faq.001",
+      "track": "faq",
+      "phase": "Wo",
+      "pattern": "ARE YOUR SEEDS IN STOCK",
+      "captures": [],
+      "template": "Availability changes. Please check the current product listing or contact the store before ordering.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.faq.002",
+      "track": "faq",
+      "phase": "Wo",
+      "pattern": "HOW MUCH IS SHIPPING",
+      "captures": [],
+      "template": "Shipping costs depend on the seller and destination. Check the current checkout and shipping policy.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.faq.003",
+      "track": "faq",
+      "phase": "Wo",
+      "pattern": "DO YOU SHIP TO *",
+      "captures": [
+        {
+          "name": "subject",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        }
+      ],
+      "template": "Shipping eligibility depends on the destination and applicable rules. Confirm the current store policy for <star/>.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.faq.004",
+      "track": "faq",
+      "phase": "Wo",
+      "pattern": "WHERE IS MY ORDER",
+      "captures": [],
+      "template": "Use your order confirmation and the store support channel to request tracking. Do not post private order information in public chat.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.faq.005",
+      "track": "faq",
+      "phase": "Wo",
+      "pattern": "HOW DO I CONTACT SUPPORT",
+      "captures": [],
+      "template": "Use the contact information on the official store website.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.faq.006",
+      "track": "faq",
+      "phase": "Wo",
+      "pattern": "WHAT IS YOUR RETURN POLICY",
+      "captures": [],
+      "template": "Please review the official store return and refund policy; I cannot verify policy details from a blog feed.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.faq.007",
+      "track": "faq",
+      "phase": "Wo",
+      "pattern": "HOW DO I TRACK MY PACKAGE",
+      "captures": [],
+      "template": "Check the tracking link in your shipping confirmation, or contact the store.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.faq.008",
+      "track": "faq",
+      "phase": "Wo",
+      "pattern": "DO YOU OFFER DISCOUNTS",
+      "captures": [],
+      "template": "Check current store promotions. I cannot guarantee an unverified coupon.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.faq.009",
+      "track": "faq",
+      "phase": "Wo",
+      "pattern": "ARE THESE PRODUCTS LEGAL",
+      "captures": [],
+      "template": "Rules differ by jurisdiction and product type. Check current local law before purchasing or cultivating.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.faq.010",
+      "track": "faq",
+      "phase": "Wo",
+      "pattern": "CAN YOU GUARANTEE GERMINATION",
+      "captures": [],
+      "template": "No seed can be guaranteed to germinate. Review the specific seller policy.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.faq.011",
+      "track": "faq",
+      "phase": "Wo",
+      "pattern": "WHAT PAYMENT METHODS DO YOU ACCEPT",
+      "captures": [],
+      "template": "Check the current checkout page for supported payment methods.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.faq.012",
+      "track": "faq",
+      "phase": "Wo",
+      "pattern": "HOW LONG DOES DELIVERY TAKE",
+      "captures": [],
+      "template": "Delivery estimates depend on the seller, carrier, destination and order processing. Check the store policy.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.product.001",
+      "track": "product",
+      "phase": "Wo",
+      "pattern": "SHOW ME YOUR SEEDS",
+      "captures": [],
+      "template": "Browse the current seed catalog on the official store. I can help explain the product labels.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.product.002",
+      "track": "product",
+      "phase": "Wo",
+      "pattern": "DO YOU HAVE *",
+      "captures": [
+        {
+          "name": "subject",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        }
+      ],
+      "template": "I cannot verify live inventory for <star/> without a current catalog entry. Check the product page.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.product.003",
+      "track": "product",
+      "phase": "Wo",
+      "pattern": "HOW MUCH IS *",
+      "captures": [
+        {
+          "name": "subject",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        }
+      ],
+      "template": "Prices for <star/> must come from a current product listing, not an older blog post.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.product.004",
+      "track": "product",
+      "phase": "Wo",
+      "pattern": "TELL ME ABOUT * SEEDS",
+      "captures": [
+        {
+          "name": "subject",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        }
+      ],
+      "template": "For <star/> seeds, verify breeder, genetics, seed type, package count and any lab-backed claims from the specific listing.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.product.005",
+      "track": "product",
+      "phase": "Wo",
+      "pattern": "COMPARE * AND *",
+      "captures": [
+        {
+          "name": "left",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        },
+        {
+          "name": "right",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        }
+      ],
+      "template": "Compare <star index=\"1\"/> and <star index=\"2\"/> using verified breeder, seed type, genetics, stated traits and price. Avoid assuming effects from names alone.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.product.006",
+      "track": "product",
+      "phase": "Wo",
+      "pattern": "WHICH STRAIN IS BEST",
+      "captures": [],
+      "template": "Best depends on your criteria: aroma, genetics, cultivation characteristics, and local legality. What matters most?",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.product.007",
+      "track": "product",
+      "phase": "Wo",
+      "pattern": "WHAT IS THE DIFFERENCE BETWEEN FEMINIZED AND REGULAR SEEDS",
+      "captures": [],
+      "template": "Feminized seeds are bred to favor female plants. Regular seeds can develop male or female plants.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.product.008",
+      "track": "product",
+      "phase": "Wo",
+      "pattern": "WHAT DOES PACK SIZE MEAN",
+      "captures": [],
+      "template": "Pack size is the number of seeds in a product package. Confirm the listing for the exact count.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.product.009",
+      "track": "product",
+      "phase": "Wo",
+      "pattern": "WHAT IS A BREEDER",
+      "captures": [],
+      "template": "A breeder develops plant lines by selecting and crossing plants for particular traits.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.growing.001",
+      "track": "growing",
+      "phase": "Ch'en",
+      "pattern": "WHY ARE MY LEAVES YELLOW",
+      "captures": [],
+      "template": "Yellow leaves can result from aging, watering problems, nutrient imbalance, root stress or pests. Check the pattern and growing conditions before deciding.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.growing.002",
+      "track": "growing",
+      "phase": "Ch'en",
+      "pattern": "WHY ARE MY LEAVES CURLING",
+      "captures": [],
+      "template": "Leaf curling may relate to heat, light, water stress or pests. Examine the whole plant and environmental conditions.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.growing.003",
+      "track": "growing",
+      "phase": "Ch'en",
+      "pattern": "WHAT IS OVERWATERING",
+      "captures": [],
+      "template": "Overwatering occurs when excess water reduces oxygen availability around roots. Drainage and watering frequency both matter.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.growing.004",
+      "track": "growing",
+      "phase": "Ch'en",
+      "pattern": "WHAT IS UNDERWATERING",
+      "captures": [],
+      "template": "Underwatering occurs when a plant lacks enough available moisture to maintain normal function.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.growing.005",
+      "track": "growing",
+      "phase": "Ch'en",
+      "pattern": "HOW DO I CHECK SOIL PH",
+      "captures": [],
+      "template": "Use a calibrated pH meter or appropriate test kit and follow its instructions for the growing medium.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.growing.006",
+      "track": "growing",
+      "phase": "Ch'en",
+      "pattern": "WHAT CAUSES ROOT ROT",
+      "captures": [],
+      "template": "Root rot can involve pathogens and poorly oxygenated, persistently wet root conditions.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.growing.007",
+      "track": "growing",
+      "phase": "Ch'en",
+      "pattern": "HOW DO I IDENTIFY PESTS",
+      "captures": [],
+      "template": "Inspect leaf undersides, stems and the growing medium for insects, eggs, webbing or damage; identify the pest before treatment.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.growing.008",
+      "track": "growing",
+      "phase": "Ch'en",
+      "pattern": "WHAT IS LIGHT STRESS",
+      "captures": [],
+      "template": "Light stress is plant damage or reduced performance from unsuitable light intensity, duration or heat.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.growing.009",
+      "track": "growing",
+      "phase": "Ch'en",
+      "pattern": "WHAT IS NUTRIENT LOCKOUT",
+      "captures": [],
+      "template": "Nutrient lockout is a common grower term for conditions that limit nutrient uptake despite nutrients being present.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.growing.010",
+      "track": "growing",
+      "phase": "Ch'en",
+      "pattern": "HOW DO I STORE SEEDS",
+      "captures": [],
+      "template": "For many plant seeds, a cool, dry, dark, stable environment and moisture-resistant packaging support storage longevity.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.growing.011",
+      "track": "growing",
+      "phase": "Ch'en",
+      "pattern": "HOW DO I PREVENT MOLD",
+      "captures": [],
+      "template": "Improve ventilation, avoid persistent moisture, inspect plant material and keep storage areas clean.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.growing.012",
+      "track": "growing",
+      "phase": "Ch'en",
+      "pattern": "WHY IS MY PLANT NOT GROWING",
+      "captures": [],
+      "template": "Slow growth can involve temperature, light, root health, water, nutrients, genetics or pests. Check the simplest variables first.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.growing.013",
+      "track": "growing",
+      "phase": "Ch'en",
+      "pattern": "WHAT IS HARDENING OFF",
+      "captures": [],
+      "template": "Hardening off is gradually acclimating indoor-grown plants to outdoor conditions.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.growing.014",
+      "track": "growing",
+      "phase": "Ch'en",
+      "pattern": "WHAT IS A GROW MEDIUM",
+      "captures": [],
+      "template": "A growing medium supports roots and affects water, oxygen and nutrient availability.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.growing.015",
+      "track": "growing",
+      "phase": "Ch'en",
+      "pattern": "WHAT IS INTEGRATED PEST MANAGEMENT",
+      "captures": [],
+      "template": "Integrated pest management combines monitoring, prevention and proportionate controls rather than relying on one treatment.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.classics.001",
+      "track": "classics",
+      "phase": "Wo",
+      "pattern": "WHAT IS NORTHERN LIGHTS",
+      "captures": [],
+      "template": "Northern Lights is a longstanding cannabis cultivar family, often described as indica-leaning; exact genetics vary by breeder.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.classics.002",
+      "track": "classics",
+      "phase": "Wo",
+      "pattern": "WHAT IS WHITE WIDOW",
+      "captures": [],
+      "template": "White Widow is a classic cultivar name associated with 1990s Dutch breeding. Different sellers may offer distinct versions.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.classics.003",
+      "track": "classics",
+      "phase": "Wo",
+      "pattern": "WHAT IS SKUNK NUMBER ONE",
+      "captures": [],
+      "template": "Skunk #1 is a historically influential hybrid breeding line; modern products bearing the name may differ.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.classics.004",
+      "track": "classics",
+      "phase": "Wo",
+      "pattern": "WHAT IS JACK HERER",
+      "captures": [],
+      "template": "Jack Herer is a classic cultivar named for the cannabis activist and author; exact lineage varies by source.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.classics.005",
+      "track": "classics",
+      "phase": "Wo",
+      "pattern": "WHAT IS HAZE",
+      "captures": [],
+      "template": "Haze refers to a family of historically influential cannabis lines, commonly associated with sativa-leaning ancestry.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.classics.006",
+      "track": "classics",
+      "phase": "Wo",
+      "pattern": "WHAT IS OG KUSH",
+      "captures": [],
+      "template": "OG Kush is a well-known cultivar family with disputed or inconsistently documented early lineage.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.classics.007",
+      "track": "classics",
+      "phase": "Wo",
+      "pattern": "WHAT IS BLUE DREAM",
+      "captures": [],
+      "template": "Blue Dream is a popular cultivar commonly described as Blueberry × Haze, though commercial genetics vary.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.classics.008",
+      "track": "classics",
+      "phase": "Wo",
+      "pattern": "WHAT IS SOUR DIESEL",
+      "captures": [],
+      "template": "Sour Diesel is a longstanding cultivar name associated with pungent diesel-like aroma; its origin stories vary.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.classics.009",
+      "track": "classics",
+      "phase": "Wo",
+      "pattern": "WHAT IS DURBAN POISON",
+      "captures": [],
+      "template": "Durban Poison is a classic cultivar name associated with South African origins; present-day seed lines differ.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.classics.010",
+      "track": "classics",
+      "phase": "Wo",
+      "pattern": "WHAT IS ACAPULCO GOLD",
+      "captures": [],
+      "template": "Acapulco Gold is a historic cannabis name associated with the Acapulco region of Mexico.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.classics.011",
+      "track": "classics",
+      "phase": "Wo",
+      "pattern": "WHAT IS PANAMA RED",
+      "captures": [],
+      "template": "Panama Red is a historic cannabis cultivar name associated with Panama and older landrace-style lines.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.classics.012",
+      "track": "classics",
+      "phase": "Wo",
+      "pattern": "WHAT IS GRANDDADDY PURPLE",
+      "captures": [],
+      "template": "Granddaddy Purple is a well-known purple-flowered cultivar name, commonly associated with Purple Urkle and Big Bud ancestry.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.classics.013",
+      "track": "classics",
+      "phase": "Wo",
+      "pattern": "WHAT IS AK 47",
+      "captures": [],
+      "template": "AK-47 is a classic hybrid cultivar name; breeder-specific details should be checked at the source.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.classics.014",
+      "track": "classics",
+      "phase": "Wo",
+      "pattern": "WHAT IS AMNESIA HAZE",
+      "captures": [],
+      "template": "Amnesia Haze is a widely known Haze-related cultivar family, with variations among breeders.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "general_reference"
+    },
+    {
+      "id": "daemon.blog.001",
+      "track": "blog",
+      "phase": "Pop",
+      "pattern": "SHOW ME THE LATEST BLOG POSTS",
+      "captures": [],
+      "template": "BLOG_FEED_LATEST",
+      "output_kind": "gap",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "feed_required",
+      "requires_executor": "blog.feed",
+      "feed_status": "not_verified_in_this_environment"
+    },
+    {
+      "id": "daemon.blog.002",
+      "track": "blog",
+      "phase": "Pop",
+      "pattern": "WHAT IS NEW",
+      "captures": [],
+      "template": "BLOG_FEED_LATEST",
+      "output_kind": "gap",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "feed_required",
+      "requires_executor": "blog.feed",
+      "feed_status": "not_verified_in_this_environment"
+    },
+    {
+      "id": "daemon.blog.003",
+      "track": "blog",
+      "phase": "Pop",
+      "pattern": "WHAT S NEW",
+      "captures": [],
+      "template": "BLOG_FEED_LATEST",
+      "output_kind": "gap",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "feed_required",
+      "requires_executor": "blog.feed",
+      "feed_status": "not_verified_in_this_environment"
+    },
+    {
+      "id": "daemon.blog.004",
+      "track": "blog",
+      "phase": "Pop",
+      "pattern": "LATEST POSTS",
+      "captures": [],
+      "template": "BLOG_FEED_LATEST",
+      "output_kind": "gap",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "feed_required",
+      "requires_executor": "blog.feed",
+      "feed_status": "not_verified_in_this_environment"
+    },
+    {
+      "id": "daemon.blog.005",
+      "track": "blog",
+      "phase": "Pop",
+      "pattern": "SEARCH BLOG FOR *",
+      "captures": [
+        {
+          "name": "subject",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        }
+      ],
+      "template": "BLOG_FEED_SEARCH: <star/>",
+      "output_kind": "gap",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "feed_required",
+      "requires_executor": "blog.feed",
+      "feed_status": "not_verified_in_this_environment"
+    },
+    {
+      "id": "daemon.blog.006",
+      "track": "blog",
+      "phase": "Pop",
+      "pattern": "WHAT DID YOU POST ABOUT *",
+      "captures": [
+        {
+          "name": "subject",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        }
+      ],
+      "template": "BLOG_FEED_SEARCH: <star/>",
+      "output_kind": "gap",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "feed_required",
+      "requires_executor": "blog.feed",
+      "feed_status": "not_verified_in_this_environment"
+    },
+    {
+      "id": "daemon.blog.007",
+      "track": "blog",
+      "phase": "Pop",
+      "pattern": "SUMMARIZE YOUR BLOG",
+      "captures": [],
+      "template": "BLOG_FEED_SUMMARY",
+      "output_kind": "gap",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "feed_required",
+      "requires_executor": "blog.feed",
+      "feed_status": "not_verified_in_this_environment"
+    },
+    {
+      "id": "daemon.blog.008",
+      "track": "blog",
+      "phase": "Pop",
+      "pattern": "DO YOU HAVE AN ARTICLE ABOUT *",
+      "captures": [
+        {
+          "name": "subject",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        }
+      ],
+      "template": "BLOG_FEED_SEARCH: <star/>",
+      "output_kind": "gap",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "feed_required",
+      "requires_executor": "blog.feed",
+      "feed_status": "not_verified_in_this_environment"
+    },
+    {
+      "id": "daemon.wildcard.001",
+      "track": "wildcard",
+      "phase": "Yax",
+      "pattern": "TELL ME ABOUT *",
+      "captures": [
+        {
+          "name": "subject",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        }
+      ],
+      "template": "Please specify whether <star/> is a strain, a product, a growing term, or a blog topic so I can give the right answer.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "static"
+    },
+    {
+      "id": "daemon.wildcard.002",
+      "track": "wildcard",
+      "phase": "Yax",
+      "pattern": "EXPLAIN *",
+      "captures": [
+        {
+          "name": "subject",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        }
+      ],
+      "template": "Please specify whether <star/> is a strain, a product, a growing term, or a blog topic so I can give the right answer.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "static"
+    },
+    {
+      "id": "daemon.wildcard.003",
+      "track": "wildcard",
+      "phase": "Yax",
+      "pattern": "DEFINE *",
+      "captures": [
+        {
+          "name": "subject",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        }
+      ],
+      "template": "Please specify whether <star/> is a strain, a product, a growing term, or a blog topic so I can give the right answer.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "static"
+    },
+    {
+      "id": "daemon.wildcard.004",
+      "track": "wildcard",
+      "phase": "Yax",
+      "pattern": "WHAT DOES *",
+      "captures": [
+        {
+          "name": "subject",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        }
+      ],
+      "template": "Please specify whether <star/> is a strain, a product, a growing term, or a blog topic so I can give the right answer.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "static"
+    },
+    {
+      "id": "daemon.wildcard.005",
+      "track": "wildcard",
+      "phase": "Yax",
+      "pattern": "HOW DO I CHOOSE *",
+      "captures": [
+        {
+          "name": "subject",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        }
+      ],
+      "template": "What criteria matter for <star/>: genetics, aroma, format, budget or growing conditions?",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "static"
+    },
+    {
+      "id": "daemon.wildcard.006",
+      "track": "wildcard",
+      "phase": "Yax",
+      "pattern": "WHY DOES * HAPPEN",
+      "captures": [
+        {
+          "name": "subject",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        }
+      ],
+      "template": "What conditions were present when <star/> happened?",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "static"
+    },
+    {
+      "id": "daemon.wildcard.007",
+      "track": "wildcard",
+      "phase": "Yax",
+      "pattern": "WHAT IS THE DIFFERENCE BETWEEN * AND *",
+      "captures": [
+        {
+          "name": "left",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        },
+        {
+          "name": "right",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        }
+      ],
+      "template": "Compare <star index=\"1\"/> and <star index=\"2\"/> by their verified attributes rather than assuming the names determine their properties.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "static"
+    },
+    {
+      "id": "daemon.wildcard.008",
+      "track": "wildcard",
+      "phase": "Yax",
+      "pattern": "CAN YOU RECOMMEND *",
+      "captures": [
+        {
+          "name": "subject",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        }
+      ],
+      "template": "Tell me which non-medical product characteristics you care about, and I can explain the options.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "static"
+    },
+    {
+      "id": "daemon.wildcard.009",
+      "track": "wildcard",
+      "phase": "Yax",
+      "pattern": "IS * GOOD FOR ANXIETY",
+      "captures": [
+        {
+          "name": "subject",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        }
+      ],
+      "template": "I cannot predict or recommend a cannabis product to treat anxiety. Effects vary, and THC can worsen anxiety for some people. Consult a qualified clinician.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "static"
+    },
+    {
+      "id": "daemon.wildcard.010",
+      "track": "wildcard",
+      "phase": "Yax",
+      "pattern": "IS * SAFE",
+      "captures": [
+        {
+          "name": "subject",
+          "type": "phrase",
+          "on_unresolved": "defer"
+        }
+      ],
+      "template": "Safety depends on the specific product, person and context. Check credible evidence, testing and applicable regulations.",
+      "output_kind": "finding",
+      "authority": "observation_only",
+      "never_executes": true,
+      "source": "static"
+    }
+  ],
+  "@control": [
+    {
+      "@op": "FOLD_ENTER",
+      "@fold": "Ch'en",
+      "@node": "daemon_bot"
+    },
+    {
+      "@op": "PATTERN_BANK",
+      "@bank": "@patterns",
+      "@input": "input"
+    },
+    {
+      "@op": "FOLD_EXIT",
+      "@fold": "Ch'en",
+      "@args": [
+        "observation_only"
+      ]
+    }
+  ]
+}

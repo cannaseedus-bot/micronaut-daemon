@@ -1,0 +1,57 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "photo-journal",
+  "@key": "⟁APP:PHOTO_JOURNAL",
+  "@mount": "⟁ROOT:PHOTO_JOURNAL",
+  "@theme": { "accent": "#34d399", "bg": "#050d0a", "surface": "#0d1f18", "text": "#d1fae5", "hero_phase": "Pop", "tagline": "Moments worth keeping" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "gallery", "component": "⟁WIDGET:GALLERY", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "albums": [], "search": "", "active_photo": null, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:PHOTO_JOURNAL": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:UPLOAD"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:UPLOAD": { "@type": "button", "@text": "Upload", "@on": { "click": "photo.open_upload" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:GALLERY", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:GALLERY": { "@type": "grid", "@bind": "state.albums", "@children": ["⟁WIDGET:PHOTO_CARD"] },
+    "⟁WIDGET:PHOTO_CARD": { "@type": "media-card", "@bind": "photo", "@on": { "view": "photo.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:ALBUMS", "⟁WIDGET:RECENT"] },
+    "⟁WIDGET:ALBUMS": { "@type": "list", "@bind": "data.albums" },
+    "⟁WIDGET:RECENT": { "@type": "list", "@bind": "data.recent" }
+  },
+  "@programs": {
+    "photo.open_upload": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "photo.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_photo", "@out": "active_photo" }] },
+    "photo.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "photo.view": "photo.view", "upload.open": "photo.open_upload", "search.input": "photo.search" },
+  "@imports": [{ "ref": "photo", "mode": "schema_table" }, { "ref": "album", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "slideshow", "name": "Slideshow Mode", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Auto-play albums as a fullscreen slideshow." },
+      { "id": "print-orders", "name": "Print Orders", "category": "commerce", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Let visitors order prints directly from your gallery." },
+      { "id": "caption-bot", "name": "Caption Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Auto-generate alt-text and captions from photos." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "photo.upload", "pattern": "UPLOAD PHOTO|ADD PHOTO|NEW ALBUM", "intent": "open_upload" },
+      { "id": "photo.search", "pattern": "FIND PHOTO *|SEARCH *", "intent": "filter_photos" }
+    ]
+  },
+  "@data": {
+    "albums": ["Kyoto 2024", "Studio Shots", "Events"],
+    "recent": ["golden-hour-kyoto.jpg", "studio-portrait-01.jpg"],
+    "spotlight": [
+      { "id": "sp1", "title": "Kyoto in Spring", "album": "Kyoto 2024", "badge": "Featured", "excerpt": "Cherry blossom season captured in 40 photographs." },
+      { "id": "sp2", "title": "Studio Portraits", "album": "Studio Shots", "badge": "Series", "excerpt": "Natural light studio work — minimal setup, maximal impact." },
+      { "id": "sp3", "title": "Night Market Textures", "album": "Events", "badge": "Moody", "excerpt": "Neon reflections and street food smoke." }
+    ],
+    "schema": {
+      "photo": { "primaryKey": "photo_id", "fields": { "photo_id": { "type": "string" }, "album_id": { "type": "string", "required": true }, "filename": { "type": "string", "required": true }, "caption": { "type": "text" }, "taken_at": { "type": "datetime" }, "width": { "type": "integer" }, "height": { "type": "integer" }, "tags": { "type": "json" } } },
+      "album": { "primaryKey": "album_id", "fields": { "album_id": { "type": "string" }, "title": { "type": "string", "required": true }, "description": { "type": "text" }, "cover_photo_id": { "type": "string" }, "created_at": { "type": "datetime" } } }
+    }
+  }
+}

@@ -1,0 +1,55 @@
+# ==============================================================================
+# EBNF Grammar for an English-Like Scripting Language (With Syntactic Sugar)
+# ==============================================================================
+
+# --- Core Program Structure ---
+program           = { statement , [ newline ] } ;
+
+statement         = creation_statement 
+                  | assignment_statement 
+                  | conditional_statement 
+                  | action_statement ;
+
+# --- Syntactic Sugar (Optional Filler Words) ---
+# These tokens make the code read like natural English but do not alter logic.
+sugar_a           = "a" | "an" | "the" ;
+sugar_to          = "to" | "into" ;
+sugar_named       = "named" | "called" ;
+sugar_is          = "is" | "equals" | "to be" ;
+sugar_then        = "then" | "do" ;
+
+# --- Statement Definitions ---
+# Matches: 'create a new user named "Alex"' or 'create user "Alex"'
+creation_statement = "create" , [ sugar_a ] , [ "new" ] , identifier , [ sugar_named ] , string_literal ;
+
+# Matches: 'set X to 5' or 'assign 5 into X'
+assignment_statement = ( "set" | "assign" ) , identifier , [ sugar_to ] , expression 
+                     | "set" , identifier , [ sugar_is ] , expression ;
+
+# Matches: 'if user is "Alex" then ...'
+conditional_statement = "if" , expression , [ sugar_is ] , expression , [ sugar_then ] , [ newline ] , 
+                        block , 
+                        [ "else" , [ newline ] , block ] ;
+
+# Matches: 'print string' or 'delete user'
+action_statement   = ( "print" | "delete" | "show" ) , ( identifier | string_literal | number_literal ) ;
+
+block              = "begin" , { statement , [ newline ] } , "end" ;
+
+# --- Expressions & Primitives ---
+expression         = identifier | literal ;
+literal            = string_literal | number_literal ;
+
+# --- Tokens / Lexical Terminals ---
+identifier         = letter , { letter | digit } ;
+string_literal     = '"' , { letter | digit | space } , '"' ;
+number_literal     = digit , { digit } ;
+
+letter             = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" 
+                   | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" 
+                   | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "Y" | "K" | "L" | "M" 
+                   | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" ;
+
+digit              = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+space              = " " ;
+newline            = "\n" | "\r\n" ;

@@ -1,0 +1,116 @@
+{
+  "@type": "khanary.document_contracts.v1",
+  "id": "urn:kuhul:document:text-composition:v1",
+  "version": "1.0.0",
+  "authority": "text_composition_contract_not_semantic_authority",
+  "semantic_authority": false,
+  "commit_authorized": false,
+  "purpose": "Declare the word->sentence->paragraph->article ladder over fold-neighborhood structure, and constrain it so that realized text restates edges that already exist rather than inventing them.",
+
+  "law": {
+    "carrier": "document",
+    "levels": ["word", "sentence", "paragraph", "section", "article"],
+    "containment": "article > section > paragraph > sentence > word",
+    "unit": "one sentence realizes exactly one relation edge",
+    "book": "Book(h) == N(h); Unfold(h,tau) = { e | B_tau[h,e] != 0 }",
+    "reveal_only": "FG2: Unfold(h,tau) reveals relationships represented by B_tau[h,e] != 0; it does not create semantic relationships",
+    "composition": "FG9: Local Fold Validity + Boundary Compatibility => Composable Fold Validity",
+    "adjacency": "KFA C6: composability is pairwise-local: a plan is admissible exactly when every adjacent pair is",
+    "ordering": "horizontal = Delta T (fold-space movement axis); a document is a Delta T ordering, not a phase ordering",
+    "identity": "SC-29: (Fold . Unfold)(h) = h when delta_phi = 0, applied to text as parse(linearize(d)) = d",
+    "authority": "apply-field-not-commit-topology: a document steers semantic computation; it does not mutate the permanent graph",
+    "terminal_phase": "Sek",
+    "phase_note": "realization is projection: Pop reads relations, Wo binds their typed ends, Yax orders them by Delta T, Sek scores and selects. Ch'en is not reached because nothing is proven; Xul is not reached because nothing is committed."
+  },
+
+  "mood": {
+    "document_body_requires": "declarative",
+    "imperative_allowed_for": "command dispatch only",
+    "law": "a control template realizes a command verb (GET, POST, READ, WRITE, PATCH, LIST, INSPECT, RUN, COMPILE, CALL, HEALTH, SEARCH); a declarative template realizes a relation verb",
+    "consequence": "a document whose sentences come from the control catalog is a runbook, not prose, regardless of how correctly it composes"
+  },
+
+  "boundaries": [
+    {
+      "level": "sentence",
+      "attribute": "text_boundary",
+      "value": "sentence",
+      "token": "\u25c4/s\u25ba",
+      "divergence": -1.0,
+      "singularity": "sink",
+      "resets": ["n_gram_context"]
+    },
+    {
+      "level": "paragraph",
+      "attribute": "text_boundary",
+      "value": "paragraph",
+      "token": "\u25c4par\u25ba",
+      "divergence": 1.0,
+      "singularity": "source",
+      "resets": ["n_gram_context"]
+    },
+    {
+      "level": "section",
+      "attribute": "text_boundary",
+      "value": "section",
+      "token": "\u25c4sec\u25ba",
+      "divergence": 1.0,
+      "singularity": "source",
+      "resets": ["n_gram_context"]
+    },
+    {
+      "level": "article",
+      "attribute": "text_boundary",
+      "value": "article",
+      "token": "\u25c4art\u25ba",
+      "divergence": 1.0,
+      "singularity": "source",
+      "resets": ["n_gram_context"]
+    }
+  ],
+
+  "sources": {
+    "enum": "data/grammar/gml.khanary.ebnf :: text_boundary = sentence|paragraph|article|section|none",
+    "validator": "data/grammar/gml.validator.json :: Q7 text_boundary_enum / INVALID_TEXT_BOUNDARY",
+    "tokens": "data/grammar/gml.khanary.ebnf :: boundary_token, structural delimiter such as \u25c4/s\u25ba",
+    "reset": "data/manifest/vector.manifest.json :: vector:structural-boundary-reset / n_gram_context_reset",
+    "fixture": "data/conformance/gml_validator.json :: structural_boundary_valid",
+    "relations": "data/grammar/gml.khanary.ebnf :: relation_verb",
+    "templates": "data/templates/declarative-realization.templates.json"
+  },
+
+  "realization": {
+    "template_family": "data/templates/declarative-realization.templates.json",
+    "relation_verbs": [
+      "@is_a",
+      "@has_part",
+      "@part_of",
+      "@causes",
+      "@requires",
+      "@defines",
+      "@contradicts"
+    ],
+    "rule": "each relation verb in relation_verbs has exactly one declarative template, and each declarative template realizes exactly one relation verb",
+    "unrealizable": "an edge whose relation verb has no declarative template is a typed declination, never silently dropped and never rendered by a fallback sentence",
+    "alias_verbs": ["@call", "@delegate", "@relate", "@eval", "@compose", "@informs"],
+    "alias_rule": "an alias spelling may be realized as prose, because rendering an edge is not verifying it; such a template must carry via_alias and the spelling must remain RelationCandidate in data/grammar/relation-aliases.contracts.json"
+  },
+
+  "forbidden": [
+    "inventing a relation edge during realization",
+    "minting verified_outcome",
+    "writing committed_result",
+    "claiming semantic_authority",
+    "claiming commit_authorized",
+    "using an imperative template in a document body",
+    "rendering an edge whose subject or object handle is unresolved",
+    "rendering a routing frame as prose"
+  ],
+
+  "phase_contract": {
+    "Pop": "read the relation edges of the revealed neighborhood (gramRead)",
+    "Wo": "bind subject and object handles to typed values",
+    "Yax": "order sentences by Delta T into paragraph and section groupings",
+    "Sek": "select the surviving ordering; emit"
+  }
+}

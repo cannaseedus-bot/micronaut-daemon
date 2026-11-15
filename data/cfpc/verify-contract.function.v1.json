@@ -1,0 +1,30 @@
+{
+  "@kind": "semantic.function.v1",
+  "@id": "verify_contract",
+  "@intent": "verify",
+  "@owner": "CODE-µ",
+  "@governs": ["verify", "contract", "schema", "validation"],
+  "@capabilities": ["schema_validation"],
+  "@bindings": {
+    "artifact": {
+      "type": "json",
+      "required": true,
+      "wildcard": "{artifact}"
+    }
+  },
+  "@backend": {
+    "type": "micronaut",
+    "capability": "pattern_discovery"
+  },
+  "@policy": {
+    "max_depth": 4,
+    "cycle_detection": true,
+    "allow_dynamic_resolution": false,
+    "promote_generated_facts": false
+  },
+  "@result": {
+    "retain_provenance": true,
+    "retain_gaps": true,
+    "allow_pattern_candidates": false
+  }
+}

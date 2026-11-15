@@ -1,0 +1,32 @@
+{
+  "@kind": "semantic.cheese.v1",
+  "@candidate": "claim-server-overloaded",
+  "@context": "why-server-failed",
+  "@score": 8.5,
+  "@evaluated_at": "2026-10-18T12:00:00Z",
+  "@dimensions": {
+    "pessimism": 7,
+    "doubt": 9,
+    "reasoning_quality": 8,
+    "counterevidence": 5,
+    "contradictions": 3,
+    "staleness": 2,
+    "supporting_evidence": 1
+  },
+  "@objections": [
+    {
+      "reason": "No diagnostics establish overload",
+      "evidence_ref": "logs-missing",
+      "confidence": 0.9
+    }
+  ],
+  "@support": [],
+  "@provenance": [
+    "model-output-001"
+  ],
+  "@policy": {
+    "freshness_class": "current_state",
+    "recompute_on_query": true,
+    "no_auto_promotion": true
+  }
+}

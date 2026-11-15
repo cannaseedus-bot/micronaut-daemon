@@ -1,0 +1,271 @@
+{
+  "gml:loader": [
+    "main.cpp:7876",
+    "scan:data/*.gml",
+    "auto-loaded-at-startup",
+    "consumer:field_dag.load_gml",
+    "consumer:mcp_server.add_gml",
+    "id-namespace:@node:gml:{stem}:{int_id}"
+  ],
+  "gml:grammar": [
+    "data/grammar/gml.khanary.ebnf",
+    "parser:src/world/gml_parser.cpp"
+  ],
+  "gml:topology_contract": [
+    "role:explicit-graph-topology-contract",
+    "between:key-books-and-vector-projection",
+    "preserves:nodes",
+    "preserves:typed_edges",
+    "preserves:relation_phase",
+    "preserves:fold_direction",
+    "preserves:graph_family",
+    "law:GML!=VECTOR",
+    "law:GML!=STB",
+    "law:topology-before-coordinates",
+    "consumer:vectors.xml",
+    "consumer:VECTOR-µ"
+  ],
+  "gml:vector_boundary": [
+    "GML=graph-shape-authority",
+    "VECTOR-µ=derived-representation-learner",
+    "STB/mesh/HLSL/KLSL=projection-or-execution-provider",
+    "similarity_subset_relatedness",
+    "projection_cannot_redefine_semantics"
+  ],
+  "gml:mesh_projection_bridge": [
+    "vectors.xml",
+    "provider:birdsong-stb",
+    "provider:klsl-mesh-compression",
+    "provider:asx-meshlet-shaders",
+    "features:vertex_xyz/face_normal/edge_length/dihedral_angle",
+    "features:time/freq/energy/csr_neighbors/expert_id"
+  ],
+  "gml:validator": [
+    "data/grammar/gml.validator.json",
+    "version:1.0.0",
+    "grade:PARSED→VALID→ADMITTED",
+    "law:ParsedGraph≠VerifiedGraph≠B",
+    "law:infer_relation_from_lexical(x)≠VerifiedRelation(x)",
+    "law:Representation→Relevance→Candidate→Verification",
+    "fatal:MISSING_NODE_ID/DUPLICATE_NODE_ID/MISSING_EDGE_ENDPOINT/INVALID_EDGE_ENDPOINT/OVERLAY_ID_COLLISION_INTRA",
+    "error:CONFIDENCE_OUT_OF_RANGE/STATIC_WEIGHT_OUT_OF_RANGE/HEALTH_OUT_OF_RANGE/COORDINATE_NOT_FINITE",
+    "warning:NEAR_MISS_VERB/INFER_CANDIDATE_USED/BOTH_VERB_AND_RELATION_PRESENT",
+    "boundary:VerifiedGraph→Proposal→Ch'en→XCFE→XulGate→B'"
+  ],
+  "gml:khanary_topology": [
+    "data/khanary_topology.gml",
+    "graph:Q3-hypercube-labelled",
+    "label:KHANARY_TOPOLOGY",
+    "nodes:10",
+    "edges:15",
+    "directed:0",
+    "bit0:analysis-generation",
+    "bit1:active-memory",
+    "bit2:object-meta",
+    "tracks:REASON-µ/CREATE-µ/INFER-µ/ELIZA/TOOL-µ/ORCH-µ/MEM-µ/Coordinator",
+    "purpose:semantic-adjacency-of-core-cognitive-tracks",
+    "verb:@related_to"
+  ],
+  "gml:hypercube_q3": [
+    "data/hypercube_Q3.gml",
+    "graph:Q3-hypercube",
+    "label:Q3",
+    "nodes:8",
+    "edges:12",
+    "directed:0",
+    "regular:3",
+    "vertex-labels:3-bit-binary",
+    "edge-labels:bit0/bit1/bit2",
+    "purpose:3d-geodesic-reference-topology",
+    "verb:@related_to"
+  ],
+  "gml:hypercube_q4": [
+    "data/hypercube_Q4.gml",
+    "graph:Q4-hypercube",
+    "label:Q4",
+    "nodes:16",
+    "edges:32",
+    "directed:0",
+    "regular:4",
+    "vertex-labels:4-bit-binary",
+    "layout:bit0→x, bit1→y, bit2→z, bit3→diagonal-offset",
+    "purpose:4d-geodesic-reference-topology",
+    "verb:@related_to"
+  ],
+  "gml:ccc_n3": [
+    "data/ccc_n3.gml",
+    "graph:CCC3-cube-connected-cycles",
+    "label:CCC3",
+    "nodes:24",
+    "edges:36",
+    "directed:0",
+    "regular:3",
+    "vertex-labels:{3-bit-word}:{cycle-position-0-2}",
+    "edge-types:cycle/xor:bit0/xor:bit1/xor:bit2",
+    "purpose:cubic-interconnect-topology-overlay",
+    "verb:@related_to"
+  ],
+  "gml:ccc_n4": [
+    "data/ccc_n4.gml",
+    "graph:CCC4-cube-connected-cycles",
+    "label:CCC4",
+    "nodes:64",
+    "edges:96",
+    "directed:0",
+    "regular:3",
+    "vertex-labels:{4-bit-word}:{cycle-position-0-3}",
+    "edge-types:cycle/xor",
+    "purpose:higher-order-cubic-interconnect-topology-overlay",
+    "verb:@related_to"
+  ],
+  "gml:sample": [
+    "data/sample.gml",
+    "graph:directed-3-cycle",
+    "label:Hello-I-am-a-graph",
+    "nodes:3",
+    "edges:3",
+    "directed:1",
+    "purpose:parser-smoke-test",
+    "verb:@delegates_to",
+    "note:thisIsASampleAttribute demonstrates unknown-key passthrough"
+  ],
+  "abi:projection_v1": [
+    "data/projection_abi_v1.json",
+    "schema:⟁PROJECTION_ABI_v1",
+    "loaded-as:cfg.proj_book",
+    "default-path:data/projection_abi_v1.json",
+    "cli:--proj-book",
+    "dimensions:⟁FIELD/⟁EVIDENCE/⟁INFER/⟁COUNTEREXAMPLE/⟁VERIFY/⟁XUL",
+    "targets:chat/code/patch/kuhul",
+    "thinking-levels:low/medium/high",
+    "purpose:contract-for-project_v()-neural-boundary-crossing",
+    "note:project_v() implements this Book; it does not define it"
+  ],
+  "abi:gyro_v1": [
+    "data/gyro_abi_v1.json",
+    "schema:⟁GYRO_ABI_v1",
+    "revision:v1.1",
+    "loaded-as:cfg.gyro_book",
+    "default-path:data/gyro_abi_v1.json",
+    "cli:--gyro-book",
+    "dimensions:⟁FIELD/⟁EVIDENCE/⟁INFER/⟁COUNTEREXAMPLE/⟁VERIFY/⟁XUL",
+    "measurement-tracks:REASON-µ/INFER-µ/ORCH-µ/MEM-µ/CREATE-µ/ELIZA",
+    "purpose:gyroscope-ABI-µtrack-to-epistemic-coordinate-map",
+    "synonym-credit:0.65",
+    "note:structural-ABI-6x6-unchanged-in-v1.1; ELIZA-governs-extended-for-greeting-learning"
+  ],
+  "gml:vector_topology_corpus": [
+    "vectors.xml:gml_topology_corpus",
+    "data/khanary_topology.gml:nodes=8:edges=12:directed=0",
+    "data/hypercube_Q3.gml:nodes=8:edges=12:directed=0",
+    "data/hypercube_Q4.gml:nodes=16:edges=32:directed=0",
+    "data/ccc_n3.gml:nodes=24:edges=36:directed=0",
+    "data/ccc_n4.gml:nodes=64:edges=96:directed=0",
+    "data/sample.gml:nodes=3:edges=3:directed=1",
+    "validator:data/conformance/gml_validator.json"
+  ],
+  "gml:abi_projection_bridge": [
+    "data/projection_abi_v1.json",
+    "data/gyro_abi_v1.json",
+    "role:projection-and-measurement-ABI-books",
+    "used-by:vectors.xml",
+    "used-by:VECTOR-µ"
+  ],
+  "gml:formal_grammar_contracts": [
+    "data/grammar/gml.khanary.ebnf:parser-grammar",
+    "data/grammar/gml.validator.json:semantic-validator",
+    "law:ParsedGraph≠VerifiedGraph≠B",
+    "law:Representation→Relevance→Candidate→Verification",
+    "law:VerifiedGraph→Proposal→Ch'en→XCFE→XulGate→B'"
+  ],
+  "gml:fold_graph_law_bridge": [
+    "data/grammar/fold_graph.xml:fold-graph-lawbook",
+    "data/grammar/fold.cd.xml:openmath-content-dictionary",
+    "cd:urn:kuhul:fold-graph:v1",
+    "symbols:FoldPair/FoldPairLower/Axis/supp/setbuilder",
+    "topology-symbol:B",
+    "cycle:Pop Wo Yax Sek Ch'en Xul",
+    "law:topology-before-coordinates",
+    "data/grammar/vectors.mml:mathml-foldpair-contract",
+    "FoldPair(S)=<M[Y,X],C[Y,X]^T>",
+    "M_YX!=W_Y",
+    "B=authoritative_discrete_topology",
+    "M_mu=VECTOR-µ_learned_geometry_over_B",
+    "N(k)->T_k(M_mu)",
+    "g(F,theta,r)=local_metric_projection",
+    "d_M(A,B)=typed_graph_geodesic_projection",
+    "law:Delta(M_mu)!=Delta(B)",
+    "Risk(theta,delta)=E[Loss(theta,delta(x))]",
+    "PriorDistribution:Lambda(theta)",
+    "MinimaxRule:INADMISSIBLE_VECTOR_RULE",
+    "DeltaF_diff=<DeltaM[Y,X],DeltaRelations,R_minimax>",
+    "dual_twin:dual_comparison_edge_pair",
+    "mutation:insert/delete/modify/unchanged",
+    "law:Risk constrains projection not topology truth"
+  ],
+  "gml:semantic_manifold_projection_boundary": [
+    "B remains GML/FoldGraph topology authority",
+    "VECTOR-µ may learn M_mu over B",
+    "local charts and metrics are projection-only",
+    "geodesic estimates rank/retrieve but do not verify relations",
+    "semantic_authority:false for learned geometry"
+  ],
+  "gml:decision_theory_extensions": [
+    "node_attr:prior_mass/risk_bound/mutation/base_version",
+    "edge_attr:id/dual_twin/loss_cost/mutation",
+    "validator:S1-S4 statistical decision checks",
+    "validator:D1-D4 differential/dual comparison checks",
+    "VECTOR-µ projection admissibility only",
+    "semantic_authority:false"
+  ],
+  "gml:micronaut_graph_bindings": [
+    "data/micronauts/graph-lane-bindings.v1.json",
+    "consumer:micronaut:GRAPH-THEORY",
+    "authority:DATA_ONLY",
+    "dispatch:host-binding+XCFE-required",
+    "topology-mutation:proposal→Ch’en→XCFE→Xul"
+  ],
+  "gml:unfold_graph": [
+    "data/unfold-graph.gml",
+    "graph:Q3×C6",
+    "nodes:48",
+    "edges:120",
+    "use:phase-aware-neighbor-and-delta-map-proposals",
+    "authority:DATA_ONLY"
+  ],
+  "gml:micronaut_fieldgraph": [
+    "data/micronaut_fieldgraph.gml",
+    "nodes:7",
+    "edges:8",
+    "use:fold-phase-transition-projection",
+    "authority:projection_only",
+    "dispatch:not_authorized"
+  ],
+  "gml:code_wildcard": [
+    "data/code-wildcard.gml",
+    "use:wildcard-capture-and-tool-route-candidates",
+    "authority:DATA_ONLY",
+    "dispatch:XCFE-required"
+  ],
+  "gml:intent_cfpc_graphs": [
+    "data/intent-graph.gml",
+    "data/cfpc-questions.gml",
+    "data/cfpc-wildcards.gml",
+    "use:field-and-question-candidate-routing",
+    "authority:DATA_ONLY"
+  ],
+  "gml:semantic_projection_graphs": [
+    "data/vectors.gml",
+    "data/kuhul-pi.gml",
+    "data/pi-radius-bias.gml",
+    "use:read-only-ranking-or-projection",
+    "semantic_authority:false"
+  ],
+  "gml:dictionary_relation_source": [
+    "english-dictionary.definition-relations.key-grammar.jsonl",
+    "builder:tools/build_key_relation_graph.py",
+    "edge_semantics:definition-derived lexical association evidence",
+    "authority:DATA_ONLY",
+    "embedding_alignment:shared AIML corpus pipeline"
+  ]
+}

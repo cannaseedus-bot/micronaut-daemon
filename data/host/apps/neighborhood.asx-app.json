@@ -1,0 +1,57 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "neighborhood",
+  "@key": "⟁APP:NEIGHBORHOOD",
+  "@mount": "⟁ROOT:NEIGHBORHOOD",
+  "@theme": { "accent": "#4ade80", "bg": "#010c04", "surface": "#02180a", "text": "#dcfce7", "hero_phase": "Wo", "tagline": "Stay connected. Stay local." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "posts", "component": "⟁WIDGET:POSTS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "posts": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:NEIGHBORHOOD": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:NEW_POST", "⟁ACTION:ALERTS"] },
+    "⟁ACTION:NEW_POST": { "@type": "button", "@text": "Post", "@on": { "click": "nb.open_compose" } },
+    "⟁ACTION:ALERTS": { "@type": "button", "@text": "Alerts", "@on": { "click": "nb.open_alerts" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:POSTS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:POSTS": { "@type": "feed", "@bind": "state.posts", "@children": ["⟁WIDGET:POST_CARD"] },
+    "⟁WIDGET:POST_CARD": { "@type": "content-card", "@bind": "post", "@on": { "view": "nb.view", "reply": "nb.reply" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:EVENTS", "⟁WIDGET:CATEGORIES"] },
+    "⟁WIDGET:EVENTS": { "@type": "list", "@bind": "data.events" },
+    "⟁WIDGET:CATEGORIES": { "@type": "tag-cloud", "@bind": "data.categories" }
+  },
+  "@programs": {
+    "nb.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "nb.open_alerts": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "nb.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "nb.reply": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "APPEND", "@from": "event_reply", "@out": "replies" }] }
+  },
+  "@events": { "post.new": "nb.open_compose", "alerts.open": "nb.open_alerts", "post.view": "nb.view", "post.reply": "nb.reply" },
+  "@imports": [{ "ref": "post", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "map-pin", "name": "Map Pins", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Pin posts to specific streets or landmarks on a neighbourhood map." },
+      { "id": "safety-alerts", "name": "Safety Alerts", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Priority visibility for safety-tagged posts with push alerts." },
+      { "id": "local-deals", "name": "Local Deals Board", "category": "community", "price": "optional", "status": "available_unconfigured", "description": "Separate board for local business offers and discounts." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "nb.post", "pattern": "NEW POST|ANNOUNCE *|NEIGHBOURHOOD POST", "intent": "open_compose" },
+      { "id": "nb.alerts", "pattern": "SAFETY ALERT|NEIGHBOURHOOD ALERT|WHAT IS HAPPENING", "intent": "open_alerts" }
+    ]
+  },
+  "@data": {
+    "events": [{ "title": "Street Cleanup", "date": "2026-11-08", "organiser": "Green Block" }, { "title": "Block Party", "date": "2026-11-15", "organiser": "Oak St" }],
+    "categories": ["Safety", "Events", "Lost & Found", "For Sale", "Help Wanted", "General"],
+    "spotlight": [
+      { "id": "sp1", "title": "Street Cleanup Saturday Nov 8", "category": "Events", "badge": "Upcoming", "rsvps": 24, "excerpt": "Meet at the park entrance at 09:00. Bags and gloves provided." },
+      { "id": "sp2", "title": "Lost Cat — Tabby, Elm Street", "category": "Lost & Found", "badge": "Urgent", "excerpt": "Missing since Tuesday. Name is Pixel. Responds to whistling." },
+      { "id": "sp3", "title": "Road Works — Main St Closure", "category": "Safety", "badge": "Alert", "start": "2026-11-01", "excerpt": "Main Street closed from Oak to Pine from Monday through Friday." }
+    ],
+    "schema": {
+      "post": { "primaryKey": "post_id", "fields": { "post_id": { "type": "string" }, "title": { "type": "string", "required": true }, "content": { "type": "text", "required": true }, "category": { "type": "string" }, "author_id": { "type": "string" }, "replies": { "type": "json" }, "pinned": { "type": "boolean" }, "posted_at": { "type": "datetime", "required": true } } }
+    }
+  }
+}

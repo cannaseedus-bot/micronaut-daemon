@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kuhul:micronaut-semantic-router:1",
+  "title": "K'UHUL AIML/SRAI Semantic Router Micronaut v1",
+  "type": "object",
+  "required": ["schema", "identity", "rule_bank", "authority", "phases", "constraints", "vector_ranker", "xcfe", "xul", "learning"],
+  "properties": {
+    "schema": { "const": "kuhul.micronaut.semantic-router.v1" },
+    "identity": { "type": "object", "required": ["id", "role", "version"], "properties": { "id": { "const": "AIML-SRAI-ROUTER-µ" }, "role": { "const": "semantic_pattern_router" }, "version": { "type": "string" } } },
+    "rule_bank": { "type": "object", "required": ["format", "authority", "categories_are_data", "per_category_micronaut"], "properties": { "format": { "const": "BSON" }, "authority": { "const": "DATA_ONLY" }, "categories_are_data": { "const": true }, "per_category_micronaut": { "const": false } } },
+    "authority": { "type": "object", "required": ["aiml", "srai", "pi", "xcfe", "xul", "learning"], "properties": { "aiml": { "const": "match_only" }, "srai": { "const": "redirect_only" }, "pi": { "const": "rank_only" }, "xcfe": { "const": "admission_only" }, "xul": { "const": "close_only" }, "learning": { "const": "proposal_only" } } },
+    "phases": { "type": "array", "minItems": 6, "maxItems": 6, "items": { "type": "object", "required": ["name", "responsibility"], "properties": { "name": { "enum": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"] }, "responsibility": { "type": "string" } } } },
+    "constraints": { "type": "object", "required": ["srai_max_depth", "cycle_policy", "capture_index_base", "require_pure_redirect_template"], "properties": { "srai_max_depth": { "type": "integer", "minimum": 1, "maximum": 16 }, "cycle_policy": { "const": "reject" }, "capture_index_base": { "const": 1 }, "require_pure_redirect_template": { "const": true } } },
+    "vector_ranker": { "type": "object", "required": ["authority", "requires_query_vector", "model", "prompt_name"], "properties": { "authority": { "const": "rank_only" }, "requires_query_vector": { "const": true }, "model": { "type": "string" }, "prompt_name": { "type": "string" } } },
+    "xcfe": { "type": "object", "required": ["admission_required_for_dispatch", "default_status", "dispatch_in_api"], "properties": { "admission_required_for_dispatch": { "const": true }, "default_status": { "const": "DATA_ONLY" }, "dispatch_in_api": { "const": false } } },
+    "xul": { "type": "object", "required": ["close_after_verification", "commit_executable_candidate"], "properties": { "close_after_verification": { "const": true }, "commit_executable_candidate": { "const": false } } },
+    "learning": { "type": "object", "required": ["event_log", "append_only", "writes_rule_bank", "promotes_candidates"], "properties": { "event_log": { "type": "string" }, "append_only": { "const": true }, "writes_rule_bank": { "const": false }, "promotes_candidates": { "const": false } } }
+  },
+  "additionalProperties": true
+}

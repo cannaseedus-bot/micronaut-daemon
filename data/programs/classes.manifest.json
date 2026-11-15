@@ -1,0 +1,17 @@
+{
+  "@kind": "kuhul.classes.manifest.v1",
+  "programs_dir": "programs/",
+  "classes": {
+    "JsonRuntime.Runtime": { "file": "dist/json-runtime/include/JsonRuntime.h", "methods": ["parse", "run", "run_file", "serve", "health"] },
+    "JsonRuntime.Host": { "file": "dist/json-runtime/src/json_runtime_api.cpp", "methods": ["load_manifest", "boot", "run_inline", "run_file"] },
+    "MicronauntFactory": { "file": "dist/micronaut-factory/include/micronaut_factory.h", "methods": ["create_micronaut", "create_micronaut_from_research", "register_micronaut"] },
+    "RuntimeFlow": { "file": "dist/micronaut-factory/include/micronaut_factory.h", "methods": ["answer"] },
+    "S7Model": { "file": "dist/micronaut-coder/code-micronaut/native/include/s7_model.hpp", "methods": ["load", "forward", "predict"] },
+    "TodoCreator": { "file": "dist/micronaut-coder/code-micronaut/include/micronaut_todo_creator.hpp", "methods": ["extract_todos"] },
+    "Parser": { "file": "dist/micronaut-coder/include/coder_pipeline.h", "methods": ["parse"] },
+    "Compiler": { "file": "dist/micronaut-coder/include/coder_pipeline.h", "methods": ["compile"] },
+    "Generator": { "file": "dist/micronaut-coder/include/coder_pipeline.h", "methods": ["generate"] },
+    "ApiWriter": { "file": "dist/micronaut-coder/include/coder_pipeline.h", "methods": ["write"] }
+  },
+  "note": "The classes across the stack (C++ native + C# semantic)."
+}

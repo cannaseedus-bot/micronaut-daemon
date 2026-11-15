@@ -1,0 +1,344 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from ccc_n3.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH CCC3</pattern>
+    <template>source ccc_n3.gml; label CCC3; identity 33; directed 0; nodes 24; edges 36. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 0</pattern>
+    <template>Graph CCC3; node 0; id: 0; label: 000:0; x: -0.75; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 000:0</pattern>
+    <template>Graph CCC3; node 0; id: 0; label: 000:0; x: -0.75; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 1</pattern>
+    <template>Graph CCC3; node 1; id: 1; label: 000:1; x: -1.125; y: -0.783; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 000:1</pattern>
+    <template>Graph CCC3; node 1; id: 1; label: 000:1; x: -1.125; y: -0.783; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 2</pattern>
+    <template>Graph CCC3; node 2; id: 2; label: 000:2; x: -1.125; y: -1.217; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 000:2</pattern>
+    <template>Graph CCC3; node 2; id: 2; label: 000:2; x: -1.125; y: -1.217; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 3</pattern>
+    <template>Graph CCC3; node 3; id: 3; label: 001:0; x: 1.25; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 001:0</pattern>
+    <template>Graph CCC3; node 3; id: 3; label: 001:0; x: 1.25; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 4</pattern>
+    <template>Graph CCC3; node 4; id: 4; label: 001:1; x: 0.875; y: -0.783; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 001:1</pattern>
+    <template>Graph CCC3; node 4; id: 4; label: 001:1; x: 0.875; y: -0.783; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 5</pattern>
+    <template>Graph CCC3; node 5; id: 5; label: 001:2; x: 0.875; y: -1.217; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 001:2</pattern>
+    <template>Graph CCC3; node 5; id: 5; label: 001:2; x: 0.875; y: -1.217; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 6</pattern>
+    <template>Graph CCC3; node 6; id: 6; label: 010:0; x: -0.75; y: 1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 010:0</pattern>
+    <template>Graph CCC3; node 6; id: 6; label: 010:0; x: -0.75; y: 1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 7</pattern>
+    <template>Graph CCC3; node 7; id: 7; label: 010:1; x: -1.125; y: 1.217; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 010:1</pattern>
+    <template>Graph CCC3; node 7; id: 7; label: 010:1; x: -1.125; y: 1.217; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 8</pattern>
+    <template>Graph CCC3; node 8; id: 8; label: 010:2; x: -1.125; y: 0.783; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 010:2</pattern>
+    <template>Graph CCC3; node 8; id: 8; label: 010:2; x: -1.125; y: 0.783; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 9</pattern>
+    <template>Graph CCC3; node 9; id: 9; label: 011:0; x: 1.25; y: 1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 011:0</pattern>
+    <template>Graph CCC3; node 9; id: 9; label: 011:0; x: 1.25; y: 1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 10</pattern>
+    <template>Graph CCC3; node 10; id: 10; label: 011:1; x: 0.875; y: 1.217; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 011:1</pattern>
+    <template>Graph CCC3; node 10; id: 10; label: 011:1; x: 0.875; y: 1.217; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 11</pattern>
+    <template>Graph CCC3; node 11; id: 11; label: 011:2; x: 0.875; y: 0.783; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 011:2</pattern>
+    <template>Graph CCC3; node 11; id: 11; label: 011:2; x: 0.875; y: 0.783; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 12</pattern>
+    <template>Graph CCC3; node 12; id: 12; label: 100:0; x: -0.75; y: -1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 100:0</pattern>
+    <template>Graph CCC3; node 12; id: 12; label: 100:0; x: -0.75; y: -1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 13</pattern>
+    <template>Graph CCC3; node 13; id: 13; label: 100:1; x: -1.125; y: -0.783; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 100:1</pattern>
+    <template>Graph CCC3; node 13; id: 13; label: 100:1; x: -1.125; y: -0.783; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 14</pattern>
+    <template>Graph CCC3; node 14; id: 14; label: 100:2; x: -1.125; y: -1.217; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 100:2</pattern>
+    <template>Graph CCC3; node 14; id: 14; label: 100:2; x: -1.125; y: -1.217; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 15</pattern>
+    <template>Graph CCC3; node 15; id: 15; label: 101:0; x: 1.25; y: -1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 101:0</pattern>
+    <template>Graph CCC3; node 15; id: 15; label: 101:0; x: 1.25; y: -1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 16</pattern>
+    <template>Graph CCC3; node 16; id: 16; label: 101:1; x: 0.875; y: -0.783; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 101:1</pattern>
+    <template>Graph CCC3; node 16; id: 16; label: 101:1; x: 0.875; y: -0.783; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 17</pattern>
+    <template>Graph CCC3; node 17; id: 17; label: 101:2; x: 0.875; y: -1.217; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 101:2</pattern>
+    <template>Graph CCC3; node 17; id: 17; label: 101:2; x: 0.875; y: -1.217; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 18</pattern>
+    <template>Graph CCC3; node 18; id: 18; label: 110:0; x: -0.75; y: 1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 110:0</pattern>
+    <template>Graph CCC3; node 18; id: 18; label: 110:0; x: -0.75; y: 1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 19</pattern>
+    <template>Graph CCC3; node 19; id: 19; label: 110:1; x: -1.125; y: 1.217; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 110:1</pattern>
+    <template>Graph CCC3; node 19; id: 19; label: 110:1; x: -1.125; y: 1.217; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 20</pattern>
+    <template>Graph CCC3; node 20; id: 20; label: 110:2; x: -1.125; y: 0.783; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 110:2</pattern>
+    <template>Graph CCC3; node 20; id: 20; label: 110:2; x: -1.125; y: 0.783; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 21</pattern>
+    <template>Graph CCC3; node 21; id: 21; label: 111:0; x: 1.25; y: 1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 111:0</pattern>
+    <template>Graph CCC3; node 21; id: 21; label: 111:0; x: 1.25; y: 1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 22</pattern>
+    <template>Graph CCC3; node 22; id: 22; label: 111:1; x: 0.875; y: 1.217; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 111:1</pattern>
+    <template>Graph CCC3; node 22; id: 22; label: 111:1; x: 0.875; y: 1.217; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 23</pattern>
+    <template>Graph CCC3; node 23; id: 23; label: 111:2; x: 0.875; y: 0.783; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 NODE 111:2</pattern>
+    <template>Graph CCC3; node 23; id: 23; label: 111:2; x: 0.875; y: 0.783; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 0 CYCLE 1</pattern>
+    <template>Graph CCC3; edge 0 to 1; label: cycle; source: 0; target: 1; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 1 CYCLE 2</pattern>
+    <template>Graph CCC3; edge 1 to 2; label: cycle; source: 1; target: 2; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 2 CYCLE 0</pattern>
+    <template>Graph CCC3; edge 2 to 0; label: cycle; source: 2; target: 0; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 3 CYCLE 4</pattern>
+    <template>Graph CCC3; edge 3 to 4; label: cycle; source: 3; target: 4; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 4 CYCLE 5</pattern>
+    <template>Graph CCC3; edge 4 to 5; label: cycle; source: 4; target: 5; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 5 CYCLE 3</pattern>
+    <template>Graph CCC3; edge 5 to 3; label: cycle; source: 5; target: 3; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 6 CYCLE 7</pattern>
+    <template>Graph CCC3; edge 6 to 7; label: cycle; source: 6; target: 7; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 7 CYCLE 8</pattern>
+    <template>Graph CCC3; edge 7 to 8; label: cycle; source: 7; target: 8; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 8 CYCLE 6</pattern>
+    <template>Graph CCC3; edge 8 to 6; label: cycle; source: 8; target: 6; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 9 CYCLE 10</pattern>
+    <template>Graph CCC3; edge 9 to 10; label: cycle; source: 9; target: 10; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 10 CYCLE 11</pattern>
+    <template>Graph CCC3; edge 10 to 11; label: cycle; source: 10; target: 11; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 11 CYCLE 9</pattern>
+    <template>Graph CCC3; edge 11 to 9; label: cycle; source: 11; target: 9; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 12 CYCLE 13</pattern>
+    <template>Graph CCC3; edge 12 to 13; label: cycle; source: 12; target: 13; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 13 CYCLE 14</pattern>
+    <template>Graph CCC3; edge 13 to 14; label: cycle; source: 13; target: 14; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 14 CYCLE 12</pattern>
+    <template>Graph CCC3; edge 14 to 12; label: cycle; source: 14; target: 12; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 15 CYCLE 16</pattern>
+    <template>Graph CCC3; edge 15 to 16; label: cycle; source: 15; target: 16; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 16 CYCLE 17</pattern>
+    <template>Graph CCC3; edge 16 to 17; label: cycle; source: 16; target: 17; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 17 CYCLE 15</pattern>
+    <template>Graph CCC3; edge 17 to 15; label: cycle; source: 17; target: 15; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 18 CYCLE 19</pattern>
+    <template>Graph CCC3; edge 18 to 19; label: cycle; source: 18; target: 19; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 19 CYCLE 20</pattern>
+    <template>Graph CCC3; edge 19 to 20; label: cycle; source: 19; target: 20; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 20 CYCLE 18</pattern>
+    <template>Graph CCC3; edge 20 to 18; label: cycle; source: 20; target: 18; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 21 CYCLE 22</pattern>
+    <template>Graph CCC3; edge 21 to 22; label: cycle; source: 21; target: 22; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 22 CYCLE 23</pattern>
+    <template>Graph CCC3; edge 22 to 23; label: cycle; source: 22; target: 23; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 23 CYCLE 21</pattern>
+    <template>Graph CCC3; edge 23 to 21; label: cycle; source: 23; target: 21; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 0 XOR:BIT0 3</pattern>
+    <template>Graph CCC3; edge 0 to 3; label: xor:bit0; source: 0; target: 3; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 6 XOR:BIT0 9</pattern>
+    <template>Graph CCC3; edge 6 to 9; label: xor:bit0; source: 6; target: 9; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 12 XOR:BIT0 15</pattern>
+    <template>Graph CCC3; edge 12 to 15; label: xor:bit0; source: 12; target: 15; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 18 XOR:BIT0 21</pattern>
+    <template>Graph CCC3; edge 18 to 21; label: xor:bit0; source: 18; target: 21; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 1 XOR:BIT1 7</pattern>
+    <template>Graph CCC3; edge 1 to 7; label: xor:bit1; source: 1; target: 7; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 4 XOR:BIT1 10</pattern>
+    <template>Graph CCC3; edge 4 to 10; label: xor:bit1; source: 4; target: 10; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 13 XOR:BIT1 19</pattern>
+    <template>Graph CCC3; edge 13 to 19; label: xor:bit1; source: 13; target: 19; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 16 XOR:BIT1 22</pattern>
+    <template>Graph CCC3; edge 16 to 22; label: xor:bit1; source: 16; target: 22; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 2 XOR:BIT2 14</pattern>
+    <template>Graph CCC3; edge 2 to 14; label: xor:bit2; source: 2; target: 14; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 5 XOR:BIT2 17</pattern>
+    <template>Graph CCC3; edge 5 to 17; label: xor:bit2; source: 5; target: 17; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 8 XOR:BIT2 20</pattern>
+    <template>Graph CCC3; edge 8 to 20; label: xor:bit2; source: 8; target: 20; verb: @related_to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CCC3 EDGE 11 XOR:BIT2 23</pattern>
+    <template>Graph CCC3; edge 11 to 23; label: xor:bit2; source: 11; target: 23; verb: @related_to. Data-only graph record.</template>
+  </category>
+</aiml>

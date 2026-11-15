@@ -1,0 +1,17 @@
+{
+  "@kind": "asx.atomic.runtime.manifest.v1",
+  "@version": "1.0.0",
+  "@authority": "manifest",
+  "@surface": "Atomics.js",
+  "@endpoint": "/api/kxml/exec",
+  "keys": {
+    "key-grammar.parse": { "route": "key-grammar.parse", "executor": "mx.run", "program": "key-grammar.parse", "authority": "observation_only" },
+    "aiml.match": { "route": "xaiml.unresolved", "executor": "mx.run", "program": "aiml.match", "authority": "observation_only" },
+    "aiml.template": { "route": "xaiml.unresolved", "executor": "mx.run", "program": "aiml.template", "authority": "observation_only" },
+    "app.call": { "route": "json.app", "executor": "mx.run", "program": "app.call", "authority": "observation_only" },
+    "pipeline.run": { "route": "micronaut.program", "executor": "mx.run", "program": "pipeline.run", "authority": "observation_only" },
+    "kuhul.execute": { "route": "kuhul.execute", "executor": "mx.run", "program": "kuhul.execute", "authority": "observation_only" },
+    "native.execute": { "route": "native.execute", "executor": "inproc.native", "bridge": { "type": "inproc", "binding": "native-exec" }, "authority": "observation_only" },
+    "wasm.execute": { "route": "wasm.execute", "executor": "inproc.wasm", "bridge": { "type": "inproc", "binding": "wasm-exec" }, "authority": "observation_only" }
+  }
+}

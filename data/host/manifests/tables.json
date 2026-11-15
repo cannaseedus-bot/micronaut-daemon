@@ -1,0 +1,1119 @@
+{
+  "$schema_version": "khanary.tables.v1",
+  "$id": "tables.json",
+  "$loaded_at": "2026-10-23T00:00:00Z",
+  "$description": "Versioned KHANARY schema and semantic topology registry.",
+  "database": {
+    "name": "CannabisForumDB",
+    "version": 1,
+    "backend": "indexeddb"
+  },
+  "tables": {
+    "user_profile": {
+      "id": "user_profile",
+      "primary_key": "user_id",
+      "fields": {
+        "user_id": {
+          "type": "uuid",
+          "required": true,
+          "structural": {
+            "default": "gen_random_uuid()",
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        },
+        "username": {
+          "type": "string",
+          "required": true,
+          "structural": {
+            "max_length": 64
+          }
+        },
+        "email": {
+          "type": "string",
+          "required": true,
+          "structural": {
+            "max_length": 255,
+            "format": "email",
+            "unique": true
+          },
+          "sensitive": true,
+          "log_policy": "redact"
+        },
+        "password": {
+          "type": "string",
+          "required": true,
+          "structural": {
+            "min_length": 8
+          },
+          "sensitive": true,
+          "log_policy": "never_log",
+          "expose_in": []
+        },
+        "created_at": {
+          "type": "timestamp",
+          "structural": {
+            "default": "now()",
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        }
+      }
+    },
+    "user_post": {
+      "id": "user_post",
+      "primary_key": "post_id",
+      "fields": {
+        "post_id": {
+          "type": "uuid",
+          "required": true,
+          "structural": {
+            "default": "gen_random_uuid()",
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        },
+        "user_id": {
+          "type": "uuid",
+          "structural": {
+            "references": {
+              "table": "user_profile",
+              "field": "user_id",
+              "on_delete": "cascade",
+              "schema_version": "khanary.tables.v1"
+            }
+          }
+        },
+        "author_name": {
+          "type": "string",
+          "structural": {
+            "max_length": 64
+          }
+        },
+        "category": {
+          "type": "enum",
+          "required": true,
+          "structural": {
+            "options": [
+              "General",
+              "Guides",
+              "Reviews",
+              "Food Ideas",
+              "DIY & Tips",
+              "News",
+              "Politics"
+            ],
+            "closed": true,
+            "unknown_policy": "reject"
+          }
+        },
+        "post_title": {
+          "type": "string",
+          "required": true,
+          "structural": {
+            "min_length": 1,
+            "max_length": 120
+          }
+        },
+        "post_body": {
+          "type": "string",
+          "required": true,
+          "structural": {
+            "max_length": 50000
+          }
+        },
+        "created_at": {
+          "type": "timestamp",
+          "structural": {
+            "default": "now()",
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        }
+      }
+    },
+    "post_reply": {
+      "id": "post_reply",
+      "primary_key": "reply_id",
+      "fields": {
+        "reply_id": {
+          "type": "uuid",
+          "required": true,
+          "structural": {
+            "default": "gen_random_uuid()",
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        },
+        "post_id": {
+          "type": "uuid",
+          "required": true,
+          "structural": {
+            "references": {
+              "table": "user_post",
+              "field": "post_id",
+              "on_delete": "cascade",
+              "schema_version": "khanary.tables.v1"
+            }
+          }
+        },
+        "user_id": {
+          "type": "uuid",
+          "structural": {
+            "references": {
+              "table": "user_profile",
+              "field": "user_id",
+              "on_delete": "cascade",
+              "schema_version": "khanary.tables.v1"
+            }
+          }
+        },
+        "author_name": {
+          "type": "string",
+          "structural": {
+            "max_length": 64
+          }
+        },
+        "body": {
+          "type": "string",
+          "required": true,
+          "structural": {
+            "min_length": 1,
+            "max_length": 10000
+          }
+        },
+        "created_at": {
+          "type": "timestamp",
+          "structural": {
+            "default": "now()",
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        }
+      }
+    },
+    "post_reaction": {
+      "id": "post_reaction",
+      "primary_key": [
+        "post_id",
+        "user_id",
+        "reaction"
+      ],
+      "fields": {
+        "post_id": {
+          "type": "uuid",
+          "required": true
+        },
+        "user_id": {
+          "type": "uuid",
+          "required": true
+        },
+        "reaction": {
+          "type": "enum",
+          "required": true,
+          "structural": {
+            "options": [
+              "like",
+              "love",
+              "laugh",
+              "sad",
+              "angry"
+            ],
+            "closed": true,
+            "unknown_policy": "reject"
+          }
+        },
+        "created_at": {
+          "type": "timestamp",
+          "structural": {
+            "default": "now()",
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        }
+      }
+    },
+    "session": {
+      "id": "session",
+      "primary_key": "session_id",
+      "fields": {
+        "session_id": {
+          "type": "uuid",
+          "required": true,
+          "structural": {
+            "default": "gen_random_uuid()",
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        },
+        "user_id": {
+          "type": "uuid",
+          "required": true
+        },
+        "token_hash": {
+          "type": "string",
+          "required": true,
+          "structural": {
+            "min_length": 64,
+            "max_length": 64
+          },
+          "sensitive": true,
+          "log_policy": "never_log"
+        },
+        "expires_at": {
+          "type": "timestamp",
+          "required": true,
+          "structural": {
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        },
+        "created_at": {
+          "type": "timestamp",
+          "structural": {
+            "default": "now()",
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        }
+      }
+    },
+    "audit_log": {
+      "id": "audit_log",
+      "primary_key": "event_id",
+      "append_only": true,
+      "fields": {
+        "event_id": {
+          "type": "uuid",
+          "required": true,
+          "structural": {
+            "default": "gen_random_uuid()",
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        },
+        "actor_id": {
+          "type": "uuid",
+          "structural": {
+            "nullable": true
+          }
+        },
+        "action": {
+          "type": "enum",
+          "required": true,
+          "structural": {
+            "options": [
+              "login",
+              "logout",
+              "create",
+              "update",
+              "delete",
+              "revoke"
+            ],
+            "closed": true,
+            "unknown_policy": "reject"
+          }
+        },
+        "target_table": {
+          "type": "string",
+          "required": true
+        },
+        "target_id": {
+          "type": "uuid",
+          "structural": {
+            "nullable": true
+          }
+        },
+        "payload": {
+          "type": "json",
+          "sensitive": true,
+          "log_policy": "never_log"
+        },
+        "occurred_at": {
+          "type": "timestamp",
+          "structural": {
+            "default": "now()",
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        }
+      }
+    },
+    "media_asset": {
+      "id": "media_asset",
+      "primary_key": "asset_id",
+      "fields": {
+        "asset_id": {
+          "type": "uuid",
+          "required": true,
+          "structural": {
+            "default": "gen_random_uuid()",
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        },
+        "owner_id": {
+          "type": "uuid",
+          "required": true
+        },
+        "mime_type": {
+          "type": "enum",
+          "required": true,
+          "structural": {
+            "options": [
+              "image/png",
+              "image/jpeg",
+              "image/webp",
+              "image/gif",
+              "video/mp4"
+            ],
+            "closed": true,
+            "unknown_policy": "reject"
+          }
+        },
+        "byte_size": {
+          "type": "number",
+          "required": true,
+          "structural": {
+            "min": 1,
+            "max": 52428800,
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        },
+        "storage_key": {
+          "type": "string",
+          "required": true,
+          "structural": {
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        },
+        "sha256": {
+          "type": "string",
+          "required": true,
+          "structural": {
+            "min_length": 64,
+            "max_length": 64,
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        }
+      }
+    },
+    "tag": {
+      "id": "tag",
+      "primary_key": "tag_id",
+      "fields": {
+        "tag_id": {
+          "type": "uuid",
+          "required": true,
+          "structural": {
+            "default": "gen_random_uuid()",
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        },
+        "name": {
+          "type": "string",
+          "required": true,
+          "structural": {
+            "min_length": 1,
+            "max_length": 64,
+            "unique": true,
+            "normalize": "lowercase_trim"
+          }
+        },
+        "category": {
+          "type": "enum",
+          "structural": {
+            "options": [
+              "topic",
+              "content_warning",
+              "language",
+              "system"
+            ],
+            "closed": false,
+            "unknown_policy": "allow_and_log"
+          }
+        }
+      }
+    },
+    "post_tag": {
+      "id": "post_tag",
+      "primary_key": [
+        "post_id",
+        "tag_id"
+      ],
+      "fields": {
+        "post_id": {
+          "type": "uuid",
+          "required": true
+        },
+        "tag_id": {
+          "type": "uuid",
+          "required": true
+        },
+        "applied_at": {
+          "type": "timestamp",
+          "structural": {
+            "default": "now()",
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        }
+      }
+    },
+    "notification": {
+      "id": "notification",
+      "primary_key": "notification_id",
+      "fields": {
+        "notification_id": {
+          "type": "uuid",
+          "required": true,
+          "structural": {
+            "default": "gen_random_uuid()",
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        },
+        "recipient_id": {
+          "type": "uuid",
+          "required": true
+        },
+        "kind": {
+          "type": "enum",
+          "required": true,
+          "structural": {
+            "options": [
+              "reply",
+              "reaction",
+              "mention",
+              "system"
+            ],
+            "closed": true,
+            "unknown_policy": "reject"
+          }
+        },
+        "subject_id": {
+          "type": "uuid",
+          "structural": {
+            "nullable": true
+          }
+        },
+        "read_at": {
+          "type": "timestamp",
+          "structural": {
+            "default": null,
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        },
+        "created_at": {
+          "type": "timestamp",
+          "structural": {
+            "default": "now()",
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        }
+      }
+    },
+    "feature_flag": {
+      "id": "feature_flag",
+      "primary_key": "flag_name",
+      "fields": {
+        "flag_name": {
+          "type": "string",
+          "required": true,
+          "structural": {
+            "pattern": "^[a-z][a-z0-9_.]*$"
+          }
+        },
+        "enabled": {
+          "type": "boolean",
+          "required": true,
+          "structural": {
+            "default": false
+          }
+        },
+        "rollout_percent": {
+          "type": "number",
+          "required": true,
+          "structural": {
+            "min": 0,
+            "max": 100,
+            "default": 0
+          }
+        },
+        "audience": {
+          "type": "enum",
+          "structural": {
+            "options": [
+              "all",
+              "admin",
+              "moderator",
+              "user"
+            ],
+            "closed": true,
+            "unknown_policy": "reject",
+            "default": "all"
+          }
+        }
+      }
+    },
+    "ngram_unigram": {
+      "id": "ngram_unigram",
+      "primary_key": "ngram_id",
+      "fields": {
+        "ngram_id": { "type": "string", "required": true },
+        "token": { "type": "string", "required": true },
+        "count": { "type": "number", "default": 0 },
+        "probability": { "type": "number", "min": 0, "max": 1 },
+        "contexts": { "type": "json", "nullable": true },
+        "source_class": {
+          "type": "enum", "required": true,
+          "options": ["user_prompt","model_response","web_research","user_memory","project_history","system_corpus"],
+          "closed": true, "unknown_policy": "reject"
+        },
+        "scope_id": { "type": "string", "required": true, "max_length": 256 },
+        "learning_state": {
+          "type": "enum", "required": true,
+          "options": ["approval_gated","evidence_only","user_scoped_memory","project_scoped_history"],
+          "closed": true, "unknown_policy": "reject"
+        }
+      }
+    },
+    "ngram_bigram": {
+      "id": "ngram_bigram",
+      "primary_key": "ngram_id",
+      "fields": {
+        "ngram_id": { "type": "string", "required": true },
+        "sequence": { "type": "json", "length": 2 },
+        "pair": { "type": "json" },
+        "count": { "type": "number", "default": 0 },
+        "probability": { "type": "number", "min": 0, "max": 1 },
+        "strength": { "type": "number", "min": 0 },
+        "source_class": {
+          "type": "enum", "required": true,
+          "options": ["user_prompt","model_response","web_research","user_memory","project_history","system_corpus"],
+          "closed": true, "unknown_policy": "reject"
+        },
+        "scope_id": { "type": "string", "required": true, "max_length": 256 },
+        "learning_state": {
+          "type": "enum", "required": true,
+          "options": ["approval_gated","evidence_only","user_scoped_memory","project_scoped_history"],
+          "closed": true, "unknown_policy": "reject"
+        }
+      }
+    },
+    "ngram_trigram": {
+      "id": "ngram_trigram",
+      "primary_key": "ngram_id",
+      "fields": {
+        "ngram_id": { "type": "string", "required": true },
+        "sequence": { "type": "json", "length": 3 },
+        "count": { "type": "number", "default": 0 },
+        "probability": { "type": "number", "min": 0, "max": 1 },
+        "intent": { "type": "string", "nullable": true },
+        "domain_key": { "type": "string", "nullable": true },
+        "source_class": {
+          "type": "enum", "required": true,
+          "options": ["user_prompt","model_response","web_research","user_memory","project_history","system_corpus"],
+          "closed": true, "unknown_policy": "reject"
+        },
+        "scope_id": { "type": "string", "required": true, "max_length": 256 },
+        "learning_state": {
+          "type": "enum", "required": true,
+          "options": ["approval_gated","evidence_only","user_scoped_memory","project_scoped_history"],
+          "closed": true, "unknown_policy": "reject"
+        }
+      }
+    },
+    "domain_key": {
+      "id": "domain_key",
+      "primary_key": "key_id",
+      "fields": {
+        "key_id": {
+          "type": "string",
+          "required": true,
+          "structural": {
+            "pattern": "^[a-z][a-z0-9_.]*$"
+          }
+        },
+        "parent_key": {
+          "type": "string",
+          "structural": {
+            "nullable": true
+          }
+        },
+        "disjoint_from": {
+          "type": "json",
+          "structural": {
+            "nullable": true
+          }
+        },
+        "aliases": {
+          "type": "json",
+          "structural": {
+            "nullable": true
+          }
+        },
+        "registered_at": {
+          "type": "timestamp",
+          "structural": {
+            "default": "now()",
+            "server_controlled": true,
+            "client_supplied": "ignore"
+          }
+        }
+      },
+      "seed_rows": [
+        {
+          "key_id": "food.hotdog",
+          "parent_key": "food",
+          "disjoint_from": [
+            "animal.canine.pet"
+          ],
+          "aliases": [
+            "hot dog",
+            "hotdog",
+            "frankfurter"
+          ]
+        },
+        {
+          "key_id": "animal.canine.pet",
+          "parent_key": "animal.canine",
+          "disjoint_from": [
+            "food.hotdog"
+          ],
+          "aliases": [
+            "dog",
+            "dogs",
+            "pet dog"
+          ]
+        }
+      ]
+    }
+  },
+  "intent_tables": {
+    "micro": {
+      "forge|the|doom": "action_forge_doom_world",
+      "drop|the|hell": "spawn_world_hell_city",
+      "create|the|tape": "action_create_tape",
+      "start|the|arena": "action_start_arena"
+    },
+    "routine": {
+      "forge|the|doom|hud|save|now|please": {
+        "routine": "doom_forge_pipeline",
+        "tape": "tape_doom_hud_v1",
+        "fold": "ui",
+        "kuhul_route": "⟁Sek⟁hud.forge.save"
+      },
+      "drop|the|hell|city|start|the|arena": {
+        "routine": "doom_world_hellcity_pipeline",
+        "tape": "tape_doom_world_hellcity_v1",
+        "fold": "worlds",
+        "kuhul_route": "⟁Wo⟁world.spawn.hell"
+      }
+    }
+  },
+  "probability_layer": {
+    "unigram": {
+      "order": 1,
+      "sequence_length": 1,
+      "semantic_job": "topic / relevance",
+      "carries_density": true,
+      "bandwidth": 0.1,
+      "measure_ref": "mu_unigram"
+    },
+    "bigram": {
+      "order": 2,
+      "sequence_length": 2,
+      "semantic_job": "local relation",
+      "carries_density": true,
+      "bandwidth": 0.1,
+      "measure_ref": "mu_bigram"
+    },
+    "trigram": {
+      "order": 3,
+      "sequence_length": 3,
+      "semantic_job": "idiom + conditional predictability",
+      "carries_density": true,
+      "bandwidth": 0.1,
+      "measure_ref": "mu_trigram"
+    }
+  },
+  "retrieval_layer": {
+    "quadgram": {
+      "order": 4,
+      "sequence_length": 4,
+      "semantic_job": "fixed span",
+      "key_type": "exact_hash | suffix_automaton",
+      "carries_density": false,
+      "backoff": "probability_layer"
+    },
+    "pentagram": {
+      "order": 5,
+      "sequence_length": 5,
+      "semantic_job": "phrase-level idiom / named entity",
+      "key_type": "exact_hash | suffix_automaton",
+      "carries_density": false,
+      "backoff": "probability_layer"
+    },
+    "supagram": {
+      "order": 7,
+      "sequence_length": 7,
+      "semantic_job": "memorized span",
+      "key_type": "rolling_hash | inverted_index",
+      "carries_density": false,
+      "backoff": "probability_layer"
+    }
+  },
+  "ngram_records": {
+    "ngram_unigram": {
+      "primary_key": "ngram_id",
+      "fields": {
+        "ngram_id": {
+          "type": "string",
+          "required": true
+        },
+        "token": {
+          "type": "string",
+          "required": true
+        },
+        "count": {
+          "type": "number",
+          "default": 0
+        },
+        "probability": {
+          "type": "number",
+          "min": 0,
+          "max": 1
+        },
+        "contexts": {
+          "type": "json",
+          "nullable": true
+        },
+        "source_class": {
+          "type": "enum",
+          "required": true,
+          "options": [
+            "user_prompt",
+            "model_response",
+            "web_research",
+            "user_memory",
+            "project_history",
+            "system_corpus"
+          ],
+          "closed": true,
+          "unknown_policy": "reject"
+        },
+        "scope_id": {
+          "type": "string",
+          "required": true,
+          "max_length": 256
+        },
+        "learning_state": {
+          "type": "enum",
+          "required": true,
+          "options": [
+            "approval_gated",
+            "evidence_only",
+            "user_scoped_memory",
+            "project_scoped_history"
+          ],
+          "closed": true,
+          "unknown_policy": "reject"
+        }
+      }
+    },
+    "ngram_bigram": {
+      "primary_key": "ngram_id",
+      "fields": {
+        "ngram_id": {
+          "type": "string",
+          "required": true
+        },
+        "sequence": {
+          "type": "json",
+          "length": 2
+        },
+        "pair": {
+          "type": "json"
+        },
+        "count": {
+          "type": "number",
+          "default": 0
+        },
+        "probability": {
+          "type": "number",
+          "min": 0,
+          "max": 1
+        },
+        "strength": {
+          "type": "number",
+          "min": 0
+        },
+        "source_class": {
+          "type": "enum",
+          "required": true,
+          "options": [
+            "user_prompt",
+            "model_response",
+            "web_research",
+            "user_memory",
+            "project_history",
+            "system_corpus"
+          ],
+          "closed": true,
+          "unknown_policy": "reject"
+        },
+        "scope_id": {
+          "type": "string",
+          "required": true,
+          "max_length": 256
+        },
+        "learning_state": {
+          "type": "enum",
+          "required": true,
+          "options": [
+            "approval_gated",
+            "evidence_only",
+            "user_scoped_memory",
+            "project_scoped_history"
+          ],
+          "closed": true,
+          "unknown_policy": "reject"
+        }
+      }
+    },
+    "ngram_trigram": {
+      "primary_key": "ngram_id",
+      "fields": {
+        "ngram_id": {
+          "type": "string",
+          "required": true
+        },
+        "sequence": {
+          "type": "json",
+          "length": 3
+        },
+        "count": {
+          "type": "number",
+          "default": 0
+        },
+        "probability": {
+          "type": "number",
+          "min": 0,
+          "max": 1
+        },
+        "intent": {
+          "type": "string",
+          "nullable": true
+        },
+        "domain_key": {
+          "type": "string",
+          "nullable": true
+        },
+        "source_class": {
+          "type": "enum",
+          "required": true,
+          "options": [
+            "user_prompt",
+            "model_response",
+            "web_research",
+            "user_memory",
+            "project_history",
+            "system_corpus"
+          ],
+          "closed": true,
+          "unknown_policy": "reject"
+        },
+        "scope_id": {
+          "type": "string",
+          "required": true,
+          "max_length": 256
+        },
+        "learning_state": {
+          "type": "enum",
+          "required": true,
+          "options": [
+            "approval_gated",
+            "evidence_only",
+            "user_scoped_memory",
+            "project_scoped_history"
+          ],
+          "closed": true,
+          "unknown_policy": "reject"
+        }
+      }
+    },
+    "ngram_pentagram": {
+      "primary_key": "ngram_id",
+      "fields": {
+        "ngram_id": {
+          "type": "string",
+          "required": true
+        },
+        "sequence": {
+          "type": "json",
+          "length": 5
+        },
+        "count": {
+          "type": "number",
+          "default": 0
+        },
+        "probability": {
+          "type": "number",
+          "min": 0,
+          "max": 1
+        },
+        "pattern": {
+          "type": "string",
+          "nullable": true
+        },
+        "source_class": {
+          "type": "enum",
+          "required": true,
+          "options": [
+            "user_prompt",
+            "model_response",
+            "web_research",
+            "user_memory",
+            "project_history",
+            "system_corpus"
+          ],
+          "closed": true,
+          "unknown_policy": "reject"
+        },
+        "scope_id": {
+          "type": "string",
+          "required": true,
+          "max_length": 256
+        },
+        "learning_state": {
+          "type": "enum",
+          "required": true,
+          "options": [
+            "approval_gated",
+            "evidence_only",
+            "user_scoped_memory",
+            "project_scoped_history"
+          ],
+          "closed": true,
+          "unknown_policy": "reject"
+        }
+      }
+    },
+    "ngram_supagram": {
+      "primary_key": "ngram_id",
+      "fields": {
+        "ngram_id": {
+          "type": "string",
+          "required": true
+        },
+        "sequence": {
+          "type": "json",
+          "length": 7
+        },
+        "count": {
+          "type": "number",
+          "default": 0
+        },
+        "probability": {
+          "type": "number",
+          "min": 0,
+          "max": 1
+        },
+        "routine": {
+          "type": "string",
+          "nullable": true
+        },
+        "tape": {
+          "type": "string",
+          "nullable": true
+        },
+        "fold": {
+          "type": "string",
+          "nullable": true
+        },
+        "kuhul_route": {
+          "type": "string",
+          "nullable": true
+        },
+        "source_class": {
+          "type": "enum",
+          "required": true,
+          "options": [
+            "user_prompt",
+            "model_response",
+            "web_research",
+            "user_memory",
+            "project_history",
+            "system_corpus"
+          ],
+          "closed": true,
+          "unknown_policy": "reject"
+        },
+        "scope_id": {
+          "type": "string",
+          "required": true,
+          "max_length": 256
+        },
+        "learning_state": {
+          "type": "enum",
+          "required": true,
+          "options": [
+            "approval_gated",
+            "evidence_only",
+            "user_scoped_memory",
+            "project_scoped_history"
+          ],
+          "closed": true,
+          "unknown_policy": "reject"
+        }
+      }
+    }
+  },
+  "ngram_tables": {
+    "unigram": {
+      "table": "ngram_unigram",
+      "order": 1,
+      "sequence_length": 1
+    },
+    "bigram": {
+      "table": "ngram_bigram",
+      "order": 2,
+      "sequence_length": 2
+    },
+    "trigram": {
+      "table": "ngram_trigram",
+      "order": 3,
+      "sequence_length": 3,
+      "semantic_field": "intent"
+    },
+    "pentagram": {
+      "table": "ngram_pentagram",
+      "order": 5,
+      "sequence_length": 5,
+      "semantic_field": "pattern"
+    },
+    "supagram": {
+      "table": "ngram_supagram",
+      "order": 7,
+      "sequence_length": 7,
+      "semantic_field": "routine"
+    }
+  },
+  "ngram_provenance": {
+    "policy_ref": "data/host/manifests/learning-provenance.json",
+    "rules": {
+      "user_prompt": "approval_gated",
+      "model_response": "evidence_only",
+      "web_research": "evidence_only",
+      "user_memory": "user_scoped_memory",
+      "project_history": "project_scoped_history"
+    }
+  }
+}

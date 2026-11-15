@@ -1,0 +1,314 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:khanary:schema:fold-event:1",
+  "title": "KHANARY Fold Event",
+  "description": "Typed Fold Event records. Events propose or observe movement in Fold Space; XCFE evaluates transition authority.",
+  "type": "object",
+  "required": [
+    "@type",
+    "@event_id",
+    "@event_kind",
+    "@axis",
+    "@before",
+    "@proposed_after",
+    "@trigger",
+    "@xcfe",
+    "@field_delta",
+    "@evidence"
+  ],
+  "properties": {
+    "@type": {
+      "const": "khanary.fold_event.v1"
+    },
+    "@event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "@event_kind": {
+      "$ref": "#/$defs/EventKind"
+    },
+    "@axis": {
+      "$ref": "#/$defs/EventAxis"
+    },
+    "@trigger": {
+      "enum": [
+        "LOCATE",
+        "UNFOLD",
+        "NAVIGATE",
+        "OPERATE",
+        "VERIFY",
+        "FOLD",
+        "XUL",
+        "BURNER",
+        "TEACHER",
+        "FIELD"
+      ]
+    },
+    "@before": {
+      "$ref": "#/$defs/Position"
+    },
+    "@proposed_after": {
+      "$ref": "#/$defs/Position"
+    },
+    "@xcfe": {
+      "$ref": "#/$defs/XcfeDecision"
+    },
+    "@field_delta": {
+      "$ref": "#/$defs/FieldDelta"
+    },
+    "@evidence": {
+      "$ref": "#/$defs/Evidence"
+    },
+    "@projection": {
+      "$ref": "#/$defs/Projection"
+    },
+    "@notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "Phase": {
+      "enum": [
+        "Pop",
+        "Wo",
+        "Yax",
+        "Sek",
+        "Ch'en",
+        "Xul"
+      ]
+    },
+    "Competence": {
+      "enum": [
+        "unbound",
+        "observed",
+        "learned",
+        "bound",
+        "validated",
+        "autonomous"
+      ]
+    },
+    "FoldState": {
+      "enum": [
+        "folded",
+        "unfolded"
+      ]
+    },
+    "RuntimeState": {
+      "type": "object",
+      "required": [
+        "@mutable",
+        "@state_id"
+      ],
+      "properties": {
+        "@mutable": {
+          "type": "boolean"
+        },
+        "@state_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "@digest": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "Position": {
+      "type": "object",
+      "required": [
+        "@h",
+        "@phase",
+        "@track",
+        "@fold_state",
+        "@runtime_state"
+      ],
+      "properties": {
+        "@h": {
+          "type": "string",
+          "minLength": 1
+        },
+        "@phase": {
+          "$ref": "#/$defs/Phase"
+        },
+        "@track": {
+          "type": "string",
+          "minLength": 1
+        },
+        "@fold_state": {
+          "$ref": "#/$defs/FoldState"
+        },
+        "@competence": {
+          "$ref": "#/$defs/Competence"
+        },
+        "@runtime_state": {
+          "$ref": "#/$defs/RuntimeState"
+        }
+      },
+      "additionalProperties": true
+    },
+    "EventKind": {
+      "enum": [
+        "EVENT_SHIFT_TRACK",
+        "EVENT_CYCLE_PHASE",
+        "EVENT_FOLD_STATE",
+        "EVENT_OSCILLATE_DENSITY",
+        "EVENT_SUBSTRATE_HANDSHAKE",
+        "EVENT_COMPETENCE_CANDIDATE",
+        "EVENT_COMPETENCE_UPGRADE",
+        "EVENT_FIELD_GRADIENT",
+        "EVENT_TOPOLOGY_CANDIDATE",
+        "EVENT_TOPOLOGY_COMMIT"
+      ]
+    },
+    "EventAxis": {
+      "enum": [
+        "T",
+        "phi",
+        "s",
+        "sigma",
+        "X",
+        "B",
+        "field"
+      ]
+    },
+    "XcfeDecision": {
+      "type": "object",
+      "required": [
+        "@policy_ref",
+        "@status",
+        "@authorized",
+        "@transition_law"
+      ],
+      "properties": {
+        "@policy_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "@status": {
+          "enum": [
+            "proposed",
+            "observed",
+            "authorized",
+            "rejected"
+          ]
+        },
+        "@authorized": {
+          "type": "boolean"
+        },
+        "@transition_law": {
+          "const": "p_next = delta_XCFE(p_t, e_t, Pi)"
+        },
+        "@reason": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "FieldDelta": {
+      "type": "object",
+      "required": [
+        "@kind",
+        "@delta_B",
+        "@verified",
+        "@authorized",
+        "@fresh",
+        "@xul"
+      ],
+      "properties": {
+        "@kind": {
+          "enum": [
+            "none",
+            "runtime_state",
+            "field_projection",
+            "topology_candidate",
+            "topology_commit"
+          ]
+        },
+        "@delta_B": {
+          "type": "boolean"
+        },
+        "@verified": {
+          "type": "boolean"
+        },
+        "@authorized": {
+          "type": "boolean"
+        },
+        "@fresh": {
+          "type": "boolean"
+        },
+        "@xul": {
+          "type": "boolean"
+        },
+        "@field_formula": {
+          "type": "string"
+        },
+        "@gradient_role": {
+          "enum": [
+            "none",
+            "candidate_navigation_pressure"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "Evidence": {
+      "type": "object",
+      "required": [
+        "@observations",
+        "@support",
+        "@exceptions",
+        "@confidence"
+      ],
+      "properties": {
+        "@observations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "@support": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "@exceptions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "@confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "@source": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "Projection": {
+      "type": "object",
+      "required": [
+        "@target",
+        "@semantic_authority"
+      ],
+      "properties": {
+        "@target": {
+          "enum": [
+            "Graph",
+            "Tensor",
+            "SVG3D",
+            "HLSL",
+            "SCXQ2",
+            "JROM",
+            "KQL",
+            "CPU",
+            "GPU"
+          ]
+        },
+        "@semantic_authority": {
+          "const": false
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

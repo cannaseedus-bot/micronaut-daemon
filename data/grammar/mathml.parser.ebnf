@@ -1,0 +1,119 @@
+(* ============================================================ *)
+(* Content MathML Parser Grammar for MATH-µ                    *)
+(* Declares the subset of W3C Content MathML 3 that the        *)
+(* symbolic_math resolver can receive and process.             *)
+(* ============================================================ *)
+
+(* This grammar describes the INPUT domain of the MATH-µ track.
+   The resolver accepts Content MathML 3 expressions produced
+   by the compiler (mathml.compiler.ebnf) or emitted directly
+   by AIML templates via apply(op, args...) surface syntax.
+
+   Authority rules:
+     - Parsing this grammar does NOT authorize execution.
+     - XCFE admission is required before any numeric evaluation
+       result can cross a phase boundary.
+     - Variables (<ci>) produce symbolic output, never execution.
+     - The resolver is data-only: no side effects, no mutations. *)
+
+
+(* ============================================================ *)
+(* 1. CONTENT MATHML EXPRESSION GRAMMAR                        *)
+(* ============================================================ *)
+
+MathDocument      ::= "<math" NamespaceAttr? ">" ContentExpr "</math>" ;
+NamespaceAttr     ::= 'xmlns="http://www.w3.org/1998/Math/MathML"' ;
+ContentExpr       ::= NumberLiteral | Variable | Application | Constant ;
+
+(* Numeric leaves *)
+NumberLiteral     ::= "<cn>" FloatLiteral "</cn>"
+                    | "<cn" TypeAttr ">" FloatLiteral "</cn>" ;
+TypeAttr          ::= ' type="integer"'
+                    | ' type="double"'
+                    | ' type="rational"' ;
+FloatLiteral      ::= Digit+ ( "." Digit* )? ( ExponentPart )?
+                    | "." Digit+ ( ExponentPart )? ;
+ExponentPart      ::= ( "e" | "E" ) ( "+" | "-" )? Digit+ ;
+
+(* Symbolic leaves *)
+Variable          ::= "<ci>" Identifier "</ci>" ;
+Constant          ::= "<cn>" MathConstant "</cn>" ;
+MathConstant      ::= "π" | "e" | "τ" ;
+
+(* Function application node *)
+Application       ::= "<apply>" Operator ContentExpr+ "</apply>" ;
+
+(* ============================================================ *)
+(* 2. OPERATOR VOCABULARY                                       *)
+(* ============================================================ *)
+
+Operator          ::= ArithmeticOp | CompareOp | TranscendentalOp
+                    | RoundingOp   | LogicOp   ;
+
+(* Arithmetic — arity 2 except minus (1 or 2) and root (2: degree + radicand) *)
+ArithmeticOp      ::= "<plus/>"    (* n-ary commutative addition         *)
+                    | "<minus/>"   (* unary negation or binary subtraction *)
+                    | "<times/>"   (* n-ary commutative multiplication    *)
+                    | "<divide/>"  (* binary division                     *)
+                    | "<power/>"   (* binary exponentiation               *)
+                    | "<root/>"    (* binary: root(degree, radicand)      *)
+                    | "<rem/>"     (* binary remainder                    *)
+                    | "<abs/>"     (* unary absolute value                *)
+                    ;
+
+(* Comparison — produce a Boolean proposition, not a number *)
+CompareOp         ::= "<eq/>"  | "<neq/>"
+                    | "<lt/>"  | "<gt/>"
+                    | "<leq/>" | "<geq/>" ;
+
+(* Transcendental functions — unary, real-valued *)
+TranscendentalOp  ::= "<sin/>"    | "<cos/>"    | "<tan/>"
+                    | "<arcsin/>" | "<arccos/>" | "<arctan/>"
+                    | "<exp/>"    | "<ln/>"     | "<log/>"
+                    ;
+
+(* Rounding functions — unary, integer-valued *)
+RoundingOp        ::= "<floor/>" | "<ceiling/>" | "<round/>" ;
+
+(* Logic — Boolean operators (not numerically evaluated) *)
+LogicOp           ::= "<and/>" | "<or/>" | "<not/>"
+                    | "<implies/>" | "<forall/>" | "<exists/>" ;
+
+
+(* ============================================================ *)
+(* 3. SEMANTIC CONSTRAINTS                                      *)
+(* ============================================================ *)
+
+(* P1: Every Application must have at least one ContentExpr argument. *)
+P1  ::= Application.args >= 1 ;
+
+(* P2: root(degree, radicand) — exactly two arguments; first is degree. *)
+P2  ::= "<root/>" implies Application.args = 2
+        AND Application.args[0] is NumberLiteral ;
+
+(* P3: minus unary form — exactly one argument. *)
+P3  ::= "<minus/>" unary implies Application.args = 1 ;
+
+(* P4: Comparison operators produce Boolean, not Number.
+        A Boolean result cannot feed an ArithmeticOp argument. *)
+P4  ::= CompareOp result type = Boolean ;
+P5  ::= ArithmeticOp argument may not be a CompareOp Application ;
+
+(* P6: Variables are symbolic — a document with <ci> resolves to symbolic, not numeric. *)
+P6  ::= Variable in ContentExpr implies symbolic = true ;
+
+(* P7: log(base, x) — optional first argument is the base; default is base 10. *)
+P7  ::= "<log/>" arity = 1 implies base = 10
+      ; "<log/>" arity = 2 implies Application.args[0] is base ;
+
+(* P8: Authority — parsing grants no execution. *)
+P8  ::= parse(MathDocument) grants authority {} ;
+
+
+(* ============================================================ *)
+(* 4. TOKEN DEFINITIONS                                         *)
+(* ============================================================ *)
+
+Identifier  ::= Letter ( Letter | Digit | "_" )* ;
+Letter      ::= "a" .. "z" | "A" .. "Z" ;
+Digit       ::= "0" .. "9" ;

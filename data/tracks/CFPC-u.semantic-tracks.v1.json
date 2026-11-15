@@ -1,0 +1,54 @@
+{
+  "@no-eval": true,
+  "id": "CFPC-µ",
+  "aiml_class": "CFPC-µ",
+  "aiml_source": "data/alice/semantic-control-classes.aiml",
+
+  "schemes": ["cfpc", "classification", "gap"],
+  "description": "Context-field pattern classifier — deterministic, no model. Classifies incoming context into one of five gap types (Resolved, IntentGap, QueryGap, KnowledgeGapNoKeys, KnowledgeGapNoValues) using stage 1 intent recognition, stage 2 bitmap classification, and stage 3 gap routing. Operates at Pop phase before any dispatch decision.",
+  "phase": "Pop",
+  "category": "native",
+  "confidence": 1.0,
+  "governs": [
+    "classify", "intent", "gap", "context", "field", "pattern",
+    "resolved", "intent gap", "query gap", "knowledge gap",
+    "no keys", "no values", "bitmap", "stage", "recognition",
+    "routing", "threshold", "placeholder", "substitution"
+  ],
+  "capabilities": [
+    "cfpc.classify",
+    "intent.field",
+    "context.pattern",
+    "gap.route",
+    "query.generate"
+  ],
+  "realizes": ["Pop.context_field", "Sek.gap_route"],
+  "pattern_registry": {
+    "insert_key": "CFPC:",
+    "invoke_node": "@cfpc",
+    "wrapper": "<mx2lm>cfpc gap={gap_type} intent={intent} stage={stage} {text}</mx2lm>",
+    "fallback": "<mx2lm>cfpc classify {input}</mx2lm>"
+  },
+  "relations": [
+    { "target": "Coordinator", "verb": "@delegates_to", "directed": true },
+    { "target": "ELIZA",       "verb": "@related_to",   "directed": false },
+    { "target": "Factory",     "verb": "@related_to",   "directed": false }
+  ],
+  "folds": [
+    { "phase": "Pop",   "op": "gramRead",              "key": "cfpc_context" },
+    { "phase": "Pop",   "op": "recognize_intent" },
+    { "phase": "Wo",    "op": "bind_intent_candidate" },
+    { "phase": "Yax",   "op": "bitmap_classify" },
+    { "phase": "Sek",   "op": "route_by_gap" },
+    { "phase": "Ch'en", "op": "verify_gap_type" },
+    { "phase": "Xul",   "op": "gramWrite",             "scope": "local" }
+  ],
+  "memory_patterns": ["cfpc_gap_rows", "intent_query_table", "gap_route_log"],
+  "sandbox": {
+    "gram_ns":         "CFPC",
+    "manifest_access": ["words", "micronaut"],
+    "effects":         ["gramRead", "gramWrite", "cfpc:classify", "gap:route"],
+    "ports":           [],
+    "coordinator":     false
+  }
+}

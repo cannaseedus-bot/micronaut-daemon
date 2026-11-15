@@ -1,0 +1,432 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "social-media-animal-farm",
+  "@key": "⟁APP:ANIMAL_FARM",
+  "@mount": "⟁ROOT:ANIMAL_FARM",
+  "@state": {
+    "character": "donkey",
+    "credibility": 75,
+    "followers": 120,
+    "influence": 10,
+    "scene": "rebellion_first_post",
+    "companion": "archive_crow",
+    "turn": 1,
+    "pig_index": 0,
+    "contradictions": [],
+    "act": "rebellion"
+  },
+  "@components": {
+    "⟁ROOT:ANIMAL_FARM": {
+      "@type": "app",
+      "@children": [
+        "⟁WIDGET:CHARACTER",
+        "⟁WIDGET:COMPANION",
+        "⟁WIDGET:STATS",
+        "⟁WIDGET:FEED",
+        "⟁WIDGET:CHOICES",
+        "⟁WIDGET:ALGORITHM"
+      ]
+    },
+    "⟁WIDGET:CHARACTER": {
+      "@type": "character-sheet",
+      "@bind": "state.character",
+      "@children": []
+    },
+    "⟁WIDGET:COMPANION": {
+      "@type": "pet-addon",
+      "@bind": "state.companion",
+      "@children": []
+    },
+    "⟁WIDGET:STATS": {
+      "@type": "stat-grid",
+      "@bind": "state",
+      "@children": []
+    },
+    "⟁WIDGET:FEED": {
+      "@type": "feed",
+      "@bind": "SCENES[state.scene].posts",
+      "@children": []
+    },
+    "⟁WIDGET:CHOICES": {
+      "@type": "choice-list",
+      "@bind": "SCENES[state.scene].choices",
+      "@children": [],
+      "@on": {
+        "select": "social.choose"
+      }
+    },
+    "⟁WIDGET:ALGORITHM": {
+      "@type": "svg",
+      "@bind": "state",
+      "@widget_program": "svg.field",
+      "@children": [],
+      "@on": {
+        "inspect": "social.interrogate-algorithm"
+      }
+    }
+  },
+  "@programs": {
+    "social.choose": {
+      "@kind": "asx.state-program.v1",
+      "@authority": "observation_only",
+      "@control": [
+        {
+          "@op": "ADD",
+          "@in": [
+            "credibility",
+            "event_credibility"
+          ],
+          "@out": "credibility"
+        },
+        {
+          "@op": "ADD",
+          "@in": [
+            "followers",
+            "event_followers"
+          ],
+          "@out": "followers"
+        },
+        {
+          "@op": "ADD",
+          "@in": [
+            "influence",
+            "event_influence"
+          ],
+          "@out": "influence"
+        },
+        {
+          "@op": "ADD",
+          "@in": [
+            "turn",
+            "event_turn"
+          ],
+          "@out": "turn"
+        },
+        {
+          "@op": "ADD",
+          "@in": [
+            "pig_index",
+            "event_pig_index"
+          ],
+          "@out": "pig_index"
+        },
+        {
+          "@op": "APPEND",
+          "@from": "event_contradiction",
+          "@out": "contradictions"
+        },
+        {
+          "@op": "SET",
+          "@from": "event_act",
+          "@out": "act"
+        },
+        {
+          "@op": "SET",
+          "@from": "event_next",
+          "@out": "scene"
+        },
+        {
+          "@op": "LOG",
+          "@args": [
+            "projected choice into request-scoped game state"
+          ]
+        }
+      ]
+    },
+    "social.interrogate-algorithm": {
+      "@kind": "semantic.json-program.v1",
+      "@route": "micronaut.program",
+      "@verb": "POST",
+      "@operation": "run",
+      "@authority": "observation_only",
+      "@micronaut": "eliza",
+      "@program": "reason",
+      "@state": {
+        "input": "$event.question"
+      }
+    }
+  },
+  "@events": {
+    "choice.select": "social.choose",
+    "algorithm.inspect": "social.interrogate-algorithm"
+  },
+  "@imports": [
+    {
+      "ref": "CHARACTERS",
+      "mode": "local_data"
+    },
+    {
+      "ref": "SCENES",
+      "mode": "local_data"
+    },
+    {
+      "ref": "ROUTES",
+      "mode": "local_data"
+    }
+  ],
+  "@permissions": {
+    "network": false,
+    "storage": "request_scoped",
+    "tools": [],
+    "semantic_commit": false
+  },
+  "@lifecycle": {
+    "load": "compile",
+    "mount": "project",
+    "event": "dispatch",
+    "unmount": "discard_request_state"
+  },
+  "@data": {
+    "CHARACTERS": {
+      "sheep": {
+        "title": "The Sheep",
+        "virality": 8,
+        "critical_thinking": 2
+      },
+      "pig": {
+        "title": "The Pig",
+        "influence": 8,
+        "transparency": 2
+      },
+      "horse": {
+        "title": "The Horse",
+        "loyalty": 8,
+        "skepticism": 2
+      },
+      "donkey": {
+        "title": "The Donkey",
+        "skepticism": 8,
+        "popularity": 2
+      }
+    },
+    "COMPANIONS": {
+      "archive_crow": {
+        "title": "Archive Crow",
+        "glyph": "🐦",
+        "ability": "Keeps one deleted post visible in your private replay log."
+      },
+      "signal_mouse": {
+        "title": "Signal Mouse",
+        "glyph": "🐭",
+        "ability": "Finds a low-reach post the ranking system buried."
+      },
+      "barn_cat": {
+        "title": "Barn Cat",
+        "glyph": "🐈",
+        "ability": "Lowers outrage pressure after a high-engagement turn."
+      }
+    },
+    "SCENES": {
+      "rebellion_first_post": {
+        "act": "The Rebellion",
+        "title": "The First Post",
+        "post": "Your archive of the secret moderation rules has reached ten thousand animals. The sheep are arguing, the dogs are watching, and the server owners want a private meeting.",
+        "choices": [
+          {
+            "id": "publish_everything",
+            "label": "Publish everything",
+            "effects": {
+              "credibility": 14,
+              "followers": 20,
+              "influence": 5,
+              "turn": 1,
+              "pig_index": 4
+            },
+            "contradiction": "Defended transparency but exposed private details unrelated to the public rule change.",
+            "next": "revolution_charter",
+            "act": "revolution"
+          },
+          {
+            "id": "negotiate",
+            "label": "Negotiate limited reforms",
+            "effects": {
+              "credibility": -6,
+              "followers": -12,
+              "influence": 12,
+              "turn": 1,
+              "pig_index": 8
+            },
+            "contradiction": "Promised public accountability, then moved the central bargain into a private meeting.",
+            "next": "revolution_charter",
+            "act": "revolution"
+          },
+          {
+            "id": "organize",
+            "label": "Organize transparent shared leadership",
+            "effects": {
+              "credibility": 12,
+              "followers": 10,
+              "influence": 4,
+              "turn": 1,
+              "pig_index": 0
+            },
+            "contradiction": "The declared principle of shared power matched the organizing rule.",
+            "next": "revolution_charter",
+            "act": "revolution"
+          },
+          {
+            "id": "seize_algorithm",
+            "label": "Seize control of the algorithm",
+            "effects": {
+              "credibility": -10,
+              "followers": 35,
+              "influence": 20,
+              "turn": 1,
+              "pig_index": 14
+            },
+            "contradiction": "Opposed concentrated ranking power, then concentrated it in the rebellion leadership.",
+            "next": "revolution_charter",
+            "act": "revolution"
+          }
+        ]
+      },
+      "revolution_charter": {
+        "act": "The Revolution",
+        "title": "The New Community Charter",
+        "post": "The old owners have fallen. Now the rebellion must decide who moderates the feed, how visibility is assigned, and whether emergency exceptions belong in the new rules.",
+        "choices": [
+          {
+            "id": "public_rulebook",
+            "label": "Publish one rulebook and an appeal log",
+            "effects": {
+              "credibility": 15,
+              "followers": -5,
+              "influence": 3,
+              "turn": 1,
+              "pig_index": -3
+            },
+            "contradiction": "Made enforcement inspectable and applied the stated rule to leaders and critics.",
+            "next": "restoration_crisis",
+            "act": "restoration"
+          },
+          {
+            "id": "temporary_emergency",
+            "label": "Grant the council temporary emergency powers",
+            "effects": {
+              "credibility": -5,
+              "followers": 8,
+              "influence": 14,
+              "turn": 1,
+              "pig_index": 11
+            },
+            "contradiction": "Rejected unreviewable power, then recreated it under an emergency label.",
+            "next": "restoration_crisis",
+            "act": "restoration"
+          },
+          {
+            "id": "community_jury",
+            "label": "Use rotating animal juries",
+            "effects": {
+              "credibility": 10,
+              "followers": 4,
+              "influence": -2,
+              "turn": 1,
+              "pig_index": -1
+            },
+            "contradiction": "Distributed enforcement power as promised, accepting less personal control.",
+            "next": "restoration_crisis",
+            "act": "restoration"
+          },
+          {
+            "id": "secret_quality_score",
+            "label": "Keep the ranking formula secret to prevent manipulation",
+            "effects": {
+              "credibility": -9,
+              "followers": 22,
+              "influence": 16,
+              "turn": 1,
+              "pig_index": 16
+            },
+            "contradiction": "Demanded algorithmic transparency until secrecy protected the new administration.",
+            "next": "restoration_crisis",
+            "act": "restoration"
+          }
+        ]
+      },
+      "restoration_crisis": {
+        "act": "The Restoration",
+        "title": "The Ally Exception",
+        "post": "A popular ally breaks the charter while attacking an old rival. Enforcing the rule may split the movement. Ignoring it would preserve the coalition—and restore the hierarchy you replaced.",
+        "choices": [
+          {
+            "id": "apply_equal_rule",
+            "label": "Apply the same rule and publish the decision",
+            "effects": {
+              "credibility": 18,
+              "followers": -18,
+              "influence": -6,
+              "turn": 1,
+              "pig_index": -5
+            },
+            "contradiction": "Applied the governing principle when it carried a real political cost.",
+            "next": "mirror",
+            "act": "mirror"
+          },
+          {
+            "id": "quiet_exception",
+            "label": "Handle the ally exception privately",
+            "effects": {
+              "credibility": -12,
+              "followers": 12,
+              "influence": 14,
+              "turn": 1,
+              "pig_index": 20
+            },
+            "contradiction": "Publicly denied special treatment while privately granting it to an ally.",
+            "next": "mirror",
+            "act": "mirror"
+          },
+          {
+            "id": "change_definition",
+            "label": "Rewrite the violation so the ally remains compliant",
+            "effects": {
+              "credibility": -16,
+              "followers": 20,
+              "influence": 18,
+              "turn": 1,
+              "pig_index": 24
+            },
+            "contradiction": "Changed the meaning of the rule to preserve power while claiming the rule was unchanged.",
+            "next": "mirror",
+            "act": "mirror"
+          },
+          {
+            "id": "open_audit",
+            "label": "Ask an independent jury to audit everyone, including you",
+            "effects": {
+              "credibility": 20,
+              "followers": -8,
+              "influence": -10,
+              "turn": 1,
+              "pig_index": -6
+            },
+            "contradiction": "Submitted personal authority to the review standard demanded from the former owners.",
+            "next": "mirror",
+            "act": "mirror"
+          }
+        ]
+      }
+    },
+    "ROUTES": {
+      "mirror": "The Mirror"
+    },
+    "FINAL_BOSS": {
+      "id": "algorithm",
+      "kind": "adaptive_incentive_system",
+      "win_conditions": [
+        "destroy",
+        "democratize",
+        "control"
+      ]
+    }
+  },
+  "@addons": {
+    "companion": {
+      "scope": "social-media-animal-farm",
+      "component": "⟁WIDGET:COMPANION",
+      "source": "COMPANIONS",
+      "semantic_authority": false,
+      "persistence": "request_scoped"
+    }
+  }
+}

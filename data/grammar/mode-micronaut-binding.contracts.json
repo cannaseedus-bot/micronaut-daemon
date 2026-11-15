@@ -1,0 +1,60 @@
+{
+  "@type": "khanary.mode_micronaut_binding.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "a_mode_references_capabilities_the_registry_owns_them_xcfe_authorizes_execution",
+  "lane": "KHANARY_MODE_BINDING_TEST",
+  "owner": "src/micronaut/mode_bindings.cpp",
+  "why": "A behavioural mode is *how* the daemon approaches a problem; a Micronaut is the *capability* that performs an operation. Letting a mode own capabilities would make behaviour an execution grant, and duplicating a Micronaut per mode would mean four copies of the same question engine. So a mode only references capabilities, one Micronaut serves many modes, and the registry stays the single source of what is callable.",
+  "separation": {
+    "mode": "how the daemon approaches the problem — patterns, bias vectors, question style, response format",
+    "micronaut": "the capability that performs an operation — registered, versioned, and callable",
+    "law": "a mode binds preferences; the registry owns the capability; XCFE authorizes the invocation",
+    "not_a_node_class": "a mode is not an executable node class: the closed 14-class XCFE ISA and the six phases are unchanged, so a new mode never requires a new class"
+  },
+  "binding": {
+    "ref_forms": {
+      "name": "a registered Micronaut name, e.g. `eliza`",
+      "capability": "`cap:<token>`, resolved to every Micronaut declaring that capability, e.g. `cap:question`"
+    },
+    "weights": "routing preferences, not execution permissions: they order candidates and never admit one",
+    "multiplicity": "a mode may bind several Micronauts and activates them together",
+    "sharing": "one Micronaut may serve many modes: the same question capability participates in teacher, socratic, investigator and scientist",
+    "phase_preferences": "a mode may prefer a Micronaut per phase, but the phase keeps its authority and a preference is not a dispatch"
+  },
+  "resolution": {
+    "registry": "drivers/micronauts/registry.json is the authority for what exists",
+    "distinct_facts": "registered and runnable are separate: a Micronaut in the registry with no driver manifest is registered but not runnable (as `cfpc` and `xcfe` are today), and a binding reports both facts rather than collapsing them",
+    "refusals": [
+      "an unknown name is refused, never silently dropped",
+      "an unregistered capability token is refused",
+      "a binding weight outside [0, 1] is refused",
+      "the same reference bound twice is refused",
+      "a phase preference naming an unbound or unknown Micronaut is refused"
+    ]
+  },
+  "composition": {
+    "law": "Micronauts may call other Micronauts, so capability composes hierarchically without making a mode executable",
+    "example": "scientist: hypothesis -> {question, math, experiment}, and critic -> cheese",
+    "cycle": "a call cycle is refused with the path that formed it, because recursive capability would never terminate",
+    "depth": "composition is bounded by a declared maximum depth; exceeding it is refused",
+    "order": "a resolution order is a valid topological order of the reachable subgraph"
+  },
+  "dynamic_recruitment": {
+    "law": "the active mode may shift during the fold, so the preferred capability set can change between phases",
+    "audit": "each stage records the mode and the preference set that was active, so a fold shows which capabilities it had available at each phase",
+    "bound": "recruitment changes preferences only; it never admits an invocation"
+  },
+  "invariants": {
+    "MB1": "a mode binds references only — names or capability tokens — and never defines, duplicates or owns a capability",
+    "MB2": "binding weights are routing preferences: they order candidates and grant nothing, and no API in this layer can admit an execution",
+    "MB3": "a mode may bind and activate several Micronauts simultaneously, and one Micronaut may serve any number of modes",
+    "MB4": "resolution is against the shipped registry; an unknown name, an unregistered capability token, an out-of-range weight or a duplicate reference is refused with its own reason",
+    "MB5": "registered and runnable stay distinct facts: a Micronaut with no driver manifest is reported registered-but-not-runnable, and is excluded from the runnable set rather than silently treated as available",
+    "MB6": "a phase preference is a preference: it hoists a candidate for that phase, it does not dispatch, and naming an unbound or unknown Micronaut is refused",
+    "MB7": "Micronaut composition resolves in a topological order of the reachable subgraph",
+    "MB8": "a composition cycle is refused and the path that formed it is reported",
+    "MB9": "composition depth is bounded; exceeding the declared maximum is refused",
+    "MB10": "the six phases and the closed 14-class XCFE node ISA are unchanged: adding a behavioural mode adds no node class and no phase"
+  }
+}

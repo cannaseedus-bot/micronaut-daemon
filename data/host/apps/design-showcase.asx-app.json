@@ -1,0 +1,56 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "design-showcase",
+  "@key": "⟁APP:DESIGN_SHOWCASE",
+  "@mount": "⟁ROOT:DESIGN_SHOWCASE",
+  "@theme": { "accent": "#818cf8", "bg": "#020210", "surface": "#05051e", "text": "#e0e7ff", "hero_phase": "Pop", "tagline": "Show your best work" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "projects", "component": "⟁WIDGET:PROJECTS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "projects": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:DESIGN_SHOWCASE": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:ADD_PROJECT", "⟁INPUT:SEARCH"] },
+    "⟁ACTION:ADD_PROJECT": { "@type": "button", "@text": "Add Project", "@on": { "click": "ds.open_compose" } },
+    "⟁INPUT:SEARCH": { "@type": "input", "@placeholder": "Filter by tag or tool...", "@on": { "input": "ds.search" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:PROJECTS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:PROJECTS": { "@type": "grid", "@bind": "state.projects", "@children": ["⟁WIDGET:PROJECT_CARD"] },
+    "⟁WIDGET:PROJECT_CARD": { "@type": "media-card", "@bind": "project", "@on": { "view": "ds.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:TOOLS_USED", "⟁WIDGET:TAGS"] },
+    "⟁WIDGET:TOOLS_USED": { "@type": "list", "@bind": "data.tools" },
+    "⟁WIDGET:TAGS": { "@type": "tag-cloud", "@bind": "data.tags" }
+  },
+  "@programs": {
+    "ds.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "ds.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] },
+    "ds.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "project.add": "ds.open_compose", "search.input": "ds.search", "project.view": "ds.view" },
+  "@imports": [{ "ref": "project", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "lightbox", "name": "Image Lightbox", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Full-screen image viewer with zoom and navigation." },
+      { "id": "client-access", "name": "Client Access Links", "category": "sharing", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Share password-protected case studies with clients." },
+      { "id": "behance-import", "name": "Behance Import", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Mirror projects from your Behance portfolio." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "ds.add", "pattern": "ADD PROJECT|SHOWCASE *|NEW CASE STUDY", "intent": "open_compose" },
+      { "id": "ds.filter", "pattern": "FILTER BY *|SHOW * PROJECTS|FIND WORK WITH *", "intent": "search" }
+    ]
+  },
+  "@data": {
+    "tools": ["Figma", "Blender", "After Effects", "Framer", "Midjourney"],
+    "tags": ["UI/UX", "3D", "Motion", "Brand", "Web", "Mobile"],
+    "spotlight": [
+      { "id": "sp1", "title": "KHANARY Brand Identity", "tool": "Figma", "badge": "Featured", "views": 342, "excerpt": "Full brand system. Phase-cycle color palette and glyph set." },
+      { "id": "sp2", "title": "Fold Space 3D Visualization", "tool": "Blender", "badge": "3D", "views": 218, "excerpt": "Animated C6 phase wheel rendered in Blender 4.0." },
+      { "id": "sp3", "title": "MCP Tool Dashboard", "tool": "Framer", "badge": "Interactive", "views": 195, "excerpt": "High-fidelity interactive prototype for the MCP tool surface." }
+    ],
+    "schema": {
+      "project": { "primaryKey": "project_id", "fields": { "project_id": { "type": "string" }, "title": { "type": "string", "required": true }, "description": { "type": "text" }, "tools": { "type": "json" }, "tags": { "type": "json" }, "images": { "type": "json" }, "url": { "type": "string" }, "featured": { "type": "boolean" }, "created_at": { "type": "datetime" } } }
+    }
+  }
+}

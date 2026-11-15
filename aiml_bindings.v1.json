@@ -1,0 +1,61 @@
+{
+  "schema": "micronaut.aiml.bindings.v1",
+  "authority": "data_only",
+  "runtime": "micronaut_daemon/aiml_runtime.cpp",
+  "aiml_version": "2.0",
+  "root": "aiml",
+  "attributes": {
+    "star": ["index"],
+    "thatstar": ["index"],
+    "topicstar": ["index"],
+    "bot": ["name"],
+    "get": ["name"],
+    "set": ["name"],
+    "condition": ["name", "value"],
+    "li": ["value", "name"]
+  },
+  "manifest_shape": {
+    "brains": [
+      {
+        "categories": [{"pattern": "string", "that": "optional string", "template": "template node list"}],
+        "topics": [{"name": "string", "categories": "category list"}]
+      }
+    ]
+  },
+  "bindings": {
+    "pattern": {"xml": "category/pattern", "type": "text", "normalization": "upper case", "runtime": "category input matcher"},
+    "that": {"xml": ["category/that", "template/that"], "type": "text or empty template node", "runtime": "matches previous output in category; emits previous output in template"},
+    "topic": {"xml": "topic/@name", "type": "text", "runtime": "category scope matched against session topic"},
+    "template": {"xml": "category/template", "type": "ordered node list", "runtime": "rendered when category matches"},
+    "srai": {"xml": "template/srai", "type": "nested template", "runtime": "recursive match; maximum depth 8"},
+    "star": {"xml": "template/star", "type": "capture index", "runtime": "input wildcard capture; indices are 1-based"},
+    "thatstar": {"xml": "template/thatstar", "type": "capture index", "runtime": "previous-output wildcard capture"},
+    "topicstar": {"xml": "template/topicstar", "type": "capture index", "runtime": "topic wildcard capture"},
+    "random": {"xml": "template/random/li", "type": "ordered alternatives", "runtime": "deterministic per-session cycling"},
+    "condition": {"xml": "template/condition/li", "type": "predicate branches", "runtime": "predicate comparison and ordered li selection"},
+    "li": {"xml": "template/random/li or template/condition/li", "type": "template node list", "runtime": "choice item or predicate branch"},
+    "get": {"xml": "template/get/@name", "type": "predicate name", "runtime": "reads session predicate"},
+    "set": {"xml": "template/set/@name", "type": "predicate name plus template", "runtime": "updates session predicate; topic predicate changes active topic"},
+    "think": {"xml": "template/think", "type": "ordered node list", "runtime": "executes children silently"},
+    "bot": {"xml": "template/bot/@name", "type": "bot property name", "runtime": "name resolves to Alice; other properties use bot predicates"},
+    "br": {"xml": "template/br", "type": "empty element", "runtime": "line break"},
+    "p": {"xml": "template/p", "type": "text container", "runtime": "paragraph break"},
+    "uppercase": {"xml": "template/uppercase", "type": "text container", "runtime": "upper case transform"},
+    "lowercase": {"xml": "template/lowercase", "type": "text container", "runtime": "lower case transform"},
+    "formal": {"xml": "template/formal", "type": "text container", "runtime": "capitalizes words"},
+    "sentence": {"xml": "template/sentence", "type": "text container", "runtime": "capitalizes sentence start"}
+  },
+  "not_bound": {
+    "learn": "active-corpus rule ingestion is a runtime no-op",
+    "learnf": "persistent learning is not implemented by this runtime",
+    "substitution_blocks": "global AIML PRE/POST blocks are not part of the daemon corpus schema",
+    "bot_property_declarations": "bot properties are runtime predicates, not top-level AIML elements"
+  },
+  "invariants": [
+    "all manifest text and attribute data is XML-escaped by the renderer",
+    "unsupported template tags are rejected before the AIML file is written",
+    "patterns and templates are kept in the same category record",
+    "topic is represented by a topic wrapper and must not be emitted as a top-level declaration",
+    "declarations do not grant execution authority beyond the runtime's implemented tag handlers"
+  ]
+}

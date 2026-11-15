@@ -1,0 +1,53 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "mood-journal",
+  "@key": "⟁APP:MOOD_JOURNAL",
+  "@mount": "⟁ROOT:MOOD_JOURNAL",
+  "@theme": { "accent": "#818cf8", "bg": "#060610", "surface": "#0e0e1e", "text": "#e0e7ff", "hero_phase": "Pop", "tagline": "How are you, really?" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "entries", "component": "⟁WIDGET:ENTRIES", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "entries": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:MOOD_JOURNAL": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:LOG_MOOD"] },
+    "⟁ACTION:LOG_MOOD": { "@type": "button", "@text": "Log Mood", "@on": { "click": "mood.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:ENTRIES", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:ENTRIES": { "@type": "feed", "@bind": "state.entries", "@children": ["⟁WIDGET:ENTRY_CARD"] },
+    "⟁WIDGET:ENTRY_CARD": { "@type": "content-card", "@bind": "entry", "@on": { "view": "mood.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:WEEKLY_MOOD", "⟁WIDGET:AVERAGE"] },
+    "⟁WIDGET:WEEKLY_MOOD": { "@type": "heatmap", "@bind": "data.weekly" },
+    "⟁WIDGET:AVERAGE": { "@type": "stat", "@bind": "data.avg_mood" }
+  },
+  "@programs": {
+    "mood.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "mood.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "mood.log": "mood.open_compose", "entry.view": "mood.view" },
+  "@imports": [{ "ref": "entry", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "mood-triggers", "name": "Trigger Tracking", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Tag entries with triggers like sleep, food, or exercise." },
+      { "id": "trend-report", "name": "Monthly Trend Report", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Auto-generate a monthly mood pattern analysis." },
+      { "id": "check-in-bot", "name": "Daily Check-in Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Gentle daily prompt to log your mood." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "mood.log", "pattern": "LOG MOOD|HOW AM I FEELING|MOOD CHECK IN", "intent": "open_compose" }
+    ]
+  },
+  "@data": {
+    "weekly": [3, 4, 4, 2, 5, 4, 4],
+    "avg_mood": { "label": "7-Day Average", "value": "3.7 / 5" },
+    "spotlight": [
+      { "id": "sp1", "title": "Oct 28 — Great day", "mood": 5, "badge": "High", "excerpt": "Launched the conformance suite. Everything passed. Felt unstoppable." },
+      { "id": "sp2", "title": "Oct 25 — Rough afternoon", "mood": 2, "badge": "Low", "excerpt": "Build kept failing. Took a walk. Eventually solved it." },
+      { "id": "sp3", "title": "Oct 22 — Steady", "mood": 4, "badge": "Normal", "excerpt": "Good focus block in the morning. Slowed down after lunch." }
+    ],
+    "schema": {
+      "entry": { "primaryKey": "entry_id", "fields": { "entry_id": { "type": "string" }, "mood": { "type": "integer", "required": true }, "note": { "type": "textarea" }, "triggers": { "type": "json" }, "date": { "type": "datetime", "required": true } } }
+    }
+  }
+}

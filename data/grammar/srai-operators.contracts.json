@@ -1,0 +1,603 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kuhul:srai-operators:v1",
+  "description": "Machine-readable binding registry for the SRAI operator dispatch surface. Each operator maps an AIML SRAI target to a typed XCFE dispatch frame. SraiOperators.mml is the human-readable contract authority.",
+  "version": "1",
+  "authority": {
+    "document": "data/grammar/SraiOperators.mml",
+    "content_dictionary": "urn:kuhul:srai-operators:v1",
+    "aiml_file": "data/alice/khanary-distilled.aiml",
+    "executor_files": [
+      "src/micronaut/aiml_engine.cpp",
+      "src/kuhul/xcfe_executor.cpp"
+    ]
+  },
+  "pipeline": {
+    "canonical_order": [
+      "SCORE",
+      "RANK",
+      "COLLAPSE",
+      "VERIFY",
+      "TRAIN"
+    ],
+    "terminal": "Xul",
+    "description": "SCORE → RANK → COLLAPSE → VERIFY → TRAIN → Xul commit. No operator may shortcut to Xul without traversing Ch'en verification.",
+    "weight_invariant": {
+      "formula": "W_effective = W_corpus * W_learned",
+      "W_corpus": "read-only; set by scraper pipeline; never overwritten by TRAIN",
+      "W_learned": "mutable; updated only after Ch'en_verification AND Xul_authorization"
+    }
+  },
+  "trace": {
+    "contract": "data/grammar/daemon-bot.trace.contracts.json",
+    "contributes": [
+      "srai",
+      "children",
+      "xcfe"
+    ],
+    "law": "every hop is recorded before the child text is emitted; an operator with no host dispatch records dispatch:unbound and remains a proposal, never a granted operation",
+    "fields": {
+      "srai": "one {target, depth, child, matched, status} per redirect",
+      "children": "the nested child trace; parent on the child equals the parent trace id",
+      "xcfe": "one {op, admitted, authority, dispatch} per operator node; admitted is false for this engine"
+    }
+  },
+  "operators": [
+    {
+      "operator": "SCORE",
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#SCORE",
+      "srai_pattern": "SCORE *",
+      "xcfe_pattern": "XCFE SCORE *",
+      "executor": "metric",
+      "phase": "Sek",
+      "authority_phase": "Sek",
+      "input_roles": [
+        "candidate_set",
+        "query_vector",
+        "context"
+      ],
+      "output_role": "scored_candidates",
+      "effects": [
+        "read",
+        "measure"
+      ],
+      "commit_requires": null,
+      "description": "Evaluates W·C·R, vector similarity, and metric evidence for each candidate. Populates evidence field for RANK. Does not select or admit."
+    },
+    {
+      "operator": "RANK",
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#RANK",
+      "srai_pattern": "RANK *",
+      "xcfe_pattern": "XCFE RANK *",
+      "executor": "metric",
+      "phase": "Sek",
+      "authority_phase": "Sek",
+      "input_roles": [
+        "scored_candidates",
+        "context"
+      ],
+      "output_role": "ranked_candidates",
+      "effects": [
+        "read",
+        "order"
+      ],
+      "commit_requires": null,
+      "description": "Orders the admitted scored_candidates set. XCFE legality is a separate hard gate; high rank cannot promote an inadmissible candidate."
+    },
+    {
+      "operator": "PROPOSE",
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#PROPOSE",
+      "srai_pattern": "PROPOSE *",
+      "xcfe_pattern": "XCFE PROPOSE *",
+      "executor": "metric",
+      "phase": "Sek",
+      "authority_phase": "Sek",
+      "input_roles": [
+        "constraints",
+        "context"
+      ],
+      "output_role": "candidates",
+      "effects": [
+        "read",
+        "propose"
+      ],
+      "commit_requires": null,
+      "description": "Proposes candidates for a gap. Proposing is not ranking, selecting or admitting: the output is a candidate set, and XCFE legality remains a separate hard gate."
+    },
+    {
+      "operator": "COLLAPSE",
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#COLLAPSE",
+      "srai_pattern": "COLLAPSE *",
+      "xcfe_pattern": "XCFE COLLAPSE *",
+      "executor": "jyggalag",
+      "executor_temperature": 0.0,
+      "phase": "Ch_en",
+      "authority_phase": "Ch_en",
+      "input_roles": [
+        "ranked_candidates",
+        "critic_reports"
+      ],
+      "output_role": "collapsed_candidate",
+      "effects": [
+        "read",
+        "collapse"
+      ],
+      "commit_requires": null,
+      "note": "Greymarch_record_only; Xul commit requires full authority path",
+      "description": "Total-order reduction via Jyggalag (T=0.00). Produces Greymarch record naming the surviving candidate. Not a topology commit. Sheogorath/Jyggalag must appear as a matched unit.",
+      "pair_constraint": {
+        "requires_counterpart": "Sheogorath",
+        "counterpart_temperature": 0.97,
+        "counterpart_phase": "Xul",
+        "law": "Sheogorath generates the high-entropy candidate set that COLLAPSE reduces"
+      }
+    },
+    {
+      "operator": "VERIFY",
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#VERIFY",
+      "srai_pattern": "VERIFY *",
+      "xcfe_pattern": "XCFE VERIFY *",
+      "executor": "ch_en_gate",
+      "phase": "Ch_en",
+      "authority_phase": "Ch_en",
+      "input_roles": [
+        "candidate",
+        "evidence_refs",
+        "comparison_report"
+      ],
+      "output_role": "verified_outcome",
+      "effects": [
+        "read",
+        "gate"
+      ],
+      "commit_requires": null,
+      "description": "The Ch'en verification gate. verified_outcome is the only input that unlocks TRAIN. Does not commit; produces a gate token required by both TRAIN and Xul.",
+      "gate_law": "TRAIN dispatch is blocked (XCFE TRAIN UNVERIFIED) without verified_outcome from this operator"
+    },
+    {
+      "operator": "TRAIN",
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#TRAIN",
+      "srai_pattern": "XCFE TRAIN GUARD *",
+      "xcfe_pattern": "XCFE TRAIN *",
+      "guard_pattern": "XCFE TRAIN GUARD *",
+      "blocked_pattern": "XCFE TRAIN UNVERIFIED *",
+      "executor": "learning",
+      "phase": "Xul",
+      "authority_phase": "Xul",
+      "input_roles": [
+        "ranked_candidates",
+        "verified_feedback"
+      ],
+      "output_role": "weight_delta",
+      "effects": [
+        "propose_delta"
+      ],
+      "commit_requires": [
+        "Ch_en_verification",
+        "Xul_authorization"
+      ],
+      "W_target": "W_learned",
+      "W_invariant": "W_effective = W_corpus * W_learned",
+      "description": "Proposes W_learned delta from verified feedback. Requires verified_outcome from VERIFY/Ch'en and Xul_authorization. W_corpus is never overwritten.",
+      "srai_requires_guard": true,
+      "srai_guard_reason": "TRAIN may not run without a verified outcome reference, so the executable surface accepts only the guarded form; `TRAIN *` was never the dispatched pattern"
+    },
+    {
+      "operator": "COMPARE",
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#COMPARE",
+      "srai_pattern": "COMPARE *",
+      "xcfe_pattern": "XCFE COMPARE *",
+      "executor": "eliza",
+      "phase": "Ch_en",
+      "authority_phase": "Ch_en",
+      "input_roles": [
+        "candidate_a",
+        "candidate_b",
+        "evidence_refs"
+      ],
+      "output_role": "comparison_report",
+      "effects": [
+        "read",
+        "analyze"
+      ],
+      "commit_requires": null,
+      "description": "Structured comparison of two candidates or evidence sets. Output feeds evidence_refs for VERIFY."
+    },
+    {
+      "operator": "RECALL",
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#RECALL",
+      "srai_pattern": "RECALL *",
+      "xcfe_pattern": "XCFE RECALL *",
+      "executor": "gram_store",
+      "phase": "Pop",
+      "authority_phase": "Pop",
+      "input_roles": [
+        "query",
+        "phase",
+        "context"
+      ],
+      "output_role": "gram_evidence",
+      "effects": [
+        "read"
+      ],
+      "commit_requires": null,
+      "description": "GramStore + vector evidence retrieval. Output feeds scored_candidates or evidence_refs into the SCORE→RANK pipeline."
+    },
+    {
+      "operator": "PROJECT",
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#PROJECT",
+      "srai_pattern": "PROJECT *",
+      "xcfe_pattern": "XCFE PROJECT *",
+      "executor": "vector_mu",
+      "phase": "Yax",
+      "authority_phase": "Yax",
+      "input_roles": [
+        "source_substrate",
+        "context",
+        "trajectory_id"
+      ],
+      "output_role": "result_substrate",
+      "effects": [
+        "read",
+        "project"
+      ],
+      "mutation": "none",
+      "commit_requires": null,
+      "description": "VectorMuMicronaut geodesic projection. Returns a new bounded result substrate without mutating the target. Zero pattern inflation."
+    },
+    {
+      "operator": "APP_GET",
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#RECALL",
+      "srai_pattern": "GET APP *",
+      "xcfe_pattern": "XCFE APP GET *",
+      "natural_aliases": [
+        "OPEN APP *",
+        "SHOW APP *"
+      ],
+      "executor": "manifest_store",
+      "phase": "Pop",
+      "authority_phase": "Pop",
+      "input_roles": [
+        "app_id",
+        "session_opt"
+      ],
+      "output_role": "manifest_doc",
+      "effects": [
+        "read"
+      ],
+      "commit_requires": null,
+      "semantic_authority": false,
+      "topology_mutation": false,
+      "description": "Reads a published app manifest from the manifest_store. Public apps are accessible without a session; private apps require an owner session. Output feeds PATCH pipelines."
+    },
+    {
+      "operator": "APP_LIST",
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#RECALL",
+      "srai_pattern": "LIST APPS",
+      "xcfe_pattern": "XCFE APP LIST",
+      "natural_aliases": [
+        "MY APPS",
+        "MY PROJECTS"
+      ],
+      "executor": "manifest_store",
+      "phase": "Pop",
+      "authority_phase": "Pop",
+      "input_roles": [
+        "session_required"
+      ],
+      "output_role": "project_index",
+      "effects": [
+        "read"
+      ],
+      "commit_requires": null,
+      "semantic_authority": false,
+      "topology_mutation": false,
+      "description": "Enumerates all projects owned by the session user. Returns project_index from the per-user storage directory."
+    },
+    {
+      "operator": "APP_POST",
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#TRAIN",
+      "srai_pattern": "POST APP *",
+      "xcfe_pattern": "XCFE APP POST *",
+      "natural_aliases": [
+        "PUBLISH APP *",
+        "CREATE APP *"
+      ],
+      "executor": "manifest_store",
+      "phase": "Xul",
+      "authority_phase": "Xul",
+      "input_roles": [
+        "manifest",
+        "session_required"
+      ],
+      "output_role": "project_doc",
+      "effects": [
+        "write"
+      ],
+      "commit_requires": [
+        "session_required",
+        "manifest_valid",
+        "kind_asx_mini_app_v1",
+        "id_format_valid",
+        "Xul_authorization"
+      ],
+      "semantic_authority": false,
+      "topology_mutation": false,
+      "next_gate": "Ch_en/XCFE/Xul",
+      "description": "Publishes a new asx.mini-app.v1 manifest to the per-user project store and updates the app_index. Requires valid session and a manifest whose @kind is asx.mini-app.v1."
+    },
+    {
+      "operator": "APP_PATCH",
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#TRAIN",
+      "srai_pattern": "PATCH APP *",
+      "xcfe_pattern": "XCFE APP PATCH *",
+      "natural_aliases": [
+        "UPDATE APP *",
+        "EDIT APP *"
+      ],
+      "executor": "manifest_store",
+      "phase": "Xul",
+      "authority_phase": "Xul",
+      "input_roles": [
+        "app_id",
+        "patch_body",
+        "session_required"
+      ],
+      "output_role": "updated_doc",
+      "effects": [
+        "write"
+      ],
+      "merge_strategy": "RFC7396",
+      "commit_requires": [
+        "session_required",
+        "owner_only",
+        "Xul_authorization"
+      ],
+      "semantic_authority": false,
+      "topology_mutation": false,
+      "description": "Applies a JSON Merge Patch (RFC 7396) to an existing app manifest. Only the owner session may patch; the patch is applied to doc.manifest and re-saved atomically."
+    },
+    {
+      "operator": "APP_DELETE",
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#TRAIN",
+      "srai_pattern": "XCFE APP DELETE GUARD *",
+      "xcfe_pattern": "XCFE APP DELETE *",
+      "guard_pattern": "XCFE APP DELETE GUARD *",
+      "blocked_pattern": "DELETE APP WITHOUT AUTH",
+      "natural_aliases": [
+        "REMOVE APP *"
+      ],
+      "executor": "manifest_store",
+      "phase": "Xul",
+      "authority_phase": "Xul",
+      "input_roles": [
+        "app_id",
+        "session_required"
+      ],
+      "output_role": "deletion_receipt",
+      "effects": [
+        "delete"
+      ],
+      "commit_requires": [
+        "session_required",
+        "owner_only",
+        "Ch_en_verification",
+        "Xul_authorization"
+      ],
+      "semantic_authority": false,
+      "topology_mutation": false,
+      "srai_requires_guard": true,
+      "srai_guard_reason": "Mirrors TRAIN guard: DELETE without an owner session and Ch'en verification is structurally blocked at the AIML surface before the Xul path opens",
+      "description": "Removes a project from the per-user store and from the app_index. Owner + Ch'en verification + Xul authorization all required before the deletion receipt is issued."
+    },
+    {
+      "operator": "QUESTION",
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#QUESTION",
+      "srai_pattern": "QUESTION *",
+      "xcfe_pattern": "XCFE QUESTION *",
+      "executor": "question_selector",
+      "phase": "Yax",
+      "authority_phase": "Yax",
+      "input_roles": [
+        "intent_gap",
+        "context",
+        "question_history"
+      ],
+      "output_role": "question_record",
+      "effects": [
+        "read",
+        "emit"
+      ],
+      "commit_requires": null,
+      "description": "Question selector; drives clarification and intent-gap filling. Learned preferences keyed as q_pref:<gap_id>:<pattern> in GramStore."
+    },
+    {
+      "operator": "IDENTITY_STATE",
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#IDENTITY_STATE",
+      "srai_pattern": "IDENTITY_STATE *",
+      "xcfe_pattern": "XCFE IDENTITY_STATE *",
+      "executor": "identity",
+      "phase": "Pop",
+      "authority_phase": "Pop",
+      "input_roles": [
+        "state"
+      ],
+      "output_role": "state_unchanged",
+      "effects": [],
+      "commit_requires": null,
+      "description": "The unit of the endomorphism monoid over FoldState: returns the state it was given. effects is empty because nothing happens, and phase_policy=preserve because a no-op inside a phase is not a phase transition. Use ADVANCE_PHASE to move the phase.",
+      "aiml_surface": "deferred",
+      "aiml_surface_reason": "no AIML dispatch category yet; the operator is reachable only through the XCFE executor surface"
+    },
+    {
+      "operator": "IDENTITY_TRANSFORM",
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#IDENTITY_TRANSFORM",
+      "srai_pattern": "IDENTITY_TRANSFORM *",
+      "xcfe_pattern": "XCFE IDENTITY_TRANSFORM *",
+      "executor": "identity",
+      "phase": "Yax",
+      "authority_phase": "Yax",
+      "input_roles": [
+        "source_substrate"
+      ],
+      "output_role": "substrate_unchanged",
+      "effects": [],
+      "commit_requires": null,
+      "description": "The unit of vector/tensor transformation composition. Preserves the substrate and the phase; it never stands in for a projection or a transition.",
+      "aiml_surface": "deferred",
+      "aiml_surface_reason": "no AIML dispatch category yet; the operator is reachable only through the XCFE executor surface"
+    },
+    {
+      "operator": "ADVANCE_PHASE",
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#ADVANCE_PHASE",
+      "srai_pattern": "ADVANCE_PHASE *",
+      "xcfe_pattern": "XCFE ADVANCE_PHASE *",
+      "executor": "phase_engine",
+      "phase": "Pop",
+      "authority_phase": "Pop",
+      "input_roles": [
+        "state",
+        "current_phase",
+        "target_phase"
+      ],
+      "output_role": "phase_transition_request",
+      "effects": [
+        "transition"
+      ],
+      "commit_requires": null,
+      "note": "The target phase is resolved at dispatch time; a cross-phase step still passes through XCFEExecutor::authorize_phase_transition and FoldEngine::vertical_fold enforces a single primitive step.",
+      "description": "The only operator with phase authority. It requests the next phase in the K'UHUL cycle (Pop->Wo->Yax->Sek->Ch'en->Xul); it does not grant it. This is why IDENTITY_STATE cannot be used to advance: an identity preserves the phase, and only an explicit request crosses a boundary.",
+      "aiml_surface": "deferred",
+      "aiml_surface_reason": "no AIML dispatch category yet; phase advance is requested through XCFE, never by pattern"
+    }
+  ],
+  "pipeline_patterns": [
+    {
+      "pattern": "SCORE AND RANK *",
+      "expansion": "RANK <srai>SCORE *</srai>",
+      "description": "Score then rank convenience pattern"
+    },
+    {
+      "pattern": "PIPELINE SCORE RANK COLLAPSE *",
+      "expansion": "COLLAPSE <srai>RANK <srai>SCORE *</srai></srai>",
+      "description": "Full pre-verification pipeline without premature TRAIN"
+    },
+    {
+      "pattern": "VERIFY AND TRAIN *",
+      "expansion": "TRAIN <srai>VERIFY *</srai>",
+      "description": "The only safe TRAIN path — forces verification before learning"
+    },
+    {
+      "pattern": "GET AND PATCH APP *",
+      "expansion": "PATCH APP <srai>GET APP *</srai>",
+      "description": "Read-modify-write: fetch current manifest then apply a merge patch"
+    },
+    {
+      "pattern": "PUBLISH AND OPEN APP *",
+      "expansion": "GET APP <srai>POST APP *</srai>",
+      "description": "Publish and immediately read back the stored manifest"
+    }
+  ],
+  "invariants": [
+    "SRAI redirects text through the pattern matcher; XCFE dispatch requires the [XCFE:OP] binding frame in the template",
+    "Every operator declares phase, executor, input_roles, output_role, and effects before dispatch",
+    "TRAIN requires verified_outcome from Ch'en; raw RANK output alone does not authorize learning",
+    "W_effective = W_corpus * W_learned; W_corpus is read-only; TRAIN updates only W_learned",
+    "COLLAPSE produces a Greymarch record; it is not a topology commit",
+    "No operator can shortcut to Xul without traversing the Ch'en verification gate",
+    "effects must be a subset of {read, measure, order, analyze, gate, project, emit, collapse, propose_delta, transition}",
+    "Operators with propose_delta in effects must declare commit_requires fields",
+    "Every operator declares algebra_ref resolving to exactly one Algebraic Operator ISA entry (data/grammar/algebra-isa.contracts.json); the AOI entry is what licenses regroup, reorder, distribute, repeat and invert",
+    "effects containing transition iff the AOI entry declares phase_policy=advance; an identity operator preserves the phase and may never be used to cross one",
+    "This registry describes operator contracts; aiml_engine.cpp + xcfe_executor.cpp supply the implementation",
+    "App tool operators (APP_GET, APP_LIST, APP_POST, APP_PATCH, APP_DELETE) carry semantic_authority=false and topology_mutation=false in every dispatch frame",
+    "APP_DELETE requires the GUARD step before XCFE APP DELETE, mirroring TRAIN's guard law; DELETE APP WITHOUT AUTH is the named blocked pattern",
+    "APP_POST and APP_PATCH are Xul-phase writes; APP_GET and APP_LIST are Pop-phase reads — no app read op requires Xul authorization",
+    "Natural language aliases (OPEN/SHOW → GET, CREATE/PUBLISH → POST, UPDATE/EDIT → PATCH, REMOVE → DELETE) are surface redirects only; the XCFE dispatch frame is always the canonical form"
+  ],
+  "validation": {
+    "checker": "tools/check_srai_operators.py",
+    "fixtures": "data/conformance/srai_operators.json",
+    "algebra_isa": "data/grammar/algebra-isa.contracts.json"
+  },
+  "surfaces": {
+    "aiml": {
+      "surface": "data/alice/khanary-distilled.aiml",
+      "parsed_by": "tools/check_srai_semantics.py",
+      "operators": [
+        "APP_DELETE",
+        "APP_GET",
+        "APP_LIST",
+        "APP_PATCH",
+        "APP_POST",
+        "COLLAPSE",
+        "COMPARE",
+        "PROJECT",
+        "QUESTION",
+        "RANK",
+        "RECALL",
+        "SCORE",
+        "TRAIN",
+        "VERIFY"
+      ],
+      "xcfe_patterns": [
+        "XCFE APP DELETE *",
+        "XCFE APP GET *",
+        "XCFE APP LIST",
+        "XCFE APP PATCH *",
+        "XCFE APP POST *",
+        "XCFE COLLAPSE *",
+        "XCFE COMPARE *",
+        "XCFE PROJECT *",
+        "XCFE QUESTION *",
+        "XCFE RANK *",
+        "XCFE RECALL *",
+        "XCFE SCORE *",
+        "XCFE TRAIN *",
+        "XCFE VERIFY *"
+      ],
+      "deferred_from_contract": [],
+      "freshness_rule": "the live AIML operator and XCFE-pattern inventory must equal these lists, so a stale surface is detectable",
+      "anchor": {
+        "deferred_from_contract": [
+          "ADVANCE_PHASE",
+          "IDENTITY_STATE",
+          "IDENTITY_TRANSFORM"
+        ],
+        "operators": [
+          "APP",
+          "APP_DELETE",
+          "APP_GET",
+          "APP_LIST",
+          "APP_PATCH",
+          "APP_POST",
+          "COLLAPSE",
+          "COMPARE",
+          "PROJECT",
+          "QUESTION",
+          "RANK",
+          "RECALL",
+          "SCORE",
+          "TRAIN",
+          "VERIFY"
+        ],
+        "xcfe_patterns": [
+          "XCFE APP DELETE *",
+          "XCFE APP GET *",
+          "XCFE APP LIST",
+          "XCFE APP PATCH *",
+          "XCFE APP POST *",
+          "XCFE COLLAPSE *",
+          "XCFE COMPARE *",
+          "XCFE PROJECT *",
+          "XCFE QUESTION *",
+          "XCFE RANK *",
+          "XCFE RECALL *",
+          "XCFE SCORE *",
+          "XCFE TRAIN *",
+          "XCFE VERIFY *"
+        ]
+      }
+    }
+  }
+}

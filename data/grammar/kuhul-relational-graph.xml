@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graph edgedefault="directed" xmlns:k="https://kuhul.io/relational">
+  <node id="ORCH-µ" category="executive">
+    <graph>
+      <node id="REASON-µ" category="cognitive"/>
+      <node id="CREATE-µ" category="creative"/>
+      <node id="PLAN-µ" category="executive"/>
+      <edge source="REASON-µ" target="PLAN-µ" verb="@call"/>
+      <edge source="CREATE-µ" target="REASON-µ" verb="@eval"/>
+      <edge source="PLAN-µ" target="REASON-µ" verb="@call"/>
+    </graph>
+  </node>
+
+  <node id="REASON-µ" category="cognitive"/>
+  <node id="MEM-µ" category="storage"/>
+  <node id="CODE-µ" category="cognitive"/>
+  <node id="GRAPHICS-µ" category="creative"/>
+  <node id="FILE-µ" category="storage"/>
+  <node id="NET-µ" category="cognitive"/>
+  <node id="INFER-µ" category="cognitive"/>
+
+  <edge source="ORCH-µ" target="REASON-µ" verb="@delegate"/>
+  <edge source="ORCH-µ" target="CREATE-µ" verb="@delegate"/>
+  <edge source="ORCH-µ" target="PLAN-µ" verb="@delegate"/>
+  <edge source="REASON-µ" target="MEM-µ" verb="@call"/>
+  <edge source="REASON-µ" target="CODE-µ" verb="@call"/>
+  <edge source="REASON-µ" target="INFER-µ" verb="@call"/>
+  <edge source="CREATE-µ" target="GRAPHICS-µ" verb="@compose"/>
+  <edge source="CREATE-µ" target="CODE-µ" verb="@compose"/>
+  <edge source="PLAN-µ" target="MEM-µ" verb="@call"/>
+  <edge source="PLAN-µ" target="REASON-µ" verb="@call"/>
+  <edge source="MEM-µ" target="FILE-µ" verb="@call"/>
+  <edge source="CODE-µ" target="REASON-µ" verb="@eval"/>
+  <edge source="INFER-µ" target="REASON-µ" verb="@call"/>
+  <edge source="INFER-µ" target="MEM-µ" verb="@call"/>
+  <edge source="NET-µ" target="CODE-µ" verb="@call"/>
+  <edge source="NET-µ" target="FILE-µ" verb="@call"/>
+  <edge source="MEM-µ" target="FILE-µ" directed="false" verb="@relate"/>
+  <edge source="GRAPHICS-µ" target="REASON-µ" verb="@eval"/>
+
+  <node id="MORPHISM-µ" category="structural"/>
+  <node id="FIXED-POINT-µ" category="structural"/>
+
+  <edge source="REASON-µ" target="MORPHISM-µ" verb="@informs"/>
+  <edge source="MORPHISM-µ" target="FIXED-POINT-µ" verb="@informs"/>
+  <edge source="FIXED-POINT-µ" target="MORPHISM-µ" verb="@informs"/>
+</graph>

@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Promotion Proposal",
+  "type": "object",
+  "properties": {
+    "@kind": {
+      "const": "semantic.promote.v1"
+    },
+    "@candidate_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "@assessment": {
+      "type": "object",
+      "properties": {
+        "verdict": {
+          "enum": [
+            "supports",
+            "rejects",
+            "uncertain",
+            "unavailable"
+          ]
+        },
+        "rejection_bias": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "verdict",
+        "evidence_refs"
+      ],
+      "additionalProperties": false
+    },
+    "@gate": {
+      "type": "object",
+      "properties": {
+        "relation_valid": {
+          "type": "boolean"
+        },
+        "earned_status": {
+          "type": "boolean"
+        },
+        "not_duplicate": {
+          "type": "boolean"
+        },
+        "known_destination": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "relation_valid",
+        "earned_status",
+        "not_duplicate",
+        "known_destination"
+      ],
+      "additionalProperties": false
+    },
+    "@mode": {
+      "const": "proposal_only"
+    }
+  },
+  "required": [
+    "@kind",
+    "@candidate_ref",
+    "@gate",
+    "@mode"
+  ],
+  "additionalProperties": false
+}

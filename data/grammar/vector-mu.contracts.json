@@ -1,0 +1,75 @@
+{
+  "@type": "khanary.vector_mu_contracts.v1",
+  "@schema": "urn:kuhul:khanary:contracts:vector-mu:v1",
+  "owner": "src/micronaut/vector_mu.h",
+  "semantic_authority": false,
+  "purpose": "VECTOR-mu is a projection-layer operator. Its execution surface is a documented bounded dot projection with typed refusals; it is not a metadata copy, and it commits nothing.",
+  "operation": {
+    "symbol": "mu_v(T, x)",
+    "formula": "points[k] = clamp( sum_i v_i * x[k*d + i] / ||v|| , -B , +B )",
+    "bound": "B = W * C (static weight * confidence)",
+    "inputs": [
+      "projection vector v (length d)",
+      "observation stream x (length n, n % d == 0)",
+      "optional descriptor supplying the declared trailing width"
+    ],
+    "outputs": [
+      "points",
+      "window_offsets",
+      "clipped",
+      "energy"
+    ],
+    "properties": [
+      "deterministic",
+      "bounded per point",
+      "windowed (no cross-window mixing)"
+    ],
+    "descriptor_only_rule": "a TensorSubstrate carries no values, so descriptor-only projection returns no result rather than a shaped copy"
+  },
+  "statuses": [
+    "ok",
+    "no_projection_vector",
+    "dimension_mismatch",
+    "empty_observation",
+    "partial_observation",
+    "non_finite_observation",
+    "invalid_bound"
+  ],
+  "refusal_rules": {
+    "no_projection_vector": "v is empty, or its norm is not positive",
+    "dimension_mismatch": "the descriptor declares a trailing width that differs from d",
+    "empty_observation": "x is empty",
+    "partial_observation": "n % d != 0",
+    "non_finite_observation": "x or v contains NaN/Inf",
+    "invalid_bound": "W * C is not finite and positive"
+  },
+  "authority_boundary": {
+    "creates_registry_entries": false,
+    "mutates_operator_state": false,
+    "commits_topology": false,
+    "is_semantic_truth": false,
+    "route_bias_only": true
+  },
+  "invariants": {
+    "VMU1": {
+      "name": "projection_computes_values",
+      "check": "points equal the bounded dot product of v and each observation window"
+    },
+    "VMU2": {
+      "name": "projection_is_bounded",
+      "check": "every point lies in [-B, +B] and clipping is counted"
+    },
+    "VMU3": {
+      "name": "refusal_is_typed",
+      "check": "every unusable input maps to exactly one declared status"
+    },
+    "VMU4": {
+      "name": "projection_commits_nothing",
+      "check": "id, verb, W, C and v are unchanged after projecting"
+    },
+    "VMU5": {
+      "name": "descriptor_alone_is_not_a_projection",
+      "check": "descriptor-only projection returns no result"
+    }
+  }
+}

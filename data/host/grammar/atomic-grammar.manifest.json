@@ -1,0 +1,56 @@
+{
+  "type": "atomic-dom.grammar.manifest",
+  "version": "0.2.0",
+  "authority": "projection_only",
+  "phase_cycle": [
+    "Pop",
+    "Wo",
+    "Yax",
+    "Sek",
+    "Ch'en",
+    "Xul",
+    "Pop"
+  ],
+  "files": [
+    {
+      "path": "grammar/atomic-dom.ebnf",
+      "format": "ebnf",
+      "role": "formal grammar"
+    },
+    {
+      "path": "grammar/atomic-tools.kxml",
+      "format": "kxml",
+      "role": "tool grammar and green-screen projection declarations"
+    }
+  ],
+  "projection_sandbox": {
+    "id": "green-screen",
+    "target": "#atomic-dom",
+    "runtime_projection": true,
+    "isolation": false
+  },
+  "admission_law": "A_i = W_i * C_i * R(Q,K_i)",
+  "layers": [
+    "asxr",
+    "kxml",
+    "tool_graph",
+    "projection_sandbox",
+    "fold_field",
+    "task_executor",
+    "rig_tools",
+    "xul_learning"
+  ],
+  "task_executor": {
+    "plan_file": "PLAN.md",
+    "always_build_plan": true,
+    "verbs": [
+      "note",
+      "read",
+      "write",
+      "patch",
+      "tool",
+      "check"
+    ],
+    "rig_tool_paths": "registered in src/console/task-executor.ts"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "@kind": "asx.aiml.fold-delta-ledger.v1",
+  "@version": "1.0.0",
+  "record_schema": {
+    "key": ["pattern_key", "template_key", "phase", "context"],
+    "delta_range": [-1.0, 1.0],
+    "epistemic_status": ["SUPPORTED", "MISS", "UNKNOWN", "CONTRADICTED"],
+    "initial_status": "proposed",
+    "weight_application": "requires a separate validated learning step"
+  },
+  "records": []
+}

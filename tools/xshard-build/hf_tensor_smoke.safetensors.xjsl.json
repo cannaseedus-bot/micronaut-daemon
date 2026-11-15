@@ -1,0 +1,56 @@
+{
+  "@kind": "xjsl.webgl2.safetensor_trainer.v1",
+  "@trainer": {
+    "input": "C:\\Users\\canna\\_khanary_inspect\\models\\from_zero\\from_zero_v0.6_merged.safetensors",
+    "output": "C:\\Users\\canna\\_khanary_inspect\\trainer\\build\\hf_tensor_smoke.safetensors",
+    "tensor": "transformer.wte.weight",
+    "dtype": "F32",
+    "shape": [
+      50270,
+      768
+    ],
+    "train_dim": 16,
+    "batch": 1,
+    "steps": 1,
+    "lr": 0.00001,
+    "seed": 1338
+  },
+  "@dataset": {
+    "source": "token-bin",
+    "token_bins": [
+      {
+        "path": "C:\\Users\\canna\\_khanary_inspect\\tools\\test_tokens.bin",
+        "n_seq": 10,
+        "seq_len": 128,
+        "bytes": 5128
+      }
+    ],
+    "total_rows": 10,
+    "sampled_rows": [
+      {
+        "path": "C:\\Users\\canna\\_khanary_inspect\\tools\\test_tokens.bin",
+        "row": 6,
+        "seq_len": 128
+      }
+    ]
+  },
+  "@backend": {
+    "api": "WebGL2",
+    "renderer": "ANGLE (Intel, Intel(R) HD Graphics 4600 (0x00000412) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "vendor": "Google Inc. (Intel)",
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "browser": "edge"
+  },
+  "@metrics": {
+    "loss_before": 2.6297569066879616,
+    "loss_after": 2.6289032371752263,
+    "gpu_ms": 11.599999994039536
+  },
+  "@kernels": [
+    {
+      "id": "linear_sgd_step",
+      "stage": "fragment",
+      "semantics": "MSE + SGD over bounded tensor slice"
+    }
+  ]
+}

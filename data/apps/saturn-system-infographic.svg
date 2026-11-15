@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1120" role="img" aria-labelledby="title desc">
+  <title id="title">Saturn system: moons, rings, and atmosphere types</title>
+  <desc id="desc">An illustrated map of Saturn and selected moons, with a separate comparison of Titan's substantial atmosphere, thin exospheres around Rhea and Dione, and Enceladus's plume-sourced gas.</desc>
+  <defs>
+    <radialGradient id="space" cx="55%" cy="45%"><stop stop-color="#142b48"/><stop offset="1" stop-color="#070d19"/></radialGradient>
+    <radialGradient id="saturn" cx="35%" cy="32%"><stop stop-color="#fff1bd"/><stop offset=".42" stop-color="#e8bd72"/><stop offset=".78" stop-color="#bb8051"/><stop offset="1" stop-color="#754b45"/></radialGradient>
+    <linearGradient id="rings"><stop stop-color="#d1ad76" stop-opacity=".18"/><stop offset=".2" stop-color="#eed39a" stop-opacity=".95"/><stop offset=".5" stop-color="#a97c59" stop-opacity=".55"/><stop offset=".73" stop-color="#f5dca8" stop-opacity=".92"/><stop offset="1" stop-color="#b0815e" stop-opacity=".15"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <style>
+      text{font-family:Inter,Segoe UI,Arial,sans-serif;fill:#edf4ff}.muted{fill:#b6c6da}.eyebrow{font-size:22px;letter-spacing:4px;fill:#7de2d0;font-weight:700}.title{font-size:60px;font-weight:750;letter-spacing:-1px}.subtitle{font-size:26px}.section{font-size:28px;letter-spacing:2px;fill:#b5dbf4;font-weight:700}.label{font-size:26px;font-weight:700}.small{font-size:24px}.moon-label{font-size:44px;font-weight:700}.moon-small{font-size:41px}.orbit{fill:none;stroke:#526b8d;stroke-opacity:.5;stroke-width:2;stroke-dasharray:6 10}.card{fill:#101e31;stroke:#314860;stroke-width:2}.chip{fill:#1a2e43;stroke:#46627c;stroke-width:1.5}.leader{stroke:#9ab0c9;stroke-width:2;fill:none}
+    </style>
+  </defs>
+  <rect width="1800" height="1120" rx="30" fill="url(#space)"/>
+  <g opacity=".65" fill="#d8e9ff">
+    <circle cx="75" cy="280" r="2"/><circle cx="116" cy="520" r="2"/><circle cx="322" cy="180" r="2"/><circle cx="480" cy="520" r="2"/><circle cx="545" cy="335" r="2"/><circle cx="890" cy="140" r="2"/><circle cx="1020" cy="485" r="2"/><circle cx="1240" cy="120" r="2"/><circle cx="1705" cy="190" r="2"/><circle cx="1660" cy="620" r="2"/><circle cx="930" cy="950" r="2"/><circle cx="1440" cy="1010" r="2"/><circle cx="290" cy="940" r="2"/>
+  </g>
+  <text x="86" y="86" class="eyebrow">SYSTEM ATLAS · SOLAR SYSTEM / PLANETARY SUBSYSTEM</text>
+  <text x="82" y="155" class="title">Saturn is a system of its own</text>
+  <text x="86" y="198" class="subtitle muted">Rings, moons, and active environments — explore the neighborhood around one parent world.</text>
+
+  <rect x="70" y="235" width="1060" height="620" rx="24" class="card"/>
+  <text x="105" y="282" class="section">ORBITAL NEIGHBORHOOD</text>
+  <text x="105" y="312" class="small muted">Selected inner and major moons · diagrammatic view, not to scale</text>
+  <g transform="translate(550 548)">
+    <g transform="scale(.68)">
+    <ellipse class="orbit" rx="145" ry="92" transform="rotate(-13)"/>
+    <ellipse class="orbit" rx="218" ry="138" transform="rotate(-13)"/>
+    <ellipse class="orbit" rx="294" ry="186" transform="rotate(-13)"/>
+    <ellipse class="orbit" rx="370" ry="232" transform="rotate(-13)"/>
+    <ellipse class="orbit" rx="454" ry="282" transform="rotate(-13)"/>
+    <ellipse class="orbit" rx="540" ry="332" transform="rotate(-13)"/>
+    <ellipse cx="0" cy="0" rx="280" ry="85" fill="none" stroke="url(#rings)" stroke-width="34" transform="rotate(-18)" opacity=".85"/>
+    <ellipse cx="0" cy="0" rx="295" ry="91" fill="none" stroke="#f1d4a1" stroke-opacity=".55" stroke-width="2" transform="rotate(-18)"/>
+    </g>
+    <circle r="58" fill="#d9a260" opacity=".22" filter="url(#glow)"/>
+    <circle r="49" fill="url(#saturn)"/>
+    <path d="M-45 -7 Q0 5 45 -7 M-43 13 Q0 26 43 13 M-34 -25 Q0 -16 34 -25" fill="none" stroke="#9a6047" stroke-width="6" opacity=".62"/>
+    <text x="-49" y="92" class="label">SATURN</text>
+    <text x="-71" y="122" class="small muted">parent world</text>
+    <g><circle cx="145" cy="-4" r="11" fill="#a7b4bc" stroke="#eaf2f5" stroke-width="2"/><path d="M151 -11 L205 -47" class="leader"/><text x="211" y="-49" class="label">Mimas</text></g>
+    <g><circle cx="-216" cy="-30" r="13" fill="#69d8ce" stroke="#d7fffb" stroke-width="2"/><path d="M-225 -39 L-276 -76" class="leader"/><text x="-384" y="-82" class="label">Enceladus</text><text x="-384" y="-27" class="small" fill="#7de2d0">active plumes</text></g>
+    <g transform="scale(.68)">
+    <g><circle cx="38" cy="-230" r="13" fill="#aab8c5" stroke="#edf4ff" stroke-width="2"/><path d="M44 -240 L70 -275" class="leader"/><text x="76" y="-279" class="moon-label">Tethys</text></g>
+    <g><circle cx="279" cy="83" r="15" fill="#c5a7e9" stroke="#f1e5ff" stroke-width="2"/><path d="M291 91 L340 110" class="leader"/><text x="346" y="117" class="moon-label">Dione</text><text x="346" y="164" class="moon-small" fill="#c5a7e9">thin exosphere</text></g>
+    <g><circle cx="-366" cy="45" r="16" fill="#c5a7e9" stroke="#f1e5ff" stroke-width="2"/><path d="M-376 57 L-420 95" class="leader"/><text x="-491" y="119" class="moon-label">Rhea</text><text x="-491" y="166" class="moon-small" fill="#c5a7e9">thin exosphere</text></g>
+    <g><circle cx="180" cy="240" r="21" fill="#e9ad62" stroke="#ffdfad" stroke-width="3" filter="url(#glow)"/><path d="M197 252 L238 284" class="leader"/><text x="245" y="298" class="moon-label">Titan</text><text x="245" y="338" class="moon-small" fill="#ffcf83">substantial atmosphere</text></g>
+    </g>
+  </g>
+  <text x="105" y="825" class="small muted">Rings and moons share Saturn's gravitational neighborhood.</text>
+
+  <rect x="1160" y="235" width="570" height="620" rx="24" class="card"/>
+  <text x="1200" y="282" class="section">“ATMOSPHERE” HAS TYPES</text>
+  <text x="1200" y="322" class="small muted">The answer changes with the definition.</text>
+  <rect x="1195" y="345" width="500" height="145" rx="16" class="chip"/>
+  <circle cx="1230" cy="387" r="11" fill="#ffcf83"/><text x="1255" y="397" class="label">Titan · substantial</text>
+  <text x="1220" y="438" class="small muted">Persistent, dense atmosphere.</text>
+  <text x="1220" y="472" class="small muted">Surface pressure exceeds Earth's.</text>
+  <rect x="1195" y="505" width="500" height="145" rx="16" class="chip"/>
+  <circle cx="1230" cy="547" r="11" fill="#c5a7e9"/><text x="1255" y="557" class="label">Exospheres · Rhea + Dione</text>
+  <text x="1220" y="598" class="small muted">Extremely thin gas envelopes.</text>
+  <text x="1220" y="632" class="small muted">Far less dense than Titan's.</text>
+  <rect x="1195" y="665" width="500" height="170" rx="16" class="chip"/>
+  <circle cx="1230" cy="707" r="11" fill="#69d8ce"/><text x="1255" y="717" class="label">Enceladus · active plume</text>
+  <text x="1220" y="758" class="small muted">Jets release water vapor and ice.</text>
+  <text x="1220" y="792" class="small muted">A local, active gas supply;</text>
+  <text x="1220" y="826" class="small muted">not a thick permanent atmosphere.</text>
+
+  <rect x="70" y="875" width="1660" height="205" rx="24" class="card"/>
+  <text x="105" y="923" class="section">WHY PROBE THESE WORLDS?</text>
+  <g transform="translate(105 949)">
+    <circle cx="18" cy="20" r="7" fill="#7de2d0"/><text x="40" y="30" class="label">Titan</text><text x="40" y="67" class="small muted">Thick air · complex chemistry</text>
+    <circle cx="570" cy="20" r="7" fill="#7de2d0"/><text x="592" y="30" class="label">Enceladus</text><text x="592" y="67" class="small muted">Plumes expose hidden-ocean material</text>
+    <circle cx="1120" cy="20" r="7" fill="#c5a7e9"/><text x="1142" y="30" class="label">Rhea &amp; Dione</text><text x="1142" y="67" class="small muted">Trace gases reveal moon-space interactions</text>
+  </g>
+  <text x="105" y="1055" class="small muted">Sources: NASA Titan · Rhea · Enceladus · Saturn moons. Orbit diagram is not to scale.</text>
+</svg>

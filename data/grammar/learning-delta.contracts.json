@@ -1,0 +1,70 @@
+{
+  "@type": "khanary.learning_delta.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "observation_is_continuous_commitment_is_conditional",
+  "lane": "KHANARY_LEARNING_DELTA_TEST",
+  "owner": "src/kuhul/learning_delta.cpp",
+  "why": "Every learning mechanism was inventing its own update shape: the bounded weight delta existed for mode biases, graph edges had none, n-gram counts had none, and replays had none. A shared typed object is what lets XCFE audit any proposal without knowing which Micronaut produced it. The invariant that makes continuous learning safe is one line: **every fold is accounted for, and only admitted deltas mutate knowledge.**",
+  "contract_object": {
+    "name": "LearningDeltaRecord",
+    "note": "the micronaut bounded weight update (micronaut::LearningDelta) is the narrow special case of this record with substrate = mode_bias",
+    "fields": {
+      "substrate": "vector_field | graph_edge | ngram_weight | mode_bias",
+      "target_ref": "the exact target inside that substrate (a field ref, an edge source→target, an n-gram key, a mode id)",
+      "kind": "reinforce | decay | set | append | remove",
+      "magnitude": "the proposed change, in the substrate's own units",
+      "bounds": "the declared [lower, upper] the resulting value must respect",
+      "confidence": "the proposer's confidence in [0, 1]; low confidence defers rather than decides",
+      "provenance_ref": "where the observation came from",
+      "fold_digest": "the invariant of the fold that produced it (so the update names its evidence)",
+      "evidence_refs": "the supports, including external retrieval references",
+      "credit_cause_ref": "the specific element the credit or blame attaches to",
+      "proposed_phase": "the phase that proposed it"
+    }
+  },
+  "outcomes": {
+    "ADMITTED": "verified, authorized and applied to the persistent state",
+    "DEFERRED": "evidence retained; confidence or permission insufficient, nothing written",
+    "REJECTED": "violates an invariant or fails verification, nothing written, cause recorded",
+    "NO_CHANGE": "the cycle completed without a justified weight change",
+    "law": "every fold produces exactly one learning artifact with one of these outcomes; DEFERRED and NO_CHANGE are first-class results, not failures"
+  },
+  "phase_authority": {
+    "law": "phases govern authority over the learning operation, not the modality it may encounter",
+    "propose": ["Pop", "Wo", "Yax", "Sek"],
+    "verify": ["Ch'en"],
+    "commit": ["Xul"],
+    "consequences": [
+      "Yax may discover a graph relationship and propose a graph_edge delta",
+      "Sek may invoke a vector learner and propose a vector_field delta",
+      "Ch'en may reject an n-gram proposal",
+      "a commit proposed outside Xul is refused, and verification outside Ch'en is refused"
+    ]
+  },
+  "commit": {
+    "law": "M_{t+1} = M_t (+) Commit_XCFE(Verify_Ch'en(Delta_t)), where (+) is a versioned authorized update and not necessarily a weight addition",
+    "atomicity": "a commit is all-or-nothing across every substrate: if one delta in the set is refused, nothing is written, so a crash or a rejection cannot leave GramStore, vector fields and GML topology partially updated",
+    "idempotence": "a delta already committed for the same fold digest is not applied twice; the second attempt reports NO_CHANGE with a duplicate reason",
+    "receipt": "each commit returns a receipt naming the committed set, the refused set, the deferred set and a digest over them",
+    "corpus_prior": "no delta mutates the frozen corpus prior; vector deltas apply to W_learned and W_effective = W_corpus * W_learned stays a separate product"
+  },
+  "credit_assignment": {
+    "law": "rejection condemns the element named by credit_cause_ref, not every element that participated",
+    "why": "a rejected candidate does not prove that each edge involved was wrong; blame has to identify the actual cause of failure or the system learns the wrong lesson"
+  },
+  "invariants": {
+    "LD1": "every delta names exactly one substrate and one target_ref; an unknown substrate or an empty target is refused",
+    "LD2": "the outcome vocabulary is ADMITTED, DEFERRED, REJECTED, NO_CHANGE; every fold yields exactly one learning artifact with exactly one outcome per proposed delta, so every fold is accounted for",
+    "LD3": "only ADMITTED mutates knowledge; DEFERRED, REJECTED and NO_CHANGE write nothing to any substrate",
+    "LD4": "proposal is authorized in Pop, Wo, Yax and Sek; verification only in Ch'en; commit only in Xul — and modality is never phase-locked, only authority is",
+    "LD5": "provenance is mandatory: a delta with no provenance_ref or no fold_digest is REJECTED with its reason, never silently dropped",
+    "LD6": "a delta is bounded: a resulting value outside the declared bounds is REJECTED rather than clamped without a record",
+    "LD7": "a REJECTED delta names the specific cause in credit_cause_ref, and rejection of one delta never condemns the other elements of the same fold",
+    "LD8": "confidence below the declared threshold produces DEFERRED with the evidence retained; only invariant failure produces REJECTED",
+    "LD9": "commit is idempotent: the same (substrate, target_ref, fold_digest) committed twice is applied once, and the replay reports NO_CHANGE with a duplicate reason",
+    "LD10": "commit is atomic: a set containing one refused delta writes nothing anywhere",
+    "LD11": "no delta mutates the frozen corpus prior; learned state and corpus evidence stay separate",
+    "LD12": "a fold has two distinct outputs — a response artifact and a learning artifact — and closing with zero admitted deltas is a valid, fully accounted-for result"
+  }
+}

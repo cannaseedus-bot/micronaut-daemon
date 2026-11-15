@@ -1,0 +1,29 @@
+(* Extended Backus-Naur Form (EBNF) demonstrating bias mitigation and tokenization *)
+(* for gendered, species-specific, and neutral concepts in an English-like scripting language. *)
+
+statement         = entity_definition | relationship_stmt | action_stmt ;
+
+(* Entity Definitions *)
+entity_definition = [ article ] agent_type [ identifiers ] ;
+agent_type        = human_noun | animal_noun | neutral_noun ;
+
+(* The Token Bias: Traditional systems separate categories rigidly, or encode human dynamics onto animals *)
+human_noun        = "man" | "woman" | "person" | "developer" | "user" ;
+animal_noun       = "dog" | "cat" | "pet" | "animal" ;
+neutral_noun      = "object" | "item" | "entity" ;
+
+(* Syntactic Sugar for Human-like Readability *)
+article           = "a" | "an" | "the" ;
+conjunction       = "and" | "or" | "with" ;
+sugar_to          = "to" | "into" | "as" ;
+identifiers       = ( "named" | "called" | "assigned" ) string ;
+
+(* Relationships where gender/species bias historically creeps into structural logic *)
+relationship_stmt = entity_definition conjunction entity_definition [ "paired" | "linked" ] ;
+action_stmt       = "cast" entity_definition sugar_to neutral_noun ;
+
+string            = '"' , character , { character } , '"' ;
+character         = letter | digit | "_" ;
+letter            = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" 
+                  | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" ;
+digit             = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;

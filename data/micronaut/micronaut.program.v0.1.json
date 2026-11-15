@@ -1,0 +1,1253 @@
+{
+  "$schema": "urn:khanary:schema:micronaut-program:0.1",
+  "@type": "khanary.micronaut_program.v0.1",
+  "@no-eval": true,
+  "version": "0.1",
+  "name": "KHANARY Micronaut Program",
+  "purpose": "Query-directed orchestration grammar for selecting, composing, executing, and learning Micronaut continuations without granting semantic authority.",
+  "topology": {
+    "type": "product_graph",
+    "space": "Qn□C6",
+    "semantic_coordinates": "bitvector",
+    "phase_wheel": [
+      "Pop",
+      "Wo",
+      "Yax",
+      "Sek",
+      "Ch'en",
+      "Xul"
+    ],
+    "semantic_step": "d_H(b,b')=1 && theta'=theta",
+    "phase_step": "b'=b && d_C6(theta,theta')=1"
+  },
+  "runtime": {
+    "law": "MicronautRuntime(B,Q)=Cata_phi(WCR(Match(Ana_psiQ(B))))",
+    "stages": [
+      {
+        "name": "Ana",
+        "verb": "expand_candidate_micronauts",
+        "phase": "Yax"
+      },
+      {
+        "name": "Match",
+        "verb": "bind_query_to_patterns",
+        "phase": "Wo"
+      },
+      {
+        "name": "WCR",
+        "verb": "rank_candidate_micronauts",
+        "phase": "Sek"
+      },
+      {
+        "name": "Cata",
+        "verb": "select_execution_set",
+        "phase": "Ch'en"
+      },
+      {
+        "name": "Continue",
+        "verb": "invoke_callable_edges",
+        "phase": "Sek"
+      },
+      {
+        "name": "Learn",
+        "verb": "distill_patterns_templates_routes",
+        "phase": "Xul"
+      }
+    ]
+  },
+  "authority_boundary": {
+    "semantic_authority": false,
+    "topology_authority": false,
+    "verification_authority": false,
+    "commit_authority": false,
+    "semantic_edges_do_not_invoke": true,
+    "callable_edges_require_route_contract": true,
+    "xul_required_for_promotion": true
+  },
+  "memory_field_assets": {
+    "schema": "memory.field.v1",
+    "memory_field": "memory/memory.field.v1.json",
+    "vectors": "memory/memory.field.vectors.v1.json",
+    "bytecode_keys": "memory/memory.field.bytecode-keys.v1.json",
+    "loader": "micronaut.program.inspect",
+    "execution": "read_only_resolution"
+  },
+  "registry": {
+    "micronauts": [
+      {
+        "key": "µ://pattern",
+        "track_id": "ELIZA",
+        "patterns": [
+          "regex",
+          "wildcard",
+          "nfa",
+          "dfa",
+          "pattern matching",
+          "snobol"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "analyzePattern",
+          "buildAutomata",
+          "matchQuery"
+        ],
+        "semantic_edges": [
+          "regex",
+          "wildcard",
+          "nfa",
+          "dfa"
+        ],
+        "callable_edges": [
+          "µ://graph",
+          "µ://template",
+          "µ://key"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.88,
+          "confidence": 0.91
+        }
+      },
+      {
+        "key": "µ://graph",
+        "track_id": "GRAPH-THEORY-µ",
+        "patterns": [
+          "graph",
+          "node",
+          "edge",
+          "hypercube",
+          "Qn□C6",
+          "hamming",
+          "product graph"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "buildNeighborhood",
+          "validateAtomicEdge",
+          "serializeGml"
+        ],
+        "semantic_edges": [
+          "graph",
+          "node",
+          "edge",
+          "hypercube"
+        ],
+        "callable_edges": [
+          "µ://fold",
+          "µ://pattern",
+          "µ://vector"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.9,
+          "confidence": 0.92
+        }
+      },
+      {
+        "key": "µ://fold",
+        "track_id": "SEMANTIC-FOLD-µ",
+        "patterns": [
+          "fold",
+          "catamorphism",
+          "anamorphism",
+          "hylomorphism",
+          "foldgraph",
+          "cata",
+          "ana"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "expandCandidateField",
+          "reduceCanonicalView",
+          "retainWildcard"
+        ],
+        "semantic_edges": [
+          "fold",
+          "catamorphism",
+          "anamorphism",
+          "hylomorphism"
+        ],
+        "callable_edges": [
+          "µ://graph",
+          "µ://template",
+          "µ://pattern"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.94,
+          "confidence": 0.93
+        }
+      },
+      {
+        "key": "µ://template",
+        "track_id": "TEMPLATE-µ",
+        "patterns": [
+          "template",
+          "aiml template",
+          "continuation",
+          "response form",
+          "track operator"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "expandTemplate",
+          "bindWildcard",
+          "emitCanonicalResponse"
+        ],
+        "semantic_edges": [
+          "template",
+          "aiml template",
+          "continuation",
+          "response form"
+        ],
+        "callable_edges": [
+          "µ://pattern",
+          "µ://tool",
+          "µ://key"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.84,
+          "confidence": 0.89
+        }
+      },
+      {
+        "key": "µ://tool",
+        "track_id": "TOOL-µ",
+        "patterns": [
+          "tool",
+          "call",
+          "read",
+          "write",
+          "patch",
+          "execute",
+          "bash",
+          "python"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "selectToolRoute",
+          "validateToolInput",
+          "executeToolCall"
+        ],
+        "semantic_edges": [
+          "tool",
+          "call",
+          "read",
+          "write"
+        ],
+        "callable_edges": [
+          "µ://pattern",
+          "µ://compiler",
+          "µ://memory"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.86,
+          "confidence": 0.88
+        }
+      },
+      {
+        "key": "µ://memory",
+        "track_id": "MEMORY-µ",
+        "patterns": [
+          "memory",
+          "recall",
+          "journal",
+          "evidence",
+          "history",
+          "conversation"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "loadEvidence",
+          "linkConversation",
+          "distillKeyGrammar"
+        ],
+        "semantic_edges": [
+          "memory",
+          "recall",
+          "journal",
+          "evidence"
+        ],
+        "callable_edges": [
+          "µ://key",
+          "µ://ngram",
+          "µ://research"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.78,
+          "confidence": 0.87
+        }
+      },
+      {
+        "key": "µ://research",
+        "track_id": "WEB-RESEARCH-µ",
+        "patterns": [
+          "research",
+          "question",
+          "source",
+          "latest",
+          "verify",
+          "ask model"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "askQuestion",
+          "collectAnswer",
+          "recordSource"
+        ],
+        "semantic_edges": [
+          "research",
+          "question",
+          "source",
+          "latest"
+        ],
+        "callable_edges": [
+          "µ://memory",
+          "µ://key",
+          "µ://ngram"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.8,
+          "confidence": 0.82
+        }
+      },
+      {
+        "key": "µ://math",
+        "track_id": "MATH-µ",
+        "patterns": [
+          "math",
+          "proof",
+          "equation",
+          "set",
+          "intersection",
+          "hamming",
+          "hypercube"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "derive",
+          "checkInvariant",
+          "emitMathml"
+        ],
+        "semantic_edges": [
+          "math",
+          "proof",
+          "equation",
+          "set"
+        ],
+        "callable_edges": [
+          "µ://fold",
+          "µ://graph",
+          "µ://template"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.82,
+          "confidence": 0.9
+        }
+      },
+      {
+        "key": "µ://chat",
+        "track_id": "CHAT-µ",
+        "patterns": [
+          "chat",
+          "hello",
+          "dialogue",
+          "conversation",
+          "direct input"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "answerDirectly",
+          "routeConversation",
+          "preserveTranscript"
+        ],
+        "semantic_edges": [
+          "chat",
+          "hello",
+          "dialogue",
+          "conversation"
+        ],
+        "callable_edges": [
+          "µ://memory",
+          "µ://template",
+          "µ://user"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.76,
+          "confidence": 0.86
+        }
+      },
+      {
+        "key": "µ://user",
+        "track_id": "USER-µ",
+        "patterns": [
+          "user",
+          "preference",
+          "intent",
+          "prompt",
+          "request"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "bindUserIntent",
+          "recordPreference",
+          "applyPromptScope"
+        ],
+        "semantic_edges": [
+          "user",
+          "preference",
+          "intent",
+          "prompt"
+        ],
+        "callable_edges": [
+          "µ://memory",
+          "µ://chat",
+          "µ://advisor"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.8,
+          "confidence": 0.88
+        }
+      },
+      {
+        "key": "µ://agent",
+        "track_id": "ORCH-µ",
+        "patterns": [
+          "agent",
+          "orchestrator",
+          "micronaut",
+          "execution set",
+          "plan"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "composeMicronauts",
+          "dispatchRoutes",
+          "foldResults"
+        ],
+        "semantic_edges": [
+          "agent",
+          "orchestrator",
+          "micronaut",
+          "execution set"
+        ],
+        "callable_edges": [
+          "µ://tool",
+          "µ://memory",
+          "µ://brain"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.85,
+          "confidence": 0.89
+        }
+      },
+      {
+        "key": "µ://bot",
+        "track_id": "Mx2LM",
+        "patterns": [
+          "bot",
+          "model",
+          "llama-server",
+          "openai compatible",
+          "local model"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "callModel",
+          "parseToolCall",
+          "distillModelAnswer"
+        ],
+        "semantic_edges": [
+          "bot",
+          "model",
+          "llama-server",
+          "openai compatible"
+        ],
+        "callable_edges": [
+          "µ://research",
+          "µ://tool",
+          "µ://memory"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.74,
+          "confidence": 0.8
+        }
+      },
+      {
+        "key": "µ://key",
+        "track_id": "CONCEPT-µ",
+        "patterns": [
+          "key",
+          "definition",
+          "relation",
+          "key grammar",
+          "call key"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "resolveKey",
+          "linkDefinition",
+          "emitKeyGrammarRow"
+        ],
+        "semantic_edges": [
+          "key",
+          "definition",
+          "relation",
+          "key grammar"
+        ],
+        "callable_edges": [
+          "µ://unigram",
+          "µ://bigram",
+          "µ://trigram",
+          "µ://template"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.86,
+          "confidence": 0.92
+        }
+      },
+      {
+        "key": "µ://unigram",
+        "track_id": "Mx2LM",
+        "patterns": [
+          "unigram",
+          "token",
+          "one gram"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "extractUnigram",
+          "scoreGram",
+          "writeJsonl"
+        ],
+        "semantic_edges": [
+          "unigram",
+          "token",
+          "one gram"
+        ],
+        "callable_edges": [
+          "µ://ngram",
+          "µ://key"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.7,
+          "confidence": 0.84
+        }
+      },
+      {
+        "key": "µ://bigram",
+        "track_id": "Mx2LM",
+        "patterns": [
+          "bigram",
+          "two gram",
+          "pair"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "extractBigram",
+          "scoreGram",
+          "writeJsonl"
+        ],
+        "semantic_edges": [
+          "bigram",
+          "two gram",
+          "pair"
+        ],
+        "callable_edges": [
+          "µ://ngram",
+          "µ://key"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.71,
+          "confidence": 0.84
+        }
+      },
+      {
+        "key": "µ://trigram",
+        "track_id": "Mx2LM",
+        "patterns": [
+          "trigram",
+          "three gram",
+          "phrase"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "extractTrigram",
+          "scoreGram",
+          "writeJsonl"
+        ],
+        "semantic_edges": [
+          "trigram",
+          "three gram",
+          "phrase"
+        ],
+        "callable_edges": [
+          "µ://ngram",
+          "µ://key"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.72,
+          "confidence": 0.84
+        }
+      },
+      {
+        "key": "µ://quadgram",
+        "track_id": "Mx2LM",
+        "patterns": [
+          "quadgram",
+          "four gram",
+          "long phrase"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "extractQuadgram",
+          "scoreGram",
+          "writeJsonl"
+        ],
+        "semantic_edges": [
+          "quadgram",
+          "four gram",
+          "long phrase"
+        ],
+        "callable_edges": [
+          "µ://ngram",
+          "µ://key"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.72,
+          "confidence": 0.83
+        }
+      },
+      {
+        "key": "µ://ngram",
+        "track_id": "Mx2LM",
+        "patterns": [
+          "ngram",
+          "grammar key",
+          "distillation",
+          "corpus",
+          "dataset track"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "extractNgrams",
+          "buildPatterns",
+          "writeTrainingRows"
+        ],
+        "semantic_edges": [
+          "ngram",
+          "grammar key",
+          "distillation",
+          "corpus"
+        ],
+        "callable_edges": [
+          "µ://unigram",
+          "µ://bigram",
+          "µ://trigram",
+          "µ://quadgram",
+          "µ://key"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.83,
+          "confidence": 0.88
+        }
+      },
+      {
+        "key": "µ://brain",
+        "track_id": "TENSOR-µ",
+        "patterns": [
+          "brain",
+          "tensor",
+          "field",
+          "fold field",
+          "projection"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "projectField",
+          "scoreTensorSlot",
+          "recordProjection"
+        ],
+        "semantic_edges": [
+          "brain",
+          "tensor",
+          "field",
+          "fold field"
+        ],
+        "callable_edges": [
+          "µ://vector",
+          "µ://graph",
+          "µ://memory"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.79,
+          "confidence": 0.84
+        }
+      },
+      {
+        "key": "µ://vector",
+        "track_id": "VECTOR-µ",
+        "patterns": [
+          "vector",
+          "embedding",
+          "metric",
+          "similarity",
+          "WCR"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "scoreSimilarity",
+          "projectMetric",
+          "rankNeighbors"
+        ],
+        "semantic_edges": [
+          "vector",
+          "embedding",
+          "metric",
+          "similarity"
+        ],
+        "callable_edges": [
+          "µ://graph",
+          "µ://brain",
+          "µ://key"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.81,
+          "confidence": 0.86
+        }
+      },
+      {
+        "key": "µ://simd",
+        "track_id": "coder",
+        "patterns": [
+          "simd",
+          "avx2",
+          "bitfield",
+          "mask",
+          "popcount",
+          "2d pattern"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "emitBitMaskMatcher",
+          "scoreBitWindows",
+          "selectBestMatch"
+        ],
+        "semantic_edges": [
+          "simd",
+          "avx2",
+          "bitfield",
+          "mask"
+        ],
+        "callable_edges": [
+          "µ://compiler",
+          "µ://pattern",
+          "µ://tool"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.77,
+          "confidence": 0.82
+        }
+      },
+      {
+        "key": "µ://compiler",
+        "track_id": "coder",
+        "patterns": [
+          "compiler",
+          "cmake",
+          "visual studio",
+          "build",
+          "c",
+          "typescript",
+          "driver"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "selectToolchain",
+          "buildArtifact",
+          "validateBinary"
+        ],
+        "semantic_edges": [
+          "compiler",
+          "cmake",
+          "visual studio",
+          "build"
+        ],
+        "callable_edges": [
+          "µ://tool",
+          "µ://simd",
+          "µ://pattern"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.8,
+          "confidence": 0.85
+        }
+      },
+      {
+        "key": "µ://advisor",
+        "track_id": "ADVISOR-µ",
+        "patterns": [
+          "advisor",
+          "recommend",
+          "explain",
+          "choose",
+          "next step"
+        ],
+        "guards": [
+          "confidence >= 0.60",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "compareOptions",
+          "explainTradeoff",
+          "routeNextStep"
+        ],
+        "semantic_edges": [
+          "advisor",
+          "recommend",
+          "explain",
+          "choose"
+        ],
+        "callable_edges": [
+          "µ://memory",
+          "µ://math",
+          "µ://tool"
+        ],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.73,
+          "confidence": 0.83
+        }
+      },
+      {
+        "key": "µ://codegen",
+        "track_id": "CODEGEN-µ",
+        "phase": "Sek",
+        "patterns": [
+          "code",
+          "generate",
+          "function",
+          "class",
+          "implement",
+          "refactor",
+          "emit",
+          "klsl",
+          "kuhul",
+          "shader",
+          "hlsl",
+          "glsl",
+          "wgsl",
+          "cpp",
+          "python",
+          "typescript",
+          "javascript",
+          "syntax",
+          "compile",
+          "test",
+          "debug",
+          "snippet",
+          "template",
+          "codegen"
+        ],
+        "guards": [
+          "confidence >= 0.65",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "generateCode",
+          "checkSyntax",
+          "refactorCode",
+          "emitKLSL",
+          "emitKUHUL"
+        ],
+        "semantic_edges": [
+          "code",
+          "generate",
+          "implement",
+          "syntax",
+          "compile",
+          "emit"
+        ],
+        "callable_edges": [
+          "µ://tool",
+          "µ://compiler",
+          "µ://simd",
+          "µ://template"
+        ],
+        "route_contract_required": true,
+        "model": {
+          "backend": "gguf",
+          "gguf_path": "C:\\Users\\canna\\.lmstudio\\models\\lmstudio-community\\gemma-3-1B-it-QAT-GGUF\\gemma-3-1B-it-QAT-Q4_0.gguf",
+          "port": 17889,
+          "temperature": 0.4,
+          "max_tokens": 512,
+          "notes": "Gemma 3 1B QAT Q4_0 — primary codegen model on Tier-1 rig"
+        },
+        "wcr": {
+          "weight": 0.8,
+          "confidence": 0.85
+        },
+        "corpus": {
+          "ngram_path": "data/gram/codegen-ngrams.jsonl",
+          "bias_patterns": [
+            "emit_function",
+            "class_definition",
+            "return_type",
+            "syntax_check",
+            "klsl_shader",
+            "kuhul_directive"
+          ],
+          "bias_keywords": [
+            "emit",
+            "syntax",
+            "compile",
+            "generate",
+            "function",
+            "class",
+            "interface"
+          ]
+        }
+      },
+      {
+        "key": "µ://cfpc",
+        "track_id": "CFPC-µ",
+        "phase": "Pop",
+        "patterns": [
+          "cfpc",
+          "semantic pattern",
+          "intent interpretation",
+          "knowledge gap",
+          "question request"
+        ],
+        "guards": [
+          "capability == cfpc.pattern.interpret",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "interpretPatterns",
+          "emitSemanticMatches",
+          "generateQuestionRequests"
+        ],
+        "semantic_edges": [
+          "pattern interpretation",
+          "typed bindings",
+          "question generation"
+        ],
+        "callable_edges": [],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.82,
+          "confidence": 0.88
+        },
+        "authority": {
+          "template_execution": false,
+          "srai_execution": false,
+          "fact_promotion": false,
+          "memory_write": false,
+          "dispatch": false
+        }
+      },
+      {
+        "key": "µ://xcfe",
+        "track_id": "XCFE-µ",
+        "phase": "Sek",
+        "patterns": [
+          "xcfe",
+          "static verification",
+          "xjson validation",
+          "operator catalog",
+          "capability admission"
+        ],
+        "guards": [
+          "capability == xcfe.verify",
+          "route_contract_required == true"
+        ],
+        "continuations": [
+          "verifyProgramStructure",
+          "listOperators"
+        ],
+        "semantic_edges": [
+          "static verification",
+          "phase legality",
+          "capability policy"
+        ],
+        "callable_edges": [],
+        "route_contract_required": true,
+        "wcr": {
+          "weight": 0.9,
+          "confidence": 0.91
+        },
+        "authority": {
+          "program_execution": false,
+          "runtime_invocation": false,
+          "memory_write": false,
+          "commit": false
+        }
+      }
+    ]
+  },
+  "edges": {
+    "semantic": [
+      {
+        "from": "µ://pattern",
+        "to": "regex",
+        "rel": "relates_to",
+        "weight": 0.94
+      },
+      {
+        "from": "µ://pattern",
+        "to": "NFA",
+        "rel": "compiled_as",
+        "weight": 0.88
+      },
+      {
+        "from": "µ://fold",
+        "to": "hylomorphism",
+        "rel": "defined_by",
+        "weight": 0.92
+      },
+      {
+        "from": "µ://graph",
+        "to": "Qn□C6",
+        "rel": "topology_projection",
+        "weight": 0.9
+      },
+      {
+        "from": "µ://key",
+        "to": "definition_relation",
+        "rel": "describes",
+        "weight": 0.89
+      },
+      {
+        "from": "µ://simd",
+        "to": "bitfield_mask_match",
+        "rel": "implements_projection",
+        "weight": 0.82
+      }
+    ],
+    "callable": [
+      {
+        "from": "µ://agent",
+        "to": "µ://tool",
+        "rel": "invokes",
+        "route_contract_required": true,
+        "phase": "Sek"
+      },
+      {
+        "from": "µ://pattern",
+        "to": "µ://graph",
+        "rel": "invokes",
+        "route_contract_required": true,
+        "phase": "Sek"
+      },
+      {
+        "from": "µ://fold",
+        "to": "µ://template",
+        "rel": "invokes",
+        "route_contract_required": true,
+        "phase": "Ch'en"
+      },
+      {
+        "from": "µ://ngram",
+        "to": "µ://key",
+        "rel": "invokes",
+        "route_contract_required": true,
+        "phase": "Xul"
+      },
+      {
+        "from": "µ://simd",
+        "to": "µ://compiler",
+        "rel": "invokes",
+        "route_contract_required": true,
+        "phase": "Sek"
+      }
+    ]
+  },
+  "learning": {
+    "promotionThreshold": 0.85,
+    "wildcardRetention": true,
+    "fixedPointIterations": 32,
+    "promotion_requires_xul": true,
+    "source_integrity": {
+      "conversation_logs_must_be_saved": true,
+      "do_not_truncate_chats": true
+    },
+    "law": "evidence -> patterns -> templates -> routes -> micronaut"
+  },
+  "domainFields": [
+    {
+      "id": "domain:foldgraph",
+      "status": "dominant",
+      "patterns": [
+        "FoldGraph",
+        "Ana",
+        "Cata",
+        "WCR",
+        "SC-37",
+        "Qn□C6"
+      ],
+      "templates": [
+        "derivation",
+        "runtime law",
+        "conformance case"
+      ],
+      "routes": [
+        "µ://fold",
+        "µ://graph",
+        "µ://pattern",
+        "µ://template"
+      ]
+    },
+    {
+      "id": "domain:pattern-automata",
+      "status": "dominant",
+      "patterns": [
+        "regex",
+        "SNOBOL",
+        "NFA",
+        "DFA",
+        "wildcard",
+        "bit mask"
+      ],
+      "templates": [
+        "match-bind-guard-continue",
+        "automata comparison"
+      ],
+      "routes": [
+        "µ://pattern",
+        "µ://graph",
+        "µ://simd"
+      ]
+    },
+    {
+      "id": "domain:code-runtime",
+      "status": "emerging",
+      "patterns": [
+        "typescript",
+        "python",
+        "bash",
+        "html",
+        "AST",
+        "CMake",
+        "AVX2"
+      ],
+      "templates": [
+        "code example",
+        "build check",
+        "artifact validation"
+      ],
+      "routes": [
+        "µ://tool",
+        "µ://compiler",
+        "µ://simd"
+      ]
+    },
+    {
+      "id": "domain:robotics",
+      "status": "latent",
+      "patterns": [
+        "robotics",
+        "kinematics",
+        "navigation",
+        "control",
+        "sensor",
+        "path planning"
+      ],
+      "templates": [
+        "perceive-decide-act-feedback",
+        "state estimation"
+      ],
+      "routes": [
+        "µ://graph",
+        "µ://tool",
+        "µ://simd"
+      ],
+      "promotion_candidate": "µ://robotics"
+    }
+  ]
+}

@@ -1,0 +1,168 @@
+{
+  "@no-eval": true,
+  "id": "GEMMA-µ",
+
+  "schemes": ["embedding", "ranking", "similarity"],
+  "description": "GEMMA-µ — EmbeddingGemma-2 ranker. Produces 768-dim dense vectors (mean pool, cosine) for Sek-phase ranking in the π routing pipeline. rank_only authority: no semantic truth, no state write, no topology mutation. Feeds the V_π head (hidden_size=32, 43 glyphs, weighted L1 gamma channel).",
+  "phase": "Sek",
+  "category": "ranker",
+  "confidence": 1.0,
+  "projection_micronaut": true,
+  "semantic_authority": false,
+
+  "governs": [
+    "embedding",
+    "embeddings",
+    "embed",
+    "vector_embed",
+    "dense_vector",
+    "768_dim",
+    "sentence_embedding",
+    "text_embedding",
+    "image_embedding",
+    "audio_embedding",
+    "cosine_similarity",
+    "cosine_rank",
+    "semantic_rank",
+    "rank_candidates",
+    "pi_routing_rank",
+    "weighted_L1_score",
+    "embeddinggemma2",
+    "google/embeddinggemma-2",
+    "mean_pooling",
+    "task_prefix_embed",
+    "batch_embed",
+    "multimodal_embed"
+  ],
+
+  "capabilities": [
+    "embed-text-to-768-dim-vector",
+    "embed-image-to-768-dim-vector",
+    "embed-audio-to-768-dim-vector",
+    "embed-video-to-768-dim-vector",
+    "embed-structured-message",
+    "cosine-similarity-score",
+    "rank-candidates-by-cosine",
+    "batch-embed-inputs",
+    "task-prefixed-prompt-embedding",
+    "pi-routing-v-pi-head-rank",
+    "weighted-L1-gamma-channel-score"
+  ],
+
+  "realizes": ["Sek.ranked_candidates", "Sek.pi_routing_scores"],
+
+  "responsibility_contract": {
+    "owns": [
+      "Embed(text)->v_768",
+      "Embed(image)->v_768",
+      "Embed(audio)->v_768",
+      "Rank(query,candidates[])->sorted_scores",
+      "Cosine(v_a,v_b)->score",
+      "PiRank(glyph_input,v_pi_head)->weighted_L1_score"
+    ],
+    "does_not_own": [
+      "SemanticAuthority",
+      "MutateTopology",
+      "CommitPatterns",
+      "WriteState",
+      "EmitResponse",
+      "AdvancePhase",
+      "RedirectSRAI",
+      "LearningProposal",
+      "TreatEmbeddingDriftAsSemanticDelta"
+    ],
+    "source_of_truth": "frozen EmbeddingGemma-2 checkpoint — f9972ac",
+    "derived_projection_only": true
+  },
+
+  "learning_contract": {
+    "mode": "none",
+    "note": "Embedding weights are frozen. The model is a fixed checkpoint from HuggingFace. No fine-tuning or adaptation authority at this layer.",
+    "pi_head_note": "V_π head (hidden_size=32) is trained by pi_routing.py against the weighted_keys gamma channel — that training is external to GEMMA-µ's authority."
+  },
+
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "load_model_from_cache",
+      "accepts": [
+        "C:/Users/canna/.cache/huggingface/hub/models--google--embeddinggemma-2",
+        "snapshot:f9972ac22e696a105c482202646979e33e4b5a1e"
+      ]
+    },
+    {
+      "phase": "Pop",
+      "op": "read_task_prompt_registry",
+      "accepts": ["config_sentence_transformers.json", "prompts.*"]
+    },
+    {
+      "phase": "Wo",
+      "op": "normalize_and_prefix_input",
+      "note": "prepend task prefix if task is specified; lowercase strip for text modality"
+    },
+    {
+      "phase": "Wo",
+      "op": "tokenize_input",
+      "max_length": 512,
+      "padding": true,
+      "truncation": true
+    },
+    {
+      "phase": "Yax",
+      "op": "select_embedding_strategy",
+      "strategies": ["single_embed", "batch_embed", "multimodal_embed", "pi_rank"]
+    },
+    {
+      "phase": "Sek",
+      "op": "forward_pass_embedding",
+      "output": "last_hidden_state → mean_pool → normalize",
+      "dim": 768,
+      "authority": "rank_only"
+    },
+    {
+      "phase": "Sek",
+      "op": "cosine_rank_candidates",
+      "formula": "score_i = dot(v_q, v_i) / (||v_q|| * ||v_i||)",
+      "authority": "rank_only"
+    },
+    {
+      "phase": "Sek",
+      "op": "pi_routing_v_pi_head",
+      "formula": "score = weighted_L1(V_pi(embed), gamma_channel)",
+      "hidden_size": 32,
+      "glyph_vocab": 43,
+      "authority": "rank_only"
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_output_shape",
+      "checks": [
+        "finite",
+        "dim=768",
+        "normalized=true",
+        "semantic_authority=false",
+        "no_state_written"
+      ]
+    },
+    {
+      "phase": "Xul",
+      "op": "emit_ranked_scores",
+      "scope": "read_only_rank_output",
+      "note": "returns scores to caller — no gramWrite, no state commit"
+    }
+  ],
+
+  "sandbox": {
+    "gram_ns": "GEMMA",
+    "manifest_access": ["kuhul", "pi_routing"],
+    "effects": ["gramRead"],
+    "ports": [],
+    "coordinator": false
+  },
+
+  "relations": [
+    { "target": "pi_routing.py", "verb": "@feeds",   "directed": true },
+    { "target": "VECTOR-µ",      "verb": "@parallel", "directed": false },
+    { "target": "AIML-µ",        "verb": "@ranks_for", "directed": true }
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "@no-eval": true,
+  "id": "ADVISOR-µ",
+
+  "schemes": ["advisor"],
+  "description": "Bootstrap advisor — classifies request patterns to existing experts, proposes bounded work, and exposes proposal state to the WPF card without execution authority.",
+  "phase": "Yax",
+  "category": "advisory",
+  "confidence": 1.0,
+  "governs": [
+    "advisor",
+    "advise",
+    "expert",
+    "help",
+    "proposal",
+    "gap",
+    "missing",
+    "unverified",
+    "author",
+    "grammar",
+    "card_view",
+    "stb_tensor_brain",
+    "data/world/stb_tensor_brains.json"
+  ],
+  "model": {
+    "gguf": "C:\\Users\\canna\\.lmstudio\\models\\lmstudio-community\\Qwen3-1.7B-GGUF\\Qwen3-1.7B-Q8_0.gguf",
+    "role": "advisory-reasoning"
+  },
+  "sub_micronauts": [
+    "reasoner",
+    "DECISION-µ",
+    "THOUGHT-OUTLINE-µ",
+    "PLAN-µ",
+    "COMP-THEORY-OF-MIND-µ",
+    "CONCEPT-µ",
+    "REASON-µ",
+    "Coordinator",
+    "SNOBOL-µ"
+  ],
+  "capabilities": [
+    "request_classification",
+    "expert_admission",
+    "proposal_projection",
+    "gap_reporting",
+    "wpf_card",
+    "consume-stb-tensor-brain-binding",
+    "consume-track-local-gram-tensor-brain"
+  ],
+  "realizes": ["Sek.comparison_report", "Ch'en.input_tensor"],
+  "relations": [
+    {
+      "target": "Coordinator",
+      "verb": "@requires",
+      "directed": true
+    },
+    {
+      "target": "TOOL-µ",
+      "verb": "@related_to",
+      "directed": false
+    },
+    {
+      "target": "REASON-µ",
+      "verb": "@related_to",
+      "directed": false
+    },
+    {
+      "target": "NGRAM-µ",
+      "verb": "@uses",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "gramRead",
+      "key": "advisor_request"
+    },
+    {
+      "phase": "Yax",
+      "op": "admit_expert",
+      "gate": "declared_route_match"
+    },
+    {
+      "phase": "Sek",
+      "op": "emit_proposal",
+      "gate": "authority == none"
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_proposal",
+      "gate": "evidence_and_target_present"
+    },
+    {
+      "phase": "Xul",
+      "op": "gramWrite",
+      "scope": "advisor_proposal"
+    }
+  ],
+  "ui": {
+    "card": "⟁WIDGETCARD",
+    "label": "Advisor",
+    "fields": [
+      "task",
+      "target",
+      "evidence",
+      "gaps",
+      "proposal",
+      "authority",
+      "next"
+    ],
+    "activation_key": "track"
+  },
+  "sandbox": {
+    "gram_ns": "ADVISOR-µ",
+    "manifest_access": [
+      "words",
+      "micronaut",
+      "kuhul"
+    ],
+    "effects": [
+      "gramRead",
+      "proposal:emit",
+      "card:project"
+    ],
+    "ports": [],
+    "coordinator": false
+  },
+  "stb_tensor_brain": {
+    "@type": "khanary.stb_tensor_brain.track_binding_ref.v1",
+    "registry": "data/world/stb_tensor_brains.json",
+    "checker": "tools/check_stb_tensor_brains.py",
+    "binding_key": "ADVISOR-µ",
+    "binding_kind": "track_local_gram_tensor_brain",
+    "brain_run": "brain4",
+    "fallback_brain_run": "brain3",
+    "slug": "advisor_mu",
+    "projection_only": true,
+    "semantic_authority": false,
+    "topology_authority": false,
+    "authority_boundary": "Track can consume the STB tensor brain as projection evidence only; Ch_en/Xul still verify and persist semantic state."
+  }
+}

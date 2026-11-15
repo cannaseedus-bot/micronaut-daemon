@@ -1,0 +1,89 @@
+{
+  "@kind": "kuhul.atomic.block.v1",
+  "id": "eliza.srai.bridge",
+  "type": "atomic_block",
+  "phase": "Ch'en",
+  "shared": false,
+  "consumer": "ELIZA-µ",
+  "description": "Bridge between ELIZA-µ's deterministic field-ranked candidate (from eliza.field + eliza.rule, Ch'en accumulator) and the aiml.srai.vector block. Takes the Ch'en accumulator, extracts the AIML candidate, checks for <srai> in its template, and returns a typed routing proposal for XCFE verification. Turns ELIZA from an isolated Micronaut into a reusable semantic operator inside the K'UHUL Atomic workflow system.",
+  "input_schema": {
+    "@kind": "kuhul.eliza.chen_accumulator",
+    "micronaut": "ELIZA-µ",
+    "contract": "kuhul.micronaut.atomic.v1",
+    "active_field": "string — one of ⟁GENERAL_QA ⟁REFLECTION ⟁CONVERSATION ⟁KNOWLEDGE ⟁REASONING ⟁FALLBACK",
+    "candidate": {
+      "pattern_id":          "string",
+      "pattern_match_score": "float",
+      "default_bias":        "float",
+      "field_score":         "float — default_bias * pattern_match_score",
+      "projection_order":    "integer",
+      "wildcard_captures":   "object — keyed by capture index"
+    },
+    "phase":  "Ch'en",
+    "status": "pending_verification"
+  },
+  "operations": [
+    {
+      "op": "ACCUMULATE",
+      "description": "Receive Ch'en accumulator from eliza.rule (Yax) fold. Confirm status is pending_verification before proceeding.",
+      "guard": "status == 'pending_verification'"
+    },
+    {
+      "op": "SRAI_DETECT",
+      "description": "Inspect candidate template for <srai>...</srai> tags. If present, extract srai_target text with wildcard_captures substituted.",
+      "pattern": "<srai>([^<]+)</srai>",
+      "wildcard_substitution": true
+    },
+    {
+      "op": "ROUTE_RESOLVE",
+      "description": "If srai_target detected, delegate to aiml.srai.vector block for EMBED→RETRIEVE→FILTER→RANK→SRAI chain. If no srai_target, candidate is terminal — wrap directly into routing proposal.",
+      "delegate_to": "aiml.srai.vector",
+      "terminal_on_no_srai": true
+    },
+    {
+      "op": "PROPOSAL",
+      "description": "Emit a typed routing proposal. XCFE must verify before Xul template_fill proceeds. Proposal may resolve to: a Micronaut capability, an atomic pipeline entry, a workflow block, or a direct template.",
+      "proposal_type": "eliza.srai.routing_proposal",
+      "xcfe_required": true
+    }
+  ],
+  "output_schema": {
+    "@kind": "eliza.srai.routing_proposal",
+    "micronaut": "ELIZA-µ",
+    "contract": "kuhul.micronaut.atomic.v1",
+    "active_field": "string",
+    "candidate": {
+      "pattern_id":          "string",
+      "pattern_match_score": "float",
+      "default_bias":        "float",
+      "field_score":         "float",
+      "projection_order":    "integer",
+      "wildcard_captures":   "object"
+    },
+    "srai_route": {
+      "detected":     "boolean",
+      "srai_target":  "string | null",
+      "resolved_to":  "string | null — resolved pattern after vector chain",
+      "hops":         "integer",
+      "terminal":     "boolean"
+    },
+    "routing_target": {
+      "type": "one of: direct_template | micronaut_capability | atomic_pipeline | workflow_block",
+      "id":   "string — target identifier",
+      "phase":"string"
+    },
+    "phase":  "Ch'en",
+    "status": "pending_xcfe_admission"
+  },
+  "xcfe_invariants": [
+    "eliza.reflect (Xul template_fill) MUST NOT execute unless routing_proposal status is xcfe_admitted",
+    "gramWrite keys (eliza:last_response, eliza:active_field, eliza:match_score) are gated by principal and memory scope — not automatically authorized by proposal admission",
+    "field_score computation (default_bias * pattern_match_score) is data_only — ranking evidence must be preserved in provenance, not promoted to fact"
+  ],
+  "atomic_module_map": {
+    "kuhul.atomic.blocks":   "eliza.* atomic keys are callable capabilities",
+    "kuhul.atomic.pipeline": "11-fold phase-keyed semantic track drives capability sequencing",
+    "kuhul.atomic.workflow": "SRAI routing graph connects ELIZA conversation to wider workflow",
+    "kuhul.atomic.canvas":   "field + phase transitions are projectable as visual graph"
+  }
+}

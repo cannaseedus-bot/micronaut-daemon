@@ -1,0 +1,36 @@
+{
+  "@type": "mx2lm.pattern_container.v1",
+  "admission": "candidate",
+  "authority": "mx2lm:pattern-learn",
+  "event_count": 1,
+  "events": [
+    {
+      "accepted": true,
+      "card": "Mx2LM dataset ingestion bootstrap",
+      "gram_container": "mx2lm:dataset_gram_container:mx2lm:v1",
+      "outcome_kind": "dataset_pattern_observed",
+      "outcome_status": "accepted",
+      "roles": [
+        "pattern_observation",
+        "track:Mx2LM",
+        "semantic_address",
+        "context_association",
+        "structural_shape",
+        "structural_shape_pattern",
+        "function_word_structure",
+        "function_word_pattern",
+        "tool_dispatch_intent",
+        "tool_dispatch_pattern"
+      ],
+      "source_phase": "Wo",
+      "source_track": "Mx2LM",
+      "surface": "dataset_ingest:mx2lm:ff8d8fffe7baedea732d4ac6",
+      "target_namespace": "Mx2LM"
+    }
+  ],
+  "key": "mx2lm:dataset_pattern_container:mx2lm:v1",
+  "namespace": "Mx2LM",
+  "phase": "Xul",
+  "semantic_authority": false,
+  "track": "Mx2LM"
+}

@@ -1,0 +1,70 @@
+{
+  "@kind": "cfpc.intent_resolver",
+  "id": "what-is-intent",
+  "@candidates": {
+    "threshold": 0.2,
+    "allow_multiple": true,
+    "intents": [
+      {
+        "name": "define",
+        "keywords": ["what", "is", "definition", "define", "meaning"]
+      },
+      {
+        "name": "explain",
+        "keywords": ["how", "why", "explain", "describe", "tell"]
+      },
+      {
+        "name": "verify",
+        "keywords": ["does", "can", "valid", "verify", "check", "exists"]
+      },
+      {
+        "name": "count",
+        "keywords": ["many", "much", "count", "number", "total"]
+      }
+    ]
+  },
+  "@q_factory": {
+    "intent_templates": [
+      {
+        "intent": "define",
+        "pattern": "What is the definition of {subject}?"
+      },
+      {
+        "intent": "define",
+        "pattern": "What does {subject} mean in this context?"
+      },
+      {
+        "intent": "explain",
+        "pattern": "How does {subject} work?"
+      },
+      {
+        "intent": "explain",
+        "pattern": "Why is {subject} significant in {field_keys}?"
+      },
+      {
+        "intent": "verify",
+        "pattern": "Is {subject} defined in the current semantic field?"
+      },
+      {
+        "intent": "count",
+        "pattern": "How many {quantity} does {subject} have, and do the sources agree?"
+      }
+    ]
+  },
+  "@gap_expansion": {
+    "max_depth": 3,
+    "require_new_information": true
+  },
+  "@selection": {
+    "method": "WCR",
+    "scope": "eligible_resolution_paths"
+  },
+  "@routing": {
+    "gap_capability_map": {
+      "QUERY_GAP": "pattern_discovery",
+      "KNOWLEDGE_GAP_NO_KEYS": "retrieval",
+      "KNOWLEDGE_GAP_NO_VALUES": "evidence_resolution",
+      "INTENT_GAP": "disambiguation"
+    }
+  }
+}

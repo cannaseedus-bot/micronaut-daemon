@@ -1,0 +1,156 @@
+{
+  "@kind": "khanary.phase-ops.v1",
+  "op_phase_index": {
+    "gramRead": [
+      "Pop"
+    ],
+    "manifest_lookup": [
+      "Pop"
+    ],
+    "lexical_activate_candidates": [
+      "Pop"
+    ],
+    "find_best_pattern_match": [
+      "Pop"
+    ],
+    "sense_inventory_lookup": [
+      "Pop"
+    ],
+    "candidate_sense_bind": [
+      "Pop"
+    ],
+    "xcfe_condition_check": [
+      "Pop"
+    ],
+    "local_context_window": [
+      "Pop"
+    ],
+    "context_neighbor_scan": [
+      "Pop"
+    ],
+    "function_word_structure_probe": [
+      "Pop"
+    ],
+    "tool_keyword_probe": [
+      "Pop"
+    ],
+    "embedgemma_prompt_vectorize": ["Pop"],
+    "key_lane_bind": ["Pop"],
+    "mx2lm_ngram_lane_bind": ["Pop"],
+    "micronaut_context_fanout": ["Pop"],
+    "mathml_query_detect": ["Pop"],
+    "state_and_constraints": [
+      "Wo"
+    ],
+    "unfold_linguistic_resolution": [
+      "Wo"
+    ],
+    "decompose_task": [
+      "Wo"
+    ],
+    "plan_task": [
+      "Wo"
+    ],
+    "xcfe_auth_check": [
+      "Wo"
+    ],
+    "admit_neighborhood": [
+      "Yax"
+    ],
+    "compose": [
+      "Yax"
+    ],
+    "aggregate": [
+      "Yax"
+    ],
+    "resolve_eliza_field_candidates": [
+      "Yax"
+    ],
+    "graph_bfs": [
+      "Yax"
+    ],
+    "compute_over_admitted_structure": [
+      "Sek"
+    ],
+    "resolve_xaiml_candidate": [
+      "Sek"
+    ],
+    "select_eliza_field_candidate": [
+      "Sek"
+    ],
+    "execute_tool_chain": [
+      "Sek"
+    ],
+    "dispatch_call": [
+      "Sek"
+    ],
+    "build_ngrams": [
+      "Sek"
+    ],
+    "miss_kind_classify": [
+      "Sek"
+    ],
+    "assert_and_verify_candidate": [
+      "Ch'en"
+    ],
+    "verify_eliza_candidate_provenance": [
+      "Ch'en"
+    ],
+    "verify_semantic_invariance": [
+      "Ch'en"
+    ],
+    "verify_relation_invariance": [
+      "Ch'en"
+    ],
+    "verify_syntax_constraints": [
+      "Ch'en"
+    ],
+    "verify_delegation": [
+      "Ch'en"
+    ],
+    "verify_ngram_confidence": [
+      "Ch'en"
+    ],
+    "classify_resolution": [
+      "Ch'en"
+    ],
+    "compare_and_commit": [
+      "Xul"
+    ],
+    "gramWrite": [
+      "Xul"
+    ],
+    "emit_answer": [
+      "Xul"
+    ],
+    "record_phase_evidence": [
+      "Xul"
+    ],
+    "persist_state": [
+      "Xul"
+    ],
+    "srai_intent_detect": [
+      "Pop"
+    ],
+    "srai_recursion_guard_init": [
+      "Wo"
+    ],
+    "pi_triangle_route": [
+      "Yax"
+    ],
+    "srai_program_project": [
+      "Yax"
+    ],
+    "srai_xcfe_propose": [
+      "Sek"
+    ],
+    "verify_srai_recursion_limits": [
+      "Ch'en"
+    ],
+    "fold_reasoning_result": [
+      "Xul"
+    ]
+  },
+  "duplicate_ops": {},
+  "total_ops": 47
+}

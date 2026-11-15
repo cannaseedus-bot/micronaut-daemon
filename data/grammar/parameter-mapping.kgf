@@ -1,0 +1,69 @@
+keygraph "ParameterMapping" version "2.0";
+namespace mapping:core domain custom;
+namespace fold:core domain fold;
+namespace gram:core domain gram;
+namespace track:core domain track;
+namespace micro:core domain micro;
+namespace xcfe:core domain xcfe;
+namespace learning:core domain custom;
+
+key mapping:ERROR kind field value "signed_error";
+key mapping:PARAMETER_GRADIENT kind field value "sum(error*feature)";
+key mapping:DELTA kind field value "learning_rate*parameter_gradient";
+key mapping:UPDATE_TARGET kind field value "W_learned";
+key xcfe:MAPPING_ADMISSION kind contract;
+key micro:STUDENT kind program;
+
+key mapping:LANE_MODE kind policy value "propose";
+key mapping:RULE kind policy value "softmax_feature_gradient";
+key mapping:LEARNING_RATE kind policy value "0.05";
+key mapping:PARAMETER_FAMILY kind policy value "ngram_weights";
+key mapping:MAX_STEP kind policy value "0.25";
+key mapping:OUTPUT kind policy value "learning:DELTA";
+
+edge micro:STUDENT -> mapping:ERROR type candidate;
+edge mapping:ERROR -> mapping:PARAMETER_GRADIENT type derives;
+edge mapping:PARAMETER_GRADIENT -> mapping:DELTA type derives;
+edge xcfe:MAPPING_ADMISSION -> mapping:DELTA type governs;
+
+template fold:MAPPING_MAP domain fold { operator MAP; input error; input feature; output parameter_gradient; };
+template fold:MAPPING_SELECT domain fold { operator SELECT; input parameter_gradient; output delta_candidate; };
+template fold:MAPPING_VERIFY domain fold { operator VERIFY; input delta_candidate; output verified_delta; };
+template fold:MAPPING_CLOSE domain fold { operator CLOSE; input verified_delta; output proposal; };
+
+trigram gram:MAPPING_YAX ("map",*,*) phase Yax fold fold:MAPPING_MAP bindings [error:explicit,feature:explicit];
+trigram gram:MAPPING_SEK ("select",*,*) phase Sek fold fold:MAPPING_SELECT bindings [parameter_gradient:explicit];
+trigram gram:MAPPING_CHEN ("check",*,*) phase Ch'en fold fold:MAPPING_VERIFY bindings [delta_candidate:explicit];
+trigram gram:MAPPING_XUL ("close",*,*) phase Xul fold fold:MAPPING_CLOSE bindings [verified_delta:explicit];
+
+track track:MAPPING { include micro:STUDENT; include gram:MAPPING_YAX; include gram:MAPPING_SEK; include gram:MAPPING_CHEN; include gram:MAPPING_XUL; };
+policy xcfe:MAPPING_POLICY { score custom; admission xcfe:MAPPING_ADMISSION; max_depth 3; allow_cycle false; commit_phase Xul; };
+resolver mapping:PROPOSAL_SELECT domain custom mode select policy xcfe:MAPPING_POLICY;
+program mapping:MAP track track:MAPPING entry fold:MAPPING_MAP phase Yax;
+program mapping:SELECT track track:MAPPING entry fold:MAPPING_SELECT phase Sek;
+program mapping:VERIFY track track:MAPPING entry fold:MAPPING_VERIFY phase Ch'en;
+program mapping:CLOSE track track:MAPPING entry fold:MAPPING_CLOSE phase Xul;
+
+(* Host-side contract: ParameterMappingLane turns a signed error into a
+   parameter-level update proposal. It does not train, persist or admit.
+
+     z_i         = sum_j theta_j * f_j(i, c)          declared logit form
+     e_i         = y_i - p_i                          supplied by GradientLane
+     dtheta_j    = eta * sum_i e_i * f_j(i, c)
+     delta_j     = dtheta_j                           bounded by MAX_STEP
+
+   The feature mapping f must be declared by the caller. This file asserts the
+   rule name and the parameter family; it does not infer features.
+
+   Parameter families are not interchangeable:
+     ngram_weights      learned n-gram weights        target W_learned
+     gram_multiplier    GramStore multiplier          target W_learned
+     vector_component   a vector field component      target W_vector
+     edge_weight        a graph edge weight           target W_graph
+     corpus_prior       corpus evidence               IMMUTABLE, never a target
+
+   Ordinary online learning is directed at W_learned. The corpus prior stays
+   immutable so corpus evidence and accumulated experience cannot be confused.
+
+   Xul closes a delta proposal. Persistence remains LearningLane's decision.
+*)

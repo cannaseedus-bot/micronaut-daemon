@@ -1,0 +1,130 @@
+{
+  "@type": "khanary.runtime_graph.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "topology_is_not_permission_a_legal_edge_is_a_candidate_route",
+  "lane": "KHANARY_RUNTIME_GRAPH_TEST",
+  "owner": "src/world/runtime_graph.cpp",
+  "python_owner": "tools/kuhul_world.py",
+  "python_port": {
+    "covers": ["gml_parser", "runtime_graph"],
+    "implements": ["RG1", "RG2", "RG3", "RG4", "RG5", "RG6", "RG7"],
+    "cli": "python tools/kuhul_world.py --graph <gml> --json",
+    "selftest": "python tools/kuhul_world.py --selftest",
+    "status": "verified",
+    "verified_against": "data/unfold-graph.gml -> 48 vertices, 120 edges, 72 semantic, 48 phase, degree 5",
+    "note": "portable reference; the C++ owner stays authoritative for native builds and for FieldDag"
+  },
+  "graph": "data/unfold-graph.gml",
+  "docs": [
+    "docs/KUHUL_PHASE_ALGEBRA.md",
+    "docs/TENSOR_BUNDLE.md",
+    "docs/FOLD_GRAPH.md"
+  ],
+  "why": "data/unfold-graph.gml introduces G_runtime = Q3 □ C6 (48 vertices, 120 edges, degree 5). It also exposes two contradictions with the phase grammar that must be resolved in a contract rather than in a comment: (1) phases.ebnf declares Xul terminal and the ladder linear Pop→…→Xul, while the graph closes the cycle with Xul→Pop; (2) the graph spells the fifth phase `Chen` where the grammars spell it `Ch'en`. A third point is not a contradiction but a boundary: the GML supplies topology, not executable permission.",
+  "topology": {
+    "product": "G_runtime = Q3 □ C6",
+    "vertex_count": 48,
+    "edge_count": 120,
+    "degree": 5,
+    "semantic_edges": 72,
+    "phase_edges": 48,
+    "vertex_encoding": "id = address*6 + theta, address = b0 + 2*b1 + 4*b2",
+    "addresses": {
+      "000": "REASON-µ",
+      "001": "CREATE-µ",
+      "010": "INFER-µ",
+      "011": "ELIZA",
+      "100": "TOOL-µ",
+      "101": "ORCH-µ",
+      "110": "MEM-µ",
+      "111": "Coordinator"
+    },
+    "address_axes": {
+      "b0": "analysis(0) / generation(1)",
+      "b1": "active(0) / memory-grounded(1)",
+      "b2": "object(0) / meta-orchestration(1)"
+    }
+  },
+  "edge_kinds": {
+    "semantic_step": {
+      "verb": "@semantic_step",
+      "form": "(b,θ) ↔ (b⊕e_i, θ)",
+      "invariant": "Hamming distance exactly 1 on the address, phase unchanged",
+      "carries_bit": true,
+      "weight": 1.0
+    },
+    "phase_step": {
+      "verb": "@phase_step",
+      "form": "(b,θ) → (b, θ+1 mod 6)",
+      "invariant": "address unchanged, |Δθ| = 1 on the C6 wheel",
+      "carries_bit": false,
+      "weight": 0.5,
+      "note": "0.5 is cos(π/3), the arc_weight of an adjacent C6 step — the connection's holonomy, not a routing preference"
+    }
+  },
+  "terminal_scope": {
+    "contradiction": "phases.ebnf: Xul is terminal and the pipeline is linear. unfold-graph.gml: Xul → Pop closes the cycle.",
+    "resolution": "terminality is scoped to ONE EXECUTION, not to the graph",
+    "law": "within an execution the ladder is Pop → Wo → Yax → Sek → Ch'en → Xul and admits no wrap; the Xul → Pop edge exists only as a cycle boundary that starts a NEW execution",
+    "consequences": {
+      "terminal_phase": "Xul",
+      "terminal_flag_meaning": "no further phase step inside this execution",
+      "wrap_edge_kind": "new_execution",
+      "same_execution_wrap": "refused with wrap_requires_new_execution",
+      "new_execution_entry_phase": "Pop"
+    }
+  },
+  "phase_identity": {
+    "contradiction": "the GML writes `Chen`, the grammars write `Ch'en`",
+    "resolution": "one identity, canonicalised at the parser boundary",
+    "canonical_name": "Ch'en",
+    "accepted_aliases": ["Chen", "Ch_en", "CHEN", "chen", "Ch’en"],
+    "law": "the parser canonicalises the token once (world::canonical_phase_name) so no consumer can create a second phase identity",
+    "unknown_token_rule": "returned unchanged and refused by the runtime graph as unknown_phase — a typo never becomes a phase"
+  },
+  "authority": {
+    "topology_grants_permission": false,
+    "legal_edge_is_a_candidate_route": true,
+    "moves_require_admission": true,
+    "admission_owner": "XCFE (host callback; topology can never substitute for it)",
+    "may_authorize_commit": false,
+    "may_mutate_fold_topology": false
+  },
+  "moves": {
+    "semantic_step": "change the Micronaut address, preserve the phase",
+    "phase_step": "change the phase forward by one, preserve the address",
+    "composite": "a sequence of legal atomic moves, each admitted separately"
+  },
+  "trace": {
+    "contract": "data/grammar/daemon-bot.trace.contracts.json",
+    "contributes": ["phases", "steps"],
+    "law": "a recorded phase step is a candidate route, never an authorization (RG6); the trace records the walk, it does not perform it",
+    "fields": {
+      "phases": "one {phase, status, detail} per canonical phase in the order Pop, Wo, Yax, Sek, Ch'en, Xul",
+      "steps": "ordered {seq, phase, event, detail} log; a redirect starts a child trace with parent set instead of wrapping Xul to Pop inside one record"
+    }
+  },
+  "status_vocabulary": [
+    "ok",
+    "unknown_vertex",
+    "not_adjacent",
+    "address_unchanged",
+    "phase_unchanged",
+    "multi_bit_flip",
+    "phase_not_forward",
+    "wrap_requires_new_execution",
+    "unknown_phase",
+    "admission_denied",
+    "graph_invalid"
+  ],
+  "invariants": {
+    "RG1": "the graph has 48 vertices, 120 edges and degree 5 at every vertex (3 semantic + 2 phase)",
+    "RG2": "a semantic edge changes the address by exactly one bit and leaves the phase unchanged",
+    "RG3": "a phase edge leaves the address unchanged and moves exactly one C6 step",
+    "RG4": "every vertex declares an address in 0..7 and a canonical C6 phase; an unknown phase token is a typed refusal",
+    "RG5": "within one execution the phase ladder is forward only (Pop→…→Xul); the Xul→Pop edge is a new-execution boundary and a same-execution wrap is refused",
+    "RG6": "a move is only performed when the host admission callback admits it; a legal edge is a candidate route, never an authorization",
+    "RG7": "no move mutates the graph: the topology, its vertex count and its edge count are identical before and after"
+  }
+}

@@ -1,0 +1,31 @@
+(* K'UHUL → WPF native desktop 3D text projection.
+   The text is a live VisualBrush on a rotating 3D quad, not extruded geometry. *)
+
+[Pop render_3d_text_wpf]
+  [Wo "K'uhul"] -> [Ch'en text]
+  [Wo "Viewport3D"] -> [Ch'en container]
+  [Wo 0.45] -> [Ch'en rotation_speed]
+  [Wo "#000000"] -> [Ch'en background]
+
+  [Yax container]
+    -> [Sek create_window 900 680]
+    -> [Sek create_viewport3d]
+    -> [Sek bind_perspective_camera 40]
+    -> [Sek bind_ambient_and_directional_lights]
+    -> [Ch'en scene]
+
+  [Yax text]
+    -> [Sek create_text_visual "Segoe UI Semibold" 150]
+    -> [Sek map_visual_brush_to_quad]
+    -> [Ch'en text_surface]
+
+  [K'ayab' animate]
+    [Yax text_surface]
+      -> [Sek rotate_y rotation_speed]
+    [Yax scene]
+      -> [Sek invalidate_viewport]
+    [Ch'en animation_frame_rendered]
+  [Kumk'u animate]
+
+  [Xul return {window, viewport, text_surface, rotation_speed}]
+[Xul]

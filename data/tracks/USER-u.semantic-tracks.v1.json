@@ -1,0 +1,144 @@
+{
+  "@type": "semantic-track",
+  "@version": "v1",
+  "@no-eval": true,
+  "id": "USER-µ",
+  "phase": "Wo",
+  "category": "data-layer",
+  "semantic_authority": true,
+
+  "responsibility_contract": {
+    "owns": ["UserState", "SessionState", "RoleGraph", "UserMemory"],
+    "does_not_own": ["MutateTopology", "CommitPatterns", "AIMLBank"],
+    "can_delegate": ["SemanticSearch → GEMMA-µ", "PatternMatch → AIML-µ", "EmbedQuery → GEMMA-µ"]
+  },
+
+  "resources": {
+    "ROLE": {
+      "key": "⟁USER:ROLE",
+      "description": "Role and permission hierarchy managed as a DAG (dag.dll). Roles inherit from parent roles — admin > moderator > member > guest. Custom per-app roles attach as leaf nodes.",
+      "tokens": "role permission access admin moderator member guest hierarchy inherit grant privilege scope level",
+      "backend": "dag.dll",
+      "fold_ops": {
+        "Pop":   "load role DAG from dag.dll; cache role hierarchy in memory",
+        "Wo":    "normalize role name; look up node in DAG; resolve inherited permissions",
+        "Yax":   "evaluate which parent roles apply for a given user+app pair",
+        "Sek":   "emit role result or permission verdict",
+        "Ch'en": "verify no privilege escalation; confirm role edge is valid",
+        "Xul":   "emit read-only role response; no topology mutation"
+      }
+    },
+    "PROFILE": {
+      "key": "⟁USER:PROFILE",
+      "description": "OAuth-populated user profile document. Created on first login; updated on subsequent logins. Stored as BSON via MongoDB.Bson.dll.",
+      "tokens": "profile user name email avatar bio photo identity account person details member",
+      "backend": "MongoDB.Bson.dll",
+      "fold_ops": {
+        "Pop":   "connect to MongoDB; ensure users.profiles collection index (email, user_id)",
+        "Wo":    "deserialize BSON profile document; validate required fields",
+        "Yax":   "merge incoming OAuth fields with existing profile (last_seen, name changes)",
+        "Sek":   "upsert profile document via MongoDB.Bson BSON serializer",
+        "Ch'en": "verify user_id uniqueness; confirm email is not already claimed by different provider",
+        "Xul":   "emit profile record or upsert confirmation"
+      }
+    },
+    "TABLE": {
+      "key": "⟁USER:TABLE",
+      "description": "Denormalized user document combining profile, role, session refs, and app memberships. Hot path — served from json_runtime_lib in-process cache; MongoDB is the persistence layer.",
+      "tokens": "table user record document denormalized cache query list lookup fast index user_id email",
+      "backend": "json_runtime_lib.dll",
+      "fold_ops": {
+        "Pop":   "init json_runtime cache; load hot users from MongoDB into LRU",
+        "Wo":    "resolve lookup key (user_id or email); check json_runtime cache",
+        "Yax":   "on cache miss: query MongoDB users.table; deserialize via json_runtime_lib",
+        "Sek":   "return cached or freshly-loaded user document",
+        "Ch'en": "validate document schema; check last_seen freshness",
+        "Xul":   "emit user table record; update LRU cache timestamp"
+      }
+    },
+    "MEMORY": {
+      "key": "⟁USER:MEMORY",
+      "description": "Per-user persistent key-value memory store. Each memory entry carries a category and importance weight. Semantic search uses GEMMA-µ embed when available.",
+      "tokens": "memory remember fact store key value recall user data preference history context note",
+      "backend": "MongoDB.Bson.dll",
+      "fold_ops": {
+        "Pop":   "ensure users.memory index (user_id, key, category)",
+        "Wo":    "parse memory key and category; normalize to lowercase",
+        "Yax":   "SELECT strategy: direct-key lookup vs. category scan vs. semantic search",
+        "Sek":   "execute read or write via MongoDB.Bson; on semantic mode → delegate to GEMMA-µ embed",
+        "Ch'en": "verify user_id ownership; check importance range [0.0–1.0]",
+        "Xul":   "emit memory value or write confirmation"
+      }
+    },
+    "MICRONAUTS": {
+      "key": "⟁USER:MICRONAUTS",
+      "description": "Capability grant registry — maps (user_id, micronaut_id) → allowed_keys[]. Grant graph stored in dag.dll; each node is a user, each edge is a capability delegation to a micronaut.",
+      "tokens": "micronauts capabilities access grant revoke delegate permissions service resource atomic key allowed user assign",
+      "backend": "dag.dll",
+      "fold_ops": {
+        "Pop":   "load grant graph from dag.dll; build user→micronaut adjacency",
+        "Wo":    "resolve user_id + micronaut_id pair; look up grant node in DAG",
+        "Yax":   "if allowed_keys is empty → all keys permitted; otherwise intersect with requested key",
+        "Sek":   "emit boolean access verdict + allowed key list",
+        "Ch'en": "verify grant was issued by admin or owner; confirm micronaut exists in registry",
+        "Xul":   "emit access result; update grant timestamp on successful check"
+      }
+    },
+    "SESSIONS": {
+      "key": "⟁USER:SESSIONS",
+      "description": "Session token lifecycle. Tokens are 32-byte random base64 strings with expiry. OAuth tokens from oauth_bindings are referenced here; this layer handles creation, validation, and revocation.",
+      "tokens": "session token oauth login auth expiry refresh logout access active valid user identity sign in",
+      "backend": "json_runtime_lib.dll",
+      "fold_ops": {
+        "Pop":   "init session cache (json_runtime); load non-expired sessions from MongoDB",
+        "Wo":    "hash-lookup session token in json_runtime cache; fallback to MongoDB query",
+        "Yax":   "evaluate expiry: compare expires_at vs. UtcNow; check OAuth token validity if bound",
+        "Sek":   "emit session valid/invalid + user_id; on new session: generate token, persist",
+        "Ch'en": "validate token format (base64 44 chars); confirm user exists in users.table",
+        "Xul":   "emit session record or validation result; revoke clears cache + DB"
+      }
+    },
+    "LOG": {
+      "key": "⟁USER:LOG",
+      "description": "Automatic audit trail of every prompt sent and response received, keyed to user_id + session_token. Pattern.Log.dll writes append-only entries; json_runtime_lib provides fast tail-reads for context injection. Supports GDPR right-to-erasure via Remove-UserPatternLog.",
+      "tokens": "log prompt response history conversation audit trail interaction record replay search pattern context",
+      "backend": "Pattern.Log.dll",
+      "collection": "users.patterns",
+      "schema": {
+        "user_id":       "string",
+        "type":          "prompt | response | system | error",
+        "content":       "string",
+        "session_token": "string",
+        "app_id":        "string",
+        "micronaut_id":  "string",
+        "atomic_key":    "string",
+        "latency_ms":    "float",
+        "logged_at":     "iso8601"
+      },
+      "fold_ops": {
+        "Pop":   "init Pattern.Log.dll; open append-only log handle for users.patterns collection",
+        "Wo":    "parse log entry type (prompt/response/system/error); validate user_id + session",
+        "Yax":   "SELECT strategy: append (write path) vs. range-read vs. full-text search vs. semantic search",
+        "Sek":   "execute: Pattern.Log.dll append on write; json_runtime_lib tail-read on get; GEMMA-µ embed on search",
+        "Ch'en": "verify user_id ownership on reads; confirm erasure targets only the requesting user's data",
+        "Xul":   "emit log confirmation or search results; flush Pattern.Log write buffer"
+      }
+    }
+  },
+
+  "relations": {
+    "calls":          ["oauth_bindings.psm1 (Initialize-UserFromOAuth trigger)", "dag.dll (role + grant graphs)", "Pattern.Log.dll (append-only prompt/response log)"],
+    "parallel":       ["GEMMA-µ (semantic memory search + log search)", "AIML-µ (pattern routing)"],
+    "feeds":          ["oauth_bindings (session validation)", "app-host /user/* endpoints"],
+    "initialized_by": ["oauth_bindings.psm1 after OAuth callback completes"]
+  },
+
+  "phase_contract": {
+    "Pop":   "load drivers (MongoDB.Bson, dag.dll, json_runtime_lib, Pattern.Log); verify backend reachability",
+    "Wo":    "parse + normalize all seven ⟁USER:* resource keys; auth check on session token",
+    "Yax":   "strategy selection per resource: cache vs. DB vs. semantic vs. graph",
+    "Sek":   "execute the selected strategy; write results to cache; return structured response",
+    "Ch'en": "validate data integrity; check authorization; confirm no privilege escalation",
+    "Xul":   "emit response to caller; update denormalized users.table if profile or role changed"
+  }
+}

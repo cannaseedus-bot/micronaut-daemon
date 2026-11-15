@@ -1,0 +1,421 @@
+{
+  "format": "kuhul.xaiml.pattern-bank.v1",
+  "version": 1,
+  "name": "car-semantic-field",
+  "authority": "pattern_match_only",
+  "note": "Semantic field patterns for ⟁CAR. Icons and prompt form selected by the runtime from car-field.json lane metadata via session predicates: mood (gravity/neutral/levity), preference (concise/balanced/narrative), temperature_bucket (low→1 option, mid→2, high→4). Predicates arrive from panel state in the Pop request body.",
+  "patterns": [
+    {
+      "id": "car.field.what.is.car",
+      "pattern": "WHAT IS CAR",
+      "phase": "Wo",
+      "template": [
+        {
+          "tag": "think",
+          "children": [
+            {
+              "tag": "set",
+              "name": "field_icon",
+              "children": [
+                {
+                  "tag": "condition",
+                  "name": "mood",
+                  "items": [
+                    { "value": "gravity", "children": [{ "tag": "text", "value": "[fa:car-side]" }] },
+                    { "value": "levity",  "children": [{ "tag": "text", "value": "🚙" }] },
+                    {                     "children": [{ "tag": "text", "value": "🚗" }] }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        { "tag": "get", "name": "field_icon" },
+        { "tag": "text", "value": " " },
+        {
+          "tag": "condition",
+          "name": "preference",
+          "items": [
+            {
+              "value": "concise",
+              "children": [
+                {
+                  "tag": "condition",
+                  "name": "mood",
+                  "items": [
+                    {
+                      "value": "gravity",
+                      "children": [
+                        {
+                          "tag": "condition",
+                          "name": "temperature_bucket",
+                          "items": [
+                            { "value": "mid",  "children": [{ "tag": "random", "items": [[{ "tag": "text", "value": "An automobile is a self-propelled wheeled vehicle engineered for road transport, requiring a licensed operator and valid registration." }], [{ "tag": "text", "value": "A road vehicle, engine-driven, requiring operator licensing and registration for lawful use." }]] }] },
+                            { "value": "high", "children": [{ "tag": "random", "items": [[{ "tag": "text", "value": "An automobile is a self-propelled wheeled vehicle engineered for road transport, requiring a licensed operator and valid registration." }], [{ "tag": "text", "value": "A road vehicle, engine-driven, requiring operator licensing and registration for lawful use." }], [{ "tag": "text", "value": "Engine-propelled wheeled vehicle classified as an automobile; legal operation requires jurisdiction-specific licensure." }], [{ "tag": "text", "value": "A self-propelled road vehicle whose operation is legally conditioned on driver licensing and registration compliance." }]] }] },
+                            {              "children": [{ "tag": "text", "value": "An automobile is a self-propelled wheeled vehicle engineered for road transport, requiring a licensed operator and valid registration." }] }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "value": "levity",
+                      "children": [
+                        {
+                          "tag": "condition",
+                          "name": "temperature_bucket",
+                          "items": [
+                            { "value": "mid",  "children": [{ "tag": "random", "items": [[{ "tag": "text", "value": "A car: four wheels, engine, roads — plus a license so the whole setup stays legal." }], [{ "tag": "text", "value": "Engine plus wheels plus road-privileges — the license is basically the subscription fee for driving." }]] }] },
+                            { "value": "high", "children": [{ "tag": "random", "items": [[{ "tag": "text", "value": "A car: four wheels, engine, roads — plus a license so the whole setup stays legal." }], [{ "tag": "text", "value": "Engine plus wheels plus road-privileges — the license is basically the subscription fee for driving." }], [{ "tag": "text", "value": "It gets you places. Legally. That's the licensed part." }], [{ "tag": "text", "value": "Fuel, wheels, roads, paperwork — the full car experience in four items." }]] }] },
+                            {              "children": [{ "tag": "text", "value": "A car: four wheels, engine, roads — plus a license so the whole setup stays legal." }] }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "children": [
+                        {
+                          "tag": "condition",
+                          "name": "temperature_bucket",
+                          "items": [
+                            { "value": "mid",  "children": [{ "tag": "random", "items": [[{ "tag": "text", "value": "A car is a motor vehicle that runs on an engine, drives on roads, and requires a valid driver's license to operate legally." }], [{ "tag": "text", "value": "An engine-powered road vehicle; operating one legally means having a license and keeping it registered." }]] }] },
+                            { "value": "high", "children": [{ "tag": "random", "items": [[{ "tag": "text", "value": "A car is a motor vehicle that runs on an engine, drives on roads, and requires a valid driver's license to operate legally." }], [{ "tag": "text", "value": "An engine-powered road vehicle; operating one legally means having a license and keeping it registered." }], [{ "tag": "text", "value": "Motor vehicle, roads, engine — and the paperwork that makes it official." }], [{ "tag": "text", "value": "A car gets you around on roads under engine power, with a license required to drive it lawfully." }]] }] },
+                            {              "children": [{ "tag": "text", "value": "A car is a motor vehicle that runs on an engine, drives on roads, and requires a valid driver's license to operate legally." }] }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "value": "balanced",
+              "children": [
+                {
+                  "tag": "condition",
+                  "name": "mood",
+                  "items": [
+                    {
+                      "value": "gravity",
+                      "children": [
+                        {
+                          "tag": "condition",
+                          "name": "temperature_bucket",
+                          "items": [
+                            { "value": "mid",  "children": [{ "tag": "random", "items": [[{ "tag": "text", "value": "An automobile is a self-propelled wheeled vehicle whose motive force derives from an internal combustion engine. It operates on the engineered road network and requires an operator's license and vehicle registration for lawful use." }], [{ "tag": "text", "value": "A road-confined, engine-powered vehicle — combustion converts fuel into motion across structured road surfaces, with legal operation contingent on licensing and registration." }]] }] },
+                            { "value": "high", "children": [{ "tag": "random", "items": [[{ "tag": "text", "value": "An automobile is a self-propelled wheeled vehicle whose motive force derives from an internal combustion engine. It operates on the engineered road network and requires an operator's license and vehicle registration for lawful use." }], [{ "tag": "text", "value": "A road-confined, engine-powered vehicle — combustion converts fuel into motion across structured road surfaces, with legal operation contingent on licensing and registration." }], [{ "tag": "text", "value": "Engine-driven road vehicle: combustion converts fuel to motion, road surfaces define its domain, licensing and registration govern its use." }], [{ "tag": "text", "value": "Automobile: the internal combustion engine propels it, roads define its operational domain, and jurisdiction-specific licensing governs its use." }]] }] },
+                            {              "children": [{ "tag": "text", "value": "An automobile is a self-propelled wheeled vehicle whose motive force derives from an internal combustion engine. It operates on the engineered road network and requires an operator's license and vehicle registration for lawful use." }] }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "value": "levity",
+                      "children": [
+                        {
+                          "tag": "condition",
+                          "name": "temperature_bucket",
+                          "items": [
+                            { "value": "mid",  "children": [{ "tag": "random", "items": [[{ "tag": "text", "value": "A car burns gas to make an engine go, rolls on roads for that purpose, and comes with a license requirement so the whole arrangement stays legal." }], [{ "tag": "text", "value": "Engine eats gas, wheels meet road, license makes it legit — that's the balanced car story." }]] }] },
+                            { "value": "high", "children": [{ "tag": "random", "items": [[{ "tag": "text", "value": "A car burns gas to make an engine go, rolls on roads for that purpose, and comes with a license requirement so the whole arrangement stays legal." }], [{ "tag": "text", "value": "Engine eats gas, wheels meet road, license makes it legit — that's the balanced car story." }], [{ "tag": "text", "value": "Gas in, motion out, road underneath — throw in a license and you have a legally operating car." }], [{ "tag": "text", "value": "It runs on gas, lives on roads, and demands a license before it'll let you take it out." }]] }] },
+                            {              "children": [{ "tag": "text", "value": "A car burns gas to make an engine go, rolls on roads for that purpose, and comes with a license requirement so the whole arrangement stays legal." }] }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "children": [
+                        {
+                          "tag": "condition",
+                          "name": "temperature_bucket",
+                          "items": [
+                            { "value": "mid",  "children": [{ "tag": "random", "items": [[{ "tag": "text", "value": "A car is a motor vehicle powered by an internal combustion engine. It drives on roads and requires a driver's license and registration to operate legally." }], [{ "tag": "text", "value": "An internal-combustion road vehicle: the engine converts fuel to motion, roads define its path, and a license makes you legal." }]] }] },
+                            { "value": "high", "children": [{ "tag": "random", "items": [[{ "tag": "text", "value": "A car is a motor vehicle powered by an internal combustion engine. It drives on roads and requires a driver's license and registration to operate legally." }], [{ "tag": "text", "value": "An internal-combustion road vehicle: the engine converts fuel to motion, roads define its path, and a license makes you legal." }], [{ "tag": "text", "value": "Combustion engine, paved roads, driver's license — those three things make a car work and legal." }], [{ "tag": "text", "value": "It's a road-going vehicle that burns fuel for power and needs you licensed to drive it." }]] }] },
+                            {              "children": [{ "tag": "text", "value": "A car is a motor vehicle powered by an internal combustion engine. It drives on roads and requires a driver's license and registration to operate legally." }] }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "children": [
+                {
+                  "tag": "condition",
+                  "name": "mood",
+                  "items": [
+                    {
+                      "value": "gravity",
+                      "children": [
+                        {
+                          "tag": "condition",
+                          "name": "temperature_bucket",
+                          "items": [
+                            { "value": "mid",  "children": [{ "tag": "random", "items": [[{ "tag": "text", "value": "An automobile is a self-propelled wheeled vehicle engineered to transport persons over road surfaces. Its motive force derives from the controlled combustion of refined petroleum fuel within an internal combustion engine, creating a structural dependency on the gasoline supply chain. Its operational domain is the engineered road network. Its acoustic signature signals its presence. It is instrumentalized for daily recurrence. Its spatial range spans regional distances on a single fuel tank. Legal operation requires a jurisdiction-issued operator's license, vehicle registration, and mandatory liability insurance." }], [{ "tag": "text", "value": "Automobile: a self-propelled road vehicle whose combustion engine converts petroleum into motion. Road-bound, gasoline-dependent, acoustically present, daily in use, regional in range, and legally contingent on licensing and registration." }]] }] },
+                            { "value": "high", "children": [{ "tag": "random", "items": [[{ "tag": "text", "value": "An automobile is a self-propelled wheeled vehicle engineered to transport persons over road surfaces. Its motive force derives from the controlled combustion of refined petroleum fuel within an internal combustion engine, creating a structural dependency on the gasoline supply chain. Its operational domain is the engineered road network. Its acoustic signature signals its presence. It is instrumentalized for daily recurrence. Its spatial range spans regional distances on a single fuel tank. Legal operation requires a jurisdiction-issued operator's license, vehicle registration, and mandatory liability insurance." }], [{ "tag": "text", "value": "Automobile: a self-propelled road vehicle whose combustion engine converts petroleum into motion. Road-bound, gasoline-dependent, acoustically present, daily in use, regional in range, and legally contingent on licensing and registration." }], [{ "tag": "text", "value": "A self-propelled road vehicle, engine-driven on petroleum combustion; confined to road surfaces, acoustically identifiable, daily in service, capable of regional range, and governed by licensing and registration law." }], [{ "tag": "text", "value": "The automobile class: wheeled, engine-propelled, petroleum-fueled, road-confined, sound-emitting, daily-scheduled, regionally-ranged, and licensing-conditioned." }]] }] },
+                            {              "children": [{ "tag": "text", "value": "An automobile is a self-propelled wheeled vehicle engineered to transport persons over road surfaces. Its motive force derives from the controlled combustion of refined petroleum fuel within an internal combustion engine, creating a structural dependency on the gasoline supply chain. Its operational domain is the engineered road network. Its acoustic signature signals its presence. It is instrumentalized for daily recurrence. Its spatial range spans regional distances on a single fuel tank. Legal operation requires a jurisdiction-issued operator's license, vehicle registration, and mandatory liability insurance." }] }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "value": "levity",
+                      "children": [
+                        {
+                          "tag": "condition",
+                          "name": "temperature_bucket",
+                          "items": [
+                            { "value": "mid",  "children": [{ "tag": "random", "items": [[{ "tag": "text", "value": "A car is basically a metal box on four wheels that burns gas so an engine can push it down roads. It makes noise, needs filling up regularly, takes you anywhere within a few hundred kilometers, and the government requires you to have a license before you're allowed to do any of it." }], [{ "tag": "text", "value": "Four wheels. Engine drinks gas. Goes on roads. Makes noise. Used every day. Gets you a few hundred km on one tank. Requires a license, registration, and patience for traffic." }]] }] },
+                            { "value": "high", "children": [{ "tag": "random", "items": [[{ "tag": "text", "value": "A car is basically a metal box on four wheels that burns gas so an engine can push it down roads. It makes noise, needs filling up regularly, takes you anywhere within a few hundred kilometers, and the government requires you to have a license before you're allowed to do any of it." }], [{ "tag": "text", "value": "Four wheels. Engine drinks gas. Goes on roads. Makes noise. Used every day. Gets you a few hundred km on one tank. Requires a license, registration, and patience for traffic." }], [{ "tag": "text", "value": "Burn gas, roll on roads, make engine sounds, get used daily, go regional distances, fill out some paperwork — that's a car in full." }], [{ "tag": "text", "value": "The car: humanity's answer to 'how do we move people around' — engine, wheels, roads, gasoline, daily habits, regional ambitions, and a licensing regime to hold it all together." }]] }] },
+                            {              "children": [{ "tag": "text", "value": "A car is basically a metal box on four wheels that burns gas so an engine can push it down roads. It makes noise, needs filling up regularly, takes you anywhere within a few hundred kilometers, and the government requires you to have a license before you're allowed to do any of it." }] }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "children": [
+                        {
+                          "tag": "condition",
+                          "name": "temperature_bucket",
+                          "items": [
+                            { "value": "mid",  "children": [{ "tag": "random", "items": [[{ "tag": "text", "value": "A car is a motor vehicle that uses an internal combustion engine to move people along roads. It runs on gasoline, produces engine noise, gets used daily, can travel regional distances on a single tank, and requires a valid driver's license and vehicle registration to operate legally." }], [{ "tag": "text", "value": "Engine-powered, gasoline-fueled, road-bound, daily-use, regionally capable, and legally requiring a license — that's the full neutral picture of a car." }]] }] },
+                            { "value": "high", "children": [{ "tag": "random", "items": [[{ "tag": "text", "value": "A car is a motor vehicle that uses an internal combustion engine to move people along roads. It runs on gasoline, produces engine noise, gets used daily, can travel regional distances on a single tank, and requires a valid driver's license and vehicle registration to operate legally." }], [{ "tag": "text", "value": "Engine-powered, gasoline-fueled, road-bound, daily-use, regionally capable, and legally requiring a license — that's the full neutral picture of a car." }], [{ "tag": "text", "value": "A car: combustion engine moves it, gasoline fuels it, roads guide it, engine noise announces it, daily use defines it, regional range enables it, and licensing governs it." }], [{ "tag": "text", "value": "Motor vehicle, internal combustion engine, gasoline dependency, road domain, acoustic presence, daily service, regional range, licensed operation — the full semantic field of car." }]] }] },
+                            {              "children": [{ "tag": "text", "value": "A car is a motor vehicle that uses an internal combustion engine to move people along roads. It runs on gasoline, produces engine noise, gets used daily, can travel regional distances on a single tank, and requires a valid driver's license and vehicle registration to operate legally." }] }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "car.field.what.is.a.car",
+      "pattern": "WHAT IS A CAR",
+      "phase": "Wo",
+      "template": [
+        { "tag": "srai", "children": [{ "tag": "text", "value": "WHAT IS CAR" }] }
+      ]
+    },
+    {
+      "id": "car.field.identity",
+      "pattern": "CAR FIELD IDENTITY",
+      "phase": "Pop",
+      "template": [
+        {
+          "tag": "think",
+          "children": [{ "tag": "set", "name": "field_icon", "children": [{ "tag": "condition", "name": "mood", "items": [{ "value": "gravity", "children": [{ "tag": "text", "value": "[fa:car-side]" }] }, { "value": "levity", "children": [{ "tag": "text", "value": "🚙" }] }, { "children": [{ "tag": "text", "value": "🚗" }] }] }] }]
+        },
+        { "tag": "get", "name": "field_icon" },
+        { "tag": "text", "value": " " },
+        {
+          "tag": "condition",
+          "name": "mood",
+          "items": [
+            { "value": "gravity", "children": [{ "tag": "text", "value": "⟁AUTOMOBILE — An automobile is a self-propelled wheeled vehicle engineered to transport persons or cargo over road surfaces." }] },
+            { "value": "levity",  "children": [{ "tag": "text", "value": "⟁AUTOMOBILE — A car? Four wheels, an engine, and a seat — it gets you there." }] },
+            {                     "children": [{ "tag": "text", "value": "⟁AUTOMOBILE — A car is a motor vehicle that uses an engine to move people from place to place on roads." }] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "car.field.gradient",
+      "pattern": "CAR FIELD GRADIENT",
+      "phase": "Wo",
+      "template": [
+        {
+          "tag": "think",
+          "children": [{ "tag": "set", "name": "field_icon", "children": [{ "tag": "condition", "name": "mood", "items": [{ "value": "gravity", "children": [{ "tag": "text", "value": "[fa:fire-flame-curved]" }] }, { "value": "levity", "children": [{ "tag": "text", "value": "💥" }] }, { "children": [{ "tag": "text", "value": "⚙️" }] }] }] }]
+        },
+        { "tag": "get", "name": "field_icon" },
+        { "tag": "text", "value": " " },
+        {
+          "tag": "condition",
+          "name": "mood",
+          "items": [
+            { "value": "gravity", "children": [{ "tag": "text", "value": "⟁COMBUSTION — Its motive force derives from the controlled combustion of fuel within an internal combustion engine, converting chemical energy into mechanical motion." }] },
+            { "value": "levity",  "children": [{ "tag": "text", "value": "⟁COMBUSTION — Burn fuel, make boom, go forward — that's the combustion deal." }] },
+            {                     "children": [{ "tag": "text", "value": "⟁COMBUSTION — The engine burns gasoline to generate motion through combustion." }] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "car.field.bias",
+      "pattern": "CAR FIELD BIAS",
+      "phase": "Yax",
+      "template": [
+        {
+          "tag": "think",
+          "children": [{ "tag": "set", "name": "field_icon", "children": [{ "tag": "condition", "name": "mood", "items": [{ "value": "gravity", "children": [{ "tag": "text", "value": "[fa:gas-pump]" }] }, { "value": "levity", "children": [{ "tag": "text", "value": "🛢️" }] }, { "children": [{ "tag": "text", "value": "⛽" }] }] }] }]
+        },
+        { "tag": "get", "name": "field_icon" },
+        { "tag": "text", "value": " " },
+        {
+          "tag": "condition",
+          "name": "mood",
+          "items": [
+            { "value": "gravity", "children": [{ "tag": "text", "value": "⟁GASOLINE — Operation depends on a continuous supply of refined petroleum fuel, creating a structural dependency on the gasoline supply chain." }] },
+            { "value": "levity",  "children": [{ "tag": "text", "value": "⟁GASOLINE — It drinks gas like you drink coffee — needs it, runs on it, runs out of it." }] },
+            {                     "children": [{ "tag": "text", "value": "⟁GASOLINE — Cars require gasoline to run; no fuel, no motion." }] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "car.field.topology",
+      "pattern": "CAR FIELD TOPOLOGY",
+      "phase": "Sek",
+      "template": [
+        {
+          "tag": "think",
+          "children": [{ "tag": "set", "name": "field_icon", "children": [{ "tag": "condition", "name": "mood", "items": [{ "value": "gravity", "children": [{ "tag": "text", "value": "[fa:road]" }] }, { "value": "levity", "children": [{ "tag": "text", "value": "🛤️" }] }, { "children": [{ "tag": "text", "value": "🛣️" }] }] }] }]
+        },
+        { "tag": "get", "name": "field_icon" },
+        { "tag": "text", "value": " " },
+        {
+          "tag": "condition",
+          "name": "mood",
+          "items": [
+            { "value": "gravity", "children": [{ "tag": "text", "value": "⟁ROADS — Its operational domain is the engineered road network; it cannot traverse unimproved terrain without structural modification." }] },
+            { "value": "levity",  "children": [{ "tag": "text", "value": "⟁ROADS — Roads are its home turf. Off-road? That's a different conversation." }] },
+            {                     "children": [{ "tag": "text", "value": "⟁ROADS — Cars drive on roads; they're built for paved surfaces." }] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "car.field.sensory",
+      "pattern": "CAR FIELD SENSORY",
+      "phase": "Sek",
+      "template": [
+        {
+          "tag": "think",
+          "children": [{ "tag": "set", "name": "field_icon", "children": [{ "tag": "condition", "name": "mood", "items": [{ "value": "gravity", "children": [{ "tag": "text", "value": "[fa:volume-high]" }] }, { "value": "levity", "children": [{ "tag": "text", "value": "📢" }] }, { "children": [{ "tag": "text", "value": "🔊" }] }] }] }]
+        },
+        { "tag": "get", "name": "field_icon" },
+        { "tag": "text", "value": " " },
+        {
+          "tag": "condition",
+          "name": "mood",
+          "items": [
+            { "value": "gravity", "children": [{ "tag": "text", "value": "⟁SOUND — The combustion cycle and mechanical drivetrain produce a characteristic acoustic signature that signals the vehicle's presence and operational state." }] },
+            { "value": "levity",  "children": [{ "tag": "text", "value": "⟁SOUND — It announces itself with sound. Vroom is basically its greeting." }] },
+            {                     "children": [{ "tag": "text", "value": "⟁SOUND — You can hear a car coming — engine noise is part of its identity." }] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "car.field.temporal",
+      "pattern": "CAR FIELD TEMPORAL",
+      "phase": "Ch'en",
+      "template": [
+        {
+          "tag": "think",
+          "children": [{ "tag": "set", "name": "field_icon", "children": [{ "tag": "condition", "name": "mood", "items": [{ "value": "gravity", "children": [{ "tag": "text", "value": "[fa:clock]" }] }, { "value": "levity", "children": [{ "tag": "text", "value": "⏰" }] }, { "children": [{ "tag": "text", "value": "📅" }] }] }] }]
+        },
+        { "tag": "get", "name": "field_icon" },
+        { "tag": "text", "value": " " },
+        {
+          "tag": "condition",
+          "name": "mood",
+          "items": [
+            { "value": "gravity", "children": [{ "tag": "text", "value": "⟁DAILY — Its temporal signature is daily recurrence — the vehicle is instrumentalized as a daily commuting and errand-running apparatus." }] },
+            { "value": "levity",  "children": [{ "tag": "text", "value": "⟁DAILY — Every single day. It's basically your unpaid chauffeur." }] },
+            {                     "children": [{ "tag": "text", "value": "⟁DAILY — Cars are used daily by most owners — commuting, errands, school runs." }] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "car.field.spatial",
+      "pattern": "CAR FIELD SPATIAL",
+      "phase": "Ch'en",
+      "template": [
+        {
+          "tag": "think",
+          "children": [{ "tag": "set", "name": "field_icon", "children": [{ "tag": "condition", "name": "mood", "items": [{ "value": "gravity", "children": [{ "tag": "text", "value": "[fa:map-location-dot]" }] }, { "value": "levity", "children": [{ "tag": "text", "value": "🧭" }] }, { "children": [{ "tag": "text", "value": "🗺️" }] }] }] }]
+        },
+        { "tag": "get", "name": "field_icon" },
+        { "tag": "text", "value": " " },
+        {
+          "tag": "condition",
+          "name": "mood",
+          "items": [
+            { "value": "gravity", "children": [{ "tag": "text", "value": "⟁REGIONAL — Its spatial range spans regional distances — typically hundreds of kilometers on a single fuel tank — making it the primary instrument of overland personal mobility." }] },
+            { "value": "levity",  "children": [{ "tag": "text", "value": "⟁REGIONAL — Tank full? Road trip. It handles regional distances no problem." }] },
+            {                     "children": [{ "tag": "text", "value": "⟁REGIONAL — Cars can cover regional distances easily — a few hundred kilometers on one tank." }] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "car.field.operational",
+      "pattern": "CAR FIELD OPERATIONAL",
+      "phase": "Xul",
+      "template": [
+        {
+          "tag": "think",
+          "children": [{ "tag": "set", "name": "field_icon", "children": [{ "tag": "condition", "name": "mood", "items": [{ "value": "gravity", "children": [{ "tag": "text", "value": "[fa:id-card]" }] }, { "value": "levity", "children": [{ "tag": "text", "value": "🪪" }] }, { "children": [{ "tag": "text", "value": "📋" }] }] }] }]
+        },
+        { "tag": "get", "name": "field_icon" },
+        { "tag": "text", "value": " " },
+        {
+          "tag": "condition",
+          "name": "mood",
+          "items": [
+            { "value": "gravity", "children": [{ "tag": "text", "value": "⟁LICENSED — Legal operation requires a jurisdiction-issued operator's license, vehicle registration, and in most jurisdictions, mandatory liability insurance." }] },
+            { "value": "levity",  "children": [{ "tag": "text", "value": "⟁LICENSED — Paper trail required: license, registration, insurance — the full legal kit." }] },
+            {                     "children": [{ "tag": "text", "value": "⟁LICENSED — To drive legally, you need a driver's license and your car must be registered." }] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "car.field.staged",
+      "pattern": "CAR FIELD STAGED",
+      "phase": "Wo",
+      "template": [
+        {
+          "tag": "condition",
+          "name": "mood",
+          "items": [
+            {
+              "value": "gravity",
+              "children": [
+                { "tag": "text", "value": "[fa:car-side] ⟁AUTOMOBILE — A self-propelled wheeled vehicle engineered to transport persons over road surfaces. | [fa:fire-flame-curved] ⟁COMBUSTION — Its motive force derives from the controlled combustion of petroleum fuel within an internal combustion engine. | [fa:gas-pump] ⟁GASOLINE — Operation depends on a continuous supply of refined petroleum fuel. | [fa:road] ⟁ROADS — Its operational domain is the engineered road network. | [fa:volume-high] ⟁SOUND — The combustion cycle produces a characteristic acoustic signature that signals its presence. | [fa:clock] ⟁DAILY — Instrumentalized as a daily commuting and errand-running apparatus. | [fa:map-location-dot] ⟁REGIONAL — Its spatial range spans regional distances on a single fuel tank. | [fa:id-card] ⟁LICENSED — Legal operation requires a jurisdiction-issued operator's license, vehicle registration, and mandatory liability insurance." }
+              ]
+            },
+            {
+              "value": "levity",
+              "children": [
+                { "tag": "text", "value": "🚙 Coordinate 1 — What it is: Four wheels, one engine, carries people. | 💥 Coordinate 2 — How it moves: Burns gas, makes combustion happen, goes. | 🛢️ Coordinate 3 — Fuel habit: Drinks gasoline like it's addicted. | 🛤️ Coordinate 4 — Where it lives: Roads — its natural habitat. | 📢 Coordinate 5 — How it announces itself: Vroom. | ⏰ Coordinate 6 — Time: Every single day, without fail. | 🧭 Coordinate 7 — Distance: Tank full? Road trip. A few hundred kilometers, easy. | 🪪 Coordinate 8 — Paperwork: License, registration, insurance — the government insists." }
+              ]
+            },
+            {
+              "children": [
+                { "tag": "text", "value": "🚗 1 Identity: A motor vehicle designed to carry people on roads. | ⚙️ 2 Gradient: It runs on an internal combustion engine. | ⛽ 3 Bias: It requires gasoline to operate. | 🛣️ 4 Topology: Built for road surfaces. | 🔊 5 Sensory: You can hear an engine running — engine noise is part of its identity. | 📅 6 Temporal: Most owners use their car daily. | 🗺️ 7 Spatial: Can cover regional distances on one tank. | 📋 8 Operational: Valid driver's license and registration are required by law." }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "car.field.replay",
+      "pattern": "CAR FIELD REPLAY",
+      "phase": "Wo",
+      "template": [
+        { "tag": "srai", "children": [{ "tag": "text", "value": "WHAT IS CAR" }] }
+      ]
+    }
+  ]
+}

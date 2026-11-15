@@ -1,0 +1,6 @@
+{
+  "@kind": "asx.edge-gap.runtime.v1",
+  "relation_types": { "quantity":"Yax.expand_relations", "morphology":"Yax.expand_morphology", "disambiguation":"Sek.resolve_ambiguity", "naming":"Yax.expand_relations", "analogy":"Yax.expand_analogies", "attribute_generalization":"Yax.expand_relations", "temporal":"Yax.expand_temporal_context", "speculative_expansion":"Yax.expand_relations", "epistemic_classification":"Sek.classify_epistemic_status" },
+  "pipeline": ["Ch'en.verify_relations", "Sek.detect_gaps", "Xul.collapse_selected_thoughts"],
+  "gap_kinds": ["policy_mismatch", "missing_edge", "epistemic_conflict", "temporal_drift"]
+}

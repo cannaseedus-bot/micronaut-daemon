@@ -1,0 +1,8 @@
+<div id="micronaut-gallery-widget" data-asx-key="⟁APP:MICRONAUT_GALLERY/⟁ROOT:MICRONAUT_GALLERY">
+  <header data-asx-key="⟁APP:MICRONAUT_GALLERY/⟁WIDGET:MG_HEADER"><h1>Micronaut Gallery</h1><p>Every bot variant, every speed. Pick what you need.</p></header>
+  <nav data-asx-key="⟁APP:MICRONAUT_GALLERY/⟁WIDGET:MG_FILTERS" data-source="bot_types" data-bind="state.filter" data-event="filter.select"></nav>
+  <section data-asx-key="⟁APP:MICRONAUT_GALLERY/⟁WIDGET:MG_GALLERY" data-source="bot_types,speeds" data-event="gallery.add"></section>
+  <aside data-asx-key="⟁APP:MICRONAUT_GALLERY/⟁WIDGET:MG_CART" data-bind="state.cart" data-events="cart.quantity,cart.remove,cart.clear"></aside>
+  <form data-asx-key="⟁APP:MICRONAUT_GALLERY/⟁WIDGET:MG_CHECKOUT" data-bind="state.cart" data-event="checkout.submit"><input name="name" required placeholder="Full name" /><input name="email" type="email" required placeholder="Email" /><input name="website" type="url" required placeholder="Website URL" /><textarea name="notes" placeholder="Notes"></textarea><button type="submit">Submit Order</button></form>
+</div>
+<script type="application/json" id="asx-json-runtime">{"@kind":"asx.key-runtime.binding.v1","@app":"⟁APP:MICRONAUT_GALLERY","@manifest":"data/host/apps/micronaut-gallery.asx-app.json","@executor":"mx.run","@authority":"projection_only","@state":"request_scoped","@semantic_commit":false}</script>

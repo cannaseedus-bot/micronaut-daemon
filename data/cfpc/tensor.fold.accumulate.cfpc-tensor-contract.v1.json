@@ -1,0 +1,48 @@
+{
+  "@kind": "khanary.tensor.contract.v1",
+  "id": "tensor.accumulate",
+  "intent": "resolve",
+  "phase_entry": "Pop",
+
+  "@tensor": {
+    "dtype": "float32",
+    "rank": 3,
+    "shape": [2, 3, 4]
+  },
+
+  "@operator": {
+    "name": "FOLD",
+    "accumulator_shape": [2, 3, 4],
+    "output_shape": [2, 3, 4],
+    "identity": "zeros",
+    "combine": "add"
+  },
+
+  "@lifecycle": {
+    "Pop":   ["receive_tensor", "receive_context"],
+    "Wo":    ["bind_dtype", "bind_rank", "bind_shape", "bind_operator", "bind_accumulator"],
+    "Yax":   ["prepare_accumulator", "initialize_identity"],
+    "Sek":   ["require_authorization", "dispatch_fold"],
+    "Ch'en": ["verify_rank", "verify_shape", "verify_dtype", "verify_output_contract"],
+    "Xul":   ["close_accumulator", "emit_result"]
+  },
+
+  "@routing": {
+    "dominant_operator": "accumulate",
+    "dominant_phase": "Sek",
+    "depth_norm_min": 0.3
+  },
+
+  "@policy": {
+    "max_depth": 4,
+    "cycle_detection": true,
+    "allow_partial_shape": false,
+    "promote_generated_facts": false
+  },
+
+  "@result": {
+    "retain_provenance": true,
+    "retain_gaps": true,
+    "allow_pattern_candidates": false
+  }
+}

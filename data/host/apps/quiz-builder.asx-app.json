@@ -1,0 +1,57 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "quiz-builder",
+  "@key": "⟁APP:QUIZ_BUILDER",
+  "@mount": "⟁ROOT:QUIZ_BUILDER",
+  "@theme": { "accent": "#a3e635", "bg": "#050c00", "surface": "#0b1800", "text": "#ecfccb", "hero_phase": "Yax", "tagline": "Build quizzes. Test knowledge." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "quizzes", "component": "⟁WIDGET:QUIZZES", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "quizzes": [], "active_quiz": null, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:QUIZ_BUILDER": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:NEW_QUIZ", "⟁ACTION:PLAY"] },
+    "⟁ACTION:NEW_QUIZ": { "@type": "button", "@text": "New Quiz", "@on": { "click": "quiz.open_compose" } },
+    "⟁ACTION:PLAY": { "@type": "button", "@text": "Play Quiz", "@on": { "click": "quiz.play" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:QUIZZES", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:QUIZZES": { "@type": "grid", "@bind": "state.quizzes", "@children": ["⟁WIDGET:QUIZ_CARD"] },
+    "⟁WIDGET:QUIZ_CARD": { "@type": "content-card", "@bind": "quiz", "@on": { "play": "quiz.play", "edit": "quiz.edit" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:STATS", "⟁WIDGET:CATEGORIES"] },
+    "⟁WIDGET:STATS": { "@type": "stat", "@bind": "data.stats" },
+    "⟁WIDGET:CATEGORIES": { "@type": "tag-cloud", "@bind": "data.categories" }
+  },
+  "@programs": {
+    "quiz.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "quiz.play": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_quiz", "@out": "active_quiz" }] },
+    "quiz.edit": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "quiz.play": "quiz.play", "quiz.edit": "quiz.edit", "compose.open": "quiz.open_compose" },
+  "@imports": [{ "ref": "quiz", "mode": "schema_table" }, { "ref": "result", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "timed-mode", "name": "Timed Mode", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Set a countdown timer per question or per quiz." },
+      { "id": "leaderboard", "name": "Leaderboard", "category": "community", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Public quiz leaderboard with high scores." },
+      { "id": "quiz-gen-bot", "name": "AI Quiz Generator", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Auto-generate quiz questions from any topic or article." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "quiz.new", "pattern": "NEW QUIZ|CREATE QUIZ|BUILD QUIZ *", "intent": "open_compose" },
+      { "id": "quiz.play", "pattern": "PLAY QUIZ *|START QUIZ *|TAKE QUIZ", "intent": "play_quiz" }
+    ]
+  },
+  "@data": {
+    "stats": { "quizzes": 12, "questions": 148, "plays": 342 },
+    "categories": ["History", "Science", "Tech", "Pop Culture", "Geography"],
+    "spotlight": [
+      { "id": "sp1", "title": "K'UHUL Phase Cycle", "category": "Tech", "badge": "Most Played", "questions": 12, "avg_score": 0.74, "excerpt": "Test your knowledge of the six K'UHUL C6 phases." },
+      { "id": "sp2", "title": "Capital Cities of the World", "category": "Geography", "badge": "Classic", "questions": 25, "avg_score": 0.61, "excerpt": "How many capital cities can you name?" },
+      { "id": "sp3", "title": "Famous Last Lines", "category": "Pop Culture", "badge": "Fun", "questions": 10, "avg_score": 0.55, "excerpt": "Guess the book or film from its final sentence." }
+    ],
+    "schema": {
+      "quiz": { "primaryKey": "quiz_id", "fields": { "quiz_id": { "type": "string" }, "title": { "type": "string", "required": true }, "description": { "type": "text" }, "category": { "type": "string" }, "questions": { "type": "json", "required": true }, "play_count": { "type": "integer" }, "created_at": { "type": "datetime" } } },
+      "result": { "primaryKey": "result_id", "fields": { "result_id": { "type": "string" }, "quiz_id": { "type": "string", "required": true }, "user_id": { "type": "string" }, "score": { "type": "integer" }, "total": { "type": "integer" }, "completed_at": { "type": "datetime" } } }
+    }
+  }
+}

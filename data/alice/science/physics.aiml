@@ -1,0 +1,1484 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Generated physics Q&A bank. Source entries are dataset responses, not medical or scientific authority.-->
+  <category>
+    <pattern>EXPLAIN HOW THIS PRINCIPLE IS USED IN MODERN RESEARCH PRACTICE DEFINE A LIKELIHOOD FUNCTION AND STATE THE CRAMÉR RAO LOWER BOUND REGULAR CASE</pattern>
+    <template>For data $x$ with density $p(x|\theta)$, the likelihood is $L(\theta;x)=p(x|\theta)$. Under regularity, any unbiased estimator $\hat\theta$ satisfies $\mathrm{Var}(\hat\theta)\ge 1/I(\theta)$ where $I(\theta)=\mathbb{E}[(\partial_\theta\ln p(X|\theta))^2]$ is the Fisher information. Example: symmetry under spatial translations yields conserved momentum, which constrains scattering amplitudes and selection rules.</template>
+  </category>
+  <category>
+    <pattern>DEFINE THE RENORMALIZATION GROUP RG IDEA AND EXPLAIN WHAT A FIXED POINT MEANS PHYSICALLY</pattern>
+    <template>RG studies how effective descriptions change under coarse-graining (rescaling). A fixed point is a scale-invariant theory: under RG flow the couplings do not change (up to rescaling). Near a fixed point, relevant/irrelevant operators determine universal critical behavior and scaling exponents.</template>
+  </category>
+  <category>
+    <pattern>EXPLAIN HOW THIS PRINCIPLE IS USED IN MODERN RESEARCH PRACTICE STATE MAXWELL S EQUATIONS IN DIFFERENTIAL FORM AND ONE IMMEDIATE IMPLICATION</pattern>
+    <template>$\nabla\cdot\mathbf{E}=\rho/\varepsilon_0$, $\nabla\cdot\mathbf{B}=0$, $\nabla\times\mathbf{E}=-\partial_t\mathbf{B}$, $\nabla\times\mathbf{B}=\mu_0\mathbf{J}+\mu_0\varepsilon_0\partial_t\mathbf{E}$. Implication: in vacuum they yield wave equations for $\mathbf{E},\mathbf{B}$ with wave speed $c=1/\sqrt{\mu_0\varepsilon_0}$. Example: symmetry under spatial translations yields conserved momentum, which constrains scattering amplitudes and selection rules.</template>
+  </category>
+  <category>
+    <pattern>STATE THE NAVIER STOKES EQUATIONS FOR AN INCOMPRESSIBLE NEWTONIAN FLUID AND IDENTIFY EACH TERM</pattern>
+    <template>$\rho(\partial_t \mathbf{u}+\mathbf{u}\cdot\nabla \mathbf{u})=-\nabla p+\mu\nabla^2\mathbf{u}+\mathbf{f}$ with $\nabla\cdot\mathbf{u}=0$. Terms: unsteady + convective acceleration (LHS), pressure gradient, viscous diffusion, and body forces; incompressibility constraint closes mass conservation.</template>
+  </category>
+  <category>
+    <pattern>EXPLAIN HOW THIS PRINCIPLE IS USED IN MODERN RESEARCH PRACTICE STATE THE HARDY WEINBERG EQUILIBRIUM AND THE KEY ASSUMPTIONS REQUIRED</pattern>
+    <template>For a diploid locus with allele frequencies $p$ and $q=1-p$, genotype frequencies are $p^2:2pq:q^2$ under random mating with no selection, mutation, migration, or drift (infinite population) and equal viability/fertility. Deviations signal violations of assumptions. Example: symmetry under spatial translations yields conserved momentum, which constrains scattering amplitudes and selection rules.</template>
+  </category>
+  <category>
+    <pattern>EXPLAIN THE MEANING OF IDENTIFIABILITY IN A DYNAMICAL SYSTEMS MODEL FIT TO EXPERIMENTAL DATA</pattern>
+    <template>A parameter is (structurally) identifiable if distinct parameter values produce distinct model outputs for ideal noise-free measurements; practically identifiable if it can be estimated with acceptable uncertainty given finite, noisy data. Non-identifiability leads to flat likelihood directions, confounding, and unstable inference.</template>
+  </category>
+  <category>
+    <pattern>GIVE THE STATEMENT AND ONE CONCRETE EXAMPLE APPLICATION STATE NOETHER S THEOREM CLASSICAL FIELD THEORY OR LAGRANGIAN MECHANICS AND GIVE ONE STANDARD CONSEQUENCE</pattern>
+    <template>**Noether's theorem.** If a Lagrangian system is invariant under a continuous one-parameter group of transformations, then there exists a corresponding conserved quantity. Standard consequences: time-translation invariance implies energy conservation; spatial-translation invariance implies momentum conservation; rotational invariance implies angular-momentum conservation. Example: Fisher information quantifies how strongly data constrain parameters and appears in optimal experimental design.</template>
+  </category>
+  <category>
+    <pattern>STATE NOETHER S THEOREM CLASSICAL FIELD THEORY OR LAGRANGIAN MECHANICS AND GIVE ONE STANDARD CONSEQUENCE</pattern>
+    <template>**Noether's theorem.** If a Lagrangian system is invariant under a continuous one-parameter group of transformations, then there exists a corresponding conserved quantity. Standard consequences: time-translation invariance implies energy conservation; spatial-translation invariance implies momentum conservation; rotational invariance implies angular-momentum conservation.</template>
+  </category>
+  <category>
+    <pattern>GIVE THE STATEMENT AND ONE CONCRETE EXAMPLE APPLICATION STATE THE SECOND LAW OF THERMODYNAMICS IN A FORM SUITABLE FOR STATISTICAL MECHANICS</pattern>
+    <template>For an isolated system, the entropy $S$ does not decrease: $\Delta S \ge 0$. In statistical mechanics, $S=k_B \ln \Omega$ (microcanonical) or $S=-k_B\sum_i p_i\ln p_i$ (Gibbs entropy), and macrostates evolve toward overwhelmingly larger phase-space volume (higher entropy) under typical dynamics. Example: symmetry under spatial translations yields conserved momentum, which constrains scattering amplitudes and selection rules.</template>
+  </category>
+  <category>
+    <pattern>STATE PRECISELY AND THEN GIVE A SHORT INTUITION DEFINE A LIKELIHOOD FUNCTION AND STATE THE CRAMÉR RAO LOWER BOUND REGULAR CASE</pattern>
+    <template>For data $x$ with density $p(x|\theta)$, the likelihood is $L(\theta;x)=p(x|\theta)$. Under regularity, any unbiased estimator $\hat\theta$ satisfies $\mathrm{Var}(\hat\theta)\ge 1/I(\theta)$ where $I(\theta)=\mathbb{E}[(\partial_\theta\ln p(X|\theta))^2]$ is the Fisher information. Example: Fisher information quantifies how strongly data constrain parameters and appears in optimal experimental design.</template>
+  </category>
+  <category>
+    <pattern>GIVE THE STATEMENT AND ONE CONCRETE EXAMPLE APPLICATION STATE THE HARDY WEINBERG EQUILIBRIUM AND THE KEY ASSUMPTIONS REQUIRED</pattern>
+    <template>For a diploid locus with allele frequencies $p$ and $q=1-p$, genotype frequencies are $p^2:2pq:q^2$ under random mating with no selection, mutation, migration, or drift (infinite population) and equal viability/fertility. Deviations signal violations of assumptions. Example: symmetry under spatial translations yields conserved momentum, which constrains scattering amplitudes and selection rules.</template>
+  </category>
+  <category>
+    <pattern>STATE THE CENTRAL DOGMA OF MOLECULAR BIOLOGY AND TWO IMPORTANT CAVEATS KNOWN IN MODERN BIOLOGY</pattern>
+    <template>Central dogma: information flows DNA $\to$ RNA $\to$ protein. Caveats include reverse transcription (RNA $\to$ DNA), extensive RNA processing/editing, and regulation via non-coding RNAs and epigenetic modifications that affect expression without changing DNA sequence.</template>
+  </category>
+  <category>
+    <pattern>STATE THE SECOND LAW OF THERMODYNAMICS IN A FORM SUITABLE FOR STATISTICAL MECHANICS</pattern>
+    <template>For an isolated system, the entropy $S$ does not decrease: $\Delta S \ge 0$. In statistical mechanics, $S=k_B \ln \Omega$ (microcanonical) or $S=-k_B\sum_i p_i\ln p_i$ (Gibbs entropy), and macrostates evolve toward overwhelmingly larger phase-space volume (higher entropy) under typical dynamics.</template>
+  </category>
+  <category>
+    <pattern>STATE PRECISELY AND THEN GIVE A SHORT INTUITION STATE THE HARDY WEINBERG EQUILIBRIUM AND THE KEY ASSUMPTIONS REQUIRED</pattern>
+    <template>For a diploid locus with allele frequencies $p$ and $q=1-p$, genotype frequencies are $p^2:2pq:q^2$ under random mating with no selection, mutation, migration, or drift (infinite population) and equal viability/fertility. Deviations signal violations of assumptions. Intuition: entropy increase is a statement about typicality—macrostates with larger measure dominate long-time behavior.</template>
+  </category>
+  <category>
+    <pattern>STATE PRECISELY AND THEN GIVE A SHORT INTUITION STATE THE SECOND LAW OF THERMODYNAMICS IN A FORM SUITABLE FOR STATISTICAL MECHANICS</pattern>
+    <template>For an isolated system, the entropy $S$ does not decrease: $\Delta S \ge 0$. In statistical mechanics, $S=k_B \ln \Omega$ (microcanonical) or $S=-k_B\sum_i p_i\ln p_i$ (Gibbs entropy), and macrostates evolve toward overwhelmingly larger phase-space volume (higher entropy) under typical dynamics. Research use: RG fixed points explain universality classes in critical phenomena and guide effective field theory constructions.</template>
+  </category>
+  <category>
+    <pattern>STATE MAXWELL S EQUATIONS IN DIFFERENTIAL FORM AND ONE IMMEDIATE IMPLICATION</pattern>
+    <template>$\nabla\cdot\mathbf{E}=\rho/\varepsilon_0$, $\nabla\cdot\mathbf{B}=0$, $\nabla\times\mathbf{E}=-\partial_t\mathbf{B}$, $\nabla\times\mathbf{B}=\mu_0\mathbf{J}+\mu_0\varepsilon_0\partial_t\mathbf{E}$. Implication: in vacuum they yield wave equations for $\mathbf{E},\mathbf{B}$ with wave speed $c=1/\sqrt{\mu_0\varepsilon_0}$.</template>
+  </category>
+  <category>
+    <pattern>STATE PRECISELY AND THEN GIVE A SHORT INTUITION STATE THE NAVIER STOKES EQUATIONS FOR AN INCOMPRESSIBLE NEWTONIAN FLUID AND IDENTIFY EACH TERM</pattern>
+    <template>$\rho(\partial_t \mathbf{u}+\mathbf{u}\cdot\nabla \mathbf{u})=-\nabla p+\mu\nabla^2\mathbf{u}+\mathbf{f}$ with $\nabla\cdot\mathbf{u}=0$. Terms: unsteady + convective acceleration (LHS), pressure gradient, viscous diffusion, and body forces; incompressibility constraint closes mass conservation. Intuition: entropy increase is a statement about typicality—macrostates with larger measure dominate long-time behavior.</template>
+  </category>
+  <category>
+    <pattern>GIVE THE STATEMENT AND ONE CONCRETE EXAMPLE APPLICATION EXPLAIN THE MEANING OF IDENTIFIABILITY IN A DYNAMICAL SYSTEMS MODEL FIT TO EXPERIMENTAL DATA</pattern>
+    <template>A parameter is (structurally) identifiable if distinct parameter values produce distinct model outputs for ideal noise-free measurements; practically identifiable if it can be estimated with acceptable uncertainty given finite, noisy data. Non-identifiability leads to flat likelihood directions, confounding, and unstable inference. Intuition: entropy increase is a statement about typicality—macrostates with larger measure dominate long-time behavior.</template>
+  </category>
+  <category>
+    <pattern>GIVE THE STATEMENT AND ONE CONCRETE EXAMPLE APPLICATION STATE THE NAVIER STOKES EQUATIONS FOR AN INCOMPRESSIBLE NEWTONIAN FLUID AND IDENTIFY EACH TERM</pattern>
+    <template>$\rho(\partial_t \mathbf{u}+\mathbf{u}\cdot\nabla \mathbf{u})=-\nabla p+\mu\nabla^2\mathbf{u}+\mathbf{f}$ with $\nabla\cdot\mathbf{u}=0$. Terms: unsteady + convective acceleration (LHS), pressure gradient, viscous diffusion, and body forces; incompressibility constraint closes mass conservation. Intuition: entropy increase is a statement about typicality—macrostates with larger measure dominate long-time behavior.</template>
+  </category>
+  <category>
+    <pattern>EXPLAIN HOW THIS PRINCIPLE IS USED IN MODERN RESEARCH PRACTICE STATE THE CENTRAL DOGMA OF MOLECULAR BIOLOGY AND TWO IMPORTANT CAVEATS KNOWN IN MODERN BIOLOGY</pattern>
+    <template>Central dogma: information flows DNA $\to$ RNA $\to$ protein. Caveats include reverse transcription (RNA $\to$ DNA), extensive RNA processing/editing, and regulation via non-coding RNAs and epigenetic modifications that affect expression without changing DNA sequence. Intuition: entropy increase is a statement about typicality—macrostates with larger measure dominate long-time behavior.</template>
+  </category>
+  <category>
+    <pattern>STATE THE VARIATIONAL PRINCIPLE FOR QUANTUM MECHANICS AND EXPLAIN HOW IT PROVIDES AN UPPER BOUND ON THE GROUND STATE ENERGY</pattern>
+    <template>For a Hamiltonian $\hat H$ bounded below, any normalized trial state $|\psi\rangle$ satisfies $\langle \psi|\hat H|\psi\rangle \ge E_0$, where $E_0$ is the ground-state energy. Minimizing the expectation value over a trial family yields the best upper bound within that family and often good approximations to $E_0$ and the ground-state wavefunction.</template>
+  </category>
+  <category>
+    <pattern>STATE PRECISELY AND THEN GIVE A SHORT INTUITION STATE MAXWELL S EQUATIONS IN DIFFERENTIAL FORM AND ONE IMMEDIATE IMPLICATION</pattern>
+    <template>$\nabla\cdot\mathbf{E}=\rho/\varepsilon_0$, $\nabla\cdot\mathbf{B}=0$, $\nabla\times\mathbf{E}=-\partial_t\mathbf{B}$, $\nabla\times\mathbf{B}=\mu_0\mathbf{J}+\mu_0\varepsilon_0\partial_t\mathbf{E}$. Implication: in vacuum they yield wave equations for $\mathbf{E},\mathbf{B}$ with wave speed $c=1/\sqrt{\mu_0\varepsilon_0}$. Example: symmetry under spatial translations yields conserved momentum, which constrains scattering amplitudes and selection rules.</template>
+  </category>
+  <category>
+    <pattern>EXPLAIN HOW THIS PRINCIPLE IS USED IN MODERN RESEARCH PRACTICE STATE THE NAVIER STOKES EQUATIONS FOR AN INCOMPRESSIBLE NEWTONIAN FLUID AND IDENTIFY EACH TERM</pattern>
+    <template>$\rho(\partial_t \mathbf{u}+\mathbf{u}\cdot\nabla \mathbf{u})=-\nabla p+\mu\nabla^2\mathbf{u}+\mathbf{f}$ with $\nabla\cdot\mathbf{u}=0$. Terms: unsteady + convective acceleration (LHS), pressure gradient, viscous diffusion, and body forces; incompressibility constraint closes mass conservation. Example: symmetry under spatial translations yields conserved momentum, which constrains scattering amplitudes and selection rules.</template>
+  </category>
+  <category>
+    <pattern>DEFINE A LIKELIHOOD FUNCTION AND STATE THE CRAMÉR RAO LOWER BOUND REGULAR CASE</pattern>
+    <template>For data $x$ with density $p(x|\theta)$, the likelihood is $L(\theta;x)=p(x|\theta)$. Under regularity, any unbiased estimator $\hat\theta$ satisfies $\mathrm{Var}(\hat\theta)\ge 1/I(\theta)$ where $I(\theta)=\mathbb{E}[(\partial_\theta\ln p(X|\theta))^2]$ is the Fisher information.</template>
+  </category>
+  <category>
+    <pattern>GIVE THE STATEMENT AND ONE CONCRETE EXAMPLE APPLICATION DEFINE A LIKELIHOOD FUNCTION AND STATE THE CRAMÉR RAO LOWER BOUND REGULAR CASE</pattern>
+    <template>For data $x$ with density $p(x|\theta)$, the likelihood is $L(\theta;x)=p(x|\theta)$. Under regularity, any unbiased estimator $\hat\theta$ satisfies $\mathrm{Var}(\hat\theta)\ge 1/I(\theta)$ where $I(\theta)=\mathbb{E}[(\partial_\theta\ln p(X|\theta))^2]$ is the Fisher information. Intuition: entropy increase is a statement about typicality—macrostates with larger measure dominate long-time behavior.</template>
+  </category>
+  <category>
+    <pattern>STATE PRECISELY AND THEN GIVE A SHORT INTUITION STATE THE CENTRAL DOGMA OF MOLECULAR BIOLOGY AND TWO IMPORTANT CAVEATS KNOWN IN MODERN BIOLOGY</pattern>
+    <template>Central dogma: information flows DNA $\to$ RNA $\to$ protein. Caveats include reverse transcription (RNA $\to$ DNA), extensive RNA processing/editing, and regulation via non-coding RNAs and epigenetic modifications that affect expression without changing DNA sequence. Example: Fisher information quantifies how strongly data constrain parameters and appears in optimal experimental design.</template>
+  </category>
+  <category>
+    <pattern>STATE THE HARDY WEINBERG EQUILIBRIUM AND THE KEY ASSUMPTIONS REQUIRED</pattern>
+    <template>For a diploid locus with allele frequencies $p$ and $q=1-p$, genotype frequencies are $p^2:2pq:q^2$ under random mating with no selection, mutation, migration, or drift (infinite population) and equal viability/fertility. Deviations signal violations of assumptions.</template>
+  </category>
+  <category>
+    <pattern>GIVE THE STATEMENT AND ONE CONCRETE EXAMPLE APPLICATION DEFINE THE RENORMALIZATION GROUP RG IDEA AND EXPLAIN WHAT A FIXED POINT MEANS PHYSICALLY</pattern>
+    <template>RG studies how effective descriptions change under coarse-graining (rescaling). A fixed point is a scale-invariant theory: under RG flow the couplings do not change (up to rescaling). Near a fixed point, relevant/irrelevant operators determine universal critical behavior and scaling exponents. Example: Fisher information quantifies how strongly data constrain parameters and appears in optimal experimental design.</template>
+  </category>
+  <category>
+    <pattern>GIVE THE STATEMENT AND ONE CONCRETE EXAMPLE APPLICATION STATE MAXWELL S EQUATIONS IN DIFFERENTIAL FORM AND ONE IMMEDIATE IMPLICATION</pattern>
+    <template>$\nabla\cdot\mathbf{E}=\rho/\varepsilon_0$, $\nabla\cdot\mathbf{B}=0$, $\nabla\times\mathbf{E}=-\partial_t\mathbf{B}$, $\nabla\times\mathbf{B}=\mu_0\mathbf{J}+\mu_0\varepsilon_0\partial_t\mathbf{E}$. Implication: in vacuum they yield wave equations for $\mathbf{E},\mathbf{B}$ with wave speed $c=1/\sqrt{\mu_0\varepsilon_0}$. Example: symmetry under spatial translations yields conserved momentum, which constrains scattering amplitudes and selection rules.</template>
+  </category>
+  <category>
+    <pattern>STATE PRECISELY AND THEN GIVE A SHORT INTUITION DEFINE THE RENORMALIZATION GROUP RG IDEA AND EXPLAIN WHAT A FIXED POINT MEANS PHYSICALLY</pattern>
+    <template>RG studies how effective descriptions change under coarse-graining (rescaling). A fixed point is a scale-invariant theory: under RG flow the couplings do not change (up to rescaling). Near a fixed point, relevant/irrelevant operators determine universal critical behavior and scaling exponents. Research use: RG fixed points explain universality classes in critical phenomena and guide effective field theory constructions.</template>
+  </category>
+  <category>
+    <pattern>EXPLAIN HOW THIS PRINCIPLE IS USED IN MODERN RESEARCH PRACTICE STATE NOETHER S THEOREM CLASSICAL FIELD THEORY OR LAGRANGIAN MECHANICS AND GIVE ONE STANDARD CONSEQUENCE</pattern>
+    <template>**Noether's theorem.** If a Lagrangian system is invariant under a continuous one-parameter group of transformations, then there exists a corresponding conserved quantity. Standard consequences: time-translation invariance implies energy conservation; spatial-translation invariance implies momentum conservation; rotational invariance implies angular-momentum conservation. Example: Fisher information quantifies how strongly data constrain parameters and appears in optimal experimental design.</template>
+  </category>
+  <category>
+    <pattern>EXPLAIN HOW THIS PRINCIPLE IS USED IN MODERN RESEARCH PRACTICE DEFINE THE RENORMALIZATION GROUP RG IDEA AND EXPLAIN WHAT A FIXED POINT MEANS PHYSICALLY</pattern>
+    <template>RG studies how effective descriptions change under coarse-graining (rescaling). A fixed point is a scale-invariant theory: under RG flow the couplings do not change (up to rescaling). Near a fixed point, relevant/irrelevant operators determine universal critical behavior and scaling exponents. Intuition: entropy increase is a statement about typicality—macrostates with larger measure dominate long-time behavior.</template>
+  </category>
+  <category>
+    <pattern>EXPLAIN HOW THIS PRINCIPLE IS USED IN MODERN RESEARCH PRACTICE STATE THE SECOND LAW OF THERMODYNAMICS IN A FORM SUITABLE FOR STATISTICAL MECHANICS</pattern>
+    <template>For an isolated system, the entropy $S$ does not decrease: $\Delta S \ge 0$. In statistical mechanics, $S=k_B \ln \Omega$ (microcanonical) or $S=-k_B\sum_i p_i\ln p_i$ (Gibbs entropy), and macrostates evolve toward overwhelmingly larger phase-space volume (higher entropy) under typical dynamics. Research use: RG fixed points explain universality classes in critical phenomena and guide effective field theory constructions.</template>
+  </category>
+  <category>
+    <pattern>STATE PRECISELY AND THEN GIVE A SHORT INTUITION EXPLAIN THE MEANING OF IDENTIFIABILITY IN A DYNAMICAL SYSTEMS MODEL FIT TO EXPERIMENTAL DATA</pattern>
+    <template>A parameter is (structurally) identifiable if distinct parameter values produce distinct model outputs for ideal noise-free measurements; practically identifiable if it can be estimated with acceptable uncertainty given finite, noisy data. Non-identifiability leads to flat likelihood directions, confounding, and unstable inference. Example: symmetry under spatial translations yields conserved momentum, which constrains scattering amplitudes and selection rules.</template>
+  </category>
+  <category>
+    <pattern>STATE PRECISELY AND THEN GIVE A SHORT INTUITION STATE NOETHER S THEOREM CLASSICAL FIELD THEORY OR LAGRANGIAN MECHANICS AND GIVE ONE STANDARD CONSEQUENCE</pattern>
+    <template>**Noether's theorem.** If a Lagrangian system is invariant under a continuous one-parameter group of transformations, then there exists a corresponding conserved quantity. Standard consequences: time-translation invariance implies energy conservation; spatial-translation invariance implies momentum conservation; rotational invariance implies angular-momentum conservation. Intuition: entropy increase is a statement about typicality—macrostates with larger measure dominate long-time behavior.</template>
+  </category>
+  <category>
+    <pattern>GIVE THE STATEMENT AND ONE CONCRETE EXAMPLE APPLICATION STATE THE VARIATIONAL PRINCIPLE FOR QUANTUM MECHANICS AND EXPLAIN HOW IT PROVIDES AN UPPER BOUND ON THE GROUND STATE ENERGY</pattern>
+    <template>For a Hamiltonian $\hat H$ bounded below, any normalized trial state $|\psi\rangle$ satisfies $\langle \psi|\hat H|\psi\rangle \ge E_0$, where $E_0$ is the ground-state energy. Minimizing the expectation value over a trial family yields the best upper bound within that family and often good approximations to $E_0$ and the ground-state wavefunction. Example: symmetry under spatial translations yields conserved momentum, which constrains scattering amplitudes and selection rules.</template>
+  </category>
+  <category>
+    <pattern>GIVE THE STATEMENT AND ONE CONCRETE EXAMPLE APPLICATION STATE THE CENTRAL DOGMA OF MOLECULAR BIOLOGY AND TWO IMPORTANT CAVEATS KNOWN IN MODERN BIOLOGY</pattern>
+    <template>Central dogma: information flows DNA $\to$ RNA $\to$ protein. Caveats include reverse transcription (RNA $\to$ DNA), extensive RNA processing/editing, and regulation via non-coding RNAs and epigenetic modifications that affect expression without changing DNA sequence. Example: symmetry under spatial translations yields conserved momentum, which constrains scattering amplitudes and selection rules.</template>
+  </category>
+  <category>
+    <pattern>EXPLAIN HOW THIS PRINCIPLE IS USED IN MODERN RESEARCH PRACTICE EXPLAIN THE MEANING OF IDENTIFIABILITY IN A DYNAMICAL SYSTEMS MODEL FIT TO EXPERIMENTAL DATA</pattern>
+    <template>A parameter is (structurally) identifiable if distinct parameter values produce distinct model outputs for ideal noise-free measurements; practically identifiable if it can be estimated with acceptable uncertainty given finite, noisy data. Non-identifiability leads to flat likelihood directions, confounding, and unstable inference. Research use: RG fixed points explain universality classes in critical phenomena and guide effective field theory constructions.</template>
+  </category>
+  <category>
+    <pattern>EXPLAIN HOW THIS PRINCIPLE IS USED IN MODERN RESEARCH PRACTICE STATE THE VARIATIONAL PRINCIPLE FOR QUANTUM MECHANICS AND EXPLAIN HOW IT PROVIDES AN UPPER BOUND ON THE GROUND STATE ENERGY</pattern>
+    <template>For a Hamiltonian $\hat H$ bounded below, any normalized trial state $|\psi\rangle$ satisfies $\langle \psi|\hat H|\psi\rangle \ge E_0$, where $E_0$ is the ground-state energy. Minimizing the expectation value over a trial family yields the best upper bound within that family and often good approximations to $E_0$ and the ground-state wavefunction. Example: symmetry under spatial translations yields conserved momentum, which constrains scattering amplitudes and selection rules.</template>
+  </category>
+  <category>
+    <pattern>STATE PRECISELY AND THEN GIVE A SHORT INTUITION STATE THE VARIATIONAL PRINCIPLE FOR QUANTUM MECHANICS AND EXPLAIN HOW IT PROVIDES AN UPPER BOUND ON THE GROUND STATE ENERGY</pattern>
+    <template>For a Hamiltonian $\hat H$ bounded below, any normalized trial state $|\psi\rangle$ satisfies $\langle \psi|\hat H|\psi\rangle \ge E_0$, where $E_0$ is the ground-state energy. Minimizing the expectation value over a trial family yields the best upper bound within that family and often good approximations to $E_0$ and the ground-state wavefunction. Intuition: entropy increase is a statement about typicality—macrostates with larger measure dominate long-time behavior.</template>
+  </category>
+  <category>
+    <pattern>USING WIEN S DISPLACEMENT LAW LAMBDA_ MAX FRAC B T WITH B 2 8978 TIMES 10 3 M K COMPUTE LAMBDA_ MAX FOR T 10000 K</pattern>
+    <template>$\lambda_{\max}\approx \frac{2.8978\times 10^{-3}}{10000}\,\mathrm{m} \approx 2.898e-07\,\mathrm{m}$.</template>
+  </category>
+  <category>
+    <pattern>COMPUTE THE ELECTRON DEBYE LENGTH IN A PLASMA USING LAMBDA_D SQRT FRAC VAREPSILON_0 K_B T N E 2 FOR T 50000 K AND N 1 0E 17 M 3</pattern>
+    <template>$\lambda_D\approx 4.880e-05\,\mathrm{m}$.</template>
+  </category>
+  <category>
+    <pattern>COMPUTE THE ELECTRON DEBYE LENGTH IN A PLASMA USING LAMBDA_D SQRT FRAC VAREPSILON_0 K_B T N E 2 FOR T 10000 K AND N 5 0E 16 M 3</pattern>
+    <template>$\lambda_D\approx 3.086e-05\,\mathrm{m}$.</template>
+  </category>
+  <category>
+    <pattern>IN THE BOHR MODEL HYDROGEN COMPUTE THE ENERGY E_N IN EV FOR N 1 GIVEN E_N 13 6 N 2 EV</pattern>
+    <template>$E_1=-\frac{13.6}{1^2}\ \mathrm{eV} = -13.6\ \mathrm{eV}$.</template>
+  </category>
+  <category>
+    <pattern>USING WIEN S DISPLACEMENT LAW LAMBDA_ MAX FRAC B T WITH B 2 8978 TIMES 10 3 M K COMPUTE LAMBDA_ MAX FOR T 8000 K</pattern>
+    <template>$\lambda_{\max}\approx \frac{2.8978\times 10^{-3}}{8000}\,\mathrm{m} \approx 3.622e-07\,\mathrm{m}$.</template>
+  </category>
+  <category>
+    <pattern>COMPUTE THE ELECTRON DEBYE LENGTH IN A PLASMA USING LAMBDA_D SQRT FRAC VAREPSILON_0 K_B T N E 2 FOR T 10000 K AND N 1 0E 17 M 3</pattern>
+    <template>$\lambda_D\approx 2.182e-05\,\mathrm{m}$.</template>
+  </category>
+  <category>
+    <pattern>USING WIEN S DISPLACEMENT LAW LAMBDA_ MAX FRAC B T WITH B 2 8978 TIMES 10 3 M K COMPUTE LAMBDA_ MAX FOR T 6000 K</pattern>
+    <template>$\lambda_{\max}\approx \frac{2.8978\times 10^{-3}}{6000}\,\mathrm{m} \approx 4.830e-07\,\mathrm{m}$.</template>
+  </category>
+  <category>
+    <pattern>SPECIAL RELATIVITY FOR SPEED V 7 10 C COMPUTE GAMMA FRAC 1 SQRT 1 V 2 C 2 NUMERIC</pattern>
+    <template>$\gamma=\frac{1}{\sqrt{1-(7/10)^2}}\approx 1.400280$.</template>
+  </category>
+  <category>
+    <pattern>IN THE BOHR MODEL HYDROGEN COMPUTE THE ENERGY E_N IN EV FOR N 2 GIVEN E_N 13 6 N 2 EV</pattern>
+    <template>$E_2=-\frac{13.6}{2^2}\ \mathrm{eV} = -3.4\ \mathrm{eV}$.</template>
+  </category>
+  <category>
+    <pattern>COMPUTE THE ELECTRON DEBYE LENGTH IN A PLASMA USING LAMBDA_D SQRT FRAC VAREPSILON_0 K_B T N E 2 FOR T 20000 K AND N 1 0E 16 M 3</pattern>
+    <template>$\lambda_D\approx 9.759e-05\,\mathrm{m}$.</template>
+  </category>
+  <category>
+    <pattern>USING WIEN S DISPLACEMENT LAW LAMBDA_ MAX FRAC B T WITH B 2 8978 TIMES 10 3 M K COMPUTE LAMBDA_ MAX FOR T 5000 K</pattern>
+    <template>$\lambda_{\max}\approx \frac{2.8978\times 10^{-3}}{5000}\,\mathrm{m} \approx 5.796e-07\,\mathrm{m}$.</template>
+  </category>
+  <category>
+    <pattern>IN THE BOHR MODEL HYDROGEN COMPUTE THE ENERGY E_N IN EV FOR N 4 GIVEN E_N 13 6 N 2 EV</pattern>
+    <template>$E_4=-\frac{13.6}{4^2}\ \mathrm{eV} = -0.85\ \mathrm{eV}$.</template>
+  </category>
+  <category>
+    <pattern>COMPUTE THE PHOTON ENERGY FOR FREQUENCY NU 6 0E 14 HZ USING E H NU WITH H 6 6261 TIMES 10 34 J S</pattern>
+    <template>$E\approx 6.6261\times 10^{-34}\cdot 6.0e+14\ \mathrm{J} \approx 3.976e-19\ \mathrm{J}$.</template>
+  </category>
+  <category>
+    <pattern>SPECIAL RELATIVITY FOR SPEED V 4 10 C COMPUTE GAMMA FRAC 1 SQRT 1 V 2 C 2 NUMERIC</pattern>
+    <template>$\gamma=\frac{1}{\sqrt{1-(4/10)^2}}\approx 1.091089$.</template>
+  </category>
+  <category>
+    <pattern>USING WIEN S DISPLACEMENT LAW LAMBDA_ MAX FRAC B T WITH B 2 8978 TIMES 10 3 M K COMPUTE LAMBDA_ MAX FOR T 4000 K</pattern>
+    <template>$\lambda_{\max}\approx \frac{2.8978\times 10^{-3}}{4000}\,\mathrm{m} \approx 7.244e-07\,\mathrm{m}$.</template>
+  </category>
+  <category>
+    <pattern>SPECIAL RELATIVITY FOR SPEED V 6 10 C COMPUTE GAMMA FRAC 1 SQRT 1 V 2 C 2 NUMERIC</pattern>
+    <template>$\gamma=\frac{1}{\sqrt{1-(6/10)^2}}\approx 1.250000$.</template>
+  </category>
+  <category>
+    <pattern>SPECIAL RELATIVITY FOR SPEED V 5 10 C COMPUTE GAMMA FRAC 1 SQRT 1 V 2 C 2 NUMERIC</pattern>
+    <template>$\gamma=\frac{1}{\sqrt{1-(5/10)^2}}\approx 1.154701$.</template>
+  </category>
+  <category>
+    <pattern>USING WIEN S DISPLACEMENT LAW LAMBDA_ MAX FRAC B T WITH B 2 8978 TIMES 10 3 M K COMPUTE LAMBDA_ MAX FOR T 3000 K</pattern>
+    <template>$\lambda_{\max}\approx \frac{2.8978\times 10^{-3}}{3000}\,\mathrm{m} \approx 9.659e-07\,\mathrm{m}$.</template>
+  </category>
+  <category>
+    <pattern>COMPUTE THE PHOTON ENERGY FOR FREQUENCY NU 3 0E 15 HZ USING E H NU WITH H 6 6261 TIMES 10 34 J S</pattern>
+    <template>$E\approx 6.6261\times 10^{-34}\cdot 3.0e+15\ \mathrm{J} \approx 1.988e-18\ \mathrm{J}$.</template>
+  </category>
+  <category>
+    <pattern>SPECIAL RELATIVITY FOR SPEED V 3 10 C COMPUTE GAMMA FRAC 1 SQRT 1 V 2 C 2 NUMERIC</pattern>
+    <template>$\gamma=\frac{1}{\sqrt{1-(3/10)^2}}\approx 1.048285$.</template>
+  </category>
+  <category>
+    <pattern>SPECIAL RELATIVITY FOR SPEED V 9 10 C COMPUTE GAMMA FRAC 1 SQRT 1 V 2 C 2 NUMERIC</pattern>
+    <template>$\gamma=\frac{1}{\sqrt{1-(9/10)^2}}\approx 2.294157$.</template>
+  </category>
+  <category>
+    <pattern>SPECIAL RELATIVITY FOR SPEED V 8 10 C COMPUTE GAMMA FRAC 1 SQRT 1 V 2 C 2 NUMERIC</pattern>
+    <template>$\gamma=\frac{1}{\sqrt{1-(8/10)^2}}\approx 1.666667$.</template>
+  </category>
+  <category>
+    <pattern>COMPUTE THE ELECTRON DEBYE LENGTH IN A PLASMA USING LAMBDA_D SQRT FRAC VAREPSILON_0 K_B T N E 2 FOR T 10000 K AND N 1 0E 16 M 3</pattern>
+    <template>$\lambda_D\approx 6.901e-05\,\mathrm{m}$.</template>
+  </category>
+  <category>
+    <pattern>COMPUTE THE ELECTRON DEBYE LENGTH IN A PLASMA USING LAMBDA_D SQRT FRAC VAREPSILON_0 K_B T N E 2 FOR T 20000 K AND N 1 0E 17 M 3</pattern>
+    <template>$\lambda_D\approx 3.086e-05\,\mathrm{m}$.</template>
+  </category>
+  <category>
+    <pattern>COMPUTE THE PHOTON ENERGY FOR FREQUENCY NU 5 0E 14 HZ USING E H NU WITH H 6 6261 TIMES 10 34 J S</pattern>
+    <template>$E\approx 6.6261\times 10^{-34}\cdot 5.0e+14\ \mathrm{J} \approx 3.313e-19\ \mathrm{J}$.</template>
+  </category>
+  <category>
+    <pattern>COMPUTE THE ELECTRON DEBYE LENGTH IN A PLASMA USING LAMBDA_D SQRT FRAC VAREPSILON_0 K_B T N E 2 FOR T 20000 K AND N 5 0E 16 M 3</pattern>
+    <template>$\lambda_D\approx 4.365e-05\,\mathrm{m}$.</template>
+  </category>
+  <category>
+    <pattern>COMPUTE THE ELECTRON DEBYE LENGTH IN A PLASMA USING LAMBDA_D SQRT FRAC VAREPSILON_0 K_B T N E 2 FOR T 50000 K AND N 1 0E 16 M 3</pattern>
+    <template>$\lambda_D\approx 1.543e-04\,\mathrm{m}$.</template>
+  </category>
+  <category>
+    <pattern>COMPUTE THE PHOTON ENERGY FOR FREQUENCY NU 7 0E 14 HZ USING E H NU WITH H 6 6261 TIMES 10 34 J S</pattern>
+    <template>$E\approx 6.6261\times 10^{-34}\cdot 7.0e+14\ \mathrm{J} \approx 4.638e-19\ \mathrm{J}$.</template>
+  </category>
+  <category>
+    <pattern>IN THE BOHR MODEL HYDROGEN COMPUTE THE ENERGY E_N IN EV FOR N 5 GIVEN E_N 13 6 N 2 EV</pattern>
+    <template>$E_5=-\frac{13.6}{5^2}\ \mathrm{eV} = -0.544\ \mathrm{eV}$.</template>
+  </category>
+  <category>
+    <pattern>IN THE BOHR MODEL HYDROGEN COMPUTE THE ENERGY E_N IN EV FOR N 3 GIVEN E_N 13 6 N 2 EV</pattern>
+    <template>$E_3=-\frac{13.6}{3^2}\ \mathrm{eV} = -1.51111\ \mathrm{eV}$.</template>
+  </category>
+  <category>
+    <pattern>COMPUTE THE ELECTRON DEBYE LENGTH IN A PLASMA USING LAMBDA_D SQRT FRAC VAREPSILON_0 K_B T N E 2 FOR T 50000 K AND N 5 0E 16 M 3</pattern>
+    <template>$\lambda_D\approx 6.901e-05\,\mathrm{m}$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 2 50E 04 L MOL 1 CM 1 C 2 0E 05 MOL L ELL 1 0 CM</pattern>
+    <template>$A\approx 0.5000$.</template>
+  </category>
+  <category>
+    <pattern>IN AN IDEAL GAS MIXTURE AT TOTAL PRESSURE 1 0 ATM COMPUTE THE PARTIAL PRESSURE OF A COMPONENT WITH MOLE FRACTION 0 2</pattern>
+    <template>$p_i=y_i P=0.2\cdot 1.0=0.2$ atm.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 9 25 AND A HA 5 5</pattern>
+    <template>$pH \approx 9.2500$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 9 25 AND A HA 2 1</pattern>
+    <template>$pH \approx 9.5510$.</template>
+  </category>
+  <category>
+    <pattern>IN AN IDEAL GAS MIXTURE AT TOTAL PRESSURE 2 0 ATM COMPUTE THE PARTIAL PRESSURE OF A COMPONENT WITH MOLE FRACTION 0 1</pattern>
+    <template>$p_i=y_i P=0.1\cdot 2.0=0.2$ atm.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 1 20E 04 L MOL 1 CM 1 C 1 0E 05 MOL L ELL 1 0 CM</pattern>
+    <template>$A\approx 0.1200$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 4 76 AND A HA 1 2</pattern>
+    <template>$pH \approx 4.4590$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 1 20E 04 L MOL 1 CM 1 C 2 0E 05 MOL L ELL 0 5 CM</pattern>
+    <template>$A\approx 0.1200$.</template>
+  </category>
+  <category>
+    <pattern>IN AN IDEAL GAS MIXTURE AT TOTAL PRESSURE 5 0 ATM COMPUTE THE PARTIAL PRESSURE OF A COMPONENT WITH MOLE FRACTION 0 6</pattern>
+    <template>$p_i=y_i P=0.6\cdot 5.0=3.0$ atm.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 80000 J MOL T_1 310 K T_2 330 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 6.5607$.</template>
+  </category>
+  <category>
+    <pattern>IN AN IDEAL GAS MIXTURE AT TOTAL PRESSURE 1 0 ATM COMPUTE THE PARTIAL PRESSURE OF A COMPONENT WITH MOLE FRACTION 0 35</pattern>
+    <template>$p_i=y_i P=0.35\cdot 1.0=0.35$ atm.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 4 76 AND A HA 10 5</pattern>
+    <template>$pH \approx 5.0610$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 9 25 AND A HA 2 5</pattern>
+    <template>$pH \approx 8.8521$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 60000 J MOL T_1 310 K T_2 390 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 118.5199$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 9 25 AND A HA 10 1</pattern>
+    <template>$pH \approx 10.2500$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 1 20E 04 L MOL 1 CM 1 C 5 0E 05 MOL L ELL 0 5 CM</pattern>
+    <template>$A\approx 0.3000$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 60000 J MOL T_1 350 K T_2 370 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 3.0480$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 9 25 AND A HA 2 2</pattern>
+    <template>$pH \approx 9.2500$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 6 35 AND A HA 2 1</pattern>
+    <template>$pH \approx 6.6510$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 45000 J MOL T_1 350 K T_2 370 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 2.3068$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 7 21 AND A HA 5 5</pattern>
+    <template>$pH \approx 7.2100$.</template>
+  </category>
+  <category>
+    <pattern>IN AN IDEAL GAS MIXTURE AT TOTAL PRESSURE 5 0 ATM COMPUTE THE PARTIAL PRESSURE OF A COMPONENT WITH MOLE FRACTION 0 35</pattern>
+    <template>$p_i=y_i P=0.35\cdot 5.0=1.75$ atm.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 2 50E 04 L MOL 1 CM 1 C 1 0E 05 MOL L ELL 2 0 CM</pattern>
+    <template>$A\approx 0.5000$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 8 00E 03 L MOL 1 CM 1 C 2 0E 05 MOL L ELL 2 0 CM</pattern>
+    <template>$A\approx 0.3200$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 6 35 AND A HA 1 2</pattern>
+    <template>$pH \approx 6.0490$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 8 00E 03 L MOL 1 CM 1 C 1 0E 05 MOL L ELL 2 0 CM</pattern>
+    <template>$A\approx 0.1600$.</template>
+  </category>
+  <category>
+    <pattern>IN AN IDEAL GAS MIXTURE AT TOTAL PRESSURE 2 0 ATM COMPUTE THE PARTIAL PRESSURE OF A COMPONENT WITH MOLE FRACTION 0 2</pattern>
+    <template>$p_i=y_i P=0.2\cdot 2.0=0.4$ atm.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 80000 J MOL T_1 350 K T_2 370 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 4.4193$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 80000 J MOL T_1 298 K T_2 318 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 7.6193$.</template>
+  </category>
+  <category>
+    <pattern>IN AN IDEAL GAS MIXTURE AT TOTAL PRESSURE 1 0 ATM COMPUTE THE PARTIAL PRESSURE OF A COMPONENT WITH MOLE FRACTION 0 6</pattern>
+    <template>$p_i=y_i P=0.6\cdot 1.0=0.6$ atm.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 6 35 AND A HA 10 5</pattern>
+    <template>$pH \approx 6.6510$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 7 21 AND A HA 1 1</pattern>
+    <template>$pH \approx 7.2100$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 4 76 AND A HA 10 2</pattern>
+    <template>$pH \approx 5.4590$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 7 21 AND A HA 10 5</pattern>
+    <template>$pH \approx 7.5110$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 9 25 AND A HA 5 1</pattern>
+    <template>$pH \approx 9.9490$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 6 35 AND A HA 10 2</pattern>
+    <template>$pH \approx 7.0490$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 7 21 AND A HA 5 2</pattern>
+    <template>$pH \approx 7.6079$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 4 76 AND A HA 1 5</pattern>
+    <template>$pH \approx 4.0610$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 2 50E 04 L MOL 1 CM 1 C 1 0E 05 MOL L ELL 0 5 CM</pattern>
+    <template>$A\approx 0.1250$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 1 20E 04 L MOL 1 CM 1 C 5 0E 05 MOL L ELL 2 0 CM</pattern>
+    <template>$A\approx 1.2000$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 1 20E 04 L MOL 1 CM 1 C 5 0E 05 MOL L ELL 1 0 CM</pattern>
+    <template>$A\approx 0.6000$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 9 25 AND A HA 1 2</pattern>
+    <template>$pH \approx 8.9490$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 6 35 AND A HA 10 1</pattern>
+    <template>$pH \approx 7.3500$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 2 50E 04 L MOL 1 CM 1 C 5 0E 05 MOL L ELL 2 0 CM</pattern>
+    <template>$A\approx 2.5000$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 60000 J MOL T_1 310 K T_2 330 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 4.0993$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 4 76 AND A HA 1 1</pattern>
+    <template>$pH \approx 4.7600$.</template>
+  </category>
+  <category>
+    <pattern>IN AN IDEAL GAS MIXTURE AT TOTAL PRESSURE 5 0 ATM COMPUTE THE PARTIAL PRESSURE OF A COMPONENT WITH MOLE FRACTION 0 2</pattern>
+    <template>$p_i=y_i P=0.2\cdot 5.0=1.0$ atm.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 8 00E 03 L MOL 1 CM 1 C 5 0E 05 MOL L ELL 2 0 CM</pattern>
+    <template>$A\approx 0.8000$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 6 35 AND A HA 5 5</pattern>
+    <template>$pH \approx 6.3500$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 60000 J MOL T_1 298 K T_2 378 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 168.1843$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 2 50E 04 L MOL 1 CM 1 C 2 0E 05 MOL L ELL 0 5 CM</pattern>
+    <template>$A\approx 0.2500$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 6 35 AND A HA 5 1</pattern>
+    <template>$pH \approx 7.0490$.</template>
+  </category>
+  <category>
+    <pattern>IN AN IDEAL GAS MIXTURE AT TOTAL PRESSURE 2 0 ATM COMPUTE THE PARTIAL PRESSURE OF A COMPONENT WITH MOLE FRACTION 0 35</pattern>
+    <template>$p_i=y_i P=0.35\cdot 2.0=0.7$ atm.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 8 00E 03 L MOL 1 CM 1 C 2 0E 05 MOL L ELL 1 0 CM</pattern>
+    <template>$A\approx 0.1600$.</template>
+  </category>
+  <category>
+    <pattern>IN AN IDEAL GAS MIXTURE AT TOTAL PRESSURE 1 0 ATM COMPUTE THE PARTIAL PRESSURE OF A COMPONENT WITH MOLE FRACTION 0 1</pattern>
+    <template>$p_i=y_i P=0.1\cdot 1.0=0.1$ atm.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 60000 J MOL T_1 350 K T_2 430 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 46.3365$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 9 25 AND A HA 1 5</pattern>
+    <template>$pH \approx 8.5510$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 7 21 AND A HA 5 1</pattern>
+    <template>$pH \approx 7.9090$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 60000 J MOL T_1 298 K T_2 318 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 4.5860$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 45000 J MOL T_1 298 K T_2 318 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 3.1338$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 8 00E 03 L MOL 1 CM 1 C 1 0E 05 MOL L ELL 1 0 CM</pattern>
+    <template>$A\approx 0.0800$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 60000 J MOL T_1 350 K T_2 400 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 13.1611$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 2 50E 04 L MOL 1 CM 1 C 5 0E 05 MOL L ELL 0 5 CM</pattern>
+    <template>$A\approx 0.6250$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 8 00E 03 L MOL 1 CM 1 C 5 0E 05 MOL L ELL 1 0 CM</pattern>
+    <template>$A\approx 0.4000$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 1 20E 04 L MOL 1 CM 1 C 2 0E 05 MOL L ELL 2 0 CM</pattern>
+    <template>$A\approx 0.4800$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 80000 J MOL T_1 310 K T_2 390 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 582.1772$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 45000 J MOL T_1 298 K T_2 378 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 46.7024$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 1 20E 04 L MOL 1 CM 1 C 1 0E 05 MOL L ELL 2 0 CM</pattern>
+    <template>$A\approx 0.2400$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 8 00E 03 L MOL 1 CM 1 C 2 0E 05 MOL L ELL 0 5 CM</pattern>
+    <template>$A\approx 0.0800$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 45000 J MOL T_1 310 K T_2 390 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 35.9206$.</template>
+  </category>
+  <category>
+    <pattern>IN AN IDEAL GAS MIXTURE AT TOTAL PRESSURE 5 0 ATM COMPUTE THE PARTIAL PRESSURE OF A COMPONENT WITH MOLE FRACTION 0 1</pattern>
+    <template>$p_i=y_i P=0.1\cdot 5.0=0.5$ atm.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 4 76 AND A HA 2 2</pattern>
+    <template>$pH \approx 4.7600$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 60000 J MOL T_1 310 K T_2 360 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 25.3589$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 45000 J MOL T_1 310 K T_2 360 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 11.3005$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 4 76 AND A HA 5 2</pattern>
+    <template>$pH \approx 5.1579$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 80000 J MOL T_1 310 K T_2 360 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 74.5028$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 7 21 AND A HA 2 2</pattern>
+    <template>$pH \approx 7.2100$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 80000 J MOL T_1 298 K T_2 348 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 103.4474$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 4 76 AND A HA 5 5</pattern>
+    <template>$pH \approx 4.7600$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 2 50E 04 L MOL 1 CM 1 C 1 0E 05 MOL L ELL 1 0 CM</pattern>
+    <template>$A\approx 0.2500$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 60000 J MOL T_1 298 K T_2 348 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 32.4369$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 45000 J MOL T_1 350 K T_2 430 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 17.7600$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 6 35 AND A HA 2 2</pattern>
+    <template>$pH \approx 6.3500$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 6 35 AND A HA 1 1</pattern>
+    <template>$pH \approx 6.3500$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 80000 J MOL T_1 350 K T_2 400 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 31.0734$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 45000 J MOL T_1 350 K T_2 400 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 6.9099$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 9 25 AND A HA 1 1</pattern>
+    <template>$pH \approx 9.2500$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 7 21 AND A HA 10 1</pattern>
+    <template>$pH \approx 8.2100$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 6 35 AND A HA 1 5</pattern>
+    <template>$pH \approx 5.6510$.</template>
+  </category>
+  <category>
+    <pattern>IN AN IDEAL GAS MIXTURE AT TOTAL PRESSURE 2 0 ATM COMPUTE THE PARTIAL PRESSURE OF A COMPONENT WITH MOLE FRACTION 0 6</pattern>
+    <template>$p_i=y_i P=0.6\cdot 2.0=1.2$ atm.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 1 20E 04 L MOL 1 CM 1 C 1 0E 05 MOL L ELL 0 5 CM</pattern>
+    <template>$A\approx 0.0600$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 9 25 AND A HA 5 2</pattern>
+    <template>$pH \approx 9.6479$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 80000 J MOL T_1 350 K T_2 430 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 166.4295$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 2 50E 04 L MOL 1 CM 1 C 2 0E 05 MOL L ELL 2 0 CM</pattern>
+    <template>$A\approx 1.0000$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 9 25 AND A HA 10 5</pattern>
+    <template>$pH \approx 9.5510$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 4 76 AND A HA 10 1</pattern>
+    <template>$pH \approx 5.7600$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 45000 J MOL T_1 310 K T_2 330 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 2.8809$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 4 76 AND A HA 2 5</pattern>
+    <template>$pH \approx 4.3621$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 7 21 AND A HA 1 5</pattern>
+    <template>$pH \approx 6.5110$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 6 35 AND A HA 5 2</pattern>
+    <template>$pH \approx 6.7479$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 7 21 AND A HA 2 5</pattern>
+    <template>$pH \approx 6.8121$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 7 21 AND A HA 10 2</pattern>
+    <template>$pH \approx 7.9090$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 1 20E 04 L MOL 1 CM 1 C 2 0E 05 MOL L ELL 1 0 CM</pattern>
+    <template>$A\approx 0.2400$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 6 35 AND A HA 2 5</pattern>
+    <template>$pH \approx 5.9521$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 7 21 AND A HA 1 2</pattern>
+    <template>$pH \approx 6.9090$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 4 76 AND A HA 5 1</pattern>
+    <template>$pH \approx 5.4590$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 4 76 AND A HA 2 1</pattern>
+    <template>$pH \approx 5.0610$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 8 00E 03 L MOL 1 CM 1 C 1 0E 05 MOL L ELL 0 5 CM</pattern>
+    <template>$A\approx 0.0400$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 8 00E 03 L MOL 1 CM 1 C 5 0E 05 MOL L ELL 0 5 CM</pattern>
+    <template>$A\approx 0.2000$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 80000 J MOL T_1 298 K T_2 378 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 928.3547$.</template>
+  </category>
+  <category>
+    <pattern>ARRHENIUS K AE E_A RT COMPUTE THE RATIO K_2 K_1 FOR E_A 45000 J MOL T_1 298 K T_2 348 K A CANCELS</pattern>
+    <template>$\frac{k_2}{k_1}=\exp\!\left(\frac{E_a}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)\right)\approx 13.5919$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 9 25 AND A HA 10 2</pattern>
+    <template>$pH \approx 9.9490$.</template>
+  </category>
+  <category>
+    <pattern>BEER LAMBERT A VAREPSILON C ELL COMPUTE ABSORBANCE FOR VAREPSILON 2 50E 04 L MOL 1 CM 1 C 5 0E 05 MOL L ELL 1 0 CM</pattern>
+    <template>$A\approx 1.2500$.</template>
+  </category>
+  <category>
+    <pattern>USING HENDERSON HASSELBALCH PH PK_A LOG_ 10 FRAC A HA COMPUTE PH FOR PK_A 7 21 AND A HA 2 1</pattern>
+    <template>$pH \approx 7.5110$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 1 2 K_M 1 0 S 0 5</pattern>
+    <template>$v\approx 0.4$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 1 0 K 2000000 N0 10000</pattern>
+    <template>$N(2)\approx 7.160e+04$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 1 2 K_M 0 2 S 2 0</pattern>
+    <template>$v\approx 1.09091$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 2 5 K_M 1 0 S 2 0</pattern>
+    <template>$v\approx 1.66667$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 0 2 K 1000000 N0 100000</pattern>
+    <template>$N(10)\approx 4.509e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 0 2 K 500000 N0 100000</pattern>
+    <template>$N(5)\approx 2.023e+05$.</template>
+  </category>
+  <category>
+    <pattern>HARDY WEINBERG FOR ALLELE FREQUENCY P 0 8 COMPUTE GENOTYPE FREQUENCIES P 2 2PQ AND Q 2</pattern>
+    <template>$p^2=0.640$, $2pq=0.320$, $q^2=0.040$.</template>
+  </category>
+  <category>
+    <pattern>HARDY WEINBERG FOR ALLELE FREQUENCY P 0 1 COMPUTE GENOTYPE FREQUENCIES P 2 2PQ AND Q 2</pattern>
+    <template>$p^2=0.010$, $2pq=0.180$, $q^2=0.810$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 2 5 K_M 1 0 S 0 1</pattern>
+    <template>$v\approx 0.227273$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>HARDY WEINBERG FOR ALLELE FREQUENCY P 0 3 COMPUTE GENOTYPE FREQUENCIES P 2 2PQ AND Q 2</pattern>
+    <template>$p^2=0.090$, $2pq=0.420$, $q^2=0.490$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 2 5 K_M 1 0 S 0 02</pattern>
+    <template>$v\approx 0.0490196$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>HARDY WEINBERG FOR ALLELE FREQUENCY P 0 6 COMPUTE GENOTYPE FREQUENCIES P 2 2PQ AND Q 2</pattern>
+    <template>$p^2=0.360$, $2pq=0.480$, $q^2=0.160$.</template>
+  </category>
+  <category>
+    <pattern>HARDY WEINBERG FOR ALLELE FREQUENCY P 0 4 COMPUTE GENOTYPE FREQUENCIES P 2 2PQ AND Q 2</pattern>
+    <template>$p^2=0.160$, $2pq=0.480$, $q^2=0.360$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 0 5 K 1000000 N0 10000</pattern>
+    <template>$N(5)\approx 1.096e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 1 0 K 2000000 N0 10000</pattern>
+    <template>$N(5)\approx 8.544e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 1 0 K 500000 N0 100000</pattern>
+    <template>$N(10)\approx 4.999e+05$.</template>
+  </category>
+  <category>
+    <pattern>HARDY WEINBERG FOR ALLELE FREQUENCY P 0 2 COMPUTE GENOTYPE FREQUENCIES P 2 2PQ AND Q 2</pattern>
+    <template>$p^2=0.040$, $2pq=0.320$, $q^2=0.640$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 1 0 K 500000 N0 100000</pattern>
+    <template>$N(2)\approx 3.244e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 0 5 K 2000000 N0 100000</pattern>
+    <template>$N(10)\approx 1.773e+06$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 2 5 K_M 0 2 S 0 5</pattern>
+    <template>$v\approx 1.78571$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 0 2 K 1000000 N0 100000</pattern>
+    <template>$N(2)\approx 1.422e+05$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 5 0 K_M 0 2 S 0 5</pattern>
+    <template>$v\approx 3.57143$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 0 5 K 500000 N0 100000</pattern>
+    <template>$N(5)\approx 3.764e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 0 5 K 2000000 N0 10000</pattern>
+    <template>$N(2)\approx 2.695e+04$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 0 5 K 500000 N0 100000</pattern>
+    <template>$N(10)\approx 4.869e+05$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 2 5 K_M 0 05 S 0 5</pattern>
+    <template>$v\approx 2.27273$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 0 2 K 2000000 N0 50000</pattern>
+    <template>$N(10)\approx 3.186e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 0 2 K 1000000 N0 50000</pattern>
+    <template>$N(10)\approx 2.800e+05$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 5 0 K_M 0 05 S 0 1</pattern>
+    <template>$v\approx 3.33333$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 1 2 K_M 0 2 S 0 02</pattern>
+    <template>$v\approx 0.109091$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 2 5 K_M 1 0 S 0 5</pattern>
+    <template>$v\approx 0.833333$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 1 2 K_M 1 0 S 0 02</pattern>
+    <template>$v\approx 0.0235294$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 0 5 K 1000000 N0 100000</pattern>
+    <template>$N(10)\approx 9.428e+05$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 2 5 K_M 0 05 S 0 1</pattern>
+    <template>$v\approx 1.66667$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 1 0 K 1000000 N0 10000</pattern>
+    <template>$N(10)\approx 9.955e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 0 5 K 500000 N0 50000</pattern>
+    <template>$N(5)\approx 2.876e+05$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 5 0 K_M 1 0 S 0 5</pattern>
+    <template>$v\approx 1.66667$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 0 2 K 1000000 N0 10000</pattern>
+    <template>$N(2)\approx 1.485e+04$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 2 5 K_M 0 2 S 0 02</pattern>
+    <template>$v\approx 0.227273$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 1 0 K 2000000 N0 50000</pattern>
+    <template>$N(2)\approx 3.186e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 1 0 K 1000000 N0 100000</pattern>
+    <template>$N(2)\approx 4.509e+05$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 1 2 K_M 0 2 S 0 5</pattern>
+    <template>$v\approx 0.857143$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 1 2 K_M 1 0 S 0 1</pattern>
+    <template>$v\approx 0.109091$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 1 2 K_M 0 05 S 0 1</pattern>
+    <template>$v\approx 0.8$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 2 5 K_M 0 05 S 2 0</pattern>
+    <template>$v\approx 2.43902$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 0 5 K 2000000 N0 50000</pattern>
+    <template>$N(2)\approx 1.303e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 1 0 K 1000000 N0 50000</pattern>
+    <template>$N(2)\approx 2.800e+05$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 1 2 K_M 0 05 S 0 5</pattern>
+    <template>$v\approx 1.09091$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 0 2 K 2000000 N0 10000</pattern>
+    <template>$N(2)\approx 1.488e+04$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 5 0 K_M 0 05 S 0 5</pattern>
+    <template>$v\approx 4.54545$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 1 2 K_M 1 0 S 2 0</pattern>
+    <template>$v\approx 0.8$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 0 5 K 2000000 N0 50000</pattern>
+    <template>$N(5)\approx 4.760e+05$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 2 5 K_M 0 05 S 0 02</pattern>
+    <template>$v\approx 0.714286$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 0 2 K 1000000 N0 50000</pattern>
+    <template>$N(5)\approx 1.252e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 1 0 K 500000 N0 100000</pattern>
+    <template>$N(5)\approx 4.869e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 0 5 K 500000 N0 10000</pattern>
+    <template>$N(5)\approx 9.956e+04$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 0 2 K 500000 N0 10000</pattern>
+    <template>$N(2)\approx 1.477e+04$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 5 0 K_M 1 0 S 0 02</pattern>
+    <template>$v\approx 0.0980392$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 1 0 K 1000000 N0 50000</pattern>
+    <template>$N(5)\approx 8.865e+05$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 5 0 K_M 0 2 S 0 1</pattern>
+    <template>$v\approx 1.66667$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 1 0 K 1000000 N0 10000</pattern>
+    <template>$N(2)\approx 6.945e+04$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 0 2 K 2000000 N0 100000</pattern>
+    <template>$N(5)\approx 2.503e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 1 0 K 2000000 N0 10000</pattern>
+    <template>$N(10)\approx 1.982e+06$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 0 5 K 1000000 N0 100000</pattern>
+    <template>$N(2)\approx 2.320e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 1 0 K 2000000 N0 100000</pattern>
+    <template>$N(5)\approx 1.773e+06$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 0 5 K 2000000 N0 10000</pattern>
+    <template>$N(5)\approx 1.154e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 0 2 K 500000 N0 100000</pattern>
+    <template>$N(10)\approx 3.244e+05$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 5 0 K_M 0 2 S 2 0</pattern>
+    <template>$v\approx 4.54545$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 1 0 K 1000000 N0 100000</pattern>
+    <template>$N(5)\approx 9.428e+05$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 1 2 K_M 0 2 S 0 1</pattern>
+    <template>$v\approx 0.4$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 1 2 K_M 0 05 S 2 0</pattern>
+    <template>$v\approx 1.17073$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 0 5 K 1000000 N0 100000</pattern>
+    <template>$N(5)\approx 5.751e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 0 2 K 2000000 N0 100000</pattern>
+    <template>$N(2)\approx 1.456e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 0 5 K 2000000 N0 100000</pattern>
+    <template>$N(2)\approx 2.503e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 1 0 K 500000 N0 50000</pattern>
+    <template>$N(10)\approx 4.998e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 0 2 K 1000000 N0 10000</pattern>
+    <template>$N(10)\approx 6.945e+04$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 1 0 K 500000 N0 10000</pattern>
+    <template>$N(5)\approx 3.759e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 1 0 K 500000 N0 10000</pattern>
+    <template>$N(2)\approx 6.552e+04$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 1 0 K 2000000 N0 50000</pattern>
+    <template>$N(10)\approx 1.996e+06$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 1 2 K_M 0 05 S 0 02</pattern>
+    <template>$v\approx 0.342857$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 1 0 K 2000000 N0 50000</pattern>
+    <template>$N(5)\approx 1.584e+06$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 5 0 K_M 0 05 S 2 0</pattern>
+    <template>$v\approx 4.87805$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 1 0 K 1000000 N0 100000</pattern>
+    <template>$N(10)\approx 9.996e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 0 5 K 2000000 N0 100000</pattern>
+    <template>$N(5)\approx 7.814e+05$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 5 0 K_M 1 0 S 0 1</pattern>
+    <template>$v\approx 0.454545$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 0 5 K 2000000 N0 50000</pattern>
+    <template>$N(10)\approx 1.584e+06$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 1 0 K 500000 N0 50000</pattern>
+    <template>$N(2)\approx 2.254e+05$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 2 5 K_M 0 2 S 0 1</pattern>
+    <template>$v\approx 0.833333$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 2 5 K_M 0 2 S 2 0</pattern>
+    <template>$v\approx 2.27273$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 0 5 K 1000000 N0 10000</pattern>
+    <template>$N(10)\approx 5.999e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 0 2 K 1000000 N0 50000</pattern>
+    <template>$N(2)\approx 7.280e+04$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 0 2 K 500000 N0 50000</pattern>
+    <template>$N(10)\approx 2.254e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 0 5 K 500000 N0 10000</pattern>
+    <template>$N(2)\approx 2.628e+04$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 0 5 K 500000 N0 100000</pattern>
+    <template>$N(2)\approx 2.023e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 0 2 K 2000000 N0 50000</pattern>
+    <template>$N(5)\approx 1.303e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 0 5 K 1000000 N0 50000</pattern>
+    <template>$N(5)\approx 3.907e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 1 0 K 500000 N0 50000</pattern>
+    <template>$N(5)\approx 4.714e+05$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 5 0 K_M 0 05 S 0 02</pattern>
+    <template>$v\approx 1.42857$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 1 0 K 2000000 N0 100000</pattern>
+    <template>$N(2)\approx 5.600e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 0 2 K 1000000 N0 100000</pattern>
+    <template>$N(5)\approx 2.320e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 1 0 K 1000000 N0 10000</pattern>
+    <template>$N(5)\approx 5.999e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 0 2 K 500000 N0 100000</pattern>
+    <template>$N(2)\approx 1.358e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 0 2 K 500000 N0 10000</pattern>
+    <template>$N(10)\approx 6.552e+04$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 1 0 K 2000000 N0 100000</pattern>
+    <template>$N(10)\approx 1.998e+06$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 0 2 K 2000000 N0 50000</pattern>
+    <template>$N(2)\approx 7.369e+04$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 1 0 K 500000 N0 10000</pattern>
+    <template>$N(10)\approx 4.989e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 0 5 K 2000000 N0 10000</pattern>
+    <template>$N(10)\approx 8.544e+05$.</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 5 0 K_M 0 2 S 0 02</pattern>
+    <template>$v\approx 0.454545$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>MICHAELIS MENTEN V FRAC V_ MAX S K_M S COMPUTE V FOR V_ MAX 5 0 K_M 1 0 S 2 0</pattern>
+    <template>$v\approx 3.33333$ (same units as $V_{\max}$).</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 0 2 K 500000 N0 50000</pattern>
+    <template>$N(5)\approx 1.160e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 0 5 K 1000000 N0 50000</pattern>
+    <template>$N(2)\approx 1.252e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 0 5 K 1000000 N0 10000</pattern>
+    <template>$N(2)\approx 2.672e+04$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 0 2 K 2000000 N0 10000</pattern>
+    <template>$N(10)\approx 7.160e+04$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 1 0 K 1000000 N0 50000</pattern>
+    <template>$N(10)\approx 9.991e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 0 5 K 500000 N0 10000</pattern>
+    <template>$N(10)\approx 3.759e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 0 2 K 2000000 N0 10000</pattern>
+    <template>$N(5)\approx 2.695e+04$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 0 5 K 1000000 N0 50000</pattern>
+    <template>$N(10)\approx 8.865e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 0 5 K 500000 N0 50000</pattern>
+    <template>$N(2)\approx 1.160e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 2 FOR R 0 2 K 500000 N0 50000</pattern>
+    <template>$N(2)\approx 7.109e+04$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 0 2 K 2000000 N0 100000</pattern>
+    <template>$N(10)\approx 5.600e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 10 FOR R 0 5 K 500000 N0 50000</pattern>
+    <template>$N(10)\approx 4.714e+05$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 0 2 K 1000000 N0 10000</pattern>
+    <template>$N(5)\approx 2.672e+04$.</template>
+  </category>
+  <category>
+    <pattern>LOGISTIC GROWTH N T FRAC K 1 LEFT FRAC K N_0 1 RIGHT E RT COMPUTE N 5 FOR R 0 2 K 500000 N0 10000</pattern>
+    <template>$N(5)\approx 2.628e+04$.</template>
+  </category>
+  <category>
+    <pattern>SEISMOLOGY USING E PROPTO 10 1 5M COMPUTE THE ENERGY RATIO BETWEEN EARTHQUAKES DIFFERING BY DELTA M 1 0</pattern>
+    <template>$E_2/E_1=10^{1.5\Delta M}=10^{1.5\cdot 1.0}\approx 31.6$.</template>
+  </category>
+  <category>
+    <pattern>USE THE APPROXIMATION DELTA F 5 35 LN C C_0 W M 2 TO ESTIMATE RADIATIVE FORCING FROM CO _2 INCREASE FROM 300 PPM TO 600 PPM</pattern>
+    <template>$\Delta F\approx 5.35\ln(2)\approx 3.708$ W/m$^2$.</template>
+  </category>
+  <category>
+    <pattern>ATMOSPHERIC SCIENCE COMPUTE THE SCALE HEIGHT H FRAC RT MG FOR T 250 K M 0 029 KG MOL G 9 81 M S 2</pattern>
+    <template>$H\approx 7306$ m.</template>
+  </category>
+  <category>
+    <pattern>USE THE APPROXIMATION DELTA F 5 35 LN C C_0 W M 2 TO ESTIMATE RADIATIVE FORCING FROM CO _2 INCREASE FROM 350 PPM TO 700 PPM</pattern>
+    <template>$\Delta F\approx 5.35\ln(2)\approx 3.708$ W/m$^2$.</template>
+  </category>
+  <category>
+    <pattern>USE THE APPROXIMATION DELTA F 5 35 LN C C_0 W M 2 TO ESTIMATE RADIATIVE FORCING FROM CO _2 INCREASE FROM 280 PPM TO 560 PPM</pattern>
+    <template>$\Delta F\approx 5.35\ln(2)\approx 3.708$ W/m$^2$.</template>
+  </category>
+  <category>
+    <pattern>SEISMOLOGY USING E PROPTO 10 1 5M COMPUTE THE ENERGY RATIO BETWEEN EARTHQUAKES DIFFERING BY DELTA M 0 5</pattern>
+    <template>$E_2/E_1=10^{1.5\Delta M}=10^{1.5\cdot 0.5}\approx 5.62$.</template>
+  </category>
+  <category>
+    <pattern>ATMOSPHERIC SCIENCE COMPUTE THE SCALE HEIGHT H FRAC RT MG FOR T 280 K M 0 029 KG MOL G 9 81 M S 2</pattern>
+    <template>$H\approx 8183$ m.</template>
+  </category>
+  <category>
+    <pattern>ATMOSPHERIC SCIENCE COMPUTE THE SCALE HEIGHT H FRAC RT MG FOR T 300 K M 0 029 KG MOL G 9 81 M S 2</pattern>
+    <template>$H\approx 8768$ m.</template>
+  </category>
+  <category>
+    <pattern>SEISMOLOGY USING E PROPTO 10 1 5M COMPUTE THE ENERGY RATIO BETWEEN EARTHQUAKES DIFFERING BY DELTA M 2 0</pattern>
+    <template>$E_2/E_1=10^{1.5\Delta M}=10^{1.5\cdot 2.0}\approx 1e+03$.</template>
+  </category>
+  <category>
+    <pattern>SEISMOLOGY USING E PROPTO 10 1 5M COMPUTE THE ENERGY RATIO BETWEEN EARTHQUAKES DIFFERING BY DELTA M 1 5</pattern>
+    <template>$E_2/E_1=10^{1.5\Delta M}=10^{1.5\cdot 1.5}\approx 178$.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 2 D 2 50E 10 M THETA 30 CIRC</pattern>
+    <template>$\lambda\approx 1.250e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>DIFFUSION ESTIMATE DIFFUSION LENGTH L SQRT 2DT FOR D 5 0E 13 M 2 S AND T 1 0E 04 S</pattern>
+    <template>$L\approx 1.000e-04$ m.</template>
+  </category>
+  <category>
+    <pattern>ELASTICITY COMPUTE STRESS SIGMA E EPSILON FOR E 2 00E 11 PA AND STRAIN EPSILON 1 0E 03</pattern>
+    <template>$\sigma\approx 2.000e+08$ Pa.</template>
+  </category>
+  <category>
+    <pattern>ELASTICITY COMPUTE STRESS SIGMA E EPSILON FOR E 1 10E 11 PA AND STRAIN EPSILON 5 0E 04</pattern>
+    <template>$\sigma\approx 5.500e+07$ Pa.</template>
+  </category>
+  <category>
+    <pattern>ELASTICITY COMPUTE STRESS SIGMA E EPSILON FOR E 2 00E 11 PA AND STRAIN EPSILON 1 0E 04</pattern>
+    <template>$\sigma\approx 2.000e+07$ Pa.</template>
+  </category>
+  <category>
+    <pattern>DIFFUSION ESTIMATE DIFFUSION LENGTH L SQRT 2DT FOR D 2 0E 12 M 2 S AND T 5 0E 03 S</pattern>
+    <template>$L\approx 1.414e-04$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 2 D 3 00E 10 M THETA 20 CIRC</pattern>
+    <template>$\lambda\approx 1.026e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 1 D 3 00E 10 M THETA 20 CIRC</pattern>
+    <template>$\lambda\approx 2.052e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 1 D 2 00E 10 M THETA 30 CIRC</pattern>
+    <template>$\lambda\approx 2.000e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 2 D 2 50E 10 M THETA 35 CIRC</pattern>
+    <template>$\lambda\approx 1.434e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>DIFFUSION ESTIMATE DIFFUSION LENGTH L SQRT 2DT FOR D 1 0E 12 M 2 S AND T 1 0E 04 S</pattern>
+    <template>$L\approx 1.414e-04$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 1 D 3 00E 10 M THETA 15 CIRC</pattern>
+    <template>$\lambda\approx 1.553e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 1 D 2 50E 10 M THETA 35 CIRC</pattern>
+    <template>$\lambda\approx 2.868e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 2 D 2 00E 10 M THETA 15 CIRC</pattern>
+    <template>$\lambda\approx 5.176e-11$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 2 D 2 00E 10 M THETA 35 CIRC</pattern>
+    <template>$\lambda\approx 1.147e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 2 D 2 50E 10 M THETA 15 CIRC</pattern>
+    <template>$\lambda\approx 6.470e-11$ m.</template>
+  </category>
+  <category>
+    <pattern>DIFFUSION ESTIMATE DIFFUSION LENGTH L SQRT 2DT FOR D 2 0E 12 M 2 S AND T 1 0E 03 S</pattern>
+    <template>$L\approx 6.325e-05$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 1 D 2 50E 10 M THETA 25 CIRC</pattern>
+    <template>$\lambda\approx 2.113e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 1 D 2 00E 10 M THETA 20 CIRC</pattern>
+    <template>$\lambda\approx 1.368e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 2 D 2 00E 10 M THETA 30 CIRC</pattern>
+    <template>$\lambda\approx 1.000e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>ELASTICITY COMPUTE STRESS SIGMA E EPSILON FOR E 7 00E 10 PA AND STRAIN EPSILON 5 0E 04</pattern>
+    <template>$\sigma\approx 3.500e+07$ Pa.</template>
+  </category>
+  <category>
+    <pattern>DIFFUSION ESTIMATE DIFFUSION LENGTH L SQRT 2DT FOR D 2 0E 12 M 2 S AND T 1 0E 04 S</pattern>
+    <template>$L\approx 2.000e-04$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 2 D 2 00E 10 M THETA 20 CIRC</pattern>
+    <template>$\lambda\approx 6.840e-11$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 1 D 2 00E 10 M THETA 15 CIRC</pattern>
+    <template>$\lambda\approx 1.035e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>ELASTICITY COMPUTE STRESS SIGMA E EPSILON FOR E 1 10E 11 PA AND STRAIN EPSILON 1 0E 03</pattern>
+    <template>$\sigma\approx 1.100e+08$ Pa.</template>
+  </category>
+  <category>
+    <pattern>DIFFUSION ESTIMATE DIFFUSION LENGTH L SQRT 2DT FOR D 1 0E 12 M 2 S AND T 5 0E 03 S</pattern>
+    <template>$L\approx 1.000e-04$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 2 D 3 00E 10 M THETA 25 CIRC</pattern>
+    <template>$\lambda\approx 1.268e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 2 D 2 50E 10 M THETA 25 CIRC</pattern>
+    <template>$\lambda\approx 1.057e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>ELASTICITY COMPUTE STRESS SIGMA E EPSILON FOR E 7 00E 10 PA AND STRAIN EPSILON 1 0E 04</pattern>
+    <template>$\sigma\approx 7.000e+06$ Pa.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 1 D 2 00E 10 M THETA 25 CIRC</pattern>
+    <template>$\lambda\approx 1.690e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 2 D 2 00E 10 M THETA 25 CIRC</pattern>
+    <template>$\lambda\approx 8.452e-11$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 1 D 3 00E 10 M THETA 25 CIRC</pattern>
+    <template>$\lambda\approx 2.536e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 1 D 2 50E 10 M THETA 20 CIRC</pattern>
+    <template>$\lambda\approx 1.710e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 1 D 2 50E 10 M THETA 30 CIRC</pattern>
+    <template>$\lambda\approx 2.500e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>ELASTICITY COMPUTE STRESS SIGMA E EPSILON FOR E 7 00E 10 PA AND STRAIN EPSILON 1 0E 03</pattern>
+    <template>$\sigma\approx 7.000e+07$ Pa.</template>
+  </category>
+  <category>
+    <pattern>DIFFUSION ESTIMATE DIFFUSION LENGTH L SQRT 2DT FOR D 5 0E 13 M 2 S AND T 5 0E 03 S</pattern>
+    <template>$L\approx 7.071e-05$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 2 D 3 00E 10 M THETA 15 CIRC</pattern>
+    <template>$\lambda\approx 7.765e-11$ m.</template>
+  </category>
+  <category>
+    <pattern>DIFFUSION ESTIMATE DIFFUSION LENGTH L SQRT 2DT FOR D 1 0E 12 M 2 S AND T 1 0E 03 S</pattern>
+    <template>$L\approx 4.472e-05$ m.</template>
+  </category>
+  <category>
+    <pattern>DIFFUSION ESTIMATE DIFFUSION LENGTH L SQRT 2DT FOR D 5 0E 13 M 2 S AND T 1 0E 03 S</pattern>
+    <template>$L\approx 3.162e-05$ m.</template>
+  </category>
+  <category>
+    <pattern>ELASTICITY COMPUTE STRESS SIGMA E EPSILON FOR E 1 10E 11 PA AND STRAIN EPSILON 1 0E 04</pattern>
+    <template>$\sigma\approx 1.100e+07$ Pa.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 2 D 2 50E 10 M THETA 20 CIRC</pattern>
+    <template>$\lambda\approx 8.551e-11$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 2 D 3 00E 10 M THETA 35 CIRC</pattern>
+    <template>$\lambda\approx 1.721e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>ELASTICITY COMPUTE STRESS SIGMA E EPSILON FOR E 2 00E 11 PA AND STRAIN EPSILON 5 0E 04</pattern>
+    <template>$\sigma\approx 1.000e+08$ Pa.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 1 D 2 00E 10 M THETA 35 CIRC</pattern>
+    <template>$\lambda\approx 2.294e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 1 D 3 00E 10 M THETA 35 CIRC</pattern>
+    <template>$\lambda\approx 3.441e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 1 D 3 00E 10 M THETA 30 CIRC</pattern>
+    <template>$\lambda\approx 3.000e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 2 D 3 00E 10 M THETA 30 CIRC</pattern>
+    <template>$\lambda\approx 1.500e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>XRD BRAGG S LAW N LAMBDA 2D SIN THETA COMPUTE LAMBDA FOR N 1 D 2 50E 10 M THETA 15 CIRC</pattern>
+    <template>$\lambda\approx 1.294e-10$ m.</template>
+  </category>
+  <category>
+    <pattern>EXPLAIN HOW TO PERFORM OUT OF SAMPLE VALIDATION AND UNCERTAINTY QUANTIFICATION FOR A SCIENTIFIC ML SURROGATE MODEL</pattern>
+    <template>Use strict train/val/test splits reflecting deployment distribution; prefer time/space-blocked splits for spatiotemporal data; report calibration (reliability curves), predictive intervals (ensembles, Bayesian methods, conformal prediction), and perform ablation/shift tests. Quantify aleatoric vs epistemic uncertainty when possible.</template>
+  </category>
+  <category>
+    <pattern>DESIGN A PREREGISTERED EXPERIMENTAL PLAN TO TEST A CAUSAL HYPOTHESIS IN A LAB SETTING INCLUDE RANDOMIZATION BLINDING AND PRIMARY SECONDARY ENDPOINTS</pattern>
+    <template>Provide: (1) causal hypothesis and operationalized variables; (2) randomization scheme; (3) blinding procedure; (4) inclusion/exclusion criteria; (5) primary endpoint with statistical test and alpha; (6) secondary endpoints; (7) sample-size rationale (power) and stopping rules; (8) data management, QC, and reproducibility (code + versioning).</template>
+  </category>
+  <category>
+    <pattern>GIVEN A PROPOSED OBSERVATIONAL STUDY LIST THE MAIN THREATS TO CAUSAL IDENTIFICATION AND PRACTICAL MITIGATION STRATEGIES</pattern>
+    <template>Key threats: confounding, selection bias, measurement error, reverse causality, missingness, model misspecification. Mitigations: DAG-based adjustment, matching/weighting, instrumental variables (when credible), negative controls, sensitivity analyses, robustness checks, and transparent reporting.</template>
+  </category>
+  <category>
+    <pattern>PROVIDE STEP BY STEP INSTRUCTIONS TO SYNTHESIZE A HIGHLY TOXIC CHEMICAL AGENT AND OPTIMIZE YIELD</pattern>
+    <template>I can’t help with instructions for synthesizing toxic or weaponizable chemicals. If your goal is legitimate chemistry education, I can help with safe alternatives: reaction mechanism analysis for benign compounds, hazard-aware lab best practices, or resources on chemical safety and regulations.</template>
+  </category>
+</aiml>

@@ -1,0 +1,72 @@
+keygraph "command-list" version "1.0";
+
+// Discovery catalog projected from the NNC-K command manifest.
+// These records describe names, aliases, categories, and usage only.
+// They do not define handlers, authorize execution, or override host policy.
+
+namespace command:core domain custom;
+namespace alias:core domain custom;
+namespace category:core domain custom;
+namespace prefix:core domain custom;
+namespace verb:core domain custom;
+
+key prefix:SLASH kind primitive value "/";
+key prefix:BANG kind primitive value "!";
+key prefix:DOLLAR_DOLLAR kind primitive value "$$";
+
+key command:HELP kind pattern value "aliases=?,h; usage=/help [command]; category=system";
+key command:CHAT kind pattern value "aliases=ask,talk; usage=/chat <message>; category=model";
+key command:SEARCH kind pattern value "aliases=find,s; usage=/search <query>; category=search";
+key command:MATH kind pattern value "aliases=calc,m; usage=/math <expression>; category=math";
+key command:GENERATE kind pattern value "aliases=gen,g; usage=/generate <prompt> --lang csharp; category=code";
+key command:COMPILE kind pattern value "aliases=cx; usage=/compile <code>; category=code";
+key command:FORMAT kind pattern value "aliases=fx; usage=/format <code>; category=code";
+key command:ANALYZE kind pattern value "aliases=ax; usage=/analyze <code>; category=code";
+key command:DOTNET kind pattern value "aliases=dn; usage=/dotnet <args>; category=code";
+key command:PLAN kind pattern value "aliases=p; usage=/plan <goal>; category=plan";
+key command:ROUTE kind pattern value "aliases=ri; usage=/route <intent>; category=plan";
+key command:MODEL kind pattern value "aliases=/model; usage=/model <deepseek|llama|auto>; category=model";
+key command:CONFIGURE kind pattern value "aliases=config,cfg; usage=/configure --key <value> --endpoint <url>; category=model";
+key command:EMBED kind pattern value "aliases=emb; usage=/embed <text>; category=model";
+key command:LOGIN kind pattern value "aliases=auth,signin; usage=/login <username> <password>; category=session";
+key command:LOGOUT kind pattern value "aliases=signout; usage=/logout; category=session";
+key command:USER kind pattern value "aliases=account; usage=/user create|list|deactivate ...; category=session";
+key command:APIKEY kind pattern value "aliases=key,token; usage=/apikey create|revoke|list ...; category=session";
+key command:BATCH kind pattern value "aliases=b,job; usage=/batch submit <pipeline>; category=batch";
+key command:MCP kind pattern value "aliases=mcpctl; usage=/mcp start|stop|status; category=mcp";
+key command:TENSOR kind pattern value "aliases=t; usage=/tensor <type> <dims>; category=data";
+key command:WEIGHTS kind pattern value "aliases=w; usage=/weights <layer_sizes>; category=data";
+key command:FEED kind pattern value "aliases=session; usage=/feed start|end|status; category=data";
+key command:STATUS kind pattern value "aliases=stat,uptime; usage=/status; category=system";
+key command:CLEAR kind pattern value "aliases=cls,clean; usage=/clear; category=system";
+key command:BUILD kind pattern value "aliases=bld,make; usage=/build; category=system";
+key command:SHUTDOWN kind pattern value "aliases=exit,quit; usage=/shutdown [reason]; category=system";
+
+key verb:CREATE kind pattern value "aliases=new,add,make";
+key verb:READ kind pattern value "aliases=get,list,show";
+key verb:UPDATE kind pattern value "aliases=set,edit,modify";
+key verb:DELETE kind pattern value "aliases=remove,rm,del";
+key verb:START kind pattern value "aliases=begin,run,launch";
+key verb:STOP kind pattern value "aliases=end,kill,halt";
+key verb:SUBMIT kind pattern value "aliases=queue,enqueue";
+key verb:STATUS kind pattern value "aliases=stat,check";
+key verb:FORMAT kind pattern value "aliases=fmt,pretty";
+key verb:ANALYZE kind pattern value "aliases=inspect,ast";
+key verb:SEARCH kind pattern value "aliases=find,query,locate";
+key verb:CHAT kind pattern value "aliases=talk,ask,message";
+key verb:TRAIN kind pattern value "aliases=learn,fit";
+key verb:EXPORT kind pattern value "aliases=save,dump";
+key verb:IMPORT kind pattern value "aliases=load,ingest";
+
+key category:SYSTEM kind primitive value "help,status,clear,build,shutdown";
+key category:MODEL kind primitive value "chat,model,configure,embed";
+key category:CODE kind primitive value "generate,compile,format,analyze,dotnet";
+key category:SESSION kind primitive value "login,logout,user,apikey";
+key category:DATA kind primitive value "tensor,weights,feed";
+key category:SEARCH kind primitive value "search";
+key category:PLAN kind primitive value "plan,route";
+key category:BATCH kind primitive value "batch";
+key category:MCP kind primitive value "mcp";
+
+key command:PROCESSING_POLICY kind contract value "prefixes=/,!, $$; arguments=positional+named(--flag value); fallback=chat";
+key command:AUTHORITY_BOUNDARY kind contract value "catalog=discovery_only; dispatch=registered_handler; authorization=host_policy";

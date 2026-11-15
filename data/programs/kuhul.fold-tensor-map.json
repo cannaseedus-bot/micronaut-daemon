@@ -1,0 +1,193 @@
+{
+  "@program": "kuhul.fold-tensor-map",
+  "@schema": "kuhul.fold-tensor-map.v1",
+  "@version": "1.0.0",
+  "@description": "Canonical ownership map from the K-UHUL phase wheel to model, semantic-cube, and shard-sidecar tensors.",
+  "model_contract": {
+    "model_class": "PiKuhulTransformer",
+    "shards": 6,
+    "token_axis": "T",
+    "tensor_dtype": "float32",
+    "gradient_authority": "pytorch",
+    "sidecar_rule": "sidecars may observe or return bounded corrections; they do not replace the PyTorch gradient update"
+  },
+  "provider_authority": {
+    "pytorch": {
+      "authority": ["model_state", "forward_transform", "logits", "gradients", "optimizer_updates"],
+      "mutation": "authoritative"
+    },
+    "opencl_1_2": {
+      "authority": ["bounded_projection", "matrix5x4_sidecar", "fold_node_observation"],
+      "mutation": "none; returns bounded correction or observation"
+    },
+    "webgl2": {
+      "authority": ["inference_projection", "route_scoring", "expert_projection", "bounded_correction"],
+      "mutation": "none; inference-only projection provider",
+      "transport": "WASM linear memory or WebView2 postMessage",
+      "forbidden": ["model_weight_update", "optimizer_step", "authoritative_gradient_write"]
+    },
+    "kuhul": {
+      "authority": ["phase_order", "fold_admission", "semantic_validation", "replay_commit"],
+      "mutation": "controls execution state; does not own model weights"
+    }
+  },
+  "tensor_groups": {
+    "context": [
+      "input_ids[B,T]",
+      "labels[B,T]",
+      "maya_coords[B,T,15]",
+      "phase_ids[B,T]",
+      "token_embedding.weight[V,H]",
+      "position_embedding.weight[1024,H]",
+      "maya_embedding.*",
+      "phase_embedding.*"
+    ],
+    "shard_fields": [
+      "cards[6].field[H,H]",
+      "cards[6].gradient[H]",
+      "shard_ids[T]",
+      "shard_distribution[6]"
+    ],
+    "attention": [
+      "layers[L].q_proj.*",
+      "layers[L].k_proj.*",
+      "layers[L].v_proj.*",
+      "layers[L].out_proj.*",
+      "attention_scores[B,heads,T,T]",
+      "attention_probs[B,heads,T,T]"
+    ],
+    "feed_forward": [
+      "ffns[L].0.*",
+      "ffns[L].2.*",
+      "norms[L].*",
+      "ffn_norms[L].*"
+    ],
+    "semantic": [
+      "logits[B,T,V]",
+      "semantic_summary[5,4]",
+      "semantic_signal[1]",
+      "semantic_confidence[1]",
+      "semantic_loss[1]"
+    ],
+    "sidecar": [
+      "bone_ids[T,4]",
+      "bone_weights[T,4]",
+      "sorted_idx[T]",
+      "cluster_start[64]",
+      "cluster_count[64]",
+      "fold_scores[6]",
+      "node_scores[6]",
+      "P_buf[T,5,4]",
+      "routed_hidden[B,T,H]",
+      "bounded_correction[B,T,H]"
+    ],
+    "output": [
+      "ln_f.*",
+      "output_proj.weight[H,V]",
+      "next_token_logits[B,V]"
+    ]
+  },
+  "runtime_state": {
+    "gradient_target": [
+      "parameter_gradients[*]",
+      "gradient_rms[*]",
+      "gradient_target_multiplier[*]",
+      "gravity_correction[*]"
+    ],
+    "validation_status": ["shape_status", "finite_status", "residual_status", "confidence_status"],
+    "checkpoint_state": ["model_state", "optimizer_state", "pi_time", "shard_state"]
+  },
+  "artifacts": {
+    "result.json": "training/inference completion summary",
+    "checkpoint": "model and optimizer checkpoint envelope"
+  },
+  "streams": {
+    "replay_event.jsonl": "append-only semantic dispatch and checkpoint events"
+  },
+  "folds": {
+    "Pop": {
+      "meaning": "load and observe",
+      "reads": ["group:context", "state:checkpoint_state", "group:shard_fields", "group:semantic"],
+      "writes": ["tensor:shard_ids[T]", "tensor:shard_distribution[6]", "tensor:bone_ids[T,4]", "tensor:bone_weights[T,4]", "tensor:fold_scores[6]", "tensor:node_scores[6]"],
+      "tensor_contract": "bind input_ids/labels and restore bounded shard-sidecar state",
+      "backend": "pytorch_cpu",
+      "artifacts": ["tools/pi_kuhul.py", "tools/pi_kuhul_train.py", "tools/bone_rig.py"],
+      "bone_contract": {
+        "producer": "tools/bone_rig.py",
+        "schema": "kuhul.fold-bone-rig.v1",
+        "slots": 4,
+        "clusters": 64,
+        "order": "innermost fold -> parent fold -> ... -> root",
+        "weights": "geometric 2^-(k+1), normalised; unused slot = -1 / 0",
+        "tensors": ["bone_ids[T,4]", "bone_weights[T,4]"],
+        "sidecar": ".micronaut/checkpoints/neighborhood-attention.bones.safetensors",
+        "authority": "structural coordinates only; a shared bone is not verification or admission"
+      }
+    },
+    "Wo": {
+      "meaning": "route and attend",
+      "reads": ["tensor:shard_ids[T]", "tensor:fold_scores[6]", "tensor:node_scores[6]", "group:attention", "group:context"],
+      "writes": ["tensor:attention_scores[B,heads,T,T]", "tensor:attention_probs[B,heads,T,T]", "tensor:sorted_idx[T]", "tensor:cluster_start[64]", "tensor:cluster_count[64]", "tensor:routed_hidden[B,T,H]"],
+      "tensor_contract": "route token positions and select chat/code/tool or fold-node experts without changing tensor shapes",
+      "backend": "pytorch_cpu_with_opencl_or_webgl2_projection",
+      "artifacts": ["programs/bimodal.expert-routing.json", "drivers/opencl_1_2/kson_fold_node_expert.cl", "drivers/webgl2/kson_expert_correction.frag"]
+    },
+    "Yax": {
+      "meaning": "branch and admit",
+      "reads": ["tensor:routed_hidden[B,T,H]", "tensor:fold_scores[6]", "tensor:node_scores[6]", "group:shard_fields"],
+      "writes": ["group:sidecar", "tensor:fold_scores[6]", "tensor:node_scores[6]"],
+      "tensor_contract": "admit bounded shard slices and choose the expert/sidecar path; no weight mutation",
+      "backend": "kube_semantic_cube",
+      "artifacts": ["dist/GPU-TRAINER/models/kube.model.json", "dist/kuhul_folds/native/pi_kuhul_glyph_geometry.json"]
+    },
+    "Sek": {
+      "meaning": "execute and compute",
+      "reads": ["group:attention", "group:feed_forward", "tensor:routed_hidden[B,T,H]", "group:sidecar", "group:shard_fields"],
+      "writes": ["tensor:logits[B,T,V]", "tensor:semantic_summary[5,4]", "tensor:semantic_signal[1]", "tensor:semantic_confidence[1]", "tensor:bounded_correction[B,T,H]"],
+      "tensor_contract": "run model forward pass and six bounded sidecar projections; OpenCL may project P_buf but PyTorch owns gradients",
+      "backend": "pytorch_cpu_plus_opencl_1_2",
+      "artifacts": ["drivers/opencl_1_2/matrix5x4.cl", "drivers/opencl_1_2/training.cl", "dist/GPU-TRAINER/semantic_cube.cso", "programs/adapter.kuhul.pi.json"]
+    },
+    "Chen": {
+      "meaning": "verify and correct",
+      "reads": ["tensor:logits[B,T,V]", "tensor:semantic_signal[1]", "tensor:semantic_confidence[1]", "tensor:bounded_correction[B,T,H]", "state:gradient_target"],
+      "writes": ["tensor:semantic_loss[1]", "state:gradient_target", "stream:replay_event.jsonl", "state:validation_status"],
+      "tensor_contract": "check finite values, shape preservation, confidence bounds, gradient targets, and residual limits",
+      "backend": "cpu_reference_with_opencl_health_check",
+      "artifacts": ["tools/pi_kuhul_semantic_adapter.py", "programs/adapter.kuhul.pi.json"]
+    },
+    "Xul": {
+      "meaning": "emit and checkpoint",
+      "reads": ["tensor:semantic_loss[1]", "state:gradient_target", "state:validation_status", "group:output"],
+      "writes": ["state:checkpoint_state", "group:output", "stream:replay_event.jsonl", "artifact:result.json"],
+      "tensor_contract": "commit model/shard checkpoints and auditable JSONL/JSON results after validation",
+      "backend": "pytorch_checkpoint_and_json_replay",
+      "artifacts": ["tools/pi_kuhul_train.py", "TRAINING.md"]
+    }
+  },
+  "shader_bindings": {
+    "cs_bone_argsort_": {"fold": "Wo", "reads": ["tensor:bone_ids[T,4]"], "writes": ["tensor:sorted_idx[T]", "tensor:cluster_start[64]", "tensor:cluster_count[64]"]},
+    "cs_fold_kernel_compute_": {"fold": "Sek", "reads": ["tensor:sorted_idx[T]", "tensor:bone_ids[T,4]", "tensor:bone_weights[T,4]", "tensor:P_buf[T,5,4]"], "writes": ["tensor:P_buf[T,5,4]"]},
+    "cs_fold_route_matmul": {"fold": "Sek", "reads": ["tensor:sorted_idx[T]", "tensor:routed_hidden[B,T,H]"], "writes": ["tensor:bounded_correction[B,T,H]"]},
+    "cs_gravity_field_layer_": {"fold": "Chen", "reads": ["tensor:P_buf[T,5,4]", "tensor:bone_ids[T,4]", "tensor:bone_weights[T,4]"], "writes": ["tensor:bounded_correction[B,T,H]", "state:validation_status"]},
+    "semantic_cube": {"fold": "Yax", "reads": ["tensor:fold_scores[6]", "tensor:node_scores[6]", "tensor:semantic_summary[5,4]"], "writes": ["tensor:semantic_signal[1]", "tensor:semantic_confidence[1]"]},
+    "kson_expert_correction_webgl2": {"fold": "Wo", "phase_use": "Wo/Sek", "provider": "webgl2", "reads": ["tensor:routed_hidden[B,T,H]", "tensor:fold_scores[6]", "tensor:node_scores[6]"], "writes": ["tensor:bounded_correction[B,T,H]"], "authority": "inference_projection_only", "source": "drivers/webgl2/kson_expert_correction.frag"},
+    "arc_replay_kernel": {"fold": "Xul", "reads": ["stream:replay_event.jsonl", "state:checkpoint_state"], "writes": ["stream:replay_event.jsonl"]}
+  },
+  "validation": {
+    "required_folds": ["Pop", "Wo", "Yax", "Sek", "Chen", "Xul"],
+    "required_tensor_groups": ["context", "shard_fields", "attention", "feed_forward", "semantic", "gradient_target", "sidecar", "output"],
+    "shape_policy": "reject mismatch",
+    "residual_policy": "bounded",
+    "gradient_policy": "PyTorch-only-authoritative",
+    "replay_policy": "one JSON object per dispatch/checkpoint event"
+  },
+  "execution_graph": {
+    "derive_from": ["folds.*.reads", "folds.*.writes", "shader_bindings.*"],
+    "edge_rule": "write target of one fold becomes dependency input of the next fold that reads the same typed target",
+    "provider_rule": "backend and shader binding resolve the execution provider after target validation",
+    "authority_rule": "only tensor:parameter_gradients and state:gradient_target may reach the PyTorch optimizer; sidecars emit bounded_correction",
+    "webgl2_rule": "WebGL2 may consume routed_hidden and emit bounded_correction during inference, but cannot mutate model_state or optimizer_state",
+    "cycle": ["Pop", "Wo", "Yax", "Sek", "Chen", "Xul"]
+  }
+}

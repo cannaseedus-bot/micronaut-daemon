@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0">
+
+<!-- Wo phase bank: bind word-problem captures to typed semantic roles.
+     Bindings describe the utterance. They do not establish factual authority. -->
+
+<category>
+<pattern>IF * GOING * AND * GOING *</pattern>
+<template>
+<mx2lm>
+Wo binding frame:
+  entity_a = <star index="1"/>
+  rate_a = <star index="2"/>
+  entity_b = <star index="3"/>
+  rate_b = <star index="4"/>
+  unknown = meeting time or distance requested by the utterance
+Binding state: OBSERVED — values are utterance-sourced and remain unverified.
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>WORD PROBLEM RATE DISTANCE *</pattern>
+<template>
+<mx2lm>
+Wo binding frame for rate-distance-time.
+Knowns: <star/>.
+Candidate relation: distance = rate × time.
+Required unresolved binding: identify the requested quantity and compatible units.
+Binding state: OBSERVED — no computation or promotion performed.
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>WHAT IS * PERCENT OF *</pattern>
+<template>
+<mx2lm>
+Wo binding frame:
+  percent = <star index="1"/>
+  base = <star index="2"/>
+  unknown = result
+Candidate relation: result = (percent ÷ 100) × base.
+Binding state: OBSERVED — no computation or promotion performed.
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>COMPUTE PERCENT * OF *</pattern>
+<template>
+<mx2lm>
+Wo binding frame: percent = <star index="1"/>; base = <star index="2"/>; unknown = result.
+Binding state: OBSERVED — pass typed values to Yax candidate admission.
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>WORD PROBLEM *</pattern>
+<template>
+<mx2lm>
+Wo generic binding pass for: <star/>.
+Bind explicit quantities, units, entities, requested value, and governing-relation candidates.
+Missing values remain VOID; wildcard bindings defer and never default.
+</mx2lm>
+</template>
+</category>
+
+</aiml>

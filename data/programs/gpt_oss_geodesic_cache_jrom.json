@@ -1,0 +1,40 @@
+{
+  "@program": "gpt-oss.geodesic_cache",
+  "@kind": "kuhul.tensor-cache.jrom.v2",
+  "@format": "JROM+CBOR",
+  "@version": 2,
+  "@phase": "Pop",
+  "@source": "E:/models/GPT-DDS/GPT-OSS/model.scxqdds",
+  "@control": [
+    { "@op": "LOG", "@args": ["[geodesic_cache] verify GPT-OSS SCXQDDS manifest before residency"] },
+    { "@op": "SCXQDDS_MANIFEST_VERIFY", "@args": ["$source_manifest"], "@out": "manifest" },
+    { "@op": "GPU_RESIDENCY_PLAN", "@args": ["embedding", "router", "attention", "active_experts"], "@out": "residency_plan" },
+    { "@op": "CACHE_PROMOTE", "@args": ["C:/SCXQDDS-cache", "$residency_plan"], "@out": "hot_swap" },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "gpt-oss.geodesic_cache.commit", "@args": ["$hot_swap"] }
+  ],
+  "cache": {
+    "model": "gpt-oss-20b-MXFP4",
+    "architecture": "gpt-oss-moe",
+    "vocab": 201088,
+    "source_format": "SCXQDDS/DDS folds backed by SafeTensors tensor map",
+    "canonical_manifest": "E:/models/GPT-DDS/GPT-OSS/model.scxqdds",
+    "fold_manifest": "E:/models/GPT-DDS/GPT-OSS/folds/fold_manifest.json",
+    "tensor_map": "E:/models/GPT-DDS/GPT-OSS/gpt-oss-20b-MXFP4.tensor_map.json",
+    "hot_swap_cache": "C:/SCXQDDS-cache",
+    "load_policy": "canonical_manifest_then_local_hot_swap",
+    "gpu_policy": {
+      "upload": "demand_driven",
+      "backend_order": ["d3d11", "opencl_1_2", "cpu"],
+      "dedicated_vram_bytes": 134217728,
+      "shared_gpu_memory_bytes": 2147483648,
+      "system_memory_bytes": 17179869184,
+      "effective_cache_budget_bytes": 2281701376,
+      "active_expert_strategy": "router_selected_fold_window"
+    },
+    "geodesic_features": {
+      "status": "router_and_fold_residency_contract",
+      "source": "E:/models/GPT-DDS/GPT-OSS/gpt_oss_20b_folds.kson",
+      "note": "GPT-2 vocabulary .npy geometry is not reused for GPT-OSS."
+    }
+  }
+}

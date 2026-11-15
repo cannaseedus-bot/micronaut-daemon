@@ -1,0 +1,11 @@
+{
+  "@kind":"asx.semantic.admission.v2",
+  "@pipeline":["Pop.semantic_admission","Wo.container_context","Yax.validate_and_classify","Sek.xcfe_admission","Ch'en.record_result","Xul.return_record"],
+  "statuses":["DATA_ONLY","EXECUTABLE_CANDIDATE","ADMITTED","REJECTED"],
+  "record_binding":["canonical_asxg_sha256","capability","principal","authorization_context_id","permission_id"],
+  "descriptor_validation":{"contract":"asxg.lanes.v1","schema":"data/host/asxg/extensions/asxg-lane-descriptors.v1.schema.json","registry":"data/host/manifests/asxg-lanes.json","supported_lanes":["NGramLane","PhaseLane"],"does_not_execute":true,"ngram":{"probability_orders":[1,2,3],"retrieval_min_order":4,"retrieval_has_density":false},"phase_edges":{"relations":["depends_on","transitions_to","provides_evidence"],"phase_manifest_check":true}},
+  "execution":{"separate_capability":"semantic.dispatch","never_implicit":true,"host":"KHANARY_APP_HOST.exe","permission_env":"KHANARY_SEMANTIC_DISPATCH_TOKEN","supported_runtime_capabilities":["khanary.json.inline","khanary.micronaut.dispatch"],"micronaut_plan":{"format":"asx.glyph.micronaut-plan.v1","max_steps":64,"requires_registered_program":true,"phase_policy":"manifest_checked","execution_order":"graph_precedes_edges"}},
+  "endpoints":{"admit":"/api/semantic/admit","authorize":"/api/semantic/authorize","dispatch":"/api/semantic/dispatch"},
+  "invariants":["valid_container_does_not_imply_execution_authority","admitted_does_not_imply_executed","admission_record_is_container_bound","admission_record_is_single_use_for_dispatch"],
+  "container":"ASXG.v1"
+}

@@ -1,0 +1,120 @@
+{
+  "$schema": "urn:kuhul:khanary:schema:entropic-well:v4",
+  "generation_id": 1425,
+  "topology_target": "B",
+  "metric_context": "Tensor_Bundle_Manifold",
+  "laws": {
+    "entropic_emergence": "Gravity is not a fundamental structural primitive; it emerges from the minimization of free energy along the entropy gradient profile.",
+    "horizon_area_bound": "The information storage capacity of a semantic well is bounded by one-quarter of its holographic boundary surface area (Bekenstein-Hawking Limit).",
+    "equipartition_prior": "The runtime energy profile of a well is evenly distributed across its available topological degrees of freedom.",
+    "euler_triangle_bound": "For every declared inscribed mesh geometry, Euler triangle inequality requires circumradius_R >= 2 * inradius_r; violation marks the projection mesh warped.",
+    "tensor_coordinate_transform": "For TENSOR-µ projection fields, upper indices transform by the Jacobian and lower indices by the inverse Jacobian; tensor geometry remains projection-only and cannot mutate B."
+  },
+  "global_constants": {
+    "boltzmann_proxy_kb": 1.0,
+    "planck_length_lp_sq": 0.25,
+    "system_clock_omega": 60.0
+  },
+  "active_wells": [
+    {
+      "well_id": "well:gml:core_reasoning_sink",
+      "anchor_node_id": "@node:gml:khanary_topology:0",
+      "label": "REASON-µ Semantic Gravity Center",
+      "structural_entropy_metrics": {
+        "geodesic_entropy_hg": 1.142,
+        "triangular_entropy_h_delta": 0.085,
+        "mesh_density_triangles": 32
+      },
+      "holographic_boundary": {
+        "radius_r": 2.5,
+        "surface_area_a": 78.5398,
+        "max_bits_n": 314.1592,
+        "temperature_unruh": 0.1591
+      },
+      "thermodynamic_state": {
+        "internal_energy_e": 25.0,
+        "baseline_entropy_s": 78.5398,
+        "potential_barrier_u": 0.05
+      },
+      "field_warp": {
+        "metric_tensor_g00": -0.85,
+        "metric_tensor_g11": 1.15,
+        "divergence_sink_mass": -4.82,
+        "admissible_risk_bound": 0.05,
+        "jacobian_determinant": -0.9776562499999999
+      },
+      "inscribed_mesh_geometry": {
+        "circumradius_R": 2.5,
+        "inradius_r": 1.082,
+        "circumcenter_coord": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "triangular_entropy_h_delta": 0.085,
+        "riemann_curvature_scalar": -0.412
+      },
+      "tensor_field_type": {
+        "contravariant_rank_p": 1,
+        "covariant_rank_q": 1,
+        "is_smooth_section": true
+      },
+      "local_metric_tensor_g_ij": {
+        "g00": -0.85,
+        "g01": 0.0125,
+        "g10": 0.0125,
+        "g11": 1.15
+      }
+    },
+    {
+      "well_id": "well:gml:contradiction_repulsion_well",
+      "anchor_node_id": "@node:gml:khanary_topology:3",
+      "label": "ELIZA High-Entropy Branching Well",
+      "structural_entropy_metrics": {
+        "geodesic_entropy_hg": 2.718,
+        "triangular_entropy_h_delta": 0.391,
+        "mesh_density_triangles": 8
+      },
+      "holographic_boundary": {
+        "radius_r": 1.2,
+        "surface_area_a": 18.0955,
+        "max_bits_n": 72.3822,
+        "temperature_unruh": 0.3314
+      },
+      "thermodynamic_state": {
+        "internal_energy_e": 12.0,
+        "baseline_entropy_s": 18.0955,
+        "potential_barrier_u": 14.5
+      },
+      "field_warp": {
+        "metric_tensor_g00": -0.22,
+        "metric_tensor_g11": 4.54,
+        "divergence_sink_mass": 3.91,
+        "admissible_risk_bound": 0.18,
+        "jacobian_determinant": -0.9988
+      },
+      "inscribed_mesh_geometry": {
+        "circumradius_R": 1.2,
+        "inradius_r": 0.42,
+        "circumcenter_coord": [
+          0.35,
+          -0.15,
+          0.0
+        ],
+        "triangular_entropy_h_delta": 0.391,
+        "riemann_curvature_scalar": 0.219
+      },
+      "tensor_field_type": {
+        "contravariant_rank_p": 1,
+        "covariant_rank_q": 1,
+        "is_smooth_section": true
+      },
+      "local_metric_tensor_g_ij": {
+        "g00": -0.22,
+        "g01": 0.0,
+        "g10": 0.0,
+        "g11": 4.54
+      }
+    }
+  ]
+}

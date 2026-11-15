@@ -1,0 +1,204 @@
+(* geometric-coder-µ program grammar v1.0
+   Defines the notation for programs processed by the geometric-coder micronaut.
+   Grammar defines notation and static type contracts only.
+   No code execution, file mutation, or write authority is implied.
+   XCFE admission is required before any CodeCandidate result may be persisted.
+
+   The geometric-coder operates over a 2D tensor field:
+     tensor:metric   — 2×2 f32 Riemannian metric (read-only during ANALYZE)
+     tensor:jacobian — 2×2 f32 transformation Jacobian (Xul-commit to update)
+     tensor:input    — 2×1 f32 source field vector
+     tensor:output   — 2×1 f32 projected field vector (metric × input)
+   These tensors are implementation-internal; programs may reference them
+   by name for PROJECT operations but may not modify them without an
+   authorized Xul fold. *)
+
+
+(* ================================================================
+   Geometric-Coder Program Syntax
+   A program is a sequence of statements.
+   Statements are ANALYZE, GENERATE, PROJECT, local bindings, or comments.
+   ================================================================ *)
+
+program           = { statement } ;
+statement         = analyze_stmt
+                  | generate_stmt
+                  | project_stmt
+                  | binding_stmt
+                  | comment
+                  | newline
+                  ;
+comment           = "#", { any_line_char }, newline ;
+
+
+(* ----------------------------------------------------------------
+   ANALYZE — parse source code into a CodeStructure.
+   Phase: Sek.  Output: CodeStructure (read-only snapshot).
+   ---------------------------------------------------------------- *)
+analyze_stmt      = "ANALYZE", ws, source_expr,
+                    [ ws, "language", ws, ":", ws, language_name ],
+                    [ ws, "as", ws, identifier ]
+                  ;
+
+source_expr       = string_literal             (* inline source text *)
+                  | file_ref                   (* file:"/path/to/source" *)
+                  | variable_ref               (* $binding from a prior statement *)
+                  ;
+file_ref          = "file", ":", string_literal ;
+
+
+(* ----------------------------------------------------------------
+   GENERATE — produce a CodeCandidate from a CodeStructure.
+   Phase: Yax.  Output: CodeCandidate (requires XCFE admission to persist).
+   ---------------------------------------------------------------- *)
+generate_stmt     = "GENERATE", ws, structure_expr,
+                    [ ws, "target", ws, ":", ws, language_name ],
+                    [ ws, "options", ws, ":", ws, options_object ],
+                    [ ws, "as", ws, identifier ]
+                  ;
+
+structure_expr    = variable_ref               (* $binding whose value is a CodeStructure *)
+                  | inline_structure           (* { field: value, ... } *)
+                  ;
+inline_structure  = "{", ws, "}"
+                  | "{", ws, struct_field, { ws, ",", ws, struct_field }, ws, "}"
+                  ;
+struct_field      = identifier, ws, ":", ws, arg_expr ;
+
+options_object    = "{", ws, "}"
+                  | "{", ws, option_field, { ws, ",", ws, option_field }, ws, "}"
+                  ;
+option_field      = option_name, ws, ":", ws, arg_expr ;
+option_name       = "max_tokens" | "temperature" | "style" | identifier ;
+
+
+(* ----------------------------------------------------------------
+   PROJECT — apply the tensor field projection directly.
+   Phase: Yax.  Output: TensorOutput (2×1 f32).
+   Reads tensor:metric and tensor:input; writes tensor:output.
+   This is the matvec2 kernel declared in the geometric-coder KGF.
+   ---------------------------------------------------------------- *)
+project_stmt      = "PROJECT", ws, tensor_input_ref,
+                    [ ws, "through", ws, tensor_name ],
+                    [ ws, "as", ws, identifier ]
+                  ;
+
+tensor_input_ref  = variable_ref               (* $binding whose value is TensorInput *)
+                  | tensor_literal             (* [ f32, f32 ] *)
+                  ;
+tensor_literal    = "[", ws, float_literal, ws, ",", ws, float_literal, ws, "]" ;
+tensor_name       = "metric" | "jacobian" ;    (* which tensor to project through *)
+
+
+(* ----------------------------------------------------------------
+   Local binding — assign a name without a tool call
+   ---------------------------------------------------------------- *)
+binding_stmt      = "let", ws, identifier, ws, "=", ws, arg_expr ;
+
+
+(* ----------------------------------------------------------------
+   Shared expression forms
+   ---------------------------------------------------------------- *)
+arg_expr          = string_literal
+                  | float_literal
+                  | integer_literal
+                  | variable_ref
+                  | inline_structure
+                  | tensor_literal
+                  ;
+
+variable_ref      = "$", identifier ;
+
+language_name     = "python" | "javascript" | "typescript" | "cpp" | "c"
+                  | "rust"   | "go"         | "java"       | "csharp"
+                  | identifier
+                  ;
+
+
+(* ----------------------------------------------------------------
+   Literals and lexical basics
+   ---------------------------------------------------------------- *)
+string_literal    = '"', { string_char_dq }, '"'
+                  | "'", { string_char_sq }, "'"
+                  ;
+float_literal     = [ "-" ], digit, { digit }, [ ".", digit, { digit } ] ;
+integer_literal   = [ "-" ], digit, { digit } ;
+identifier        = letter, { letter | digit | "_" | "-" } ;
+letter            = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J"
+                  | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T"
+                  | "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d"
+                  | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n"
+                  | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x"
+                  | "y" | "z" ;
+digit             = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+newline           = "\n" | "\r\n" | ";" ;
+ws                = " " | "\t", { " " | "\t" } ;
+any_line_char     = ? any Unicode scalar except newline ? ;
+(* string_char_dq: any Unicode scalar except unescaped double-quote or backslash.
+   string_char_sq: same, except for single-quote. *)
+
+
+(* ================================================================
+   Static Signatures  (declarative type contracts; no execution authority)
+   ================================================================
+
+   Operation     Input                      Output          Phase
+   ─────────────────────────────────────────────────────────────────
+   ANALYZE       Source × Language?         CodeStructure   Sek
+   GENERATE      CodeStructure × Target?    CodeCandidate   Yax
+   PROJECT       TensorInput                TensorOutput    Yax
+
+   Type definitions:
+     Source
+       A string containing source code, or a file: reference to source
+       on the local filesystem.  Language is an optional hint; if absent,
+       the classifier selects the language at Wo (classify_language).
+
+     CodeStructure
+       An immutable geometric snapshot of the analyzed source: abstract
+       syntax nodes projected onto the tensor field (rank (1,1), phase Yax).
+       CodeStructure is read-only; a new ANALYZE produces a new structure.
+
+     CodeCandidate
+       A proposed code artifact produced by GENERATE.  Requires XCFE
+       admission before it may be written to any file or gram key.
+       Passing a CodeCandidate to a subsequent GENERATE without
+       intermediate admission is a static warning.
+
+     TensorInput   — 2×1 f32 column vector (source field vector)
+     TensorOutput  — 2×1 f32 column vector (result of metric × input)
+     Metric        — 2×2 f32 Riemannian metric tensor (read-only during ANALYZE;
+                     corpus=0.9, update=read_only)
+     Jacobian      — 2×2 f32 transformation Jacobian (corpus=0.8,
+                     update=xul_commit — requires authorized Xul fold to update)
+
+   Tensor field invariants:
+     tensor:analyze_bias corpus=0.9 learned=1.0  update=read_only
+       — ANALYZE may not alter the metric during execution.
+     tensor:generate_bias corpus=0.8 learned=1.0 update=xul_commit
+       — GENERATE may not alter the Jacobian without an authorized Xul fold.
+     tensor:project (matvec2): output = metric × input
+       — PROJECT reads [metric, input], writes [output]; no other tensor access.
+
+   Binding invariant:
+     Every variable_ref ($name) must resolve to a name introduced by an
+     earlier "as" clause or a "let" statement in the same program.
+     Forward references are a static error.
+
+   Pipeline invariant:
+     GENERATE requires a CodeStructure input; passing a raw string
+     (which is a Source, not a CodeStructure) as the structure_expr
+     without a prior ANALYZE is a static type error.
+
+   Static errors:
+     - unresolved_variable_ref
+     - raw_source_passed_as_structure
+     - candidate_persisted_without_admission
+     - tensor_modified_without_xul_commit (for Jacobian)
+     - tensor_modified_read_only (for Metric)
+
+   Authority:
+     Parsing this grammar and checking these type rules produces
+     a parse tree and a diagnostic list only.  No code execution,
+     file read or write, tensor mutation, or authorization is granted.
+   ================================================================ *)

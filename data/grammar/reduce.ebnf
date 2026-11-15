@@ -1,0 +1,136 @@
+(* ========================================================================== *)
+(* K'UHUL REDUCE OPERATOR GRAMMAR (EBNF)                                     *)
+(* Version: 1.0                                                              *)
+(* Operator algebra: reduce : FoldSet → Fold                                 *)
+(* Contract: data/grammar/operator-algebra.contracts.json                    *)
+(* Runtime:  src/kuhul/reduce.cpp                                            *)
+(* ========================================================================== *)
+
+(* ── Reduce contract ────────────────────────────────────────────────────── *)
+
+ReduceContract      ::= "{" ReduceMembers "}"
+
+ReduceMembers       ::= ReduceId "," ReduceSource "," ReduceAccumulator
+                      "," ReduceInitial
+                      ("," ReduceConditions)?
+                      ("," ReduceDeterminism)?
+                      ("," ReduceMetadata)?
+
+(* ── Identity ───────────────────────────────────────────────────────────── *)
+
+ReduceId            ::= "id" ":" String
+
+(* ── Source ─────────────────────────────────────────────────────────────── *)
+
+ReduceSource        ::= "source" ":" "{" ReduceSourceBody "}"
+
+ReduceSourceBody    ::= "fold_ids" ":" StringArray
+                      | "fold_set" ":" String
+                      | "phase" ":" PhaseName
+                      | "stream" ":" String
+                      | "all_folds" ":" Boolean
+                      | "ordering" ":" OrderingMode
+
+OrderingMode        ::= "structural"      (* by fold id *)
+                      | "phase"           (* by current phase *)
+                      | "incidence"       (* by tau *)
+                      | "confidence"      (* by confidence, descending *)
+
+(* ── Accumulator: the reduce function ───────────────────────────────────── *)
+
+ReduceAccumulator   ::= "accumulator" ":" "{" AccBody "}"
+
+AccBody             ::= "type" ":" AccType ","
+                        "ops" ":" OpList
+                        ("," "params" ":" ParamSet)?
+
+AccType             ::= "sum"           (* sum values *)
+                      | "product"       (* product values *)
+                      | "mean"          (* arithmetic mean *)
+                      | "max"           (* maximum value *)
+                      | "min"           (* minimum value *)
+                      | "count"         (* count folds *)
+                      | "concat"        (* concatenate *)
+                      | "merge"         (* merge structures *)
+                      | "custom"        (* custom function *)
+
+OpList              ::= "[" (OpName ("," OpName)*)? "]"
+
+OpName              ::= String
+
+ParamSet            ::= "{" (Param ("," Param)*)? "}"
+
+Param               ::= String ":" Value
+
+Value               ::= String | Number | Boolean | Array | Object | Null
+
+(* ── Initial value ──────────────────────────────────────────────────────── *)
+
+ReduceInitial       ::= "initial" ":" Value
+
+(* ── Conditions ─────────────────────────────────────────────────────────── *)
+
+ReduceConditions    ::= "conditions" ":" "[" (Condition ("," Condition)*)? "]"
+
+Condition           ::= "{" ConditionBody "}"
+
+ConditionBody       ::= "if" ":" Expression
+                      | "unless" ":" Expression
+                      | "when_phase" ":" PhaseName
+
+(* ── Determinism ────────────────────────────────────────────────────────── *)
+
+ReduceDeterminism   ::= "determinism" ":" "{" DeterminismBody "}"
+
+DeterminismBody     ::= "mode" ":" DeterminismMode
+                        ("," "record_inputs" ":" Boolean)?
+                        ("," "order_sensitive" ":" Boolean)?
+
+DeterminismMode     ::= "deterministic" | "seeded" | "stochastic"
+
+(* ── Metadata ───────────────────────────────────────────────────────────── *)
+
+ReduceMetadata      ::= "metadata" ":" "{" (MetadataField ("," MetadataField)*)? "}"
+
+MetadataField       ::= String ":" Value
+
+(* ── Phase names (canonical C6 identity) ────────────────────────────────── *)
+
+PhaseName           ::= "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul"
+
+(* ── Expression (shared with filter.ebnf) ───────────────────────────────── *)
+
+Expression          ::= String
+
+(* ── Constraints ────────────────────────────────────────────────────────── *)
+
+(*
+   CONSTRAINT 1: Source must be specified
+     source.fold_ids OR source.fold_set OR source.phase
+     OR source.stream OR source.all_folds
+
+   CONSTRAINT 2: Accumulator type is required
+     accumulator.type ∈ {sum, product, mean, max, min, count, concat, merge, custom}
+
+   CONSTRAINT 3: Initial value is required
+     initial must be declared (may be null, 0, [], {}, …)
+
+   CONSTRAINT 4: Ordering semantics follow the accumulator, not the caller
+     If accumulator.type ∈ {sum, product, concat, merge}:
+       the source order is preserved and order_sensitive must be declared true for
+       float carriers (a float sum is not associative)
+     If accumulator.type ∈ {mean, max, min, count}:
+       the result is order independent (commutative)
+
+   CONSTRAINT 5: Determinism must be declared
+     determinism.mode is required
+     If mode != "deterministic", order_sensitive must be declared
+
+   CONSTRAINT 6: Reduce preserves source folds
+     reduce does NOT mutate the source folds; it produces a NEW fold carrying the
+     aggregated result. The source set is evidence, not scratch space.
+
+   CONSTRAINT 7: A reduce is not a commit
+     reduce : FoldSet → Fold is a proposal. The produced fold is only real after
+     XCFE admission; a reduce may never write topology (Xul-only rule).
+*)

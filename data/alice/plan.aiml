@@ -1,0 +1,27 @@
+<aiml version="1.0.1">
+  <!-- GENERATED from data/grammar/plan-bootstrap.json; do not edit by hand. -->
+  <category>
+    <pattern>PLAN BANK</pattern>
+    <template><mx2lm>plan: track=PLAN-µ phase=Wo card_view=true task_list=true authority=none fields=goal,tasks,dependencies,owner,phase,status,next verbs=refine,edit,verify,accept,execute,pause</mx2lm></template>
+  </category>
+  <category>
+    <pattern>MAKE A PLAN FOR *</pattern>
+    <template><mx2lm>plan: track=PLAN-µ phase=Wo next=Yax card_view=true task_list=true authority=none verbs=refine,edit,verify,accept,execute,pause goal=<star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>BREAK DOWN *</pattern>
+    <template><mx2lm>plan: track=PLAN-µ phase=Wo next=Yax card_view=true task_list=true authority=none verbs=refine,edit,verify,accept,execute,pause goal=<star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>TASKS FOR *</pattern>
+    <template><mx2lm>plan: track=PLAN-µ phase=Wo next=Yax card_view=true task_list=true authority=none verbs=refine,edit,verify,accept,execute,pause goal=<star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>ROADMAP *</pattern>
+    <template><mx2lm>plan: track=PLAN-µ phase=Wo next=Yax card_view=true task_list=true authority=none verbs=refine,edit,verify,accept,execute,pause goal=<star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>PLAN *</pattern>
+    <template><mx2lm>plan: track=PLAN-µ phase=Wo next=Yax card_view=true task_list=true authority=none verbs=refine,edit,verify,accept,execute,pause goal=<star/></mx2lm></template>
+  </category>
+</aiml>

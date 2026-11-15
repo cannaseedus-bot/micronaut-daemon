@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0">
+
+<!-- Pop phase bank: word-problem recognizers.
+     K'UHUL Pop ops: find_best_pattern_match, candidate_sense_bind, gramRead activation.
+     Each pattern binds knowns via <think> then fires <srai> to advance to the Sek computation bank. -->
+
+<category>
+<pattern>IF * GOING * AND * GOING *</pattern>
+<template>
+<mx2lm>
+<think><set name="wtype">rate-distance-time</set></think>
+Knowns: object A rate = <star index="2"/>, object B rate = <star index="4"/>.
+Rule: rate × time = distance; meeting when distances sum to initial gap.
+<srai>WORD PROBLEM RATE DISTANCE <star index="1"/> <star index="2"/> <star index="3"/> <star index="4"/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>WHAT IS * PERCENT OF *</pattern>
+<template>
+<mx2lm>
+<think><set name="wtype">percentage</set></think>
+Percentage problem.
+<srai>COMPUTE PERCENT <star/> OF <star index="2"/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>SOLVE *</pattern>
+<template>
+<mx2lm>
+<think><set name="topic">word-problem</set></think>
+Parsing problem: <star/>.
+Step 1 — identify question type.
+Step 2 — extract knowns and unknowns.
+<srai>WORD PROBLEM <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>SANDBOX DUEL *</pattern>
+<template>
+<mx2lm>
+Word-problem sandbox. Both bots active.
+KHANARY (Bot A): phase-engine parse + SRILM gram scoring.
+NeuralGrammar (Bot B): Qwen3-1.7B generative elaboration.
+Submitting: <star/>
+<srai>WORD PROBLEM <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>WHAT IS THE SANDBOX DUEL</pattern>
+<template>
+sandbox_duel.py runs two bots on the same word problem:
+  Bot A — KHANARY.exe uses AIML patterns, SRILM n-gram scoring, and the K'UHUL phase engine.
+  Bot B — NeuralGrammar uses Qwen3-1.7B with VerbEngine operation selection.
+Both share the word-problem driver (drivers/micronauts/semantic/word-problem.json).
+Run: py -3 tools\sandbox_duel.py "your word problem here"
+</template>
+</category>
+
+</aiml>

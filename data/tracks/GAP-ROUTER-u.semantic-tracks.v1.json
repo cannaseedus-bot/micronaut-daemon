@@ -1,0 +1,33 @@
+{
+  "@no-eval": true,
+  "id": "GAP-ROUTER-µ",
+
+  "schemes": ["gap-router"],
+  "description": "Pattern discovery router for query gaps. Surfaces structural patterns when a query is recognized but no Q template covers it.",
+  "phase": "Sek",
+  "sandbox": {
+    "gram_ns": "GAP-ROUTER",
+    "manifest_access": ["words", "micronaut"],
+    "effects": ["gramRead"],
+    "ports": [],
+    "coordinator": false
+  },
+  "category": "cognitive",
+  "confidence": 1.0,
+  "static_weight": 1.0,
+  "health": 1.0,
+  "governs": [
+    "decision",
+    "query",
+    "gap",
+    "pattern"
+  ],
+  "capabilities": [
+    "pattern_discovery"
+  ],
+  "route_contract": {
+    "tokens": ["decision", "query", "gap", "pattern"]
+  },
+  "relations": [],
+  "folds": []
+}

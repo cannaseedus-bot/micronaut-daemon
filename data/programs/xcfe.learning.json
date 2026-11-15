@@ -1,0 +1,21 @@
+{
+  "@type": "khanary.xcfe_program.v1",
+  "@no-eval": true,
+  "id": "xcfe.learning",
+  "program_class": "LEARNING",
+  "phase": "Xul",
+  "input_role": "verified_outcome",
+  "output_role": "learned_pattern",
+  "admission": "verified_outcome_required",
+  "description": "Promotes a verified outcome into a learned pattern at Xul. Requires verified_outcome from a prior VERIFICATION pass — learning never bypasses Ch'en. LEARNING is a program-descriptor class only — it does not appear in the 14-class XCFE node ISA.",
+  "steps": [
+    { "phase": "Pop",   "op": "gramRead",   "id": "xcfe_verified_outcome" },
+    { "phase": "Ch'en", "op": "verify",     "id": "verified_outcome" },
+    { "phase": "Xul",   "op": "gramWrite",  "id": "learned_pattern" }
+  ],
+  "authority": {
+    "semantic_authority": false,
+    "topology_mutation": false,
+    "commit_authorized": false
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "wellness-check",
+  "@key": "⟁APP:WELLNESS_CHECK",
+  "@mount": "⟁ROOT:WELLNESS_CHECK",
+  "@theme": { "accent": "#2dd4bf", "bg": "#010c0a", "surface": "#02181a", "text": "#ccfbf1", "hero_phase": "Ch'en", "tagline": "Check in. Notice more." },
+  "@layout": { "mode": "single", "regions": [{ "id": "main", "component": "⟁WIDGET:MAIN", "position": "center" }], "responsive": { "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "checks": [], "today": null, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:WELLNESS_CHECK": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:MAIN"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:HISTORY"] },
+    "⟁ACTION:HISTORY": { "@type": "button", "@text": "History", "@on": { "click": "well.open_history" } },
+    "⟁WIDGET:MAIN": { "@type": "layout", "@children": ["⟁WIDGET:CHECK_CARD", "⟁WIDGET:RADAR", "⟁WIDGET:HEATMAP"] },
+    "⟁WIDGET:CHECK_CARD": { "@type": "content-card", "@bind": "state.today" },
+    "⟁WIDGET:RADAR": { "@type": "chart", "@bind": "data.radar" },
+    "⟁WIDGET:HEATMAP": { "@type": "heatmap", "@bind": "data.calendar" }
+  },
+  "@programs": {
+    "well.open_history": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "history.open": "well.open_history" },
+  "@imports": [{ "ref": "check", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "daily-prompt", "name": "Daily Prompt", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Customise the daily check-in questions to your priorities." },
+      { "id": "weekly-digest", "name": "Weekly Digest", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Weekly summary of wellness trends across all dimensions." },
+      { "id": "mood-journal-link", "name": "Mood Journal Sync", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Link to the Mood Journal app for combined insights." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "well.check", "pattern": "WELLNESS CHECK|HOW AM I DOING|DAILY CHECK IN", "intent": "open_check" }
+    ]
+  },
+  "@data": {
+    "radar": { "energy": 7, "mood": 6, "stress": 4, "focus": 8, "sleep": 7, "nutrition": 6 },
+    "calendar": [],
+    "spotlight": [
+      { "id": "sp1", "title": "Today's Check-in", "badge": "Complete", "score": 6.3, "excerpt": "Energy and focus are high. Stress manageable. Sleep below average." },
+      { "id": "sp2", "title": "7-Day Average: 6.8/10", "badge": "Trending Up", "excerpt": "Up from 5.9 the previous week. Good consistency." },
+      { "id": "sp3", "title": "Best Day This Month", "badge": "Score 8.7", "excerpt": "High energy, low stress, great sleep. Wednesday two weeks ago." }
+    ],
+    "schema": {
+      "check": { "primaryKey": "check_id", "fields": { "check_id": { "type": "string" }, "date": { "type": "datetime", "required": true }, "energy": { "type": "integer" }, "mood": { "type": "integer" }, "stress": { "type": "integer" }, "focus": { "type": "integer" }, "sleep": { "type": "integer" }, "nutrition": { "type": "integer" }, "note": { "type": "text" } } }
+    }
+  }
+}

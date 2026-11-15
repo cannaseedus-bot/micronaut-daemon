@@ -1,0 +1,52 @@
+(* ============================================================ *)
+(* Regex/FSM Bridge Runtime Grammar                             *)
+(* Regular expressions and finite state machines recognize the   *)
+(* same regular languages through different representations.     *)
+(* ============================================================ *)
+
+RegexFsmBridge ::= RegexEngine Compiler Automaton LanguageEquivalence AutomatonSemantics ;
+
+RegexEngine    ::= Pattern Matcher Input MatchResult ;
+Pattern        ::= Literal | Alternation | Concatenation | Repetition | WildcardPattern | AnchorPattern | Group ;
+Matcher        ::= "matcher" "(" Pattern "," Input ")" ;
+MatchResult    ::= "match" | "no_match" ;
+
+FiniteStateMachine ::= States Transitions Input AcceptState ;
+States         ::= State { State } ;
+State          ::= "start" | "accept" | Identifier ;
+Transitions    ::= Transition { Transition } ;
+Transition     ::= State Symbol State ;
+AcceptState    ::= State ;
+
+
+AutomatonSemantics ::= DeterminismRule | NondeterminismRule | EpsilonRule | ActiveStateRule | BacktrackingRule | TradeoffRule ;
+DeterminismRule   ::= "dfa" ":" "one_next_state_per_symbol" ;
+NondeterminismRule ::= "nfa" ":" "zero_or_more_next_states_per_symbol" ;
+EpsilonRule       ::= "epsilon" ":" "move_without_consuming_input" ;
+ActiveStateRule   ::= "active_states" ":" ( "single" | "set" ) ;
+BacktrackingRule  ::= "backtracking" ":" "one_active_path_plus_rewind" ;
+TradeoffRule      ::= ( "dfa" "=" "precomputed_certainty" ) | ( "nfa" "=" "runtime_possibility" ) | ( "backtracking" "=" "sequential_guessing" ) ;
+SubsetConstruction ::= Nfa "->" Dfa ;
+Compiler       ::= RegexToNfa [ NfaToDfa ] [ MinimizeDfa ] ;
+RegexToNfa     ::= Pattern "->" Nfa ;
+NfaToDfa       ::= Nfa "->" Dfa ;
+MinimizeDfa    ::= Dfa "->" Dfa ;
+Automaton      ::= Nfa | Dfa | FiniteStateMachine ;
+Nfa            ::= "nfa" "{" States Transitions AcceptState "}" ;
+Dfa            ::= "dfa" "{" States Transitions AcceptState "}" ;
+
+LanguageEquivalence ::= RegexEngine "~" FiniteStateMachine ;
+
+Alternation    ::= Pattern "|" Pattern ;
+Concatenation  ::= Pattern Pattern ;
+Repetition     ::= Pattern ( "*" | "+" | "?" ) ;
+WildcardPattern ::= "." | ".*" | "?" | "*" ;
+AnchorPattern  ::= "^" Pattern [ "$" ] ;
+Group          ::= "(" Pattern ")" ;
+Literal        ::= Token { Token } ;
+Input          ::= Token { Token } ;
+Symbol         ::= Token | "any" | "epsilon" ;
+Token          ::= [A-Za-z0-9_:-]+ ;
+Identifier     ::= [A-Za-z_][A-Za-z0-9_:-]* ;
+
+

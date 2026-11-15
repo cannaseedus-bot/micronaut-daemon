@@ -1,0 +1,7 @@
+<div id="daemon-bot-widget" data-asx-key="⟁APP:DAEMON_BOT/⟁ROOT:DAEMON_BOT">
+  <form data-asx-key="⟁APP:DAEMON_BOT/⟁WIDGET:DB_FORM" data-bind="state.question" data-event="form.submit" action="/p/seed-bot.html" method="get"><label for="msb-input">Ask Daemon Bot anything</label><input id="msb-input" name="q" required placeholder="e.g. Recommend something for anxiety" /><input type="hidden" name="anchor" value="seedbot-chat" /><button type="submit">Ask</button></form>
+  <nav data-asx-key="⟁APP:DAEMON_BOT/⟁WIDGET:DB_SUGGESTIONS" data-source="suggestions" data-event="suggestion.select"></nav>
+  <button data-asx-key="⟁APP:DAEMON_BOT/⟁ACTION:DB_FLOATER" data-event="modal.open" aria-label="Open Daemon Bot chat">?</button>
+  <dialog data-asx-key="⟁APP:DAEMON_BOT/⟁WIDGET:DB_MODAL" data-event="modal.close" aria-label="Ask Daemon Bot"><form data-bind="state.question" data-event="form.submit"><input name="q" required placeholder="Ask Daemon Bot anything" /><button type="submit">Ask</button></form></dialog>
+</div>
+<script type="application/json" id="asx-json-runtime">{"@kind":"asx.key-runtime.binding.v1","@app":"⟁APP:DAEMON_BOT","@manifest":"data/host/apps/mini-seedbot.asx-app.json","@executor":"mx.run","@authority":"projection_only","@state":"request_scoped","@semantic_commit":false}</script>

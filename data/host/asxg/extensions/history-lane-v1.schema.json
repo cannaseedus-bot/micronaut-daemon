@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "asx://schema/history-lane-v1",
+  "title": "ASXG HistoryLane v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "@id", "@type", "@owner_ref", "@field_ref", "@scope_id",
+    "@record_refs", "@evidence_refs", "@provenance_refs",
+    "@fold_delta_refs", "@hypothesis_refs", "@read_policy_ref",
+    "@requires_admission"
+  ],
+  "properties": {
+    "@id": { "type": "string", "pattern": "^lane\\.[a-z0-9_.-]+$" },
+    "@type": { "const": "HistoryLane" },
+    "@owner_ref": { "type": "string", "pattern": "^micronaut\\.[a-z0-9_-]+$" },
+    "@field_ref": { "type": "string", "minLength": 1 },
+    "@scope_id": { "type": "string", "pattern": "^(conversation|user|project):[^\\s]+$" },
+    "@record_refs": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "@evidence_refs": {
+      "type": "array", "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "@provenance_refs": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "@fold_delta_refs": {
+      "type": "array", "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "@hypothesis_refs": {
+      "type": "array", "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^hypothesis:[a-z0-9_.-]+$" }
+    },
+    "@read_policy_ref": { "type": "string", "minLength": 1 },
+    "@requires_admission": { "const": true }
+  }
+}

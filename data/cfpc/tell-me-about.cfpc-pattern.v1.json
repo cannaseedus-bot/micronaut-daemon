@@ -1,0 +1,33 @@
+{
+  "@kind": "khanary.cfpc.pattern.v1",
+  "id": "tell-me-about",
+  "intent": "Open-ended elaboration request — give background, context, and detail about a subject.",
+  "phase": "Pop",
+  "@captures": {
+    "subject": {
+      "wildcard": "*",
+      "strip_prefix": "tell me about "
+    }
+  },
+  "neighborhood_resolve": {
+    "from_captures": [
+      "subject"
+    ],
+    "max_hops": 2
+  },
+  "question_templates": [
+    "What is the background of {subject}?",
+    "What are the most important aspects of {subject}?",
+    "How does {subject} connect to {neighbor}?",
+    "What context is needed to understand {subject}?",
+    "What questions does {subject} raise?"
+  ],
+  "context_template": "Subject for elaboration: {subject}\nSemantic field: {field_keys}\nRelated domains: {neighbors}\nEpistemic state: UNKNOWN -- model verification required.",
+  "match": {
+    "rules": [
+      {
+        "prefix": "tell me about"
+      }
+    ]
+  }
+}

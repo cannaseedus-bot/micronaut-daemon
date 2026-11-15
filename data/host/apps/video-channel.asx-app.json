@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "video-channel",
+  "@key": "⟁APP:VIDEO_CHANNEL",
+  "@mount": "⟁ROOT:VIDEO_CHANNEL",
+  "@theme": { "accent": "#ef4444", "bg": "#0a0000", "surface": "#180000", "text": "#fee2e2", "hero_phase": "Pop", "tagline": "Your channel. Your audience." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "videos", "component": "⟁WIDGET:VIDEOS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "videos": [], "current_video": null, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:VIDEO_CHANNEL": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:UPLOAD", "⟁ACTION:CHANNEL_SETTINGS"] },
+    "⟁ACTION:UPLOAD": { "@type": "button", "@text": "Upload Video", "@on": { "click": "vc.open_upload" } },
+    "⟁ACTION:CHANNEL_SETTINGS": { "@type": "button", "@text": "Channel", "@on": { "click": "vc.open_settings" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:VIDEOS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:VIDEOS": { "@type": "grid", "@bind": "state.videos", "@children": ["⟁WIDGET:VIDEO_CARD"] },
+    "⟁WIDGET:VIDEO_CARD": { "@type": "media-card", "@bind": "video", "@on": { "play": "vc.play", "edit": "vc.edit" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:CHANNEL_STATS", "⟁WIDGET:RECENT_COMMENTS"] },
+    "⟁WIDGET:CHANNEL_STATS": { "@type": "stat", "@bind": "data.stats" },
+    "⟁WIDGET:RECENT_COMMENTS": { "@type": "list", "@bind": "data.comments" }
+  },
+  "@programs": {
+    "vc.open_upload": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "vc.open_settings": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "vc.play": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_video", "@out": "current_video" }] },
+    "vc.edit": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "video.upload": "vc.open_upload", "channel.settings": "vc.open_settings", "video.play": "vc.play", "video.edit": "vc.edit" },
+  "@imports": [{ "ref": "video", "mode": "schema_table" }, { "ref": "series", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "chapters", "name": "Chapter Markers", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Add timestamp chapters to videos for easy navigation." },
+      { "id": "members-only", "name": "Members-Only Videos", "category": "monetisation", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Gate specific videos behind a paid membership tier." },
+      { "id": "captions", "name": "Auto Captions", "category": "accessibility", "price": "optional", "status": "available_unconfigured", "description": "Generate captions for your videos automatically." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "vc.upload", "pattern": "UPLOAD VIDEO|NEW VIDEO|PUBLISH VIDEO", "intent": "open_upload" },
+      { "id": "vc.stats", "pattern": "CHANNEL STATS|VIEW COUNT|SUBSCRIBER COUNT", "intent": "view_stats" }
+    ]
+  },
+  "@data": {
+    "stats": { "videos": 34, "total_views": 41200, "subscribers": 1840, "avg_watch_min": 8.3 },
+    "comments": [{ "author": "alex.p", "text": "Great breakdown of the phase engine!", "video": "K'UHUL Intro" }],
+    "spotlight": [
+      { "id": "sp1", "title": "K'UHUL Phase Cycle Explained", "views": 8420, "badge": "Top Video", "duration_min": 18, "excerpt": "The most-viewed video on the channel. 18-minute deep dive." },
+      { "id": "sp2", "title": "Build a Mini-App in 10 Minutes", "views": 5102, "badge": "Tutorial", "duration_min": 11, "excerpt": "Quick walkthrough of the ASX manifest format." },
+      { "id": "sp3", "title": "GPU Memory Ceiling Explainer", "views": 3644, "badge": "Technical", "duration_min": 24, "excerpt": "HD 4600 resident memory deep dive. Popular with devs." }
+    ],
+    "schema": {
+      "video": { "primaryKey": "video_id", "fields": { "video_id": { "type": "string" }, "title": { "type": "string", "required": true }, "description": { "type": "text" }, "series_id": { "type": "string" }, "file_path": { "type": "string" }, "duration_sec": { "type": "integer" }, "published_at": { "type": "datetime" }, "views": { "type": "integer" } } },
+      "series": { "primaryKey": "series_id", "fields": { "series_id": { "type": "string" }, "name": { "type": "string", "required": true }, "description": { "type": "text" }, "video_order": { "type": "json" } } }
+    }
+  }
+}

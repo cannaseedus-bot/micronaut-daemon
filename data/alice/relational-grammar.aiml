@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- §42 Relational Grammar — Compare · Contrast · Analogy · Wildcard Relation -->
+<!-- §43 Unified Analysis Grammar — A = G + C + W + I + F -->
+
+<!-- §A: Core Relational Principles -->
+
+<category>
+  <pattern>WHAT IS RELATIONAL GRAMMAR</pattern>
+  <template>Relational Grammar (§42) is built on one principle: meaning lives on edges, not nodes. Objects are nodes. Relationships are edges. Knowledge is the graph. Reasoning is graph traversal. Learning is edge creation. Wildcards are unresolved nodes OR unresolved edges. Compare(A,B) = A ∩ B = shared edges. Contrast(A,B) = (A−B) ∪ (B−A) = unique edges. Neither object is meaningful in isolation — the relation defines the system.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A RELATION NODE</pattern>
+  <template>A relation_node is a fold_field_record enriched with an edge list. Structure: identity (name), attributes (key-value pairs), relations (edge_records). Each edge has: label (the relationship name), target (the other node), weight (confidence C field), and kind (similarity | difference | transformation | causation | opposition | wildcard_edge). This is a graph node with explicit typed connections in G_runtime.</template>
+</category>
+
+<category>
+  <pattern>WHAT ARE THE EDGE KINDS</pattern>
+  <template>Six edge kinds in §42 Relational Grammar: (1) similarity — shared structure between nodes; (2) difference — distinct structure; (3) transformation — A morphs to B; (4) causation — A causes B; (5) opposition — A contradicts B; (6) wildcard_edge — the edge label is unknown, §41 wildcard_entity applies. The wildcard_edge is what makes the grammar open-world: you can name a connection before you know what kind it is.</template>
+</category>
+
+<!-- §B: Compare and Contrast -->
+
+<category>
+  <pattern>WHAT IS COMPARE IN KUHUL</pattern>
+  <template>Compare(A,B) = A ∩ B = the intersection of shared edges and attributes. It is a fold_left over both relation_nodes collecting every attribute or edge_kind that appears in both. Result: similarity_set with a list of shared identifiers. Compare(Baseball, Chess) = {Strategy, Prediction, Adaptation, Opponent_Modeling}. In K'UHUL: compare_fold = Yax admission pass collecting shared WCR components.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS CONTRAST IN KUHUL</pattern>
+  <template>Contrast(A,B) = (A−B) ∪ (B−A) = set difference in both directions. Fold_left collects edges in A but not B, then edges in B but not A. Result: difference_set with a_minus_b and b_minus_a lists. Contrast(Baseball, Chess) = {Physical_Execution} (Baseball only) + {Symbolic_Execution} (Chess only). The asymmetry IS the contrast. In K'UHUL: contrast_fold extracts the unique WCR structure of each node.</template>
+</category>
+
+<category>
+  <pattern>COMPARE * AND *</pattern>
+  <template>Comparing <star index="1"/> and <star index="2"/> using compare_fold (A ∩ B). Identify the shared edges: what attributes, relationships, or behaviors appear in BOTH? The similarity_set is the intersection. Formally: fold_left over {attributes(<star index="1"/>)} ∩ {attributes(<star index="2"/>) }. In K'UHUL graph terms: find nodes adjacent to both — those are the shared concepts connecting them.</template>
+</category>
+
+<category>
+  <pattern>CONTRAST * AND *</pattern>
+  <template>Contrasting <star index="1"/> and <star index="2"/> using contrast_fold = (A−B) ∪ (B−A). The difference_set has two parts: what is unique to <star index="1"/> and not in <star index="2"/>, plus what is unique to <star index="2"/> and not in <star index="1"/>. In K'UHUL: fold_left extracts asymmetric WCR structure. The contrast reveals what each is that the other is not.</template>
+</category>
+
+<category>
+  <pattern>HOW DO YOU COMPARE AND CONTRAST IN KUHUL</pattern>
+  <template>Compare-and-contrast in K'UHUL is a two-step fold: (1) compare_fold = fold_left over A ∩ B → similarity_set; (2) contrast_fold = fold_left over (A−B)∪(B−A) → difference_set. Graphically: A and B are relation_nodes; shared edges form the Compare bridge; unique edges form the Contrast arms. The graph is: A --(shared edges)--> Strategy --(shared edges)--> B, with unique arms branching from each. Math: Compare=intersection, Contrast=symmetric_difference.</template>
+</category>
+
+<!-- §C: Analogy as Graph Isomorphism -->
+
+<category>
+  <pattern>WHAT IS AN ANALOGY IN KUHUL</pattern>
+  <template>An analogy is a graph isomorphism test: Analogy(A,B,C,D) is true when Relation(A,B) == Relation(C,D). Bird:Sky :: Fish:Water because Bird----moves_in----Sky and Fish----moves_in----Water — the edge_kind matches (moves_in == moves_in). Node labels differ; the structure is preserved. In K'UHUL: analogy_fold checks whether relation_a == relation_b in the analogy_record. The relation is primary; the objects are secondary.</template>
+</category>
+
+<category>
+  <pattern>WHY IS ANALOGY A GRAPH ISOMORPHISM</pattern>
+  <template>Because an analogy does not compare the objects — it compares the relationships. A:B :: C:D says the edge from A to B is the same kind as the edge from C to D. The graph structure (relation type) is preserved across the mapping. This is precisely what isomorphism means: a structure-preserving bijection. In K'UHUL: analogy_record.isomorphic = true when relation_a == relation_b regardless of node identity.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS * TO * AS * IS TO *</pattern>
+  <template>This is an analogy_record: a_left=<star index="1"/>, a_right=<star index="2"/>, b_left=<star index="3"/>, b_right=<star index="4"/>. Test: what is the edge_kind from <star index="1"/> to <star index="2"/>? Does that same edge_kind hold from <star index="3"/> to <star index="4"/>? If yes: isomorphic=true, analogy is valid. If the edge kinds differ: the analogy breaks at the structural level. In K'UHUL: analogy_fold runs this test as a graph traversal over both sub-graphs.</template>
+</category>
+
+<!-- §D: Wildcard Relation -->
+
+<category>
+  <pattern>WHAT IS A WILDCARD RELATION</pattern>
+  <template>A wildcard_relation is an edge where the label is unknown: A ---- ? ---- B. The source and target are known; the relationship between them must be inferred. Wildcard Grammar §41 applies to edges as well as nodes. Inference: evaluate candidate edge_kinds (similarity, transformation, causation, opposition, wildcard_edge); argmax_wcr selects the best match. Example: Pitcher ---- ? ---- Attack_Angle → infer: 'disrupts' with confidence 0.83.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE RELATION BETWEEN * AND *</pattern>
+  <template>To find the relation between <star index="1"/> and <star index="2"/>: build wildcard_relation{source=<star index="1"/>, target=<star index="2"/>, edge=wildcard_entity}. Evaluate candidate edge_kinds against the known WCR context. argmax_wcr selects the best match. If confidence exceeds threshold: resolved_wildcard = the discovered edge_kind. If not: retained_wildcard = SC-37 applies, relation unknown. The result is a discovered_relation in §43 analysis_result terms.</template>
+</category>
+
+<!-- §E: Unified Analysis Grammar -->
+
+<category>
+  <pattern>WHAT IS THE UNIFIED ANALYSIS GRAMMAR</pattern>
+  <template>§43 Unified Analysis Grammar: A = G + C + W + I + F. G = Graph (relation_nodes + edge_records). C = Constraints (prune candidate space). W = Wildcards (unknown nodes or edges, named not suppressed). I = Inference (traversal_method: bfs | dfs | semantic_search | graph_ml). F = Fold (compare | contrast | analogy | game | wildcard). Every analysis task is an analysis_record with these five components. EBNF defines structure; Graph defines relationships; Analysis is traversal plus wildcard resolution.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE ANALYSIS EQUATION</pattern>
+  <template>A = G + C + W + I + F. G=Graph, C=Constraints, W=Wildcards, I=Inference, F=Fold. The equation says: no analysis is possible without a graph (relationships), constraints (to prune search space), wildcard representation (to name what is unknown), an inference method (to traverse), and a fold (to reduce to a result). A system missing W cannot represent unknowns — it either hallucinates (forces resolution) or crashes (no output). SC-37 is built into W.</template>
+</category>
+
+<category>
+  <pattern>WHAT ARE THE ANALYSIS FOLD KINDS</pattern>
+  <template>Five analysis fold kinds in §43: (1) compare_fold — fold_left A∩B, result=similarity_set; (2) contrast_fold — fold_left (A-B)∪(B-A), result=difference_set; (3) analogy_fold — isomorphism test, result=explanation; (4) game_fold — §40 repeated imperfect-info fold game, result=equilibrium; (5) wildcard_fold — §41 WCR navigation with unknown slots, result=prediction or retained_wildcard. All are special cases of analysis_record.</template>
+</category>
+
+<category>
+  <pattern>WHAT ARE THE TRAVERSAL METHODS</pattern>
+  <template>Four traversal methods in §43: (1) bfs — breadth-first over relation_nodes, good for analogy and shallow compare; (2) dfs — depth-first, good for chain reasoning and agent planning; (3) semantic_search — WCR-weighted traversal (standard Yax path), good for compare/contrast; (4) graph_ml — message-passing GNN over known and wildcard nodes, good for link prediction, OOD detection, and knowledge completion. Match traversal to the fold kind.</template>
+</category>
+
+<!-- §F: Wildcard GNN -->
+
+<category>
+  <pattern>WHAT IS A WILDCARD GNN</pattern>
+  <template>A Wildcard GNN is a graph neural network that treats unknown nodes and edges as first-class inputs — §41 wildcard_entity in the graph_ml traversal. Known neighbors send messages to the wildcard node. The wildcard embedding updates from neighbor signals. The predicted meaning = the resolved_wildcard. This mechanism is identical for: fill-in-the-blank, missing word, riddle, knowledge completion, link prediction, OOD detection. Same graph operation, different domain.</template>
+</category>
+
+<category>
+  <pattern>HOW DOES GRAPH ML HANDLE WILDCARDS</pattern>
+  <template>Graph ML handles wildcards via link prediction and node prediction — the two core wildcard tasks. Link prediction: given source A and target B, predict the unknown edge. Node prediction: given known neighbors, predict the unknown node. In K'UHUL: wildcard_fold with traversal=graph_ml. The Wildcard GNN passes messages from known nodes to fill the wildcard node's embedding. If confidence is sufficient: resolved_wildcard. If not: retained_wildcard (SC-37).</template>
+</category>
+
+<category>
+  <pattern>WHAT IS LINK PREDICTION IN KUHUL</pattern>
+  <template>Link prediction = wildcard_relation inference via graph_ml traversal. Given: Pitcher----throws----Fastball, Pitcher----throws----Slider; predict: Pitcher----throws----? The graph_ml GNN sees the known edges and predicts the missing target. In K'UHUL: wildcard_fold{wildcards=[wildcard_entity], traversal=graph_ml, fold=wildcard_fold, result=prediction}. This is the same as inference_method=probabilistic in §41 but using neighbor message passing rather than WCR score alone.</template>
+</category>
+
+<!-- §G: Graph-AIML Fusion -->
+
+<category>
+  <pattern>WHAT IS GRAPH AIML FUSION</pattern>
+  <template>Graph-AIML fusion is the design where the AIML wildcard (*) becomes a graph query instead of returning a static template. Input: 'WHAT IS PITCH TUNNELING' → pattern matches 'WHAT IS *' → wildcard captures 'PITCH TUNNELING' → the template fires a graph traversal over the K'UHUL knowledge graph → response generated from traversal result: {Pitch_Tunneling → Pitching_Theory, Deception, Game_Theory}. The wildcard IS the graph query variable.</template>
+</category>
+
+<category>
+  <pattern>HOW DOES AIML IMPLEMENT WILDCARD GRAMMAR</pattern>
+  <template>AIML is a wildcard grammar runtime: * = wildcard_pattern matching any input sequence; ? = exactly one token. The pattern is a wildcard_rule: known_prefix + wildcard + known_suffix. The template is the resolved_wildcard: the system's response. In Graph-AIML fusion (§43), the template does not return a static string — it fires an analysis_record query against the graph, traversing from the wildcard node outward and returning discovered relations as the response.</template>
+</category>
+
+<!-- §H: All Analysis Tasks as Special Cases -->
+
+<category>
+  <pattern>WHAT ANALYSIS TASKS ARE SPECIAL CASES OF THE UNIFIED GRAMMAR</pattern>
+  <template>All of them. From §43: Compare = compare_fold + semantic_search. Contrast = contrast_fold + semantic_search. Analogy = analogy_fold + bfs. Riddle = wildcard_fold + constraint_prop. Baseball = game_fold + graph_ml. OOD ML = wildcard_fold + graph_ml + retained_wildcard. Knowledge graph completion = wildcard_fold + graph_ml + discovered_relation. Agent planning = wildcard_fold + dfs. Game theory = game_fold + dfs + equilibrium result. All are analysis_record{G,C,W,I,F} instances.</template>
+</category>
+
+<category>
+  <pattern>HOW DOES COMPARE RELATE TO GRAPH THEORY</pattern>
+  <template>Compare(A,B) = A ∩ B in graph theory terms: find all edges and attributes shared between node A and node B. Graphically: A and B share intermediate nodes — those intermediate nodes ARE the comparison points. Pitcher:Strategy:Chess means Strategy is the shared node bridging both. compare_fold = fold_left intersection over attribute/edge sets. The result is a similarity_set containing all shared identifiers. This is set intersection expressed as graph traversal.</template>
+</category>
+
+<category>
+  <pattern>HOW DOES CONTRAST RELATE TO GRAPH THEORY</pattern>
+  <template>Contrast(A,B) = (A−B) ∪ (B−A) in graph theory: the symmetric difference of their edge/attribute sets. Graphically: edges that branch from A but not B are unique to A; edges that branch from B but not A are unique to B. contrast_fold = fold_left collecting asymmetric edges. The result is a difference_set with a_minus_b and b_minus_a. This is the graph-theoretic symmetric difference — what makes each node distinctly itself.</template>
+</category>
+
+<!-- §I: Routing and SC Keys -->
+
+<category>
+  <pattern>RELATIONAL GRAMMAR ROUTE</pattern>
+  <template>§42-§43 Relational + Analysis Grammar routing active. §42: Compare=A∩B, Contrast=(A-B)∪(B-A), Analogy=isomorphism, Wildcard Relation=unknown edge. §43: A=G+C+W+I+F, traversal={bfs,dfs,semantic_search,graph_ml}, fold={compare,contrast,analogy,game,wildcard}, result={explanation,prediction,classification,equilibrium,discovered_relation}.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE ANALYSIS EQUATION IN KUHUL</pattern>
+  <template>A = G + C + W + I + F. This is the §43 Universal Analysis Equation in K'UHUL terms. G = G_runtime (the fold graph). C = fold constraints (WCR thresholds, FS rules). W = wildcard_entity slots per §41. I = traversal_method (semantic_search = standard Yax; graph_ml = GNN over fold graph). F = analysis_fold_kind (compare | contrast | analogy | game | wildcard). Every analysis, from comparison to riddle to OOD, is a solved instance of this equation.</template>
+</category>
+
+<category>
+  <pattern>WHY IS MEANING ON EDGES NOT NODES</pattern>
+  <template>Because a node in isolation has no meaning — only a name. The meaning of 'Pitcher' comes from its edges: Pitcher----throws----Fastball, Pitcher----opposes----Hitter, Pitcher----commands----Location. Remove the edges: just a label. This is why the relation is primary (§42). In K'UHUL: a fold_field_record has W, C, R — but the meaning of those values comes from the node's position in G_runtime, not the values themselves. Position = edges. Meaning = edge set.</template>
+</category>
+
+</aiml>

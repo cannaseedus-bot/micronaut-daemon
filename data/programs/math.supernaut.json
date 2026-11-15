@@ -1,0 +1,96 @@
+{
+  "@program": "math.supernaut",
+  "@kind": "kuhul.supernaut.math.v1",
+  "@namespace": "https://kuhul.dev/",
+  "@stack": ["xjson", "xcfe", "scxq2", "kuhul", "supernaut"],
+  "@backend": {
+    "native_library": "kuhul_supernaut",
+    "source": "dist/json-runtime/supernaut/utils/math.cpp",
+    "header": "dist/json-runtime/supernaut/include/supernaut_math.h",
+    "abi": "Matrix4x4 row-major float32",
+    "simd": ["SSE", "FMA-optional"],
+    "fallback": "scalar"
+  },
+  "@state": {
+    "phase": "Pop",
+    "lhs": null,
+    "rhs": null,
+    "product": null,
+    "verified": false
+  },
+  "@ops": {
+    "matrix_multiply": {
+      "@fn": "supernaut::math::matrix_multiply",
+      "@phase": "Sek",
+      "@args": ["lhs:read", "rhs:read"],
+      "@out": "product:write",
+      "@shape": [4, 4],
+      "@dtype": "float32",
+      "@semantic": "matrix.mul"
+    },
+    "matrix_multiply_transpose": {
+      "@fn": "supernaut::math::matrix_multiply_transpose",
+      "@phase": "Sek",
+      "@args": ["lhs:read", "rhs:read"],
+      "@out": "product_transpose:write",
+      "@shape": [4, 4],
+      "@dtype": "float32",
+      "@semantic": "matrix.mul.transpose"
+    }
+  },
+  "@control": [
+    {
+      "@op": "READ",
+      "@key": "lhs",
+      "@out": "lhs"
+    },
+    {
+      "@op": "READ",
+      "@key": "rhs",
+      "@out": "rhs"
+    },
+    {
+      "@op": "FOLD_ENTER",
+      "@fold": "Sek",
+      "@node": "math.supernaut.matrix"
+    },
+    {
+      "@op": "NATIVE_EVAL",
+      "@fn": "supernaut::math::matrix_multiply",
+      "@args": ["$lhs", "$rhs"],
+      "@out": "product"
+    },
+    {
+      "@op": "NATIVE_EVAL",
+      "@fn": "supernaut::math::matrix_multiply_transpose",
+      "@args": ["$lhs", "$rhs"],
+      "@out": "product_transpose"
+    },
+    {
+      "@op": "FOLD_EXIT",
+      "@fold": "Chen",
+      "@node": "math.supernaut.matrix",
+      "@args": ["$product", "$product_transpose"]
+    },
+    {
+      "@op": "EVAL",
+      "@fn": "matrix_finite_and_shape_check",
+      "@args": ["$product", [4, 4]],
+      "@out": "verified"
+    },
+    {
+      "@op": "FOLD_EXIT",
+      "@fold": "Xul",
+      "@node": "math.supernaut.matrix",
+      "@args": ["$verified"]
+    }
+  ],
+  "@invariants": {
+    "matrix_shape": [4, 4],
+    "dtype": "float32",
+    "layout": "row_major",
+    "sek_operation": "matrix_multiply",
+    "transpose_operation": "matrix_multiply_transpose",
+    "no_webgpu": true
+  }
+}

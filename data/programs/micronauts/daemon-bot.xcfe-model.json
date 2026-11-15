@@ -1,0 +1,1024 @@
+{
+  "schema": "xcfe-model-1",
+  "id": "daemon-bot-xcfe-v1",
+  "version": "1.0.0",
+  "reference_base": "key-grammar-kit/",
+  "status": "declarative_bootstrap",
+  "purpose": "Single composition and routing source for the local Daemon Bot prompt runtime.",
+  "authority": {
+    "kind": "route_and_source_binding",
+    "semantic_authority": false,
+    "execution_authority": false,
+    "commit_authorized": false,
+    "law": "This file binds prompt routes and required sources. Referenced grammar, pattern, and knowledge files remain authoritative for their own contents. A match or log entry never grants XCFE admission or Xul commit."
+  },
+  "runtime": {
+    "class": "local_grammar_and_pattern_runtime",
+    "llm_models": "excluded",
+    "weights": null,
+    "network_default": "disabled",
+    "unknown_prompt": "return_no_match_or_request_clarification",
+    "registered_status": "not_verified_by_this_file"
+  },
+  "identity": {
+    "micronaut_id": "daemon_bot",
+    "name": "Daemon Bot",
+    "role": "pattern_matched_grounded_response_and_route_proposal",
+    "fold": "Ch'en",
+    "authority_claim": "observation_only"
+  },
+  "prompt_contract": {
+    "input": "one user utterance",
+    "output": "response_or_no_match",
+    "provenance_required": true,
+    "never_infer_inventory_or_live_facts": true,
+    "unknown_is_not_false": true,
+    "no_match_is_not_contradiction": true,
+    "phase_order": [
+      "Pop",
+      "Wo",
+      "Yax",
+      "Sek",
+      "Ch'en",
+      "Xul"
+    ],
+    "phase_aliases": {
+      "Chen": "Ch'en"
+    },
+    "execution_boundary": "Pattern matches produce data or route proposals. Only a registered host dispatcher with XCFE admission may invoke a capability."
+  },
+  "phase_gate_policy": {
+    "phase_order": [
+      "Pop",
+      "Wo",
+      "Yax",
+      "Sek",
+      "Ch'en",
+      "Xul"
+    ],
+    "enforcement": "Every group, pattern, field, and graph read or write must pass the gate for the current phase.",
+    "deny_on_missing_declaration": true,
+    "no_implicit_phase_advance": true,
+    "no_resource_permission_inheritance": true,
+    "gate_dimensions": [
+      "groups",
+      "patterns",
+      "fields",
+      "graphs"
+    ],
+    "gates": {
+      "Pop": {
+        "purpose": "prompt ingress, normalization, and registered surface pattern matching",
+        "permit": {
+          "groups": [
+            "prompt_input",
+            "grammar_contracts",
+            "pattern_bank",
+            "greeting_bank",
+            "autocomplete_wildcard_graph"
+          ],
+          "patterns": [
+            "registered_static_aiml_pattern:match",
+            "registered_normalization_rule:apply",
+            "prompt_pattern_gram:retrieve",
+            "registered_question_form:match",
+            "registered_greeting_template:retrieve",
+            "registered_wildcard_shape:read"
+          ],
+          "fields": [
+            "input.raw:read",
+            "input.normalized:write",
+            "source_refs:read",
+            "PromptGramLane:read",
+            "greeting_source:read"
+          ],
+          "graphs": [
+            "CFPCQuestionGraph:read_question_form_topology",
+            "AutocompleteWildcardGraph:read_registered_wildcard_shapes"
+          ]
+        },
+        "deny": {
+          "groups": [
+            "learning_store",
+            "host_tools"
+          ],
+          "patterns": [
+            "unregistered_pattern",
+            "generated_pattern"
+          ],
+          "fields": [
+            "user_profile",
+            "persistent_memory"
+          ],
+          "graphs": [
+            "semantic_graph:traverse",
+            "semantic_graph:mutate"
+          ]
+        }
+      },
+      "Wo": {
+        "purpose": "type and bind only the captures and static lane declarations produced by Pop",
+        "permit": {
+          "groups": [
+            "pattern_bank",
+            "grammar_contracts",
+            "typed_bindings",
+            "greeting_bank"
+          ],
+          "patterns": [
+            "selected_registered_pattern:bind",
+            "declared_wildcard:bind_if_capture_exists"
+          ],
+          "fields": [
+            "capture_bindings:write",
+            "typed_bindings:write",
+            "pattern_sync_declarations:read",
+            "lane_set:write",
+            "ContextGramLane:read",
+            "greeting_phase_binding:read"
+          ],
+          "graphs": [
+            "pattern_to_declared_lane:read"
+          ]
+        },
+        "deny": {
+          "groups": [
+            "learning_store",
+            "host_tools"
+          ],
+          "patterns": [
+            "candidate_pattern:promote",
+            "runtime_generated_pattern:bind"
+          ],
+          "fields": [
+            "ambient_lane",
+            "undeclared_field"
+          ],
+          "graphs": [
+            "semantic_graph:traverse",
+            "semantic_graph:mutate"
+          ]
+        }
+      },
+      "Yax": {
+        "purpose": "retrieve local evidence and form non-authoritative candidates and route proposals",
+        "permit": {
+          "groups": [
+            "typed_bindings",
+            "knowledge_records",
+            "declared_field_lanes",
+            "semantic_graph",
+            "route_proposals",
+            "continuation_bias_graph",
+            "eliza_bias_field",
+            "entropy_gradient_field",
+            "bias_parameter_graph",
+            "cfpc_questions_graph",
+            "greeting_bank",
+            "autocomplete_wildcard_graph"
+          ],
+          "patterns": [
+            "selected_registered_pattern:score",
+            "registered_question_pattern:propose",
+            "registered_wildcard_pattern:retrieve_candidates"
+          ],
+          "fields": [
+            "knowledge_record:read_with_provenance",
+            "NGramLane:read",
+            "ReasoningGramLane:read",
+            "RedirectProposalGramLane:read",
+            "ResponseCandidateGramLane:read",
+            "FieldLane:retrieve",
+            "VectorLane:score",
+            "PhaseEdgeLane:read",
+            "LearningLane:propose_only",
+            "ContinuationBiasLane:retrieve_hint",
+            "ElizaFieldLane:retrieve_data_only",
+            "EntropyGradientLane:read_parameters",
+            "BiasParameterGraph:inspect_topology",
+            "greeting_bank:retrieve_phase_candidate",
+            "AutocompleteCandidateEvidence:read"
+          ],
+          "graphs": [
+            "declared_relation_edge:read",
+            "query_local_graph:project_read_only",
+            "CFPCQuestionGraph:read_gap_routes",
+            "BiasParameterGraph:inspect_topology",
+            "AutocompleteWildcardGraph:retrieve_candidate_continuations"
+          ]
+        },
+        "constraints": [
+          "Field and graph access must be named by the active pattern's static sync declarations and a registered contract.",
+          "No ambient lane access.",
+          "No route invocation or semantic promotion."
+        ],
+        "deny": {
+          "groups": [
+            "host_tools",
+            "learning_commit"
+          ],
+          "patterns": [
+            "unregistered_pattern",
+            "candidate_pattern:promote"
+          ],
+          "fields": [
+            "undeclared_field",
+            "unverified_fact:write"
+          ],
+          "graphs": [
+            "cross_track_traverse",
+            "semantic_graph:mutate"
+          ]
+        }
+      },
+      "Sek": {
+        "purpose": "compare candidates, validate bindings, and select a route proposal",
+        "permit": {
+          "groups": [
+            "route_proposals",
+            "candidate_evidence",
+            "knowledge_records",
+            "capability_registry",
+            "declared_field_lanes",
+            "continuation_bias_graph",
+            "eliza_bias_field",
+            "entropy_gradient_field",
+            "autocomplete_wildcard_graph"
+          ],
+          "patterns": [
+            "selected_registered_pattern:guard",
+            "selected_registered_pattern:select"
+          ],
+          "fields": [
+            "bound_evidence:compare",
+            "GramEvidence:compare",
+            "declared_lane_result:read",
+            "capability_descriptor:read",
+            "ContinuationBiasLane:compare_candidate_evidence",
+            "ElizaFieldLane:compare_declared_candidate",
+            "EntropyGradientLane:compare_declared_bounds",
+            "AutocompleteCandidateEvidence:compare_declared_edges"
+          ],
+          "graphs": [
+            "candidate_support_edge:read"
+          ]
+        },
+        "constraints": [
+          "Sek may select a proposal but may not invoke a target before the host admission gate completes.",
+          "Only declared fields and relation edges may participate."
+        ],
+        "deny": {
+          "groups": [
+            "host_execution",
+            "learning_commit"
+          ],
+          "patterns": [
+            "candidate_pattern:promote",
+            "pattern:execute_as_code"
+          ],
+          "fields": [
+            "ambient_field",
+            "verified_fact:write"
+          ],
+          "graphs": [
+            "semantic_graph:mutate",
+            "topology:commit"
+          ]
+        }
+      },
+      "Ch'en": {
+        "purpose": "check evidence coverage and record host verification status without self-asserted authority",
+        "permit": {
+          "groups": [
+            "evidence_ledger",
+            "registered_verifier_result",
+            "route_proposals",
+            "cfpc_questions_graph",
+            "continuation_bias_graph",
+            "eliza_bias_field",
+            "entropy_gradient_field",
+            "bias_parameter_graph",
+            "greeting_bank",
+            "autocomplete_wildcard_graph"
+          ],
+          "patterns": [
+            "selected_pattern:reference_only"
+          ],
+          "fields": [
+            "source_provenance:read",
+            "coverage_and_gap:write",
+            "host_verification_result:read",
+            "ContinuationBiasLane:read_provenance",
+            "ElizaFieldLane:read_provenance",
+            "EntropyGradientLane:verify_source_and_bounds",
+            "greeting_source:read_provenance"
+          ],
+          "graphs": [
+            "evidence_provenance_edge:read",
+            "CFPCQuestionGraph:read_provenance_only",
+            "BiasParameterGraph:verify_provenance",
+            "AutocompleteWildcardGraph:read_provenance"
+          ]
+        },
+        "constraints": [
+          "Without a registered host verifier, record verification as unavailable and keep admission false.",
+          "A pattern match or trace is not verification."
+        ],
+        "deny": {
+          "groups": [
+            "unregistered_verifier",
+            "learning_commit"
+          ],
+          "patterns": [
+            "candidate_pattern:promote"
+          ],
+          "fields": [
+            "self_asserted_verification:write",
+            "verified_fact:write"
+          ],
+          "graphs": [
+            "semantic_graph:mutate",
+            "topology:commit"
+          ]
+        }
+      },
+      "Xul": {
+        "purpose": "close the response and append an observation record",
+        "permit": {
+          "groups": [
+            "selected_response",
+            "local_turn_log",
+            "greeting_bank"
+          ],
+          "patterns": [
+            "selected_template:render",
+            "registered_greeting_template:render_after_selection"
+          ],
+          "fields": [
+            "response.text:write",
+            "trace_record:append"
+          ],
+          "graphs": []
+        },
+        "constraints": [
+          "This profile's Xul response path is not a semantic commit.",
+          "The local log is append-only and cannot update authoritative patterns or facts."
+        ],
+        "deny": {
+          "groups": [
+            "pattern_bank_write",
+            "knowledge_write",
+            "learning_commit",
+            "host_tools"
+          ],
+          "patterns": [
+            "pattern_bank:insert",
+            "pattern_bank:delete"
+          ],
+          "fields": [
+            "authoritative_pattern:write",
+            "knowledge_fact:write"
+          ],
+          "graphs": [
+            "semantic_graph:mutate",
+            "topology:commit"
+          ]
+        }
+      }
+    },
+    "source_permission_rule": "A source is readable only in the phases listed for that source below; these grants do not imply write, execution, selection, admission, or permission inheritance.",
+    "source_permissions": {
+      "cfpc_questions_graph": {
+        "path": "data/cfpc-questions.gml",
+        "phases": {
+          "Pop": [
+            "graphs:CFPCQuestionGraph:read_question_form_topology"
+          ],
+          "Yax": [
+            "graphs:CFPCQuestionGraph:read_gap_routes"
+          ],
+          "Ch'en": [
+            "graphs:CFPCQuestionGraph:read_provenance_only"
+          ]
+        },
+        "writes": false
+      },
+      "continuation_bias_graph": {
+        "path": "data/continuation-bias.gml",
+        "phases": {
+          "Yax": [
+            "fields:ContinuationBiasLane:retrieve_hint"
+          ],
+          "Sek": [
+            "fields:ContinuationBiasLane:compare_candidate_evidence"
+          ],
+          "Ch'en": [
+            "fields:ContinuationBiasLane:read_provenance"
+          ]
+        },
+        "writes": false,
+        "selection_authority": false
+      },
+      "eliza_bias_field": {
+        "path": "data/eliza-bias.gml",
+        "phases": {
+          "Yax": [
+            "fields:ElizaFieldLane:retrieve_data_only"
+          ],
+          "Sek": [
+            "fields:ElizaFieldLane:compare_declared_candidate"
+          ],
+          "Ch'en": [
+            "fields:ElizaFieldLane:read_provenance"
+          ]
+        },
+        "writes": false,
+        "template_execution": false
+      },
+      "entropy_gradient_field": {
+        "path": "data/entropy_gradient_field.gml",
+        "phases": {
+          "Yax": [
+            "fields:EntropyGradientLane:read_parameters"
+          ],
+          "Sek": [
+            "fields:EntropyGradientLane:compare_declared_bounds"
+          ],
+          "Ch'en": [
+            "fields:EntropyGradientLane:verify_source_and_bounds"
+          ]
+        },
+        "writes": false,
+        "permission_inference": false
+      },
+      "bias_parameter_graph": {
+        "path": "data/bias.gml",
+        "phases": {
+          "Yax": [
+            "graphs:BiasParameterGraph:inspect_topology"
+          ],
+          "Ch'en": [
+            "graphs:BiasParameterGraph:verify_provenance"
+          ]
+        },
+        "writes": false,
+        "parameter_updates": false
+      },
+      "greeting_bank": {
+        "path": "data/greeting-bank.json",
+        "phases": {
+          "Pop": [
+            "groups:greeting_bank:read_canonical_templates"
+          ],
+          "Wo": [
+            "fields:greeting_phase_binding:read"
+          ],
+          "Yax": [
+            "groups:greeting_bank:retrieve_phase_candidate"
+          ],
+          "Ch'en": [
+            "fields:greeting_source:read_provenance"
+          ],
+          "Xul": [
+            "patterns:registered_greeting_template:render_after_selection"
+          ]
+        },
+        "writes": false,
+        "learning_commit": false
+      },
+      "autocomplete_wildcard_graph": {
+        "path": "data/autocomplete.wildcard.gml",
+        "phases": {
+          "Pop": [
+            "graphs:AutocompleteWildcardGraph:read_registered_wildcard_shapes"
+          ],
+          "Yax": [
+            "graphs:AutocompleteWildcardGraph:retrieve_candidate_continuations"
+          ],
+          "Sek": [
+            "fields:AutocompleteCandidateEvidence:compare_declared_edges"
+          ],
+          "Ch'en": [
+            "graphs:AutocompleteWildcardGraph:read_provenance"
+          ]
+        },
+        "writes": false,
+        "selection_authority": false,
+        "pattern_promotion": false
+      }
+    }
+  },
+  "prompt_routes": [
+    {
+      "id": "precompiled_aiml_rest_match",
+      "priority": 5,
+      "when": "a prompt requires local AIML pattern matching",
+      "endpoint": "http://127.0.0.1:3217/match",
+      "method": "POST",
+      "request": {
+        "text": "prompt_text"
+      },
+      "result": "return_match_template_pattern_kind_and_confidence_or_no_match",
+      "authority": "observation_only",
+      "runtime": "precompiled_BSON_loaded_once_by_local_API"
+    },
+    {
+      "id": "phase_aware_srai_route_proposal",
+      "priority": 8,
+      "when": "a matched AIML template emits a pattern or semantic-anchor redirect",
+      "reads": [
+        "daemon_patterns",
+        "typed_bindings",
+        "semantic_relation_vectors"
+      ],
+      "result": "emit_a_symbolic_route_proposal_with_phase_trace_and_source_references",
+      "dispatch": "Sek host admission required",
+      "verification": "Ch'en required before Xul",
+      "authority": "observation_only"
+    },
+    {
+      "id": "phase_gated_key_gravity",
+      "priority": 12,
+      "when": "an atomic pattern, context, response, or redirect has shared unigram bigram or trigram references",
+      "reads": [
+        "key_gravity_fields"
+      ],
+      "result": "attach_phase_valid_gram_references_as_observation_only_evidence",
+      "frequency_selects_atom": false,
+      "authority": "observation_only"
+    },
+    {
+      "id": "local_pattern_answer",
+      "priority": 10,
+      "when": "normalized_input_matches_a_registered_static_pattern",
+      "reads": [
+        "daemon_patterns",
+        "knowledge_records"
+      ],
+      "result": "emit_the_matched_template_with_source_and_match_id",
+      "authority": "observation_only"
+    },
+    {
+      "id": "local_knowledge_context",
+      "priority": 20,
+      "when": "a_static_pattern_or_clarification_needs_domain_context",
+      "reads": [
+        "knowledge_records"
+      ],
+      "result": "add_provenance_tagged_evidence_without_promoting_it_to_verified_fact",
+      "authority": "observation_only"
+    },
+    {
+      "id": "phase_gated_gram_evidence",
+      "priority": 15,
+      "when": "no_direct_pattern_answer_exists_and_registered_grams_overlap_the_prompt",
+      "reads": [
+        "aiml_gram_index"
+      ],
+      "result": "attach_provenance_tagged_candidates_or_ask_a_clarifying_question",
+      "direct_answer_from_frequency_alone": false,
+      "authority": "observation_only"
+    },
+    {
+      "id": "host_gated_blog_feed",
+      "priority": 30,
+      "when": "the_matched_intent_is_one_of_the_declared_blog_feed_actions",
+      "reads": [
+        "knowledge_feed_policy"
+      ],
+      "dispatch": "host_registered_feed_adapter_only",
+      "default": "defer_when_network_or_adapter_is_not_explicitly_enabled",
+      "result": "return_titles_links_and_source_timestamps",
+      "authority": "route_proposal_only"
+    },
+    {
+      "id": "bounded_no_match",
+      "priority": 100,
+      "when": "no_local_pattern_or_admitted_feed_route_matches",
+      "result": "return_no_match_or_ask_one_clarifying_question",
+      "llm_fallback": false,
+      "authority": "observation_only"
+    }
+  ],
+  "xcfe_flow": {
+    "Pop": "accept_prompt_and_normalize_using_the_declared_normalization_contract",
+    "Wo": "bind_candidate_intent_pattern_and_typed_wildcard_captures",
+    "Yax": "read_local_pattern_and_knowledge_evidence_and_form_route_proposals",
+    "Sek": "select_only_a_registered_host_capability_after_binding_and_lane_checks",
+    "Ch'en": "record evidence coverage and unresolved gaps; the pattern engine itself does not verify facts",
+    "Xul": "return the response; no memory, model, or topology commit is implied"
+  },
+  "prompt_inputs": {
+    "always_required": [
+      {
+        "id": "aiml_source",
+        "path": "data/apps/daemon-bot-expanded.aiml",
+        "role": "canonical_static_pattern_and_template_source"
+      },
+      {
+        "id": "aiml_bson_bank",
+        "path": "../io/aiml-grams/alice.bson",
+        "role": "precompiled_read_only_AIML_pattern_bank"
+      },
+      {
+        "id": "aiml_rest_service",
+        "path": "tools/aiml_rest_api.py",
+        "role": "loopback_match_health_stats_and_reload_feed"
+      },
+      {
+        "id": "aiml_bson_compiler",
+        "path": "tools/compile_aiml_bank.py",
+        "role": "offline_precompile_only; no_launch_time_XML_parsing"
+      },
+      {
+        "id": "pattern_index",
+        "path": "data/programs/micronauts/daemon-bot.json",
+        "role": "compiled_pattern_index; rebuild_from_aiml_source_when_stale"
+      },
+      {
+        "id": "knowledge",
+        "path": "data/apps/daemon-bot-knowledge.json",
+        "role": "domain_records_feed_policy_and_source_rules"
+      },
+      {
+        "id": "normalization",
+        "path": "data/grammar/scfml.normalization.json",
+        "role": "input_normalization_and_unknown_miss_laws"
+      },
+      {
+        "id": "aiml_runtime_grammar",
+        "path": "data/grammar/aiml.runtime-grammar.ebnf",
+        "role": "pattern_template_and_capture_syntax"
+      },
+      {
+        "id": "aiml_manifest",
+        "path": "data/manifest/aiml.manifest.json",
+        "role": "aiml_key_book_and_semantic_vocabulary"
+      },
+      {
+        "id": "xcfe_aiml_contract",
+        "path": "data/grammar/xcfe-aiml.contract.json",
+        "role": "phase_operator_and_validation_contract"
+      },
+      {
+        "id": "pattern_bank_contract",
+        "path": "data/grammar/aiml-pattern-bank.contracts.json",
+        "role": "wildcard_binding_lane_and_admission_constraints"
+      },
+      {
+        "id": "dispatch_program",
+        "path": "data/programs/xcfe.aiml-micronaut-dispatch.json",
+        "role": "registered_route_proposal_and_admission_sequence"
+      },
+      {
+        "id": "trace_contract",
+        "path": "data/grammar/daemon-bot.trace.contracts.json",
+        "role": "reply_trace_and_observation_only_learning_boundary"
+      },
+      {
+        "id": "local_turn_log_schema",
+        "path": "data/schema/daemon-bot.local-turn.v1.schema.json",
+        "role": "validate_append_only_local_learning_records"
+      },
+      {
+        "id": "aiml_gram_index",
+        "path": "../io/aiml-grams/aiml-grams.v1.json.gz",
+        "compression": "gzip_json",
+        "role": "phase_typed_unigram_bigram_trigram_evidence; source_hash_must_match_before_use"
+      },
+      {
+        "id": "capability_registry",
+        "path": "data/micronauts/kuhul-micronaut-registry.json",
+        "role": "identity_and_capability lookup; the daemon bot is not registered there yet, so tool dispatch stays denied"
+      },
+      {
+        "id": "dialogue_contract",
+        "path": "data/grammar/mml/v1/DaemonPatterns.mml",
+        "role": "prompt_evidence_dialogue_and_bounded_response_contract"
+      },
+      {
+        "id": "dispatch_contract",
+        "path": "data/grammar/mml/v1/XaimlMicronautDispatch.mml",
+        "role": "route_proposal_and_host_admission_boundary"
+      }
+    ],
+    "conditional": [
+      {
+        "id": "behavior_modes",
+        "path": "data/grammar/daemon-behavior-modes.v1.json",
+        "when": "the user explicitly selects a response mode",
+        "role": "style selection only; never changes authority"
+      },
+      {
+        "id": "greeting_bank",
+        "path": "data/greeting-bank.json",
+        "when": "greeting intent is detected",
+        "role": "phase_labeled_greeting_templates; render_only_after_Xul_response_selection",
+        "phase_access": [
+          "Pop",
+          "Wo",
+          "Yax",
+          "Ch'en",
+          "Xul"
+        ],
+        "authority": "data_only; no persistent learning or authority changes"
+      },
+      {
+        "id": "srai_contract",
+        "path": "data/grammar/srai-operators.contracts.json",
+        "when": "a pattern emits an SRAI redirect",
+        "role": "redirect guard and recursion policy"
+      },
+      {
+        "id": "aiml_gram_compiler",
+        "path": "tools/compile_aiml_grams.py",
+        "when": "the AIML source corpus changes",
+        "role": "rebuild phase_typed unigram, bigram and trigram index"
+      },
+      {
+        "id": "aiml_atomic_compiler",
+        "path": "tools/aiml_to_atomic.py",
+        "when": "a source AIML file is compiled for XCFE structural verification",
+        "role": "Pydantic structural transform; no AIML execution"
+      },
+      {
+        "id": "atomic_program_example",
+        "path": "../io/aiml-grams/daemon-bot.atomic.json",
+        "when": "reviewing the compiled daemon-bot example",
+        "role": "declarative atom output; verify before admission"
+      },
+      {
+        "id": "semantic_srai_triangle_example",
+        "path": "data/grammar/mml/v1/franks-black-cat.semantic-srai.xml",
+        "when": "reviewing phase-aware semantic SRAI and relation-vector bindings",
+        "role": "declarative example; compiling it creates proposals only"
+      },
+      {
+        "id": "semantic_srai_atomic_output",
+        "path": "../io/aiml-grams/franks-black-cat.atomic.json",
+        "when": "reviewing the compiled semantic triangle",
+        "role": "verified atom graph; no capability execution"
+      },
+      {
+        "id": "live_feed",
+        "path": "https://duhdank.blogspot.com/feeds/posts/default",
+        "when": "a BLOG_FEED action is matched and a host feed adapter is admitted",
+        "role": "untrusted live evidence; preserve canonical URL and published or updated time"
+      },
+      {
+        "id": "cfpc_questions_graph",
+        "path": "data/cfpc-questions.gml",
+        "when": "a question requires CFPC gap classification or registered question-form routing",
+        "role": "closed question-topology declarations; pattern definitions and per-question outcomes remain in their separate sources",
+        "phase_access": [
+          "Pop",
+          "Yax",
+          "Ch'en"
+        ],
+        "read_only": true,
+        "authority": "data_only; declares no admission, verification, or commit"
+      },
+      {
+        "id": "continuation_bias_graph",
+        "path": "data/continuation-bias.gml",
+        "when": "Yax retrieves lexical continuation evidence for a candidate",
+        "role": "classic-lexicon token reuse prior; not semantic evidence and cannot independently select a response",
+        "phase_access": [
+          "Yax",
+          "Sek",
+          "Ch'en"
+        ],
+        "read_only": true,
+        "authority": "ranking_hint_only; no selection or admission"
+      },
+      {
+        "id": "eliza_bias_field",
+        "path": "data/eliza-bias.gml",
+        "when": "a registered ELIZA field/candidate projection is relevant",
+        "role": "ELIZA field and template projection; AIML/XML template content remains declarative and is not executed",
+        "phase_access": [
+          "Yax",
+          "Sek",
+          "Ch'en"
+        ],
+        "read_only": true,
+        "authority": "data_only; XCFE admission required for any later operation"
+      },
+      {
+        "id": "entropy_gradient_field",
+        "path": "data/entropy_gradient_field.gml",
+        "when": "a declared ambiguity/capture gate requires its read-only field parameters",
+        "role": "read-only entropy and diffusion parameter evidence; values do not authorize a route or mutate graph topology",
+        "phase_access": [
+          "Yax",
+          "Sek",
+          "Ch'en"
+        ],
+        "read_only": true,
+        "authority": "parameter_evidence_only; no computed permission inferred"
+      },
+      {
+        "id": "bias_parameter_graph",
+        "path": "data/bias.gml",
+        "when": "reviewing declared n-gram feature-to-parameter topology",
+        "role": "topology only; maps features and parameter families, with immutable corpus-prior nodes",
+        "phase_access": [
+          "Yax",
+          "Ch'en"
+        ],
+        "read_only": true,
+        "authority": "no mutation, admission, persistence, or parameter update"
+      },
+      {
+        "id": "autocomplete_wildcard_graph",
+        "path": "data/autocomplete.wildcard.gml",
+        "when": "a registered wildcard pattern has candidate autocomplete continuations",
+        "role": "read-only wildcard-to-ngram candidate associations; edge strengths are evidence and cannot independently select or answer",
+        "phase_access": [
+          "Pop",
+          "Yax",
+          "Sek",
+          "Ch'en"
+        ],
+        "read_only": true,
+        "authority": "candidate_evidence_only; no promotion, admission, or execution"
+      }
+    ],
+    "excluded": [
+      "LLM model endpoints and weights",
+      "unverified absolute training dataset paths",
+      "theoretical tensor dimensions without matching local artifacts",
+      "tool dispatch based only on prompt text or an AIML match"
+    ]
+  },
+  "routing_registry": {
+    "pattern_dispatch_program": "data/programs/xcfe.aiml-micronaut-dispatch.json",
+    "capability_registry": "data/micronauts/kuhul-micronaut-registry.json",
+    "daemon_bot_registration": "missing; local pattern answers remain available, but host capability dispatch is denied",
+    "tool_policy": "No tools are invoked in this profile. If a future profile enables one, the host must resolve its registration, capability, phase, bindings, and lane modes before dispatch.",
+    "route_authority": "A route candidate is not an invocation or grant.",
+    "aiml_rest_feed": {
+      "base_url": "http://127.0.0.1:3217",
+      "bind": "loopback_only",
+      "routes": [
+        "GET /health",
+        "GET /stats",
+        "POST /match",
+        "POST /reload"
+      ],
+      "dispatch_semantics": "local_pattern_match_data_only; no_AIML_tag_execution"
+    },
+    "srai_dispatch_boundary": {
+      "proposal_only": true,
+      "allowed_target_kinds": [
+        "aiml_pattern",
+        "semantic_anchor",
+        "micronaut_capability",
+        "xcfe_program",
+        "typed_field_lane"
+      ],
+      "sek_dispatcher": "registered_host_XCFE_admission_only",
+      "verification_phase": "Ch'en",
+      "unregistered_target": "remain_unresolved_and_do_not_dispatch"
+    }
+  },
+  "local_learning": {
+    "enabled": true,
+    "mode": "append_only_observation_and_candidate_discovery",
+    "log_path": "../io/daemon-bot-trace.jsonl",
+    "record_schema": "daemon-bot.local-turn.v1",
+    "schema_ref": "data/schema/daemon-bot.local-turn.v1.schema.json",
+    "record_fields": [
+      "id",
+      "occurredAt",
+      "input.raw",
+      "input.normalized",
+      "route.selected",
+      "route.pattern",
+      "route.confidence",
+      "output.source",
+      "output.text",
+      "learning.state",
+      "learning.candidateStatus"
+    ],
+    "record_events": [
+      "matched_reply",
+      "below_threshold",
+      "no_match",
+      "bank_unavailable"
+    ],
+    "candidate_policy": {
+      "no_match_is_candidate_evidence": true,
+      "repeated_patterns_may_be_summarized_for_review": true,
+      "automatic_pattern_insertion": false,
+      "automatic_fact_promotion": false,
+      "verification": "requires user_or_host_review_then_XCFE_admission_and_Ch'en_verification",
+      "commit": "authorized_Xul_only"
+    },
+    "privacy": "Local JSONL only. The raw utterance and local response are retained so the owner can review corrections and recurring misses."
+  },
+  "source_facts": {
+    "aiml_category_count": 86,
+    "knowledge_record_count": 88,
+    "count_note": "The AIML source has 86 categories; the knowledge file has 88 records. These are different inventories and must not be conflated.",
+    "feed_status": "not_verified_in_this_environment",
+    "runtime_registration": "not_verified",
+    "model_weights": "none_declared",
+    "additional_declared_sources": {
+      "cfpc_questions_graph": "closed question-form/gap routing topology",
+      "continuation_bias_graph": "4000 classic-vocabulary continuation hints; reuse prior only",
+      "eliza_bias_field": "data-only ELIZA field with XCFE admission requirement",
+      "entropy_gradient_field": "read-only ambiguity/diffusion parameter field",
+      "greeting_bank": "phase-labeled greeting templates, including canonical and adaptive categories",
+      "bias_parameter_graph": "n-gram feature/parameter topology; no mutation authority",
+      "autocomplete_wildcard_graph": "wildcard pattern to n-gram candidate associations; read-only suggestions"
+    }
+  },
+  "rebuild": {
+    "source_of_generated_pattern_index": "data/apps/daemon-bot-expanded.aiml",
+    "source_of_gram_index": "C:/public_html/kuhul/vendor/key-grammar-kit/data/alice",
+    "gram_compiler": "tools/compile_aiml_grams.py",
+    "gram_output": "../io/aiml-grams/aiml-grams.v1.json.gz",
+    "generated_pattern_index": "data/programs/micronauts/daemon-bot.json",
+    "generator_status": "not_present_in_this_local_key_grammar_kit_copy",
+    "required_gate": "Hash-check the AIML source set, compile category-local grams without crossing category boundaries, verify every lane against the current phase gate, then expose counts only as evidence. No frequency score may grant admission, verification, or execution.",
+    "bson_compiler": "tools/compile_aiml_bank.py",
+    "bson_output": "../io/aiml-grams/alice.bson",
+    "runtime_service": "tools/aiml_rest_api.py",
+    "launch_behavior": "load_precompiled_BSON; never_parse_AIML_XML_during_chat_startup",
+    "atomic_compiler": "tools/aiml_to_atomic.py",
+    "atomic_verifier": "AtomicVerifier included in tools/aiml_to_atomic.py; structural checks only",
+    "atomic_example": "../io/aiml-grams/daemon-bot.atomic.json",
+    "key_gravity_fields": "tools/aiml_to_atomic.py emits size-1/2/3 phase-tagged evidence references on each atom",
+    "semantic_srai_example": "data/grammar/mml/v1/franks-black-cat.semantic-srai.xml",
+    "semantic_srai_output": "../io/aiml-grams/franks-black-cat.atomic.json",
+    "phase_gated_sources": [
+      "cfpc_questions_graph",
+      "continuation_bias_graph",
+      "eliza_bias_field",
+      "entropy_gradient_field",
+      "bias_parameter_graph",
+      "greeting_bank",
+      "autocomplete_wildcard_graph"
+    ]
+  },
+  "key_gravity_fields": {
+    "schema": "key-gravity-fields-v1",
+    "source": "AIML atom text, indexed within each atom; grams never cross atom/category boundaries",
+    "sizes": [
+      "unigram",
+      "bigram",
+      "trigram"
+    ],
+    "reference_field": "atom.body.key_gravity_refs",
+    "shared_index": "AtomicProgram.key_gravity.fields",
+    "counts": {
+      "support_count": "distinct atoms referencing a gram",
+      "occurrence_count": "source occurrences across indexed atom text"
+    },
+    "phase_lanes": {
+      "Pop": "PromptGramLane",
+      "Wo": "ContextGramLane",
+      "Yax": [
+        "ResponseCandidateGramLane",
+        "RedirectProposalGramLane",
+        "ReasoningGramLane"
+      ]
+    },
+    "authority": false,
+    "selection_score": false,
+    "law": "Counts are retrieval evidence only. They do not resolve decisions, execute SRAI, verify facts, admit routes, or grant a phase permission.",
+    "flow_refs": "Flow atoms inherit endpoint gram references; each reference remains gated by its own phase.",
+    "support_count": "distinct text atoms and flow references"
+  },
+  "phase_aware_srai": {
+    "operator": "symbolic_redirect_and_route_proposal",
+    "target_kinds": [
+      "aiml_pattern",
+      "semantic_anchor",
+      "micronaut_capability",
+      "xcfe_program",
+      "typed_field_lane"
+    ],
+    "phase_order": [
+      "Pop",
+      "Wo",
+      "Yax",
+      "Sek",
+      "Ch'en",
+      "Xul"
+    ],
+    "responsibilities": {
+      "Pop": "capture input and declared context",
+      "Wo": "match patterns, relation vectors, and typed wildcard bindings",
+      "Yax": "expand semantic candidates as evidence only when needed",
+      "Sek": "require registered target, capability, phase, bindings, lane modes, and host XCFE admission before any dispatch",
+      "Ch'en": "verify target and result; rejection leaves route unexecuted",
+      "Xul": "close and return only after verification"
+    },
+    "srai_authority": false,
+    "compiler_executes_target": false,
+    "wcr": "W, C, and R may be declared as candidate evidence; illustrative scores are not recomputed or treated as measured runtime output by this compiler.",
+    "semantic_anchor_example": "⟁FRANKS-BLACK-CAT"
+  }
+}

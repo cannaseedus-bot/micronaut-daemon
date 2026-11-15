@@ -1,0 +1,90 @@
+{
+  "@type": "khanary.interaction_mode.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "user_information_selects_the_mode_the_daemon_proposes_another_layer_dispatches",
+  "lane": "KHANARY_INTERACTION_MODE_TEST",
+  "owner": "src/io/interaction_mode.cpp",
+  "why": "User-provided information decides the interaction: whether an answer may be asserted, whether research must run first, and whether a stale or contradicted fact has to be reconciled. Without a declared table the same input could be answered directly in one path and researched in another, and the epistemic states would quietly collapse into a guess. The daemon layer proposes; it does not dispatch — the shipped dialogue schema already pins `dispatch_requested` to false.",
+  "bindings": {
+    "speech_acts": "drivers/daemon-dialogue/daemon-dialogue.v1.schema.json (#/properties/speech_act) — the same nine acts, reused rather than reinvented",
+    "dialogue_does_not_dispatch": "the dialogue schema declares `dispatch_requested: const false`, so a mode may propose effects but not perform them",
+    "research": "src/host/research_run.cpp (fetch_wikipedia / fetch_arxiv / fetch_url)",
+    "mcp": "src/io/mcp_server.cpp",
+    "gap_register": "PLAN.md",
+    "fields": "src/world/asx_field.h (key → declared neighborhood)"
+  },
+  "speech_acts": [
+    "intent_analysis", "question", "hypothesis", "objection", "evidence_report",
+    "proposal", "agreement", "disagreement", "final_answer"
+  ],
+  "daemon_modes": {
+    "direct": "answer from already-covered, fresh, evidenced knowledge",
+    "assist": "compose fields or propose one-line fixes from covered knowledge; assert nothing new",
+    "research": "gather external evidence before anything is asserted",
+    "verify": "fact-check a claim that arrived without evidence (a hypothesis is never self-certifying)",
+    "reconcile": "a correction or conflict against stored knowledge: resolve, never silently overwrite",
+    "clarify": "the input does not determine an answer: ask, and keep the state UNKNOWN"
+  },
+  "selection_law": {
+    "law": "the mode is a deterministic function of the user's information: speech act, topic coverage, freshness, whether it conflicts with stored knowledge, and whether evidence came with it",
+    "order": [
+      "1. a conflict with stored knowledge, an objection or a disagreement → reconcile",
+      "2. a request for current information, or a stale fact → research",
+      "3. a hypothesis → verify (never assert from its own statement)",
+      "4. a proposal → assist (compose or propose, assert nothing)",
+      "5. a question or intent analysis over covered, fresh, evidenced knowledge → direct",
+      "6. an evidence report over covered fresh knowledge → direct",
+      "7. an agreement or final answer that is covered, fresh and evidenced → direct",
+      "8. anything else → clarify, and the state stays UNKNOWN"
+    ],
+    "determinism": "rule order is part of the contract: applying the same information always selects the same mode"
+  },
+  "epistemic_states": {
+    "vocabulary": ["SUPPORTED", "MISS", "UNKNOWN", "CONTRADICTED"],
+    "law": "these never collapse: only SUPPORTED may be asserted, MISS carries a research plan instead of an answer, UNKNOWN asks rather than guesses, and CONTRADICTED reconciles rather than overwrites",
+    "mapping": {
+      "direct": "SUPPORTED",
+      "research": "MISS (with a research plan)",
+      "verify": "UNKNOWN until evidence arrives",
+      "reconcile": "CONTRADICTED when the conflict is unevidenced, UNKNOWN when it is being resolved",
+      "assist": "UNKNOWN (a proposal asserts nothing)",
+      "clarify": "UNKNOWN"
+    }
+  },
+  "online_update_events": {
+    "law": "an online event signals that information has moved on; it invalidates only the topics it covers",
+    "stale": "a covered, affected topic becomes stale and must be re-researched before it is used again",
+    "contradicted": "an event that supersedes prior information marks the covered topic CONTRADICTED rather than merely stale",
+    "no_op": "an uncovered topic is a no-op: an update signal never invalidates knowledge it says nothing about",
+    "downstream": "a stale or contradicted topic blocks composition until it is re-researched"
+  },
+  "effects": {
+    "law": "the three effects are the only things a session may do with what it learned, and each is gated independently",
+    "compose_field": {
+      "requires": "SUPPORTED knowledge and a fresh topic; a stale or unsupported topic may not be composed into a field",
+      "produces": "a proposal (see src/world/asx_field.h key → field expansion)"
+    },
+    "update_gap": {
+      "requires": "evidence and a legal transition; closing a gap needs its validation command, so an unevidenced claim cannot mark anything Resolved"
+    },
+    "fix_one_liner": {
+      "requires": "admission; a session proposes the edit and another layer applies it, because the dialogue schema declares dispatch_requested false"
+    }
+  },
+  "invariants": {
+    "IM1": "only SUPPORTED may be asserted; MISS carries a research plan, UNKNOWN asks, and CONTRADICTED reconciles — the four states never collapse into one answer",
+    "IM2": "a request for current information, or a stale fact, forces research before any assertion",
+    "IM3": "a hypothesis is verified, never asserted from its own statement",
+    "IM4": "a user correction that conflicts with stored knowledge reconciles; it never silently overwrites",
+    "IM5": "an online event invalidates only the topics it covers, and an uncovered topic is a no-op",
+    "IM6": "composing a field requires SUPPORTED knowledge and a fresh topic; composition from stale or unevidenced knowledge is refused",
+    "IM7": "a gap update requires evidence and a legal transition: without them the state does not move",
+    "IM8": "a one-line fix is proposed, never applied, without admission — the dialogue layer declares dispatch_requested false and so does this layer"
+  },
+  "status_vocabulary": [
+    "direct", "assist", "research", "verify", "reconcile", "clarify",
+    "allowed", "refused_stale", "refused_unsupported", "refused_not_admitted",
+    "refused_illegal_transition", "no_update", "stale", "contradicted"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "icon-library",
+  "@key": "⟁APP:ICON_LIBRARY",
+  "@mount": "⟁ROOT:ICON_LIBRARY",
+  "@theme": { "accent": "#38bdf8", "bg": "#000a10", "surface": "#001420", "text": "#e0f2fe", "hero_phase": "Yax", "tagline": "One place for all your icons" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "icons", "component": "⟁WIDGET:ICONS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "icons": [], "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:ICON_LIBRARY": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:IMPORT"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@placeholder": "Search icons...", "@on": { "input": "il.search" } },
+    "⟁ACTION:IMPORT": { "@type": "button", "@text": "Import SVG", "@on": { "click": "il.open_import" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:ICONS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:ICONS": { "@type": "grid", "@bind": "state.icons", "@children": ["⟁WIDGET:ICON_CARD"] },
+    "⟁WIDGET:ICON_CARD": { "@type": "content-card", "@bind": "icon", "@on": { "copy_svg": "il.copy_svg", "copy_react": "il.copy_react" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:SELECTED", "⟁WIDGET:CATEGORIES"] },
+    "⟁WIDGET:SELECTED": { "@type": "list", "@bind": "data.selected" },
+    "⟁WIDGET:CATEGORIES": { "@type": "tag-cloud", "@bind": "data.categories" }
+  },
+  "@programs": {
+    "il.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] },
+    "il.open_import": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "il.copy_svg": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_copied", "@out": "copied" }] },
+    "il.copy_react": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_copied", "@out": "copied" }] }
+  },
+  "@events": { "search.input": "il.search", "import.open": "il.open_import", "icon.copy_svg": "il.copy_svg", "icon.copy_react": "il.copy_react" },
+  "@imports": [{ "ref": "icon", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "size-preview", "name": "Size Preview", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Preview icons at 16/24/32/48px simultaneously." },
+      { "id": "sprite-export", "name": "SVG Sprite Export", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Export a single optimised SVG sprite sheet." },
+      { "id": "figma-sync", "name": "Figma Component Sync", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Sync your icon library to a Figma file as components." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "il.search", "pattern": "FIND ICON *|SEARCH ICON *|ICON FOR *", "intent": "search" },
+      { "id": "il.copy", "pattern": "COPY ICON *|GET SVG *|ICON CODE", "intent": "copy_svg" }
+    ]
+  },
+  "@data": {
+    "selected": [],
+    "categories": ["UI", "Navigation", "Media", "Social", "Commerce", "Misc"],
+    "spotlight": [
+      { "id": "sp1", "title": "Fold Phase Icons (6-pack)", "category": "K'UHUL", "badge": "Custom", "count": 6, "excerpt": "Pop, Wo, Yax, Sek, Ch'en, Xul — each as a 24px SVG glyph." },
+      { "id": "sp2", "title": "Heroicons v2 (all)", "category": "UI", "badge": "Imported", "count": 292, "excerpt": "Full Heroicons v2 set in outline and solid variants." },
+      { "id": "sp3", "title": "Lucide React (subset)", "category": "UI", "badge": "Subset", "count": 48, "excerpt": "48 frequently used Lucide icons for dashboard UIs." }
+    ],
+    "schema": {
+      "icon": { "primaryKey": "icon_id", "fields": { "icon_id": { "type": "string" }, "name": { "type": "string", "required": true }, "category": { "type": "string" }, "tags": { "type": "json" }, "svg_source": { "type": "text", "required": true }, "set_name": { "type": "string" }, "added_at": { "type": "datetime" } } }
+    }
+  }
+}

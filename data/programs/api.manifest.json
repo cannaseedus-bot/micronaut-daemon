@@ -1,0 +1,47 @@
+{
+  "@kind": "kuhul.api.manifest.v2",
+  "server": {
+    "host": "127.0.0.1",
+    "port": 8787,
+    "api_prefix": "/api",
+    "manifest": "dist/json-runtime/server.json",
+    "runtime": "manifest-driven-json-runtime"
+  },
+  "endpoints": {
+    "health":      "/api/health",
+    "run":         "/api/run",
+    "graph":       "/api/graph",
+    "sco":         "/api/sco/<alias>",
+    "discovery":   "/api/discovery",
+    "rom_exec":    "/api/rom/exec",
+    "rom_compile": "/api/rom/compile",
+    "rom_parse":   "/api/rom/parse",
+    "rom_write":   "/api/rom/write",
+    "rom_health":  "/api/rom/health"
+  },
+  "coder_api": {
+    "parse":    { "method": "POST", "path": "/api/coder/parse",    "params": ["grammar", "source"] },
+    "compile":  { "method": "POST", "path": "/api/coder/compile",  "params": ["grammar", "source"] },
+    "generate": { "method": "POST", "path": "/api/coder/generate", "params": ["grammar", "fn_name"] },
+    "api_write":{ "method": "POST", "path": "/api/coder/api-write","params": ["grammar", "source"] },
+    "todos":    { "method": "POST", "path": "/api/coder/todos",    "params": ["source"] }
+  },
+  "rom": {
+    "magic":        "JROM",
+    "version":      1,
+    "format":       "CBOR",
+    "content_type": "application/rom",
+    "impl":         "src/api.cpp",
+    "note": "A JSON program compiled to ROM is CBOR-encoded binary prefixed with JROM magic + version byte. ROM files execute without JSON parsing overhead and can be stored as .rom files."
+  },
+  "models": {
+    "micronaut-coder": "native C++ pipeline (parse/compile/generate/api-write/todos)",
+    "gpt-oss":         "default planner and general chat model on :9000",
+    "lfm2.5-1.2b":     "LM Studio/llama.cpp tool model via lmstudio://tools",
+    "phi3-mini-4k":    "single-tool-call fallback",
+    "dolphin-phi2":    "reasoning fallback",
+    "mini":            "low-latency classifier and route selector"
+  },
+  "capability_routes": "programs/model-capability-routes.json",
+  "note": "api.cpp registers the ROM bytecode surface (/api/rom/*). @import this manifest to declare ROM API access in your program entry."
+}

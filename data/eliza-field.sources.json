@@ -1,0 +1,52 @@
+{
+  "@kind": "kuhul.eliza-field-sources.v1",
+  "sources": [
+    { "path": "data/alice/greetings.aiml", "field": "⟁CONVERSATION" },
+    { "path": "data/alice/chat.aiml", "field": "⟁CONVERSATION" },
+    { "path": "data/alice/salutations.aiml", "field": "⟁CONVERSATION" },
+    { "path": "data/alice/knowledge.aiml", "field": "⟁GENERAL_QA" },
+    { "path": "data/alice/ai.aiml", "field": "⟁GENERAL_QA" },
+    { "path": "data/alice/science.aiml", "field": "⟁GENERAL_QA" },
+    { "path": "data/alice/math.aiml", "field": "⟁REASONING" },
+    { "path": "data/alice/word-problem.aiml", "field": "⟁REASONING" },
+    { "path": "data/alice/graph-fold-field.aiml", "field": "⟁KNOWLEDGE" },
+    { "path": "data/alice/emotion.aiml", "field": "⟁REFLECTION" },
+    { "path": "data/alice/psychology.aiml", "field": "⟁REFLECTION" },
+    { "path": "data/alice/default.aiml", "field": "⟁FALLBACK" }
+  ],
+  "field_order": ["⟁GENERAL_QA", "⟁REFLECTION", "⟁CONVERSATION", "⟁KNOWLEDGE", "⟁REASONING", "⟁FALLBACK"],
+  "rules": [
+    {
+      "id": "reflection.feeling",
+      "field": "⟁REFLECTION",
+      "pattern": "I FEEL *",
+      "if": { "predicate": "capture_contains", "capture": 1, "value": "SAD" },
+      "then": "What has been making you feel {1}?",
+      "else": "Tell me more about feeling {1}.",
+      "default_bias": 1.1
+    }
+  ],
+  "authority": "data_only",
+  "projection": "vendor/key-grammar-kit/data/eliza-bias.gml",
+  "micronaut_manifest": "data/manifest/micronaut.manifest.json",
+  "bindings": {
+    "static": [
+      {
+        "id": "binding:ELIZA_PROGRAM",
+        "target": "program:micronaut.eliza_field.live_resolve",
+        "implementation_ref": "micronaut/eliza_field.py#live_resolve",
+        "input_type": "ConversationQuery",
+        "output_type": "ElizaCandidateSet"
+      }
+    ],
+    "dynamic": [
+      { "intent": "GENERAL_QA", "cfpc_intents": ["define", "fact"], "field": "⟁GENERAL_QA" },
+      { "intent": "REFLECTION", "cfpc_intents": ["reflection", "emotion"], "field": "⟁REFLECTION" },
+      { "intent": "RELATION_QUERY", "cfpc_intents": ["relation", "relationship"], "field": "⟁KNOWLEDGE" },
+      { "intent": "REASONING", "cfpc_intents": ["explain", "reason"], "field": "⟁REASONING" },
+      { "intent": "CONVERSATION", "cfpc_intents": ["greeting", "conversation"], "field": "⟁CONVERSATION" },
+      { "intent": "ELSE", "cfpc_intents": [], "field": "⟁FALLBACK" }
+    ],
+    "lifecycle": ["DECLARED", "RESOLVED", "VALIDATED", "ADMITTED", "DISPATCHED"]
+  }
+}

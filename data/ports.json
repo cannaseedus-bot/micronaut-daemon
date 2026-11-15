@@ -1,0 +1,61 @@
+{
+  "$schema": "urn:kuhul:khanary:schema:ports:v1",
+  "@type": "khanary.port_registry.v1",
+  "chat_mu": 17889,
+  "tool_mu": 17890,
+  "completion": 17892,
+  "public_api": {"base_url": "https://api.kuhul.dev", "port": 443, "protocol": "https", "role": "public KHANARY API edge over the local completion/KQL mesh runtime", "authority": "transport/routing only; not semantic authority"},
+  "mcp":     17891,
+  "rpc":     8787,
+  "policy": {
+    "known_micronauts_bind_to_abstract_ports": true,
+    "do_not_allocate_unique_socket_per_micronaut": true,
+    "concrete_ports_are_host_bindings_only": true,
+    "abstract_ports_are_the_runtime_contract": true,
+    "authority": "routing/configuration only; not semantic authority"
+  },
+  "concrete_ports": {
+    "chat_mu": 17889,
+    "tool_mu": 17890,
+    "completion": 17892,
+    "mcp": 17891,
+    "rpc": 8787
+  },
+  "abstract_ports": {
+    "chat": {"port_ref": "chat_mu", "protocol": "openai-compatible-chat", "role": "general conversational micronaut lane"},
+    "tool": {"port_ref": "tool_mu", "protocol": "openai-compatible-chat", "role": "tool/action micronaut lane"},
+    "completion": {"port_ref": "completion", "protocol": "openai-compatible-completion", "role": "single completion facade over chat/tool lanes"},
+    "api": {"port_ref": "completion", "public_ref": "public_api", "protocol": "https+openai-compatible", "role": "public text/code/image/learning/RPC facade"},
+    "mcp": {"port_ref": "mcp", "protocol": "mcp/http", "role": "tool gateway and mesh-control surface"},
+    "rpc": {"port_ref": "rpc", "protocol": "json-rpc/http", "role": "native KHANARY runtime API"},
+    "tensor": {"port_ref": "rpc", "protocol": "json-rpc/http", "role": "tensor/vector/KQL query operations"},
+    "memory": {"port_ref": "rpc", "protocol": "json-rpc/http", "role": "JROM/KQL/gram memory operations"},
+    "control": {"port_ref": "mcp", "protocol": "mcp/http", "role": "orchestration and policy control"}
+  },
+  "known_micronauts": {
+    "ADVISOR-µ": {"abstract_port": "chat", "fallback_abstract_port": "completion"},
+    "APP-WIZARD-µ": {"abstract_port": "completion", "fallback_abstract_port": "chat"},
+    "BLOG-µ": {"abstract_port": "chat", "fallback_abstract_port": "completion"},
+    "CODE-µ": {"abstract_port": "tool", "fallback_abstract_port": "completion"},
+    "CONTROL-µ": {"abstract_port": "control", "fallback_abstract_port": "rpc"},
+    "CREATE-µ": {"abstract_port": "completion", "fallback_abstract_port": "chat"},
+    "FGP-µ": {"abstract_port": "tensor", "fallback_abstract_port": "rpc"},
+    "FILE-µ": {"abstract_port": "tool", "fallback_abstract_port": "memory"},
+    "GRAPHICS-µ": {"abstract_port": "completion", "fallback_abstract_port": "tool"},
+    "GREETING-µ": {"abstract_port": "chat", "fallback_abstract_port": "completion"},
+    "INFER-µ": {"abstract_port": "chat", "fallback_abstract_port": "tensor"},
+    "JOKE-µ": {"abstract_port": "chat", "fallback_abstract_port": "completion"},
+    "MEM-µ": {"abstract_port": "memory", "fallback_abstract_port": "rpc"},
+    "METRIC-µ": {"abstract_port": "tensor", "fallback_abstract_port": "rpc"},
+    "Mx2LM": {"abstract_port": "tensor", "fallback_abstract_port": "memory"},
+    "NET-µ": {"abstract_port": "tool", "fallback_abstract_port": "mcp"},
+    "ORCH-µ": {"abstract_port": "control", "fallback_abstract_port": "mcp"},
+    "PLAN-µ": {"abstract_port": "chat", "fallback_abstract_port": "control"},
+    "POLITICS-µ": {"abstract_port": "chat", "fallback_abstract_port": "completion"},
+    "REASON-µ": {"abstract_port": "chat", "fallback_abstract_port": "tensor"},
+    "TENSOR-µ": {"abstract_port": "tensor", "fallback_abstract_port": "rpc"},
+    "TOOL-µ": {"abstract_port": "tool", "fallback_abstract_port": "mcp"},
+    "VECTOR-µ": {"abstract_port": "tensor", "fallback_abstract_port": "rpc"},
+    "WEB-RESEARCH-µ": {"abstract_port": "tool", "fallback_abstract_port": "mcp"}
+  }
+}

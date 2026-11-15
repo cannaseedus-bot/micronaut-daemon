@@ -1,0 +1,166 @@
+{
+  "schema": "kuhul.micronaut.atomic.v1",
+  "identity": {
+    "id": "USER-µ",
+    "name": "UserDataLayer",
+    "version": "1.0.0",
+    "authority_claim": "write_state"
+  },
+  "descriptor_status": "declarative_proposal",
+  "registered": false,
+  "registered_status": "unregistered; call register_micronaut() to activate",
+  "track_ref": "data/tracks/USER-u.semantic-tracks.v1.json",
+  "bindings_ref": "shell/user_bindings.psm1",
+  "manifest": {
+    "display_name": "User Data Layer µ",
+    "tagline": "⟁USER:* resource bindings — roles, profiles, table, memory, micronauts, sessions",
+    "color": "#34a853",
+    "icon_svg": "data/micronauts/assets/user.svg",
+    "animated_svg": "data/micronauts/assets/user.animated.svg",
+    "profile_card": {
+      "widget": "data/host/apps/micronaut-card.asx-app.json",
+      "props": { "id": "USER-µ", "phase": "Wo", "category": "data-layer" }
+    }
+  },
+  "api": {
+    "namespace": "user",
+    "base": "http://127.0.0.1:17885",
+    "atomic_keys": [
+      { "key": "user.role",       "description": "get / set / test user role; query the role DAG (dag.dll)" },
+      { "key": "user.profile",    "description": "CRUD user profile document — OAuth-populated name, email, avatar" },
+      { "key": "user.table",      "description": "denormalized user document — combined profile+role+session refs; fast json_runtime cache" },
+      { "key": "user.memory",     "description": "per-user persistent key-value memory via MongoDB.Bson; supports semantic search" },
+      { "key": "user.micronauts", "description": "capability grants — which micronauts and atomic keys a user can call" },
+      { "key": "user.sessions",   "description": "session tokens bridging OAuth tokens and micronaut session state" },
+      { "key": "user.log",        "description": "Pattern.Log audit trail — write/read/search every prompt and response per user; supports GDPR erasure" },
+      { "key": "user.health",     "description": "USER-µ backend status — MongoDB ping, dag.dll loaded, json_runtime cache stats, Pattern.Log flush queue" }
+    ]
+  },
+  "resources": {
+    "ROLE": {
+      "key": "⟁USER:ROLE",
+      "description": "User role and permission graph. admin > moderator > member > guest. DAG edges model inheritance; custom roles can be added per-app.",
+      "backend": "dag.dll",
+      "schema": { "user_id": "string", "role": "string", "app_id": "string?", "granted_at": "iso8601" },
+      "operations": ["get", "set", "test", "graph", "add_edge", "list_by_role"]
+    },
+    "PROFILE": {
+      "key": "⟁USER:PROFILE",
+      "description": "OAuth-populated user profile. Created on first login via Initialize-UserFromOAuth. Fields: user_id, name, email, avatar_url, provider, created_at.",
+      "backend": "MongoDB.Bson.dll",
+      "collection": "users.profiles",
+      "schema": {
+        "user_id":    "string (provider:sub)",
+        "name":       "string",
+        "email":      "string",
+        "avatar_url": "string",
+        "provider":   "google | github | facebook",
+        "created_at": "iso8601",
+        "last_seen":  "iso8601"
+      },
+      "operations": ["new", "get", "set", "remove", "find_by_email"]
+    },
+    "TABLE": {
+      "key": "⟁USER:TABLE",
+      "description": "Denormalized user record — fastest read path. Combines profile + current role + session refs + app memberships. In-process cache via json_runtime_lib, MongoDB persistence.",
+      "backend": "json_runtime_lib.dll",
+      "collection": "users.table",
+      "schema": {
+        "_id":         "user:<user_id>",
+        "user_id":     "string",
+        "email":       "string",
+        "name":        "string",
+        "role":        "string",
+        "roles":       "string[]",
+        "apps":        "string[]",
+        "micronauts":  "string[]",
+        "created_at":  "iso8601",
+        "last_seen":   "iso8601",
+        "memory_ref":  "users.memory/<user_id>",
+        "session_ref": "users.sessions/<user_id>"
+      },
+      "operations": ["get", "query", "list", "remove", "clear_cache"]
+    },
+    "MEMORY": {
+      "key": "⟁USER:MEMORY",
+      "description": "Per-user persistent key-value memory. Each entry has user_id, key, category, importance, and value. Supports semantic search via GEMMA-µ when available.",
+      "backend": "MongoDB.Bson.dll",
+      "collection": "users.memory",
+      "schema": {
+        "user_id":    "string",
+        "key":        "string",
+        "value":      "any",
+        "category":   "string",
+        "importance": "float [0.0–1.0]",
+        "written_at": "iso8601"
+      },
+      "operations": ["write", "read", "get_all", "remove", "search"]
+    },
+    "MICRONAUTS": {
+      "key": "⟁USER:MICRONAUTS",
+      "description": "Capability grants — which micronauts and atomic keys a user can call. Each grant includes allowed_keys (empty = all). Grant graph tracked via dag.dll.",
+      "backend": "dag.dll",
+      "collection": "users.micronauts",
+      "schema": {
+        "user_id":      "string",
+        "micronaut_id": "string",
+        "allowed_keys": "string[] (empty = all keys permitted)",
+        "granted_by":   "string",
+        "granted_at":   "iso8601"
+      },
+      "operations": ["get", "grant", "revoke", "check"]
+    },
+    "SESSIONS": {
+      "key": "⟁USER:SESSIONS",
+      "description": "Session tokens bridging OAuth tokens and micronaut session state. Created by Initialize-UserFromOAuth after OAuth callback. Integrates with oauth_bindings.psm1.",
+      "backend": "json_runtime_lib.dll",
+      "collection": "users.sessions",
+      "schema": {
+        "session_token": "string (base64 32-byte random)",
+        "user_id":       "string",
+        "provider":      "string",
+        "oauth_token":   "string",
+        "app_id":        "string",
+        "created_at":    "iso8601",
+        "expires_at":    "iso8601"
+      },
+      "operations": ["new", "get", "list", "test", "remove", "revoke_all"]
+    }
+  },
+  "xcfe": {
+    "authority": "write_state",
+    "permitted": [
+      "emit_response",
+      "write_state",
+      "gramRead",
+      "redirect_srai"
+    ],
+    "forbidden": [
+      "mutate_topology",
+      "commit_patterns"
+    ]
+  },
+  "program_contract": {
+    "phase": "Wo",
+    "effects": ["gramRead", "write_state", "emit_response"],
+    "learning": {
+      "mode": "none",
+      "note": "user data layer — no pattern learning; routes LEARN verb to AIML-µ"
+    },
+    "drivers": [
+      "MongoDB.Bson.dll",
+      "dag.dll",
+      "json_runtime_lib.dll",
+      "Pattern.Log.dll"
+    ],
+    "oauth_integration": {
+      "module": "shell/oauth_bindings.psm1",
+      "bootstrap_function": "Initialize-UserFromOAuth",
+      "trigger": "oauth.callback event from oauth_bindings after token exchange"
+    }
+  },
+  "srai": {
+    "mode": "delegate",
+    "max_depth": 3
+  }
+}

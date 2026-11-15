@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://khanary.local/schema/semantic-grammar.schema.json",
+  "title": "Semantic Grammar artifact",
+  "description": "Machine digest of the K'UHUL semantic EBNF (data/grammar/kuhul.runtime-grammar.ebnf): the §24 XCFE node-class closed set with its atom→rung routing, §24 operators, §25 GlyphOps (SC-13 table), §26 gram channel vocabulary, §3 phase_ref rung order, and the §73 attributed lexical grounding (@cue/@morpheme). Emitted by tools/semantic_grammar.py — the §71 'target pipeline' compiler pass — and consumed by src/kuhul/semantic_grammar.cpp. A checker must never manufacture the authority it verifies: a missing source is reported, never reverse-engineered from the artifact.",
+  "type": "object",
+  "required": ["rungs", "routings", "cues"],
+  "properties": {
+    "@kind": { "type": "string", "const": "khanary.semantic.grammar.v1" },
+    "language": { "type": "string" },
+    "version": { "type": "string" },
+    "rungs": {
+      "type": "array",
+      "description": "C6 rung order, compiled from §3 phase_ref (Pop→Wo→Yax→Sek→Ch'en→Xul).",
+      "items": { "type": "string" }
+    },
+    "routings": {
+      "type": "array",
+      "description": "Atom → rung, compiled from §24 xcfe_node_class including its (* -> rung *) routing comments. This is the §72 licensing ladder as data: the ladder's atom admission table.",
+      "items": {
+        "type": "object",
+        "required": ["atom", "rung"],
+        "properties": {
+          "atom": { "type": "string" },
+          "rung": { "type": "string" }
+        }
+      }
+    },
+    "operators": {
+      "type": "array",
+      "description": "§24 xcfe_operator_name: operator → node class.",
+      "items": {
+        "type": "object",
+        "required": ["name", "node_class"],
+        "properties": {
+          "name": { "type": "string" },
+          "node_class": { "type": "string" }
+        }
+      }
+    },
+    "glyph_ops": {
+      "type": "array",
+      "description": "§25 glyph_op: the closed set of KLSL GlyphOps admissible at Sek (SC-13).",
+      "items": { "type": "string" }
+    },
+    "gram_channels": {
+      "type": "array",
+      "description": "§26 gram_channel_name fixed vocabulary (the production additionally admits arbitrary string channels).",
+      "items": { "type": "string" }
+    },
+    "cues": {
+      "type": "array",
+      "description": "§73 attributed lexical grounding: surface cue → node class. Cue resolution grounds atoms; it never authorizes (SC-24).",
+      "items": {
+        "type": "object",
+        "required": ["cue", "atom"],
+        "properties": {
+          "cue": { "type": "string" },
+          "atom": { "type": "string" }
+        }
+      }
+    },
+    "morphemes": {
+      "type": "array",
+      "description": "§73 morpheme rules: affix-scoped grounding. Emitted pseudo-cues (prefix:un / suffix:able) must exist in the cue table; min_stem is the minimum stem length after stripping the affix (prefixes 3, suffixes 2 — the historical grounding-lane guards).",
+      "items": {
+        "type": "object",
+        "required": ["kind", "form", "min_stem", "cue", "atom"],
+        "properties": {
+          "kind": { "type": "string", "enum": ["prefix", "suffix"] },
+          "form": { "type": "string" },
+          "min_stem": { "type": "integer" },
+          "cue": { "type": "string" },
+          "atom": { "type": "string" }
+        }
+      }
+    },
+    "transpiles": {
+      "type": "array",
+      "description": "§71 @transpile attributed productions: surfaces → (key, b, theta, gram). theta must be a declared rung; b a binary address. Empty until real productions are authored in the EBNF (the §71 example remains commented); the compiler validates them as soon as they are authored.",
+      "items": {
+        "type": "object",
+        "required": ["name", "surfaces", "key", "binary_address", "theta", "gram"],
+        "properties": {
+          "name": { "type": "string" },
+          "surfaces": { "type": "array", "items": { "type": "string" } },
+          "key": { "type": "string" },
+          "binary_address": { "type": "string" },
+          "theta": { "type": "string" },
+          "gram": { "type": "string" }
+        }
+      }
+    }
+  },
+  "additionalProperties": true,
+
+  "optional": ["language", "version", "operators", "glyph_ops", "gram_channels", "morphemes", "transpiles"],
+  "routing_required": ["atom", "rung"],
+  "cue_required": ["cue", "atom"],
+  "operator_required": ["name", "node_class"],
+  "rung_set_source": "data/grammar/kuhul.runtime-grammar.ebnf (§3 phase_ref)",
+  "languages": [
+    {
+      "language": "kuhul-semantic",
+      "artifact": "data/grammar/kuhul.semantic-grammar.json",
+      "source": "data/grammar/kuhul.runtime-grammar.ebnf",
+      "source_expected": true
+    }
+  ],
+  "verification_algebra": {
+    "VERIFIED": "shape valid, source present, regeneration matches the generated subset",
+    "INVALID": "schema violation, or a declared source is missing, or regeneration disagrees",
+    "UNVERIFIED": "no canonical source available; absence of proof is representable and is neither PASS nor FAIL"
+  }
+}

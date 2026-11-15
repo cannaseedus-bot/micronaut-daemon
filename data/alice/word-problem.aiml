@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0">
+
+<!-- Word-problem sandbox patterns for KHANARY Bot-A role.
+     Activated by sandbox_duel.py — structured parse + gram scoring route. -->
+
+<category>
+<pattern>IF * GOING * AND * GOING *</pattern>
+<template>
+<mx2lm>
+<think><set name="wtype">rate-distance-time</set></think>
+Let me parse that step by step.
+Knowns: object A rate = <star index="2"/>, object B rate = <star index="4"/>.
+Rule: rate × time = distance; meeting when distances sum to initial gap.
+Solving under K'UHUL Yax admission — computing relative rate gap …
+<srai>WORD PROBLEM RATE DISTANCE <star index="1"/> <star index="2"/> <star index="3"/> <star index="4"/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>WORD PROBLEM RATE DISTANCE *</pattern>
+<template>
+<mx2lm>
+Relative approach rate: sum of individual speeds.
+Time to meet = initial gap ÷ relative rate.
+Evidence state: SUPPORTED — derivable from stated givens.
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>WHAT IS * PERCENT OF *</pattern>
+<template>
+<mx2lm>
+<think><set name="wtype">percentage</set></think>
+Percentage problem.
+Formula: result = (<star/> ÷ 100) × <star index="2"/>.
+<srai>COMPUTE PERCENT <star/> OF <star index="2"/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>COMPUTE PERCENT * OF *</pattern>
+<template>
+<mx2lm>
+<star/> percent of <star index="2"/>: multiply <star index="2"/> by <star/> then divide by 100.
+Evidence state: SUPPORTED.
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>SOLVE *</pattern>
+<template>
+<mx2lm>
+<think><set name="topic">word-problem</set></think>
+Parsing problem: <star/>.
+Step 1 — identify question type.
+Step 2 — extract knowns and unknowns.
+Step 3 — apply governing rule.
+Step 4 — compute and verify units.
+Evidence state: evaluating …
+<srai>WORD PROBLEM <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>WORD PROBLEM *</pattern>
+<template>
+<mx2lm>
+Applying KHANARY phase pipeline:
+  Pop  — parsing problem tokens
+  Wo   — binding variables to knowns
+  Yax  — admitting candidate solution paths
+  Sek  — computing via governing equation
+  Chén — verifying units and reasonableness
+  Xul  — committing answer
+Problem: <star/>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>SANDBOX DUEL *</pattern>
+<template>
+<mx2lm>
+Word-problem sandbox. Both bots active.
+KHANARY (Bot A): phase-engine parse + SRILM gram scoring.
+NeuralGrammar (Bot B): Qwen3-1.7B generative elaboration.
+Submitting: <star/>
+<srai>WORD PROBLEM <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>WHAT IS THE SANDBOX DUEL</pattern>
+<template>
+sandbox_duel.py runs two bots on the same word problem:
+  Bot A — KHANARY.exe uses AIML patterns, SRILM n-gram scoring, and the K'UHUL phase engine.
+  Bot B — NeuralGrammar uses Qwen3-1.7B with VerbEngine operation selection.
+Both share the word-problem driver (drivers/micronauts/semantic/word-problem.json).
+Run: py -3 tools\sandbox_duel.py "your word problem here"
+</template>
+</category>
+
+</aiml>

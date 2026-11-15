@@ -1,0 +1,82 @@
+{
+  "@program": "control-micronaut-1",
+  "@schema": "kuhul.control-micronaut.v1",
+  "identity": {
+    "id": "CM-1-µ",
+    "name": "CM-1",
+    "version": "1.0.0",
+    "authority_claim": "xcfe_gated_read_only"
+  },
+  "descriptor_status": "declarative_proposal",
+  "registered": false,
+  "registered_status": "unregistered; call register_micronaut() to activate",
+  "track_ref": "data/tracks/CONTROL-u.semantic-tracks.v1.json",
+  "bindings_ref": "shell/cm1.bindings.psm1",
+  "manifest": {
+    "display_name": "Control Micronaut CM-1",
+    "tagline": "Non-rendered control stream — LGL, π-tick engine, C6 phase hooks",
+    "color": "#aa00ff",
+    "icon_svg": "data/micronauts/assets/cm1.svg",
+    "animated_svg": "data/micronauts/assets/cm1.animated.svg",
+    "profile_card": {
+      "widget": "data/host/apps/micronaut-card.asx-app.json",
+      "props": { "id": "CM-1-µ", "phase": "Pop", "category": "runtime" }
+    }
+  },
+  "name": "CM-1",
+  "version": "1.0.0",
+  "role": "non_rendered_control_stream",
+  "authority": "programs/micronauts",
+  "backend_policy": {
+    "execution": ["opencl_1_2", "d3d11_cs5"],
+    "visualization": "webgl2",
+    "forbidden": ["webgpu", "wgsl"]
+  },
+  "control_bytes": {
+    "STX": 2,
+    "ETX": 3,
+    "EOT": 4,
+    "SO": 14,
+    "SI": 15,
+    "ESC": 27
+  },
+  "linear_geometric_loop": {
+    "range": "U+2000-U+200B",
+    "symbols": {
+      "2000": "loop.init",
+      "2001": "loop.alloc",
+      "2002": "loop.iterate",
+      "2003": "loop.iterate",
+      "2004": "loop.iterate",
+      "2005": "loop.iterate",
+      "2006": "loop.iterate",
+      "2007": "loop.numeric",
+      "2008": "loop.delimiter",
+      "2009": "loop.thin.iterate",
+      "200A": "loop.micro.iterate",
+      "200B": "loop.invisible.terminus"
+    },
+    "iteration_rule": "one iteration token per U+2002-U+200A occurrence",
+    "allocation_rule": "U+2001 must precede iteration tokens when allocation is requested"
+  },
+  "pi_tick_engine": {
+    "tick_base_formula": "1/(PI*1000)",
+    "phase_sequence": ["PI/2", "PI", "3PI/2", "2PI"],
+    "synchronization_marker": "ESC + U+03C0 + ESC",
+    "clock_source": "injected_monotonic_clock"
+  },
+  "processor": {
+    "components": ["cm1_control", "linear_geometric_loop", "pi_tick_engine", "pi_harmonic_clock", "pi_math"],
+    "operations": ["date_time", "add", "subtract", "multiply", "divide", "geometric_series", "sin_pi", "cos_pi", "tan_pi"],
+    "projection_invariant": "control characters never enter rendered result payloads"
+  },
+  "program_example": "\\u0002\\u2002\\u2002\\u2002\\u000E\\u001Bπ\\u001B\\u0004\\u000F\\u0003",
+  "phase_hooks": {
+    "Pop": "decode_control_stream",
+    "Wo": "allocate_loop_state",
+    "Yax": "synchronize_pi_phase",
+    "Sek": "execute_iterations",
+    "Chen": "verify_projection_invariant",
+    "Xul": "commit_control_trace"
+  }
+}

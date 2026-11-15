@@ -1,0 +1,73 @@
+(* Micronaut.SRAI.AIML authoring grammar v1.
+   JSON is the interchange form. These declarations are data contracts, not code.
+   AIML matches; SRAI redirects; π ranks; XCFE admits; XUL closes verified data;
+   LEARNING proposes append-only evidence. No declaration itself grants authority.
+*)
+
+srai-document = { whitespace | comment }, declaration,
+                { whitespace | comment | declaration } ;
+declaration = aiml-micronaut | srai-micronaut | pi-micronaut
+            | xcfe-micronaut | xul-micronaut | learning-micronaut
+            | pattern-bank | route-graph ;
+
+aiml-micronaut = "@aiml-micronaut", identifier, "{", identity,
+                 authority-match, normalization, matching-contract, "}" ;
+srai-micronaut = "@srai-micronaut", identifier, "{", identity,
+                 authority-redirect, route-limits, redirect-contract, "}" ;
+pi-micronaut = "@pi-micronaut", identifier, "{", identity,
+               authority-rank, field-contract, ranking-contract, "}" ;
+xcfe-micronaut = "@xcfe-micronaut", identifier, "{", identity,
+                 authority-admit, admission-contracts, "}" ;
+xul-micronaut = "@xul-micronaut", identifier, "{", identity,
+                authority-close, closure-contract, "}" ;
+learning-micronaut = "@learning-micronaut", identifier, "{", identity,
+                      authority-propose, evidence-contract, proposal-contract, "}" ;
+
+identity = "identity", "{", field-list, "}" ;
+authority-match = "authority", "{", '"match_only"', ",", "execute:false", ",", "write:false", ",", "close:false", "}" ;
+authority-redirect = "authority", "{", '"redirect_only"', ",", "execute:false", ",", "write:false", ",", "close:false", "}" ;
+authority-rank = "authority", "{", '"rank_only"', ",", "execute:false", ",", "write:false", ",", "close:false", "}" ;
+authority-admit = "authority", "{", '"admission_only"', ",", "execute:false", ",", "write:false", ",", "close:false", "}" ;
+authority-close = "authority", "{", '"close_only"', ",", "execute:false", ",", "write:false", ",", "close:true", "}" ;
+authority-propose = "authority", "{", '"proposal_only"', ",", "execute:false", ",", "write:false", ",", "promote:false", "}" ;
+
+normalization = "normalization", "{", "uppercase", ",", "strip_punctuation", ",", "collapse_whitespace", "}" ;
+matching-contract = "matching", "{", "specificity:declared", ",", "wildcard_priority:[exact, _, *]", "}" ;
+route-limits = "limits", "{", "max_depth", ":", integer, ",", "cycle_policy:reject", "}" ;
+redirect-contract = "redirect", "{", "source:srai_or_sr", ",", "return:candidate", ",", "pure_template_required:true", "}" ;
+field-contract = "field", "{", "dimensions", ":", integer, ",", "metric", ":", string, "}" ;
+ranking-contract = "ranking", "{", "input:candidates", ",", "output:ranked_candidates", "}" ;
+admission-contracts = "contracts", "{", { admission-rule }, "}" ;
+admission-rule = "rule", identifier, "{", "action", ":", ( '"admit"' | '"reject"' | '"defer"' ), ",", "reason", ":", string, "}" ;
+closure-contract = "closure", "{", "requires:aiml+srai+pi+xcfe", ",", "commit:verified_data_only", "}" ;
+evidence-contract = "evidence", "{", "sources:[aiml_matches, srai_routes, pi_rankings, xcfe_admissions]", "}" ;
+proposal-contract = "proposal", "{", "append_only:true", ",", "writes_rule_bank:false", ",", "promotes:false", "}" ;
+
+pattern-bank = "@pattern-bank", identifier, "{", "authority:data_only", ",", "rules", "[", { bank-rule }, "]", "}" ;
+bank-rule = "rule", identifier, "{", "pattern", ":", pattern-string, ",", "template", ":", template-data,
+            [ ",", "topic", ":", string ], [ ",", "that", ":", pattern-string ], "}" ;
+template-data = string | "srai", "(", template-parts, ")" | "sr", "(", ")" | object ;
+template-parts = { string | capture-ref } ;
+capture-ref = "star", "[", integer, "]" ;
+pattern-string = '"', { pattern-char }, '"' ;
+pattern-char = ? any Unicode scalar except unescaped quote and newline ? ;
+
+route-graph = "@route-graph", identifier, "{", "authority:data_only", ",",
+              "max_depth", ":", integer, ",", "cycle_policy:reject", ",",
+              "nodes", "[", { route-node }, "]", ",", "edges", "[", { route-edge }, "]", "}" ;
+route-node = "node", identifier, "{", "pattern", ":", pattern-string, "}" ;
+route-edge = "edge", identifier, "->", identifier, "{", "kind:srai", "}" ;
+
+field-list = identifier, ":", value, { ",", identifier, ":", value } ;
+object = "{", [ field-list ], "}" ;
+value = string | integer | boolean | object | array ;
+array = "[", [ value, { ",", value } ], "]" ;
+string = '"', { string-char }, '"' ;
+string-char = ? any Unicode scalar except quote and newline ? | "\\", ? escape ? ;
+boolean = "true" | "false" ;
+identifier = letter, { letter | digit | "_" | "-" | "." } ;
+integer = [ "-" ], digit, { digit } ;
+digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+letter = "A".."Z" | "a".."z" ;
+whitespace = " " | "\t" | "\r" | "\n" ;
+comment = "(*", { ? any character except comment terminator ? }, "*)" ;

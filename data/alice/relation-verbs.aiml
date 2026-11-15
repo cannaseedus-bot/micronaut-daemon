@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+  <!-- =====================================================================
+       Relation-verb query surface.
+
+       Seven canonical relation verbs had no declarative realization template:
+       @delegates_to, @has_property, @possesses, @value, @imports, @calls,
+       @exposes. Rather than invent a sentence template for each, they get a
+       query surface: the surface phrasings redirect by SRAI to one canonical
+       handler per verb, and every handler emits a typed query frame.
+
+       Boundary: op=query, effect=read, commit=none. These patterns report an
+       edge that already exists in B_tau. They never assert a new edge, never
+       mint verified_outcome, and never claim semantic or commit authority.
+
+       Phase: Yax. data/manifest/aiml.manifest.json declares the relation
+       surface at phase:Yax (aiml:relation).
+       ===================================================================== -->
+
+  <!-- @delegates_to -->
+  <category>
+    <pattern>DOES * DELEGATE TO *</pattern>
+    <template><srai>RELATION DELEGATES TO <star index="1"/> <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern>* DELEGATES TO *</pattern>
+    <template><srai>RELATION DELEGATES TO <star index="1"/> <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern>RELATION DELEGATES TO * *</pattern>
+    <template>RELATION-µ domain=relation_surface op=query verb="@delegates_to" subject=<star index="1"/> object=<star index="2"/> phase=Yax effect=read commit=none</template>
+  </category>
+
+  <!-- @has_property -->
+  <category>
+    <pattern>DOES * HAVE THE PROPERTY *</pattern>
+    <template><srai>RELATION HAS PROPERTY <star index="1"/> <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern>* HAS PROPERTY *</pattern>
+    <template><srai>RELATION HAS PROPERTY <star index="1"/> <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern>RELATION HAS PROPERTY * *</pattern>
+    <template>RELATION-µ domain=relation_surface op=query verb="@has_property" subject=<star index="1"/> object=<star index="2"/> phase=Yax effect=read commit=none</template>
+  </category>
+
+  <!-- @possesses -->
+  <category>
+    <pattern>DOES * POSSESS *</pattern>
+    <template><srai>RELATION POSSESSES <star index="1"/> <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern>* POSSESSES *</pattern>
+    <template><srai>RELATION POSSESSES <star index="1"/> <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern>RELATION POSSESSES * *</pattern>
+    <template>RELATION-µ domain=relation_surface op=query verb="@possesses" subject=<star index="1"/> object=<star index="2"/> phase=Yax effect=read commit=none</template>
+  </category>
+
+  <!-- @value -->
+  <category>
+    <pattern>DOES * HAVE VALUE *</pattern>
+    <template><srai>RELATION VALUE <star index="1"/> <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern>* HAS VALUE *</pattern>
+    <template><srai>RELATION VALUE <star index="1"/> <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern>RELATION VALUE * *</pattern>
+    <template>RELATION-µ domain=relation_surface op=query verb="@value" subject=<star index="1"/> object=<star index="2"/> phase=Yax effect=read commit=none</template>
+  </category>
+
+  <!-- @imports -->
+  <category>
+    <pattern>DOES * IMPORT *</pattern>
+    <template><srai>RELATION IMPORTS <star index="1"/> <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern>* IMPORTS *</pattern>
+    <template><srai>RELATION IMPORTS <star index="1"/> <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern>RELATION IMPORTS * *</pattern>
+    <template>RELATION-µ domain=relation_surface op=query verb="@imports" subject=<star index="1"/> object=<star index="2"/> phase=Yax effect=read commit=none</template>
+  </category>
+
+  <!-- @calls -->
+  <category>
+    <pattern>DOES * CALL *</pattern>
+    <template><srai>RELATION CALLS <star index="1"/> <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern>* CALLS *</pattern>
+    <template><srai>RELATION CALLS <star index="1"/> <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern>RELATION CALLS * *</pattern>
+    <template>RELATION-µ domain=relation_surface op=query verb="@calls" subject=<star index="1"/> object=<star index="2"/> phase=Yax effect=read commit=none</template>
+  </category>
+
+  <!-- @exposes -->
+  <category>
+    <pattern>DOES * EXPOSE *</pattern>
+    <template><srai>RELATION EXPOSES <star index="1"/> <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern>* EXPOSES *</pattern>
+    <template><srai>RELATION EXPOSES <star index="1"/> <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern>RELATION EXPOSES * *</pattern>
+    <template>RELATION-µ domain=relation_surface op=query verb="@exposes" subject=<star index="1"/> object=<star index="2"/> phase=Yax effect=read commit=none</template>
+  </category>
+
+  <!-- Unknown verb: decline with the registered set, never guess an edge. -->
+  <category>
+    <pattern>RELATION * * *</pattern>
+    <template>RELATION-µ domain=relation_surface op=decline status=UNREGISTERED_VERB verb=<star index="1"/> registered=@delegates_to,@has_property,@possesses,@value,@imports,@calls,@exposes semantic_authority=false commit=none</template>
+  </category>
+
+</aiml>

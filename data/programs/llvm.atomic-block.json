@@ -1,0 +1,49 @@
+{
+  "@kind": "kuhul.llvm.lowering-contract.v1",
+  "@program": "llvm.atomic-block",
+  "@version": "1.0.0",
+  "@source": "programs/atomic_block.json",
+  "@purpose": "Lower domain-associated glyph matches into a typed atomic-block IR before provider dispatch.",
+  "toolchain": {
+    "required": ["clang", "llvm-as", "opt", "llc"],
+    "status": "not-installed-on-current-host",
+    "policy": "Do not claim LLVM execution until the toolchain and emitted module verify."
+  },
+  "ir": {
+    "entities": ["glyph", "atomic_block", "node", "layer", "fold", "lane", "tensor", "replay_event"],
+    "binding_rule": "three_or_more_domain_compatible_glyphs",
+    "required_fields": ["glyph_ids", "domain", "relations", "layer", "fold", "relevance", "confidence", "provenance"],
+    "example": {
+      "glyphs": ["cat", "black", "outside"],
+      "roles": {"cat": "subject", "black": "attribute", "outside": "location"},
+      "relevance_order": ["outside", "black", "cat"]
+    }
+  },
+  "lowering": [
+    { "op": "GLYPH_LOAD", "fold": "Pop" },
+    { "op": "DOMAIN_ASSOCIATE", "fold": "Wo" },
+    { "op": "ATOMIC_BIND", "min_items": 3, "fold": "Yax" },
+    { "op": "RELEVANCE_SCORE", "fold": "Sek" },
+    { "op": "VALIDATE_BLOCK", "fold": "Chen" },
+    { "op": "JROM_REPLAY_COMMIT", "fold": "Xul" }
+  ],
+  "providers": {
+    "llvm_cpu": { "requires": ["clang", "llvm-as", "llc"], "role": "reference_and_jit" },
+    "opencl_1_2": { "source": "drivers/opencl_1_2", "role": "numeric_tensor_kernels" },
+    "d3d11_cs5": { "source": "drivers/cs5_shaders", "role": "semantic_cube_and_geometry" },
+    "webgl2": { "source": "drivers/webgl2", "role": "browser_projection" }
+  },
+  "replay": {
+    "manifest": "programs/tools/jrom_replay.manifest.json",
+    "state": "MX-2",
+    "no_implicit_tool_execution": true,
+    "record": ["input_hash", "glyph_ids", "block_hash", "fold", "lane", "provider", "result_hash", "confidence"]
+  },
+  "acceptance": [
+    "LLVM toolchain discovery passes",
+    "atomic block IR validates against the source manifest",
+    "CPU reference result is deterministic",
+    "provider result agrees within declared tolerance",
+    "validated result emits a hash-linked MX-2 replay event"
+  ]
+}

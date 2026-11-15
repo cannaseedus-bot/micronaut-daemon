@@ -1,0 +1,57 @@
+{
+  "@program": "programs_dispatcher",
+  "@fold": "Wo",
+  "@node": "programs-node",
+
+  "@architecture": {
+    "principle": "Each glyph lane is a narrow specialist GGUF. No single lane carries all the power. Micronauts wrap lanes to present a coherent expert persona. THINK (⊙/µ-think) is the internal deliberation lane — Eliza Q:/Think:/A: scaffold, fires at fold phase Wo before REASON (⊛/µ-reason) which handles visible chain-of-thought. The fold loop is both the runtime cycle AND the micronaut's memory cycle — Pop reads cube state in, Xul writes updated state back through SharedMemoryBridge(Local\\KuhulGeometricState), so each fold pass is a memory tick. The semantic cube IS the micronaut resolution: GPU_DISPATCH runs semantic_cube.cso, projects SH coefficients across the 6 cube faces (Phi/Fold/Gram/Geodesic/Projection/Entropy), and the dominant_micronaut is the winning lane scored by that geometry.",
+    "fold_as_memory_cycle": "Pop=read_state → Wo=classify → Yax=score_cube → Sek=dispatch_lane → Chen=validate → Xul=emit+write_state → (next turn) Pop=read_updated_state",
+    "semantic_cube_is_gpu_dispatch": "GPU_DISPATCH micronaut.cso == SemanticCubeMap::dispatch + projectSH. dominant_micronaut = highest SH coefficient micronaut after cube evolution.",
+    "cube_faces": { "Phi": "intent+confidence", "Fold": "current_phase", "Gram": "grammar_compatibility", "Geodesic": "tool_path_distance", "Projection": "args+target", "Entropy": "uncertainty" },
+    "glyph_lane_contract": "programs/glyph.tokens.json",
+    "lane_routing": {
+      "CHATML": { "micronaut": "µ-chat",   "glyph": "⟁", "manifest": "models/scx-expert-chat-v2/atomic.manifest.json",  "gguf": "E:/models/GPT2/from_zero/trained/SCX-EXPERT-chat-v2.gguf",  "status": "pending_chain_phase3" },
+      "REASON": { "micronaut": "µ-reason", "glyph": "⊛", "manifest": "models/scx-expert-reason-v1/atomic.manifest.json", "gguf": "E:/models/GPT2/from_zero/trained/SCX-EXPERT-reason-v1.gguf", "status": "pending_training",    "train_data": "artifacts/response-lanes/reason.jsonl" },
+      "THINK":  { "micronaut": "µ-think",  "glyph": "⊙", "manifest": "models/scx-expert-think-v1/atomic.manifest.json",  "gguf": "E:/models/GPT2/from_zero/trained/SCX-EXPERT-think-v1.gguf",  "status": "pending_chain_phase3" },
+      "CODE":   { "micronaut": "µ-code",   "glyph": "⊞", "manifest": "models/scx-expert-code-v1/atomic.manifest.json",  "gguf": "E:/models/GPT2/from_zero/trained/SCX-EXPERT-code-v1.gguf",  "status": "pending_training",    "train_data": "artifacts/response-lanes/code.jsonl"   },
+      "AST":    { "micronaut": "µ-ast",    "glyph": "⟜", "manifest": "models/scx-expert-ast-v1/atomic.manifest.json",   "gguf": "E:/models/GPT2/from_zero/trained/SCX-EXPERT-ast-v1.gguf",   "status": "pending_training",    "train_data": "artifacts/response-lanes/ast.jsonl"    },
+      "TOOL":   { "micronaut": "µ-tool",   "glyph": "⊕", "manifest": "models/scx-expert-tool-v1/atomic.manifest.json",  "gguf": "E:/models/GPT2/from_zero/trained/SCX-EXPERT-tool-v1.gguf",  "status": "pending_training",    "train_data": "artifacts/response-lanes/tool.jsonl"   },
+      "MEMORY": { "micronaut": "µ-memory", "glyph": "⊗", "manifest": "models/scx-expert-memory-v1/atomic.manifest.json","gguf": "E:/models/GPT2/from_zero/trained/SCX-EXPERT-memory-v1.gguf","status": "pending_training",    "train_data": "artifacts/response-lanes/memory.jsonl" }
+    },
+    "port": 9010,
+    "port_note": "All 6 lane GGUFs share port 9010 via hot-swap. HD 4600 ceiling 1792MB — only one 1420MB F32 model resident at a time. Semantic cube selects lane; dispatcher hot-swaps on lane change.",
+    "routing_note": "Dispatcher classifies each turn into a glyph lane, selects the matching lane GGUF, delegates to it via the micronaut wrapper, then emits through the fold loop. Consecutive turns can use different lanes transparently — the micronaut persona stays constant."
+  },
+
+  "@chat_programs": {
+    "gpt": "programs/gpt.chat.json",
+    "scx-expert": "programs/scx-expert.chat.json",
+    "selection_rule": "model.Type == 'chatml_gguf' OR 'mx2_brain' -> gpt; model.Type == 'scx_gguf' -> scx-expert"
+  },
+
+  "@state": {
+    "program_ref":       null,
+    "program":           null,
+    "op_table":          null,
+    "valid":             false,
+    "result":            null,
+    "glyph_lane":        null,
+    "dominant_micronaut": null
+  },
+
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Wo", "@node": "programs-node" },
+    { "@op": "CALL", "@fn": "classify_glyph_lane", "@args": ["$message", "programs/glyph.tokens.json"], "@out": "glyph_lane" },
+    { "@op": "CALL", "@fn": "load_program",         "@args": ["$program_ref"],                          "@out": "program"    },
+    { "@op": "CALL", "@fn": "resolve_stdlib",       "@args": ["$program"],                              "@out": "op_table"   },
+    { "@op": "CALL", "@fn": "validate_state",       "@args": ["$program", "$op_table"],                 "@out": "valid"      },
+    { "@op": "IF",
+      "@cond": "$valid",
+      "@then": { "@op": "CALL", "@fn": "dispatch_program", "@args": ["$program", "$op_table", "$glyph_lane"], "@out": "result" },
+      "@else": { "@op": "SET",  "@key": "result", "@args": [{ "error": "validation_failed", "ref": "$program_ref" }] }
+    },
+    { "@op": "GPU_DISPATCH", "@args": ["micronaut.cso"], "@out": "dominant_micronaut" },
+    { "@op": "LOG", "@args": ["[programs_dispatcher] done — lane=$glyph_lane dominant=$dominant_micronaut"] },
+    { "@op": "FOLD_EXIT", "@fold": "Chen", "@node": "programs-node", "@args": ["$result", "$glyph_lane", "$dominant_micronaut"] }
+  ]
+}

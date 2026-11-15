@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xcfe="urn:kuhul:xcfe:aiml:1.0"
+ targetNamespace="urn:kuhul:xcfe:aiml:1.0" elementFormDefault="qualified">
+  <xs:simpleType name="PhaseType"><xs:restriction base="xs:string">
+      <xs:enumeration value="Pop"/>
+      <xs:enumeration value="Wo"/>
+      <xs:enumeration value="Yax"/>
+      <xs:enumeration value="Sek"/>
+      <xs:enumeration value="Chen"/>
+      <xs:enumeration value="Xul"/>
+  </xs:restriction></xs:simpleType>
+  <xs:simpleType name="BindingType"><xs:restriction base="xs:string">
+      <xs:enumeration value="text"/>
+      <xs:enumeration value="entity"/>
+      <xs:enumeration value="relation"/>
+      <xs:enumeration value="property"/>
+      <xs:enumeration value="question"/>
+      <xs:enumeration value="program"/>
+  </xs:restriction></xs:simpleType>
+  <xs:simpleType name="EmitKind"><xs:restriction base="xs:string">
+      <xs:enumeration value="question"/>
+      <xs:enumeration value="candidate"/>
+      <xs:enumeration value="gap"/>
+      <xs:enumeration value="finding"/>
+  </xs:restriction></xs:simpleType>
+  <xs:complexType name="CaptureType"><xs:attribute name="index" type="xs:positiveInteger" use="required"/><xs:attribute name="name" type="xs:NCName" use="required"/><xs:attribute name="type" type="xcfe:BindingType" use="required"/><xs:attribute name="resolver" type="xs:NCName"/><xs:attribute name="required" type="xs:boolean"/><xs:attribute name="confidence-min" type="xs:decimal"/><xs:attribute name="on-unresolved" type="xs:string"/></xs:complexType>
+  <xs:element name="capture" type="xcfe:CaptureType"/><xs:element name="wildcard" type="xcfe:CaptureType"/>
+  <xs:element name="bind"><xs:complexType><xs:attribute name="name" type="xs:NCName" use="required"/><xs:attribute name="resolver" type="xs:NCName" use="required"/></xs:complexType></xs:element>
+  <xs:element name="guard"><xs:complexType><xs:attribute name="test" type="xs:NCName" use="required"/></xs:complexType></xs:element>
+  <xs:element name="invoke"><xs:complexType><xs:attribute name="micronaut" type="xs:NCName" use="required"/><xs:attribute name="input" type="xs:string"/><xs:attribute name="output" type="xs:NCName" use="required"/><xs:attribute name="trusted" use="prohibited"/></xs:complexType></xs:element>
+  <xs:element name="emit"><xs:complexType><xs:attribute name="kind" type="xcfe:EmitKind" use="required"/><xs:attribute name="family" type="xs:NCName"/><xs:attribute name="target" type="xs:NCName"/><xs:attribute name="phase" type="xcfe:PhaseType"/></xs:complexType></xs:element>
+  <xs:element name="store"><xs:complexType><xs:attribute name="ref" type="xs:NCName" use="required"/><xs:attribute name="approval-ref" type="xs:string"/></xs:complexType></xs:element>
+  <xs:element name="revise"><xs:complexType><xs:attribute name="ref" type="xs:NCName" use="required"/><xs:attribute name="approval-ref" type="xs:string"/></xs:complexType></xs:element>
+  <xs:element name="fold"><xs:complexType><xs:choice minOccurs="0" maxOccurs="unbounded"><xs:element ref="xcfe:capture"/><xs:element ref="xcfe:wildcard"/><xs:element ref="xcfe:bind"/><xs:element ref="xcfe:guard"/><xs:element ref="xcfe:invoke"/><xs:element ref="xcfe:emit"/><xs:element ref="xcfe:store"/><xs:element ref="xcfe:revise"/></xs:choice><xs:attribute name="phase" type="xcfe:PhaseType" use="required"/><xs:attribute name="operator" type="xs:NCName" use="required"/><xs:attribute name="mode" type="xs:NCName"/></xs:complexType></xs:element>
+</xs:schema>

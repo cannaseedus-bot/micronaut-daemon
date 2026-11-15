@@ -1,0 +1,229 @@
+{
+  "@type": "khanary.fold_lattice_contracts.v1",
+  "version": "1.0.0",
+  "authority": "fold_lattice_product_graph_contract_not_semantic_authority",
+  "semantic_authority": false,
+  "law": {
+    "coordinate": "K = (theta, sigma)",
+    "product_graph": "G_fold_lattice = G_phase \u25a1 G_competence",
+    "boundary": "Fold Lattice != Fold Kernel != XCFE Policy != Execution",
+    "transition_boundary": "Metrics recommend competence movement; XCFE Policy authorizes state/route movement.",
+    "route_boundary": "route_hint is advisory; XCFE remains route authority.",
+    "full_coordinate": "K_t = (F_h, phi, T, s, sigma, X_t)",
+    "slice_coordinate": "K = (theta, sigma) is the phase/competence slice of K_t, not the full runtime identity.",
+    "fold_boundary": "Fold != Xul; fold_state folded/unfolded is independent of the C6 phase pointer.",
+    "phase_operator_boundary": "Fold phases are C6 operations applied over a Fold, not six kinds of Fold and not the Fold learning states.",
+    "proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits.",
+    "fold_space_boundary": "Fold Lattice is the K = (theta, sigma) phase/competence slice of Fold Space F_K, not the full navigable position."
+  },
+  "theta_axis": [
+    "Pop",
+    "Wo",
+    "Yax",
+    "Sek",
+    "Ch'en",
+    "Xul"
+  ],
+  "theta_angles": {
+    "Pop": 0.0,
+    "Wo": 1.0471975511965976,
+    "Yax": 2.0943951023931953,
+    "Sek": 3.141592653589793,
+    "Ch'en": 4.1887902047863905,
+    "Xul": 5.235987755982989
+  },
+  "sigma_axis": [
+    "unbound",
+    "observed",
+    "learned",
+    "bound",
+    "validated",
+    "autonomous"
+  ],
+  "sigma_order": {
+    "unbound": 0,
+    "observed": 1,
+    "learned": 2,
+    "bound": 3,
+    "validated": 4,
+    "autonomous": 5
+  },
+  "substrates": [
+    "local",
+    "local-test",
+    "in-studio",
+    "teacher",
+    "fallback"
+  ],
+  "callbacks": [
+    "none",
+    "record_observation",
+    "teacher_pairing",
+    "dual_run",
+    "contract_probe"
+  ],
+  "route_hints": [
+    "local",
+    "local-test",
+    "fallback",
+    "teacher",
+    "in-studio"
+  ],
+  "default_cell_rules": {
+    "subautonomous_requires_callback": true,
+    "autonomous_callback": "none",
+    "xul_autonomous_policy_gate_required": true,
+    "one_active_cell_per_phase": true
+  },
+  "recommended_example_cells": [
+    {
+      "theta": "Pop",
+      "sigma": "autonomous",
+      "substrate": "local",
+      "callback": "none",
+      "route_hint": "local",
+      "policy_gate": false
+    },
+    {
+      "theta": "Wo",
+      "sigma": "autonomous",
+      "substrate": "local",
+      "callback": "none",
+      "route_hint": "local",
+      "policy_gate": false
+    },
+    {
+      "theta": "Yax",
+      "sigma": "validated",
+      "substrate": "local-test",
+      "callback": "dual_run",
+      "route_hint": "local-test",
+      "policy_gate": false
+    },
+    {
+      "theta": "Sek",
+      "sigma": "learned",
+      "substrate": "teacher",
+      "callback": "teacher_pairing",
+      "route_hint": "teacher",
+      "policy_gate": false
+    },
+    {
+      "theta": "Ch'en",
+      "sigma": "autonomous",
+      "substrate": "local",
+      "callback": "none",
+      "route_hint": "local",
+      "policy_gate": false
+    },
+    {
+      "theta": "Xul",
+      "sigma": "autonomous",
+      "substrate": "local",
+      "callback": "none",
+      "route_hint": "local",
+      "policy_gate": true
+    }
+  ],
+  "metrics": {
+    "bounded_rates": [
+      "support_rate",
+      "exception_rate",
+      "contract_pass_rate",
+      "policy_agreement"
+    ],
+    "nonnegative": [
+      "observations",
+      "teacher_distance"
+    ],
+    "phase_metrics": {
+      "Pop": [
+        "support_rate",
+        "exception_rate"
+      ],
+      "Wo": [
+        "support_rate",
+        "exception_rate"
+      ],
+      "Yax": [
+        "support_rate",
+        "exception_rate",
+        "teacher_distance"
+      ],
+      "Sek": [
+        "contract_pass_rate",
+        "teacher_distance"
+      ],
+      "Ch'en": [
+        "contract_pass_rate",
+        "policy_agreement"
+      ],
+      "Xul": [
+        "policy_agreement",
+        "exception_rate"
+      ]
+    }
+  },
+  "transition_metrics": {
+    "observed_to_learned": {
+      "condition": "observations >= 8 and support_rate >= 0.60",
+      "required": [
+        "observations",
+        "support_rate"
+      ]
+    },
+    "learned_to_bound": {
+      "condition": "teacher_distance <= 0.25 and support_rate >= 0.70",
+      "required": [
+        "teacher_distance",
+        "support_rate"
+      ]
+    },
+    "bound_to_validated": {
+      "condition": "contract_pass_rate >= 0.90 and exception_rate <= 0.10",
+      "required": [
+        "contract_pass_rate",
+        "exception_rate"
+      ]
+    },
+    "validated_to_autonomous": {
+      "condition": "policy_agreement >= 0.95 and contract_pass_rate >= 0.95",
+      "required": [
+        "policy_agreement",
+        "contract_pass_rate"
+      ],
+      "authority": "XCFE Policy must still authorize final state and route."
+    }
+  },
+  "invariants": {
+    "L1": "theta in phase_cycle",
+    "L2": "sigma in competence_axis",
+    "L3": "each cell has a unique (theta, sigma) coordinate",
+    "L4": "full execution lattice has exactly one active cell per theta",
+    "L5": "sigma < autonomous implies callback != none",
+    "L6": "sigma = autonomous implies callback = none",
+    "L7": "theta = Xul and sigma = autonomous implies policy_gate = true",
+    "L8": "metrics are bounded: rates in [0,1], observations >= 0, teacher_distance >= 0",
+    "L9": "evolutionary transition recommendation never bypasses XCFE Policy",
+    "L10": "route_hint is advisory; XCFE remains route authority",
+    "L11": "fold_state is independent of phase; Fold != Xul",
+    "L12": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits",
+    "L13": "K = (theta, sigma) is a slice of K_t = (F_h, phi, T, s, sigma, X_t)",
+    "L14": "Fold Lattice K = (theta, sigma) is a projection of Fold Space p_t = (h, phi, T, s, sigma, X_t)",
+    "L15": "FoldField score() = W*C*R is a WCR score for a product-graph vertex (node_id, theta); it is distinct from a lattice cell score",
+    "L16": "ConvergenceTest tracks Kleene iteration: CONVERGED when d<epsilon, MAX_ITER at n>=max_iter, DIVERGING when k>=k_max for div_window consecutive steps; best_state() holds the FoldState at minimum d"
+  },
+  "fold_states": [
+    "folded",
+    "unfolded"
+  ],
+  "runtime_state": {
+    "required_keys": [
+      "@mutable",
+      "@state_id"
+    ],
+    "authority": "runtime_state_not_semantic_topology",
+    "mutable": true
+  },
+  "fold_space_contract": "data/grammar/fold-space.contracts.json"
+}

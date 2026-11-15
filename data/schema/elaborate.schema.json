@@ -1,0 +1,81 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "khanary.elaborate.v1",
+    "title": "CFPC Elaborate Contract",
+    "description": "Composition layer over existing CFPC machinery. Declares elaboration modes dispatched uniformly through the intent resolver. Not an independent execution arm.",
+    "type": "object",
+    "required": ["@kind", "@id"],
+    "properties": {
+        "@kind": {
+            "type": "string",
+            "const": "semantic.elaborate.v1"
+        },
+        "@id": {
+            "type": "string",
+            "description": "Unique identifier for this elaborate contract."
+        },
+        "@owner": {
+            "type": "string",
+            "description": "Owning micronaut id. Used as the caller in sub-invocations."
+        },
+        "@subject": {
+            "type": "string",
+            "description": "Subject being elaborated."
+        },
+        "@intent": {
+            "type": "string",
+            "description": "Intent label applied to all mode dispatches."
+        },
+        "@modes": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "description": "Elaboration operation label. 'elaborate' is not permitted (recursive elaborate guard).",
+                "not": {"const": "elaborate"}
+            },
+            "description": "Elaboration modes. Each mode produces one sub-query dispatched uniformly through the resolver."
+        },
+        "@captures": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Fields or aspects to retain from elaboration findings."
+        },
+        "@backend": {
+            "type": "object",
+            "description": "Backend capability used for all mode dispatches.",
+            "properties": {
+                "type":       { "type": "string" },
+                "capability": { "type": "string" }
+            },
+            "additionalProperties": false
+        },
+        "@policy": {
+            "type": "object",
+            "description": "Policy block. promote_generated_facts=true and allow_weight_updates=true are both rejected at parse time (Pattern Induction Guards).",
+            "properties": {
+                "max_depth": {
+                    "type": "integer",
+                    "description": "Maximum invocation depth per mode dispatch. Default 3."
+                },
+                "max_operations": {
+                    "type": "integer",
+                    "description": "Maximum number of modes processed. Default 6."
+                },
+                "cycle_detection": {
+                    "type": "boolean",
+                    "description": "Enable cycle detection in sub-invocations. Default true."
+                },
+                "promote_generated_facts": {
+                    "type": "boolean",
+                    "description": "MUST NOT be true. Rejected by Pattern Induction Guard 1."
+                },
+                "allow_weight_updates": {
+                    "type": "boolean",
+                    "description": "MUST NOT be true. Rejected by Pattern Induction Guard 2."
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

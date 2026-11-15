@@ -1,0 +1,68 @@
+{
+  "id": "cycle-hash.spec.v1",
+  "kind": "cycle_identity_specification",
+  "internal_manifest_schema_links_only": true,
+  "schema_stack_links": {
+    "stack_root": "data/schema/kuhul.fold-runtime.json",
+    "xsd_contract": "data/schema/kuhul.xsd"
+  },
+  "resolution_policy": "runtime-critical schemas resolve fold contracts transitively through stack_root",
+  "phase_cycle": {
+    "states": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"],
+    "transition_order": [
+      ["Pop", "Wo"],
+      ["Wo", "Yax"],
+      ["Yax", "Sek"],
+      ["Sek", "Ch'en"],
+      ["Ch'en", "Xul"],
+      ["Xul", "Pop"]
+    ],
+    "pointer_invariant": "P^6 = I"
+  },
+  "hash_contract": {
+    "algorithm": "sha256",
+    "encoding": "utf-8",
+    "canonicalization": "json-c14n-v1",
+    "implementation": "src/util/canonical_hash.cpp",
+    "canonicalization_spec": "docs/CONFORMANCE.md#canonical-identity",
+    "verification": "KHANARY_CANONICAL_TEST",
+    "prefix": "sha256:",
+    "scope": [
+      "topology_version",
+      "topology_hash",
+      "candidate_delta_hash",
+      "certificate_hash"
+    ]
+  },
+  "chen_requirements": {
+    "verified_rule": "all required assertions PASS",
+    "rewrite_authorized_by_chen": false,
+    "resolution_classification_enum": [
+      "VERIFIED",
+      "CONTRADICTED",
+      "MISS",
+      "AMBIGUOUS",
+      "INSUFFICIENT_CONTEXT",
+      "INVALID"
+    ],
+    "miss_rule": "MISS != WRONG",
+    "miss_deficit_definition": "MISS(Q) = RequiredContext(Q) - ResolvedContext(F_Q)",
+    "research_pressure_formula": "rho_research = M * I * U",
+    "required_certificate_fields": [
+      "subject",
+      "topology_version",
+      "topology_hash",
+      "candidate_delta_hash",
+      "assertions",
+      "verified",
+      "rewrite_authorized"
+    ]
+  },
+  "topology_freshness": {
+    "check": "current_topology_hash == certificate.topology_hash && current_topology_version == certificate.topology_version",
+    "stale_action": "reject_and_reverify"
+  },
+  "sha256": {
+    "policy": "authoritative hash values are declared in data/schema/kuhul.fold-runtime.json"
+  }
+}

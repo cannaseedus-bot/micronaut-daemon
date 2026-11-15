@@ -1,0 +1,70 @@
+{
+  "@relational": [
+    "RELATIONAL:",
+    "@node:ORCH-µ",
+    "GraphLayout:Tree",
+    "XSLT/SDM",
+    "K'UHUL relational micronauts"
+  ],
+  "RELATIONAL:": [
+    "@relational",
+    "relational:sdm-graph-rendering:v1",
+    "relational:micronaut-network",
+    "relational:edge-verbs",
+    "relational:tensor-slot-law",
+    "every_node_is_micronaut",
+    "every_edge_is_verb",
+    "every_graph_is_execution_plan",
+    "⟁Yax",
+    "⟁Sek"
+  ],
+  "relational:authority-boundary": [
+    "rendering_projection_only",
+    "execution_plan_projection_only",
+    "not_semantic_truth",
+    "not_Ch'en_verification",
+    "not_Xul_persistence"
+  ],
+  "relational:edge-verbs": [
+    "@call",
+    "@compose",
+    "@delegate",
+    "@eval",
+    "@informs",
+    "@relate"
+  ],
+  "relational:micronaut-network": [
+    "CODE-µ",
+    "CREATE-µ",
+    "FILE-µ",
+    "FIXED-POINT-µ",
+    "GRAPHICS-µ",
+    "INFER-µ",
+    "MEM-µ",
+    "MORPHISM-µ",
+    "NET-µ",
+    "ORCH-µ",
+    "PLAN-µ",
+    "REASON-µ"
+  ],
+  "relational:sdm-graph-rendering:v1": [
+    "source:data/grammar/kuhul-relational-graph.xml",
+    "xsl:data/grammar/kuhul-relational.xsl",
+    "style:data/grammar/kuhul-relational.sdm.css",
+    "sdm:data/grammar/kuhul-relational.sdm.xml",
+    "key_grammar:data/grammar/kuhul-relational.key-grammar.jsonl",
+    "tensor_slots:data/world/micronaut_tensor_slots.json",
+    "graph->relational_network",
+    "node->micronaut_instance",
+    "node->micronaut_tensor_slot",
+    "edge->relational_verb",
+    "nested_graph->sub_micronaut_cluster"
+  ],
+  "relational:tensor-slot-law": [
+    "every_micronaut_node_has_tensor_slot",
+    "private_STB_binding_requires_evidence",
+    "shared_virtual_tensor_slot_allowed",
+    "tensor_slot_is_projection_not_truth",
+    "registry:data/world/micronaut_tensor_slots.json"
+  ]
+}

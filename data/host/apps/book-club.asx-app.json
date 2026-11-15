@@ -1,0 +1,57 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "book-club",
+  "@key": "⟁APP:BOOK_CLUB",
+  "@mount": "⟁ROOT:BOOK_CLUB",
+  "@theme": { "accent": "#c084fc", "bg": "#12091e", "surface": "#1d1130", "text": "#ede9f6", "hero_phase": "Wo", "tagline": "Read together, think together" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "primary", "component": "⟁WIDGET:BOOKS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "books": [], "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:BOOK_CLUB": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:ADD_BOOK"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:ADD_BOOK": { "@type": "button", "@text": "Add Book", "@on": { "click": "bookclub.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:BOOKS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:BOOKS": { "@type": "feed", "@bind": "state.books", "@children": ["⟁WIDGET:BOOK_CARD"] },
+    "⟁WIDGET:BOOK_CARD": { "@type": "content-card", "@bind": "book", "@on": { "view": "bookclub.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:MEMBERS", "⟁WIDGET:READING_NOW"] },
+    "⟁WIDGET:MEMBERS": { "@type": "list", "@bind": "data.members" },
+    "⟁WIDGET:READING_NOW": { "@type": "stat", "@bind": "data.reading_now" }
+  },
+  "@programs": {
+    "bookclub.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "bookclub.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "bookclub.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "book.view": "bookclub.view", "compose.open": "bookclub.open_compose", "search.input": "bookclub.search" },
+  "@imports": [{ "ref": "book", "mode": "schema_table" }, { "ref": "note", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "discussion-threads", "name": "Discussion Threads", "category": "community", "price": "free", "status": "available_unconfigured", "description": "Chapter-by-chapter discussion threads for each book." },
+      { "id": "goodreads-sync", "name": "Goodreads Sync", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Import your Goodreads shelf to the club library." },
+      { "id": "summary-bot", "name": "Summary Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Generate a one-page summary for each book." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "bookclub.add", "pattern": "ADD BOOK|SUGGEST BOOK|NOMINATE *", "intent": "open_compose" },
+      { "id": "bookclub.search", "pattern": "FIND BOOK *|SEARCH *", "intent": "filter_books" }
+    ]
+  },
+  "@data": {
+    "members": ["alice", "bob", "carol"],
+    "reading_now": "The Three-Body Problem",
+    "spotlight": [
+      { "id": "sp1", "title": "The Three-Body Problem", "author": "Liu Cixin", "badge": "Reading Now", "excerpt": "China's Cultural Revolution meets alien first contact." },
+      { "id": "sp2", "title": "Piranesi", "author": "Susanna Clarke", "badge": "Completed", "excerpt": "A labyrinthine house with infinite halls and tidal statues." },
+      { "id": "sp3", "title": "Project Hail Mary", "author": "Andy Weir", "badge": "Up Next", "excerpt": "A lone astronaut wakes up far from Earth." }
+    ],
+    "schema": {
+      "book": { "primaryKey": "book_id", "fields": { "book_id": { "type": "string" }, "title": { "type": "string", "required": true }, "author": { "type": "string", "required": true }, "isbn": { "type": "string" }, "genre": { "type": "string" }, "status": { "type": "string" }, "added_at": { "type": "datetime" } } },
+      "note": { "primaryKey": "note_id", "fields": { "note_id": { "type": "string" }, "book_id": { "type": "string", "required": true }, "user_id": { "type": "string" }, "body": { "type": "textarea", "required": true }, "chapter": { "type": "integer" }, "created_at": { "type": "datetime" } } }
+    }
+  }
+}

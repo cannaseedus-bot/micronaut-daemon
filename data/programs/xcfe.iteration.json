@@ -1,0 +1,22 @@
+{
+  "@type": "khanary.xcfe_program.v1",
+  "@no-eval": true,
+  "id": "xcfe.iteration",
+  "program_class": "ITERATION",
+  "phase": "Sek",
+  "input_role": "iteration_range",
+  "output_role": "iteration_results",
+  "admission": "explicit",
+  "description": "Drives a @for loop over a declared range. ITERATION is a program-descriptor class only — it does not appear in the 14-class XCFE node ISA. Dispatch at Sek; results committed at Xul.",
+  "steps": [
+    { "phase": "Pop",  "op": "gramRead",   "id": "xcfe_range" },
+    { "phase": "Wo",   "op": "bind",       "id": "iteration_range" },
+    { "phase": "Sek",  "op": "dispatch",   "id": "for_body" },
+    { "phase": "Xul",  "op": "gramWrite",  "id": "iteration_results" }
+  ],
+  "authority": {
+    "semantic_authority": false,
+    "topology_mutation": false,
+    "commit_authorized": false
+  }
+}

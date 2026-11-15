@@ -1,0 +1,78 @@
+# SNOBOL-µ kernel declaration — K'UHUL .kl format.
+# Maps SNOBOL pattern-matching operations across the full six-phase runtime.
+# Authority: declaration_only; dispatch requires host XCFE admission.
+
+[shaders]
+pattern_match   = "bool pattern_match(string subject, pattern p)"
+pattern_capture = "captures pattern_capture(string subject, pattern p)"
+pattern_replace = "string pattern_replace(string subject, pattern p, string replacement)"
+
+[opcodes]
+FOLD   = 0x01
+MAP    = 0x02
+FILTER = 0x03
+REDUCE = 0x04
+
+[glyphs]
+POP  = "⟁SNOBOL_RECEIVE"
+WO   = "⟁SNOBOL_BIND"
+YAX  = "⟁SNOBOL_EVALUATE"
+SEK  = "⟁SNOBOL_SELECT"
+CHEN = "⟁SNOBOL_VERIFY"
+XUL  = "⟁SNOBOL_FOLD"
+
+[semantics]
+POP  = "receive subject string and matching context"
+WO   = "bind pattern, captures, and matching policy"
+YAX  = "evaluate pattern alternatives and candidate captures"
+SEK  = "select winning match; xcfe_admission is a request to the host authority gate"
+CHEN = "verify captures, route contract, and permitted effects"
+XUL  = "close fold; persist only changes authorized by Chen"
+
+[float]
+phase_weight  = 1.0
+learning_rate = 0.0
+
+[weight]
+pattern_match   = 1.0
+pattern_capture = 1.0
+pattern_replace = 1.0
+semantic        = 1.0
+
+[confidence]
+verified_result = 0.98
+candidate_match = 0.80
+
+[key]
+phase = "SEK"
+glyph = "⟁SNOBOL_SELECT"
+
+[value]
+route_map       = "kuhul.advisor-map.v1"
+dispatch_policy = "xcfe_gated"
+
+[query]
+semantic = "select winning pattern match under declared precedence"
+vector   = "nearest candidate captures to subject string"
+
+[bindings]
+identity        = "key.glyph"
+phase           = "key.phase"
+route_map       = "value.route_map"
+dispatch_policy = "value.dispatch_policy"
+pattern_weight  = "weight.pattern_match"
+match_conf      = "confidence.candidate_match"
+result_conf     = "confidence.verified_result"
+
+[fold]
+operator    = "FOLD"
+scope       = "local"
+accumulator = "verified_result"
+closure     = "XUL"
+
+[admission]
+semantic     = "required"
+lane         = "required"
+operator     = "required"
+verification = "required"
+xcfe         = "required"

@@ -1,0 +1,100 @@
+{
+  "@type": "khanary.fold_event_contracts.v1",
+  "version": "1.0.0",
+  "authority": "fold_event_logging_contract_not_transition_authority",
+  "semantic_authority": false,
+  "json_schema": "data/schema/fold-event.schema.json",
+  "fold_space_contract": "data/grammar/fold-space.contracts.json",
+  "fold_lattice_contract": "data/grammar/fold-lattice.contracts.json",
+  "fold_theory": {
+    "formal": "FrakturF = (F_K, M_F, E_F, delta_Pi, B, Exe)",
+    "F_K": "Fold Space: discrete navigable state space",
+    "M_F": "Fold Field: typed incidence/potential field over Fold Space",
+    "E_F": "Fold Events: typed proposed/observed transitions",
+    "delta_Pi": "XCFE transition/control law",
+    "B": "Fold Bindings",
+    "Exe": "Executors: CPU/GPU/model/backend projections"
+  },
+  "fold_field": {
+    "definition": "field defined over Fold topology, optionally admitting continuous geometric projections",
+    "formula": "M_F(h) = bigoplus_tau B_tau[h,*] tensor W_tau",
+    "projection_law": "Pi_R(M_F) is a representation; projection is not the object",
+    "gradient_law": "gradient_Q(M_F) is candidate navigation pressure, not legal direction",
+    "legal_direction_owner": "XCFE"
+  },
+  "event_law": {
+    "event_is": "typed proposed/observed transition record",
+    "event_is_not": "transition authority, semantic truth, or topology commit by itself",
+    "transition": "p_next = delta_XCFE(p_t, e_t, Pi)",
+    "competence_boundary": "N-Gram Burner may emit EVENT_COMPETENCE_CANDIDATE; XCFE must authorize an upgrade",
+    "topology_boundary": "delta_B != 0 requires Verified && Authorized && Fresh && Xul"
+  },
+  "event_kinds": [
+    "EVENT_SHIFT_TRACK",
+    "EVENT_CYCLE_PHASE",
+    "EVENT_FOLD_STATE",
+    "EVENT_OSCILLATE_DENSITY",
+    "EVENT_SUBSTRATE_HANDSHAKE",
+    "EVENT_COMPETENCE_CANDIDATE",
+    "EVENT_COMPETENCE_UPGRADE",
+    "EVENT_FIELD_GRADIENT",
+    "EVENT_TOPOLOGY_CANDIDATE",
+    "EVENT_TOPOLOGY_COMMIT"
+  ],
+  "axis_by_event": {
+    "EVENT_SHIFT_TRACK": "T",
+    "EVENT_CYCLE_PHASE": "phi",
+    "EVENT_FOLD_STATE": "s",
+    "EVENT_OSCILLATE_DENSITY": "s",
+    "EVENT_SUBSTRATE_HANDSHAKE": "X",
+    "EVENT_COMPETENCE_CANDIDATE": "sigma",
+    "EVENT_COMPETENCE_UPGRADE": "sigma",
+    "EVENT_FIELD_GRADIENT": "field",
+    "EVENT_TOPOLOGY_CANDIDATE": "B",
+    "EVENT_TOPOLOGY_COMMIT": "B"
+  },
+  "phase_cycle": [
+    "Pop",
+    "Wo",
+    "Yax",
+    "Sek",
+    "Ch'en",
+    "Xul"
+  ],
+  "competence_axis": [
+    "unbound",
+    "observed",
+    "learned",
+    "bound",
+    "validated",
+    "autonomous"
+  ],
+  "topology_commit_requirements": [
+    "verified",
+    "authorized",
+    "fresh",
+    "xul"
+  ],
+  "invariants": {
+    "FE1": "event_kind determines axis",
+    "FE2": "EVENT_SHIFT_TRACK changes T while preserving phase",
+    "FE3": "EVENT_CYCLE_PHASE advances phi by one C6 step while preserving track",
+    "FE4": "EVENT_FOLD_STATE and EVENT_OSCILLATE_DENSITY toggle s while preserving phase and track",
+    "FE5": "EVENT_COMPETENCE_CANDIDATE proposes sigma movement but does not authorize it",
+    "FE6": "EVENT_COMPETENCE_UPGRADE requires XCFE authorized status",
+    "FE7": "EVENT_FIELD_GRADIENT is field_projection only; gradient is candidate navigation pressure",
+    "FE8": "EVENT_TOPOLOGY_CANDIDATE may propose delta_B but cannot commit topology",
+    "FE9": "EVENT_TOPOLOGY_COMMIT requires delta_B and Verified && Authorized && Fresh && Xul",
+    "FE10": "projection.semantic_authority must be false",
+    "FE11": "p_next = delta_XCFE(p_t, e_t, Pi); event records do not decide transitions",
+    "FE12": "evidence fields are nonnegative and confidence is in [0,1]",
+    "FE13": "EVENT_FIELD_GRADIENT may carry a FoldField record; fold_field.score() = W·C·R is navigation pressure, not route authority",
+    "FE14": "product graph edge weight = W_arc·cos(Δθ); FoldField vertex encodes (node_id,theta,W,C,R) for G_runtime scoring"
+  },
+  "fold_field_integration": {
+    "FoldField_is": "vertex in G_runtime = G_semantic □ G_phase: (node_id, theta, W, C, R)",
+    "score": "S = W·C·R",
+    "relation_to_events": "EVENT_FIELD_GRADIENT carries fold_field scoring; event is candidate, not authority",
+    "product_graph_edge": "w(a,b) = W_arc·cos(θ_b − θ_a); approximate form uses √(Wa·Wb) when W_arc unavailable"
+  }
+}

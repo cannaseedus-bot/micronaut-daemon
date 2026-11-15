@@ -1,0 +1,62 @@
+{
+  "@kind": "kuhul.micronaut.atomic.v1",
+  "id": "PLAN-µ",
+  "descriptor_status": "active",
+  "track_ref": "data/tracks/PLAN-u.semantic-tracks.v1.json",
+  "manifest": {
+    "name": "PLAN-µ",
+    "version": "1.0.0",
+    "description": "Planning micronaut — goal normalisation, task decomposition, dependency ordering, SCFML branch learning. Wo-phase plan generation with WPF card projection. proposal_only: plan is a proposal until XCFE admits."
+  },
+  "api": {
+    "namespace": "plan",
+    "atomic_keys": ["plan.decompose", "plan.order", "plan.emit", "plan.verify", "plan.health"],
+    "verb_surface": ["PLAN *", "ROADMAP *", "DECOMPOSE *", "TASK LIST *", "PLAN STATUS"]
+  },
+  "xcfe": {
+    "mode": "xcfe_gated_read_only",
+    "escalation_mode": "proposal_only",
+    "authority": "proposal_only",
+    "forbidden": ["emit_response", "write_state", "mutate_topology", "commit_patterns", "direct_dispatch"]
+  },
+  "atomic_key_defs": {
+    "plan.decompose": {
+      "@type": "task_decompose",
+      "description": "Wo/Yax-phase: decompose a goal into ordered task list — unfolds ngram context, identifies sub-goals, applies SCFML branch-normalisation to task surface.",
+      "phases": ["Wo", "Yax"],
+      "authority": "data_only"
+    },
+    "plan.order": {
+      "@type": "order_dependencies",
+      "description": "Yax-phase: sort task list by dependency and priority — resolves dependency graph, identifies critical path, folds ngram evidence to weight ordering.",
+      "phases": ["Yax"],
+      "authority": "data_only"
+    },
+    "plan.emit": {
+      "@type": "emit_plan",
+      "description": "Sek-phase: emit typed plan proposal (kuhul.plan.v1) — includes task list, dependency order, branch semantics, WPF card projection. xcfe_required.",
+      "phases": ["Sek"],
+      "xcfe_required": true,
+      "output_schema": "kuhul.plan.v1",
+      "authority": "proposal_only"
+    },
+    "plan.verify": {
+      "@type": "verify_plan",
+      "description": "Ch'en-phase: verify plan proposal — checks task completeness, dependency cycle detection, SCFML pattern admission eligibility.",
+      "phases": ["Ch'en"],
+      "authority": "data_only"
+    },
+    "plan.health": {
+      "@type": "status",
+      "description": "Pop-phase: reports plan engine status, last emitted plan summary, SCFML admission queue depth.",
+      "phases": ["Pop"]
+    }
+  },
+  "program_contract": {
+    "drivers": ["Micronaut.Core.dll", "CFPC.Patterns.dll"],
+    "sandbox": "xcfe_gated_read_only",
+    "learning": false
+  },
+  "srai": { "enabled": false },
+  "capabilities": ["goal_normalization", "task_decomposition", "dependency_ordering", "task_list_projection", "wpf_card"]
+}

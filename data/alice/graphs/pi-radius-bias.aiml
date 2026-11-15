@@ -1,0 +1,532 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from pi-radius-bias.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH </pattern>
+    <template>source pi-radius-bias.gml; label PI_Radius_Bias_Graph; identity pi-radius-bias; authority data_only; directed 1; nodes 44; edges 43. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 1</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 1; depth_prior: 0.8; glyph: ⟁ANIMAL; id: 1; kind: pi_anchor; label: pi_anchor:⟁ANIMAL; pi_depth: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 1; depth_prior: 0.8; glyph: ⟁ANIMAL; id: 1; kind: pi_anchor; label: pi_anchor:⟁ANIMAL; pi_depth: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 2</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 2; depth_prior: 0.9; glyph: ⟁BALL; id: 2; kind: pi_anchor; label: pi_anchor:⟁BALL; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 2; depth_prior: 0.9; glyph: ⟁BALL; id: 2; kind: pi_anchor; label: pi_anchor:⟁BALL; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 3</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 3; depth_prior: 0.7; glyph: ⟁BARK; id: 3; kind: pi_anchor; label: pi_anchor:⟁BARK; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 3; depth_prior: 0.7; glyph: ⟁BARK; id: 3; kind: pi_anchor; label: pi_anchor:⟁BARK; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 4</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 4; depth_prior: 0.9; glyph: ⟁BAT; id: 4; kind: pi_anchor; label: pi_anchor:⟁BAT; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 4; depth_prior: 0.9; glyph: ⟁BAT; id: 4; kind: pi_anchor; label: pi_anchor:⟁BAT; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 5</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 5; depth_prior: 0.9; glyph: ⟁BICYCLE; id: 5; kind: pi_anchor; label: pi_anchor:⟁BICYCLE; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 5; depth_prior: 0.9; glyph: ⟁BICYCLE; id: 5; kind: pi_anchor; label: pi_anchor:⟁BICYCLE; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 6</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 6; depth_prior: 0.9; glyph: ⟁BIRD; id: 6; kind: pi_anchor; label: pi_anchor:⟁BIRD; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 6; depth_prior: 0.9; glyph: ⟁BIRD; id: 6; kind: pi_anchor; label: pi_anchor:⟁BIRD; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 7</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 7; depth_prior: 0.9; glyph: ⟁BOAT; id: 7; kind: pi_anchor; label: pi_anchor:⟁BOAT; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 7; depth_prior: 0.9; glyph: ⟁BOAT; id: 7; kind: pi_anchor; label: pi_anchor:⟁BOAT; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 8</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 8; depth_prior: 0.9; glyph: ⟁BUS; id: 8; kind: pi_anchor; label: pi_anchor:⟁BUS; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 8; depth_prior: 0.9; glyph: ⟁BUS; id: 8; kind: pi_anchor; label: pi_anchor:⟁BUS; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 9</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 9; depth_prior: 0.9; glyph: ⟁CAR; id: 9; kind: pi_anchor; label: pi_anchor:⟁CAR; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 9; depth_prior: 0.9; glyph: ⟁CAR; id: 9; kind: pi_anchor; label: pi_anchor:⟁CAR; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 10</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 10; depth_prior: 0.7; glyph: ⟁CARGO; id: 10; kind: pi_anchor; label: pi_anchor:⟁CARGO; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 10; depth_prior: 0.7; glyph: ⟁CARGO; id: 10; kind: pi_anchor; label: pi_anchor:⟁CARGO; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 11</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 11; depth_prior: 0.9; glyph: ⟁CAT; id: 11; kind: pi_anchor; label: pi_anchor:⟁CAT; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 11; depth_prior: 0.9; glyph: ⟁CAT; id: 11; kind: pi_anchor; label: pi_anchor:⟁CAT; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 12</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 12; depth_prior: 0.9; glyph: ⟁DOG; id: 12; kind: pi_anchor; label: pi_anchor:⟁DOG; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 12; depth_prior: 0.9; glyph: ⟁DOG; id: 12; kind: pi_anchor; label: pi_anchor:⟁DOG; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 13</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 13; depth_prior: 0.9; glyph: ⟁DRIVER; id: 13; kind: pi_anchor; label: pi_anchor:⟁DRIVER; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 13; depth_prior: 0.9; glyph: ⟁DRIVER; id: 13; kind: pi_anchor; label: pi_anchor:⟁DRIVER; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 14</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 14; depth_prior: 0.9; glyph: ⟁ENERGY; id: 14; kind: pi_anchor; label: pi_anchor:⟁ENERGY; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 14; depth_prior: 0.9; glyph: ⟁ENERGY; id: 14; kind: pi_anchor; label: pi_anchor:⟁ENERGY; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 15</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 15; depth_prior: 0.8; glyph: ⟁ENGINE; id: 15; kind: pi_anchor; label: pi_anchor:⟁ENGINE; pi_depth: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 15; depth_prior: 0.8; glyph: ⟁ENGINE; id: 15; kind: pi_anchor; label: pi_anchor:⟁ENGINE; pi_depth: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 16</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 16; depth_prior: 0.7; glyph: ⟁FIELD; id: 16; kind: pi_anchor; label: pi_anchor:⟁FIELD; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 16; depth_prior: 0.7; glyph: ⟁FIELD; id: 16; kind: pi_anchor; label: pi_anchor:⟁FIELD; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 17</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 17; depth_prior: 0.2; glyph: ⟁FLAT; id: 17; kind: pi_anchor; label: pi_anchor:⟁FLAT; pi_depth: 8. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 17; depth_prior: 0.2; glyph: ⟁FLAT; id: 17; kind: pi_anchor; label: pi_anchor:⟁FLAT; pi_depth: 8. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 18</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 18; depth_prior: 0.8; glyph: ⟁FLOW; id: 18; kind: pi_anchor; label: pi_anchor:⟁FLOW; pi_depth: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 18; depth_prior: 0.8; glyph: ⟁FLOW; id: 18; kind: pi_anchor; label: pi_anchor:⟁FLOW; pi_depth: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 19</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 19; depth_prior: 0.7; glyph: ⟁FUR; id: 19; kind: pi_anchor; label: pi_anchor:⟁FUR; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 19; depth_prior: 0.7; glyph: ⟁FUR; id: 19; kind: pi_anchor; label: pi_anchor:⟁FUR; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 20</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 20; depth_prior: 0.9; glyph: ⟁GAME; id: 20; kind: pi_anchor; label: pi_anchor:⟁GAME; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 20; depth_prior: 0.9; glyph: ⟁GAME; id: 20; kind: pi_anchor; label: pi_anchor:⟁GAME; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 21</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 21; depth_prior: 0.8; glyph: ⟁GROWTH; id: 21; kind: pi_anchor; label: pi_anchor:⟁GROWTH; pi_depth: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 21; depth_prior: 0.8; glyph: ⟁GROWTH; id: 21; kind: pi_anchor; label: pi_anchor:⟁GROWTH; pi_depth: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 22</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 22; depth_prior: 0.9; glyph: ⟁HORSE; id: 22; kind: pi_anchor; label: pi_anchor:⟁HORSE; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 22; depth_prior: 0.9; glyph: ⟁HORSE; id: 22; kind: pi_anchor; label: pi_anchor:⟁HORSE; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 23</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 23; depth_prior: 0.9; glyph: ⟁MATTER; id: 23; kind: pi_anchor; label: pi_anchor:⟁MATTER; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 23; depth_prior: 0.9; glyph: ⟁MATTER; id: 23; kind: pi_anchor; label: pi_anchor:⟁MATTER; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 24</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 24; depth_prior: 0.7; glyph: ⟁MEOW; id: 24; kind: pi_anchor; label: pi_anchor:⟁MEOW; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 24; depth_prior: 0.7; glyph: ⟁MEOW; id: 24; kind: pi_anchor; label: pi_anchor:⟁MEOW; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 25</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 25; depth_prior: 0.9; glyph: ⟁MOTION; id: 25; kind: pi_anchor; label: pi_anchor:⟁MOTION; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 25; depth_prior: 0.9; glyph: ⟁MOTION; id: 25; kind: pi_anchor; label: pi_anchor:⟁MOTION; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 26</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 26; depth_prior: 0.9; glyph: ⟁MOTORCYCLE; id: 26; kind: pi_anchor; label: pi_anchor:⟁MOTORCYCLE; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 26; depth_prior: 0.9; glyph: ⟁MOTORCYCLE; id: 26; kind: pi_anchor; label: pi_anchor:⟁MOTORCYCLE; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 27</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 27; depth_prior: 0.7; glyph: ⟁PASSENGER; id: 27; kind: pi_anchor; label: pi_anchor:⟁PASSENGER; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 27; depth_prior: 0.7; glyph: ⟁PASSENGER; id: 27; kind: pi_anchor; label: pi_anchor:⟁PASSENGER; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 28</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 28; depth_prior: 0.7; glyph: ⟁PATH; id: 28; kind: pi_anchor; label: pi_anchor:⟁PATH; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 28; depth_prior: 0.7; glyph: ⟁PATH; id: 28; kind: pi_anchor; label: pi_anchor:⟁PATH; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 29</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 29; depth_prior: 0.7; glyph: ⟁PAW; id: 29; kind: pi_anchor; label: pi_anchor:⟁PAW; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 29; depth_prior: 0.7; glyph: ⟁PAW; id: 29; kind: pi_anchor; label: pi_anchor:⟁PAW; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 30</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 30; depth_prior: 1.0; glyph: ⟁PHYSICAL; id: 30; kind: pi_anchor; label: pi_anchor:⟁PHYSICAL; pi_depth: 0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 30; depth_prior: 1.0; glyph: ⟁PHYSICAL; id: 30; kind: pi_anchor; label: pi_anchor:⟁PHYSICAL; pi_depth: 0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 31</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 31; depth_prior: 0.7; glyph: ⟁PITCH; id: 31; kind: pi_anchor; label: pi_anchor:⟁PITCH; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 31; depth_prior: 0.7; glyph: ⟁PITCH; id: 31; kind: pi_anchor; label: pi_anchor:⟁PITCH; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 32</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 32; depth_prior: 0.9; glyph: ⟁PLANE; id: 32; kind: pi_anchor; label: pi_anchor:⟁PLANE; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 32; depth_prior: 0.9; glyph: ⟁PLANE; id: 32; kind: pi_anchor; label: pi_anchor:⟁PLANE; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 33</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 33; depth_prior: 0.3; glyph: ⟁ROAD; id: 33; kind: pi_anchor; label: pi_anchor:⟁ROAD; pi_depth: 7. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 33; depth_prior: 0.3; glyph: ⟁ROAD; id: 33; kind: pi_anchor; label: pi_anchor:⟁ROAD; pi_depth: 7. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 34</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 34; depth_prior: 0.8; glyph: ⟁ROTATION; id: 34; kind: pi_anchor; label: pi_anchor:⟁ROTATION; pi_depth: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 34; depth_prior: 0.8; glyph: ⟁ROTATION; id: 34; kind: pi_anchor; label: pi_anchor:⟁ROTATION; pi_depth: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 35</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 35; depth_prior: 0.9; glyph: ⟁SCORE; id: 35; kind: pi_anchor; label: pi_anchor:⟁SCORE; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 35; depth_prior: 0.9; glyph: ⟁SCORE; id: 35; kind: pi_anchor; label: pi_anchor:⟁SCORE; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 36</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 36; depth_prior: 0.8; glyph: ⟁SPORTS; id: 36; kind: pi_anchor; label: pi_anchor:⟁SPORTS; pi_depth: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 36; depth_prior: 0.8; glyph: ⟁SPORTS; id: 36; kind: pi_anchor; label: pi_anchor:⟁SPORTS; pi_depth: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 37</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 37; depth_prior: 0.8; glyph: ⟁SWING; id: 37; kind: pi_anchor; label: pi_anchor:⟁SWING; pi_depth: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 37; depth_prior: 0.8; glyph: ⟁SWING; id: 37; kind: pi_anchor; label: pi_anchor:⟁SWING; pi_depth: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 38</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 38; depth_prior: 0.6; glyph: ⟁TIRE; id: 38; kind: pi_anchor; label: pi_anchor:⟁TIRE; pi_depth: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 38; depth_prior: 0.6; glyph: ⟁TIRE; id: 38; kind: pi_anchor; label: pi_anchor:⟁TIRE; pi_depth: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 39</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 39; depth_prior: 0.9; glyph: ⟁TRAIN; id: 39; kind: pi_anchor; label: pi_anchor:⟁TRAIN; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 39; depth_prior: 0.9; glyph: ⟁TRAIN; id: 39; kind: pi_anchor; label: pi_anchor:⟁TRAIN; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 40</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 40; depth_prior: 0.8; glyph: ⟁TRANSPORT; id: 40; kind: pi_anchor; label: pi_anchor:⟁TRANSPORT; pi_depth: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 40; depth_prior: 0.8; glyph: ⟁TRANSPORT; id: 40; kind: pi_anchor; label: pi_anchor:⟁TRANSPORT; pi_depth: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 41</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 41; depth_prior: 0.9; glyph: ⟁TRUCK; id: 41; kind: pi_anchor; label: pi_anchor:⟁TRUCK; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 41; depth_prior: 0.9; glyph: ⟁TRUCK; id: 41; kind: pi_anchor; label: pi_anchor:⟁TRUCK; pi_depth: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 42</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 42; depth_prior: 0.7; glyph: ⟁VEHICLE; id: 42; kind: pi_anchor; label: pi_anchor:⟁VEHICLE; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 42; depth_prior: 0.7; glyph: ⟁VEHICLE; id: 42; kind: pi_anchor; label: pi_anchor:⟁VEHICLE; pi_depth: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 43</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 43; depth_prior: 0.6; glyph: ⟁WHEEL; id: 43; kind: pi_anchor; label: pi_anchor:⟁WHEEL; pi_depth: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 43; depth_prior: 0.6; glyph: ⟁WHEEL; id: 43; kind: pi_anchor; label: pi_anchor:⟁WHEEL; pi_depth: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 1000; family: pi_routing; id: 1000; kind: learned_parameter; label: weight:pi_routing; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph PI_Radius_Bias_Graph; node 1000; family: pi_routing; id: 1000; kind: learned_parameter; label: weight:pi_routing; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 1 to 1000; feature: 0.8; label: pi_bias; source: 1; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 2  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 2 to 1000; feature: 0.9; label: pi_bias; source: 2; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 3  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 3 to 1000; feature: 0.7; label: pi_bias; source: 3; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 4  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 4 to 1000; feature: 0.9; label: pi_bias; source: 4; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 5  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 5 to 1000; feature: 0.9; label: pi_bias; source: 5; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 6  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 6 to 1000; feature: 0.9; label: pi_bias; source: 6; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 7  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 7 to 1000; feature: 0.9; label: pi_bias; source: 7; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 8  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 8 to 1000; feature: 0.9; label: pi_bias; source: 8; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 9  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 9 to 1000; feature: 0.9; label: pi_bias; source: 9; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 10  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 10 to 1000; feature: 0.7; label: pi_bias; source: 10; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 11  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 11 to 1000; feature: 0.9; label: pi_bias; source: 11; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 12  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 12 to 1000; feature: 0.9; label: pi_bias; source: 12; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 13  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 13 to 1000; feature: 0.9; label: pi_bias; source: 13; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 14  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 14 to 1000; feature: 0.9; label: pi_bias; source: 14; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 15  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 15 to 1000; feature: 0.8; label: pi_bias; source: 15; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 16  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 16 to 1000; feature: 0.7; label: pi_bias; source: 16; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 17  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 17 to 1000; feature: 0.2; label: pi_bias; source: 17; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 18  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 18 to 1000; feature: 0.8; label: pi_bias; source: 18; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 19  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 19 to 1000; feature: 0.7; label: pi_bias; source: 19; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 20  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 20 to 1000; feature: 0.9; label: pi_bias; source: 20; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 21  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 21 to 1000; feature: 0.8; label: pi_bias; source: 21; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 22  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 22 to 1000; feature: 0.9; label: pi_bias; source: 22; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 23  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 23 to 1000; feature: 0.9; label: pi_bias; source: 23; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 24  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 24 to 1000; feature: 0.7; label: pi_bias; source: 24; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 25  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 25 to 1000; feature: 0.9; label: pi_bias; source: 25; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 26  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 26 to 1000; feature: 0.9; label: pi_bias; source: 26; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 27  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 27 to 1000; feature: 0.7; label: pi_bias; source: 27; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 28  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 28 to 1000; feature: 0.7; label: pi_bias; source: 28; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 29  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 29 to 1000; feature: 0.7; label: pi_bias; source: 29; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 30  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 30 to 1000; feature: 1.0; label: pi_bias; source: 30; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 31  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 31 to 1000; feature: 0.7; label: pi_bias; source: 31; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 32  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 32 to 1000; feature: 0.9; label: pi_bias; source: 32; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 33  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 33 to 1000; feature: 0.3; label: pi_bias; source: 33; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 34  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 34 to 1000; feature: 0.8; label: pi_bias; source: 34; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 35  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 35 to 1000; feature: 0.9; label: pi_bias; source: 35; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 36  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 36 to 1000; feature: 0.8; label: pi_bias; source: 36; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 37  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 37 to 1000; feature: 0.8; label: pi_bias; source: 37; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 38  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 38 to 1000; feature: 0.6; label: pi_bias; source: 38; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 39  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 39 to 1000; feature: 0.9; label: pi_bias; source: 39; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 40  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 40 to 1000; feature: 0.8; label: pi_bias; source: 40; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 41  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 41 to 1000; feature: 0.9; label: pi_bias; source: 41; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 42  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 42 to 1000; feature: 0.7; label: pi_bias; source: 42; target: 1000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 43  1000</pattern>
+    <template>Graph PI_Radius_Bias_Graph; edge 43 to 1000; feature: 0.6; label: pi_bias; source: 43; target: 1000. Data-only graph record.</template>
+  </category>
+</aiml>

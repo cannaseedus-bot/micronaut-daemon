@@ -1,0 +1,95 @@
+SDM {
+  GraphLayout: Tree;
+  nodeSpacing: 50;
+  levelSpacing: 100;
+}
+
+node {
+  class: kuhul.views.graphic.MicronautNode;
+  foreground: black;
+  fillColor1: #4a90e2;
+  fillColor2: #2c5aa0;
+  label: @id;
+  labelPosition: Center;
+  shapeWidth: 120;
+  shapeHeight: 60;
+  borderColor: #1a3a6e;
+  borderWidth: 2;
+  cornerRadius: 8;
+  shadow: true;
+}
+
+link {
+  class: kuhul.views.RelationalLink;
+  oriented: true;
+  strokeColor: #333;
+  strokeWidth: 2;
+  arrowSize: 10;
+  strokeDash: solid;
+}
+
+link[directed='false'] {
+  oriented: false;
+  strokeDash: dashed;
+  strokeColor: #666;
+}
+
+node[category='executive'] {
+  fillColor1: #e74c3c;
+  shapeWidth: 140;
+  shapeHeight: 70;
+}
+
+node[category='cognitive'] {
+  fillColor1: #3498db;
+}
+
+node[category='storage'] {
+  fillColor1: #2ecc71;
+}
+
+node[category='creative'] {
+  fillColor1: #f39c12;
+}
+
+node[category='structural'] {
+  fillColor1: #8e44ad;
+}
+
+node:has(graph) {
+  class: kuhul.views.ClusterNode;
+  fillColor1: #9b59b6;
+  shapeWidth: 200;
+  shapeHeight: 150;
+  clusterBackground: #ecf0f1;
+}
+
+link[verb='@call'] {
+  strokeColor: #e74c3c;
+}
+
+link[verb='@delegate'] {
+  strokeColor: #3498db;
+}
+
+link[verb='@compose'] {
+  strokeColor: #2ecc71;
+}
+
+link[verb='@eval'] {
+  strokeColor: #f39c12;
+}
+
+link[verb='@relate'] {
+  strokeColor: #95a5a6;
+}
+
+link::label {
+  visible: true;
+  label: @verb;
+  labelPosition: Center;
+  fontSize: 10;
+  background: white;
+  padding: 2;
+  cornerRadius: 4;
+}

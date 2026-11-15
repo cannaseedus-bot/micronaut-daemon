@@ -1,0 +1,39 @@
+<micronaut id="scfml-micronaut" name="SCFML-µ" type="programmable-agent" version="1.0.0">
+  <program language="kuhul" entry="semantic-control.run"/>
+  <behavior>
+    <mode ref="researcher" weight="0.85"/>
+    <mode ref="socratic" weight="0.85"/>
+    <mode ref="critic" weight="0.85"/>
+  </behavior>
+  <vector>
+    <bias name="reasoning" value="0.95"/>
+    <bias name="evidence" value="0.95"/>
+    <bias name="determinism" value="0.90"/>
+  </vector>
+  <field type="semantic" topology="gml" traversal="weighted" track="SCFML-µ"/>
+  <memory substrate="replay:field" scope="host-bound">
+    <type ref="episodic"/>
+    <type ref="semantic"/>
+    <type ref="procedural"/>
+  </memory>
+  <capabilities>
+    <invoke ref="scfml.normalize_branch"/>
+    <invoke ref="scfml.resolve_epistemic_state"/>
+    <invoke ref="scfml.reason_over_key_relations"/>
+    <invoke ref="scfml.propose_xcfe_move"/>
+    <invoke ref="scfml.propose_pattern_promotion"/>
+  </capabilities>
+  <learning>
+    <strategy ref="candidate_only"/>
+    <target ref="SCFML-µ"/>
+    <commit authority="xcfe"/>
+  </learning>
+  <phases>
+    <phase ref="Pop" action="gramRead"/>
+    <phase ref="Wo" action="normalize_branch_surface"/>
+    <phase ref="Yax" action="resolve_epistemic_state_and_key_relations"/>
+    <phase ref="Sek" action="project_candidate_move"/>
+    <phase ref="Ch'en" action="validate_evidence"/>
+    <phase ref="Xul" action="record_candidate"/>
+  </phases>
+</micronaut>

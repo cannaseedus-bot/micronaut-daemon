@@ -1,0 +1,54 @@
+{
+  "@kind": "kuhul.micronaut.atomic.v1",
+  "id": "INFER-µ",
+  "descriptor_status": "active",
+  "track_ref": "data/tracks/INFER-u.semantic-tracks.v1.json",
+  "manifest": {
+    "name": "INFER-µ",
+    "version": "1.0.0",
+    "description": "Evidence inference micronaut — evidence accumulation, confidence scoring, provenance tracking, truth-conditional verdict (Ch'en phase). proposal_only: emits typed verdict proposal; XCFE admits before execution."
+  },
+  "api": {
+    "namespace": "infer",
+    "atomic_keys": ["infer.score", "infer.accumulate", "infer.provenance", "infer.health"],
+    "verb_surface": ["INFER *", "EVALUATE *", "EVIDENCE *", "CONCLUDE *", "INFER STATUS"]
+  },
+  "xcfe": {
+    "mode": "xcfe_gated_read_only",
+    "escalation_mode": "proposal_only",
+    "authority": "proposal_only",
+    "forbidden": ["emit_response", "write_state", "mutate_topology", "commit_patterns"]
+  },
+  "atomic_key_defs": {
+    "infer.score": {
+      "@type": "score_evidence",
+      "description": "Yax/Ch'en-phase: score an evidence claim — assigns confidence weight based on source authority, field scope, and provenance chain depth.",
+      "phases": ["Yax", "Ch'en"],
+      "authority": "data_only"
+    },
+    "infer.accumulate": {
+      "@type": "accumulate_verdict",
+      "description": "Ch'en-phase: accumulate multiple scored evidence items into a weighted verdict — Bayesian combination of confidence scores, produces truth-conditional conclusion with uncertainty band.",
+      "phases": ["Ch'en"],
+      "authority": "data_only"
+    },
+    "infer.provenance": {
+      "@type": "check_provenance_weights",
+      "description": "Ch'en-phase: verify provenance chain of an evidence item — checks authority claim, xcfe admission history, source micronaut, and phase at which evidence was produced.",
+      "phases": ["Ch'en"],
+      "authority": "data_only"
+    },
+    "infer.health": {
+      "@type": "status",
+      "description": "Pop-phase: reports evidence accumulation engine status, last verdict, confidence threshold.",
+      "phases": ["Pop"]
+    }
+  },
+  "program_contract": {
+    "drivers": ["Micronaut.Core.dll", "CFPC.Patterns.dll"],
+    "sandbox": "xcfe_gated_read_only",
+    "learning": false
+  },
+  "srai": { "enabled": false },
+  "capabilities": ["evidence-accumulation", "Ch'en-evaluation", "provenance-tracking", "confidence-scoring", "truth-conditional-check"]
+}

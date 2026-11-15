@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "events-board",
+  "@key": "⟁APP:EVENTS_BOARD",
+  "@mount": "⟁ROOT:EVENTS_BOARD",
+  "@theme": { "accent": "#f97316", "bg": "#120600", "surface": "#201005", "text": "#ffedd5", "hero_phase": "Yax", "tagline": "Find your next great event" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "events_list", "component": "⟁WIDGET:EVENTS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "events": [], "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:EVENTS_BOARD": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:POST_EVENT"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:POST_EVENT": { "@type": "button", "@text": "Post Event", "@on": { "click": "events.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:EVENTS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:EVENTS": { "@type": "feed", "@bind": "state.events", "@children": ["⟁WIDGET:EVENT_CARD"] },
+    "⟁WIDGET:EVENT_CARD": { "@type": "content-card", "@bind": "event", "@on": { "rsvp": "events.rsvp", "view": "events.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:UPCOMING", "⟁WIDGET:CATEGORIES"] },
+    "⟁WIDGET:UPCOMING": { "@type": "list", "@bind": "data.upcoming" },
+    "⟁WIDGET:CATEGORIES": { "@type": "tag-cloud", "@bind": "data.categories" }
+  },
+  "@programs": {
+    "events.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "events.rsvp": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_rsvp", "@out": "modal" }] },
+    "events.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "events.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "event.rsvp": "events.rsvp", "event.view": "events.view", "compose.open": "events.open_compose", "search.input": "events.search" },
+  "@imports": [{ "ref": "event", "mode": "schema_table" }, { "ref": "rsvp", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "calendar-export", "name": "Calendar Export", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Export events as .ics files for any calendar app." },
+      { "id": "reminder-bot", "name": "Reminder Bot", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Auto-send reminder emails 24h before RSVP'd events." },
+      { "id": "waitlist", "name": "Waitlist", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Manage a waitlist when events reach capacity." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "events.post", "pattern": "POST EVENT|CREATE EVENT|ADD EVENT", "intent": "open_compose" },
+      { "id": "events.rsvp", "pattern": "RSVP *|ATTEND *|JOIN EVENT", "intent": "open_rsvp" }
+    ]
+  },
+  "@data": {
+    "categories": ["Meetup", "Workshop", "Conference", "Social", "Online"],
+    "upcoming": ["KHANARY Dev Day — Nov 5", "Design Sprint — Nov 12", "Community Hackathon — Nov 20"],
+    "spotlight": [
+      { "id": "sp1", "title": "KHANARY Dev Day 2025", "slug": "khanary-dev-day", "badge": "Featured", "date": "2025-11-05", "excerpt": "A full day of talks, workshops, and open-source sprints." },
+      { "id": "sp2", "title": "Figma Design Sprint", "slug": "figma-design-sprint", "badge": "Workshop", "date": "2025-11-12", "excerpt": "Hands-on UI sprint from wireframe to polished prototype." },
+      { "id": "sp3", "title": "Community Hackathon", "slug": "community-hackathon", "badge": "24h", "date": "2025-11-20", "excerpt": "48-hour build-a-thon for any project using the KHANARY runtime." }
+    ],
+    "schema": {
+      "event": { "primaryKey": "event_id", "fields": { "event_id": { "type": "string" }, "title": { "type": "string", "required": true }, "description": { "type": "textarea" }, "start_at": { "type": "datetime", "required": true }, "end_at": { "type": "datetime" }, "location": { "type": "string" }, "capacity": { "type": "integer" }, "tags": { "type": "json" } } },
+      "rsvp": { "primaryKey": "rsvp_id", "fields": { "rsvp_id": { "type": "string" }, "event_id": { "type": "string", "required": true }, "user_id": { "type": "string" }, "name": { "type": "string", "required": true }, "email": { "type": "email", "required": true }, "status": { "type": "string" }, "created_at": { "type": "datetime" } } }
+    }
+  }
+}

@@ -1,0 +1,106 @@
+(* ============================================================ *)
+(* AGL: π-PHASE 2D FIELD — RUNTIME GRAMMAR (consolidated 2.1)   *)
+(* Substrate: field + tensor + phase + fold + lane + graph      *)
+(* Merged from the six-file proposal; repairs noted inline:     *)
+(*   R1 edge_decl matches the example's documented usage:        *)
+(*      edge (n1) -> (n2) [ : edge_type ]                        *)
+(*   R2 fold/lane/graph coordinates are number-or-π literals,    *)
+(*      not idents                                               *)
+(*   R3 rank(φ) applies to the C6 CYCLE angle (i·π/3), not the   *)
+(*      field value φ(x,y) ∈ [-π/2, π/2] — the phase table here  *)
+(*      is the declared law (the floor formula over the field    *)
+(*      value alone caps at rank 1 and never reaches the table)  *)
+(*   R4 gradient-descent extension (lane rules): neg_gradient,   *)
+(*      run until convergence, rate/momentum/adaptive params.    *)
+(*      Descent lanes converge at folds; folds fire on           *)
+(*      convergence and on sweep-through phase crosses.          *)
+(* Compiled/parsed by: src/field2d/field2d.cpp (runtime lane).    *)
+(* Spec presence: tools/check_field2d_grammar.py.                *)
+(* ============================================================ *)
+
+(* ---------- §1 FIELD2D: the 2D substrate ---------------------- *)
+(* Continuous phase field over the plane.                       *)
+
+field_decl      = "field", "(", "x", ",", "y", ")", "=", expression ;
+ident           = letter, { letter | digit | "_" } ;
+letter          = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j"
+                | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t"
+                | "u" | "v" | "w" | "x" | "y" | "z"
+                | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J"
+                | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T"
+                | "U" | "V" | "W" | "X" | "Y" | "Z" ;
+
+expression      = term, { ( "+" | "-" ), term } ;
+term            = factor, { ( "*" | "/" ), factor } ;
+factor          = "x" | "y" | "pi" | number
+                | ( "sin" | "cos" | "exp" ), "(", expression, ")"
+                | "(", expression, ")" ;
+
+number          = [ "-" ], digit, { digit }, [ ".", digit, { digit } ] ;
+digit           = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+
+(* ---------- §2 TENSOR: discrete data at a point --------------- *)
+
+tensor_decl     = "tensor", "(", rank, ",", shape, ")" ;
+rank            = integer ;   (* 0..3 *)
+shape           = "(", [ integer, { ",", integer } ], ")" ;
+integer         = digit, { digit } ;
+value_block     = "{", [ value, { ",", value } ], "}" ;
+value           = number | complex ;
+complex         = number, [ ( "+i" | "-i" ), number ] ;
+
+(* ---------- §3 PHASE: cycle angle → tensor selection ---------- *)
+(* angle rows are the K'UHUL C6 rows (i·π/3).                    *)
+
+phase_decl      = "phase", "(", angle, ")", "->", "tensor", "(", rank, ",", shape, ")" ;
+angle           = "0"
+                | "pi"
+                | "pi/", integer
+                | integer, "*pi/", integer
+                | integer, "pi" ;
+coordinate      = number | angle ;
+
+(* ---------- §4 FOLD: event nodes (NEW) ------------------------ *)
+
+fold_decl       = "fold", "(", fold_type, ")", "at", node_ref ;
+fold_type       = "ridge"    (* local maximum fold *)
+                | "valley"   (* local minimum fold *)
+                | "saddle"   (* mixed curvature *)
+                | "cusp"     (* sharp discontinuity *)
+                | "spiral"   (* rotational fold *) ;
+
+fold_body       = { fold_threshold | fold_event } ;
+fold_threshold  = "threshold", "=", number ;
+fold_event      = "on", "cross", "->", fold_action ;
+fold_action     = ( "emit" | "redirect" | "spawn" | "terminate" )
+                  [ "(", event_name, ")" ] ;   (* R5: payload parens optional —
+                    the spec example writes `emit "peak_reached"` and
+                    `redirect L1` bare *)
+event_name      = string_literal ;
+lane_ref        = ident ;
+string_literal  = '"', { character }, '"' ;
+character       = letter | digit | " " | "_" | "-" | "." ;
+
+(* ---------- §5 LANE: endless phase channels (NEW, R4) --------- *)
+
+lane_decl       = "lane", ident, "from", node_ref,
+                  lane_direction, lane_run, { lane_param } ;
+lane_direction  = "follow", ( "gradient" | "neg_gradient" | "phase" )
+                | "orthogonal", "gradient" ;
+lane_run        = "run", "forever"
+                | "run", "until", "convergence" ;
+lane_param      = "rate", "=", number
+                | "momentum", "=", number
+                | "adaptive", "=", ( "true" | "false" ) ;
+
+(* ---------- §6 GRAPH: discrete structure in the field (NEW) ---- *)
+
+graph_decl      = "graph", ident, "on", "field", "(", "x", ",", "y", ")" ;
+graph_body      = { node_decl | edge_decl } ;
+node_decl       = "node", node_ref, [ ":", node_type ] ;
+node_ref        = "(", coordinate, ",", coordinate, ")" ;
+node_type       = "normal" | "fold" | "observer" ;
+edge_decl       = "edge", node_ref, "->", node_ref, [ ":", edge_type ] ;   (* R1 *)
+edge_type       = "gradient"   (* follows ∇φ *)
+                | "isophase"   (* φ = constant *)
+                | "fold"       (* connects folds *) ;

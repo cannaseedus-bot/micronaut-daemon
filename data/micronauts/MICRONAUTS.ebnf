@@ -1,0 +1,147 @@
+(* MICRONAUTS.ebnf
+   Authoring grammar for Micronaut, CM-1, and XJSON-ML manifests.
+   JSON is the interchange form; this grammar describes the semantic source.
+   https://kuhul.dev/ is a vocabulary namespace, not a schema validator.
+   No remote schema is fetched or assumed by this grammar.
+   Active stack: JSON programs + STB authority + OpenCL 1.2/D3D11 CS5
+   execution + WebGL2 visualization. WebGPU/WGSL is not a target.
+*)
+
+micronauts-document = document-header, { whitespace | comment }, micronaut-declaration,
+                      { whitespace | comment | micronaut-declaration } ;
+
+document-header = "@namespace", ":", "https://kuhul.dev/", ",",
+                  "@grammar", ":", "MICRONAUTS.ebnf" ;
+
+micronaut-declaration = atomic-micronaut | control-micronaut | xjson-ml-micronaut ;
+
+atomic-micronaut = "@micronaut", identifier, "{",
+                    identity-section, phase-section, authority-section,
+                    capability-section, invariant-section, "}" ;
+
+control-micronaut = "@control-micronaut", identifier, "{",
+                    control-section, lgl-section, pi-tick-section,
+                    processor-section, projection-section, "}" ;
+
+xjson-ml-micronaut = "@xjson-ml", identifier, "{",
+                     backend-section, operation-bank, model-schema,
+                     training-schema, inference-schema, tensor-schema,
+                     automl-schema, transfer-schema, distributed-schema, "}" ;
+
+identity-section = "identity", "{", field-list, "}" ;
+phase-section = "phases", "{", phase-binding, { ",", phase-binding }, "}" ;
+phase-binding = phase-name, ":", qualified-name ;
+phase-name = "Pop" | "Wo" | "Yax" | "Sek" | "Chen" | "Xul" | "Ch'en" ;
+
+authority-section = "authority", "{", authority-field, { ",", authority-field }, "}" ;
+authority-field = identifier, ":", string ;
+capability-section = "capabilities", "[", [ string, { ",", string } ], "]" ;
+invariant-section = "invariants", "[", [ string, { ",", string } ], "]" ;
+
+control-section = "control", "{", control-field, { ",", control-field }, "}" ;
+control-field = "STX", ":", integer
+              | "ETX", ":", integer
+              | "EOT", ":", integer
+              | "SO", ":", integer
+              | "SI", ":", integer
+              | "ESC", ":", integer ;
+
+lgl-section = "linear-geometric-loop", "{",
+              "range", ":", "U+2000-U+200B", ",",
+              "iteration-rule", ":", string, "}" ;
+
+pi-tick-section = "pi-tick-engine", "{",
+                  "tick-base", ":", expression, ",",
+                  "phase-sequence", ":", "[", string, { ",", string }, "],",
+                  "marker", ":", string, "}" ;
+
+processor-section = "processor", "{",
+                    "components", ":", "[", qualified-name, { ",", qualified-name }, "],",
+                    "operations", ":", "[", qualified-name, { ",", qualified-name }, "]," ,
+                    "clock", ":", qualified-name, "}" ;
+
+projection-section = "projection-invariant", "{",
+                     "control-output", ":", ( "forbidden" | "stripped" ), ",",
+                     "rendered-state", ":", ( "payload-only" | "json-only" ), "}" ;
+
+backend-section = "backends", "{",
+                  "compute", ":", "[", backend-name, { ",", backend-name }, "],",
+                  "visualization", ":", "webgl2", ",",
+                  "storage-authority", ":", "tools/stb.py", "}" ;
+backend-name = "opencl_1_2" | "d3d11_cs5" | "webgl2" | "cpu_reference" ;
+
+operation-bank = "ops", "{", operation, { ",", operation }, "}" ;
+operation = identifier, "{",
+            "type", ":", "primitive", ",",
+            "impl", ":", ( "native.EVAL" | "native.PHASE" | "GPU_DISPATCH" | "SIDECAR_CALL" ), ",",
+            "fn", ":", qualified-name, [ ",", "gpu", ":", boolean ],
+            [ ",", "status", ":", status ], "}" ;
+status = "implemented" | "contracted" | "host_only" | "partial" ;
+
+model-schema = "model", "{",
+               "id", ":", model-reference, ",",
+               "version", ":", semver, ",",
+               "architecture", ":", architecture, ",",
+               "weights", ":", tensor-reference, ",",
+               "training", ":", training-config, "}" ;
+architecture = "{", "layers", ":", "[", layer, { ",", layer }, "]", "}" ;
+layer = "{", "type", ":", layer-type, { ",", field }, "}" ;
+layer-type = "conv2d" | "depthwise_conv" | "pool" | "flatten" | "dense" | "attention" | "norm" ;
+
+training-schema = "training-job", "{",
+                  "id", ":", model-reference, ",",
+                  "phases", ":", "[", training-phase, { ",", training-phase }, "],",
+                  "pipeline", ":", operation-sequence, "}" ;
+training-phase = "{", "name", ":", identifier, ",", "op", ":", qualified-name,
+                 [ ",", "iterations", ":", value ], [ ",", "body", ":", operation-sequence ], "}" ;
+operation-sequence = "[", [ operation-call, { ",", operation-call } ], "]" ;
+operation-call = "{", "op", ":", identifier, { ",", argument }, "}" ;
+argument = identifier, ":", value ;
+
+inference-schema = "inference-bot", "{",
+                   "id", ":", model-reference, ",",
+                   "model", ":", model-reference, ",",
+                   "pipeline", ":", operation-sequence, "}" ;
+
+tensor-schema = "tensor", "{",
+                "id", ":", model-reference, ",",
+                "shape", ":", integer-array, ",",
+                "dtype", ":", ( "f32" | "f16" | "i32" ), ",",
+                "layout", ":", ( "row_major" | "NCHW" | "NHWC" ), ",",
+                "storage", ":", ( "stb_file" | "opencl_buffer" | "d3d11_uav" | "webgl2_texture" | "memory_mapped" ), "}" ;
+
+automl-schema = "automl-search", "{", "objective", ":", identifier,
+                ",", "trials", ":", integer, ",", "search-space", ":", value, "}" ;
+transfer-schema = "transfer-learning", "{", "base-model", ":", model-reference,
+                   ",", "freeze", ":", string-array, ",", "unfreeze", ":", string-array, "}" ;
+distributed-schema = "distributed-training", "{", "transport", ":", "sidecar://",
+                     ",", "reduction", ":", ( "synchronous_all_reduce" | "ring" ),
+                     ",", "device-policy", ":", ( "native_backend" | "declared_remote_backend" ), "}" ;
+
+tensor-reference = model-reference ;
+model-reference = ( "model://" | "cso://" | "stb://" | "sidecar://" ), identifier ;
+qualified-name = identifier, { ".", identifier } ;
+semver = integer, ".", integer, ".", integer ;
+integer-array = "[", integer, { ",", integer }, "]" ;
+string-array = "[", [ string, { ",", string } ], "]" ;
+field-list = identifier, ":", value, { ",", identifier, ":", value } ;
+field = identifier, ":", value ;
+
+value = string | number | boolean | null | array | object | variable | expression ;
+array = "[", [ value, { ",", value } ], "]" ;
+object = "{", [ identifier, ":", value, { ",", identifier, ":", value } ], "}" ;
+variable = "$", identifier ;
+expression = identifier, { operator, ( identifier | number | "PI" ) } ;
+operator = "+" | "-" | "*" | "/" | "%" ;
+boolean = "true" | "false" ;
+null = "null" ;
+number = [ "-" ], integer, [ ".", integer ] ;
+integer = digit, { digit } ;
+identifier = letter, { letter | digit | "_" | "-" } ;
+string = '"', { string-character }, '"' ;
+string-character = ? any Unicode scalar except quote and newline ? | "\\" , ? escape ? ;
+digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+letter = "A".."Z" | "a".."z" ;
+whitespace = " " | "\t" | "\r" | "\n" ;
+comment = "//", { ? any character except newline ? }, "\n"
+        | "/*", { ? any character ? }, "*/" ;

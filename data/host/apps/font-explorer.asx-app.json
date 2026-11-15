@@ -1,0 +1,57 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "font-explorer",
+  "@key": "⟁APP:FONT_EXPLORER",
+  "@mount": "⟁ROOT:FONT_EXPLORER",
+  "@theme": { "accent": "#a78bfa", "bg": "#03020a", "surface": "#06041a", "text": "#ede9fe", "hero_phase": "Yax", "tagline": "Find the right typeface" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "fonts", "component": "⟁WIDGET:FONTS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "fonts": [], "preview_text": "The quick brown fox", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:FONT_EXPLORER": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:PREVIEW", "⟁INPUT:SEARCH"] },
+    "⟁INPUT:PREVIEW": { "@type": "input", "@placeholder": "Preview text...", "@bind": "state.preview_text", "@on": { "input": "fe.set_preview" } },
+    "⟁INPUT:SEARCH": { "@type": "input", "@placeholder": "Search fonts...", "@on": { "input": "fe.search" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:FONTS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:FONTS": { "@type": "grid", "@bind": "state.fonts", "@children": ["⟁WIDGET:FONT_CARD"] },
+    "⟁WIDGET:FONT_CARD": { "@type": "content-card", "@bind": "font", "@on": { "view": "fe.view", "save": "fe.save" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:SAVED", "⟁WIDGET:TAGS"] },
+    "⟁WIDGET:SAVED": { "@type": "list", "@bind": "data.saved" },
+    "⟁WIDGET:TAGS": { "@type": "tag-cloud", "@bind": "data.tags" }
+  },
+  "@programs": {
+    "fe.set_preview": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_text", "@out": "preview_text" }] },
+    "fe.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] },
+    "fe.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "fe.save": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "APPEND", "@from": "event_font", "@out": "saved" }] }
+  },
+  "@events": { "preview.set": "fe.set_preview", "search.input": "fe.search", "font.view": "fe.view", "font.save": "fe.save" },
+  "@imports": [{ "ref": "font", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "pairing", "name": "Font Pairing", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Suggested heading + body pairings for each font." },
+      { "id": "custom-upload", "name": "Custom Font Upload", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Upload and preview your own .ttf / .woff2 files." },
+      { "id": "css-export", "name": "CSS Export", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Copy font-face or @import CSS for any selected font." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "fe.search", "pattern": "FIND FONT *|SEARCH FONT *|FONT FOR *", "intent": "search" },
+      { "id": "fe.saved", "pattern": "SAVED FONTS|MY FONTS|FONT LIST", "intent": "view_saved" }
+    ]
+  },
+  "@data": {
+    "saved": [{ "name": "Inter", "category": "Sans-serif" }, { "name": "Playfair Display", "category": "Serif" }, { "name": "JetBrains Mono", "category": "Monospace" }],
+    "tags": ["Serif", "Sans-serif", "Monospace", "Display", "Handwriting", "Variable"],
+    "spotlight": [
+      { "id": "sp1", "title": "Inter", "category": "Sans-serif", "badge": "Most Used", "styles": 18, "excerpt": "The go-to UI typeface. Variable weight. Excellent readability." },
+      { "id": "sp2", "title": "Playfair Display", "category": "Serif", "badge": "Editorial", "styles": 6, "excerpt": "Classic high-contrast serif. Perfect for editorial headings." },
+      { "id": "sp3", "title": "JetBrains Mono", "category": "Monospace", "badge": "Dev Favourite", "styles": 8, "excerpt": "Designed for code editors. Ligatures included." }
+    ],
+    "schema": {
+      "font": { "primaryKey": "font_id", "fields": { "font_id": { "type": "string" }, "name": { "type": "string", "required": true }, "family": { "type": "string" }, "category": { "type": "string" }, "styles": { "type": "integer" }, "tags": { "type": "json" }, "source": { "type": "string" }, "saved": { "type": "boolean" } } }
+    }
+  }
+}

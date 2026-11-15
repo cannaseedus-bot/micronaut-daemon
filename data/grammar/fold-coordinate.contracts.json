@@ -1,0 +1,83 @@
+{
+  "@type": "khanary.fold_coordinate_contracts.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority": "coordinate_record_only_not_semantic_authority",
+  "lane": "KHANARY_FOLD_COORDINATE_TEST",
+  "owner": "src/micronaut/fold_coordinate.cpp",
+  "docs": [
+    "docs/KUHUL_PHASE_ALGEBRA.md",
+    "kuhul-grammar-kit/docs/FOLD_ALGEBRA.md"
+  ],
+  "coordinate": "K_t = (F_h, phi, T, s, sigma, X_t)",
+  "fields": {
+    "F_h": {
+      "key": "@fold",
+      "meaning": "fold identity",
+      "mutable": false,
+      "schema": "data/schema/fold-runtime-coordinate.schema.json#/$defs/FoldIdentity"
+    },
+    "phi": {
+      "key": "@phase",
+      "meaning": "C6 phase",
+      "mutable": true,
+      "schema": "data/schema/fold-runtime-coordinate.schema.json#/$defs/PhaseState"
+    },
+    "T": {
+      "key": "@track",
+      "meaning": "owning micronaut/track",
+      "mutable": false,
+      "schema": "data/schema/fold-runtime-coordinate.schema.json#/$defs/TrackState"
+    },
+    "s": {
+      "key": "@state",
+      "meaning": "folded state plus revealed extent",
+      "mutable": true,
+      "schema": "data/schema/fold-runtime-coordinate.schema.json#/$defs/FoldState"
+    },
+    "sigma": {
+      "key": "@learning",
+      "meaning": "learning/binding state: evidence about behavior, never structure",
+      "mutable": true,
+      "schema": "data/schema/fold-runtime-coordinate.schema.json#/$defs/LearningState"
+    },
+    "X_t": {
+      "key": "@execution",
+      "meaning": "mutable execution residue",
+      "mutable": true,
+      "schema": "data/schema/fold-runtime-coordinate.schema.json#/$defs/ExecutionState"
+    }
+  },
+  "separators": {
+    "learning_record_owns_no_fold_field": true,
+    "learning_record_keys": ["@status", "@binding", "@sigma", "@evidence"],
+    "why": "a learned binding must never be readable as fold identity, phase or topology, so the learning record is a closed object with no fold/phase/extent key"
+  },
+  "burner_observation": {
+    "shape": "tau = (F_h, phi, T, s, Q, input, operation, output, evidence)",
+    "kind": "khanary.burner.observation.v1",
+    "schema": "data/schema/burner-observation.schema.json",
+    "role": "proposal evidence until Ch'en assertion and Xul commit",
+    "authority": "denies semantic_authority, commit_authorized and verified"
+  },
+  "invariants": {
+    "FC1": "a runtime coordinate declares the six fields F_h, phi, T, s, sigma and X_t as separate records; no field carries two meanings",
+    "FC2": "the learning record is a closed object with no fold, phase or extent key, so sigma can never be read as structure",
+    "FC3": "a learning update copies F_h verbatim: learning state cannot alter fold identity, phase or topology",
+    "FC4": "recording a coordinate at a non-Xul phase never implies commit; the coordinate authority block always denies semantic authority and commit",
+    "FC5": "replay distinguishes fold state, phase state and learned binding state, and counts the changes of each independently",
+    "FC6": "a Burner observation is proposal evidence: it is never verified, never authoritative, and never commits",
+    "FC7": "only a verified Xul request may apply a topology delta; every request is journaled with its typed refusal reason"
+  },
+  "topology_delta": {
+    "commit_phase": "Xul",
+    "requires": "XCFE authorization",
+    "refusal_reasons": ["delta_missing", "phase_not_xul", "not_xcfe_authorized"]
+  },
+  "jrom": {
+    "coordinate_event": "fold:runtime_coordinate",
+    "observation_event": "burner:observation",
+    "delta_events": ["fold:topology_delta_admitted", "fold:topology_delta_denied"],
+    "epistemic_types": ["observation", "execution_trace"]
+  }
+}

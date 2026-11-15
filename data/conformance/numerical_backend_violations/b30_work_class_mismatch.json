@@ -1,0 +1,807 @@
+{
+  "description": "Numerical backend boundary: which execution paths this repository ships, which device each requires, what each was measured to be good for, and the dispatch geometry of the kernels it actually dispatches. The evidence table is transcribed from drivers/shaders/gemm_bench/RESULT.md and is checked against the shader sources on disk.",
+  "authority": {
+    "gemm_bench_note": "drivers/shaders/gemm_bench/RESULT.md",
+    "gemm_bench_source": "drivers/shaders/gemm_bench/gemm_bench.cpp",
+    "shipped_shaders": "drivers/hlsl/",
+    "compiled_shaders": "drivers/cs5_shaders/",
+    "opencl_kernels": "drivers/shaders/opencl_1_2/",
+    "webgl2_surface": "drivers/shaders/webgl2/",
+    "driver_manifest": "drivers/manifest.json",
+    "cpp_types": "src/graphscript/numerical_backend.h"
+  },
+  "backends": [
+    {
+      "id": "cpu_kernel",
+      "requires_device": "cpu",
+      "role": "reference",
+      "note": "The C++ kernels. Accumulation order is the reference, which is why this is the bit-comparable baseline rather than merely a fallback."
+    },
+    {
+      "id": "d3d11_compute",
+      "requires_device": "d3d11.1",
+      "role": "primary",
+      "note": "drivers/hlsl cs_5_0 compute. The measured winner at matched optimisation."
+    },
+    {
+      "id": "opencl_1_2",
+      "requires_device": "opencl_1.2",
+      "role": "alternative",
+      "note": "OpenCL C 1.2 only. Measured and kept; the directive was to commit only if it won the fair comparison, and it did not."
+    },
+    {
+      "id": "webgl2",
+      "requires_device": "webgl2",
+      "role": "optional",
+      "note": "GLSL ES 3.00 fragment surface (drivers/shaders/webgl2). NOT the WGSL assets, which the KLSL XVM target carries separately: two surfaces with two different histories."
+    },
+    {
+      "id": "d3d12_compute",
+      "requires_device": "d3d12",
+      "role": "optional",
+      "note": "drivers/klsl/xvm_d3d12 \u2014 a real native D3D12 compute path (xvm_d12), not Microsoft's DirectML. D3D12-only, and not selected on the HD 4600 because the D3D12 feature level is unavailable there."
+    },
+    {
+      "id": "directml",
+      "requires_device": "d3d12",
+      "role": "optional",
+      "note": "Microsoft's Direct3D 12-backed ML API: a further, separate decision from the native XVM/D3D12 path. It cannot execute through a d3d11.1 device as though the two were interchangeable."
+    },
+    {
+      "id": "numpy_reference",
+      "requires_device": "cpu",
+      "role": "reference",
+      "note": "The CPU oracle used for parity, never for execution."
+    }
+  ],
+  "device_rules": [
+    {
+      "backend": "cpu_kernel",
+      "device": "cpu",
+      "expect": "ADMITTED"
+    },
+    {
+      "backend": "cpu_kernel",
+      "device": "d3d11.1",
+      "expect": "BACKEND_IS_CPU_ONLY"
+    },
+    {
+      "backend": "cpu_kernel",
+      "device": "d3d12",
+      "expect": "BACKEND_IS_CPU_ONLY"
+    },
+    {
+      "backend": "numpy_reference",
+      "device": "cpu",
+      "expect": "ADMITTED"
+    },
+    {
+      "backend": "numpy_reference",
+      "device": "d3d11.1",
+      "expect": "BACKEND_IS_CPU_ONLY"
+    },
+    {
+      "backend": "d3d11_compute",
+      "device": "d3d11.1",
+      "expect": "ADMITTED"
+    },
+    {
+      "backend": "d3d11_compute",
+      "device": "d3d12",
+      "expect": "BACKEND_REQUIRES_D3D11_1"
+    },
+    {
+      "backend": "opencl_1_2",
+      "device": "opencl_1.2",
+      "expect": "ADMITTED"
+    },
+    {
+      "backend": "opencl_1_2",
+      "device": "d3d11.1",
+      "expect": "BACKEND_REQUIRES_OPENCL_1_2"
+    },
+    {
+      "backend": "webgl2",
+      "device": "webgl2",
+      "expect": "ADMITTED"
+    },
+    {
+      "backend": "webgl2",
+      "device": "d3d11.1",
+      "expect": "BACKEND_REQUIRES_WEBGL2"
+    },
+    {
+      "backend": "directml",
+      "device": "d3d12",
+      "expect": "ADMITTED"
+    },
+    {
+      "backend": "directml",
+      "device": "d3d11.1",
+      "expect": "BACKEND_REQUIRES_D3D12"
+    },
+    {
+      "backend": "d3d12_compute",
+      "device": "d3d12",
+      "expect": "ADMITTED"
+    },
+    {
+      "backend": "d3d12_compute",
+      "device": "d3d11.1",
+      "expect": "BACKEND_REQUIRES_D3D12"
+    }
+  ],
+  "kernels": [
+    {
+      "name": "kuhul_gemm_tiled",
+      "source": "drivers/hlsl/kuhul_gemm_tiled.hlsl",
+      "entry": "main",
+      "threads": [
+        8,
+        8,
+        1
+      ],
+      "tiled": true,
+      "groupshared_tile": 8,
+      "note": "Shipped tiled kernel. KUHUL_TILE is 8 in the source, so the dispatch is 8x8x1 with 8x8 groupshared tiles.",
+      "source_kind": "hlsl",
+      "status": "shipped",
+      "requires_d3d12": false
+    },
+    {
+      "name": "kuhul_gemm",
+      "source": "drivers/hlsl/kuhul_gemm.hlsl",
+      "entry": "main",
+      "threads": [
+        8,
+        8,
+        1
+      ],
+      "tiled": false,
+      "note": "Shipped naive kernel; its own header states that DirectML is D3D12-only and cannot bind to a D3D11_1 device.",
+      "source_kind": "hlsl",
+      "status": "shipped",
+      "requires_d3d12": false
+    },
+    {
+      "name": "gemm_bench_embedded_tiled",
+      "source": "drivers/shaders/gemm_bench/gemm_bench.cpp",
+      "entry": "main",
+      "threads": [
+        16,
+        16,
+        1
+      ],
+      "tiled": true,
+      "groupshared_tile": 16,
+      "note": "The benchmark embeds its own 16x16 kernels; these are the kernels the GFLOPS numbers below were measured on, NOT the 8x8 shipped HLSL.",
+      "source_kind": "embedded",
+      "status": "embedded",
+      "requires_d3d12": false
+    },
+    {
+      "name": "gpt2_matmul_fwd",
+      "source": "drivers/cs5_shaders/gpt2_matmul_fwd.cso",
+      "entry": "CSMain",
+      "threads": [
+        16,
+        16,
+        1
+      ],
+      "tiled": true,
+      "groupshared_tile": 16,
+      "note": "Cited by the benchmark as the 16x16 algorithm the trainer ships. Only the compiled .cso is in the tree; the matching HLSL source is absent, so its dispatch geometry is recorded from the citation and cannot be verified against a source file. Recorded as a provenance gap, not as a shipped source.",
+      "source_kind": "compiled",
+      "hlsl_source_present": false,
+      "status": "compiled_only",
+      "requires_d3d12": false
+    }
+  ],
+  "evidence": {
+    "measured_on": "Intel HD 4600 (D3D11 FL 11_1) + Intel Core i7-4790S (OpenCL CPU 1.2)",
+    "units": "GFLOPS, f32",
+    "harness": "KHANARY_GEMM_PROVIDERS_BENCH (drivers/shaders/gemm_bench/gemm_bench.cpp)",
+    "kernels": {
+      "d3d11": "cs_5_0 cooperative tiled GEMM, 16x16 groupshared tiles (no SM 6.10 instructions)",
+      "opencl": "OpenCL C 1.2 tiled GEMM, 16x16 local tiles"
+    },
+    "shapes": [
+      {
+        "shape": "1024x1024x1024",
+        "iterations": 10,
+        "naive": {
+          "d3d11": 6.3,
+          "opencl_gpu": 13.1,
+          "opencl_cpu": 7.7
+        },
+        "tiled": {
+          "d3d11": 25.7,
+          "opencl_gpu": 22.6,
+          "opencl_cpu": 41.3
+        }
+      },
+      {
+        "shape": "512x512x512",
+        "iterations": 30,
+        "naive": {
+          "d3d11": 14.3,
+          "opencl_gpu": 18.0,
+          "opencl_cpu": 39.3
+        },
+        "tiled": {
+          "d3d11": 32.2,
+          "opencl_gpu": 26.1,
+          "opencl_cpu": 54.1
+        }
+      }
+    ],
+    "correctness": {
+      "d3d11_max_abs_err": 6.68e-06,
+      "opencl_gpu_max_abs_err": 0.0,
+      "opencl_cpu_max_abs_err": 6.68e-06,
+      "note": "All three providers are correct. The OpenCL GPU leg is bit-exact against the CPU reference because its accumulation order matches; the D3D11 and OpenCL CPU legs differ by ~6.7e-06 through mad/reassociation, which is correct f32 on values of magnitude ~16."
+    },
+    "verdict": "Ordinary cooperative tiled GEMM on D3D11 works and needs no SM 6.10. Measured against BOTH OpenCL devices, the OpenCL CPU device (i7-4790S, 8 compute units) wins tiled GEMM at both shapes: 41.3 vs 25.7 GFLOPS at 1024^3 and 54.1 vs 32.2 at 512^3, i.e. roughly 1.6-1.7x the iGPU. The earlier 2-provider comparison concluded 'OpenCL does not win' because it only bound the OpenCL GPU device.",
+    "consequence": "Role is per PROVIDER (backend + device), not per API. OpenCL-CPU is primary for GEMM at these shapes; D3D11 stays the GPU-resident path and is the primary where the data already lives in a D3D11 buffer; OpenCL-GPU is an alternative. One API is two providers and must be measured as two."
+  },
+  "invariants": [
+    "B1 capability and preference are separate axes: check_backend answers 'can this pair exist', performance_role answers 'what is it for'",
+    "B2 a refusal names the requirement and never proposes a substitute, because substituting would change where the work runs without the caller's knowledge",
+    "B3 directml and the native XVM/D3D12 target require d3d12; neither can execute through a d3d11.1 device as though the two were interchangeable",
+    "B4 d3d11_compute is refused on a d3d12 device because this project uses no compatibility layer",
+    "B5 numpy_reference is a CPU oracle, never an execution provider",
+    "B7 GEMM executes C = alpha*A*B + beta*C over numbers and does not implement any algebraic product; using it for one requires building the lowered matrix explicitly",
+    "B8 a kernel recorded with hlsl_source_present false must have no matching .hlsl in the tree, so a provenance gap cannot be mistaken for a shipped source",
+    "B9 an API mismatch (BACKEND_REQUIRES_*) is permanent; a capability gap (DEVICE_UNAVAILABLE) is a property of this machine and must not read as the same refusal",
+    "B10 WGSL and WebGL2 are different surfaces; OpenCL is 1.2 only; D3D11 cs_5_0 and D3D12 compute are different targets",
+    "B11 every kernel carries a status: shipped, experimental, compiled_only or embedded; a dispatch table that mixes them silently promotes a candidate",
+    "B12 no experimental kernel may be the preferred path for any operation",
+    "B13 a kernel that requires D3D12 cannot appear on a path selected on a rig without D3D12, whatever its status",
+    "B14 the model file format is a serialization concern: consuming safetensors natively is not the same decision as adopting a tensor stack",
+    "B15 a capability claim carried in prose is a hypothesis: the probe is the authority, and where they disagree the prose is corrected, not the measurement",
+    "B6 a measured loss does not remove a backend from the taxonomy; it removes the commitment to it",
+    "B16 one API can be two providers with two different rankings: an OpenCL platform that exposes a GPU and a CPU device must be measured as two providers, or the number is a blend",
+    "B17 role is per provider (backend + device), not per API",
+    "B18 provider authority is workload-conditional: a primary or alternative role is valid only for the measured operation, tensor shape, data type, residency and execution conditions supporting that designation",
+    "B19 a tiled algorithm is not a specialized instruction: cooperative tiled GEMM runs on cs_5_0 and needs no SM 6.10 support",
+    "B20 measured compute rank and execution role are different rankings: compute rank is compared only within one (operation, shape, residency) domain, never across domains",
+    "B21 every recorded throughput carries its kernel variant, methodology and provider identity, so numbers from different conditions cannot be compared by accident",
+    "B22 measurement scope must match selection scope: a compute-throughput ranking cannot be reused as an end-to-end graph-latency ranking unless the benchmark includes the required transfers, dispatches and synchronisation",
+    "B23 an unmeasured domain may still have eligible providers: classified=false means no evidence-backed performance winner, never no legal execution path",
+    "B24 numerical validity precedes performance admission: a measurement is admissible for ranking only when the exact measured kernel, provider, shape, dtype and execution strategy pass numerical parity AND completion validation. A fused path is a different execution path and must establish its own correctness",
+    "B25 completion and duration are different measurements: an event query establishes that preceding GPU work finished, while GPU kernel duration needs timestamp queries; host-observed latency and device-side duration are recorded separately so T_sync cannot double-count execution",
+    "B26 two timing boundaries are two domains: resident-execution (transfer outside the interval) and host-input-to-host-output (transfer inside) may not be merged into one ranking, and a provider measured in only one of them is unclassified in the other",
+    "B27 a workload-shape argument is not a measurement: 'this work is embarrassingly parallel, so the GPU should win it' is a prediction, and it must be measured before a division of labour is built on it",
+    "B28 worst-case selection must state its error metric: choosing the offending element by relative error surfaces near-zero references and can reject a correct kernel, so geometric aggregates are gated on absolute error with relative error reported alongside",
+    "B29 an optimisation is a hypothesis until measured: tiling and local-memory reuse are standard GPU techniques and still lost to the naive kernel here, so the technique is not evidence",
+    "B30 numerical and presentation classifications are separate domains: a provider's rank for computing a metric matrix says nothing about its rank for rendering that graph, and neither may be inferred from the other",
+    "B31 a hardcoded preference that measurement contradicts is a defect: preferred_gemm_backend() was removed rather than left in the API as a default the evidence disproves",
+    "B32 a policy result is not an execution decision: when classified=false and work must proceed, the choice among eligible providers is made under an explicit fallback policy and its basis is recorded, so no silent default can reintroduce a hardcoded preference",
+    "B33 a presentation benchmark domain includes its edge-selection rule: drawing every pairwise relationship and drawing a subset are different workloads and may not share a ranking"
+  ],
+  "validation": {
+    "checker": "tools/check_numerical_backend.py",
+    "cpp_test": "KHANARY_NUMERICAL_BACKEND_TEST"
+  },
+  "capabilities": {
+    "machine": "Intel HD Graphics 4600 + Intel Core i7-4790S (driver 20.19.15.4835)",
+    "available": {
+      "cpu": true,
+      "d3d11.1": true,
+      "opencl_1.2": true,
+      "webgl2": true,
+      "d3d12": true
+    },
+    "shader_model_6_10": false,
+    "probed": {
+      "source": "KHANARY_BACKEND_PROBE_TEST (runtime enumeration)",
+      "opencl_platform": "Intel(R) OpenCL",
+      "opencl_devices": [
+        {
+          "type": "gpu",
+          "name": "Intel(R) HD Graphics 4600",
+          "version": "OpenCL 1.2",
+          "compute_units": 20,
+          "provider": "opencl_gpu"
+        },
+        {
+          "type": "cpu",
+          "name": "Intel(R) Core(TM) i7-4790S CPU @ 3.20GHz",
+          "version": "OpenCL 1.2 (Build 10094)",
+          "compute_units": 8,
+          "provider": "opencl_cpu"
+        }
+      ],
+      "d3d11": {
+        "feature_level": "11_1",
+        "compute": true,
+        "downlevel_compute": true,
+        "adapter": "Intel(R) HD Graphics 4600"
+      },
+      "d3d12": {
+        "device_created": true,
+        "max_feature_level": "11_1"
+      },
+      "d2d1": {
+        "factory_created": true
+      }
+    },
+    "note": "drivers/klsl/xvm_d3d12/README.md states that the D3D12 target 'is not selected because D3D12 feature level is unavailable' on the HD 4600. Measurement on driver 20.19.15.4835 contradicts that: a D3D12 device is created at feature level 11_1. The D3D12 path is therefore reachable; what is NOT reachable is SM 6.10, so the cooperative-matrix candidate stays unavailable for a different reason than the note gives."
+  },
+  "surface_disambiguation": {
+    "webgl2": "GLSL ES 3.00 fragment shaders in drivers/shaders/webgl2",
+    "wgsl": "WebGPU-side assets carried by the KLSL XVM target; NOT the WebGL2 backend and not interchangeable with it",
+    "opencl": "OpenCL C 1.2 only",
+    "hlsl_cs5": "D3D11.1 cs_5_0 compute in drivers/hlsl",
+    "hlsl_d3d12": "D3D12-only compute in drivers/klsl/xvm_d3d12/shaders"
+  },
+  "experimental_surface": {
+    "path": "drivers/hlsl/experimental",
+    "file_count": 27,
+    "note": "A separate surface from the shipped kernels in drivers/hlsl. Nothing here may be the preferred GEMM path: an experimental shader is a candidate, not a commitment, and the two must not be confused in a dispatch table.",
+    "entries": [
+      {
+        "name": "huggingface_dequantizer",
+        "source": "drivers/hlsl/experimental/huggingface.hlsl",
+        "entry": "main",
+        "threads": [
+          256,
+          1,
+          1
+        ],
+        "status": "experimental",
+        "requires_d3d12": false,
+        "note": "SafeTensors streaming dequantizer: CPU maps a tensor slice into a D3D11 ByteAddressBuffer, the shader writes float32 into the persistent working tensor, and the CPU advances the chunk. BF16 is f32 = bf16_word << 16. The Hugging Face SERIALIZATION format is already handled natively here, which is why adopting the HF tensor stack is not required for data ingestion."
+      },
+      {
+        "name": "kuhul_cooperative_matrix",
+        "source": "drivers/hlsl/experimental/kuhul_cooperative_matrix.hlsl",
+        "entry": "main",
+        "threads": [
+          0,
+          0,
+          1
+        ],
+        "status": "experimental",
+        "requires_d3d12": true,
+        "note": "SM 6.10 cooperative matrix. D3D12 itself IS available on this machine (FL 11_1, measured), but SM 6.10 is not, so the candidate stays out of the dispatch table for the shader-model reason rather than the API reason.",
+        "requires_shader_model_6_10": true
+      },
+      {
+        "name": "int4_matmul",
+        "source": "drivers/hlsl/experimental/int4_matmul.hlsl",
+        "entry": "main",
+        "threads": [
+          0,
+          0,
+          1
+        ],
+        "status": "experimental",
+        "requires_d3d12": false
+      },
+      {
+        "name": "matmul_int4",
+        "source": "drivers/hlsl/experimental/matmul_int4.hlsl",
+        "entry": "main",
+        "threads": [
+          0,
+          0,
+          1
+        ],
+        "status": "experimental",
+        "requires_d3d12": false
+      }
+    ]
+  },
+  "serialization": {
+    "formats_handled_natively": [
+      "safetensors",
+      "bf16",
+      "f16"
+    ],
+    "shader": "drivers/hlsl/experimental/huggingface.hlsl",
+    "note": "The ecosystem's serialization is a dequantizer, not an execution engine. K'UHUL reads safetensors and dequantizes BF16/F16 into its own persistent working tensor, so the numerical stack stays native and the symbolic layer stays untouched by the choice of model file format.",
+    "consequence": "adopting the Hugging Face tensor STACK would replace the execution path; consuming its FILE FORMAT replaces nothing"
+  },
+  "providers": [
+    {
+      "id": "opencl_cpu",
+      "api": "opencl_1_2",
+      "device_class": "cpu",
+      "device_id": "Intel(R) Core(TM) i7-4790S CPU @ 3.20GHz",
+      "compute_units": 8,
+      "backend": "opencl_1_2"
+    },
+    {
+      "id": "d3d11_gpu",
+      "api": "d3d11",
+      "device_class": "integrated_gpu",
+      "device_id": "Intel(R) HD Graphics 4600",
+      "backend": "d3d11_compute"
+    },
+    {
+      "id": "opencl_gpu",
+      "api": "opencl_1_2",
+      "device_class": "integrated_gpu",
+      "device_id": "Intel(R) HD Graphics 4600",
+      "compute_units": 20,
+      "backend": "opencl_1_2"
+    },
+    {
+      "id": "d3d12_gpu",
+      "api": "d3d12",
+      "device_class": "integrated_gpu",
+      "device_id": "Intel(R) HD Graphics 4600",
+      "note": "reachable at FL 11_1; unmeasured for GEMM",
+      "backend": "d3d12_compute"
+    },
+    {
+      "id": "cpu_kernel",
+      "api": "cpu_kernel",
+      "device_class": "cpu",
+      "device_id": "host",
+      "backend": "cpu_kernel"
+    },
+    {
+      "id": "numpy_reference",
+      "api": "numpy",
+      "device_class": "cpu",
+      "device_id": "python",
+      "backend": "numpy_reference"
+    },
+    {
+      "id": "webgl2_surface",
+      "api": "webgl2",
+      "backend": "webgl2",
+      "device_class": "integrated_gpu",
+      "device_id": "browser",
+      "note": "GLSL ES 3.00 fragment surface; not a GEMM leg"
+    },
+    {
+      "id": "directml_d3d12",
+      "api": "directml",
+      "backend": "directml",
+      "device_class": "integrated_gpu",
+      "device_id": "Intel(R) HD Graphics 4600",
+      "note": "separate D3D12 API decision; unmeasured"
+    }
+  ],
+  "rankings": [
+    {
+      "operation": "gemm",
+      "shape": "1024x1024x1024",
+      "kernel_variant": "tiled16",
+      "residency": "host",
+      "methodology": "3 warmup dispatches, 10 timed dispatches, one synchronisation",
+      "rank": [
+        {
+          "provider": "opencl_cpu",
+          "gflops": 41.3
+        },
+        {
+          "provider": "d3d11_gpu",
+          "gflops": 25.7
+        },
+        {
+          "provider": "opencl_gpu",
+          "gflops": 22.6
+        }
+      ]
+    },
+    {
+      "operation": "gemm",
+      "shape": "512x512x512",
+      "kernel_variant": "tiled16",
+      "residency": "host",
+      "methodology": "3 warmup dispatches, 30 timed dispatches, one synchronisation",
+      "rank": [
+        {
+          "provider": "opencl_cpu",
+          "gflops": 54.1
+        },
+        {
+          "provider": "d3d11_gpu",
+          "gflops": 32.2
+        },
+        {
+          "provider": "opencl_gpu",
+          "gflops": 26.1
+        }
+      ]
+    },
+    {
+      "operation": "gemm",
+      "shape": "1024x1024x1024",
+      "kernel_variant": "tiled16",
+      "residency": "d3d11_buffer",
+      "methodology": "not measured: operands assumed already resident, so T_transfer is zero",
+      "rank": [
+        {
+          "provider": "d3d11_gpu",
+          "gflops": null,
+          "note": "the only provider that pays no transfer in this class"
+        }
+      ]
+    }
+  ],
+  "roles": [
+    {
+      "provider": "opencl_cpu",
+      "role": "primary",
+      "scope": "gemm, host residency, both measured shapes",
+      "basis": "fastest measured; 41.3 / 54.1 GFLOPS tiled"
+    },
+    {
+      "provider": "d3d11_gpu",
+      "role": "primary",
+      "scope": "gemm, d3d11_buffer residency",
+      "basis": "the only provider that does not pay a transfer in its own residency class; second by raw compute"
+    },
+    {
+      "provider": "opencl_gpu",
+      "role": "alternative",
+      "scope": "gemm, host residency",
+      "basis": "22.6 / 26.1 GFLOPS tiled; bit-exact against the CPU reference"
+    },
+    {
+      "provider": "d3d12_gpu",
+      "role": "unclassified",
+      "scope": "gemm",
+      "basis": "reachable at FL 11_1, no measurement"
+    },
+    {
+      "provider": "cpu_kernel",
+      "role": "reference",
+      "scope": "correctness",
+      "basis": "the oracle"
+    },
+    {
+      "provider": "numpy_reference",
+      "role": "reference",
+      "scope": "correctness",
+      "basis": "the Python-side oracle"
+    },
+    {
+      "provider": "webgl2_surface",
+      "role": "optional",
+      "scope": "browser presentation",
+      "basis": "not a compute leg for the native runtime"
+    },
+    {
+      "provider": "directml_d3d12",
+      "role": "optional",
+      "scope": "d3d12 ml api",
+      "basis": "separate backend decision; unmeasured"
+    }
+  ],
+  "selection": {
+    "cost_model": "T_P = T_transfer + T_dispatch + T_compute + T_sync",
+    "measured": [
+      "T_compute"
+    ],
+    "unmeasured": [
+      "T_transfer",
+      "T_dispatch",
+      "T_sync"
+    ],
+    "rule": "P* = argmin over ADMITTED providers of T_P(operation, shape, residency); because only T_compute is measured, selection ranks within a residency class and reports anything else as unclassified rather than guessing across classes"
+  },
+  "graph_benchmark": {
+    "status": "validated on all three providers",
+    "operation": "gemm+bias+relu",
+    "shape": "512x512x512",
+    "inputs": "identical A, B and bias vectors for every provider and strategy",
+    "defects_found_by_the_gate_ladder": [
+      "structured buffers created without D3D11_RESOURCE_MISC_BUFFER_STRUCTURED, so StructuredBuffer views failed and the dispatch wrote nowhere (the empty tensor)",
+      "timed region ended at Dispatch with only Flush(), so it measured submission (0.010 ms and a 25 TFLOP-equivalent result)",
+      "the OpenCL epilogue kernels take M and N as scalar arguments; leaving them unset made ReLU never run (gate2 err 1.00, gate5 all 262144 entries nonzero)",
+      "gate admissibility was a score (>=4 of 6) instead of a conjunction; a numerical failure could be offset by unrelated passing checks"
+    ],
+    "domains": [
+      {
+        "residency": "resident-execution",
+        "timing_boundary": "first enqueue through completion; upload and readback outside",
+        "latency_ms": {
+          "d3d11_gpu": {
+            "unfused": 9.742,
+            "partial": 9.555,
+            "full": 9.163
+          },
+          "opencl_gpu": {
+            "unfused": 10.921,
+            "partial": 10.665,
+            "full": 10.464
+          },
+          "opencl_cpu": {
+            "unfused": 5.293,
+            "partial": 5.24,
+            "full": 4.95
+          }
+        },
+        "rank_full": [
+          {
+            "provider": "opencl_cpu",
+            "ms": 4.95
+          },
+          {
+            "provider": "d3d11_gpu",
+            "ms": 9.163
+          },
+          {
+            "provider": "opencl_gpu",
+            "ms": 10.464
+          }
+        ],
+        "note": "OpenCL CPU is 1.85x faster than the best D3D11 strategy"
+      },
+      {
+        "residency": "host-input-to-host-output",
+        "timing_boundary": "upload + dispatch + clFinish + readback, all inside the interval",
+        "latency_ms": {
+          "opencl_gpu": {
+            "unfused": 14.244,
+            "partial": 14.45,
+            "full": 14.458
+          },
+          "opencl_cpu": {
+            "unfused": 6.228,
+            "partial": 6.688,
+            "full": 6.511
+          }
+        },
+        "rank_full": [
+          {
+            "provider": "opencl_cpu",
+            "ms": 6.511
+          },
+          {
+            "provider": "opencl_gpu",
+            "ms": 14.458
+          }
+        ],
+        "note": "D3D11 not measured end-to-end: its resident figure excludes upload/readback and a D3D11 end-to-end boundary was not implemented"
+      }
+    ],
+    "fusion_benefit": {
+      "d3d11_gpu": "5.9% (resident)",
+      "opencl_gpu": "4.2% (resident)",
+      "opencl_cpu": "6.5% resident, 13.7% at full-vs-partial in the second run"
+    },
+    "transfer_overhead_ms": {
+      "opencl_gpu": {
+        "unfused": 3.324,
+        "partial": 3.785,
+        "full": 3.994
+      },
+      "opencl_cpu": {
+        "unfused": 0.424,
+        "partial": 1.47,
+        "full": 1.505
+      }
+    },
+    "consequence": "a cross-provider graph ranking is now admissible for the resident-execution domain, where OpenCL CPU wins by 1.85x. The host-input-to-host-output domain has two providers measured, not three, so its rank is partial and D3D11 is unclassified there"
+  },
+  "metric_graph_benchmark": {
+    "status": "measured on all four variants; the GPU-for-geometry hypothesis is refuted on this hardware, including with local-memory tiling",
+    "operation": "vector metric graph: pairwise distance + cosine similarity, then per-node aggregation",
+    "shape": "n=2048 nodes, 4194304 pairs, 10 iters",
+    "timing_boundary": "resident execution: upload outside, dispatches and completion inside; the cosim matrix stays device-resident between the passes",
+    "reference": "single-threaded double-precision CPU reference, ~50 ms once",
+    "results": {
+      "opencl_cpu_naive": {
+        "ms": 8.46,
+        "worst_abs_err": 7.629e-05,
+        "worst_rel_err": 2.137e-06,
+        "mpairs_per_s": 495.8,
+        "gate": "pass"
+      },
+      "opencl_cpu_tiled": {
+        "ms": 13.845,
+        "worst_abs_err": 7.629e-05,
+        "worst_rel_err": 2.137e-06,
+        "gate": "pass"
+      },
+      "opencl_gpu_naive": {
+        "ms": 154.184,
+        "worst_abs_err": 9.537e-05,
+        "worst_rel_err": 2.872e-06,
+        "mpairs_per_s": 27.2,
+        "gate": "pass"
+      },
+      "opencl_gpu_tiled": {
+        "ms": 179.481,
+        "worst_abs_err": 9.537e-05,
+        "worst_rel_err": 2.872e-06,
+        "gate": "pass"
+      }
+    },
+    "corrected_finding": "The earlier verdict 'OpenCL GPU parity FAILED (1.19e-03 > 1e-03)' was an artifact of my own metric, not of the kernel. Selecting the worst case by RELATIVE error picks out a node whose aggregate is near zero, which inflates the ratio. Ranking by ABSOLUTE error and reporting both shows the GPU at abs 9.537e-05 / rel 2.872e-06, which passes comfortably on both providers. A combined absolute-or-relative criterion is the correct test for geometric aggregates.",
+    "tiling_experiment": "The tiled float4 kernel with 16x16 work-groups and local-memory coordinate reuse is SLOWER on both devices: GPU 179.481 vs 154.184 ms (+16.4%), CPU 13.845 vs 8.460 ms (+63.7%). Reuse did not pay for the barrier, the local-memory round-trip and the float4 padding cost at this size. The naive kernel is memory-friendly enough that the coordinate re-reads it saves are cheaper than the synchronisation it adds.",
+    "ratio": {
+      "cpu_over_gpu_naive": 18.2,
+      "cpu_over_gpu_tiled": 13.0,
+      "kind": "observed ratio between validated measurements in the same domain"
+    },
+    "consequence": "OpenCL CPU is 18.2x faster on this workload with both providers passing parity, so this is an admissible ranking, not a diagnostic one. The GPU has no measured domain in which it wins on this machine, and a straightforward optimisation (local-memory tiling) did not change that."
+  },
+  "provider_classification": {
+    "opencl_cpu_dense_numerics": "measured primary (GEMM, gemm+bias+relu, both boundaries)",
+    "opencl_cpu_pairwise_metrics": "measured, 18.2x faster than GPU on the tested workload",
+    "opencl_gpu_naive_pairwise": "measured, parity passing, slower",
+    "opencl_gpu_tiled_pairwise": "measured, parity passing, slower than its own naive variant",
+    "d3d11_cooperative_tiled_gemm": "measured and validated; slower than OpenCL CPU in every measured domain",
+    "d3d11_end_to_end": "unmeasured (no upload/readback boundary implemented)",
+    "d3d12_compute": "reachable at FL 11_1; unmeasured",
+    "authority": "XCFE / FoldGraph, independent of whichever provider computed the numbers",
+    "d3d11_presentation": "eligible, unclassified: the graphics path has not been benchmarked and carries no claim from the numerical measurements"
+  },
+  "scheduling_policy": {
+    "rule": [
+      "if the (operation, shape, residency) domain has a validated ranking: return its fastest admissible provider",
+      "otherwise: classified = false with the eligible providers populated"
+    ],
+    "removed": "preferred_gemm_backend() returned a hardcoded D3D11 and has been deleted; the measurements contradict it (OpenCL CPU is 1.85x faster on the fused graph and 18.2x on pairwise metrics)",
+    "no_predetermined_compute_provider": "the GPU keeps eligibility wherever its capabilities satisfy the kernel contract, and earns no preference without matching evidence",
+    "work_classes": {
+      "numerical": "measured providers: OpenCL CPU leads every measured domain",
+      "presentation": "a separate classification; D3D11/D2D1 rendering has NOT been measured and inherits nothing from the numerical results"
+    }
+  },
+  "presentation_domain": {
+    "status": "unmeasured",
+    "candidate": "D3D11 + D2D1",
+    "proposed_workload": "compute the vector metric graph on the CPU, upload only the visualization data, and measure graph presentation latency (nodes, edges, transforms, effects)",
+    "why_separate": "rendering a graph efficiently is a different operation from computing its metric matrix; the numerical results say nothing about it",
+    "costs_still_unmeasured": [
+      "CPU-to-GPU upload of visualization data",
+      "D2D1 effect chain",
+      "presentation and vsync behaviour"
+    ],
+    "eligible": true,
+    "classified": false
+  },
+  "execution_resolution": {
+    "problem": "classified=false is a valid policy result but not a complete execution decision; something must still choose among the eligible providers when work has to proceed",
+    "rule": "the choice is explicit, never a silent default: the caller states a FallbackPolicy and the decision records its basis",
+    "policies": {
+      "refuse": "do not execute; the refusal names the missing measurement",
+      "calibrate": "decline now and require a measurement before executing",
+      "caller_supplied": "execute on the named provider, which must be in the eligible set",
+      "first_eligible": "documented deterministic fallback: lowest provider identity name, recorded with that basis"
+    },
+    "guarantees": [
+      "a classified domain is decided by the ranking; no fallback policy can override it",
+      "every execution decision carries a non-empty basis",
+      "every refusal carries a non-empty reason",
+      "first_eligible is deterministic across runs and builds"
+    ]
+  },
+  "presentation_benchmark": {
+    "status": "ranked from the numerical results",
+    "workload": "the 2048-node vector metric graph with CPU-computed positions and edge metrics",
+    "stages": {
+      "cpu_graph_preparation": "time to construct the visualization buffers",
+      "upload": "time to transfer node and edge data into GPU resources",
+      "d3d11_rendering": "GPU-side duration via completion query; timestamp queries where valid",
+      "d2d1_composition": "additional effect/composition cost, measured only after D3D11 alone",
+      "completed_frame": "host-observed time through the chosen completion boundary"
+    },
+    "domain_axis": "edge selection is part of the domain key, not a detail: drawing all 4194304 pairwise relationships and drawing a selected subset are different presentation workloads",
+    "sequencing": "D3D11 alone first, then add D2D1, so composition cost is isolated rather than attributed to the whole render path",
+    "eligible": true,
+    "classified": true,
+    "costs_still_unmeasured": [
+      "CPU-to-GPU upload of visualization data",
+      "D2D1 effect chain",
+      "presentation and vsync behaviour",
+      "edge-selection subsetting"
+    ],
+    "rank_full": [
+      {
+        "provider": "opencl_cpu",
+        "ms": 4.95,
+        "inherited_from": "gemm+bias+relu"
+      }
+    ]
+  }
+}

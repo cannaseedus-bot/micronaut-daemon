@@ -1,0 +1,56 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "color-palette",
+  "@key": "⟁APP:COLOR_PALETTE",
+  "@mount": "⟁ROOT:COLOR_PALETTE",
+  "@theme": { "accent": "#f472b6", "bg": "#060006", "surface": "#0e000e", "text": "#fce7f3", "hero_phase": "Pop", "tagline": "Build palettes that work" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "palettes", "component": "⟁WIDGET:PALETTES", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "palettes": [], "active": null, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:COLOR_PALETTE": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:NEW_PALETTE", "⟁ACTION:GENERATE"] },
+    "⟁ACTION:NEW_PALETTE": { "@type": "button", "@text": "New Palette", "@on": { "click": "cp.open_compose" } },
+    "⟁ACTION:GENERATE": { "@type": "button", "@text": "Generate", "@on": { "click": "cp.generate" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:PALETTES", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:PALETTES": { "@type": "grid", "@bind": "state.palettes", "@children": ["⟁WIDGET:PALETTE_CARD"] },
+    "⟁WIDGET:PALETTE_CARD": { "@type": "content-card", "@bind": "palette", "@on": { "view": "cp.view", "copy": "cp.copy" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:ACTIVE_PALETTE", "⟁WIDGET:COLOR_TOOLS"] },
+    "⟁WIDGET:ACTIVE_PALETTE": { "@type": "list", "@bind": "state.active.colors" },
+    "⟁WIDGET:COLOR_TOOLS": { "@type": "list", "@bind": "data.tools" }
+  },
+  "@programs": {
+    "cp.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "cp.generate": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "cp.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_palette", "@out": "active" }] },
+    "cp.copy": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_copied", "@out": "copied_id" }] }
+  },
+  "@events": { "palette.new": "cp.open_compose", "palette.generate": "cp.generate", "palette.view": "cp.view", "color.copy": "cp.copy" },
+  "@imports": [{ "ref": "palette", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "contrast-check", "name": "WCAG Contrast Check", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Check WCAG AA/AAA contrast ratios for any color pair." },
+      { "id": "figma-export", "name": "Figma Variable Export", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Export palettes as Figma variable JSON." },
+      { "id": "image-extract", "name": "Extract from Image", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Upload an image and extract dominant colors." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "cp.new", "pattern": "NEW PALETTE|CREATE PALETTE|BUILD COLOR SCHEME", "intent": "open_compose" },
+      { "id": "cp.gen", "pattern": "GENERATE PALETTE|RANDOM COLORS|PALETTE FROM *", "intent": "generate" }
+    ]
+  },
+  "@data": {
+    "tools": ["Color Picker", "Shade Generator", "Contrast Checker", "CSS Variables"],
+    "spotlight": [
+      { "id": "sp1", "title": "KHANARY Phase Palette", "colors": ["#6366f1", "#a78bfa", "#c084fc", "#f472b6", "#fb7185", "#fbbf24"], "badge": "Saved Palette", "excerpt": "6-color phase gradient mirroring the C6 cycle angles." },
+      { "id": "sp2", "title": "Dark UI Neutral Set", "colors": ["#0a0a0a", "#141414", "#1e1e1e", "#2a2a2a", "#888888", "#ffffff"], "badge": "Classic", "excerpt": "High-contrast neutral scale. Works for any dark UI." },
+      { "id": "sp3", "title": "Earthy Brand Tones", "colors": ["#d97706", "#92400e", "#78350f", "#4ade80", "#065f46"], "badge": "Generated", "excerpt": "Warm earth tones with a green accent. Auto-generated from #d97706." }
+    ],
+    "schema": {
+      "palette": { "primaryKey": "palette_id", "fields": { "palette_id": { "type": "string" }, "name": { "type": "string", "required": true }, "colors": { "type": "json", "required": true }, "tags": { "type": "json" }, "created_at": { "type": "datetime" } } }
+    }
+  }
+}

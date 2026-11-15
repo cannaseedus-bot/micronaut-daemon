@@ -1,0 +1,520 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from kuhul-pi.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH </pattern>
+    <template>source kuhul-pi.gml; label KUHUL_PI_Carrier; identity kuhul-pi; authority data_only; directed 1; nodes 43; edges 42. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 1</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 1; centroid_norm: 0.96827418; cohesion: 0.93691836; domain: ⟁MOTION; domain_sim: 0.97036928; id: 1; kind: semantic; label: ⟁ANIMAL; node_kind: domain; pi_depth: 2; pi_radius: 0.6283185307179586; pi_weight: 0.8; record_count: 216. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁ANIMAL</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 1; centroid_norm: 0.96827418; cohesion: 0.93691836; domain: ⟁MOTION; domain_sim: 0.97036928; id: 1; kind: semantic; label: ⟁ANIMAL; node_kind: domain; pi_depth: 2; pi_radius: 0.6283185307179586; pi_weight: 0.8; record_count: 216. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 2</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 2; centroid_norm: 0.96704078; cohesion: 0.93415498; domain: ⟁SPORTS; domain_sim: 0.9786669; id: 2; kind: semantic; label: ⟁BALL; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 65. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁BALL</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 2; centroid_norm: 0.96704078; cohesion: 0.93415498; domain: ⟁SPORTS; domain_sim: 0.9786669; id: 2; kind: semantic; label: ⟁BALL; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 65. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 3</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 3; centroid_norm: 0.9794054; cohesion: 0.95813316; domain: ⟁ANIMAL; domain_sim: 0.98394907; id: 3; kind: semantic; label: ⟁BARK; node_kind: associated; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 38. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁BARK</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 3; centroid_norm: 0.9794054; cohesion: 0.95813316; domain: ⟁ANIMAL; domain_sim: 0.98394907; id: 3; kind: semantic; label: ⟁BARK; node_kind: associated; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 38. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 4</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 4; centroid_norm: 0.96897882; cohesion: 0.93382987; domain: ⟁SPORTS; domain_sim: 0.96702141; id: 4; kind: semantic; label: ⟁BAT; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 13. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁BAT</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 4; centroid_norm: 0.96897882; cohesion: 0.93382987; domain: ⟁SPORTS; domain_sim: 0.96702141; id: 4; kind: semantic; label: ⟁BAT; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 13. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 5</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 5; centroid_norm: 0.97710299; cohesion: 0.95343689; domain: ⟁VEHICLE; domain_sim: 0.9830721; id: 5; kind: semantic; label: ⟁BICYCLE; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 36. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁BICYCLE</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 5; centroid_norm: 0.97710299; cohesion: 0.95343689; domain: ⟁VEHICLE; domain_sim: 0.9830721; id: 5; kind: semantic; label: ⟁BICYCLE; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 36. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 6</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 6; centroid_norm: 0.9731214; cohesion: 0.94666439; domain: ⟁ANIMAL; domain_sim: 0.98769945; id: 6; kind: semantic; label: ⟁BIRD; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 143. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁BIRD</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 6; centroid_norm: 0.9731214; cohesion: 0.94666439; domain: ⟁ANIMAL; domain_sim: 0.98769945; id: 6; kind: semantic; label: ⟁BIRD; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 143. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 7</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 7; centroid_norm: 0.97368562; cohesion: 0.94589969; domain: ⟁VEHICLE; domain_sim: 0.97966653; id: 7; kind: semantic; label: ⟁BOAT; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 25. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁BOAT</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 7; centroid_norm: 0.97368562; cohesion: 0.94589969; domain: ⟁VEHICLE; domain_sim: 0.97966653; id: 7; kind: semantic; label: ⟁BOAT; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 25. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 8</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 8; centroid_norm: 0.97063023; cohesion: 0.93871855; domain: ⟁VEHICLE; domain_sim: 0.98525691; id: 8; kind: semantic; label: ⟁BUS; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 18. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁BUS</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 8; centroid_norm: 0.97063023; cohesion: 0.93871855; domain: ⟁VEHICLE; domain_sim: 0.98525691; id: 8; kind: semantic; label: ⟁BUS; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 18. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 9</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 9; centroid_norm: 0.97092468; cohesion: 0.94234848; domain: ⟁VEHICLE; domain_sim: 0.99380177; id: 9; kind: semantic; label: ⟁CAR; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 304. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁CAR</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 9; centroid_norm: 0.97092468; cohesion: 0.94234848; domain: ⟁VEHICLE; domain_sim: 0.99380177; id: 9; kind: semantic; label: ⟁CAR; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 304. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 10</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 10; centroid_norm: 1.0; cohesion: 1.0; domain: ⟁TRANSPORT; domain_sim: 0.91620189; id: 10; kind: semantic; label: ⟁CARGO; node_kind: domain; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁CARGO</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 10; centroid_norm: 1.0; cohesion: 1.0; domain: ⟁TRANSPORT; domain_sim: 0.91620189; id: 10; kind: semantic; label: ⟁CARGO; node_kind: domain; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 11</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 11; centroid_norm: 0.97379738; cohesion: 0.94800395; domain: ⟁ANIMAL; domain_sim: 0.99263316; id: 11; kind: semantic; label: ⟁CAT; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 249. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁CAT</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 11; centroid_norm: 0.97379738; cohesion: 0.94800395; domain: ⟁ANIMAL; domain_sim: 0.99263316; id: 11; kind: semantic; label: ⟁CAT; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 249. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 12</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 12; centroid_norm: 0.97218722; cohesion: 0.94501781; domain: ⟁ANIMAL; domain_sim: 0.99257398; id: 12; kind: semantic; label: ⟁DOG; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 336. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁DOG</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 12; centroid_norm: 0.97218722; cohesion: 0.94501781; domain: ⟁ANIMAL; domain_sim: 0.99257398; id: 12; kind: semantic; label: ⟁DOG; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 336. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 13</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 13; centroid_norm: 0.96133369; cohesion: 0.91468292; domain: ⟁VEHICLE; domain_sim: 0.98105013; id: 13; kind: semantic; label: ⟁DRIVER; node_kind: associated; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 9. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁DRIVER</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 13; centroid_norm: 0.96133369; cohesion: 0.91468292; domain: ⟁VEHICLE; domain_sim: 0.98105013; id: 13; kind: semantic; label: ⟁DRIVER; node_kind: associated; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 9. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 14</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 14; centroid_norm: 0.96505684; cohesion: 0.93041914; domain: ⟁PHYSICAL; domain_sim: 0.98319674; id: 14; kind: semantic; label: ⟁ENERGY; node_kind: domain; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 76. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁ENERGY</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 14; centroid_norm: 0.96505684; cohesion: 0.93041914; domain: ⟁PHYSICAL; domain_sim: 0.98319674; id: 14; kind: semantic; label: ⟁ENERGY; node_kind: domain; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 76. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 15</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 15; centroid_norm: 0.96190447; cohesion: 0.92284937; domain: ⟁VEHICLE; domain_sim: 0.98497367; id: 15; kind: semantic; label: ⟁ENGINE; node_kind: associated; pi_depth: 2; pi_radius: 0.6283185307179586; pi_weight: 0.8; record_count: 32. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁ENGINE</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 15; centroid_norm: 0.96190447; cohesion: 0.92284937; domain: ⟁VEHICLE; domain_sim: 0.98497367; id: 15; kind: semantic; label: ⟁ENGINE; node_kind: associated; pi_depth: 2; pi_radius: 0.6283185307179586; pi_weight: 0.8; record_count: 32. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 16</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 16; centroid_norm: 0.93000871; cohesion: 0.85741155; domain: ⟁SPORTS; domain_sim: 0.97081757; id: 16; kind: semantic; label: ⟁FIELD; node_kind: associated; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁FIELD</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 16; centroid_norm: 0.93000871; cohesion: 0.85741155; domain: ⟁SPORTS; domain_sim: 0.97081757; id: 16; kind: semantic; label: ⟁FIELD; node_kind: associated; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 17</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 17; centroid_norm: 0.96911007; cohesion: 0.93788022; domain: ⟁VEHICLE; domain_sim: 0.97891718; id: 17; kind: semantic; label: ⟁FLAT; node_kind: associated; pi_depth: 8; pi_radius: 2.5132741228718345; pi_weight: 0.2; record_count: 48. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁FLAT</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 17; centroid_norm: 0.96911007; cohesion: 0.93788022; domain: ⟁VEHICLE; domain_sim: 0.97891718; id: 17; kind: semantic; label: ⟁FLAT; node_kind: associated; pi_depth: 8; pi_radius: 2.5132741228718345; pi_weight: 0.2; record_count: 48. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 18</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 18; centroid_norm: 0.96484542; cohesion: 0.92915559; domain: ⟁MOTION; domain_sim: 0.97628492; id: 18; kind: semantic; label: ⟁FLOW; node_kind: domain; pi_depth: 2; pi_radius: 0.6283185307179586; pi_weight: 0.8; record_count: 40. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁FLOW</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 18; centroid_norm: 0.96484542; cohesion: 0.92915559; domain: ⟁MOTION; domain_sim: 0.97628492; id: 18; kind: semantic; label: ⟁FLOW; node_kind: domain; pi_depth: 2; pi_radius: 0.6283185307179586; pi_weight: 0.8; record_count: 40. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 19</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 19; centroid_norm: 0.97811705; cohesion: 0.95504823; domain: ⟁ANIMAL; domain_sim: 0.98840648; id: 19; kind: semantic; label: ⟁FUR; node_kind: associated; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 27. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁FUR</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 19; centroid_norm: 0.97811705; cohesion: 0.95504823; domain: ⟁ANIMAL; domain_sim: 0.98840648; id: 19; kind: semantic; label: ⟁FUR; node_kind: associated; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 27. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 20</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 20; centroid_norm: 0.96125889; cohesion: 0.92412508; domain: ⟁SPORTS; domain_sim: 0.97686261; id: 20; kind: semantic; label: ⟁GAME; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 267. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁GAME</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 20; centroid_norm: 0.96125889; cohesion: 0.92412508; domain: ⟁SPORTS; domain_sim: 0.97686261; id: 20; kind: semantic; label: ⟁GAME; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 267. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 21</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 21; centroid_norm: 0.94518226; cohesion: 0.87204345; domain: ⟁MOTION; domain_sim: 0.97003007; id: 21; kind: semantic; label: ⟁GROWTH; node_kind: domain; pi_depth: 2; pi_radius: 0.6283185307179586; pi_weight: 0.8; record_count: 6. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁GROWTH</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 21; centroid_norm: 0.94518226; cohesion: 0.87204345; domain: ⟁MOTION; domain_sim: 0.97003007; id: 21; kind: semantic; label: ⟁GROWTH; node_kind: domain; pi_depth: 2; pi_radius: 0.6283185307179586; pi_weight: 0.8; record_count: 6. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 22</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 22; centroid_norm: 0.97402513; cohesion: 0.94806757; domain: ⟁ANIMAL; domain_sim: 0.98823661; id: 22; kind: semantic; label: ⟁HORSE; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 79. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁HORSE</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 22; centroid_norm: 0.97402513; cohesion: 0.94806757; domain: ⟁ANIMAL; domain_sim: 0.98823661; id: 22; kind: semantic; label: ⟁HORSE; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 79. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 23</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 23; centroid_norm: 0.9609251; cohesion: 0.92274635; domain: ⟁PHYSICAL; domain_sim: 0.9904846; id: 23; kind: semantic; label: ⟁MATTER; node_kind: domain; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 130. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁MATTER</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 23; centroid_norm: 0.9609251; cohesion: 0.92274635; domain: ⟁PHYSICAL; domain_sim: 0.9904846; id: 23; kind: semantic; label: ⟁MATTER; node_kind: domain; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 130. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 24</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 24; centroid_norm: 0.98456556; cohesion: 0.96499343; domain: ⟁ANIMAL; domain_sim: 0.98140037; id: 24; kind: semantic; label: ⟁MEOW; node_kind: associated; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 8. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁MEOW</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 24; centroid_norm: 0.98456556; cohesion: 0.96499343; domain: ⟁ANIMAL; domain_sim: 0.98140037; id: 24; kind: semantic; label: ⟁MEOW; node_kind: associated; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 8. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 25</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 25; centroid_norm: 0.95751631; cohesion: 0.90852124; domain: ⟁PHYSICAL; domain_sim: 0.98431778; id: 25; kind: semantic; label: ⟁MOTION; node_kind: domain; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 11. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁MOTION</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 25; centroid_norm: 0.95751631; cohesion: 0.90852124; domain: ⟁PHYSICAL; domain_sim: 0.98431778; id: 25; kind: semantic; label: ⟁MOTION; node_kind: domain; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 11. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 26</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 26; centroid_norm: 0.9728747; cohesion: 0.93979592; domain: ⟁VEHICLE; domain_sim: 0.98029459; id: 26; kind: semantic; label: ⟁MOTORCYCLE; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 9. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁MOTORCYCLE</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 26; centroid_norm: 0.9728747; cohesion: 0.93979592; domain: ⟁VEHICLE; domain_sim: 0.98029459; id: 26; kind: semantic; label: ⟁MOTORCYCLE; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 9. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 27</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 27; centroid_norm: 0.94921786; cohesion: 0.88121761; domain: ⟁TRANSPORT; domain_sim: 0.97064686; id: 27; kind: semantic; label: ⟁PASSENGER; node_kind: domain; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 6. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁PASSENGER</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 27; centroid_norm: 0.94921786; cohesion: 0.88121761; domain: ⟁TRANSPORT; domain_sim: 0.97064686; id: 27; kind: semantic; label: ⟁PASSENGER; node_kind: domain; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 6. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 28</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 28; centroid_norm: 1.0; cohesion: 1.0; domain: ⟁TRANSPORT; domain_sim: 0.95038146; id: 28; kind: semantic; label: ⟁PATH; node_kind: domain; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁PATH</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 28; centroid_norm: 1.0; cohesion: 1.0; domain: ⟁TRANSPORT; domain_sim: 0.95038146; id: 28; kind: semantic; label: ⟁PATH; node_kind: domain; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 29</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 29; centroid_norm: 1.0; cohesion: 1.0; domain: ⟁ANIMAL; domain_sim: 0.89836997; id: 29; kind: semantic; label: ⟁PAW; node_kind: associated; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁PAW</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 29; centroid_norm: 1.0; cohesion: 1.0; domain: ⟁ANIMAL; domain_sim: 0.89836997; id: 29; kind: semantic; label: ⟁PAW; node_kind: associated; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 30</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 30; centroid_norm: 0.95091581; cohesion: 0.90232567; domain: ⟁PHYSICAL; domain_sim: 1.0; id: 30; kind: semantic; label: ⟁PHYSICAL; node_kind: domain; pi_depth: 0; pi_radius: 0.0; pi_weight: 1.0; record_count: 51. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁PHYSICAL</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 30; centroid_norm: 0.95091581; cohesion: 0.90232567; domain: ⟁PHYSICAL; domain_sim: 1.0; id: 30; kind: semantic; label: ⟁PHYSICAL; node_kind: domain; pi_depth: 0; pi_radius: 0.0; pi_weight: 1.0; record_count: 51. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 31</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 31; centroid_norm: 0.96272492; cohesion: 0.89025895; domain: ⟁SPORTS; domain_sim: 0.96351999; id: 31; kind: semantic; label: ⟁PITCH; node_kind: associated; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁PITCH</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 31; centroid_norm: 0.96272492; cohesion: 0.89025895; domain: ⟁SPORTS; domain_sim: 0.96351999; id: 31; kind: semantic; label: ⟁PITCH; node_kind: associated; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 32</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 32; centroid_norm: 0.96102315; cohesion: 0.9210998; domain: ⟁VEHICLE; domain_sim: 0.98472077; id: 32; kind: semantic; label: ⟁PLANE; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 32. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁PLANE</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 32; centroid_norm: 0.96102315; cohesion: 0.9210998; domain: ⟁VEHICLE; domain_sim: 0.98472077; id: 32; kind: semantic; label: ⟁PLANE; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 32. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 33</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 33; centroid_norm: 0.96489131; cohesion: 0.92695738; domain: ⟁VEHICLE; domain_sim: 0.98235804; id: 33; kind: semantic; label: ⟁ROAD; node_kind: associated; pi_depth: 7; pi_radius: 2.199114857512855; pi_weight: 0.3; record_count: 18. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁ROAD</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 33; centroid_norm: 0.96489131; cohesion: 0.92695738; domain: ⟁VEHICLE; domain_sim: 0.98235804; id: 33; kind: semantic; label: ⟁ROAD; node_kind: associated; pi_depth: 7; pi_radius: 2.199114857512855; pi_weight: 0.3; record_count: 18. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 34</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 34; centroid_norm: 0.94087148; cohesion: 0.85654896; domain: ⟁MOTION; domain_sim: 0.96511525; id: 34; kind: semantic; label: ⟁ROTATION; node_kind: domain; pi_depth: 2; pi_radius: 0.6283185307179586; pi_weight: 0.8; record_count: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁ROTATION</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 34; centroid_norm: 0.94087148; cohesion: 0.85654896; domain: ⟁MOTION; domain_sim: 0.96511525; id: 34; kind: semantic; label: ⟁ROTATION; node_kind: domain; pi_depth: 2; pi_radius: 0.6283185307179586; pi_weight: 0.8; record_count: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 35</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 35; centroid_norm: 0.9593733; cohesion: 0.91509037; domain: ⟁SPORTS; domain_sim: 0.97262377; id: 35; kind: semantic; label: ⟁SCORE; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 16. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁SCORE</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 35; centroid_norm: 0.9593733; cohesion: 0.91509037; domain: ⟁SPORTS; domain_sim: 0.97262377; id: 35; kind: semantic; label: ⟁SCORE; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 16. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 36</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 36; centroid_norm: 0.96878737; cohesion: 0.93748939; domain: ⟁MOTION; domain_sim: 0.9587177; id: 36; kind: semantic; label: ⟁SPORTS; node_kind: domain; pi_depth: 2; pi_radius: 0.6283185307179586; pi_weight: 0.8; record_count: 59. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁SPORTS</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 36; centroid_norm: 0.96878737; cohesion: 0.93748939; domain: ⟁MOTION; domain_sim: 0.9587177; id: 36; kind: semantic; label: ⟁SPORTS; node_kind: domain; pi_depth: 2; pi_radius: 0.6283185307179586; pi_weight: 0.8; record_count: 59. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 37</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 37; centroid_norm: 0.95447958; cohesion: 0.88137498; domain: ⟁SPORTS; domain_sim: 0.95452458; id: 37; kind: semantic; label: ⟁SWING; node_kind: associated; pi_depth: 2; pi_radius: 0.6283185307179586; pi_weight: 0.8; record_count: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁SWING</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 37; centroid_norm: 0.95447958; cohesion: 0.88137498; domain: ⟁SPORTS; domain_sim: 0.95452458; id: 37; kind: semantic; label: ⟁SWING; node_kind: associated; pi_depth: 2; pi_radius: 0.6283185307179586; pi_weight: 0.8; record_count: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 38</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 38; centroid_norm: 0.9796297; cohesion: 0.95160935; domain: ⟁VEHICLE; domain_sim: 0.9781962; id: 38; kind: semantic; label: ⟁TIRE; node_kind: associated; pi_depth: 4; pi_radius: 1.2566370614359172; pi_weight: 0.6; record_count: 6. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁TIRE</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 38; centroid_norm: 0.9796297; cohesion: 0.95160935; domain: ⟁VEHICLE; domain_sim: 0.9781962; id: 38; kind: semantic; label: ⟁TIRE; node_kind: associated; pi_depth: 4; pi_radius: 1.2566370614359172; pi_weight: 0.6; record_count: 6. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 39</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 39; centroid_norm: 0.96310717; cohesion: 0.92498889; domain: ⟁VEHICLE; domain_sim: 0.98055708; id: 39; kind: semantic; label: ⟁TRAIN; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 29. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁TRAIN</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 39; centroid_norm: 0.96310717; cohesion: 0.92498889; domain: ⟁VEHICLE; domain_sim: 0.98055708; id: 39; kind: semantic; label: ⟁TRAIN; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 29. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 40</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 40; centroid_norm: 0.98137343; cohesion: 0.95973878; domain: ⟁MOTION; domain_sim: 0.96825522; id: 40; kind: semantic; label: ⟁TRANSPORT; node_kind: domain; pi_depth: 2; pi_radius: 0.6283185307179586; pi_weight: 0.8; record_count: 12. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁TRANSPORT</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 40; centroid_norm: 0.98137343; cohesion: 0.95973878; domain: ⟁MOTION; domain_sim: 0.96825522; id: 40; kind: semantic; label: ⟁TRANSPORT; node_kind: domain; pi_depth: 2; pi_radius: 0.6283185307179586; pi_weight: 0.8; record_count: 12. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 41</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 41; centroid_norm: 0.97142804; cohesion: 0.93933945; domain: ⟁VEHICLE; domain_sim: 0.98993927; id: 41; kind: semantic; label: ⟁TRUCK; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 14. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁TRUCK</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 41; centroid_norm: 0.97142804; cohesion: 0.93933945; domain: ⟁VEHICLE; domain_sim: 0.98993927; id: 41; kind: semantic; label: ⟁TRUCK; node_kind: member; pi_depth: 1; pi_radius: 0.3141592653589793; pi_weight: 0.9; record_count: 14. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 42</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 42; centroid_norm: 0.96446627; cohesion: 0.92482558; domain: ⟁TRANSPORT; domain_sim: 0.98575276; id: 42; kind: semantic; label: ⟁VEHICLE; node_kind: domain; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 14. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁VEHICLE</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 42; centroid_norm: 0.96446627; cohesion: 0.92482558; domain: ⟁TRANSPORT; domain_sim: 0.98575276; id: 42; kind: semantic; label: ⟁VEHICLE; node_kind: domain; pi_depth: 3; pi_radius: 0.9424777960769379; pi_weight: 0.7; record_count: 14. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 43</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 43; centroid_norm: 0.96729499; cohesion: 0.93208512; domain: ⟁VEHICLE; domain_sim: 0.98422813; id: 43; kind: semantic; label: ⟁WHEEL; node_kind: associated; pi_depth: 4; pi_radius: 1.2566370614359172; pi_weight: 0.6; record_count: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ⟁WHEEL</pattern>
+    <template>Graph KUHUL_PI_Carrier; node 43; centroid_norm: 0.96729499; cohesion: 0.93208512; domain: ⟁VEHICLE; domain_sim: 0.98422813; id: 43; kind: semantic; label: ⟁WHEEL; node_kind: associated; pi_depth: 4; pi_radius: 1.2566370614359172; pi_weight: 0.6; record_count: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 25 HIERARCHY 1</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 25 to 1; operator: fold; relation: hierarchy; source: 25; target: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1 MEMBERSHIP 12</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 1 to 12; operator: map; relation: membership; source: 1; target: 12. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1 MEMBERSHIP 11</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 1 to 11; operator: map; relation: membership; source: 1; target: 11. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1 MEMBERSHIP 22</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 1 to 22; operator: map; relation: membership; source: 1; target: 22. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1 MEMBERSHIP 6</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 1 to 6; operator: map; relation: membership; source: 1; target: 6. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1 ASSOCIATION 29</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 1 to 29; operator: filter; relation: association; source: 1; target: 29. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1 ASSOCIATION 19</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 1 to 19; operator: filter; relation: association; source: 1; target: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1 ASSOCIATION 3</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 1 to 3; operator: filter; relation: association; source: 1; target: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1 ASSOCIATION 24</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 1 to 24; operator: filter; relation: association; source: 1; target: 24. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 40 HIERARCHY 10</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 40 to 10; operator: fold; relation: hierarchy; source: 40; target: 10. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 30 HIERARCHY 14</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 30 to 14; operator: fold; relation: hierarchy; source: 30; target: 14. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 25 HIERARCHY 18</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 25 to 18; operator: fold; relation: hierarchy; source: 25; target: 18. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 25 HIERARCHY 21</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 25 to 21; operator: fold; relation: hierarchy; source: 25; target: 21. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 30 HIERARCHY 23</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 30 to 23; operator: fold; relation: hierarchy; source: 30; target: 23. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 30 HIERARCHY 25</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 30 to 25; operator: fold; relation: hierarchy; source: 30; target: 25. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 40 HIERARCHY 27</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 40 to 27; operator: fold; relation: hierarchy; source: 40; target: 27. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 40 HIERARCHY 28</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 40 to 28; operator: fold; relation: hierarchy; source: 40; target: 28. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 25 HIERARCHY 34</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 25 to 34; operator: fold; relation: hierarchy; source: 25; target: 34. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 25 HIERARCHY 36</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 25 to 36; operator: fold; relation: hierarchy; source: 25; target: 36. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 36 MEMBERSHIP 4</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 36 to 4; operator: map; relation: membership; source: 36; target: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 36 MEMBERSHIP 2</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 36 to 2; operator: map; relation: membership; source: 36; target: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 36 MEMBERSHIP 20</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 36 to 20; operator: map; relation: membership; source: 36; target: 20. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 36 MEMBERSHIP 35</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 36 to 35; operator: map; relation: membership; source: 36; target: 35. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 36 ASSOCIATION 37</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 36 to 37; operator: filter; relation: association; source: 36; target: 37. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 36 ASSOCIATION 31</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 36 to 31; operator: filter; relation: association; source: 36; target: 31. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 36 ASSOCIATION 16</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 36 to 16; operator: filter; relation: association; source: 36; target: 16. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 25 HIERARCHY 40</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 25 to 40; operator: fold; relation: hierarchy; source: 25; target: 40. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 40 HIERARCHY 42</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 40 to 42; operator: fold; relation: hierarchy; source: 40; target: 42. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 42 MEMBERSHIP 9</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 42 to 9; operator: map; relation: membership; source: 42; target: 9. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 42 MEMBERSHIP 41</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 42 to 41; operator: map; relation: membership; source: 42; target: 41. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 42 MEMBERSHIP 8</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 42 to 8; operator: map; relation: membership; source: 42; target: 8. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 42 MEMBERSHIP 26</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 42 to 26; operator: map; relation: membership; source: 42; target: 26. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 42 MEMBERSHIP 5</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 42 to 5; operator: map; relation: membership; source: 42; target: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 42 MEMBERSHIP 39</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 42 to 39; operator: map; relation: membership; source: 42; target: 39. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 42 MEMBERSHIP 7</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 42 to 7; operator: map; relation: membership; source: 42; target: 7. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 42 MEMBERSHIP 32</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 42 to 32; operator: map; relation: membership; source: 42; target: 32. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 42 ASSOCIATION 43</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 42 to 43; operator: filter; relation: association; source: 42; target: 43. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 42 ASSOCIATION 15</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 42 to 15; operator: filter; relation: association; source: 42; target: 15. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 42 ASSOCIATION 33</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 42 to 33; operator: filter; relation: association; source: 42; target: 33. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 42 ASSOCIATION 13</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 42 to 13; operator: filter; relation: association; source: 42; target: 13. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 42 ASSOCIATION 38</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 42 to 38; operator: filter; relation: association; source: 42; target: 38. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 42 ASSOCIATION 17</pattern>
+    <template>Graph KUHUL_PI_Carrier; edge 42 to 17; operator: filter; relation: association; source: 42; target: 17. Data-only graph record.</template>
+  </category>
+</aiml>

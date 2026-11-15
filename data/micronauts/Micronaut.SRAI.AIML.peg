@@ -1,0 +1,50 @@
+# PEG.js-style grammar: Micronaut.SRAI.AIML semantic authoring profile v1.
+# Declarative parsing only. No expression in this grammar is evaluated or dispatched.
+
+Document = Spacing Declaration (Spacing Declaration)* Spacing
+Declaration = AimlMicronaut / SraiMicronaut / PiMicronaut / XcfeMicronaut / XulMicronaut / LearningMicronaut / PatternBank / RouteGraph
+
+AimlMicronaut = '@aiml-micronaut' Spacing Identifier Spacing '{' Spacing Identity Spacing AuthorityMatch Spacing Normalization Spacing MatchingContract Spacing '}'
+SraiMicronaut = '@srai-micronaut' Spacing Identifier Spacing '{' Spacing Identity Spacing AuthorityRedirect Spacing RouteLimits Spacing RedirectContract Spacing '}'
+PiMicronaut = '@pi-micronaut' Spacing Identifier Spacing '{' Spacing Identity Spacing AuthorityRank Spacing FieldContract Spacing RankingContract Spacing '}'
+XcfeMicronaut = '@xcfe-micronaut' Spacing Identifier Spacing '{' Spacing Identity Spacing AuthorityAdmit Spacing AdmissionContracts Spacing '}'
+XulMicronaut = '@xul-micronaut' Spacing Identifier Spacing '{' Spacing Identity Spacing AuthorityClose Spacing ClosureContract Spacing '}'
+LearningMicronaut = '@learning-micronaut' Spacing Identifier Spacing '{' Spacing Identity Spacing AuthorityPropose Spacing EvidenceContract Spacing ProposalContract Spacing '}'
+
+Identity = 'identity' Spacing '{' Spacing Field (Spacing ',' Spacing Field)* Spacing '}'
+Field = Identifier Spacing ':' Spacing Value
+AuthorityMatch = 'authority' Spacing '{' Spacing '"match_only"' Spacing ',' Spacing 'execute:false' Spacing ',' Spacing 'write:false' Spacing ',' Spacing 'close:false' Spacing '}'
+AuthorityRedirect = 'authority' Spacing '{' Spacing '"redirect_only"' Spacing ',' Spacing 'execute:false' Spacing ',' Spacing 'write:false' Spacing ',' Spacing 'close:false' Spacing '}'
+AuthorityRank = 'authority' Spacing '{' Spacing '"rank_only"' Spacing ',' Spacing 'execute:false' Spacing ',' Spacing 'write:false' Spacing ',' Spacing 'close:false' Spacing '}'
+AuthorityAdmit = 'authority' Spacing '{' Spacing '"admission_only"' Spacing ',' Spacing 'execute:false' Spacing ',' Spacing 'write:false' Spacing ',' Spacing 'close:false' Spacing '}'
+AuthorityClose = 'authority' Spacing '{' Spacing '"close_only"' Spacing ',' Spacing 'execute:false' Spacing ',' Spacing 'write:false' Spacing ',' Spacing 'close:true' Spacing '}'
+AuthorityPropose = 'authority' Spacing '{' Spacing '"proposal_only"' Spacing ',' Spacing 'execute:false' Spacing ',' Spacing 'write:false' Spacing ',' Spacing 'promote:false' Spacing '}'
+
+Normalization = 'normalization' Spacing '{' Spacing 'uppercase' Spacing ',' Spacing 'strip_punctuation' Spacing ',' Spacing 'collapse_whitespace' Spacing '}'
+MatchingContract = 'matching' Spacing '{' Spacing 'specificity:declared' Spacing ',' Spacing 'wildcard_priority:[exact, _, *]' Spacing '}'
+RouteLimits = 'limits' Spacing '{' Spacing 'max_depth' Spacing ':' Spacing Integer Spacing ',' Spacing 'cycle_policy:reject' Spacing '}'
+RedirectContract = 'redirect' Spacing '{' Spacing 'source:srai_or_sr' Spacing ',' Spacing 'return:candidate' Spacing ',' Spacing 'pure_template_required:true' Spacing '}'
+FieldContract = 'field' Spacing '{' Spacing 'dimensions' Spacing ':' Spacing Integer Spacing ',' Spacing 'metric' Spacing ':' Spacing String Spacing '}'
+RankingContract = 'ranking' Spacing '{' Spacing 'input:candidates' Spacing ',' Spacing 'output:ranked_candidates' Spacing '}'
+AdmissionContracts = 'contracts' Spacing '{' Spacing AdmissionRule* Spacing '}'
+AdmissionRule = 'rule' Spacing Identifier Spacing '{' Spacing 'action' Spacing ':' Spacing ('"admit"' / '"reject"' / '"defer"') Spacing ',' Spacing 'reason' Spacing ':' Spacing String Spacing '}'
+ClosureContract = 'closure' Spacing '{' Spacing 'requires:aiml+srai+pi+xcfe' Spacing ',' Spacing 'commit:verified_data_only' Spacing '}'
+EvidenceContract = 'evidence' Spacing '{' Spacing 'sources:[aiml_matches, srai_routes, pi_rankings, xcfe_admissions]' Spacing '}'
+ProposalContract = 'proposal' Spacing '{' Spacing 'append_only:true' Spacing ',' Spacing 'writes_rule_bank:false' Spacing ',' Spacing 'promotes:false' Spacing '}'
+
+PatternBank = '@pattern-bank' Spacing Identifier Spacing '{' Spacing 'authority:data_only' Spacing ',' Spacing 'rules' Spacing '[' Spacing BankRule* Spacing ']' Spacing '}'
+BankRule = 'rule' Spacing Identifier Spacing '{' Spacing 'pattern' Spacing ':' Spacing Pattern Spacing ',' Spacing 'template' Spacing ':' Spacing Value (Spacing ',' Spacing ('topic' / 'that') Spacing ':' Spacing Value)* Spacing '}'
+RouteGraph = '@route-graph' Spacing Identifier Spacing '{' Spacing 'authority:data_only' Spacing ',' Spacing 'max_depth' Spacing ':' Spacing Integer Spacing ',' Spacing 'cycle_policy:reject' Spacing ',' Spacing 'nodes' Spacing '[' Spacing RouteNode* Spacing ']' Spacing ',' Spacing 'edges' Spacing '[' Spacing RouteEdge* Spacing ']' Spacing '}'
+RouteNode = 'node' Spacing Identifier Spacing '{' Spacing 'pattern' Spacing ':' Spacing Pattern Spacing '}'
+RouteEdge = 'edge' Spacing Identifier Spacing '->' Spacing Identifier Spacing '{' Spacing 'kind:srai' Spacing '}'
+
+Pattern = '"' (!'"' .)* '"'
+Value = String / Number / Boolean / Object / Array
+Object = '{' Spacing (Field (Spacing ',' Spacing Field)*)? Spacing '}'
+Array = '[' Spacing (Value (Spacing ',' Spacing Value)*)? Spacing ']'
+String = '"' ('\\' . / !'"' .)* '"'
+Number = '-'? [0-9]+ ('.' [0-9]+)?
+Boolean = 'true' / 'false'
+Identifier = [A-Za-z] [A-Za-z0-9_.-]*
+Integer = '-'? [0-9]+
+Spacing = [ \t\r\n]*

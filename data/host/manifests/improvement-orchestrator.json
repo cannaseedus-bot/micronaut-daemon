@@ -1,0 +1,9 @@
+{
+  "@xjson_type":"improvement_orchestrator.v1",
+  "@kuhul_binding":"fn.improve.all_systems_recursively",
+  "@authority":"observation_only",
+  "cycle":"universal.cycle",
+  "guard":"is_improvement",
+  "relationship_update":"update_relationships",
+  "promotion":false
+}

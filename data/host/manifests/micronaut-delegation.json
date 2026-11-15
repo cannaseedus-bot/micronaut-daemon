@@ -1,0 +1,21 @@
+{
+  "@kind": "asx.micronaut-delegation.manifest.v1",
+  "@version": "1.0.0",
+  "contract": "asx.micronaut.delegation-envelope.v1",
+  "schema": "data/schema/micronaut-delegation-envelope.v1.schema.json",
+  "runtime": "src/micronaut/micronaut_delegation.h",
+  "budget_authority": "MicronautDelegationBudgetLedger",
+  "call_authority": "MicronautCallGraph",
+  "proposal_authority": "SupernautCoordinator",
+  "execution_authority": "XCFE",
+  "invariants": {
+    "capability_attenuation": true,
+    "budget_reservation_atomic": true,
+    "root_policy_budget_shared_by_policy_ref": true,
+    "objective_inherited_or_subobjective": true,
+    "context_and_evidence_scopes_attenuate": true,
+    "delegated_calls_proposal_only": true,
+    "admission_ref_is_not_permission": true
+  },
+  "admission_binding": "pending_xcfe_app_host_program_phase_digest_context_binding"
+}

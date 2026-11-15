@@ -1,0 +1,59 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "podcast",
+  "@key": "⟁APP:PODCAST",
+  "@mount": "⟁ROOT:PODCAST",
+  "@theme": { "accent": "#fb923c", "bg": "#0f0a00", "surface": "#1c1200", "text": "#fff7ed", "hero_phase": "Sek", "tagline": "Your voice, your audience" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "episodes", "component": "⟁WIDGET:EPISODES", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "episodes": [], "search": "", "playing": null, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:PODCAST": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS", "⟁WIDGET:PLAYER"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:UPLOAD"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:UPLOAD": { "@type": "button", "@text": "New Episode", "@on": { "click": "podcast.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:EPISODES", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:EPISODES": { "@type": "feed", "@bind": "state.episodes", "@children": ["⟁WIDGET:EPISODE_CARD"] },
+    "⟁WIDGET:EPISODE_CARD": { "@type": "content-card", "@bind": "episode", "@on": { "play": "podcast.play", "view": "podcast.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:SUBSCRIBER_COUNT", "⟁WIDGET:LATEST"] },
+    "⟁WIDGET:SUBSCRIBER_COUNT": { "@type": "stat", "@bind": "data.subscriber_count" },
+    "⟁WIDGET:LATEST": { "@type": "list", "@bind": "data.latest_episodes" },
+    "⟁WIDGET:PLAYER": { "@type": "audio-player", "@bind": "state.playing" }
+  },
+  "@programs": {
+    "podcast.play": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_episode", "@out": "playing" }] },
+    "podcast.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "podcast.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "podcast.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "episode.play": "podcast.play", "episode.view": "podcast.view", "compose.open": "podcast.open_compose", "search.input": "podcast.search" },
+  "@imports": [{ "ref": "episode", "mode": "schema_table" }, { "ref": "subscriber", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "transcript", "name": "Auto Transcript", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Auto-generate searchable episode transcripts." },
+      { "id": "rss-feed", "name": "RSS Feed", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Publish a standards-compliant podcast RSS feed." },
+      { "id": "chapter-bot", "name": "Chapter Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Auto-detect chapter timestamps from audio." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "podcast.new-episode", "pattern": "NEW EPISODE|UPLOAD EPISODE|ADD EPISODE", "intent": "open_compose" },
+      { "id": "podcast.search", "pattern": "FIND EPISODE *|SEARCH *", "intent": "filter_episodes" }
+    ]
+  },
+  "@data": {
+    "subscriber_count": 874,
+    "latest_episodes": ["Ep. 22 — Building in Public", "Ep. 21 — The AI Tool Stack", "Ep. 20 — Ship Faster"],
+    "spotlight": [
+      { "id": "sp1", "title": "Ep. 22 — Building in Public", "episode_num": 22, "badge": "Latest", "duration_min": 48, "excerpt": "Why transparency is a growth strategy, not a risk." },
+      { "id": "sp2", "title": "Ep. 15 — The Founder's Toolkit", "episode_num": 15, "badge": "Most Listened", "duration_min": 62, "excerpt": "Tools that made the biggest difference in year one." },
+      { "id": "sp3", "title": "Ep. 1 — Why I Started This", "episode_num": 1, "badge": "Start Here", "duration_min": 34, "excerpt": "The origin story of this show." }
+    ],
+    "schema": {
+      "episode": { "primaryKey": "episode_id", "fields": { "episode_id": { "type": "string" }, "episode_num": { "type": "integer", "required": true }, "title": { "type": "string", "required": true }, "description": { "type": "textarea" }, "audio_url": { "type": "uri", "required": true }, "duration_sec": { "type": "integer" }, "published_at": { "type": "datetime" }, "play_count": { "type": "integer" } } },
+      "subscriber": { "primaryKey": "sub_id", "fields": { "sub_id": { "type": "string" }, "email": { "type": "email", "required": true }, "subscribed_at": { "type": "datetime" }, "active": { "type": "bool" } } }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "@kind": "asx.micronaut-goal-state.manifest.v1",
+  "@version": "1.0.0",
+  "contract": "asx.micronaut.goal-state.v1",
+  "schema": "data/schema/micronaut-goal-state.v1.schema.json",
+  "runtime": "src/kuhul/micronaut_goal_state.h",
+  "planner_binding": "SupernautCoordinator::propose_goal_plan",
+  "goal_predicates": "registered_reference_only",
+  "transition_models": "registered_reference_only",
+  "execution_authority": "XCFE",
+  "invariants": {
+    "plan_proposal_only": true,
+    "per_step_admission_required": true,
+    "goal_capabilities_attenuated_by_policy": true,
+    "step_count_bounded_by_goal_and_policy": true,
+    "completion_requires_predicate_and_all_evidence": true,
+    "replan_after_observation": true
+  }
+}

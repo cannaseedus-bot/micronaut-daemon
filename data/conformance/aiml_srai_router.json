@@ -1,0 +1,10 @@
+{
+  "cases": [
+    { "id": "simple-redirect", "expect": "HELLO" },
+    { "id": "wildcard-binding", "expect": "DEFINE A CAR" },
+    { "id": "wildcard-specificity", "expect": "WHAT IS _" },
+    { "id": "sr-shortcut", "expect": "AI" },
+    { "id": "cycle-rejected", "expect": "srai_cycle" },
+    { "id": "residual-template-rejected", "expect": "srai_template_has_residual_content" }
+  ]
+}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml-feed>
+  <track id="a#b%" grammar_ref="gram:escaped"/>
+  <trigram track="a#b%" phase="Wo" fold_ref="fold:escaped">
+    <atom>x@y</atom><atom>*</atom><atom>a b</atom>
+  </trigram>
+</aiml-feed>

@@ -1,0 +1,126 @@
+{
+  "schema": "kuhul.micronaut.atomic.v1",
+  "identity": {
+    "id": "XJSON-ML-µ",
+    "name": "XJSON-ML",
+    "version": "1.0.0",
+    "authority_claim": "xcfe_gated_read_only"
+  },
+  "descriptor_status": "declarative_proposal",
+  "registered": false,
+  "registered_status": "unregistered; call register_micronaut() to activate",
+  "track_ref": "data/tracks/TENSOR-u.semantic-tracks.v1.json",
+  "bindings_ref": "shell/xjson-ml.bindings.psm1",
+  "manifest": {
+    "display_name": "XJSON ML µ",
+    "tagline": "JSON-native ML substrate — tensors, ops, training, inference via OpenCL/D3D11",
+    "color": "#00cc88",
+    "icon_svg": "data/micronauts/assets/xjson-ml.svg",
+    "animated_svg": "data/micronauts/assets/xjson-ml.animated.svg",
+    "profile_card": {
+      "widget": "data/host/apps/micronaut-card.asx-app.json",
+      "props": { "id": "XJSON-ML-µ", "phase": "Sek", "category": "runtime" }
+    }
+  },
+  "api": {
+    "namespace": "xjson-ml",
+    "note": "No standalone HTTP server — atomic keys route through the native driver layer via Invoke-AtomicKey in xjson-ml.bindings.psm1",
+    "atomic_keys": [
+      { "key": "xjson-ml.op",     "description": "dispatch a named ML op (MATMUL, CONV2D, SOFTMAX, etc.) by op code — routes to OpenCL/D3D11 kernel" },
+      { "key": "xjson-ml.tensor", "description": "create or materialize an xjson/tensor object in native compute storage" },
+      { "key": "xjson-ml.infer",  "description": "run an inference request against a loaded xjson/ml/model — returns top-k predictions" },
+      { "key": "xjson-ml.match",  "description": "AIML @pattern match via Invoke-XjsonMLMatch — text pattern lookup in XJSON-ML-µ topic scope" },
+      { "key": "xjson-ml.agent",  "description": "full @agent turn via Invoke-XjsonMLAgent — returns templated response from XJSON-ML-µ" },
+      { "key": "xjson-ml.health", "description": "driver load status, backend availability (OpenCL, D3D11, DirectML, qwen_infer)" }
+    ],
+    "verb_surface": [
+      "match", "agent", "call", "topic", "condition", "think",
+      "remember", "recall", "learn", "decide", "eval", "identity",
+      "read", "get", "list", "write", "patch", "post", "delete", "save"
+    ]
+  },
+  "ml_ops_ref": "data/micronauts/xjson-ml.json",
+  "backend_policy": {
+    "native_compute": ["opencl_1_2", "d3d11_cs5"],
+    "browser_compute_visualization": "webgl2",
+    "forbidden": ["webgpu", "wgsl"],
+    "gpu_dispatch": "registry_selected_kernel_only"
+  },
+  "capabilities": [
+    "ml_op_dispatch",
+    "tensor_create_and_materialize",
+    "model_inference",
+    "aiml_pattern_match",
+    "opencl_kernel_dispatch",
+    "d3d11_shader_dispatch",
+    "directml_fallback",
+    "training_job_orchestration",
+    "xjson_tensor_schema",
+    "kuhul_verb_surface"
+  ],
+  "srai": {
+    "mode": "bounded_redirect_only",
+    "cycle_detection": true,
+    "max_depth": 2
+  },
+  "xcfe": {
+    "authority": "xcfe_gated_read_only",
+    "required_for_tool_dispatch": true,
+    "required_for_mutation": true,
+    "forbidden": [
+      "emit_response",
+      "write_state",
+      "redirect_srai",
+      "mutate_topology",
+      "commit_patterns"
+    ]
+  },
+  "program_contract": {
+    "format": "kuhul.micronaut-program/1",
+    "phase": "Sek",
+    "role": ["ml_op_dispatch", "tensor_contract", "model_inference"],
+    "grammar_refs": [
+      "data/grammar/Bindings.gram"
+    ],
+    "contract_refs": [
+      "data/tracks/TENSOR-u.semantic-tracks.v1.json",
+      "shell/xjson-ml.bindings.psm1",
+      "shell/tensor_bindings.psm1"
+    ],
+    "entry_points": [
+      "xjson-ml.bindings.Invoke-XjsonMLOp",
+      "xjson-ml.bindings.Invoke-XjsonMLTensor",
+      "xjson-ml.bindings.Invoke-XjsonMLInfer",
+      "xjson-ml.bindings.Register-XjsonMLMicronaut"
+    ],
+    "effects": ["gramRead"],
+    "learning": {
+      "mode": "none",
+      "note": "compute substrate — ML op dispatch is stateless; no learning authority in XJSON-ML-µ itself"
+    },
+    "sandbox": {
+      "filesystem": "allowlisted_tensor_assets_read_only",
+      "network": "loopback_khanary_only",
+      "process": "none",
+      "effects": ["gramRead", "invoke_opencl_kernel", "invoke_d3d11_shader"],
+      "admission": "xcfe_gated"
+    },
+    "drivers": [
+      "DirectML.dll",
+      "dml_gemm.dll",
+      "dxcompiler.dll",
+      "xcfe_gl_ops.dll",
+      "d3d11_infer.dll",
+      "gl_infer_driver.dll",
+      "Micronaut.Core.dll",
+      "Micronaut.Compute.dll",
+      "json_runtime_lib.dll",
+      "qwen_infer_driver.dll"
+    ]
+  },
+  "cache": {
+    "ttl": 1800,
+    "strategy": "op_lru",
+    "max_entries": 10000
+  }
+}

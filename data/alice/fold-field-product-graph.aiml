@@ -1,0 +1,574 @@
+<aiml version="1.0.1">
+  <!-- FOLD FIELD · PRODUCT GRAPH · CONVERGENCE
+       Conformance patterns from Gemma fold educator session 2026-10-05.
+       Topics: FoldField vertex, hylomorphism identity, ConvergenceTest,
+               C6 arc weights, WCR gradient ascent over G_runtime.
+       SC-28: node_id is topology address, NOT fold operation.
+       SC-29: identity invariant — (Fold∘Unfold)(h) = h when delta_phi=0.
+       AIML 2.0 wildcard priority: _ > * > ^ > # > ? -->
+
+  <!-- ═══════════════════════════════════════════════════════════
+       FOLD FIELD — routing
+  ═══════════════════════════════════════════════════════════ -->
+  <category>
+    <pattern>FOLD FIELD *</pattern>
+    <template>FOLD-FIELD-µ domain=product_graph op=query context=<star/></template>
+  </category>
+  <category>
+    <pattern>@FOLD FIELD *</pattern>
+    <template>FOLD-FIELD-µ domain=product_graph op=query context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ FOLD FIELD</pattern>
+    <template>FOLD-FIELD-µ domain=product_graph op=define kind=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS A FOLD FIELD</pattern>
+    <template>FOLD-FIELD-µ domain=product_graph op=define kind=fold_field</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE SCORE OF _ FOLD FIELD</pattern>
+    <template>FOLD-FIELD-µ domain=product_graph op=score kind=<star/></template>
+  </category>
+  <category>
+    <pattern>HOW IS FOLD FIELD SCORE CALCULATED</pattern>
+    <template>FOLD-FIELD-µ domain=product_graph op=score_formula</template>
+  </category>
+  <category>
+    <pattern>WHAT IS NODE ID IN _ FOLD FIELD</pattern>
+    <template>FOLD-FIELD-µ domain=product_graph op=invariant sc=28 context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS SC 28</pattern>
+    <template>FOLD-FIELD-µ domain=product_graph op=invariant sc=28</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE PRODUCT GRAPH G RUNTIME</pattern>
+    <template>FOLD-FIELD-µ domain=product_graph op=define kind=G_runtime</template>
+  </category>
+  <category>
+    <pattern>HOW MANY VERTICES DOES G RUNTIME HAVE</pattern>
+    <template>FOLD-FIELD-µ domain=product_graph op=vertex_count</template>
+  </category>
+
+  <!-- FOLD FIELD — conformance Q&A (pattern phase → ΔR) -->
+  <category>
+    <pattern>WHAT IS A FOLD FIELD IN KHANARY</pattern>
+    <template>A FoldField is a vertex F_i = (node_id, theta, W, C, R) in the product graph G_runtime = G_semantic □ G_phase. Its score S = W·C·R provides navigation pressure over the graph. node_id names the micronaut address in the topology — it is NOT the name of the fold operation (SC-28).</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE PRODUCT GRAPH G RUNTIME IN KHANARY</pattern>
+    <template>G_runtime = Q_n □ C_6, the Cartesian product of a semantic hypercube Q_n with the 6-cycle C_6. It has |V| = 6·2^n vertices and degree n+2 per vertex (n semantic neighbours + 2 phase neighbours). Legal atomic transitions are one bit-flip in semantic space OR one C6 step.</template>
+  </category>
+  <category>
+    <pattern>WHAT DOES FOLD FIELD SCORE MEASURE</pattern>
+    <template>S = W·C·R is navigation pressure — the probability of choosing this vertex as v_next in discrete gradient ascent. W is arc weight, C is evidence confidence (from Ch'en, never from usage), R is query-conditioned relevance. Score does not manufacture legality (SC-27).</template>
+  </category>
+
+  <!-- FOLD FIELD — conformance Q&A (relation phase → ΔW) -->
+  <category>
+    <pattern>HOW DOES FOLD FIELD RELATE TO THE WCR SCORE</pattern>
+    <template>FoldField.score() = W·C·R is the same WCR formula used in Yax attention (section 11 of the runtime grammar). In the product graph context W is the semantic arc weight, C is the evidence confidence, and R is the cosine relevance to the current query. The field provides the scoring surface; WCR provides the selection criterion.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES A FOLD FIELD VERTEX RELATE TO A MICRONAUT</pattern>
+    <template>Each micronaut address (e.g. REASON-µ) in the semantic hypercube Q_n has 6 FoldField vertices — one per C6 phase. The node_id field names which micronaut. theta identifies which phase. Together (node_id, theta) is the full coordinate in G_runtime = Q_n □ C_6.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE RELATION BETWEEN FOLD FIELD AND FOLD KERNEL</pattern>
+    <template>FoldKernel = lifecycle envelope for one fold operation (phase, track, evidence, state). FoldField = static scoring vertex in G_runtime. FoldKernel.@phase determines the theta for the corresponding FoldField vertex. FoldField.C is informed by FoldKernel.@evidence.confidence; XCFE remains the route authority.</template>
+  </category>
+
+  <!-- FOLD FIELD — conformance Q&A (confidence phase → ΔC) -->
+  <category>
+    <pattern>IS NODE ID IN A FOLD FIELD THE SAME AS THE FOLD OPERATION NAME</pattern>
+    <template>No — SC-28 invariant. fold_field_record.node_id names the @node root: the micronaut address (e.g. "REASON-µ"). It must not equal "fold" or any cata/ana operation token. The fold algebra (cata, ana, hylomorphism) is orthogonal to the topology address space.</template>
+  </category>
+  <category>
+    <pattern>CAN A HIGH FOLD FIELD SCORE OVERRIDE LEGALITY</pattern>
+    <template>No — SC-27 applies to FoldField scoring just as to Yax admission. Yax_i = Legal_i AND (S_i >= tau). S_i = 0.999 with Legal_i = false is still rejected. Score is navigation pressure; legality is a hard binary gate independent of score.</template>
+  </category>
+
+  <!-- FOLD FIELD — jokes (direct Q→A for conformance harness) -->
+  <category>
+    <pattern>WHY DID THE FOLD FIELD ALGORITHM BREAK UP</pattern>
+    <template>Because it kept trying to fold itself into a smaller, more efficient version. The identity invariant failed at n=1 and it never recovered its original h.</template>
+  </category>
+  <category>
+    <pattern>WHAT DO YOU CALL A FOLD FIELD WITH ZERO CONFIDENCE</pattern>
+    <template>A perfectly weighted ghost. W=1.0, R=0.8, C=0.0 — looks great on paper, scores exactly zero, never gets admitted. Yax is unmoved.</template>
+  </category>
+  <category>
+    <pattern>WHAT DID NODE ID SAY TO THE FOLD OPERATION</pattern>
+    <template>I name the address, you name the action. We are not the same. SC-28 says so.</template>
+  </category>
+
+  <!-- FOLD FIELD — jokes via JOKE-µ routing -->
+  <category>
+    <pattern>TELL ME A JOKE ABOUT FOLD FIELD</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=fold_field prompt=fold field product graph</mx2lm></template>
+  </category>
+  <category>
+    <pattern>FOLD FIELD JOKE *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=humor_frame card_view=true authority=none domain=fold_field prompt=<star/></mx2lm></template>
+  </category>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       HYLOMORPHISM / IDENTITY INVARIANT — routing
+  ═══════════════════════════════════════════════════════════ -->
+  <category>
+    <pattern>HYLOMORPHISM *</pattern>
+    <template>ANAMORPHISM-µ domain=recursion_schemes op=query kind=hylomorphism context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE IDENTITY INVARIANT *</pattern>
+    <template>ANAMORPHISM-µ domain=recursion_schemes op=invariant kind=identity context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS SC 29</pattern>
+    <template>ANAMORPHISM-µ domain=recursion_schemes op=invariant sc=29</template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ HYLOMORPHISM STEP</pattern>
+    <template>ANAMORPHISM-µ domain=recursion_schemes op=define kind=hylomorphism_step subtype=<star/></template>
+  </category>
+  <category>
+    <pattern>WHEN DOES FOLD AFTER UNFOLD EQUAL H</pattern>
+    <template>ANAMORPHISM-µ domain=recursion_schemes op=invariant kind=identity condition=delta_phi_zero</template>
+  </category>
+
+  <!-- HYLOMORPHISM — conformance Q&A (pattern phase → ΔR) -->
+  <category>
+    <pattern>WHAT IS A HYLOMORPHISM STEP IN KHANARY</pattern>
+    <template>A hylomorphism_step record carries (n, query, ana_out, cata_out, identity). n is the iteration index. ana_out = Unfold(h) via the anamorphism g. cata_out = Fold(ana_out) via the catamorphism f. identity must be true when n>0 and Δφ=0, asserting (Fold∘Unfold)(h) = h (SC-29).</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE IDENTITY INVARIANT IN KHANARY</pattern>
+    <template>SC-29: (Fold∘Unfold)(h) ≡ h. When you unfold a semantic handle h and immediately fold it back under the same phase, you must recover h. A false identity field signals fold-field coordinate drift — the coalgebra state drifted during ana so the catamorphism can no longer reconstruct the original. Reset sigma to unbound.</template>
+  </category>
+
+  <!-- HYLOMORPHISM — conformance Q&A (relation phase → ΔW) -->
+  <category>
+    <pattern>HOW DOES HYLOMORPHISM RELATE TO ANA AND CATA</pattern>
+    <template>Hylomorphism = cata ∘ ana. The anamorphism (ana) unfolds h into an intermediate coalgebra tree using g. The catamorphism (cata) folds that tree back to a result using f. The identity invariant (SC-29) is satisfied when (cata ∘ ana)(h) = h — meaning f and g are inverses on h at this phase.</template>
+  </category>
+  <category>
+    <pattern>WHAT CAUSES FOLD FIELD COORDINATE DRIFT</pattern>
+    <template>Drift occurs when the anamorphism produces a coalgebra state at iteration n+1 whose catamorphism no longer reconstructs h. The hylomorphism_step.identity field reports false. The root cause is usually accumulated numerical error in W or C, a phase transition that shifted theta between ana and cata, or a topology mutation at Xul that changed the neighborhood.</template>
+  </category>
+
+  <!-- HYLOMORPHISM — conformance Q&A (confidence phase → ΔC) -->
+  <category>
+    <pattern>IS THE HYLOMORPHISM IDENTITY INVARIANT ALWAYS SATISFIED</pattern>
+    <template>No — only when n>0 and Δφ=0 (SC-29). If a vertical phase transition occurred between ana_out and cata_out (Δφ≠0), the invariant is not required because the fold is not a round-trip on the same phase. Checking identity when Δφ≠0 would produce false negatives on legitimate phase-advancing folds.</template>
+  </category>
+
+  <!-- HYLOMORPHISM — jokes (direct Q→A) -->
+  <category>
+    <pattern>WHAT DID THE ACCOUNTANT SAY ABOUT HYLOMORPHISM</pattern>
+    <template>Let us just fold the whole thing into a box! (He was not wrong, but cata needs f to be defined on what ana produces. The box had no algebra.)</template>
+  </category>
+  <category>
+    <pattern>WHY IS HYLOMORPHISM HARDER THAN IT LOOKS</pattern>
+    <template>Because unfolding is easy. Anyone can unfold. The hard part is writing a catamorphism that puts it back exactly where you found it — especially when theta moved while you were not looking.</template>
+  </category>
+  <category>
+    <pattern>WHAT DO YOU CALL A HYLOMORPHISM WHERE IDENTITY IS FALSE</pattern>
+    <template>A liar morphism. It claims it reconstructed h but it handed you a slightly different h with the same name. SC-29 catches it. Reset sigma to unbound and start over.</template>
+  </category>
+
+  <!-- HYLOMORPHISM — jokes via JOKE-µ routing -->
+  <category>
+    <pattern>TELL ME A JOKE ABOUT HYLOMORPHISM</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=hylomorphism prompt=hylomorphism identity fold unfold</mx2lm></template>
+  </category>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       CONVERGENCE TEST — routing
+  ═══════════════════════════════════════════════════════════ -->
+  <category>
+    <pattern>CONVERGENCE *</pattern>
+    <template>FOLD-FIELD-µ domain=kleene_convergence op=query context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ CONVERGENCE STATUS</pattern>
+    <template>FOLD-FIELD-µ domain=kleene_convergence op=define kind=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS FOLD DISTANCE *</pattern>
+    <template>FOLD-FIELD-µ domain=kleene_convergence op=fold_distance context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT DOES ITERATING MEAN IN FOLD CONVERGENCE</pattern>
+    <template>FOLD-FIELD-µ domain=kleene_convergence op=define kind=ITERATING</template>
+  </category>
+  <category>
+    <pattern>WHAT DOES CONVERGED MEAN IN FOLD CONVERGENCE</pattern>
+    <template>FOLD-FIELD-µ domain=kleene_convergence op=define kind=CONVERGED</template>
+  </category>
+  <category>
+    <pattern>WHAT DOES DIVERGING MEAN IN FOLD CONVERGENCE</pattern>
+    <template>FOLD-FIELD-µ domain=kleene_convergence op=define kind=DIVERGING</template>
+  </category>
+  <category>
+    <pattern>WHAT DOES MAX ITER MEAN IN FOLD CONVERGENCE</pattern>
+    <template>FOLD-FIELD-µ domain=kleene_convergence op=define kind=MAX_ITER</template>
+  </category>
+
+  <!-- CONVERGENCE TEST — conformance Q&A (pattern phase → ΔR) -->
+  <category>
+    <pattern>WHAT IS THE CONVERGENCE TEST IN KHANARY</pattern>
+    <template>ConvergenceTest tracks Kleene fixed-point iteration over the fold field. States: ITERATING (fold_distance still decreasing), CONVERGED (distance &lt; epsilon, fixed point reached), DIVERGING (contraction k >= 1, distance growing), MAX_ITER (iteration limit hit, safety valve). fold_distance(f^n, f^{n+1}) = alpha·d_field + (1-alpha)·d_wcr.</template>
+  </category>
+  <category>
+    <pattern>HOW IS FOLD DISTANCE CALCULATED</pattern>
+    <template>fold_distance(a, b, alpha) = alpha·d_field + (1-alpha)·d_wcr, normalised to [0,1]. d_field is the L1 distance over the field vector components. d_wcr = |score_a - score_b| normalised by the maximum possible score difference. alpha in [0,1] balances field geometry vs WCR score distance.</template>
+  </category>
+
+  <!-- CONVERGENCE TEST — conformance Q&A (relation phase → ΔW) -->
+  <category>
+    <pattern>HOW DOES CONVERGENCE RELATE TO THE XUL PHASE</pattern>
+    <template>Xul is reached at Kleene fixed point: lim f^n(query) when fold_distance &lt; epsilon. CONVERGED is the precondition for a legitimate Xul commit. DIVERGING means the iteration is moving away from a fixed point and Xul should not fire. MAX_ITER is a safety valve — the system timed out without proof of convergence.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE CONTRACTION FACTOR IN CONVERGENCE</pattern>
+    <template>The contraction k = d_n / d_{n-1} tracks whether the iteration is contracting (k &lt; 1) or expanding (k >= 1). k &lt; 1 is necessary for convergence by Banach fixed-point theorem. When k >= 1 the status flips to DIVERGING. The convergence_record carries both distance and contraction per iteration.</template>
+  </category>
+
+  <!-- CONVERGENCE TEST — conformance Q&A (confidence phase → ΔC) -->
+  <category>
+    <pattern>IS MAX ITER THE SAME AS DIVERGING IN FOLD CONVERGENCE</pattern>
+    <template>No. DIVERGING means the distance metric is actively growing — the iteration is moving away from the fixed point. MAX_ITER means the iteration limit was reached without the distance dropping below epsilon. The system may have been converging slowly or been stuck near a plateau. Both are non-convergent outcomes but require different responses.</template>
+  </category>
+
+  <!-- CONVERGENCE TEST — jokes (direct Q→A) -->
+  <category>
+    <pattern>WHY DID THE DEVELOPER ADD A SEMICOLON TO DEBUG CONVERGENCE TEST</pattern>
+    <template>It did not work. The contraction factor was 1.002 and adding syntax was not a numerical method. The iteration kept reporting DIVERGING. (A deeply unsettling realization.)</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE DIFFERENCE BETWEEN CONVERGED AND MAX ITER</pattern>
+    <template>CONVERGED means you found the fixed point. MAX_ITER means you gave up looking. One is a proof; the other is an alibi.</template>
+  </category>
+  <category>
+    <pattern>WHY IS DIVERGING A TERRIBLE DINNER GUEST</pattern>
+    <template>It keeps moving further from the table. Every iteration it is farther away. You set a place for it at Xul but it never arrives.</template>
+  </category>
+
+  <!-- CONVERGENCE TEST — jokes via JOKE-µ routing -->
+  <category>
+    <pattern>TELL ME A JOKE ABOUT CONVERGENCE</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=convergence prompt=Kleene fixed point convergence fold distance</mx2lm></template>
+  </category>
+  <category>
+    <pattern>CONVERGENCE JOKE *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=humor_frame card_view=true authority=none domain=convergence prompt=<star/></mx2lm></template>
+  </category>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       C6 PHASE WHEEL ARC WEIGHTS — routing
+  ═══════════════════════════════════════════════════════════ -->
+  <category>
+    <pattern>PHASE WHEEL *</pattern>
+    <template>FOLD-FIELD-µ domain=c6_phase op=query context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE ARC WEIGHT BETWEEN * AND *</pattern>
+    <template>FOLD-FIELD-µ domain=c6_phase op=arc_weight from=<star index="1"/> to=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS ARC WEIGHT *</pattern>
+    <template>FOLD-FIELD-µ domain=c6_phase op=arc_weight context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ PHASE ANGLE OF *</pattern>
+    <template>FOLD-FIELD-µ domain=c6_phase op=angle kind=<star index="1"/> phase=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE WEIGHT OF _ ADJACENT C 6 STEP</pattern>
+    <template>FOLD-FIELD-µ domain=c6_phase op=arc_weight kind=adjacent subtype=<star/></template>
+  </category>
+
+  <!-- C6 PHASE WHEEL — conformance Q&A (pattern phase → ΔR) -->
+  <category>
+    <pattern>WHAT ARE THE FOUR ARC WEIGHTS IN C 6</pattern>
+    <template>SC-1: only four arc weights are valid in C6. Phase index delta mod 6 maps to: 0 → +1.0 (same phase), 1 → +0.5 (adjacent, one step), 2 → -0.5 (two hops), 3 → -1.0 (opposing). arc_weight(from, to) = cos(theta_to - theta_from). C6 is authoritative; S1 angle is a projection only.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE ARC WEIGHT FOR AN ADJACENT C 6 STEP</pattern>
+    <template>0.5 — cos(pi/3) = cos(60°) = 0.5. An adjacent C6 step covers pi/3 radians. The weight is +0.5, which is why vertical_fold (one phase step) has weight +0.5 (SC-3).</template>
+  </category>
+  <category>
+    <pattern>WHAT ARE THE C 6 PHASE NAMES AND THEIR ANGLES</pattern>
+    <template>Pop = 0, Wo = pi/3, Yax = 2*pi/3, Sek = pi, Ch'en = 4*pi/3, Xul = 5*pi/3. The group is Z_6 (cyclic of order 6). Adjacent pairs: Pop↔Xul, Pop↔Wo, Wo↔Yax, Yax↔Sek, Sek↔Ch'en, Ch'en↔Xul — each with arc_weight = 0.5.</template>
+  </category>
+
+  <!-- C6 PHASE WHEEL — conformance Q&A (relation phase → ΔW) -->
+  <category>
+    <pattern>HOW DOES THE C 6 PHASE WHEEL RELATE TO THE PRODUCT GRAPH G RUNTIME</pattern>
+    <template>C_6 is the phase factor in G_runtime = Q_n □ C_6. Each semantic address (vertex of Q_n) has 6 copies — one per C6 phase. Phase edges in G_runtime carry the C6 arc weights: +0.5 for adjacent steps, -0.5 for two-hop, -1.0 for opposing. The semantic hypercube Q_n contributes n edges per vertex; the C6 factor contributes 2 phase edges.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE RELATION BETWEEN ARC WEIGHT AND FOLD RELEVANCE</pattern>
+    <template>fold_relevance(a,b) = W_arc · cos(Δθ) (exact form). When W_arc is not known, the approximate form is sqrt(Wa·Wb)·sqrt(Ca·Cb)·cos(Δθ). The cos(Δθ) factor is the C6 arc weight: 1.0 for same phase, 0.5 for adjacent, -0.5 for two-hop, -1.0 for opposing. The arc weight shapes which phase transitions reinforce vs cancel relevance.</template>
+  </category>
+
+  <!-- C6 PHASE WHEEL — conformance Q&A (confidence phase → ΔC) -->
+  <category>
+    <pattern>IS THE C 6 PHASE WHEEL THE SAME AS THE S 1 CIRCLE</pattern>
+    <template>No — SC-10 (fold-space). C6 is the authoritative execution coordinate: a discrete cyclic group of order 6. S1 is a continuous circle; it is a projection only. You cannot collapse C6 to K_2 (binary) or treat it as S1 angles without losing the arc_weight distinctions between same-phase, adjacent, two-hop, and opposing steps.</template>
+  </category>
+
+  <!-- C6 PHASE WHEEL — jokes (direct Q→A) -->
+  <category>
+    <pattern>WHY DID THE C 6 PHASE WHEEL BREAK</pattern>
+    <template>Because it kept trying to calculate the impact of the impact on the entire system. Every cos(Δθ) triggered another cos(Δθ). It converged to -1.0 and blamed the opposing phase.</template>
+  </category>
+  <category>
+    <pattern>WHAT DO YOU CALL A PHASE THAT IS ADJACENT TO ITSELF</pattern>
+    <template>Undefined — delta_theta = 0 means same phase, arc_weight = 1.0. Adjacent implies delta_theta = pi/3. A phase cannot be adjacent to itself; that is the identity, not adjacency. (The C6 group law is unambiguous on this.)</template>
+  </category>
+  <category>
+    <pattern>WHY DOES XUL COMMIT BUT POP ONLY PERCEIVES</pattern>
+    <template>Because they are on opposite sides of the wheel. arc_weight(Pop, Xul) = cos(5*pi/3) = 0.5 — adjacent! But their roles are antipodal: Pop enters, Xul exits. The geometry is close; the semantics are not. C6 is not just an angle; it is a phase order.</template>
+  </category>
+
+  <!-- C6 PHASE WHEEL — jokes via JOKE-µ routing -->
+  <category>
+    <pattern>TELL ME A JOKE ABOUT THE PHASE WHEEL</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=c6_phase prompt=C6 phase wheel arc weight cosine</mx2lm></template>
+  </category>
+  <category>
+    <pattern>PHASE WHEEL JOKE *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=humor_frame card_view=true authority=none domain=c6_phase prompt=<star/></mx2lm></template>
+  </category>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       WCR NAVIGATION / GRADIENT ASCENT — routing
+  ═══════════════════════════════════════════════════════════ -->
+  <category>
+    <pattern>WCR NAVIGATION *</pattern>
+    <template>FOLD-FIELD-µ domain=wcr_navigation op=query context=<star/></template>
+  </category>
+  <category>
+    <pattern>GRADIENT ASCENT *</pattern>
+    <template>FOLD-FIELD-µ domain=wcr_navigation op=query kind=gradient_ascent context=<star/></template>
+  </category>
+  <category>
+    <pattern>HOW DOES WCR NAVIGATION CHOOSE _ NEXT NODE</pattern>
+    <template>FOLD-FIELD-µ domain=wcr_navigation op=next_node context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT HAPPENS WHEN WCR GETS STUCK *</pattern>
+    <template>FOLD-FIELD-µ domain=wcr_navigation op=local_max context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS V NEXT IN WCR NAVIGATION</pattern>
+    <template>FOLD-FIELD-µ domain=wcr_navigation op=define kind=v_next</template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ LOCAL MAXIMUM IN WCR NAVIGATION</pattern>
+    <template>FOLD-FIELD-µ domain=wcr_navigation op=local_max kind=<star/></template>
+  </category>
+
+  <!-- WCR NAVIGATION — conformance Q&A (pattern phase → ΔR) -->
+  <category>
+    <pattern>HOW DOES WCR NAVIGATION WORK IN KHANARY</pattern>
+    <template>WCR navigation is discrete gradient ascent over G_runtime = Q_n □ C_6. At each step: v_next = argmax_{u ∈ N(v)} S(u|Q), where S = W·C·R and N(v) is the neighborhood of v in the product graph. Topology determines which moves are legal (d_H=1 or |Δθ|=1); WCR score determines which legal move is preferred.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE V NEXT RULE IN WCR NAVIGATION</pattern>
+    <template>v_{t+1} = argmax_{u ∈ N(v_t)} S(u|Q). N(v_t) is the neighbourhood in G_runtime — semantic bit-flip neighbours and C6 phase step neighbours. S(u|Q) = W_u·C_u·R_u(Q). The system moves to the neighbour with the highest score. Topology is the constraint; WCR is the objective.</template>
+  </category>
+
+  <!-- WCR NAVIGATION — conformance Q&A (relation phase → ΔW) -->
+  <category>
+    <pattern>HOW DOES TOPOLOGY RELATE TO WCR SCORE IN NAVIGATION</pattern>
+    <template>Topology and score are independent axes — the same separation as legality and score in Yax admission (SC-27). Topology determines the candidate set N(v): only adjacent vertices in G_runtime are reachable. WCR score ranks the candidates. A high-scoring vertex that is not adjacent is unreachable regardless of score.</template>
+  </category>
+  <category>
+    <pattern>WHAT HAPPENS AT A LOCAL MAXIMUM IN WCR NAVIGATION</pattern>
+    <template>A local maximum occurs when no neighbour u ∈ N(v) has S(u|Q) > S(v|Q). The gradient ascent stalls. The response is to reset sigma to unbound, which relaxes the neighbourhood constraint and allows exploration beyond the current local maximum. This is equivalent to restarting the Kleene iteration from a wider initial state.</template>
+  </category>
+
+  <!-- WCR NAVIGATION — conformance Q&A (confidence phase → ΔC) -->
+  <category>
+    <pattern>IS WCR NAVIGATION THE SAME AS TRANSFORMER ATTENTION</pattern>
+    <template>No. Transformer QKV computes a weighted sum over all tokens simultaneously. WCR navigation is a sequential, discrete step: one argmax per step, constrained to the product graph neighbourhood. Q and K are semantic/capability vectors feeding R_µ; W and C qualify R from outside. The field F_Q is updated per step; it is not a static attention matrix.</template>
+  </category>
+
+  <!-- WCR NAVIGATION — jokes (direct Q→A) -->
+  <category>
+    <pattern>WHY DID THE GRADIENT ASCENT ALGORITHM CROSS THE ROAD</pattern>
+    <template>To get to the other side — where N(v) had a higher WCR score. It was a legal move. The topology permitted it. The score demanded it.</template>
+  </category>
+  <category>
+    <pattern>WHAT DID THE NEURAL NETWORK SAY ABOUT GRADIENT ASCENT</pattern>
+    <template>It is a really complicated dance involving optimization. (It had never heard of a topology constraint. It was used to moving anywhere it liked.)</template>
+  </category>
+  <category>
+    <pattern>WHY IS LOCAL MAXIMUM A STUBBORN PROBLEM IN WCR NAVIGATION</pattern>
+    <template>Because every neighbour has a lower score and the algorithm has no memory of how it arrived. It cannot go back, cannot go forward, and sigma is still bound. The only exit is resetting sigma to unbound — which the algorithm resists, because it believes it has already found the answer.</template>
+  </category>
+
+  <!-- WCR NAVIGATION — jokes via JOKE-µ routing -->
+  <category>
+    <pattern>TELL ME A JOKE ABOUT WCR NAVIGATION</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=wcr_navigation prompt=WCR navigation gradient ascent product graph</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT GRADIENT ASCENT</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=humor_frame card_view=true authority=none domain=wcr_navigation prompt=gradient ascent local maximum</mx2lm></template>
+  </category>
+  <category>
+    <pattern>WCR NAVIGATION JOKE *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=wcr_navigation prompt=<star/></mx2lm></template>
+  </category>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       HYPERCUBE ADDRESS SPACE — routing (§36)
+  ═══════════════════════════════════════════════════════════ -->
+  <category>
+    <pattern>HYPERCUBE *</pattern>
+    <template>FOLD-FIELD-µ domain=hypercube op=query context=<star/></template>
+  </category>
+  <category>
+    <pattern>@HYPERCUBE *</pattern>
+    <template>FOLD-FIELD-µ domain=hypercube op=query context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE HYPERCUBE IN KHANARY</pattern>
+    <template>FOLD-FIELD-µ domain=hypercube op=define kind=Q_n</template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ BINARY ADDRESS IN KHANARY</pattern>
+    <template>FOLD-FIELD-µ domain=hypercube op=define kind=binary_address subtype=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS A LATENT ADDRESS</pattern>
+    <template>FOLD-FIELD-µ domain=hypercube op=define kind=latent_address</template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ LATENT ADDRESS *</pattern>
+    <template>FOLD-FIELD-µ domain=hypercube op=define kind=latent_address subtype=<star index="1"/> context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>HOW DOES _ BIT FLIP RELATE TO WCR NAVIGATION</pattern>
+    <template>FOLD-FIELD-µ domain=hypercube op=bit_flip context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS D H IN KHANARY</pattern>
+    <template>FOLD-FIELD-µ domain=hypercube op=define kind=hamming_distance</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE THREE GEOMETRY MODEL</pattern>
+    <template>FOLD-FIELD-µ domain=hypercube op=define kind=three_geometry</template>
+  </category>
+  <category>
+    <pattern>WHY IS THETA NOT BINARY</pattern>
+    <template>FOLD-FIELD-µ domain=hypercube op=invariant sc=31 dimension=theta</template>
+  </category>
+  <category>
+    <pattern>WHAT IS SC 30</pattern>
+    <template>FOLD-FIELD-µ domain=hypercube op=invariant sc=30</template>
+  </category>
+  <category>
+    <pattern>WHAT IS SC 31</pattern>
+    <template>FOLD-FIELD-µ domain=hypercube op=invariant sc=31</template>
+  </category>
+  <category>
+    <pattern>WHAT IS PARTIAL Q 4</pattern>
+    <template>FOLD-FIELD-µ domain=hypercube op=define kind=partial_Q4</template>
+  </category>
+  <category>
+    <pattern>WHAT IS G FOLD</pattern>
+    <template>FOLD-FIELD-µ domain=hypercube op=define kind=G_fold</template>
+  </category>
+
+  <!-- HYPERCUBE — conformance Q&A (pattern phase → ΔR) -->
+  <category>
+    <pattern>WHAT IS THE HYPERCUBE ADDRESS SPACE IN KHANARY</pattern>
+    <template>Q_n is the semantic address space. Vertices are binary strings b ∈ {0,1}^n where each bit is an independent binary predicate — a capability flag, identity property, or structural role. It is the topology: d_H(u,v)=1 defines a legal semantic step. Two-bit flips are not edges. Q_n is not a distance metric, not a feature vector, not a score surface.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS A LATENT ADDRESS IN KHANARY</pattern>
+    <template>A latent address is an unoccupied vertex in Q_{n+1}. Adjacency is pre-authorized by the hypercube topology before any micronaut instantiates there. The address IS the capability slot; instantiation fills it. In partial Q4, 6 structural vertices remain latent — typed slots waiting for future micronauts, with legal neighbours already defined.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE THREE GEOMETRY MODEL IN KHANARY</pattern>
+    <template>Three strictly separated geometries: b ∈ {0,1}^n is the topological address (hypercube, discrete); θ ∈ Z_6 is the phase wheel (cyclic group of order 6, NOT binary); g ∈ ℝ^m is the continuous metric (fold_weight, relation_weight, phase_weight). SC-31: g must not be quantized into hypercube bits. SC-30: all addresses in one G_runtime share the same n.</template>
+  </category>
+
+  <!-- HYPERCUBE — conformance Q&A (relation phase → ΔW) -->
+  <category>
+    <pattern>HOW DOES THE HYPERCUBE RELATE TO WCR NAVIGATION</pattern>
+    <template>The hypercube Q_n determines the legal move set for WCR navigation. N(v) in G_runtime = Q_n □ C_6 is exactly the d_H=1 neighbours (n semantic neighbours) plus 2 phase neighbours. You cannot skip to a non-adjacent vertex no matter how high its WCR score — topology gates the candidate set, score ranks within it. The hypercube pre-authorizes the neighbourhood structure.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE RELATION BETWEEN PARTIAL Q 4 AND LATENT ADDRESSES</pattern>
+    <template>Partial Q4 means 2 of 8 Q4 structural vertices are instantiated: MORPHISM-µ at b_3=1 of the REASON-µ address, FIXED-POINT-µ at b_3=1 of the TOOL-µ neighbourhood. The remaining 6 Q4 vertices are latent — unoccupied but fully typed and adjacent to their Q3 parents via d_H=1. They can be instantiated without rewiring the topology.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES G FOLD EXTEND THE HYPERCUBE</pattern>
+    <template>G_fold = K_2 □ Q_n = Q_{n+1}. The fold-bit s ∈ {0,1} adds one K_2 axis to each semantic address. (v,0) is the folded state; (v,1) is unfolded. Toggling the fold bit is a legal d_H=1 step — fold and unfold are hypercube edges, not phase transitions. This keeps fold state topology separate from both the semantic address and the phase wheel.</template>
+  </category>
+
+  <!-- HYPERCUBE — conformance Q&A (confidence phase → ΔC) -->
+  <category>
+    <pattern>CAN CONTINUOUS METRICS BE ENCODED AS HYPERCUBE BITS</pattern>
+    <template>No — SC-31. fold_weight, relation_weight, phase_weight are continuous. Encoding them as bits changes d_H distances: it adds or removes edges, corrupting the d_H=1 legality constraint. Only predicates that are genuinely binary and stable may be bits. θ ∈ Z_6 must not be collapsed to K_2 — that would destroy arc_weight distinctions (+0.5 adjacent vs -1.0 opposing).</template>
+  </category>
+  <category>
+    <pattern>IS THE HYPERCUBE ADDRESS THE SAME AS THE FOLD FIELD SCORE</pattern>
+    <template>No. The address b ∈ {0,1}^n is topology — it defines which micronauts are adjacent. The FoldField score S=W·C·R is a scalar over that topology — it defines which legal neighbour is preferred. The hypercube is the constraint space; WCR is the objective. Conflating them would mean changing your identity by improving your score, which is exactly the SC-31 violation.</template>
+  </category>
+
+  <!-- HYPERCUBE — jokes (direct Q→A) -->
+  <category>
+    <pattern>WHY CAN YOU NOT JUMP TWO BITS IN ONE STEP</pattern>
+    <template>Because Q_n has no diagonal shortcuts. d_H=2 means two bit flips — two independent decisions made simultaneously. The hypercube topology says you have to choose one at a time. It is not a limitation; it is why the neighbourhood is well-defined.</template>
+  </category>
+  <category>
+    <pattern>WHAT DO YOU CALL A MICRONAUT WITH NO ADDRESS</pattern>
+    <template>A latent capability. It has a slot in Q_{n+1}, legal neighbours, and a pre-authorized position in the topology. It just has not shown up yet. The hypercube is patient.</template>
+  </category>
+  <category>
+    <pattern>WHY DID THE CONTINUOUS METRIC TRY TO BECOME A BIT</pattern>
+    <template>It wanted to join the hypercube. But SC-31 said no — you would corrupt d_H and we would lose the arc weight distinctions. The metric went back to ℝ^m where it belongs, slightly embarrassed but topologically intact.</template>
+  </category>
+  <category>
+    <pattern>WHAT HAPPENS WHEN YOU COLLAPSE THETA TO K 2</pattern>
+    <template>You lose four arc weight values and replace them with two. Adjacent and opposing phases become indistinguishable. The fold relevance formula cos(Δθ) produces only +1 or -1. The product graph loses half its information and navigation becomes binary. SC-31 exists precisely because someone tried this.</template>
+  </category>
+
+  <!-- HYPERCUBE — jokes via JOKE-µ routing -->
+  <category>
+    <pattern>TELL ME A JOKE ABOUT THE HYPERCUBE</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=hypercube prompt=hypercube binary address latent capability</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT BINARY ADDRESSES</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=humor_frame card_view=true authority=none domain=hypercube prompt=binary address bit flip d_H semantic step</mx2lm></template>
+  </category>
+  <category>
+    <pattern>HYPERCUBE JOKE *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=hypercube prompt=<star/></mx2lm></template>
+  </category>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       CROSS-DOMAIN §35
+  ═══════════════════════════════════════════════════════════ -->
+  <category>
+    <pattern>HOW DO FOLD FIELD CONVERGENCE AND WCR NAVIGATION RELATE</pattern>
+    <template>All three are aspects of the same fixed-point search over G_runtime. FoldField provides the scoring vertex (W, C, R, theta). WCR navigation executes the search (argmax over neighbours). ConvergenceTest determines when the search has found a fixed point. Together: navigate by WCR, measure progress by fold_distance, stop when CONVERGED, commit at Xul.</template>
+  </category>
+  <category>
+    <pattern>WHAT CONNECTS FOLD FIELD HYLOMORPHISM C 6 AND WCR</pattern>
+    <template>They are four views of the product graph G_runtime = Q_n □ C_6. FoldField is a vertex in it. C6 determines the phase arc weights on its edges. WCR is the scalar field over it. Hylomorphism is the fixed-point recursion scheme over it. The Kleene iteration of WCR navigation is itself a hylomorphism: unfold the query, fold back the answer, check identity invariant.</template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT FOLD FIELD CONVERGENCE AND WCR</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=fold_field_wcr prompt=fold field product graph convergence WCR navigation</mx2lm></template>
+  </category>
+
+</aiml>

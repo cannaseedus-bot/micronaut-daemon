@@ -1,0 +1,54 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "weight-log",
+  "@key": "⟁APP:WEIGHT_LOG",
+  "@mount": "⟁ROOT:WEIGHT_LOG",
+  "@theme": { "accent": "#34d399", "bg": "#010c06", "surface": "#02180c", "text": "#d1fae5", "hero_phase": "Yax", "tagline": "Small progress every day" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "entries", "component": "⟁WIDGET:ENTRIES", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "entries": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:WEIGHT_LOG": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:LOG_WEIGHT"] },
+    "⟁ACTION:LOG_WEIGHT": { "@type": "button", "@text": "Log Weight", "@on": { "click": "wt.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:ENTRIES", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:ENTRIES": { "@type": "feed", "@bind": "state.entries", "@children": ["⟁WIDGET:ENTRY_CARD"] },
+    "⟁WIDGET:ENTRY_CARD": { "@type": "content-card", "@bind": "entry", "@on": { "view": "wt.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:CHART", "⟁WIDGET:STATS"] },
+    "⟁WIDGET:CHART": { "@type": "chart", "@bind": "data.trend" },
+    "⟁WIDGET:STATS": { "@type": "stat", "@bind": "data.stats" }
+  },
+  "@programs": {
+    "wt.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "wt.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "wt.log": "wt.open_compose", "entry.view": "wt.view" },
+  "@imports": [{ "ref": "weight_entry", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "bmi-calc", "name": "BMI Calculator", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Calculate BMI and ideal weight range automatically." },
+      { "id": "goal-projection", "name": "Goal Projection", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Projected date to reach your goal weight at current pace." },
+      { "id": "body-comp", "name": "Body Composition", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Log body fat % and muscle mass alongside weight." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "wt.log", "pattern": "LOG WEIGHT|WEIGH IN|I WEIGH *", "intent": "open_compose" },
+      { "id": "wt.trend", "pattern": "WEIGHT TREND|HOW AM I DOING|PROGRESS", "intent": "view_chart" }
+    ]
+  },
+  "@data": {
+    "trend": [82.1, 81.8, 81.5, 81.3, 81.0, 80.8, 80.6],
+    "stats": { "start_kg": 85.2, "current_kg": 80.6, "goal_kg": 75.0, "lost_kg": 4.6, "days": 42 },
+    "spotlight": [
+      { "id": "sp1", "title": "Week 6 — Steady Progress", "badge": "On Track", "kg": 80.6, "excerpt": "0.6kg down this week. Consistent with the 3-month average." },
+      { "id": "sp2", "title": "Plateau Broken", "badge": "Milestone", "excerpt": "Held at 81.3 for 10 days, then dropped 0.7kg in 5 days." },
+      { "id": "sp3", "title": "Total Lost: 4.6kg", "badge": "Progress", "excerpt": "5.4kg remaining to goal. Projected 9 weeks at current pace." }
+    ],
+    "schema": {
+      "weight_entry": { "primaryKey": "entry_id", "fields": { "entry_id": { "type": "string" }, "weight_kg": { "type": "float", "required": true }, "body_fat_pct": { "type": "float" }, "note": { "type": "text" }, "logged_at": { "type": "datetime", "required": true } } }
+    }
+  }
+}

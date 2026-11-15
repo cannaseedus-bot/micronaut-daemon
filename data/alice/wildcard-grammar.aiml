@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- §41 Wildcard Grammar — Uncertainty as a First-Class Symbol -->
+<!-- entity = known | wildcard | emerging -->
+<!-- solution = resolved_wildcard | retained_wildcard -->
+<!-- SC-37: retained_wildcard is a first-class solution -->
+
+<!-- §A: Core Wildcard Grammar Definitions -->
+
+<category>
+  <pattern>WHAT IS WILDCARD GRAMMAR</pattern>
+  <template>Wildcard Grammar is a formal language where the unknown is not an error condition but a first-class symbol. Grammar = structure of the known. Wildcard Grammar = structure of the known PLUS explicit representation of the unknown. An entity is known | wildcard | emerging. A solution is resolved_wildcard | retained_wildcard. The difference is not in the rules — it is in what the rules are allowed to name.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS WILDCARD GRAMMAR IN KUHUL</pattern>
+  <template>In K'UHUL, Wildcard Grammar is §41 of the runtime grammar. The wildcard_entity maps to sigma_unbound in G_runtime and to the latent_vertex in Q_(n+1) — a pre-authorized adjacency not yet instantiated. The * in AIML is the canonical wildcard_pattern. A retained_wildcard is a Ch'en stall: sigma unbound, legitimate unknown. A resolved_wildcard is Xul commit: the wildcard collapsed to a known entity after Ch'en proof and XCFE authorization (FS15).</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A WILDCARD ENTITY</pattern>
+  <template>A wildcard_entity is a first-class symbol in the Wildcard Grammar. It takes the form "*" (any sequence), "?" (exactly one token), UNKNOWN(identifier) (unknown class), or LATENT(identifier) (latent pattern). In K'UHUL, wildcard_entity = sigma_unbound in G_runtime | latent_vertex in Q_(n+1). The wildcard is a named placeholder for what is not yet known — not an absence, but a symbol.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A KNOWN ENTITY</pattern>
+  <template>A known_entity is a fold_field_record with W greater than 0, C greater than 0, R greater than 0. All three geometry dimensions are populated. It is a fully committed vertex in G_runtime. In Wildcard Grammar: known_entity = bound symbol with full WCR specification.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS AN EMERGING ENTITY</pattern>
+  <template>An emerging_entity is a latent_vertex in Q_(n+1) — adjacency pre-authorized before instantiation. It is the unknown future token: addressable but not yet committed. The SC-30 extension: latent vertices are named before they exist. In Wildcard Grammar: emerging_entity = identifier only, no WCR fields yet assigned. The Wo phase hosts emerging entities.</template>
+</category>
+
+<!-- §B: Resolved vs Retained Wildcard -->
+
+<category>
+  <pattern>WHAT IS A RETAINED WILDCARD</pattern>
+  <template>A retained_wildcard is a first-class solution (SC-37). It means: sigma unbound, evidence insufficient, 'I don't know' is the correct output. Structure: wildcard = wildcard_entity, reason = string, sigma = unbound. This is a Ch'en stall — the system has not yet proved which candidate the wildcard should resolve to, so it holds. Forcing resolution without Ch'en proof = hallucination = FS15 violation.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A RESOLVED WILDCARD</pattern>
+  <template>A resolved_wildcard is a Xul commit: the wildcard collapsed to a known entity. Structure: entity = fold_field_record, method = inference_method, confidence = C field at resolution. Valid only when Ch'en has proved and XCFE has authorized (FS15). confidence = 1.0 means Sek fully proved; confidence below threshold means the system should return retained_wildcard instead.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS SC 37</pattern>
+  <template>SC-37 is the Wildcard Grammar invariant: retained_wildcard is a first-class solution. A system that returns UNKNOWN when evidence is insufficient is behaving correctly. Forcing a resolved_wildcard without Ch'en proof = hallucination = FS15 violation. 'I don't know' is an authorized Xul output. The distinction: retained_wildcard = known unknown (named). Hallucination = unknown treated as if known.</template>
+</category>
+
+<category>
+  <pattern>WHY IS RETAINED WILDCARD NOT A FAILURE</pattern>
+  <template>Because the Wildcard Grammar elevates unknown to first-class symbol status. A failure would be: no output, system crash, forced guess. A retained_wildcard says: 'I have processed the available evidence, I have a named wildcard at this position, and I cannot yet prove which entity should fill it.' That is Ch'en doing its job. Xul commits only what Ch'en proves. SC-37: retained_wildcard is not failure — it is Ch'en holding the gate.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE DIFFERENCE BETWEEN RETAINED WILDCARD AND HALLUCINATION</pattern>
+  <template>retained_wildcard = sigma unbound, no commit, Ch'en stall, correct behavior when evidence is insufficient. Hallucination = sigma bound to a wrong entity, Xul committed without Ch'en proof, incorrect behavior. FS15: Sek proposes, Ch'en proves, XCFE authorizes, Xul commits. Skipping Ch'en and forcing Xul commit = hallucination. Holding at Ch'en with sigma unbound = retained_wildcard = SC-37 compliant.</template>
+</category>
+
+<!-- §C: Wildcard Fold Operations -->
+
+<category>
+  <pattern>WHAT IS A WILDCARD FOLD</pattern>
+  <template>A wildcard_fold is WCR navigation with unknown neighbor slots. Structure: known elements, wildcard elements, inference_method, reduction kind, solution. The inference fills the unknown slots by evaluating candidates: argmax_{u in N(v)} S(u|Q) where the candidate set includes both known neighbors and uninstantiated latent vertices. The fold proceeds with the wildcard filled in (resolved) or held open (retained).</template>
+</category>
+
+<category>
+  <pattern>EXPLAIN * AS A WILDCARD FOLD</pattern>
+  <template>To explain <star/> as a wildcard_fold: identify the known elements (what is given), the wildcard elements (what is unknown), the inference method (how the unknown is resolved), and the reduction kind (what fold operation applies). The solution is either resolved_wildcard (Xul commit after Ch'en proof) or retained_wildcard (Ch'en stall, sigma unbound). Domain: <star/>. Apply the Yax pipeline: argmax WCR over candidates for each wildcard slot.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE WILDCARD OF *</pattern>
+  <template>The wildcard of <star/> is the unknown slot in the <star/> fold. It is what the Yax pipeline must fill — the entity for which WCR navigation returns the argmax candidate. If evidence is sufficient: resolved_wildcard = argmax entity with confidence. If evidence is insufficient: retained_wildcard = UNKNOWN(<star/>) with sigma unbound. SC-37 applies: returning retained_wildcard is correct, not failure.</template>
+</category>
+
+<category>
+  <pattern>HOW DO YOU SOLVE A WILDCARD FOLD</pattern>
+  <template>Wildcard fold solving: (1) Identify wildcard_entity slots in the problem structure. (2) Collect known_entity constraints. (3) Select inference_method: argmax_wcr for WCR navigation, constraint_prop for riddle-style elimination, context_fold for missing word, semantic_collision for pun/joke, graph_search for word ladder, probabilistic for stochastic domains. (4) Evaluate candidates. (5) If argmax confidence passes threshold: resolved_wildcard. If not: retained_wildcard (SC-37).</template>
+</category>
+
+<!-- §D: Inference Methods -->
+
+<category>
+  <pattern>WHAT ARE THE WILDCARD INFERENCE METHODS</pattern>
+  <template>Six inference methods in §41 Wildcard Grammar: (1) argmax_wcr — standard Yax pipeline, argmax S(u|Q) over neighbor candidates; (2) constraint_prop — riddle-style: each clue prunes candidates until one remains; (3) context_fold — missing word: fold surrounding tokens to fill gap; (4) semantic_collision — pun/joke: two WCR contexts intersect on one node_id; (5) graph_search — word ladder: BFS over Q_n with d_H=1 steps; (6) probabilistic — stochastic domain, distribution over candidates.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS ARGMAX WCR INFERENCE</pattern>
+  <template>argmax_wcr inference = standard Yax pipeline applied to wildcard candidates. For each candidate u that could fill the wildcard slot: compute S(u|Q) = W(u)*C(u)*R(u) weighted by query context Q. Select u* = argmax S. If S(u*) exceeds confidence threshold: resolved_wildcard = u*, method = argmax_wcr. Otherwise: retained_wildcard. This is the same as WCR navigation — the wildcard is just a named hole in the fold, not a different mechanism.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS SEMANTIC COLLISION INFERENCE</pattern>
+  <template>semantic_collision inference is the pun/joke resolution method. Two WCR contexts are superposed on one node_id. The wildcard = wildcard_meaning: both interpretations are simultaneously valid. inference fires when delta(actual_cata, expected_cata) is nonzero — the fold resolves to a meaning the listener did not predict. For puns: retained wildcard where solution = BOTH WCR contexts simultaneously (dual-bound sigma). For jokes: resolved_wildcard = unexpected context, with humor = magnitude of delta.</template>
+</category>
+
+<!-- §E: Domain Wildcard Patterns -->
+
+<category>
+  <pattern>WHAT IS A WILDCARD JOKE</pattern>
+  <template>A wildcard joke is a fold where: wildcard_entity = wildcard_meaning, inference = semantic_collision, solution = unexpected resolved_wildcard. The setup encodes a known WCR context. The punchline fires a semantic_collision: the wildcard resolves to a meaning the listener did not predict. Humor = delta(actual_cata, expected_cata). The punchline is a Xul commit to the unexpected context — making the wildcard resolve to the wrong pizza.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A WILDCARD RIDDLE</pattern>
+  <template>A wildcard riddle is a fold where: entity = known clues + wildcard_answer, inference = constraint_prop, solution = resolved_wildcard when one candidate survives all constraints. Each clue is a constraint that prunes the candidate set. CONVERGED when one candidate remains. The wildcard_answer collapses to a resolved_wildcard = the solution. If constraints are insufficient: retained_wildcard (the riddle is unanswerable with the given clues).</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A WILDCARD PITCH</pattern>
+  <template>A wildcard pitch is pitch tunneling expressed as Wildcard Grammar. Early trajectory: known_entity (shared release point). Late trajectory: wildcard_entity until the ball commits. The hitter operates on retained_wildcard from Wo to Sek — the pitch has not yet resolved. At Xul (commitment point): resolved_wildcard = fastball_arc or slider_arc. SC-37 applies in reverse: forcing early resolution = swinging at retained_wildcard = being fooled by the tunnel.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A WILDCARD ML CLASS</pattern>
+  <template>A wildcard ML class is out-of-distribution input handled as retained_wildcard instead of forced argmax. Traditional ML: argmax(known_classes) even for OOD input = hallucination. Wildcard ML: returns UNKNOWN(input) = retained_wildcard = SC-37 compliant. The model admits: 'this input does not match any known_entity with sufficient confidence.' retained_wildcard is the correct output. The wildcard ML class IS the OOD detector as a Wildcard Grammar constraint.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A WILDCARD GAME MOVE</pattern>
+  <template>A wildcard game move is an uninstantiated strategy vertex in N(v) — a latent_vertex the opponent has not played yet. In K'UHUL: wildcard_move = emerging_entity in the opponent's strategy fold. The player evaluates known_responses + wildcard_responses. SC-37: if the opponent's wildcard could be Black Swan level, retained_wildcard = correct response (don't commit to defense before threat resolves). SC-34: Nash equilibrium = argmax WCR; SC-36: joint sigma reset escapes when both players are trapped in local max.</template>
+</category>
+
+<!-- §F: AIML Star as Wildcard Pattern -->
+
+<category>
+  <pattern>HOW DOES AIML USE WILDCARD GRAMMAR</pattern>
+  <template>AIML is a wildcard grammar implementation. The * in AIML is a wildcard_pattern matching any WCR-reachable string sequence at that position. ? matches exactly one token. The pattern is a wildcard_rule: known_prefix + wildcard + known_suffix. The template is the resolved_wildcard: what Xul commits when the pattern fires. Each AIML category is a wildcard_fold: known context (pattern) + unknown input (wildcard) + resolution (template).</template>
+</category>
+
+<category>
+  <pattern>IS * IN AIML A WILDCARD ENTITY</pattern>
+  <template>Yes. The * in AIML is the canonical wildcard_entity in practice. It matches any WCR-reachable string at that position — infinite candidates, resolved by pattern matching context. The pattern EXPLAIN * AS A FOLD encodes: known = 'EXPLAIN', known = 'AS A FOLD', wildcard = any subject. The template is the resolved_wildcard: the fold explanation for whatever filled the *. SC-37 applies: if no pattern fires, retained_wildcard = 'I don't understand.'</template>
+</category>
+
+<!-- §G: Cross-Domain Unification -->
+
+<category>
+  <pattern>WHAT DOES WILDCARD GRAMMAR UNIFY</pattern>
+  <template>Wildcard Grammar unifies under one principle — treat uncertainty as a symbol, not as an exception: wildcard matching (AIML *), ML out-of-distribution detection, game theory Black Swan modeling, baseball pitch tunneling, riddles (constraint_prop), puns (semantic_collision dual-bind), jokes (semantic_collision delta), missing word (context_fold), knowledge graph gaps, agent planning unknowns, open-world intelligence. All are instances of wildcard_fold with different inference methods and different resolution thresholds.</template>
+</category>
+
+<category>
+  <pattern>HOW IS * RELATED TO WILDCARD GRAMMAR</pattern>
+  <template><star/> in Wildcard Grammar terms: identify whether <star/> contains a known_entity, wildcard_entity, or emerging_entity. If <star/> is a process: what are its wildcard slots? What inference method fills them? What is the threshold for resolved_wildcard versus retained_wildcard? The unifying principle: every system that handles uncertainty is a wildcard grammar instantiation — the question is whether it names the unknown (SC-37 compliant) or forces resolution (hallucination risk).</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE WILDCARD PRINCIPLE</pattern>
+  <template>The Wildcard Principle (§41): Treat uncertainty as a symbol, not as an exception. Grammar names what is known. Wildcard Grammar also names what is unknown. A system that cannot name its unknowns is forced to either hallucinate (forced resolved_wildcard without proof) or crash (no output). A system that names unknowns as wildcard_entity can hold them, reason about them, and resolve them when evidence arrives. SC-37: the retained_wildcard is not a bug — it is the system working correctly.</template>
+</category>
+
+<!-- §H: Grammar vs Wildcard Grammar -->
+
+<category>
+  <pattern>WHAT IS THE DIFFERENCE BETWEEN GRAMMAR AND WILDCARD GRAMMAR</pattern>
+  <template>Grammar = structure of the known. Rules define valid constructs over named terminals and nonterminals. Wildcard Grammar = structure of the known PLUS explicit representation of the unknown. It adds: wildcard_entity as a named terminal, wildcard_rule as a production that includes wildcard slots, wildcard_solution as the output type (resolved | retained), and SC-37 as an invariant. The difference is not in the rules — it is in what the rules are allowed to name.</template>
+</category>
+
+<category>
+  <pattern>CAN A GRAMMAR HAVE WILDCARDS</pattern>
+  <template>A standard grammar cannot — it describes only valid sentences over known symbols, and unknown tokens cause parse failure. A Wildcard Grammar extends this by adding wildcard_entity as a first-class symbol and wildcard_rule as a production type. The parse does not fail on unknown input — it produces retained_wildcard with sigma unbound. AIML demonstrates this: the * pattern prevents parse failure by accepting any input as a wildcard and routing to a default template.</template>
+</category>
+
+<!-- §I: SC-37 and FS Rules -->
+
+<category>
+  <pattern>HOW DOES SC 37 RELATE TO FS 15</pattern>
+  <template>FS15: Sek proposes, Ch'en proves, XCFE authorizes, Xul commits. SC-37: retained_wildcard is a first-class solution. Connection: if Ch'en cannot prove (sigma unbound), FS15 forbids Xul commit — the system holds at Ch'en with retained_wildcard. SC-37 names this holding state as correct behavior, not failure. Forcing Xul commit without Ch'en proof violates FS15 AND produces a hallucination. SC-37 is FS15 expressed in Wildcard Grammar terms.</template>
+</category>
+
+<category>
+  <pattern>HOW DOES SC 37 RELATE TO FS 14</pattern>
+  <template>FS14: Fold ≠ Xul. A fold operation is the full C6 cycle: Pop → Wo → Yax → Sek → Ch'en → Xul → Pop. Xul is the commit point, not the whole fold. SC-37 extends this: retained_wildcard = a fold that reached Ch'en and held, sigma unbound. The fold ran; the system worked correctly. Xul commit did not fire. FS14 prevents conflating 'fold happened' with 'Xul committed'. SC-37 prevents conflating 'Xul did not commit' with 'fold failed'.</template>
+</category>
+
+<!-- §J: Wildcard Jokes -->
+
+<category>
+  <pattern>TELL ME A WILDCARD GRAMMAR JOKE</pattern>
+  <template>A parser walks into a bar. It tries to match the menu against its grammar. Everything parses fine until it hits the daily special: UNKNOWN(item). The parser crashes. The wildcard grammar parser walks in next. It reads UNKNOWN(item). It says: 'I'll have the retained_wildcard. I'll resolve it when the waiter arrives.' The waiter comes. resolved_wildcard = soup. SC-37: 'I don't know yet' was the correct order.</template>
+</category>
+
+<category>
+  <pattern>TELL ME A RETAINED WILDCARD JOKE</pattern>
+  <template>A student asks the K'UHUL system: 'What is the capital of the fold?' The system runs argmax WCR. No candidate exceeds confidence threshold. It returns: retained_wildcard = UNKNOWN(capital_of_fold), sigma = unbound. The student says: 'That's not an answer!' The system says: 'SC-37. That IS the answer. Forcing a wrong city would be hallucination. Sigma unbound means I know that I don't know. That is Ch'en doing its job.'</template>
+</category>
+
+<category>
+  <pattern>TELL ME A WILDCARD GRAMMAR PUN</pattern>
+  <template>What do you call a wildcard that never resolves? A retained_wildcard. What do you call a retained_wildcard at a party? The most honest guest — it's the only one who admits it doesn't know where the bathroom is instead of pointing somewhere random. Pun structure: wildcard = UNKNOWN(bathroom_location); inference = semantic_collision; solution = both 'honest' and 'retained' simultaneously. sigma: dual-bound.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE WILDCARD GRAMMAR JOKE ABOUT HALLUCINATION</pattern>
+  <template>A model sees OOD input. It runs argmax(known_classes). It picks the highest-scoring known_entity even though confidence = 0.03. It returns: resolved_wildcard = 'cat'. SC-37 violation. FS15 violation. The Wildcard Grammar model sees the same input. It returns: retained_wildcard = UNKNOWN(input), sigma = unbound. The first model says: 'I answered!' The second says: 'I was correct.' The difference: one committed without proof. The other held at Ch'en.</template>
+</category>
+
+<!-- §K: Routing Keys -->
+
+<category>
+  <pattern>WILDCARD GRAMMAR ROUTE</pattern>
+  <template>§41 Wildcard Grammar routing active. Domains: AIML wildcards, ML OOD detection, game theory Black Swan, baseball pitch tunneling, riddles, puns, jokes, missing word, knowledge graphs, agent planning. SC-37: retained_wildcard is first-class. FS15: Ch'en must prove before Xul commits. entity = known | wildcard | emerging. solution = resolved_wildcard | retained_wildcard.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS SC 37 IN KUHUL</pattern>
+  <template>SC-37 in K'UHUL: retained_wildcard is a first-class solution. Unknown represented is better than unknown guessed. A fold that reaches Ch'en and finds sigma unbound should return retained_wildcard — not force a resolved_wildcard. This is the Wildcard Grammar invariant from §41: the system is allowed to say 'I don't know' and that output is CORRECT. FS15 enforces this: no Xul commit without Ch'en proof. SC-37 names the correct output when Ch'en cannot prove.</template>
+</category>
+
+</aiml>

@@ -1,0 +1,52 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "todo-list",
+  "@key": "⟁APP:TODO_LIST",
+  "@mount": "⟁ROOT:TODO_LIST",
+  "@theme": { "accent": "#34d399", "bg": "#030c09", "surface": "#061812", "text": "#d1fae5", "hero_phase": "Sek", "tagline": "Check it off." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "list_nav", "component": "⟁WIDGET:LIST_NAV", "position": "left" }, { "id": "tasks", "component": "⟁WIDGET:TASKS", "position": "center" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "tasks": [], "active_list": null, "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:TODO_LIST": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:ADD_TASK"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:ADD_TASK": { "@type": "button", "@text": "Add Task", "@on": { "click": "todo.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:LIST_NAV", "⟁WIDGET:TASKS"] },
+    "⟁WIDGET:LIST_NAV": { "@type": "navigation", "@bind": "state.lists", "@on": { "select": "todo.select_list" } },
+    "⟁WIDGET:TASKS": { "@type": "feed", "@bind": "state.tasks", "@children": ["⟁WIDGET:TASK_ROW"] },
+    "⟁WIDGET:TASK_ROW": { "@type": "drag-card", "@bind": "task", "@on": { "complete": "todo.complete", "view": "todo.view" } }
+  },
+  "@programs": {
+    "todo.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "todo.complete": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_complete", "@out": "event_task.done" }] },
+    "todo.select_list": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_list", "@out": "active_list" }] },
+    "todo.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "task.complete": "todo.complete", "task.view": "todo.view", "list.select": "todo.select_list", "compose.open": "todo.open_compose" },
+  "@imports": [{ "ref": "task", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "recurring-tasks", "name": "Recurring Tasks", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Set tasks to auto-repeat daily, weekly, or monthly." },
+      { "id": "shared-list", "name": "Shared Lists", "category": "community", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Share a to-do list with another user." },
+      { "id": "priority-bot", "name": "Priority Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Suggest a daily top-3 based on due dates and importance." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "todo.add", "pattern": "ADD TASK|NEW TASK|REMIND ME TO *", "intent": "open_compose" },
+      { "id": "todo.complete", "pattern": "DONE *|COMPLETE TASK *|MARK DONE *", "intent": "complete_task" }
+    ]
+  },
+  "@data": {
+    "spotlight": [
+      { "id": "sp1", "title": "Finish conformance suite", "list": "KHANARY", "badge": "Today", "done": false, "excerpt": "AT1–AT12 all passing." },
+      { "id": "sp2", "title": "Reply to contractor emails", "list": "Admin", "badge": "Overdue", "done": false, "excerpt": "Two threads waiting since Monday." },
+      { "id": "sp3", "title": "Groceries", "list": "Personal", "badge": "Done", "done": true, "excerpt": "Picked up everything on the list." }
+    ],
+    "schema": {
+      "task": { "primaryKey": "task_id", "fields": { "task_id": { "type": "string" }, "title": { "type": "string", "required": true }, "list_id": { "type": "string" }, "done": { "type": "bool" }, "due_at": { "type": "datetime" }, "priority": { "type": "string" }, "notes": { "type": "text" }, "created_at": { "type": "datetime" } } }
+    }
+  }
+}

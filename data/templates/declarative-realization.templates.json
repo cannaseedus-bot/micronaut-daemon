@@ -1,0 +1,213 @@
+{
+  "@kind": "semantic.declarative-realization-templates.v1",
+  "@no-eval": true,
+  "@version": "1.0.0",
+  "mood": "declarative",
+
+  "authority_boundary": {
+    "semantic_authority": false,
+    "commit_authorized": false,
+    "mutation": "none",
+    "emits": "statement",
+    "note": "A declarative template renders one existing relation edge as one sentence. It creates no edge, proves nothing, and commits nothing."
+  },
+
+  "contract": "data/grammar/document.contracts.json",
+
+  "templates": [
+    {
+      "id": "stmt.is_a",
+      "realizes_relation": "@is_a",
+      "patterns": ["*:entity is a *:entity"],
+      "captures": [
+        { "index": 1, "name": "subject", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" },
+        { "index": 2, "name": "object", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" }
+      ],
+      "render": "{subject} is a {object}.",
+      "phases": ["Wo", "Yax", "Sek"],
+      "phase_floor": "Wo",
+      "admission": { "mode": "rank_if_verified", "capabilities": ["render.statement"], "min_score": 0.25 },
+      "emits": "statement"
+    },
+    {
+      "id": "stmt.has_part",
+      "realizes_relation": "@has_part",
+      "patterns": ["*:entity has *:entity"],
+      "captures": [
+        { "index": 1, "name": "subject", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" },
+        { "index": 2, "name": "object", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" }
+      ],
+      "render": "{subject} has {object}.",
+      "phases": ["Wo", "Yax", "Sek"],
+      "phase_floor": "Wo",
+      "admission": { "mode": "rank_if_verified", "capabilities": ["render.statement"], "min_score": 0.25 },
+      "emits": "statement"
+    },
+    {
+      "id": "stmt.part_of",
+      "realizes_relation": "@part_of",
+      "patterns": ["*:entity is part of *:entity"],
+      "captures": [
+        { "index": 1, "name": "subject", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" },
+        { "index": 2, "name": "object", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" }
+      ],
+      "render": "{subject} is part of {object}.",
+      "phases": ["Wo", "Yax", "Sek"],
+      "phase_floor": "Wo",
+      "admission": { "mode": "rank_if_verified", "capabilities": ["render.statement"], "min_score": 0.25 },
+      "emits": "statement"
+    },
+    {
+      "id": "stmt.causes",
+      "realizes_relation": "@causes",
+      "patterns": ["*:entity causes *:entity"],
+      "captures": [
+        { "index": 1, "name": "subject", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" },
+        { "index": 2, "name": "object", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" }
+      ],
+      "render": "{subject} causes {object}.",
+      "phases": ["Wo", "Yax", "Sek"],
+      "phase_floor": "Wo",
+      "admission": { "mode": "rank_if_verified", "capabilities": ["render.statement"], "min_score": 0.25 },
+      "emits": "statement"
+    },
+    {
+      "id": "stmt.requires",
+      "realizes_relation": "@requires",
+      "patterns": ["*:entity requires *:entity"],
+      "captures": [
+        { "index": 1, "name": "subject", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" },
+        { "index": 2, "name": "object", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" }
+      ],
+      "render": "{subject} requires {object}.",
+      "phases": ["Wo", "Yax", "Sek"],
+      "phase_floor": "Wo",
+      "admission": { "mode": "rank_if_verified", "capabilities": ["render.statement"], "min_score": 0.25 },
+      "emits": "statement"
+    },
+    {
+      "id": "stmt.defines",
+      "realizes_relation": "@defines",
+      "patterns": ["*:entity defines *:entity"],
+      "captures": [
+        { "index": 1, "name": "subject", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" },
+        { "index": 2, "name": "object", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" }
+      ],
+      "render": "{subject} defines {object}.",
+      "phases": ["Wo", "Yax", "Sek"],
+      "phase_floor": "Wo",
+      "admission": { "mode": "rank_if_verified", "capabilities": ["render.statement"], "min_score": 0.25 },
+      "emits": "statement"
+    },
+    {
+      "id": "stmt.contradicts",
+      "realizes_relation": "@contradicts",
+      "patterns": ["*:entity contradicts *:entity"],
+      "captures": [
+        { "index": 1, "name": "subject", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" },
+        { "index": 2, "name": "object", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" }
+      ],
+      "render": "{subject} contradicts {object}.",
+      "phases": ["Wo", "Yax", "Sek"],
+      "phase_floor": "Wo",
+      "admission": { "mode": "rank_if_verified", "capabilities": ["render.statement"], "min_score": 0.25 },
+      "emits": "statement"
+    }
+    ,{
+      "id": "stmt.delegate",
+      "realizes_relation": "@delegate",
+      "via_alias": "@delegate",
+      "canonical_intent": "@delegates_to",
+      "patterns": ["*:entity delegates to *:entity"],
+      "captures": [
+        { "index": 1, "name": "subject", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" },
+        { "index": 2, "name": "object", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" }
+      ],
+      "render": "{subject} delegates to {object}.",
+      "phases": ["Wo", "Yax", "Sek"],
+      "phase_floor": "Wo",
+      "admission": { "mode": "rank_if_verified", "capabilities": ["render.statement"], "min_score": 0.25 },
+      "emits": "statement"
+    }
+    ,{
+      "id": "stmt.call",
+      "realizes_relation": "@call",
+      "via_alias": "@call",
+      "canonical_intent": "@calls",
+      "patterns": ["*:entity calls *:entity"],
+      "captures": [
+        { "index": 1, "name": "subject", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" },
+        { "index": 2, "name": "object", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" }
+      ],
+      "render": "{subject} calls {object}.",
+      "phases": ["Wo", "Yax", "Sek"],
+      "phase_floor": "Wo",
+      "admission": { "mode": "rank_if_verified", "capabilities": ["render.statement"], "min_score": 0.25 },
+      "emits": "statement"
+    }
+    ,{
+      "id": "stmt.relate",
+      "realizes_relation": "@relate",
+      "via_alias": "@relate",
+      "canonical_intent": "@related_to",
+      "patterns": ["*:entity relates to *:entity"],
+      "captures": [
+        { "index": 1, "name": "subject", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" },
+        { "index": 2, "name": "object", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" }
+      ],
+      "render": "{subject} relates to {object}.",
+      "phases": ["Wo", "Yax", "Sek"],
+      "phase_floor": "Wo",
+      "admission": { "mode": "rank_if_verified", "capabilities": ["render.statement"], "min_score": 0.25 },
+      "emits": "statement"
+    }
+    ,{
+      "id": "stmt.eval",
+      "realizes_relation": "@eval",
+      "via_alias": "@eval",
+      "canonical_intent": null,
+      "patterns": ["*:entity evaluates through *:entity"],
+      "captures": [
+        { "index": 1, "name": "subject", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" },
+        { "index": 2, "name": "object", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" }
+      ],
+      "render": "{subject} evaluates through {object}.",
+      "phases": ["Wo", "Yax", "Sek"],
+      "phase_floor": "Wo",
+      "admission": { "mode": "rank_if_verified", "capabilities": ["render.statement"], "min_score": 0.25 },
+      "emits": "statement"
+    }
+    ,{
+      "id": "stmt.compose",
+      "realizes_relation": "@compose",
+      "via_alias": "@compose",
+      "canonical_intent": null,
+      "patterns": ["*:entity composes *:entity"],
+      "captures": [
+        { "index": 1, "name": "subject", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" },
+        { "index": 2, "name": "object", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" }
+      ],
+      "render": "{subject} composes {object}.",
+      "phases": ["Wo", "Yax", "Sek"],
+      "phase_floor": "Wo",
+      "admission": { "mode": "rank_if_verified", "capabilities": ["render.statement"], "min_score": 0.25 },
+      "emits": "statement"
+    }
+    ,{
+      "id": "stmt.informs",
+      "realizes_relation": "@informs",
+      "via_alias": "@informs",
+      "canonical_intent": null,
+      "patterns": ["*:entity informs *:entity"],
+      "captures": [
+        { "index": 1, "name": "subject", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" },
+        { "index": 2, "name": "object", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind" }
+      ],
+      "render": "{subject} informs {object}.",
+      "phases": ["Wo", "Yax", "Sek"],
+      "phase_floor": "Wo",
+      "admission": { "mode": "rank_if_verified", "capabilities": ["render.statement"], "min_score": 0.25 },
+      "emits": "statement"
+    }
+  ]
+}

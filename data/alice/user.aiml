@@ -1,0 +1,39 @@
+<aiml version="1.0.1">
+  <!-- HAND-AUTHORED, not generated. The guarded pattern for an NL surface is the
+       greeting pipeline (authored bank -> transpiler -> AIML -> replay check +
+       placeholder contract). This file is the weaker, unguarded form: there is no
+       user-bank.json, no user-bank-compile step and no replay check yet.
+       Convert it to the generated form before treating it as authoritative. -->
+  <category>
+    <pattern>USER BANK</pattern>
+    <template><mx2lm>user bank phases Pop Wo Yax Sek Ch'en Xul ops read_caller_identity bind_principal resolve_session_scope apply_session_state verify_caller_authority commit_session_state</mx2lm></template>
+  </category>
+  <category>
+    <pattern>WHO AM I</pattern>
+    <template><mx2lm>user phase=Pop op=read_caller_identity track=USER-µ <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>USER IDENTITY *</pattern>
+    <template><mx2lm>user phase=Ch'en op=verify_caller_authority track=USER-µ <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>USER SESSION SCOPE *</pattern>
+    <template><mx2lm>user phase=Yax op=resolve_session_scope track=USER-µ <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>USER SESSION COMMIT *</pattern>
+    <template><mx2lm>user phase=Xul op=commit_session_state track=USER-µ <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>USER SESSION STATE *</pattern>
+    <template><mx2lm>user phase=Pop op=gramRead key=user:session:current track=USER-µ <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>USER SESSION *</pattern>
+    <template><mx2lm>user phase=Pop op=bind_principal scope=session track=USER-µ <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>USER *</pattern>
+    <template><mx2lm>user phase=Pop op=bind_principal track=USER-µ <star/></mx2lm></template>
+  </category>
+</aiml>

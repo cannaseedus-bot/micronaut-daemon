@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "event.schema.json",
+  "title": "EventDef",
+  "description": "K'UHUL semantic event contract. @kind must be semantic.event.v1. Observed and Reported are valid ingestion states. Inferred and Disputed are earned states — parse() rejects both (Pattern Induction Guard: earned status cannot be self-declared at ingestion). When @epistemic_status is absent, defaults to Reported. predicate must be declared in the live RelationRegistry. subject_type and object_type are optional wildcards; when provided, they are validated against the relation's declared domain/range.",
+  "type": "object",
+  "required": ["@kind", "@id", "@subject", "@predicate", "@object", "@timestamp"],
+  "additionalProperties": false,
+  "properties": {
+    "@kind": {
+      "type": "string",
+      "const": "semantic.event.v1"
+    },
+    "@id": {
+      "type": "string",
+      "description": "Unique event identifier.",
+      "pattern": "^[A-Za-z0-9_-]+"
+    },
+    "@subject": {
+      "type": "string",
+      "description": "Entity about which this event is recorded."
+    },
+    "@subject_type": {
+      "type": "string",
+      "description": "Optional entity type for the subject. When provided, validated against the relation's declared domain."
+    },
+    "@predicate": {
+      "type": "string",
+      "description": "Event verb. Must be declared in the RelationRegistry at parse time."
+    },
+    "@object": {
+      "type": "string",
+      "description": "Outcome or effect of the event."
+    },
+    "@object_type": {
+      "type": "string",
+      "description": "Optional entity type for the object. When provided, validated against the relation's declared range."
+    },
+    "@timestamp": {
+      "type": "string",
+      "description": "ISO 8601 timestamp when the event occurred."
+    },
+    "@epistemic_status": {
+      "type": "string",
+      "description": "How the event is known. Observed and Reported are valid ingestion states. Inferred and Disputed are earned — rejected at parse (Pattern Induction Guard).",
+      "enum": ["Observed", "Reported"]
+    },
+    "@provenance": {
+      "type": "array",
+      "description": "Evidence sources for this event.",
+      "items": { "type": "string" }
+    },
+    "@authority": {
+      "type": "string",
+      "description": "Event evidence authority."
+    }
+  }
+}

@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Generated key lookup bank from control-flow.key-grammar.jsonl; entries are data, not execution authority.-->
+  <category>
+    <pattern>LOOK UP KEY CONTROL:IF</pattern>
+    <template>Key control:if. phase: Pop; role: conditional-branch; class: CONDITION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:ELSE</pattern>
+    <template>Key control:else. phase: Yax; role: branch-alternative; class: SELECTION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:THEN</pattern>
+    <template>Key control:then. phase: Wo; role: ordered-transition; class: CONSEQUENCE</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:WHEN</pattern>
+    <template>Key control:when. phase: Pop; role: temporal-condition; class: CONSEQUENCE</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:HOW</pattern>
+    <template>Key control:how. phase: Wo; role: method-execution; class: EXECUTION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:WHO</pattern>
+    <template>Key control:who. phase: Pop; role: entity-binding; class: STRUCTURE</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:WHY</pattern>
+    <template>Key control:why. phase: Yax; role: causal-link; class: CAUSAL</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:FOR</pattern>
+    <template>Key control:for. phase: Sek; role: iteration-or-scope; class: CONSEQUENCE</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:FROM</pattern>
+    <template>Key control:from. phase: Pop; role: origin-extraction; class: STRUCTURE</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:AS</pattern>
+    <template>Key control:as. phase: Sek; role: role-cast-alias; class: TRANSFORM</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:EQUALS</pattern>
+    <template>Key control:equals. phase: Ch'en; role: comparison-equivalence; class: TRANSFORM</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:WHERE</pattern>
+    <template>Key control:where. phase: Wo; role: location-binding; class: STRUCTURE</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:IS</pattern>
+    <template>Key control:is. phase: Ch'en; role: state-assertion; class: MEMORY</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:ARE</pattern>
+    <template>Key control:are. phase: Ch'en; role: state-assertion; class: MEMORY</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:EQUAL</pattern>
+    <template>Key control:equal. phase: Ch'en; role: comparison-equivalence; class: TRANSFORM</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:AND</pattern>
+    <template>Key control:and. phase: Wo; role: conjunctive-join; class: STRUCTURE</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:OR</pattern>
+    <template>Key control:or. phase: Yax; role: disjunctive-branch; class: SELECTION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:NOT</pattern>
+    <template>Key control:not. phase: Sek; role: negation-constraint; class: NEGATION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:BECAUSE</pattern>
+    <template>Key control:because. phase: Yax; role: causal-link; class: CAUSAL</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:REQUIRES</pattern>
+    <template>Key control:requires. phase: Pop; role: precondition-binding; class: CONDITION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:DEPENDS</pattern>
+    <template>Key control:depends. phase: Pop; role: precondition-binding; class: CONDITION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:EVIDENCE</pattern>
+    <template>Key control:evidence. phase: Ch'en; role: evidence-binding; class: VERIFICATION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:SHOWS</pattern>
+    <template>Key control:shows. phase: Ch'en; role: evidence-binding; class: VERIFICATION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:PROVES</pattern>
+    <template>Key control:proves. phase: Ch'en; role: evidence-binding; class: VERIFICATION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:VERIFY</pattern>
+    <template>Key control:verify. phase: Ch'en; role: verification-gate; class: VERIFICATION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:CHECK</pattern>
+    <template>Key control:check. phase: Ch'en; role: test-gate; class: VERIFICATION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CONTROL:ASSERT</pattern>
+    <template>Key control:assert. phase: Ch'en; role: test-gate; class: VERIFICATION</template>
+  </category>
+</aiml>

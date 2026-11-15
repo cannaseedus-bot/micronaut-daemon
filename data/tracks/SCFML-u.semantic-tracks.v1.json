@@ -1,0 +1,71 @@
+{
+  "@no-eval": true,
+  "id": "SCFML-µ",
+  "aiml_class": "SCFML-µ",
+  "aiml_source": "data/alice/semantic-control-classes.aiml",
+  "schema": "semantic-tracks.v1",
+  "schemes": ["scfml", "semantic-control-flow", "pattern-learning", "reasoning"],
+  "description": "Declarative SCFML track for normalizing semantic branches, preserving epistemic states, reasoning over typed key relations, and proposing pattern-learning and XCFE moves. SCFML proposals do not grant execution or commit authority.",
+  "phase": "Wo",
+  "category": "control",
+  "confidence": 1.0,
+  "governs": [
+    "SCFML", "semantic control flow", "branch", "condition", "then", "else",
+    "unknown", "SUPPORTED", "MISS", "UNKNOWN", "CONTRADICTED",
+    "epistemic resolution", "pattern learning", "key relation", "reasoning",
+    "candidate move", "XCFE projection", "provenance", "track", "fold"
+  ],
+  "capabilities": [
+    "scfml.normalize_branch",
+    "scfml.resolve_epistemic_state",
+    "scfml.reason_over_key_relations",
+    "scfml.propose_xcfe_move",
+    "scfml.propose_pattern_promotion"
+  ],
+  "realizes": [
+    "Wo.branch_normalization",
+    "Yax.epistemic_resolution",
+    "Sek.xcfe_move_proposal",
+    "Ch'en.evidence_validation"
+  ],
+  "pattern_registry": {
+    "insert_key": "SCFML:",
+    "invoke_node": "@scfml",
+    "wrapper": "<mx2lm>scfml state={epistemic_state} track={track} {text}</mx2lm>",
+    "fallback": "<mx2lm>scfml normalize {input}</mx2lm>"
+  },
+  "relations": [
+    { "target": "XCFE-µ", "verb": "@related_to", "directed": false },
+    { "target": "CFPC-µ", "verb": "@related_to", "directed": false }
+  ],
+  "folds": [
+    { "phase": "Pop", "op": "gramRead", "key": "scfml_context" },
+    { "phase": "Wo", "op": "normalize_branch_surface", "order": ["if", "then", "else", "unknown"] },
+    { "phase": "Yax", "op": "resolve_epistemic_state_and_key_relations" },
+    { "phase": "Sek", "op": "project_candidate_move", "authority": "proposal_only" },
+    { "phase": "Ch'en", "op": "validate_evidence_and_pattern_promotion" },
+    { "phase": "Xul", "op": "record_candidate", "scope": "candidate_only", "commit": "host_authorized_only" }
+  ],
+  "epistemic_laws": [
+    "SUPPORTED(P)=>then",
+    "CONTRADICTED(P)=>else_as_complement",
+    "MISS(P)!=CONTRADICTED(P)",
+    "UNKNOWN(P)!=else",
+    "else!=not",
+    "contradicting_one_candidate_does_not_prove_another"
+  ],
+  "pattern_learning": {
+    "candidate_kinds": ["aiml_pattern", "aiml_template", "semantic_branch", "key_grammar", "route_pattern"],
+    "promotion_requires": "SUPPORTED_or_user_verified",
+    "fact_authority_default": false,
+    "static_unigram_weights": "immutable"
+  },
+  "memory_patterns": ["scfml_branch_rows", "scfml_reasoning_edges", "scfml_pattern_candidates"],
+  "sandbox": {
+    "gram_ns": "SCFML",
+    "manifest_access": ["words", "micronaut"],
+    "effects": ["gramRead", "candidate:branch", "candidate:relation", "candidate:pattern_promotion"],
+    "ports": [],
+    "coordinator": false
+  }
+}

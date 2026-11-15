@@ -1,0 +1,53 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "sleep-log",
+  "@key": "⟁APP:SLEEP_LOG",
+  "@mount": "⟁ROOT:SLEEP_LOG",
+  "@theme": { "accent": "#818cf8", "bg": "#040410", "surface": "#08081e", "text": "#e0e7ff", "hero_phase": "Pop", "tagline": "Good nights build great days" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "entries", "component": "⟁WIDGET:ENTRIES", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "entries": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:SLEEP_LOG": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:LOG_SLEEP"] },
+    "⟁ACTION:LOG_SLEEP": { "@type": "button", "@text": "Log Sleep", "@on": { "click": "sleep.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:ENTRIES", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:ENTRIES": { "@type": "feed", "@bind": "state.entries", "@children": ["⟁WIDGET:SLEEP_CARD"] },
+    "⟁WIDGET:SLEEP_CARD": { "@type": "content-card", "@bind": "entry", "@on": { "view": "sleep.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:AVG_SLEEP", "⟁WIDGET:WEEKLY_CHART"] },
+    "⟁WIDGET:AVG_SLEEP": { "@type": "stat", "@bind": "data.avg_hours" },
+    "⟁WIDGET:WEEKLY_CHART": { "@type": "chart", "@bind": "data.weekly" }
+  },
+  "@programs": {
+    "sleep.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "sleep.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "sleep.log": "sleep.open_compose", "entry.view": "sleep.view" },
+  "@imports": [{ "ref": "sleep_entry", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "sleep-score", "name": "Sleep Score", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Calculate a sleep quality score from your logged metrics." },
+      { "id": "bedtime-reminder", "name": "Bedtime Reminder", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Custom bedtime alert based on your target wake time." },
+      { "id": "pattern-bot", "name": "Sleep Pattern Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Identify patterns that correlate with better sleep." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "sleep.log", "pattern": "LOG SLEEP|SLEPT * HOURS|BEDTIME LOG", "intent": "open_compose" }
+    ]
+  },
+  "@data": {
+    "avg_hours": { "label": "7-Day Average", "value": "7h 22m" },
+    "weekly": [6.5, 7.5, 8.0, 6.0, 7.0, 8.5, 7.5],
+    "spotlight": [
+      { "id": "sp1", "title": "Oct 27 — Great night", "hours": 8.5, "badge": "Best This Week", "excerpt": "In bed at 22:00. No phone. Woke up without alarm." },
+      { "id": "sp2", "title": "Oct 25 — Rough night", "hours": 6.0, "badge": "Below Target", "excerpt": "Late screen time before bed. Felt groggy all morning." },
+      { "id": "sp3", "title": "Oct 22 — Average", "hours": 7.0, "badge": "OK", "excerpt": "Consistent with the weekly pattern." }
+    ],
+    "schema": {
+      "sleep_entry": { "primaryKey": "entry_id", "fields": { "entry_id": { "type": "string" }, "date": { "type": "datetime", "required": true }, "bedtime": { "type": "datetime" }, "wake_time": { "type": "datetime" }, "duration_h": { "type": "float", "required": true }, "quality": { "type": "integer" }, "notes": { "type": "text" } } }
+    }
+  }
+}

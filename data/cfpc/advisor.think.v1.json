@@ -1,0 +1,64 @@
+{
+  "@kind": "semantic.think.v1",
+  "@id": "advisor_request_classify",
+  "@owner": "ADVISOR-µ",
+  "@mode": "classify_request",
+  "@subject": "advisory_query",
+  "@context": "cfpc.field",
+  "@functions": [
+    {
+      "@kind": "semantic.function.v1",
+      "@id": "admit_expert",
+      "@owner": "ADVISOR-µ",
+      "@governs": ["advisor", "expert", "help", "proposal", "gap", "advise"],
+      "@capabilities": ["pattern_discovery"],
+      "@bindings": {
+        "request": {"type": "text", "required": true, "wildcard": "{request}"}
+      },
+      "@backend": {
+        "type": "micronaut",
+        "capability": "pattern_discovery"
+      },
+      "@policy": {
+        "max_depth": 3,
+        "cycle_detection": true,
+        "allow_dynamic_resolution": false
+      },
+      "@result": {
+        "retain_provenance": true,
+        "retain_gaps": true,
+        "allow_pattern_candidates": false
+      }
+    },
+    {
+      "@kind": "semantic.function.v1",
+      "@id": "emit_proposal_draft",
+      "@owner": "ADVISOR-µ",
+      "@governs": ["proposal", "missing", "unverified", "gap", "author"],
+      "@capabilities": ["pattern_discovery"],
+      "@bindings": {
+        "target": {"type": "text", "required": false, "wildcard": "{target}"},
+        "evidence": {"type": "json", "required": false, "wildcard": "{evidence}"}
+      },
+      "@backend": {
+        "type": "micronaut",
+        "capability": "pattern_discovery"
+      },
+      "@policy": {
+        "max_depth": 2,
+        "cycle_detection": true,
+        "allow_dynamic_resolution": false
+      },
+      "@result": {
+        "retain_provenance": true,
+        "retain_gaps": true,
+        "allow_pattern_candidates": false
+      }
+    }
+  ],
+  "@policy": {
+    "max_depth": 3,
+    "max_operations": 6,
+    "cycle_detection": true
+  }
+}

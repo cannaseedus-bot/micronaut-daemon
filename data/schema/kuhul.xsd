@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:k="https://kuhul.dev"
+  targetNamespace="https://kuhul.dev/kxml"
+  elementFormDefault="qualified"
+  attributeFormDefault="unqualified">
+
+  <xs:annotation>
+    <xs:documentation>
+      K'UHUL Fold Contract Schema
+      ------------------------------------------
+      This schema separates:
+        - Fold as structural ADT (semantic context + incidence participation)
+        - Phase as runtime operation/state over the Fold
+        - Ch'en verification as assertion certificate (not authorizer)
+        - Xul commit as compare-and-commit envelope
+    </xs:documentation>
+  </xs:annotation>
+
+  <!-- ── Scalar types ─────────────────────────────────────────────────────── -->
+
+  <xs:simpleType name="SemVerType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9]+\.[0-9]+\.[0-9]+"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="HashHexType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9a-fA-F]{32,128}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="UnitFloatType">
+    <xs:restriction base="xs:decimal">
+      <xs:minInclusive value="0.0"/>
+      <xs:maxInclusive value="1.0"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="PhaseNameType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Pop"/>
+      <xs:enumeration value="Wo"/>
+      <xs:enumeration value="Yax"/>
+      <xs:enumeration value="Sek"/>
+      <xs:enumeration value="Ch'en"/>
+      <xs:enumeration value="Xul"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="AssertionStatusType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PASS"/>
+      <xs:enumeration value="FAIL"/>
+      <xs:enumeration value="UNKNOWN"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ChenResolutionClassType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="VERIFIED"/>
+      <xs:enumeration value="CONTRADICTED"/>
+      <xs:enumeration value="MISS"/>
+      <xs:enumeration value="AMBIGUOUS"/>
+      <xs:enumeration value="INSUFFICIENT_CONTEXT"/>
+      <xs:enumeration value="INVALID"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="MissKindType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="semantic"/>
+      <xs:enumeration value="topology"/>
+      <xs:enumeration value="memory"/>
+      <xs:enumeration value="factual"/>
+      <xs:enumeration value="mathematical"/>
+      <xs:enumeration value="capability"/>
+      <xs:enumeration value="evidence"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="RepresentationKindType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Book"/>
+      <xs:enumeration value="GraphML"/>
+      <xs:enumeration value="B_matrix"/>
+      <xs:enumeration value="Fingerprint"/>
+      <xs:enumeration value="Tensor"/>
+      <xs:enumeration value="SVG_3D"/>
+      <xs:enumeration value="SCXQ2"/>
+      <xs:enumeration value="JSON"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ProjectionFidelityType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="lossless"/>
+      <xs:enumeration value="lossy"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- ── Legacy fold topology declaration (KXML) ─────────────────────────── -->
+
+  <xs:simpleType name="LegacyFoldTypeEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="orchestrator"/>
+      <xs:enumeration value="compute"/>
+      <xs:enumeration value="storage"/>
+      <xs:enumeration value="network"/>
+      <xs:enumeration value="reasoning"/>
+      <xs:enumeration value="generation"/>
+      <xs:enumeration value="planning"/>
+      <xs:enumeration value="persistence"/>
+      <xs:enumeration value="codegen"/>
+      <xs:enumeration value="filesystem"/>
+      <xs:enumeration value="graphics"/>
+      <xs:enumeration value="inference"/>
+      <xs:enumeration value="semantic"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="LegacyNodeTypeEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="input"/>
+      <xs:enumeration value="output"/>
+      <xs:enumeration value="process"/>
+      <xs:enumeration value="transform"/>
+      <xs:enumeration value="gate"/>
+      <xs:enumeration value="memory"/>
+      <xs:enumeration value="dispatch"/>
+      <xs:enumeration value="context"/>
+      <xs:enumeration value="anchor"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="LegacyEdgeType">
+    <xs:attribute name="from" type="xs:string" use="required"/>
+    <xs:attribute name="to" type="xs:string" use="required"/>
+    <xs:attribute name="weight" type="UnitFloatType" use="optional"/>
+    <xs:attribute name="verb" type="xs:string" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="LegacyEdgesType">
+    <xs:sequence>
+      <xs:element name="edge" type="k:LegacyEdgeType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="LegacyNodeType">
+    <xs:sequence>
+      <xs:element name="edges" type="k:LegacyEdgesType" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="type" type="k:LegacyNodeTypeEnum" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="LegacyNodesType">
+    <xs:sequence>
+      <xs:element name="node" type="k:LegacyNodeType" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="LegacyIdentityType">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="role" type="xs:string" minOccurs="0"/>
+      <xs:element name="created" type="xs:dateTime" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="LegacyRetryType">
+    <xs:attribute name="max_attempts" type="xs:nonNegativeInteger" use="required"/>
+    <xs:attribute name="backoff_ms" type="xs:nonNegativeInteger" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="LegacyPolicyType">
+    <xs:sequence>
+      <xs:element name="retry" type="k:LegacyRetryType" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="priority" type="xs:string" use="optional"/>
+    <xs:attribute name="entropy_budget" type="UnitFloatType" use="optional"/>
+    <xs:attribute name="timeout_ms" type="xs:nonNegativeInteger" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="LegacyFoldDeclarationType">
+    <xs:sequence>
+      <xs:element name="identity" type="k:LegacyIdentityType" minOccurs="0"/>
+      <xs:element name="policy" type="k:LegacyPolicyType" minOccurs="0"/>
+      <xs:element name="nodes" type="k:LegacyNodesType" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="type" type="k:LegacyFoldTypeEnum" use="required"/>
+    <xs:attribute name="version" type="k:SemVerType" use="required"/>
+  </xs:complexType>
+
+  <!-- ── Fold ADT contract ────────────────────────────────────────────────── -->
+
+  <xs:complexType name="FoldIdentityType">
+    <xs:sequence>
+      <xs:element name="anchor" type="xs:string"/>
+      <xs:element name="superordinate" type="xs:string" minOccurs="0"/>
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <xs:element name="version" type="k:SemVerType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="IncidenceOperandType">
+    <xs:sequence>
+      <xs:element name="tau" type="xs:string"/>
+      <xs:element name="row_ref" type="xs:string"/>
+      <xs:element name="context_count" type="xs:nonNegativeInteger" minOccurs="0"/>
+      <xs:element name="active_count" type="xs:nonNegativeInteger" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="PatternStrengthChannelType">
+    <xs:sequence>
+      <xs:element name="channel_name" type="xs:string" fixed="W_E"/>
+      <xs:element name="normalization" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="FoldStateType">
+    <xs:sequence>
+      <xs:element name="phase" type="k:PhaseNameType"/>
+      <xs:element name="confidence" type="k:UnitFloatType"/>
+      <xs:element name="static_weight" type="k:UnitFloatType"/>
+      <xs:element name="health" type="k:UnitFloatType"/>
+      <xs:element name="active" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ComputationalBoundaryType">
+    <xs:sequence>
+      <xs:element name="runtime_scope" type="xs:string" minOccurs="0"/>
+      <xs:element name="sandbox_policy" type="xs:string" minOccurs="0"/>
+      <xs:element name="topology_mutable" type="xs:boolean" default="false"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="FoldADTType">
+    <xs:sequence>
+      <xs:element name="identity" type="k:FoldIdentityType"/>
+      <xs:element name="incidence" type="k:IncidenceOperandType"/>
+      <xs:element name="pattern_strength" type="k:PatternStrengthChannelType"/>
+      <xs:element name="state" type="k:FoldStateType"/>
+      <xs:element name="computational_boundary" type="k:ComputationalBoundaryType"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="ProjectionType">
+    <xs:sequence>
+      <xs:element name="kind" type="k:RepresentationKindType"/>
+      <xs:element name="fidelity" type="k:ProjectionFidelityType"/>
+      <xs:element name="reversible" type="xs:boolean"/>
+      <xs:element name="notes" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ProjectionSetType">
+    <xs:sequence>
+      <xs:element name="projection" type="k:ProjectionType" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- ── Ch'en assertion certificate ──────────────────────────────────────── -->
+
+  <xs:complexType name="AssertionType">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string"/>
+      <xs:element name="class" type="xs:string"/>
+      <xs:element name="status" type="k:AssertionStatusType"/>
+      <xs:element name="expected" type="xs:string" minOccurs="0"/>
+      <xs:element name="observed" type="xs:string" minOccurs="0"/>
+      <xs:element name="reason" type="xs:string" minOccurs="0"/>
+      <xs:element name="evidence" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="required" type="xs:boolean" use="optional" default="true"/>
+  </xs:complexType>
+
+  <xs:complexType name="AssertionSetType">
+    <xs:sequence>
+      <xs:element name="assertion" type="k:AssertionType" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="StringListType">
+    <xs:sequence>
+      <xs:element name="item" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="MissDeficitType">
+    <xs:sequence>
+      <xs:element name="query" type="xs:string"/>
+      <xs:element name="resolved" type="k:StringListType" minOccurs="0"/>
+      <xs:element name="missing" type="k:StringListType" minOccurs="0"/>
+      <xs:element name="required_folds" type="k:StringListType" minOccurs="0"/>
+      <xs:element name="confidence" type="k:UnitFloatType"/>
+      <xs:element name="research_pressure" type="k:UnitFloatType"/>
+      <xs:element name="miss_kind" type="k:MissKindType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ChenVerificationCertificateType">
+    <xs:sequence>
+      <xs:element name="subject" type="xs:string"/>
+      <xs:element name="topology_version" type="xs:nonNegativeInteger"/>
+      <xs:element name="topology_hash" type="k:HashHexType"/>
+      <xs:element name="candidate_delta_hash" type="k:HashHexType"/>
+      <xs:element name="generated_at" type="xs:dateTime"/>
+      <xs:element name="resolution_classification" type="k:ChenResolutionClassType" minOccurs="0"/>
+      <xs:element name="resolution_transition" type="xs:string" minOccurs="0"/>
+      <xs:element name="miss_deficit" type="k:MissDeficitType" minOccurs="0"/>
+      <xs:element name="assertions" type="k:AssertionSetType"/>
+      <xs:element name="verified" type="xs:boolean"/>
+      <!-- Ch'en verifies; it does not authorize rewrites -->
+      <xs:element name="rewrite_authorized" type="xs:boolean" fixed="false"/>
+      <xs:element name="certificate_hash" type="k:HashHexType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="AuthorizationDecisionType">
+    <xs:sequence>
+      <xs:element name="authority" type="xs:string"/>
+      <xs:element name="authorized" type="xs:boolean"/>
+      <xs:element name="reason" type="xs:string" minOccurs="0"/>
+      <xs:element name="certificate_hash" type="k:HashHexType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="FreshnessCheckType">
+    <xs:sequence>
+      <xs:element name="expected_topology_version" type="xs:nonNegativeInteger"/>
+      <xs:element name="current_topology_version" type="xs:nonNegativeInteger"/>
+      <xs:element name="expected_topology_hash" type="k:HashHexType"/>
+      <xs:element name="current_topology_hash" type="k:HashHexType"/>
+      <xs:element name="is_fresh" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="TopologyDeltaType">
+    <xs:sequence>
+      <xs:element name="operation" minOccurs="1" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="op" type="xs:string"/>
+            <xs:element name="target" type="xs:string"/>
+            <xs:element name="payload" type="xs:string" minOccurs="0"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="XulCommitEnvelopeType">
+    <xs:sequence>
+      <xs:element name="certificate_hash" type="k:HashHexType"/>
+      <xs:element name="authorization" type="k:AuthorizationDecisionType"/>
+      <xs:element name="freshness" type="k:FreshnessCheckType"/>
+      <xs:element name="delta" type="k:TopologyDeltaType"/>
+      <xs:element name="committed" type="xs:boolean"/>
+      <xs:element name="result_topology_version" type="xs:nonNegativeInteger" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- ── Phase wheel declaration ──────────────────────────────────────────── -->
+
+  <xs:complexType name="PhaseTransitionType">
+    <xs:sequence>
+      <xs:element name="from" type="k:PhaseNameType"/>
+      <xs:element name="to" type="k:PhaseNameType"/>
+      <xs:element name="operator" type="xs:string"/>
+      <xs:element name="topology_write_allowed" type="xs:boolean" default="false"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="PhaseWheelType">
+    <xs:sequence>
+      <xs:element name="transition" type="k:PhaseTransitionType" minOccurs="6" maxOccurs="6"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- ── Root contract document ───────────────────────────────────────────── -->
+
+  <xs:complexType name="KuhulContractType">
+    <xs:sequence>
+      <xs:element name="fold_adt" type="k:FoldADTType"/>
+      <xs:element name="projections" type="k:ProjectionSetType" minOccurs="0"/>
+      <xs:element name="phase_wheel" type="k:PhaseWheelType" minOccurs="0"/>
+      <xs:element name="chen_certificate" type="k:ChenVerificationCertificateType" minOccurs="0"/>
+      <xs:element name="xul_commit" type="k:XulCommitEnvelopeType" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="version" type="k:SemVerType" use="required"/>
+  </xs:complexType>
+
+  <xs:element name="fold" type="k:LegacyFoldDeclarationType"/>
+  <xs:element name="kuhul_contract" type="k:KuhulContractType"/>
+  <xs:element name="chen_certificate" type="k:ChenVerificationCertificateType"/>
+  <xs:element name="xul_commit" type="k:XulCommitEnvelopeType"/>
+
+</xs:schema>

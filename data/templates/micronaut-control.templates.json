@@ -1,0 +1,213 @@
+{
+  "@kind": "semantic.micronaut-control-templates.v1",
+  "@no-eval": true,
+  "@version": "1.1.0",
+  "phase_order": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"],
+
+  "capture_contract": {
+    "wildcard": {
+      "proposes": "capture_binding",
+      "authorizes": false,
+      "on_unresolved": "defer",
+      "on_multiple_resolved": "reject",
+      "on_no_match": "reject",
+      "on_resolved": "bind",
+      "binding_types": ["entity", "program", "question"],
+      "binding_requires": ["verb_registered", "phase_admitted", "direction_ranked"]
+    },
+    "typed": {
+      "entity":   { "resolve_against": "tool_catalog", "allow_wildcard_subpath": false },
+      "program":  { "resolve_against": "program_registry", "allow_wildcard_subpath": false },
+      "question": { "resolve_against": "free_text", "allow_wildcard_subpath": true }
+    }
+  },
+
+  "gate_contract": {
+    "hard_gate": "current_phase in template.phases",
+    "direction_gate": "DirectionStore.query_at_phase(capabilities,current_phase,min_score)",
+    "delta_learning": "GOOD FoldDelta.phase_position -> FoldDirection.phase_key",
+    "laws": [
+      "wildcard match proposes a capture; it does not authorize a command",
+      "declared template phase is the hard legality set and cannot be expanded by ranking",
+      "FoldDirection ranks compatible templates only inside the declared phase set",
+      "only a GOOD evaluated FoldDelta may add phase evidence to FoldDirection",
+      "an unresolved wildcard defers and never supplies a default binding",
+      "phase membership is an ordered floor, not a set; a template with phase_floor P may only run at phases >= P",
+      "a resolved capture must name a registered object in its typed namespace before rendering"
+    ]
+  },
+
+  "direction_store": {
+    "mode": "rank_if_verified",
+    "min_score_default": 0.25,
+    "capability_source": "registered_verbs",
+    "phase_keyed": true,
+    "note": "Per-template `admission.capabilities` names the minimum capability set; ranking is done by DirectionStore, not by the template."
+  },
+
+  "tracks": {
+    "TOOL-µ":             { "default_phase_floor": "Pop", "effects": ["read_only", "invoke_candidate", "file_read"] },
+    "CODEGEN-µ":          { "default_phase_floor": "Sek", "effects": ["file_write", "file_patch", "code_compile"] },
+    "MICRONAUT-PROGRAM-µ":{ "default_phase_floor": "Sek", "effects": ["program_dispatch", "registered_call"] },
+    "WEB-RESEARCH-µ":     { "default_phase_floor": "Yax", "effects": ["web_retrieval"] }
+  },
+
+  "templates": [
+    {
+      "id": "tool.get",
+      "intent": "intent:tool_retrieve",
+      "verb": "GET",
+      "patterns": ["GET *:entity", "FETCH *:entity"],
+      "captures": [{"index": 1, "name": "resource", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind"}],
+      "phases": ["Pop", "Wo"],
+      "phase_floor": "Pop",
+      "track": "TOOL-µ",
+      "render": "GET {resource}",
+      "admission": {"mode": "rank_if_verified", "capabilities": ["GET", "read_only"], "min_score": 0.25},
+      "effect": "read_only"
+    },
+    {
+      "id": "tool.post",
+      "intent": "intent:tool_invoke",
+      "verb": "POST",
+      "patterns": ["POST *:program", "INVOKE *:program"],
+      "captures": [{"index": 1, "name": "program", "type": "program", "on_unresolved": "defer", "on_resolved": "bind"}],
+      "phases": ["Sek"],
+      "phase_floor": "Sek",
+      "track": "TOOL-µ",
+      "render": "POST {program}",
+      "admission": {"mode": "rank_if_verified", "capabilities": ["POST", "invoke_candidate"], "min_score": 0.25},
+      "effect": "invoke_candidate"
+    },
+    {
+      "id": "tool.read",
+      "intent": "intent:tool_file_read",
+      "verb": "READ",
+      "patterns": ["READ *:entity", "OPEN *:entity"],
+      "captures": [{"index": 1, "name": "target", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind"}],
+      "phases": ["Pop", "Wo"],
+      "phase_floor": "Pop",
+      "track": "TOOL-µ",
+      "render": "READ {target}",
+      "admission": {"mode": "rank_if_verified", "capabilities": ["READ", "file_read"], "min_score": 0.25},
+      "effect": "file_read"
+    },
+    {
+      "id": "tool.write",
+      "intent": "intent:tool_file_write",
+      "verb": "WRITE",
+      "patterns": ["WRITE *:entity", "SAVE *:entity"],
+      "captures": [{"index": 1, "name": "target", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind"}],
+      "phases": ["Sek"],
+      "phase_floor": "Sek",
+      "track": "CODEGEN-µ",
+      "render": "WRITE {target}",
+      "admission": {"mode": "rank_if_verified", "capabilities": ["WRITE", "file_write"], "min_score": 0.25},
+      "effect": "file_write"
+    },
+    {
+      "id": "tool.patch",
+      "intent": "intent:tool_file_patch",
+      "verb": "PATCH",
+      "patterns": ["PATCH *:entity", "UPDATE *:entity"],
+      "captures": [{"index": 1, "name": "target", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind"}],
+      "phases": ["Sek"],
+      "phase_floor": "Sek",
+      "track": "CODEGEN-µ",
+      "render": "PATCH {target}",
+      "admission": {"mode": "rank_if_verified", "capabilities": ["PATCH", "file_patch"], "min_score": 0.25},
+      "effect": "file_patch"
+    },
+    {
+      "id": "tool.list",
+      "intent": "intent:tool_retrieve",
+      "verb": "LIST",
+      "patterns": ["LIST *:entity", "SHOW *:entity"],
+      "captures": [{"index": 1, "name": "catalog", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind"}],
+      "phases": ["Pop"],
+      "phase_floor": "Pop",
+      "track": "TOOL-µ",
+      "render": "LIST {catalog}",
+      "admission": {"mode": "rank_if_verified", "capabilities": ["LIST", "read_only"], "min_score": 0.25},
+      "effect": "read_only"
+    },
+    {
+      "id": "tool.inspect",
+      "intent": "intent:tool_retrieve",
+      "verb": "INSPECT",
+      "patterns": ["INSPECT *:entity", "DESCRIBE *:entity"],
+      "captures": [{"index": 1, "name": "target", "type": "entity", "on_unresolved": "defer", "on_resolved": "bind"}],
+      "phases": ["Pop", "Wo"],
+      "phase_floor": "Pop",
+      "track": "TOOL-µ",
+      "render": "INSPECT {target}",
+      "admission": {"mode": "rank_if_verified", "capabilities": ["INSPECT", "read_only"], "min_score": 0.25},
+      "effect": "read_only"
+    },
+    {
+      "id": "tool.run",
+      "intent": "intent:tool_program",
+      "verb": "RUN",
+      "patterns": ["RUN *:program", "EXECUTE *:program"],
+      "captures": [{"index": 1, "name": "program", "type": "program", "on_unresolved": "defer", "on_resolved": "bind"}],
+      "phases": ["Sek"],
+      "phase_floor": "Sek",
+      "track": "MICRONAUT-PROGRAM-µ",
+      "render": "RUN {program}",
+      "admission": {"mode": "rank_if_verified", "capabilities": ["RUN", "program_dispatch"], "min_score": 0.25},
+      "effect": "program_dispatch"
+    },
+    {
+      "id": "tool.compile",
+      "intent": "intent:tool_code",
+      "verb": "COMPILE",
+      "patterns": ["COMPILE *:program", "BUILD *:program"],
+      "captures": [{"index": 1, "name": "program", "type": "program", "on_unresolved": "defer", "on_resolved": "bind"}],
+      "phases": ["Wo", "Sek"],
+      "phase_floor": "Wo",
+      "track": "CODEGEN-µ",
+      "render": "COMPILE {program}",
+      "admission": {"mode": "rank_if_verified", "capabilities": ["COMPILE", "code_compile"], "min_score": 0.25},
+      "effect": "code_compile"
+    },
+    {
+      "id": "tool.call",
+      "intent": "intent:tool_invoke",
+      "verb": "CALL",
+      "patterns": ["CALL *:program"],
+      "captures": [{"index": 1, "name": "program", "type": "program", "on_unresolved": "defer", "on_resolved": "bind"}],
+      "phases": ["Sek"],
+      "phase_floor": "Sek",
+      "track": "MICRONAUT-PROGRAM-µ",
+      "render": "CALL {program}",
+      "admission": {"mode": "rank_if_verified", "capabilities": ["CALL", "registered_call"], "min_score": 0.25},
+      "effect": "registered_call"
+    },
+    {
+      "id": "tool.health",
+      "intent": "intent:tool_status",
+      "verb": "HEALTH",
+      "patterns": ["HEALTH *:program", "STATUS *:program"],
+      "captures": [{"index": 1, "name": "program", "type": "program", "on_unresolved": "defer", "on_resolved": "bind"}],
+      "phases": ["Pop"],
+      "phase_floor": "Pop",
+      "track": "TOOL-µ",
+      "render": "HEALTH {program}",
+      "admission": {"mode": "rank_if_verified", "capabilities": ["HEALTH", "read_only"], "min_score": 0.25},
+      "effect": "read_only"
+    },
+    {
+      "id": "tool.search",
+      "intent": "intent:tool_research",
+      "verb": "SEARCH",
+      "patterns": ["SEARCH *:question", "RESEARCH *:question"],
+      "captures": [{"index": 1, "name": "question", "type": "question", "on_unresolved": "defer", "on_resolved": "bind"}],
+      "phases": ["Yax"],
+      "phase_floor": "Yax",
+      "track": "WEB-RESEARCH-µ",
+      "render": "SEARCH {question}",
+      "admission": {"mode": "rank_if_verified", "capabilities": ["SEARCH", "web_retrieval"], "min_score": 0.25},
+      "effect": "web_retrieval"
+    }
+  ]
+}

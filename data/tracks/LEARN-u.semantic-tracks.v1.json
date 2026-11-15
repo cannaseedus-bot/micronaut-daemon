@@ -1,0 +1,59 @@
+{
+  "@no-eval": true,
+  "id": "LEARN-µ",
+  "description": "Phase-keyed micronaut evolution, chat scoring, semantic factory, and field-query. Active-evolve authority — may write to .learning/ and evolve seed micronauts.",
+  "phase": "Sek",
+  "category": "evolution",
+  "confidence": 1.0,
+  "governs": [
+    "learn", "evolve", "score", "evaluate", "chat", "factory",
+    "seed", "knowledge", "phase_state", "field_query", "evaluation",
+    "learn.phase_state", "learn.store_chat", "learn.score", "learn.recall", "learn.evolve", "learn.query_field", "learn.factory_research"
+  ],
+  "capabilities": [
+    "phase_state_tracking",
+    "chat_persistence",
+    "quality_scoring",
+    "micronaut_evolution",
+    "seed_creation",
+    "knowledge_micronaut_store",
+    "field_query_ngram",
+    "factory_research_semantic_driver",
+    "monthly_score_aggregation",
+    "chat_replay"
+  ],
+  "relations": [
+    { "target": "BINDINGS-µ", "verb": "@orchestrated_by", "directed": true },
+    { "target": "GEMMA-µ",    "verb": "@related_to",      "directed": false, "note": "GEMMA-µ embedding used in field_query ngram scoring" },
+    { "target": "APP-µ",      "verb": "@related_to",      "directed": false, "note": "APP-µ scaffold generation uses LEARN-µ factory_research" }
+  ],
+  "folds": [
+    { "phase": "Pop",   "op": "gramRead",              "key": "learn_request" },
+    { "phase": "Wo",    "op": "route_key_dispatch",
+                        "routes": {
+                          "learn.phase_state":       "read_phase_state",
+                          "learn.store_chat":        "persist_chat",
+                          "learn.score":             "record_evaluation",
+                          "learn.recall":            "retrieve_scored_records",
+                          "learn.evolve":            "evolution_pass",
+                          "learn.query_field":       "field_query",
+                          "learn.factory_research":  "factory_research"
+                        }
+    },
+    { "phase": "Wo",    "op": "read_phase_state",       "gate": "key == learn.phase_state", "source": ".learning/phase_state.json", "authority": "data_only" },
+    { "phase": "Yax",   "op": "record_evaluation",      "gate": "key == learn.score",       "output": ".learning/evaluations.jsonl", "authority": "evolve_only" },
+    { "phase": "Sek",   "op": "evolution_pass",         "gate": "key == learn.evolve",      "driver": "Micronaut.Evolution.dll", "xcfe_required": true, "authority": "evolve_only" },
+    { "phase": "Sek",   "op": "field_query",            "gate": "key == learn.query_field", "script": "tools/field_query.py", "source": "data/mx2lm.vectors.safetensors", "authority": "data_only" },
+    { "phase": "Sek",   "op": "factory_research",       "gate": "key == learn.factory_research", "script": "tools/factory_research.py", "output": "drivers/micronauts/semantic/", "authority": "evolve_only" },
+    { "phase": "Ch'en", "op": "xcfe_condition_check",   "guard": "key in [learn.evolve, learn.score, learn.factory_research] → xcfe_admitted" },
+    { "phase": "Xul",   "op": "gramWrite",              "scope": "learn_state", "keys": ["learn:last_phase", "learn:last_score", "learn:last_evolve_target"] }
+  ],
+  "sandbox": {
+    "gram_ns": "LEARN-µ",
+    "filesystem": ".learning/ (read+write), tools/ (read+execute), drivers/micronauts/semantic/ (write)",
+    "network": "none",
+    "process": "field_query.py, factory_research.py",
+    "effects": ["gramRead", "gramWrite", "evolve"],
+    "admission": "xcfe_gated"
+  }
+}

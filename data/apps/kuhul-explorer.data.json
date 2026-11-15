@@ -1,0 +1,34 @@
+{
+  "@kind": "kuhul.runtime-infographic-data.v1",
+  "id": "kuhul-explorer",
+  "title": "K’UHUL Runtime Explorer",
+  "definition": "A typed semantic runtime and language stack that organizes keys and fields into bounded Micronaut programs.",
+  "phase_sequence": [
+    {"id":"Pop","label":"Ingress","description":"Receive input, establish identity and provenance."},
+    {"id":"Wo","label":"Bind context","description":"Resolve definitions, context, and typed assignments."},
+    {"id":"Yax","label":"Expand candidates","description":"Generate possible keys, questions, and routes."},
+    {"id":"Sek","label":"Propose or dispatch","description":"Select work; dispatch remains subject to admission."},
+    {"id":"Ch'en","label":"Verify","description":"Check evidence, contracts, and results."},
+    {"id":"Xul","label":"Close","description":"Close an admitted fold and record its result."}
+  ],
+  "boundaries": [
+    {"label":"Semantic resources","items":["typed keys and fields","graphs and bindings","Micronaut programs","semantic tracks"]},
+    {"label":"Host boundary","items":["registered capabilities","runtime contracts","XCFE admission"]}
+  ],
+  "tracks": [
+    {"id":"KUHUL-GLYPH","source":"data/tracks/KUHUL-GLYPH-u.semantic-tracks.v1.json"},
+    {"id":"ADAPTIVE-FOLD","source":"data/tracks/ADAPTIVE-FOLD-u.semantic-tracks.v1.json"},
+    {"id":"MICRONAUT-PROGRAM","source":"data/tracks/MICRONAUT-PROGRAM-u.semantic-tracks.v1.json"},
+    {"id":"FOLD-HOF","source":"data/tracks/FOLD-HOF-u.semantic-tracks.v1.json"},
+    {"id":"PI-PHASE","source":"data/tracks/PI-PHASE-u.semantic-tracks.v1.json"},
+    {"id":"FIELD-GEOMETRY","source":"data/tracks/FIELD-GEOMETRY-u.semantic-tracks.v1.json"},
+    {"id":"SEMANTIC-FOLD","source":"data/tracks/SEMANTIC-FOLD-u.semantic-tracks.v1.json"},
+    {"id":"GRAPH-THEORY","source":"data/tracks/GRAPH-THEORY-u.semantic-tracks.v1.json"},
+    {"id":"FOLD-FIELD","source":"data/tracks/FOLD-FIELD-u.semantic-tracks.v1.json"},
+    {"id":"XCFE","source":"data/tracks/XCFE-u.semantic-tracks.v1.json"},
+    {"id":"CFPC","source":"data/tracks/CFPC-u.semantic-tracks.v1.json"},
+    {"id":"FOLDGRAPH","source":"data/tracks/FOLDGRAPH-u.semantic-tracks.v1.json"}
+  ],
+  "track_suites": ["data/tracks/kuhul_track_suite", "data/tracks/kuhul_track_suite_v2"],
+  "note": "Diagram explains repository concepts; it does not authorize execution. Sek proposes, Ch'en verifies, and Xul closes only admitted work."
+}

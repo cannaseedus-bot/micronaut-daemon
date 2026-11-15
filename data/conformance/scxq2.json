@@ -1,0 +1,1045 @@
+{
+  "@type": "khanary.scxq2_conformance.v1",
+  "reference_vector": {
+    "name": "asxg-scxq2-symbolic-v1",
+    "payload_bytes": [
+      75,
+      72,
+      65,
+      78,
+      65,
+      82,
+      89,
+      32,
+      83,
+      67,
+      88,
+      81,
+      50,
+      32,
+      112,
+      97,
+      114,
+      105,
+      116,
+      121,
+      32,
+      118,
+      101,
+      99,
+      116,
+      111,
+      114,
+      32,
+      118,
+      49
+    ],
+    "payload_sha256": "sha256:81c20d62cb43b9cd33c44d05d6e9c30239d1990109bb9d6f255a7106b830178d",
+    "decoded_bytes": 30
+  },
+  "sdds_parity": {
+    "tensor": "scxq2_parity_f32",
+    "dtype": "FP32",
+    "dims": [
+      4,
+      2
+    ],
+    "values": [
+      1.5,
+      -2.25,
+      0.0,
+      3.125,
+      7.0,
+      -0.5,
+      2.0,
+      4.75
+    ],
+    "payload_sha256": "sha256:c5369a90ec036a3fcd8292fee35b3cfa210ef3dc16d9de5967cde5eb99245072",
+    "container": {
+      "magic": "ASXG",
+      "version": 1,
+      "lane": "asx://atomic_exec/%7C%E2%9A%9B%7C.v1",
+      "encoding": "binary-glyph-container",
+      "glyphs": [
+        {
+          "id": "g0",
+          "ref_kind": "tensor_ref",
+          "key": "scxq2_parity_f32"
+        }
+      ],
+      "edges": [],
+      "tensor": {
+        "shape": [
+          4,
+          2
+        ],
+        "dtype": "FP32",
+        "bytes_per_element": 4
+      },
+      "scxq2": {
+        "algorithm": "SCXQ2",
+        "version": 1,
+        "mode": "symbolic",
+        "compressed": false,
+        "original_bytes": 32,
+        "decoded_bytes": 32
+      },
+      "payload": [
+        0,
+        0,
+        192,
+        63,
+        0,
+        0,
+        16,
+        192,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        72,
+        64,
+        0,
+        0,
+        224,
+        64,
+        0,
+        0,
+        0,
+        191,
+        0,
+        0,
+        0,
+        64,
+        0,
+        0,
+        152,
+        64
+      ]
+    }
+  },
+  "containers": [
+    {
+      "id": "symbolic_valid",
+      "expect": "PASS",
+      "container": {
+        "magic": "ASXG",
+        "version": 1,
+        "lane": "asx://atomic_exec/%7C%E2%9A%9B%7C.v1",
+        "encoding": "binary-glyph-container",
+        "glyphs": [
+          {
+            "id": "g0",
+            "ref_kind": "program_ref",
+            "key": "scxq2.parity"
+          }
+        ],
+        "edges": [],
+        "tensor": null,
+        "scxq2": {
+          "algorithm": "SCXQ2",
+          "version": 1,
+          "mode": "symbolic",
+          "compressed": false,
+          "original_bytes": 30,
+          "decoded_bytes": 30
+        },
+        "payload": [
+          75,
+          72,
+          65,
+          78,
+          65,
+          82,
+          89,
+          32,
+          83,
+          67,
+          88,
+          81,
+          50,
+          32,
+          112,
+          97,
+          114,
+          105,
+          116,
+          121,
+          32,
+          118,
+          101,
+          99,
+          116,
+          111,
+          114,
+          32,
+          118,
+          49
+        ]
+      }
+    },
+    {
+      "id": "symbolic_valid_with_edge",
+      "expect": "PASS",
+      "container": {
+        "magic": "ASXG",
+        "version": 1,
+        "lane": "asx://atomic_exec/%7C%E2%9A%9B%7C.v1",
+        "encoding": "binary-glyph-container",
+        "glyphs": [
+          {
+            "id": "g0",
+            "ref_kind": "program_ref",
+            "key": "a"
+          },
+          {
+            "id": "g1",
+            "ref_kind": "program_ref",
+            "key": "b"
+          }
+        ],
+        "edges": [
+          {
+            "source": "g0",
+            "target": "g1",
+            "relation": "@feeds"
+          }
+        ],
+        "tensor": null,
+        "scxq2": {
+          "algorithm": "SCXQ2",
+          "version": 1,
+          "mode": "symbolic",
+          "compressed": false,
+          "original_bytes": 30,
+          "decoded_bytes": 30
+        },
+        "payload": [
+          75,
+          72,
+          65,
+          78,
+          65,
+          82,
+          89,
+          32,
+          83,
+          67,
+          88,
+          81,
+          50,
+          32,
+          112,
+          97,
+          114,
+          105,
+          116,
+          121,
+          32,
+          118,
+          101,
+          99,
+          116,
+          111,
+          114,
+          32,
+          118,
+          49
+        ]
+      }
+    },
+    {
+      "id": "not_an_object",
+      "expect": "FAIL",
+      "error": "container_not_object",
+      "container": []
+    },
+    {
+      "id": "bad_magic",
+      "expect": "FAIL",
+      "error": "container_magic_invalid",
+      "container": {
+        "magic": "ASXG2",
+        "version": 1,
+        "lane": "asx://atomic_exec/%7C%E2%9A%9B%7C.v1",
+        "encoding": "binary-glyph-container",
+        "glyphs": [
+          {
+            "id": "g0",
+            "ref_kind": "program_ref",
+            "key": "scxq2.parity"
+          }
+        ],
+        "edges": [],
+        "tensor": null,
+        "scxq2": {
+          "algorithm": "SCXQ2",
+          "version": 1,
+          "mode": "symbolic",
+          "compressed": false,
+          "original_bytes": 30,
+          "decoded_bytes": 30
+        },
+        "payload": [
+          75,
+          72,
+          65,
+          78,
+          65,
+          82,
+          89,
+          32,
+          83,
+          67,
+          88,
+          81,
+          50,
+          32,
+          112,
+          97,
+          114,
+          105,
+          116,
+          121,
+          32,
+          118,
+          101,
+          99,
+          116,
+          111,
+          114,
+          32,
+          118,
+          49
+        ]
+      }
+    },
+    {
+      "id": "bad_version",
+      "expect": "FAIL",
+      "error": "container_version_invalid",
+      "container": {
+        "magic": "ASXG",
+        "version": 2,
+        "lane": "asx://atomic_exec/%7C%E2%9A%9B%7C.v1",
+        "encoding": "binary-glyph-container",
+        "glyphs": [
+          {
+            "id": "g0",
+            "ref_kind": "program_ref",
+            "key": "scxq2.parity"
+          }
+        ],
+        "edges": [],
+        "tensor": null,
+        "scxq2": {
+          "algorithm": "SCXQ2",
+          "version": 1,
+          "mode": "symbolic",
+          "compressed": false,
+          "original_bytes": 30,
+          "decoded_bytes": 30
+        },
+        "payload": [
+          75,
+          72,
+          65,
+          78,
+          65,
+          82,
+          89,
+          32,
+          83,
+          67,
+          88,
+          81,
+          50,
+          32,
+          112,
+          97,
+          114,
+          105,
+          116,
+          121,
+          32,
+          118,
+          101,
+          99,
+          116,
+          111,
+          114,
+          32,
+          118,
+          49
+        ]
+      }
+    },
+    {
+      "id": "bad_encoding",
+      "expect": "FAIL",
+      "error": "container_encoding_invalid",
+      "container": {
+        "magic": "ASXG",
+        "version": 1,
+        "lane": "asx://atomic_exec/%7C%E2%9A%9B%7C.v1",
+        "encoding": "text-json",
+        "glyphs": [
+          {
+            "id": "g0",
+            "ref_kind": "program_ref",
+            "key": "scxq2.parity"
+          }
+        ],
+        "edges": [],
+        "tensor": null,
+        "scxq2": {
+          "algorithm": "SCXQ2",
+          "version": 1,
+          "mode": "symbolic",
+          "compressed": false,
+          "original_bytes": 30,
+          "decoded_bytes": 30
+        },
+        "payload": [
+          75,
+          72,
+          65,
+          78,
+          65,
+          82,
+          89,
+          32,
+          83,
+          67,
+          88,
+          81,
+          50,
+          32,
+          112,
+          97,
+          114,
+          105,
+          116,
+          121,
+          32,
+          118,
+          101,
+          99,
+          116,
+          111,
+          114,
+          32,
+          118,
+          49
+        ]
+      }
+    },
+    {
+      "id": "block_missing",
+      "expect": "FAIL",
+      "error": "block_missing",
+      "container": {
+        "magic": "ASXG",
+        "version": 1,
+        "lane": "asx://atomic_exec/%7C%E2%9A%9B%7C.v1",
+        "encoding": "binary-glyph-container",
+        "glyphs": [
+          {
+            "id": "g0",
+            "ref_kind": "program_ref",
+            "key": "scxq2.parity"
+          }
+        ],
+        "edges": [],
+        "tensor": null,
+        "payload": [
+          75,
+          72,
+          65,
+          78,
+          65,
+          82,
+          89,
+          32,
+          83,
+          67,
+          88,
+          81,
+          50,
+          32,
+          112,
+          97,
+          114,
+          105,
+          116,
+          121,
+          32,
+          118,
+          101,
+          99,
+          116,
+          111,
+          114,
+          32,
+          118,
+          49
+        ]
+      }
+    },
+    {
+      "id": "algorithm_invalid",
+      "expect": "FAIL",
+      "error": "algorithm_invalid",
+      "container": {
+        "magic": "ASXG",
+        "version": 1,
+        "lane": "asx://atomic_exec/%7C%E2%9A%9B%7C.v1",
+        "encoding": "binary-glyph-container",
+        "glyphs": [
+          {
+            "id": "g0",
+            "ref_kind": "program_ref",
+            "key": "scxq2.parity"
+          }
+        ],
+        "edges": [],
+        "tensor": null,
+        "scxq2": {
+          "algorithm": "LZ4",
+          "version": 1,
+          "mode": "symbolic",
+          "compressed": false,
+          "original_bytes": 30,
+          "decoded_bytes": 30
+        },
+        "payload": [
+          75,
+          72,
+          65,
+          78,
+          65,
+          82,
+          89,
+          32,
+          83,
+          67,
+          88,
+          81,
+          50,
+          32,
+          112,
+          97,
+          114,
+          105,
+          116,
+          121,
+          32,
+          118,
+          101,
+          99,
+          116,
+          111,
+          114,
+          32,
+          118,
+          49
+        ]
+      }
+    },
+    {
+      "id": "algorithm_version_unsupported",
+      "expect": "FAIL",
+      "error": "algorithm_version_unsupported",
+      "container": {
+        "magic": "ASXG",
+        "version": 1,
+        "lane": "asx://atomic_exec/%7C%E2%9A%9B%7C.v1",
+        "encoding": "binary-glyph-container",
+        "glyphs": [
+          {
+            "id": "g0",
+            "ref_kind": "program_ref",
+            "key": "scxq2.parity"
+          }
+        ],
+        "edges": [],
+        "tensor": null,
+        "scxq2": {
+          "algorithm": "SCXQ2",
+          "version": 2,
+          "mode": "symbolic",
+          "compressed": false,
+          "original_bytes": 30,
+          "decoded_bytes": 30
+        },
+        "payload": [
+          75,
+          72,
+          65,
+          78,
+          65,
+          82,
+          89,
+          32,
+          83,
+          67,
+          88,
+          81,
+          50,
+          32,
+          112,
+          97,
+          114,
+          105,
+          116,
+          121,
+          32,
+          118,
+          101,
+          99,
+          116,
+          111,
+          114,
+          32,
+          118,
+          49
+        ]
+      }
+    },
+    {
+      "id": "mode_unsupported",
+      "expect": "FAIL",
+      "error": "mode_unsupported",
+      "container": {
+        "magic": "ASXG",
+        "version": 1,
+        "lane": "asx://atomic_exec/%7C%E2%9A%9B%7C.v1",
+        "encoding": "binary-glyph-container",
+        "glyphs": [
+          {
+            "id": "g0",
+            "ref_kind": "program_ref",
+            "key": "scxq2.parity"
+          }
+        ],
+        "edges": [],
+        "tensor": null,
+        "scxq2": {
+          "algorithm": "SCXQ2",
+          "version": 1,
+          "mode": "lossy",
+          "compressed": false,
+          "original_bytes": 30,
+          "decoded_bytes": 30
+        },
+        "payload": [
+          75,
+          72,
+          65,
+          78,
+          65,
+          82,
+          89,
+          32,
+          83,
+          67,
+          88,
+          81,
+          50,
+          32,
+          112,
+          97,
+          114,
+          105,
+          116,
+          121,
+          32,
+          118,
+          101,
+          99,
+          116,
+          111,
+          114,
+          32,
+          118,
+          49
+        ]
+      }
+    },
+    {
+      "id": "compressed_in_symbolic_mode",
+      "expect": "FAIL",
+      "error": "compressed_in_symbolic_mode",
+      "container": {
+        "magic": "ASXG",
+        "version": 1,
+        "lane": "asx://atomic_exec/%7C%E2%9A%9B%7C.v1",
+        "encoding": "binary-glyph-container",
+        "glyphs": [
+          {
+            "id": "g0",
+            "ref_kind": "program_ref",
+            "key": "scxq2.parity"
+          }
+        ],
+        "edges": [],
+        "tensor": null,
+        "scxq2": {
+          "algorithm": "SCXQ2",
+          "version": 1,
+          "mode": "symbolic",
+          "compressed": true,
+          "original_bytes": 30,
+          "decoded_bytes": 30
+        },
+        "payload": [
+          75,
+          72,
+          65,
+          78,
+          65,
+          82,
+          89,
+          32,
+          83,
+          67,
+          88,
+          81,
+          50,
+          32,
+          112,
+          97,
+          114,
+          105,
+          116,
+          121,
+          32,
+          118,
+          101,
+          99,
+          116,
+          111,
+          114,
+          32,
+          118,
+          49
+        ]
+      }
+    },
+    {
+      "id": "original_decoded_mismatch",
+      "expect": "FAIL",
+      "error": "original_decoded_mismatch",
+      "container": {
+        "magic": "ASXG",
+        "version": 1,
+        "lane": "asx://atomic_exec/%7C%E2%9A%9B%7C.v1",
+        "encoding": "binary-glyph-container",
+        "glyphs": [
+          {
+            "id": "g0",
+            "ref_kind": "program_ref",
+            "key": "scxq2.parity"
+          }
+        ],
+        "edges": [],
+        "tensor": null,
+        "scxq2": {
+          "algorithm": "SCXQ2",
+          "version": 1,
+          "mode": "symbolic",
+          "compressed": false,
+          "original_bytes": 34,
+          "decoded_bytes": 30
+        },
+        "payload": [
+          75,
+          72,
+          65,
+          78,
+          65,
+          82,
+          89,
+          32,
+          83,
+          67,
+          88,
+          81,
+          50,
+          32,
+          112,
+          97,
+          114,
+          105,
+          116,
+          121,
+          32,
+          118,
+          101,
+          99,
+          116,
+          111,
+          114,
+          32,
+          118,
+          49
+        ]
+      }
+    },
+    {
+      "id": "decoded_length_mismatch",
+      "expect": "FAIL",
+      "error": "decoded_length_mismatch",
+      "container": {
+        "magic": "ASXG",
+        "version": 1,
+        "lane": "asx://atomic_exec/%7C%E2%9A%9B%7C.v1",
+        "encoding": "binary-glyph-container",
+        "glyphs": [
+          {
+            "id": "g0",
+            "ref_kind": "program_ref",
+            "key": "scxq2.parity"
+          }
+        ],
+        "edges": [],
+        "tensor": null,
+        "scxq2": {
+          "algorithm": "SCXQ2",
+          "version": 1,
+          "mode": "symbolic",
+          "compressed": false,
+          "original_bytes": 29,
+          "decoded_bytes": 29
+        },
+        "payload": [
+          75,
+          72,
+          65,
+          78,
+          65,
+          82,
+          89,
+          32,
+          83,
+          67,
+          88,
+          81,
+          50,
+          32,
+          112,
+          97,
+          114,
+          105,
+          116,
+          121,
+          32,
+          118,
+          101,
+          99,
+          116,
+          111,
+          114,
+          32,
+          118,
+          49
+        ]
+      }
+    },
+    {
+      "id": "edge_endpoint_unresolved",
+      "expect": "FAIL",
+      "error": "edge_endpoint_unresolved",
+      "container": {
+        "magic": "ASXG",
+        "version": 1,
+        "lane": "asx://atomic_exec/%7C%E2%9A%9B%7C.v1",
+        "encoding": "binary-glyph-container",
+        "glyphs": [
+          {
+            "id": "g0",
+            "ref_kind": "program_ref",
+            "key": "scxq2.parity"
+          }
+        ],
+        "edges": [
+          {
+            "source": "g0",
+            "target": "g9",
+            "relation": "@feeds"
+          }
+        ],
+        "tensor": null,
+        "scxq2": {
+          "algorithm": "SCXQ2",
+          "version": 1,
+          "mode": "symbolic",
+          "compressed": false,
+          "original_bytes": 30,
+          "decoded_bytes": 30
+        },
+        "payload": [
+          75,
+          72,
+          65,
+          78,
+          65,
+          82,
+          89,
+          32,
+          83,
+          67,
+          88,
+          81,
+          50,
+          32,
+          112,
+          97,
+          114,
+          105,
+          116,
+          121,
+          32,
+          118,
+          101,
+          99,
+          116,
+          111,
+          114,
+          32,
+          118,
+          49
+        ]
+      }
+    },
+    {
+      "id": "tensor_byte_length_mismatch",
+      "expect": "FAIL",
+      "error": "tensor_byte_length_mismatch",
+      "container": {
+        "magic": "ASXG",
+        "version": 1,
+        "lane": "asx://atomic_exec/%7C%E2%9A%9B%7C.v1",
+        "encoding": "binary-glyph-container",
+        "glyphs": [
+          {
+            "id": "g0",
+            "ref_kind": "program_ref",
+            "key": "scxq2.parity"
+          }
+        ],
+        "edges": [],
+        "tensor": {
+          "shape": [
+            4,
+            2
+          ],
+          "dtype": "FP32",
+          "bytes_per_element": 4
+        },
+        "scxq2": {
+          "algorithm": "SCXQ2",
+          "version": 1,
+          "mode": "symbolic",
+          "compressed": false,
+          "original_bytes": 30,
+          "decoded_bytes": 30
+        },
+        "payload": [
+          75,
+          72,
+          65,
+          78,
+          65,
+          82,
+          89,
+          32,
+          83,
+          67,
+          88,
+          81,
+          50,
+          32,
+          112,
+          97,
+          114,
+          105,
+          116,
+          121,
+          32,
+          118,
+          101,
+          99,
+          116,
+          111,
+          114,
+          32,
+          118,
+          49
+        ]
+      }
+    },
+    {
+      "id": "payload_parity_mismatch",
+      "expect": "FAIL",
+      "error": "payload_parity_mismatch",
+      "container": {
+        "magic": "ASXG",
+        "version": 1,
+        "lane": "asx://atomic_exec/%7C%E2%9A%9B%7C.v1",
+        "encoding": "binary-glyph-container",
+        "glyphs": [
+          {
+            "id": "g0",
+            "ref_kind": "program_ref",
+            "key": "scxq2.parity"
+          }
+        ],
+        "edges": [],
+        "tensor": null,
+        "scxq2": {
+          "algorithm": "SCXQ2",
+          "version": 1,
+          "mode": "symbolic",
+          "compressed": false,
+          "original_bytes": 30,
+          "decoded_bytes": 30
+        },
+        "payload": [
+          180,
+          183,
+          190,
+          177,
+          190,
+          173,
+          166,
+          223,
+          172,
+          188,
+          167,
+          174,
+          205,
+          223,
+          143,
+          158,
+          141,
+          150,
+          139,
+          134,
+          223,
+          137,
+          154,
+          156,
+          139,
+          144,
+          141,
+          223,
+          137,
+          206
+        ]
+      }
+    }
+  ]
+}

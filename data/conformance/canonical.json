@@ -1,0 +1,38 @@
+[
+  {
+    "id": "sorted_keys",
+    "input": "{\"z\":0,\"a\":1}",
+    "canonical": "{\"a\":1,\"z\":0}",
+    "sha256": "sha256:b55af27c4bd5f02ebeca8f901b84d2940b22e7bea7230e4d06f275d903bfdd72"
+  },
+  {
+    "id": "numeric_forms",
+    "input": "[1.0,1e0,-0.0,1e-7,1e21]",
+    "canonical": "[1,1,0,1e-7,1e21]",
+    "sha256": "sha256:c91e74317faf64804b41e1eb3a6a8abb2a664d8714ca15d4619e1a61a4bc8933"
+  },
+  {
+    "id": "precision",
+    "input": "1.2345678901234567",
+    "canonical": "1.2345678901234567",
+    "sha256": "sha256:05c9e796f4a020a2e0cb1008d3a7432483f1b77b0dea768399adcee66d90ac8e"
+  },
+  {
+    "id": "unicode",
+    "input": "\"\\ud83d\\ude00\"",
+    "canonical": "\"\ud83d\ude00\"",
+    "sha256": "sha256:7a0c50b92434b015545fe93ab723db2d4b2cdd14a441405624a9ce8be29f1d5a"
+  },
+  {
+    "id": "escaped_key",
+    "input": "{\"\\\"\\u0001\":\"\\b\\f\"}",
+    "canonical": "{\"\\\"\\u0001\":\"\\b\\f\"}",
+    "sha256": "sha256:562af4f0e189f1a41863d7ad7126ce0770b1988baa09c6e5f79a454328673dd9"
+  },
+  {
+    "id": "nested",
+    "input": "{\"b\":[null,true,false],\"a\":{\"z\":3,\"x\":2}}",
+    "canonical": "{\"a\":{\"x\":2,\"z\":3},\"b\":[null,true,false]}",
+    "sha256": "sha256:7c11c567ad63fbfca46d5627423f4536262c2c1c0b2e7c88f49a75105a66353a"
+  }
+]

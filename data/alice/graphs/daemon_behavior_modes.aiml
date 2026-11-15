@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from daemon_behavior_modes.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH DAEMONBEHAVIORMODES</pattern>
+    <template>source daemon_behavior_modes.gml; label DaemonBehaviorModes; identity 68; directed 1; nodes 12; edges 9. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE 0</pattern>
+    <template>Graph DaemonBehaviorModes; node 0; category: emotional_interpersonal; id: 0; label: therapy. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE THERAPY</pattern>
+    <template>Graph DaemonBehaviorModes; node 0; category: emotional_interpersonal; id: 0; label: therapy. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE 1</pattern>
+    <template>Graph DaemonBehaviorModes; node 1; category: emotional_interpersonal; id: 1; label: buddy. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE BUDDY</pattern>
+    <template>Graph DaemonBehaviorModes; node 1; category: emotional_interpersonal; id: 1; label: buddy. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE 2</pattern>
+    <template>Graph DaemonBehaviorModes; node 2; category: emotional_interpersonal; id: 2; label: counselor. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE COUNSELOR</pattern>
+    <template>Graph DaemonBehaviorModes; node 2; category: emotional_interpersonal; id: 2; label: counselor. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE 3</pattern>
+    <template>Graph DaemonBehaviorModes; node 3; category: emotional_interpersonal; id: 3; label: coach. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE COACH</pattern>
+    <template>Graph DaemonBehaviorModes; node 3; category: emotional_interpersonal; id: 3; label: coach. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE 4</pattern>
+    <template>Graph DaemonBehaviorModes; node 4; category: emotional_interpersonal; id: 4; label: listener. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE LISTENER</pattern>
+    <template>Graph DaemonBehaviorModes; node 4; category: emotional_interpersonal; id: 4; label: listener. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE 5</pattern>
+    <template>Graph DaemonBehaviorModes; node 5; category: learning_intellectual; id: 5; label: socratic. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE SOCRATIC</pattern>
+    <template>Graph DaemonBehaviorModes; node 5; category: learning_intellectual; id: 5; label: socratic. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE 6</pattern>
+    <template>Graph DaemonBehaviorModes; node 6; category: learning_intellectual; id: 6; label: mentor. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE MENTOR</pattern>
+    <template>Graph DaemonBehaviorModes; node 6; category: learning_intellectual; id: 6; label: mentor. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE 7</pattern>
+    <template>Graph DaemonBehaviorModes; node 7; category: learning_intellectual; id: 7; label: critic. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE CRITIC</pattern>
+    <template>Graph DaemonBehaviorModes; node 7; category: learning_intellectual; id: 7; label: critic. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE 8</pattern>
+    <template>Graph DaemonBehaviorModes; node 8; category: professional_productivity; id: 8; label: strategist. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE STRATEGIST</pattern>
+    <template>Graph DaemonBehaviorModes; node 8; category: professional_productivity; id: 8; label: strategist. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE 9</pattern>
+    <template>Graph DaemonBehaviorModes; node 9; category: technical_computational; id: 9; label: debugger. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE DEBUGGER</pattern>
+    <template>Graph DaemonBehaviorModes; node 9; category: technical_computational; id: 9; label: debugger. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE 10</pattern>
+    <template>Graph DaemonBehaviorModes; node 10; category: technical_computational; id: 10; label: investigator. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE INVESTIGATOR</pattern>
+    <template>Graph DaemonBehaviorModes; node 10; category: technical_computational; id: 10; label: investigator. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE 11</pattern>
+    <template>Graph DaemonBehaviorModes; node 11; category: metacognitive_autonomous; id: 11; label: questioner. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES NODE QUESTIONER</pattern>
+    <template>Graph DaemonBehaviorModes; node 11; category: metacognitive_autonomous; id: 11; label: questioner. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES EDGE 0  4</pattern>
+    <template>Graph DaemonBehaviorModes; edge 0 to 4; relation: can_pair_with; source: 0; target: 4; weight: 0.85. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES EDGE 1  2</pattern>
+    <template>Graph DaemonBehaviorModes; edge 1 to 2; relation: can_pair_with; source: 1; target: 2; weight: 0.60. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES EDGE 2  3</pattern>
+    <template>Graph DaemonBehaviorModes; edge 2 to 3; relation: optional_transition; source: 2; target: 3; weight: 0.65. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES EDGE 3  5</pattern>
+    <template>Graph DaemonBehaviorModes; edge 3 to 5; relation: question_style_affinity; source: 3; target: 5; weight: 0.70. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES EDGE 6  3</pattern>
+    <template>Graph DaemonBehaviorModes; edge 6 to 3; relation: goal_support_affinity; source: 6; target: 3; weight: 0.65. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES EDGE 7  11</pattern>
+    <template>Graph DaemonBehaviorModes; edge 7 to 11; relation: question_style_affinity; source: 7; target: 11; weight: 0.75. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES EDGE 8  5</pattern>
+    <template>Graph DaemonBehaviorModes; edge 8 to 5; relation: alternative_analysis_affinity; source: 8; target: 5; weight: 0.60. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES EDGE 9  10</pattern>
+    <template>Graph DaemonBehaviorModes; edge 9 to 10; relation: hypothesis_support; source: 9; target: 10; weight: 0.80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONBEHAVIORMODES EDGE 10  11</pattern>
+    <template>Graph DaemonBehaviorModes; edge 10 to 11; relation: evidence_question_affinity; source: 10; target: 11; weight: 0.75. Data-only graph record.</template>
+  </category>
+</aiml>

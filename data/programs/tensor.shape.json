@@ -1,0 +1,27 @@
+{
+  "@program": "tensor.shape",
+  "@kind": "kuhul.tensor.shape.v1",
+  "@backend": "opencl_1_2",
+  "@description": "Host-side shape, stride, dtype, and buffer-contract validation between OpenCL dispatches.",
+  "@authority": "tools/stb.py",
+  "layout": "row_major",
+  "tensors": {
+    "input": { "shape": [1, 512, 768], "dtype": "f32", "strides": [393216, 768, 1], "role": "input" },
+    "h1": { "shape": [1, 512, 1024], "dtype": "f32", "strides": [524288, 1024, 1], "role": "activation", "from": "swiglu_forward" },
+    "h1_norm": { "shape": [1, 512, 1024], "dtype": "f32", "strides": [524288, 1024, 1], "role": "activation", "from": "rms_norm_forward" },
+    "logits": { "shape": [1, 512, 50272], "dtype": "f32", "strides": [25739264, 50272, 1], "role": "output", "from": "matmul" }
+  },
+  "rules": [
+    { "op": "swiglu_forward", "inputs": ["input", "gate", "up"], "output": "h1", "formula": "x.shape == gate.shape == up.shape == output.shape" },
+    { "op": "rms_norm_forward", "inputs": ["h1"], "output": "h1_norm", "formula": "input.shape == output.shape" },
+    { "op": "matmul", "inputs": ["h1_norm", "w2"], "output": "logits", "formula": "A[-1] == B[-2] and C = broadcast_batch(A[:-1]) + [A[-2], B[-1]]" }
+  ],
+  "validation": {
+    "check_input_shapes": true,
+    "check_output_shapes": true,
+    "check_strides": true,
+    "check_dtype": true,
+    "fail_on_mismatch": true,
+    "host_validation_required": true
+  }
+}

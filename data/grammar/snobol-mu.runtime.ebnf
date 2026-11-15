@@ -1,0 +1,124 @@
+(* ================================================================ *)
+(* SNOBOL-µ — Pattern Program Grammar                               *)
+(* Individual Micronaut domain language                             *)
+(* Role: parse                                                      *)
+(* Owns: pattern declaration, match, capture, substitution, routing *)
+(* Does NOT own: question generation, WCR ranking, learning         *)
+(* ================================================================ *)
+
+
+(* ---- Part I: Program Surface Syntax ---- *)
+
+program       = { pattern_decl | rule_decl | type_decl
+               | operation_contract_decl | comment } ;
+
+(* PATTERN — declare a named pattern for reuse in rules *)
+pattern_decl  = "PATTERN" identifier "=" pattern_expr ;
+
+(* RULE — bind a named pattern to source, capture, transform, emit *)
+(* Declaring a rule does not execute it. EMIT routes output;
+   callable routing requires a separate route contract and XCFE gate. *)
+rule_decl     = "RULE" identifier "{"
+                  "MATCH" source "WITH" pattern_expr
+                  [ "CAPTURE" identifier ]
+                  [ "REPLACE" string ]
+                  [ "EMIT" output_target ]
+                "}" ;
+
+pattern_expr  = string
+              | identifier
+              | wildcard
+              | pattern_expr "|" pattern_expr
+              | pattern_expr pattern_expr ;
+
+wildcard      = "*" | "?" ;
+
+source        = "INPUT" | identifier ;
+output_target = "OUTPUT" | identifier ;
+
+(* TYPE declarations make the type inventory machine-readable.
+   TYPE declarations do not grant authority; they define names only. *)
+type_decl               = "TYPE" type_id ":" string
+                          [ "requires_xcfe" ":" bool_lit ] ;
+type_id                 = identifier ;
+bool_lit                = true_lit | false_lit ;
+true_lit                = "true" ;
+false_lit               = "false" ;
+
+(* CONTRACT declarations make operation signatures machine-readable. *)
+operation_contract_decl = "CONTRACT" identifier
+                          "INPUT" type_id
+                          "OUTPUT" type_id
+                          "PHASE" phase_name
+                          [ "xcfe" ":" "required" ] ;
+
+(* ---- Shared terminals ---- *)
+phase_name  = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Chen" | "Ch_en" | "Xul" ;
+identifier  = letter { letter | digit | "_" | "-" } ;
+string      = '"' { string_char } '"' ;
+string_char = ? any character except unescaped '"' or newline ? ;
+digit       = "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9" ;
+letter      = ? Unicode letter or underscore ? ;
+whitespace  = ? space, tab, CR, LF ? ;
+comment     = "#" { ? any character except newline ? } newline ;
+
+
+(* ================================================================ *)
+(* Part II: Static Signatures for SNOBOL-µ                          *)
+(* ================================================================ *)
+
+(*
+  Operation contracts
+  ┌──────────────────┬─────────────────────────┬────────────────┬───────┐
+  │ Operation        │ Input                   │ Output         │ Phase │
+  ├──────────────────┼─────────────────────────┼────────────────┼───────┤
+  │ PATTERN declare  │ Lexical source          │ PatternDef     │ Wo    │
+  │ RULE/MATCH       │ PatternRequest × source │ MatchResult    │ Wo    │
+  │ RULE/CAPTURE     │ MatchResult             │ CaptureSet     │ Wo    │
+  │ RULE/REPLACE     │ CaptureSet × string     │ SubstitutedText│ Wo    │
+  │ RULE/EMIT        │ MatchResult | CaptureSet│ RoutedOutput   │ Wo    │
+  └──────────────────┴─────────────────────────┴────────────────┴───────┘
+
+  Output type definitions
+  ─────────────────────────────────────────────────────────────────────
+  PatternDef      — named compiled pattern; not an execution artifact
+  PatternRequest  — input text + pattern binding request; read-only
+  MatchResult     — set of (identifier, capture_span, source_range) tuples
+  CaptureSet      — named sub-match bindings extracted from MatchResult
+  SubstitutedText — CaptureSet applied to REPLACE template; read-only
+  RoutedOutput    — EMIT target reference; callable routing requires XCFE
+
+  Separation invariants
+  ─────────────────────────────────────────────────────────────────────
+  MATCH produces MatchResult; it does not select or admit
+  CAPTURE is a read-only binding on MatchResult; no side effects
+  REPLACE produces SubstitutedText; it does not write unless EMIT routes it
+  EMIT routes output to a named target; routing to a callable target
+       requires a route contract and XCFE admission — this grammar
+       declares the route reference but grants no authority
+
+  Phase legality
+  ─────────────────────────────────────────────────────────────────────
+  PATTERN declare: Wo (declarative; no XCFE)
+  RULE/MATCH:      Wo (read-only pattern application; no XCFE)
+  RULE/CAPTURE:    Wo (binding; no XCFE)
+  RULE/REPLACE:    Wo (substitution; no XCFE)
+  RULE/EMIT:       Wo (route reference; callable emission requires XCFE)
+
+  Static errors
+  ─────────────────────────────────────────────────────────────────────
+  - pattern_ref_undeclared
+  - capture_on_non_match_result
+  - replace_without_prior_capture
+  - emit_callable_without_route_contract
+  - rule_duplicate_id
+
+  Authority
+  ─────────────────────────────────────────────────────────────────────
+  grammar_grants_execution: false
+  match_grants_execution: false
+  route_requires_xcfe_admission: true
+  persistence_requires_verified_authorized_fold: true
+  semantic_authority: false
+  commit_authority: false
+*)

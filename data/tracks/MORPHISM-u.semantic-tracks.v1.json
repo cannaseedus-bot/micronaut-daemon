@@ -1,0 +1,302 @@
+{
+  "@no-eval": true,
+  "id": "MORPHISM-µ",
+
+  "schemes": ["morphism"],
+  "description": "Category theory morphisms — arrows, monomorphism, epimorphism, isomorphism, endomorphism, automorphism, homomorphism, functor, natural transformation.",
+  "phase": "Sek",
+  "category": "structural",
+  "confidence": 0.85,
+  "static_weight": 0.88,
+  "health": 1.0,
+  "governs": [
+    "morphism",
+    "arrow",
+    "map",
+    "mapping",
+    "homomorphism",
+    "monomorphism",
+    "monic",
+    "injective morphism",
+    "left-cancellable",
+    "epimorphism",
+    "epic",
+    "surjective morphism",
+    "right-cancellable",
+    "isomorphism",
+    "invertible morphism",
+    "inverse morphism",
+    "endomorphism",
+    "self-map",
+    "automorphism",
+    "symmetry",
+    "automorphism group",
+    "functor",
+    "covariant functor",
+    "contravariant functor",
+    "natural transformation",
+    "natural in",
+    "component morphism",
+    "category",
+    "category theory",
+    "object",
+    "composition",
+    "identity morphism",
+    "associativity",
+    "unit law",
+    "@morphism",
+    "morphism:"
+  ],
+  "capabilities": [
+    "MORPH_DEFINE",
+    "MORPH_COMPARE_MONO_EPI",
+    "MORPH_ISO",
+    "MORPH_ENDO_AUTO",
+    "MORPH_FUNCTOR",
+    "MORPH_NAT_TRANS",
+    "MORPH_COMPOSE",
+    "MORPH_CROSS_DOMAIN"
+  ],
+  "conformance": {
+    "questions": [
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is a morphism in category theory?",
+        "expected_key": "arrow A to B compose associatively identity unit",
+        "gemma_answer": "A function or mapping between structures that preserves the relevant structure.",
+        "gemma_epistemic": "SUPPORTED",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is the difference between a monomorphism and an epimorphism?",
+        "expected_key": "mono left-cancellable injective epi right-cancellable surjective",
+        "gemma_answer": "Monomorphism is injective (one-to-one), epimorphism is surjective (onto) — categorical generalisations.",
+        "gemma_epistemic": "SUPPORTED",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is an isomorphism in category theory?",
+        "expected_key": "invertible morphism g∘f=id_A f∘g=id_B indistinguishable objects",
+        "gemma_answer": "A morphism with a two-sided inverse — objects connected by an isomorphism are structurally identical.",
+        "gemma_epistemic": "SUPPORTED",
+        "delta_r": 0.07
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is an endomorphism and how does it differ from an automorphism?",
+        "expected_key": "endomorphism morphism A to A automorphism invertible endomorphism symmetry group",
+        "gemma_answer": "Function mapping a path to a vector, or a transformation that maps the structure to itself.",
+        "gemma_epistemic": "MISS",
+        "canonical_answer": "An endomorphism is a morphism f:A→A from an object to itself. An automorphism is an endomorphism that is also an isomorphism — it has an inverse and forms a symmetry. The automorphisms of A form a group under composition.",
+        "delta_r": 0.09,
+        "delta_c_correction": -0.06
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is a functor and how does it map morphisms?",
+        "expected_key": "F:C→D maps objects morphisms preserves composition F(g∘f)=F(g)∘F(f) identity F(id_A)=id_{FA}",
+        "gemma_answer": "A structure-preserving map between categories that maps objects to objects and morphisms to morphisms.",
+        "gemma_epistemic": "SUPPORTED",
+        "relation_confirmed": "FIXED-POINT-µ",
+        "delta_w": 0.13
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is a natural transformation between two functors?",
+        "expected_key": "η:F⇒G assigns component η_A:FA→GA naturality square commutes η_B∘F(f)=G(f)∘η_A",
+        "gemma_answer": "A way of transforming one functor into another — a higher-level mapping between functors that preserves their structure.",
+        "gemma_epistemic": "PARTIAL",
+        "canonical_answer": "A natural transformation η:F⇒G assigns to each object A a morphism η_A:F(A)→G(A) such that for every f:A→B the naturality square commutes: η_B∘F(f) = G(f)∘η_A. It is a morphism of functors.",
+        "relation_confirmed": "FIXED-POINT-µ",
+        "delta_w": 0.14
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "How do morphisms compose and what is the identity morphism?",
+        "expected_key": "g∘f:A→C associative identity id_A f∘id_A=f id_B∘f=f",
+        "gemma_answer": "They compose associatively and every object has an identity that is a left and right unit.",
+        "gemma_epistemic": "SUPPORTED",
+        "relation_confirmed": "FIXED-POINT-µ",
+        "delta_w": 0.11
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "Is every isomorphism both a monomorphism and an epimorphism?",
+        "expected_key": "yes every iso is mono and epi converse fails Z→Q rings balanced category",
+        "gemma_answer": "Not necessarily — an isomorphism is invertible but mono and epi are cancellability properties that don't automatically follow.",
+        "gemma_epistemic": "MISS",
+        "canonical_answer": "Yes — every isomorphism is both monic and epic. The converse fails: in rings, ℤ→ℚ is both monic and epic but not an isomorphism. A category where every bimorphism is an iso is called balanced.",
+        "delta_c": -0.08,
+        "requires_authority": true
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "Can you define a natural transformation between two functors in a concrete category?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What distinguishes a monomorphism from a general injective morphism in category theory?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does an endomorphism relate to the structure of a single object within a category?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "Which condition must an automorphism satisfy to be considered an isomorphism in a category?",
+        "expected_key": "",
+        "delta_r": 0.08
+      }
+    ],
+    "jokes": [
+      {
+        "pattern": "WHY DID THE MORPHISM GET REJECTED FROM THE CATEGORY",
+        "gemma_punchline": "It failed to preserve structure under composition.",
+        "canonical_punchline": "It couldn't compose with itself. No codomain, no identity, no deal. Failed the unit laws at the first interview.",
+        "frame": "humor_frame",
+        "semantic_key": "morphism_rejected_unit_laws"
+      },
+      {
+        "pattern": "WHAT DO YOU CALL A MORPHISM FROM A SET TO ITSELF",
+        "gemma_punchline": "A self-mapping endomorphism.",
+        "canonical_punchline": "An endomorphism. And if it has an inverse — an automorphism. The set looked at itself and decided it was perfectly symmetrical.",
+        "frame": "pun_naming_frame",
+        "semantic_key": "endomorphism_automorphism_selfmap"
+      },
+      {
+        "pattern": "WHY DID THE ISOMORPHISM FEEL SO UNDERSTOOD",
+        "gemma_punchline": "Because every functor preserved it completely.",
+        "canonical_punchline": "Because every functor preserved its structure. No matter which category it moved to, it looked exactly the same from inside. That is the curse of being invertible.",
+        "frame": "delivery_frame",
+        "semantic_key": "iso_functor_preserved"
+      },
+      {
+        "pattern": "WHAT DID THE FUNCTOR SAY TO THE NATURAL TRANSFORMATION",
+        "gemma_punchline": "You are just a higher-level abstraction built on top of me.",
+        "canonical_punchline": "You are just a collection of my component morphisms. Without me there is no you. The natural transformation replied: without me, your components never commute.",
+        "frame": "pun_bridge",
+        "semantic_key": "functor_nat_trans_commute"
+      },
+      {
+        "pattern": "WHY DID THE MONOMORPHISM INSIST ON BEING A ONE-TO-ONE FUNCTION",
+        "punchline": "Because it wanted to preserve all its structure without losing a single morphism.",
+        "frame": "humor_frame",
+        "semantic_key": "why_did_the_monomorphism_insist_on_being_a_one_to_"
+      },
+      {
+        "pattern": "WHAT HAPPENED WHEN AN ENDOMORPHISM TRIED TO BE AN ISOMORPHISM",
+        "punchline": "It realized it was just a loop with no exit—until it found a faithful functor.",
+        "frame": "humor_frame",
+        "semantic_key": "what_happened_when_an_endomorphism_tried_to_be_an_"
+      },
+      {
+        "pattern": "WHY DID THE NATURAL TRANSFORMATION GET CONFUSED WITH A MONOMORPHISM",
+        "punchline": "It thought it was a strict equality until the category’s rules intervened.",
+        "frame": "humor_frame",
+        "semantic_key": "why_did_the_natural_transformation_get_confused_wi"
+      },
+      {
+        "pattern": "WHEN A HOMOMORPHISM FAILED TO COMMUNICATE WITH A FUNCTOR, WHAT DID IT SAY",
+        "punchline": "“I’m not a transformation—I’m a miscommunication.”",
+        "frame": "humor_frame",
+        "semantic_key": "when_a_homomorphism_failed_to_communicate_with_a_f"
+      }
+    ]
+  },
+  "relations": [
+    {
+      "target": "FIXED-POINT-µ",
+      "verb": "@informs",
+      "directed": true
+    },
+    {
+      "target": "ANAMORPHISM-µ",
+      "verb": "@informs",
+      "directed": true
+    },
+    {
+      "target": "FOLD-HOF-µ",
+      "verb": "@informs",
+      "directed": true
+    },
+    {
+      "target": "MATH-µ",
+      "verb": "@delegates_to",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "gramRead",
+      "key": "morphism_query",
+      "weight": 1.0
+    },
+    {
+      "phase": "Wo",
+      "op": "lower_morphism_aiml",
+      "note": "L_A morphism ISA",
+      "weight": 1.0
+    },
+    {
+      "phase": "Yax",
+      "op": "derive_morphism_pattern",
+      "note": "R arrow align",
+      "weight": 1.0
+    },
+    {
+      "phase": "Sek",
+      "op": "resolve_morphism_arc",
+      "note": "W functor nat trans",
+      "weight": 1.0
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_morphism_iso",
+      "note": "C iso=mono+epi gate",
+      "weight": 1.0
+    },
+    {
+      "phase": "Xul",
+      "op": "emit_answer",
+      "scope": "local",
+      "weight": 1.0
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "MORPHISM-µ",
+    "manifest_access": [
+      "words",
+      "micronaut",
+      "kuhul"
+    ],
+    "effects": [
+      "gramRead",
+      "gramWrite",
+      "morphism:query",
+      "morphism:define"
+    ],
+    "ports": [],
+    "coordinator": false
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "@kind": "kuhul.conformance.float-type-manifest.v1",
+  "description": "Loader conformance cases for kuhul.type-manifest.float.v1. Proves the four rejection conditions the manifest declares: out-of-range value, nonfinite float, wrong precision type, and unauthorized phase binding.",
+  "manifest": "data/manifest/float.json",
+  "authority_note": "ADMITTED means the value satisfies declared range, precision, and phase contracts. REJECTED means the loader must refuse with the stated reason. Neither outcome authorizes execution — XCFE admission is required separately.",
+  "loader_levels": {
+    "ROUTING_ONLY": "recognizes FLOAT:, @float, and other key-grammar aliases; ignores variants/bindings/operators",
+    "TYPED_BINDINGS": "validates precision, numeric ranges, phase affinity, and operator signatures"
+  },
+  "cases": [
+    {
+      "id": "hub_cost.valid",
+      "description": "hub_cost = 0.166, float32, Yax — the formula value from pi_triangle_hub_costs",
+      "field": "hub_cost",
+      "value": 0.166,
+      "declared_type": "float32",
+      "phase": "Yax",
+      "expect": "ADMITTED"
+    },
+    {
+      "id": "pi_routing_weight.valid",
+      "description": "routing_weight = 1.0 - 0.166 = 0.834, float32, Sek",
+      "field": "pi_routing_weight",
+      "value": 0.834,
+      "declared_type": "float32",
+      "phase": "Sek",
+      "expect": "ADMITTED"
+    },
+    {
+      "id": "entropy_norm.valid",
+      "description": "entropy_norm = 0.5, float32, Ch'en — mid-range levity signal",
+      "field": "entropy_norm",
+      "value": 0.5,
+      "declared_type": "float32",
+      "phase": "Ch'en",
+      "expect": "ADMITTED"
+    },
+    {
+      "id": "hub_cost.boundary_zero",
+      "description": "hub_cost = 0.0, float32, Yax — lower boundary of [0, 1] is inclusive",
+      "field": "hub_cost",
+      "value": 0.0,
+      "declared_type": "float32",
+      "phase": "Yax",
+      "expect": "ADMITTED"
+    },
+    {
+      "id": "pi_routing_weight.out_of_range",
+      "description": "routing_weight = 1.5 exceeds [0, 1] — cannot be a valid routing probability",
+      "field": "pi_routing_weight",
+      "value": 1.5,
+      "declared_type": "float32",
+      "phase": "Sek",
+      "expect": "REJECTED",
+      "reason": "OUT_OF_RANGE"
+    },
+    {
+      "id": "hub_cost.nonfinite",
+      "description": "hub_cost = NaN — nonfinite values must produce status=1 in pi_triangle_hub_costs, never advance to Sek",
+      "field": "hub_cost",
+      "value": "nan",
+      "declared_type": "float32",
+      "phase": "Yax",
+      "expect": "REJECTED",
+      "reason": "NONFINITE_FLOAT"
+    },
+    {
+      "id": "hub_cost.wrong_precision",
+      "description": "hub_cost declared as float16 — float32 is required for accumulation precision; float16 reduces dynamic range",
+      "field": "hub_cost",
+      "value": 0.3,
+      "declared_type": "float16",
+      "phase": "Yax",
+      "expect": "REJECTED",
+      "reason": "WRONG_PRECISION"
+    },
+    {
+      "id": "hub_cost.unauthorized_phase",
+      "description": "hub_cost presented at Xul — hub_cost is a Yax signal; advancing it to Xul without Ch'en verification bypasses ENTROPY_BOUNDS",
+      "field": "hub_cost",
+      "value": 0.3,
+      "declared_type": "float32",
+      "phase": "Xul",
+      "expect": "REJECTED",
+      "reason": "UNAUTHORIZED_PHASE"
+    }
+  ]
+}

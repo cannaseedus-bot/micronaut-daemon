@@ -1,0 +1,824 @@
+(* ===================================================================
+   FoldGraph.ebnf — Unified FoldGraph Grammar Digest
+   Version: 2.0   Date: 2026-10-06
+
+   DIGEST: This file is a unifying summary of K'UHUL grammar §37-§60.
+   It combines all grammar subsystems into one standalone reference.
+   Authoritative detail lives in kuhul.runtime-grammar.ebnf (§37-§60).
+   When this file and kuhul.runtime-grammar.ebnf diverge, the main file wins.
+
+   Core Identity:
+     Regex          = Symbol Grammar       (declared patterns)
+     SNOBOL         = Pattern-as-data       (first-class composable patterns)
+     NFA            = Possibility Grammar  (parallel active states)
+     DFA            = Deterministic Grammar (one active state)
+     Wildcard       = Unknown Grammar      (SC-37 retained)
+     Graph          = Relation Grammar     (edges = relations)
+     NPC            = Behavior Grammar     (C6 perception-decision-action)
+     Game Theory    = Strategy Grammar     (Nash, minimax)
+     Baseball       = Decision Grammar     (pitch-count plate appearance)
+     Fold           = Many→One            (catamorphism)
+     Unfold         = One→Many            (anamorphism)
+     FoldGraph      = Cata∘Ana
+     Problem Solving = Unfold→Search→Fold
+   =================================================================== *)
+
+(* ─── §1  K'UHUL Phase Wheel ─────────────────────────────────────── *)
+c6_phase  ::= "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul" ;
+(*  Pop=0 reset | Wo=1 spec | Yax=2 select | Sek=3 candidates |
+    Ch'en=4 hold/prove | Xul=5 commit                           *)
+
+(* ─── §2  Topological Substrate ─────────────────────────────────── *)
+topology     ::= "graph" | "hypercube" | "lattice" | "manifold" ;
+atomic_dom_B ::= "Q_n" "□" "C_6" ;
+(* B = Q_n □ C_6 : n-dimensional hypercube × six-phase cyclic manifold.
+   Neighborhood: N_G(b,θ) = {(b⊕eᵢ,θ)} ∪ {(b,θ±1 mod 6)}           *)
+
+(* ─── §3  WCR / Score ───────────────────────────────────────────── *)
+score_record  ::= "{" "W" ":" number "," "C" ":" number ","
+                      "R" ":" number "," "score" ":" number "}" ;
+(* S_µ(u|Q) = W_u · C_u · R(Q,K_u)  —  R = query-indexed retrieval_strength *)
+
+(* ─── §4  Wildcard Types ─────────────────────────────────────────── *)
+wildcard_type ::= "unknown_node"     | "unknown_edge"
+                | "unknown_class"    | "unknown_relation"
+                | "unknown_strategy" ;
+resolution    ::= "resolved" | "retained_wildcard" ;
+(* retained_wildcard = retained_unknown (v2.0 alias). SC-37: retained_wildcard
+   is a first-class solution — returning UNKNOWN when evidence is insufficient
+   is CORRECT, not a failure.                                          *)
+
+(* ─── §5  Graph Core ────────────────────────────────────────────── *)
+node_kind     ::= "Known" | "Candidate" | "Wildcard" ;
+node          ::= "{" "kind" ":" node_kind "," "id" ":" identifier "}" ;
+edge          ::= "{" "src" ":" identifier "," "dst" ":" identifier ","
+                      "rel" ":" identifier "," "weight" ":" number "}" ;
+graph         ::= "{" "nodes" ":" "[" { node } "]" ","
+                      "edges" ":" "[" { edge } "]" "}" ;
+query         ::= "{" "term" ":" string "," "context" ":" string "}" ;
+candidate_field ::= "{" "graph"    ":" graph ","
+                        "frontier"  ":" "[" { node } "]" ","
+                        "unresolved" ":" "[" { node } "]" ","
+                        "scores"    ":" "[" { score_record } "]" "}" ;
+canonical_view  ::= "{" "selected"   ":" "[" { node } "]"  ","
+                        "relations"  ":" "[" { edge } "]"  ","
+                        "confidence" ":" number "}" ;
+
+(* ─── §6  GraphF Functor ────────────────────────────────────────── *)
+graph_functor     ::= graph_functor_empty | graph_functor_vertex ;
+graph_functor_empty  ::= "{" "kind" ":" "Empty" "}" ;
+graph_functor_vertex ::= "{" "kind"     ":" "Vertex" ","
+                              "node"     ":" node ","
+                              "children" ":" "[" { graph_functor } "]" "}" ;
+(* GraphF A = Empty | Vertex(Node, List A)  — recursive functor for hylomorphism *)
+
+(* ─── §7  Coalgebra ψ and Algebra φ ─────────────────────────────── *)
+coalgebra_psi ::= "{" "kind"    ":" "coalgebra_psi" ","
+                      "input"   ":" "(" graph "," query ")" ","
+                      "output"  ":" graph_functor "}" ;
+(* ψ = anamorphism seed : (Graph,Query) → GraphF(Graph,Query)
+   One→Many unfold. Empty neighborhood → Wildcard(freshId()) — total, never fails.
+   NFA expansion is an example application (NFA,DFA ⊂ FoldGraph Applications). *)
+
+algebra_phi ::= algebra_phi_empty | algebra_phi_vertex ;
+algebra_phi_empty  ::= "{" "kind" ":" "phi_empty" ","
+                            "output" ":" canonical_view "}" ;
+algebra_phi_vertex ::= "{" "kind"     ":" "phi_vertex" ","
+                            "node"     ":" node ","
+                            "children" ":" "[" { canonical_view } "]" ","
+                            "output"   ":" canonical_view "}" ;
+(* φ = catamorphism : GraphF(CanonicalView) → CanonicalView
+   Many→One fold. DFA subset construction / Ch'en proof is an example application.
+   NOT Cata ≡ DFA. (v2.0 §9: NFA,DFA ⊂ FoldGraph Applications)             *)
+
+(* ─── §8  Attention ────────────────────────────────────────────── *)
+attention_step ::= "{" "kind"   ":" "attention" ","
+                       "input"  ":" candidate_field ","
+                       "scored" ":" candidate_field "}" ;
+(* Attention_WCR,Q : CandidateField → CandidateField
+   Applies S_µ(u|Q) = W·C·R(Q,K_u) to all candidates. Ranks, bounds wildcards. *)
+
+(* ─── §9  FoldGraph Complete Pipeline ───────────────────────────── *)
+fold_graph_pipeline ::= "{" "kind"      ":" "fold_graph" ","
+                             "graph"     ":" graph ","
+                             "query"     ":" query ","
+                             "field"     ":" candidate_field ","
+                             "weighted"  ":" candidate_field ","
+                             "result"    ":" canonical_view "}" ;
+(* FoldGraph_Q = Cata_φ ∘ Attention_WCR,Q ∘ Ana_ψQ
+   FoldGraph(Q,B) = Cata_φ(Attention(Ana_ψ(B,Q)))                          *)
+
+(* ─── §10  Fixed Point ──────────────────────────────────────────── *)
+fixed_point ::= "{" "kind"      ":" "fixed_point" ","
+                    "operator"  ":" "T_Q=Cata_φ∘Attention_WCR,Q∘Ana_ψQ" ","
+                    "equation"  ":" "B*=T_Q(B*)" ","
+                    "kleene"    ":" "B*=⊔{T_Q^n(⊥)|n≥0}" ","
+                    "micronaut" ":" "FIXED-POINT-µ" "}" ;
+(* Stable knowledge state under query Q. Kleene iteration converges to B*.   *)
+
+(* ─── §11  Automata Correspondence (v2.0 §9) ────────────────────── *)
+(*  CRITICAL CORRECTION:
+    NFA, DFA ⊂ FoldGraph Applications  (subset, not identity)
+    NOT: Ana ≡ NFA,  Cata ≡ DFA
+
+    Ana = unfold = One→Many. NFA expansion = one example.
+    Cata = fold = Many→One. DFA subset construction = one example (Ch'en proof).
+    FoldGraph subsumes: NFA, DFA, backtracking, any unfold-then-fold scheme.   *)
+automata_correspondence ::= "{" "kind"    ":" "automata_correspondence" ","
+                                 "nfa_role" ":" "example_ana_application" ","
+                                 "dfa_role" ":" "example_cata_application" ","
+                                 "law"      ":" "NFA,DFA ⊂ FoldGraph Applications" "}" ;
+
+(* ─── §12  Problem Solver Runtime ───────────────────────────────── *)
+problem_solver ::= "{" "kind"         ":" "problem_solver" ","
+                       "observe"      ":" "(" topology "," query ")" ","
+                       "anamorphism"  ":" candidate_field ","
+                       "attention"    ":" candidate_field ","
+                       "catamorphism" ":" canonical_view ","
+                       "solution"     ":" resolution "}" ;
+(* Runtime: observe→anamorphism→attention→catamorphism→solution
+   Core Identity: Problem Solving = Unfold → Search → Fold             *)
+
+(* ─── §13  Regex Algebra (§46, §49) ─────────────────────────────── *)
+regex_expr    ::= regex_choice | regex_seq | regex_star | regex_plus
+                | regex_opt   | regex_wild | regex_literal ;
+regex_choice  ::= regex_expr "|" regex_expr ;   (* Sek candidates, Yax selects *)
+regex_seq     ::= regex_expr "," regex_expr ;   (* sequential fold, Wo→Xul *)
+regex_star    ::= regex_expr "*" ;              (* C6 loop Pop→reset *)
+regex_plus    ::= regex_expr "+" ;              (* C6 loop, at least once *)
+regex_opt     ::= regex_expr "?" ;              (* wildcard_entity, zero-or-one *)
+regex_wild    ::= "." ;                         (* wildcard_entity, any single *)
+regex_literal ::= string ;
+(* L(A|B) = A∪B. Five universal primitives substrate-invariant:
+   choice(|)=Sek, sequence(,)=fold-chain, optional(?)=wildcard,
+   loop(*,+)=C6, wildcard(.)=wildcard_entity                            *)
+
+(* ─── §14  Recursion Schemes (§50) ──────────────────────────────── *)
+recursion_scheme ::= catamorphism_rec | anamorphism_rec
+                   | hylomorphism_rec | metamorphism_rec ;
+catamorphism_rec ::= "{" "kind" ":" "cata" "," "op" ":" "Many→One"
+                         "," "variants" ":" "[" "foldl" "," "foldr" "]" "}" ;
+anamorphism_rec  ::= "{" "kind" ":" "ana"  "," "op" ":" "One→Many"
+                         "," "seed" ":" identifier "}" ;
+hylomorphism_rec ::= "{" "kind" ":" "hylo" "," "op" ":" "ana∘cata"
+                         "," "law" ":" "intelligence≈ana∘cata" "}" ;
+metamorphism_rec ::= "{" "kind" ":" "meta" "," "op" ":" "cata∘ana" "}" ;
+(* foldl AND foldr are BOTH catamorphisms (Many→One). NOT anamorphisms.   *)
+
+(* ─── §15  Wildcard Grammar (§41) ───────────────────────────────── *)
+entity_kind     ::= "known_entity" | "wildcard_entity" | "emerging_entity" ;
+wildcard_fold   ::= "{" "kind"     ":" "wildcard_fold" ","
+                        "entity"   ":" entity_kind ","
+                        "solution" ":" resolution "}" ;
+(* SC-37: retained_wildcard is a first-class solution.
+   Unknown when evidence insufficient = CORRECT behavior, not failure.   *)
+
+(* ─── §16  Relational Grammar (§42-§43) ─────────────────────────── *)
+edge_kind     ::= "similarity" | "difference" | "transformation"
+                | "causation"  | "opposition"  | "wildcard_edge" ;
+analogy_record ::= "{" "kind" ":" "analogy" ","
+                       "source" ":" graph "," "target" ":" graph ","
+                       "isomorphism" ":" "[" { edge } "]" "}" ;
+compare_record ::= "{" "kind" ":" "compare" ","
+                       "intersection" ":" "[" { node } "]" "}" ;
+contrast_record ::= "{" "kind" ":" "contrast" ","
+                        "difference"  ":" "[" { node } "]" "}" ;
+
+(* ─── §17  Game Theory / NPC / Puzzle (§38-§40, §44) ───────────── *)
+game_record   ::= "{" "kind" ":" "game" ","
+                      "players"   ":" "[" { identifier } "]" ","
+                      "payoff"    ":" number ","
+                      "nash"      ":" boolean "}" ;
+npc_cycle     ::= "{" "kind"       ":" "npc_cycle" ","
+                      "perception" ":" candidate_field ","
+                      "decision"   ":" resolution ","
+                      "action"     ":" identifier ","
+                      "feedback"   ":" score_record "}" ;
+puzzle_record ::= "{" "kind"     ":" "puzzle" ","
+                      "clue"     ":" string ","
+                      "solution" ":" resolution "}" ;
+
+(* ─── §18  Baseball (§40) ───────────────────────────────────────── *)
+pitch_record  ::= "{" "kind"      ":" "pitch" ","
+                      "type"      ":" string  ","
+                      "count"     ":" string  ","
+                      "result"    ":" resolution "}" ;
+
+(* ─── §19  AIML Script (§45) ────────────────────────────────────── *)
+script_record ::= "{" "kind"    ":" "script" ","
+                      "pattern" ":" string  ","
+                      "template" ":" string "}" ;
+
+(* ─── §20  FoldGraph Universal Law ─────────────────────────────── *)
+(*  FoldGraph_Q = Cata_φ ∘ Attention_WCR,Q ∘ Ana_ψQ
+    B* = T_Q(B*)                      (fixed point, FIXED-POINT-µ)
+    S_µ(u|Q) = W_u · C_u · R(Q,K_u)  (WCR score, query-indexed)
+    Unknown ≠ Failure                 (SC-37, wildcard law)
+    NFA,DFA ⊂ FoldGraph Applications  (automata as examples, not definitions)
+    Knowledge = Fold(Unfold(Knowledge)) (hylomorphic identity)
+    Problem Solving = Unfold → Search → Fold   *)
+
+(* ─── Primitives ─────────────────────────────────────────────────── *)
+identifier ::= letter { letter | digit | "_" } ;
+string     ::= '"' { any_char } '"' ;
+number     ::= digit { digit } [ "." digit { digit } ] ;
+boolean    ::= "true" | "false" ;
+letter     ::= "a" ... "z" | "A" ... "Z" ;
+digit      ::= "0" ... "9" ;
+any_char   ::= ? any Unicode character except '"' ? ;
+
+(* ─── §21  Inference Rules (§54) ────────────────────────────────── *)
+(* Formal semantics: judgments Gamma |- X  where Gamma=(B,Q,psi,phi,WCR) *)
+
+(* ANA rules *)
+(* ANA-EXPAND:   u in N_G(v)  =>  Gamma |- v => u          (reachable = valid candidate) *)
+(* ANA-WILDCARD: N_G(v)=empty =>  Gamma |- v => *           (empty neighborhood -> wildcard) *)
+(* ANA-HYPOTHESIS: match(Q,xi) => Gamma |- Q => {x1,..,xn} (query -> possibility set) *)
+
+(* ATT rules *)
+(* ATT-SCORE:     W,C,R        => Gamma |- u : W*C*R         (WCR scoring) *)
+(* ATT-RANK:      S(u)>S(v)    => Gamma |- rank(u)>rank(v)   (order by score) *)
+(* ATT-THRESHOLD: S(u)<tau     => Gamma |- reject(u)          (discard below tau) *)
+
+(* CATA rules *)
+(* CATA-SELECT:     u=argmax S       => Gamma |- select(u)    (pick best) *)
+(* CATA-MERGE:      u,v in Selected  => Gamma |- merge(u,v)   (combine) *)
+(* CATA-PROJECTION: Selected         => Gamma |- C_Q           (canonical view) *)
+
+(* WILD rules *)
+(* WILD-RETAIN:  C(u)<tau  => Gamma |- u => Wildcard  (SC-37, retain uncertainty) *)
+(* WILD-RESOLVE: C(u)>=tau => Gamma |- u => Known     (promote to known) *)
+(* Safety: forall u (Wildcard(u) => Representable(u)) *)
+
+(* FP rules *)
+(* FP-CONVERGENCE: T_Q(B)=B  => Gamma |- FixedPoint(B)   (stable = fixed point) *)
+(* FP-ITERATE:     T_Q(B)!=B => Gamma |- B -> T_Q(B)     (continue iterating) *)
+
+(* FOLDGRAPH master rule:
+     Ana_psiQ(B)=F_Q   Att(F_Q)=F*_Q   Cata_phi(F*_Q)=C_Q
+   ────────────────────────────────────────────────────────  FOLDGRAPH
+                         (B,Q) => C_Q
+*)
+
+inference_rule ::= ana_expand_rule | ana_wildcard_rule | ana_hypothesis_rule
+                 | att_score_rule  | att_rank_rule     | att_threshold_rule
+                 | cata_select_rule | cata_merge_rule  | cata_projection_rule
+                 | wild_retain_rule | wild_resolve_rule
+                 | fp_convergence_rule | fp_iterate_rule
+                 | foldgraph_master_rule ;
+
+(* ─── §22  Derived Interpretation Law ───────────────────────────── *)
+(* Every domain (Regex, NPC, GameTheory, Baseball, Riddles, Wildcards,
+   Compare, Automata) MUST be interpretable as:
+     Generate Possibilities -> Evaluate Possibilities -> Reduce Possibilities
+   i.e.: Ana -> Attention -> Cata                                    *)
+
+(* ─── §23  Graph Isomorphism (§55) ──────────────────────────────── *)
+(* Structure > Labels. Iso(G,H) <=> Canon(G)=Canon(H)                *)
+node_mapping         ::= "{" "from" ":" node "," "to" ":" node "}" ;
+vertex_bijection     ::= "[" { node_mapping } "]" ;
+structural_equiv     ::= isomorphic_r | non_isomorphic_r ;
+isomorphic_r         ::= "{" "kind" ":" "isomorphic" "," "graph_a" ":" graph ","
+                              "graph_b" ":" graph "," "bijection" ":" vertex_bijection "}" ;
+non_isomorphic_r     ::= "{" "kind" ":" "non_isomorphic" "," "graph_a" ":" graph ","
+                              "graph_b" ":" graph "}" ;
+canonical_form       ::= "{" "kind" ":" "canonical_form" "," "graph" ":" graph ","
+                              "hash" ":" string "}" ;
+(* ISO-MATCH:    exists f:V(G)->V(H) preserving edges => Gamma |- G iso H *)
+(* ISO-WILDCARD: Wildcard(u) and StructureMatch(u,v) => Gamma |- u ~ v    *)
+(* CANON:        G iso H => Canon(G)=Canon(H)                             *)
+
+(* ─── §24  Pattern Matching Layer (§56) ─────────────────────────── *)
+scrutinee    ::= node | edge | graph | candidate_field | wildcard_type ;
+pattern      ::= literal_pattern | compound_pattern | wildcard_pattern
+               | predicate_pattern | view_pattern | alternative_pattern ;
+literal_pattern     ::= string ;
+wildcard_pattern    ::= "_" ;                      (* matches anything, binds nothing *)
+compound_pattern    ::= pattern "," identifier "," pattern ;
+alternative_pattern ::= pattern "|" pattern ;
+guard_pattern       ::= pattern "when" identifier "(" identifier ")" ">" number ;
+predicate_pattern   ::= identifier "(" pattern ")" ;
+view_pattern        ::= identifier "(" pattern ")" ;
+binding      ::= "{" "var" ":" identifier "," "value" ":" string "}" ;
+match_record ::= "{" "scrutinee" ":" scrutinee "," "pattern" ":" pattern ","
+                     "bindings" ":" "[" { binding } "]" "," "continuation" ":" string "}" ;
+(* Pipeline with pattern layer:
+   (B,Q)->F_Q->PatternMatch->F'_Q->Attention->F*_Q->Cata->C_Q        *)
+(* Rules: MATCH-BIND MATCH-WILDCARD MATCH-LITERAL MATCH-COMPOUND
+          MATCH-OR-L MATCH-OR-R MATCH-GUARD MATCH-PRED MATCH-VIEW MATCH-CONT *)
+(* Law: Gamma |- S match P => Bindings => Continuation
+   Core primitive: Match->Bind->Guard->Continue->Fold                  *)
+
+(* ─── §25  BitField Extension (§57) ─────────────────────────────── *)
+(* Node = Structure + BitField. Match = StructureMatch OR BitMaskMatch. *)
+node_flags   ::= "{" "known" ":" bit "," "candidate" ":" bit ","
+                     "wildcard" ":" bit "," "selected" ":" bit ","
+                     "resolved" ":" bit "," "frontier" ":" bit ","
+                     "relevant" ":" bit "," "active" ":" bit "}" ;
+(* bit 2 = wildcard flag: WildcardBit=1 != Failure (SC-37 binary layer) *)
+pattern_mask     ::= bitfield ;
+bit_match_record ::= "{" "node" ":" bitfield "," "mask" ":" bitfield ","
+                         "result" ":" boolean "}" ;
+execution_flags  ::= "{" "expanded" ":" bit "," "matched" ":" bit ","
+                         "ranked" ":" bit "," "folded" ":" bit ","
+                         "canonicalized" ":" bit "," "fixed_point" ":" bit "}" ;
+hypercube_coord  ::= "{" "address" ":" bitfield "," "phase" ":" c6_phase_idx "}" ;
+(* Hypercube adjacency = bit-flip: b XOR e_i = flip bit i = one edge in Q_n
+   Example: 1011 XOR bit1 = 1001 (legal neighbor)                       *)
+(* BIT-SET BIT-CLEAR BIT-MATCH BIT-WILDCARD inference rules (§57)       *)
+(* Law: Match = StructureMatch OR BitMaskMatch (two execution surfaces)  *)
+
+(* ─── §26  2D Pattern Matching (§58) ────────────────────────────── *)
+(* 1D scrutinee/pattern generalizes to 2D matrix/submatrix.
+   Ana_ψ = generate all (row,col) windows.
+   Attention = score_window (popcount matches).
+   Cata_φ = argmax(score) -> canonical (row,col).                    *)
+matrix_cell    ::= literal | wildcard_char ;
+wildcard_char  ::= "*" ;
+matrix_row_58  ::= matrix_cell { matrix_cell } ;
+pattern_matrix_58 ::= matrix_row_58 { matrix_row_58 } ;
+
+pattern_2d_bitfield_58 ::= "{" "rows" ":" number ","
+                                "width_bits" ":" number ","
+                                "width_words" ":" number ","
+                                "bits" ":" "[" { bitfield } "]" ","
+                                "mask" ":" "[" { bitfield } "]" "}" ;
+(* mask bit=1: required; mask bit=0: wildcard (SC-37 at binary layer) *)
+
+match_result_58 ::= "{" "row" ":" number "," "col" ":" number ","
+                        "score" ":" number "}" ;
+
+(* 2D-MATCH inference rule:
+   Premise:    Submatrix(S) iso Pattern(P)
+   Conclusion: Gamma |- S match P
+   Score law:  score = popcount((~((W XOR P) AND M)) AND M)    *)
+two_d_match_58 ::= "{" "kind"       ":" "2D-MATCH" ","
+                       "premise"    ":" "Submatrix(S) iso Pattern(P)" ","
+                       "conclusion" ":" "Gamma |- S match P" "}" ;
+
+(* Unification: 1D string match = 2D match with height=1.
+   Wildcard Law (2D): mask=0 => wildcard (matches anything).
+   Score Law: higher popcount = better match (graded, not boolean).  *)
+
+(* ─── §27  SIMD Acceleration (§59) ─────────────────────────────── *)
+(* Hot path: ((window ^ pattern) & mask) == 0 => exact match.
+   Score path: popcount((~((W ^ P) & M)) & M) => partial match count.
+   Dispatch: cpu_has_avx2() selects AVX2 or scalar at startup.      *)
+simd_width_59 ::= "scalar_64" | "simd_128_sse" | "simd_256_avx2"
+                | "simd_512_avx512" | "simd_n_blocks" | "gpu_warp" ;
+
+(* SIMD-MATCH rule:
+   Premise:    TestZero((W XOR P) AND M)
+   Conclusion: Gamma |- W match P
+   i.e. zero diff-under-mask = exact match across all SIMD lanes    *)
+simd_match_58 ::= "{" "kind"       ":" "SIMD-MATCH" ","
+                      "width"      ":" simd_width_59 ","
+                      "premise"    ":" "TestZero((W XOR P) AND M)" ","
+                      "conclusion" ":" "Gamma |- W match P" "}" ;
+
+(* SIMD FoldGraph Pipeline:
+   FoldGraph(B,Q) = ArgMax(ScoreSIMD(MatchSIMD(Ana(B,Q))))
+   Width Law: scalar=64, AVX2=256, AVX-512=512. Semantics unchanged.
+   Wildcard Law (SIMD): mask=0 for a lane = wildcard for that lane.  *)
+
+(* ─── §27  Implementation Index ─────────────────────────────────── *)
+(* foldgraph_2d_avx2.c:
+     BitMatrix  — text surface (rows x width_bits, uint64_t blocks)
+     Pattern2D  — bits[][] + mask[][] (mask bit=0 = wildcard)
+     MatchResult — row, col, score
+     extract64       — scalar lane-crossing window (byte_shift + bit_shift)
+     load_shifted256 — AVX2 lane-crossing via _mm256_or_si256(srli,slli)
+     scalar_score_row — Ana+Attention scalar kernel
+     avx2_score_row   — Ana+Attention AVX2 kernel, scalar tail for < 4 words
+     foldgraph_match  — Ana (all windows) + Attention + Cata (argmax)    *)
+
+
+(* ─── §60  SNOBOL Ancestry / Pattern-as-Structure ───────────────── *)
+(* SNOBOL ancestry law:
+     regex    -> pattern as syntax
+     SNOBOL   -> pattern as runtime/composable value
+     FoldGraph -> pattern as graph-generating constraint
+
+   FoldGraph divergence from SNOBOL:
+     SNOBOL matcher strategy selects a successful match.
+     FoldGraph generates a candidate field, scores by WCR, then folds by argmax
+     or preserves retained_wildcard under SC-37.
+*)
+snobol_pattern_value ::= "{" "kind" ":" "snobol_pattern_value" ","
+                              "pattern" ":" pattern ","
+                              "composition" ":" pattern_composition ","
+                              "role" ":" "first_class_runtime_pattern" "}" ;
+pattern_composition ::= "literal" | "concat" | "alternate" | "guard" | "bind" ;
+
+foldgraph_pattern_constraint ::= "{" "kind" ":" "foldgraph_pattern_constraint" ","
+                                      "pattern" ":" pattern ","
+                                      "query" ":" query ","
+                                      "base" ":" graph ","
+                                      "anamorphism" ":" candidate_field ","
+                                      "attention" ":" candidate_field ","
+                                      "catamorphism" ":" canonical_view "}" ;
+
+pattern_lineage_record ::= "{" "kind" ":" "pattern_lineage" ","
+                                "regex" ":" "pattern_as_syntax" ","
+                                "snobol" ":" "pattern_as_composable_value" ","
+                                "foldgraph" ":" "pattern_as_graph_generating_constraint" "}" ;
+
+snobol_first_match ::= "{" "kind" ":" "snobol_first_match" ","
+                            "pattern" ":" snobol_pattern_value ","
+                            "subject" ":" string ","
+                            "result" ":" resolution "}" ;
+foldgraph_best_match ::= "{" "kind" ":" "foldgraph_best_match" ","
+                              "pattern" ":" foldgraph_pattern_constraint ","
+                              "score" ":" score_record ","
+                              "selection" ":" resolution "}" ;
+
+(* §60 Laws:
+   (1) Pattern != mere syntax; pattern may be a runtime object.
+   (2) Pattern constrains Ana: P(Q,B) selects what part of B can unfold into F_Q.
+   (3) Template applies after canonicalization as stored structural transform.
+   (4) Wildcard is SC-37 unresolved variable: Unknown != Failure.
+   (5) WILD-RETAIN: C < tau -> retained_wildcard.
+   (6) WILD-RESOLVE: C >= tau -> resolved/known.
+   (7) FoldGraph replaces first-success commitment with WCR-ranked best match.
+   (8) A pattern can be an executable description of possible structure. *)
+
+(* ─── §28  SNOBOL Ancestry (§60) ────────────────────────────────── *)
+(* Lineage: regex -> SNOBOL -> BNF/EBNF -> FoldGraph
+   Core insight: a pattern is an executable description of possible structure.
+   At every level: Scrutinee -> Pattern -> Bindings -> Attention -> Fold.  *)
+
+pattern_ancestry_level_28 ::= "regex_predicate"       (* P(x)->{match,fail} *)
+                             | "snobol_value"          (* P = composable runtime object *)
+                             | "bnf_production"        (* P = recursive grammar rule *)
+                             | "foldgraph_constraint" ;(* P constrains Ana expansion *)
+
+(* SNOBOL core: pattern = first-class value.
+   concat(Q,R): both must match in sequence.
+   alt(Q|R):    first match wins — GREEDY (FoldGraph difference: WCR instead).
+   ARB:         arbitrary span wildcard = §41 wildcard_entity = SC-37 ARB.
+   assign(P.V): bind matched span to variable V = §56 MATCH-BIND.
+   BAL:         balanced brackets — context-free, requires recursive Ana.  *)
+snobol_op_28 ::= "concat" | "alt" | "arb" | "len_n" | "bal"
+               | "assign_immediate" | "assign_deferred" ;
+
+(* WCR Departure:
+   SNOBOL: alt(Q|R) -> try Q first; if match, done. R never evaluated.
+   FoldGraph: Ana expands Q AND R simultaneously -> WCR scores both -> Cata picks best.
+   Relation: SNOBOL ≅ FoldGraph(tau=1, argmax-of-first).                  *)
+
+(* AIML Bridge:
+   <pattern>  = SNOBOL-style recognizer (first-match, wildcards)
+   <wildcard> = SNOBOL ARB = SC-37 retained unknown
+   <template> = post-Cata stored transform
+   FoldGraph adds WCR ranking between pattern and template.                *)
+
+(* §60 Laws:
+   Ancestry Law:     regex ⊂ SNOBOL ⊂ BNF ⊂ FoldGraph.
+   Composability Law: SNOBOL pattern-as-value => patterns can be Ana arguments.
+   WCR Law:          SNOBOL=first-match; FoldGraph=best-match via WCR.
+   Constraint Law:   FoldGraph pattern constrains WHAT gets unfolded, not just recognized.
+   Possibility Law:  pattern = executable description of possible structure (all levels).
+   AIML Bridge Law:  AIML = SNOBOL+SC-37. FoldGraph = AIML+WCR.
+   Execute-as-Data:  SNOBOL "strings as programs" ≅ K'UHUL symbol->structure->operation. *)
+
+(* ─── §29  Micronaut Program System (§61) ───────────────────────── *)
+(* Formal law: MicronautRuntime(B,Q) = Cata_φ(WCR(Match(Ana_ψQ(B))))
+   Micronaut = Pattern-Bound Continuation + Memory + WCR state.
+   Program  = Global FoldGraph Hylomorphism governing all micronauts.  *)
+
+micronaut_key_29   ::= "µ://" identifier ;
+
+(* Edge types — strict boundary:
+   semantic_edge = relates_to (inference only; never auto-callable)
+   callable_edge = invokes    (requires Xul promotion gate)            *)
+edge_kind_29 ::= "semantic_edge" | "callable_edge" ;
+
+(* Micronaut schema: key + patterns + guards + continuations + edges + WCR *)
+micronaut_29 ::= "{" "key"           ":" micronaut_key_29 ","
+                     "patterns"      ":" "[" { pattern_58 } "]" ","
+                     "guards"        ":" "[" { string } "]" ","
+                     "continuations" ":" "[" { identifier } "]" ","
+                     "callable_edges" ":" "[" { micronaut_key_29 } "]" ","
+                     "wcr"           ":" "{" "weight" ":" number "," "confidence" ":" number "}" "}" ;
+
+(* Execution pipeline:
+   query → Ana(candidates) → Match(bind) → WCR(rank) → Cata(select) → Continuation *)
+execution_29 ::= "{" "query"       ":" string ","
+                     "candidates"  ":" "[" { micronaut_key_29 } "]" ","
+                     "bindings"    ":" "[" { binding } "]" ","
+                     "scores"      ":" "[" { number } "]" ","
+                     "selected"    ":" "[" { micronaut_key_29 } "]" ","
+                     "result"      ":" identifier "}" ;
+
+(* Domain emergence: evidence → patterns → templates → routes → promotion *)
+domain_field_29 ::= "{" "name"      ":" identifier ","
+                        "patterns"  ":" "[" { string } "]" ","
+                        "routes"    ":" "[" { micronaut_key_29 } "]" ","
+                        "score"     ":" number "}" ;
+
+(* §61 Laws (summary):
+   Formal Law:     MicronautRuntime(B,Q) = Cata_φ(WCR(Match(Ana_ψQ(B)))).
+   Edge Law:       semantic ≠ callable; promotion requires Xul gate.
+   Identity Law:   Micronaut = Pattern-Bound Continuation (not merely an agent).
+   Emergent Law:   evidence → patterns → templates → routes → micronaut.
+   Bitfield Law:   (query_mask & µ_mask) → candidate activation → WCR.
+   SNOBOL Bridge:  µ.pattern = SNOBOL value + WCR; µ.continuation = template. *)
+
+(* ============================================================
+   §30  FOLD UNIVERSALITY AND THE ERGONOMIC GAP (digest)
+   Reason modern programming adds abstractions on top of folds.
+   ============================================================ *)
+
+(* §30 = digest of §62 in kuhul.runtime-grammar.ebnf *)
+
+gap_source_30 ::= "effect_boundary" | "composition_opacity"
+                | "ranking_absence" | "cognitive_load" ;
+
+scaffold_layer_30 ::= "ranker"   (* WCR: of N valid folds, which one? *)
+                    | "effect"   (* monad: fold across IO/async/error *)
+                    | "syntax"   (* async/await: legible nested fold *)
+                    | "type" ;   (* grammar/checker: which folds compose? *)
+
+modern_abstraction_30 ::= identifier "=" "fold" "+" scaffold_layer_30 { "+" scaffold_layer_30 } ;
+
+(* Examples:
+   async/await  = fold + effect + syntax    (ContinuationMonad(foldr(callStack)))
+   TypeScript   = fold + type               (Cata_φ(typeGrammar))
+   Promise.then = fold + effect             (fmap+bind over Future)
+   for await    = fold + effect + syntax    (do-notation for IO+async monad)
+*)
+
+khanary_scaffold_30 ::= "FoldGraph" "=" "fold"
+                        "+" "WCR"       (* ranker: argmax over candidate field *)
+                        "+" "C6"        (* effect: phase-gated side effects *)
+                        "+" "Micronaut" (* naming: addressed composable fold *)
+                        "+" "EBNF" ;    (* type: fold composition constraints *)
+
+(* §30 Laws (summary of §62):
+   Universality:   Every computation is a fold. Universal ≠ usable.
+   Gap:            effect_boundary + composition_opacity + ranking_absence + cognitive_load.
+   Scaffold:       Modern abstractions = fold + one or more scaffold layers.
+   Async Law:      async/await = ContinuationMonad(foldr(callStack)). New: ergonomic layer.
+   Type Law:       TypeChecker = Cata_φ(typeGrammar). TypeScript = explicit type-fold.
+   Ranker Gap:     SNOBOL(1962)=fold+first-match. FoldGraph=fold+WCR. Gap=ranker.
+   KHANARY Law:    KHANARY = fold + WCR(ranker) + C6(effect) + Micronaut(name) + EBNF(type).
+                   All four scaffold layers. Complete ergonomic gap solution. *)
+
+(* ============================================================
+   §31  HIGHER-ORDER STRUCTURAL COMPUTATION (digest)
+   K'UHUL = higher-order structural machine language.
+   Phase × HOF are orthogonal axes.
+   ============================================================ *)
+
+(* §31 = digest of §63 in kuhul.runtime-grammar.ebnf *)
+
+hof_job_31 ::= "Map:A*→B*"       (* transform structure *)
+              | "Filter:A*→A*"    (* select structure *)
+              | "Fold:F(A)→A"     (* collapse structure *)
+              | "Unfold:A→F(A)" ; (* generate structure *)
+
+(* HOF family is open — not exhaustively enumerated.
+   Higher-order ≠ higher-level. HOF = takes/returns functions.
+   K'UHUL operates in the space of higher-order structural computation. *)
+
+c6_hof_31 ::= c6_phase_in_29 "[" hof_job_31 "]" ;
+(* Sek[Filter]  = selection phase + filter HOF. Sek ≠ Filter. *)
+(* Yax[Map]     = derivation phase + map HOF. *)
+(* Xul[Cata]    = commitment phase + cata HOF. Phase ⊥ HOF operation. *)
+
+kuhul_isa_31 ::= "MAP" | "FILTER" | "ANA" | "CATA" | "HYLO"
+               | "PROJECT" | "RESOLVE" | "COLLAPSE" ;
+
+(* K'UHUL ISA: operates over structures — not scalars.
+   Conventional ISA: ADD|MUL|LOAD|STORE|JMP.
+   K'UHUL opcodes lower to conventional backend via fold topology. *)
+
+montague_31 ::= "meaning(whole) = phi(meaning(parts), composition_rule)"
+               "(= fold law; = FoldGraph EBNF; = natural language compositional semantics)" ;
+
+kuhul_fold_semantic_31 ::= "K_UHUL_fold = semantic_execution_container (Mayan_codex)"
+                            "NOT == catamorphism."
+                            "Cata/Ana/Map/Filter/WCR occur WITHIN the fold container." ;
+
+(* §31 Laws (summary of §63):
+   HOF Family: Map/Filter/Fold/Unfold/... each do distinct structural jobs.
+   Orthogonality: Phase (semantic position) ⊥ HOF (structural operation). Not 1:1.
+   Semantic Law: K'UHUL fold = Mayan codex phase container, not catamorphism.
+   Montague: meaning(whole)=phi(parts,composition)=fold law=FoldGraph EBNF.
+   ISA Law: K'UHUL ISA={MAP,FILTER,ANA,CATA,HYLO,PROJECT,RESOLVE,COLLAPSE}.
+   Hierarchy: HOF machine → structural ops → fold topology → backend → scalar machine. *)
+
+(* ============================================================
+   §32  GLYPH AS PROGRAM — PHASES AS FACES (digest)
+   µ(b,θ,g) K'UHUL executable address.
+   Q_n□C_6: b=which program, θ=which face.
+   ============================================================ *)
+
+(* §32 = digest of §64 in kuhul.runtime-grammar.ebnf *)
+
+kuhul_address_32 ::= "µ" "(" b "," theta "," g ")" ;
+(* b = semantic program address (Q_n coordinate)
+   theta = face/phase (C_6 coordinate)
+   g = continuous learned geometry (R^m) *)
+
+glyph_32 ::= "Identity" "+" "Program" "+" "Phases" "+" "Topology" "+" "LearnedState" ;
+(* Glyph_µ = five-tuple. Not merely a symbol.
+   Meaning(µ) = f(Glyph, Phase, Neighbors, Relations, Context) *)
+
+product_move_32 ::= "(b, theta) → (b, theta+1)"   (* same program, next face *)
+                  | "(b, theta) → (b⊕eᵢ, theta)" ; (* neighbor program, same face *)
+
+glyph_opcode_32 ::= "Structure → Structure'" | "Program → Program'" ;
+(* Higher-order opcode. Not ADD(a,b). Operand = computational structure. *)
+
+codex_law_32 ::= "unfold(codex) = Ana | faces = C_6_phases | WCR = relationships | Cata = fold(meaning)" ;
+
+(* §32 Laws (summary of §64):
+   Address:   µ(b,θ,g) — semantic address + face + geometry.
+   Glyph:     ⟨Identity,Program,Phases,Topology,LearnedState⟩. Not merely a symbol.
+   Product:   b=which program, θ=which face. Independent axes → Cartesian product.
+   Faces:     µ:Pop→µ:Wo→...→µ:Xul = 6 faces of ONE program.
+   Opcode:    Glyph:Structure→Structure'. Higher-order. Not scalar.
+   Codex:     Mayan codex unfold = Ana; faces = C_6; relationships = WCR; fold = Cata. *)
+
+(* ============================================================
+   §33  ADAPTIVE FOLD — LEARNED COMBINING ALGEBRA (digest)
+   φ_t is the learned object. Both Ana and Cata update.
+   Same T, different result after reward.
+   ============================================================ *)
+
+(* §33 = digest of §65 in kuhul.runtime-grammar.ebnf *)
+
+adaptive_algebra_33 ::= "φ_µ(Q,T; W,C,R,g,Π)" ;
+(* W/C/R/g participate in the reduction — not decoration.
+   After reward: W_t→W_{t+1}, C_t→C_{t+1} → φ_t ≠ φ_{t+1}. *)
+
+learning_loop_33 ::=
+    "(B,Q)"
+    "→ Ana_{ψ_t} → F_Q"
+    "→ WCR_t     → F*_Q"
+    "→ Cata_{φ_t} → C_Q"
+    "→ Reward"
+    "→ (ψ_{t+1}, W_{t+1}, C_{t+1}, g_{t+1}, φ_{t+1})" ;
+
+ana_cata_learn_33 ::=
+    "ψ_t → ψ_{t+1}"   (* changes WHAT gets unfolded: candidate field shape *)
+    "φ_t → φ_{t+1}" ; (* changes HOW unfolded gets folded back: reduction result *)
+
+adaptive_opcode_33 ::= "FOLD_{φ_t}(Structure)" ;
+(* Not ADD(a,b). Execution changes parameters governing future execution. *)
+
+residence_law_33 ::=
+    "learned_state LIVES IN: folds grams relations confidence weights policies"
+    "NOT IN: model_tensor_weights (frozen after training)"
+    "model = oracle proposing info; fold = adaptive computational object" ;
+
+kuhul_table_33 ::= "Topology=Q_n□C_6 | Ana=ψ | Attention=WCR | Cata=φ | Learning=Δ(ψ,W,C,R,g,φ)" ;
+
+(* §33 Laws (summary of §65):
+   Adaptive Algebra:   φ_µ(Q,T;W,C,R,g,Π) — phi carries learned state.
+   Reward Update:      Reward → (ψ_{t+1},W_{t+1},C_{t+1},g_{t+1},φ_{t+1}).
+   Ana Learning:       ψ_t→ψ_{t+1} changes what gets unfolded.
+   Cata Learning:      φ_t→φ_{t+1} changes how unfolded gets folded back.
+   Same T Diff Result: Cata_{φ_t}(T)=A ≠ Cata_{φ_{t+1}}(T)=B. This IS learning.
+   Adaptive Opcode:    FOLD_{φ_t}(Structure). Execution changes future parameters.
+   Residence Law:      Learned structure lives in fold system, not model tensor weights.
+   System Table:       Topology|Ana|Attention|Cata|Learning = 5 independent axes. *)
+
+(* ============================================================
+   §34  AHO-CORASICK KEY GRAMMAR (digest)
+   AC = key-addressing automaton. K_UHUL = semantic layer.
+   n-gram = address. key-book = semantic neighborhood.
+   ============================================================ *)
+
+(* §34 = digest of §66 in kuhul.runtime-grammar.ebnf *)
+
+ngram_key_34 ::= string ":" identifier ;
+(* n-gram text -> key address -> key_book.
+   Higher arity = stronger address. *)
+
+bag_of_keys_34 ::= "[" ngram_key_34 "]" ;
+(* AC emits all overlapping matches. No premature collapse.
+   O(n+m+z): input + dictionary + emitted matches. *)
+
+key_book_34 ::= "{" "N_M" ":" "[" identifier "]" ","
+                    "N_I" ":" "[" identifier "]" "}" ;
+(* N_M = manifest symbolic neighbors. N_I = geometric neighbors.
+   NOT AC trie transitions. K_UHUL semantic graph edges. *)
+
+key_score_34 ::= "S(k) = W_k + sum_{N_M}(W_u*R_sym) + sum_{N_I}(W_u*R_geo)" ;
+
+pipeline_34 ::= "tokens -> AC -> bag_of_keys -> N_M+N_I -> Wo/Yax -> Sek -> Ch_en -> Xul" ;
+
+(* §34 Laws (summary of §66):
+   N-gram Address:   n-gram = semantic book address. Not probability.
+   AC Boundary:      AC finds keys. K_UHUL interprets keys.
+   Bag of Keys:      AC exhaustive overlapping matches. No premature collapse.
+   Failure Link:     longest useful suffix = structural fallback candidate (SC-37 at recognition).
+   Key Book:         N_M(manifest) + N_I(geometric). Not trie transitions.
+   Key Score:        S(k) = W_k + sym_sum + geo_sum.
+   Separation:       Recognition exhaustive. Collapse phase-bound.
+   Grammar Law:      AC recognition + key-book expansion + phase-bound arbitration. *)
+
+(* ============================================================
+   §35  THREE-LAYER ARCHITECTURE (digest of §67)
+   Key Grammar ≠ Inference Field ≠ K'UHUL Fold
+   retrieve → infer → learn
+   ============================================================ *)
+
+key_grammar_35       ::= "ngram → key → N_M(k)" ;
+inference_field_35   ::= "B → Ana_psi → windows → (w_i XOR P) AND M → popcount → F_Q" ;
+kuhul_fold_35        ::= "(B,Q) → Ana_psi_t → F_Q → WCR_t → F*_Q → Cata_phi_t → C_Q → Reward" ;
+escalation_35        ::= "key_hit→N_M | weak_hit→F_Q | no_hit→Fold | Fold→N_manifest_update" ;
+foldgraph_2d_35      ::= "FoldGraph_2D(B,P,M)=argmax_i[popcount(M)-popcount((W_i XOR P) AND M)]" ;
+graph_sep_35         ::= "G_Q=query-local != Q_n_C6=runtime-topology" ;
+
+(* §35 Laws (summary of §67):
+   Three layers:   KeyGrammar != InferenceField != Fold.
+   Escalation:     key_hit->N_M; weak_hit->F_Q; no_hit->Fold.
+   Feedback:       Fold verified learning -> N_manifest -> KeyGrammar.
+   Bit-native:     FoldGraph_2D = argmax bit-XOR-AND-popcount.
+   Separation:     G_Q query-local != Q_n_C6 runtime topology.
+   Outputs:        N(k), F_Q, C_Q respectively. *)
+
+(* ============================================================
+   §36  FOLDED HYPERCUBE (digest of §68)
+   FQ_n = Q_n + complement edges. Three edge classes.
+   ============================================================ *)
+
+fq_n_36         ::= "FQ_n = Q_n + {b->b_bar : b_bar = b XOR mask(n)}" ;
+semantic_step_36 ::= "(b,theta)->(b XOR e_i, theta)" ;
+fold_step_36    ::= "(b,theta)->(b_bar,theta)  (* @fold_step: all bits, CONTRAST/DUAL *)" ;
+phase_step_36   ::= "(b,theta)->(b, theta+-1)" ;
+wcrfold_36      ::= "N_F(b) = {b XOR e_i, b_bar}. WCR scores all." ;
+fq3_stats_36    ::= "FQ_3 x C_6: |V|=48 |E|=144 deg=6 diameter=2" ;
+
+(* §36 Laws (summary of §68):
+   FQ_n=Q_n+complement. diameter(FQ_3)=2.
+   Three edges: @semantic_step(1-bit) | @fold_step(all-bits) | @phase_step.
+   Non-replacement: both @semantic and @fold coexist.
+   WCR: N_F(b) includes b_bar. Fold ignored when R(Q,K_b_bar)=0.
+   Complement score: D_opp=(W_i XOR P_bar) AND M. Same cost as D.
+   Meaning: b->b_bar = COUNTEREXAMPLE/CONTRAST/DUAL. 000->111 = flip all predicates. *)
+
+(* ============================================================
+   §37  NODE FIELD GRAPH CONSTRUCTION (digest of §69)
+   n-gram keys -> nodes; key-books -> edges; phases -> states; geometry -> coords
+   ============================================================ *)
+
+key_node_37     ::= "v_i = (k_i, theta, g, W, C, R)  (* n-gram key = node address *)" ;
+nfg_v_37        ::= "V = {recognized n-gram keys}" ;
+nfg_e_37        ::= "E = E_ngram | E_manifest | E_inferred | E_phase" ;
+e_ngram_37      ::= "E_ngram = overlap/constituent sharing between co-recognized keys" ;
+resolution_37   ::= "unigram->broad field | bigram->constrained | trigram->specific" ;
+bag_subgraph_37 ::= "bag_of_keys = local semantic subgraph, NOT competing tokenizations" ;
+pipeline_37     ::= "KeyGrammar -[unfold]-> NodeFieldGraph -[project]-> GeometricNodeField" ;
+
+(* §37 Laws (summary of §69):
+   Key-Node: n-gram key = node address, NOT the field itself.
+   Four edges: G_ngram + G_manifest + G_inferred + G_phase.
+   E_ngram: overlapping keys share E_ngram edges (local subgraph).
+   Resolution: higher-arity key = more constrained neighborhood.
+   Bag: bag-of-keys = local subgraph not tokenization competition.
+   Pipeline: KeyGrammar -unfold-> SymbolicNodeField -project-> GeometricNodeField. *)
+
+(* ============================================================
+   §38  VERB TOKEN DISPATCH (digest of §70)
+   verb keys → runtime dispatch | two paths | autonomous firing
+   ============================================================ *)
+
+verb_key_38     ::= "v_verb = (k_verb, action, arg_pattern, priority)" ;
+two_paths_38    ::= "USER_EXPLICIT: AC->bind->dispatch | MODEL_EXPLICIT: tool_calls->dispatch" ;
+three_path_38   ::= "RUNTIME_AUTONOMOUS: WCR(v_verb)>=tau_verb -> dispatch without prompt" ;
+arg_wildcard_38 ::= "arg_pattern = SC-37 wildcard template. bind(pattern, input) -> args." ;
+lfm_format_38   ::= "LFM: OpenAI API tool_calls format. NOT embedded JSON in text. role:tool result." ;
+dual_agency_38  ::= "model retrieves (tool_call) OR runtime retrieves (AC intercept) -> same VerbDispatcher." ;
+
+(* §38 Laws (summary of §70):
+   Verb-Key: n-gram key + action + arg_pattern + mode.
+   Two paths: USER_EXPLICIT(AC intercept before model) | MODEL_EXPLICIT(tool_calls after model).
+   Three paths: + RUNTIME_AUTONOMOUS(WCR gap fires verb without user/model request).
+   Arg binding: SC-37 wildcard resolved at dispatch: "for *" + input -> {query: ...}.
+   LFM: OpenAI tool_calls array, not text-embedded JSON.
+   Dual agency: both paths converge to VerbDispatcher.dispatch(action, args). *)
+
+(* ============================================================
+   §39  ATTRIBUTED SEMANTIC GRAMMAR (digest of §71)
+   EBNF + executable projection semantics = semantic transpiler.
+   ============================================================ *)
+
+transpile_form_39      ::= "@transpile name = surface_patterns => key(k) => b(addr) => theta(face) => gram(ref)" ;
+recognition_39         ::= "surface_patterns -> AC seeded at compile time -> canonical_key (AC answers WHERE)" ;
+canonicalization_39    ::= "key(k): many surface forms -> ONE canonical semantic symbol (n-gram key = address)" ;
+projection_39          ::= "b(addr) => theta(face) => gram(ref): three independent spaces, never collapsed" ;
+ac_subordination_39    ::= "AC = recognition backend. Grammar = semantic authority. gram(ref) -> g from manifest." ;
+harvest_derivation_39  ::= "@transpile -> compiler pass -> n-gram keys + AIML + NFG vertices (transitional: harvest_*.py)" ;
+pipeline_39            ::= "TEXT -> surface_patterns -> AC -> canonical_key -> b/theta/gram -> node(b,theta,g) -> N(k) -> NFG" ;
+
+(* §39 Laws (digest of §71):
+   Attribution: recognition / canonicalization / projection are separable phases in one production.
+   Canonical Key: n-gram is ONE address; "fold graph" => k_FOLD_GRAPH, NOT ["fold","graph"].
+   Separation: b in FQ_n, theta in C_6, g in R^m — three spaces, never merged.
+   AC Subordination: AC answers WHERE; grammar declares WHAT; grammar overrides AC.
+   Harvest Derivation: @transpile is source; harvest scripts are transitional compiler passes.
+   SNOBOL: pattern participates in computation — @transpile extends: pattern -> capture -> key -> NFG. *)

@@ -1,0 +1,72 @@
+{
+  "@type": "khanary.entropy_budget.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "threshold_provenance_only_an_observer_never_authority",
+  "lane": "KHANARY_ENTROPY_BUDGET_TEST",
+  "owner": "src/io/entropy_budget.cpp",
+  "docs": [
+    "docs/GLOSSARY.md",
+    "docs/GRADIENT-FIELD-ALGEBRA.md",
+    "docs/KUHUL_PHASE_ALGEBRA.md"
+  ],
+  "why": "The Ω ambiguity gate compares Ĥ_route against 0.90, while the GML field carries absolute entropy measurements with a declared bound. Nothing declared the relationship between the two, so a consumer could silently compare or substitute them. They are different quantities with different normalisation denominators, so the relationship has to be stated and the only sanctioned bridge has to be an explicit, dimensionless opt-in axis.",
+  "surfaces": {
+    "router": {
+      "quantity": "Ĥ_route",
+      "definition": "H / ln|Eligible| over the eligible W·C·R distribution",
+      "range": [0, 1],
+      "units": "dimensionless (normalised distribution entropy)",
+      "default_threshold": 0.9,
+      "default_status": "provisional, documented in docs/GLOSSARY.md as Ĥ_route > 0.90",
+      "owner": "src/io/request_router.h"
+    },
+    "field": {
+      "quantity": "local_entropy",
+      "companions": ["entropy_spike", "entropy_delta", "entropy_bound"],
+      "units": "absolute field units with a declared bound (entropy_bound)",
+      "normalisation": "none: the field declares an absolute value and its bound, not a distribution",
+      "owner": "src/world/gml_parser.cpp"
+    }
+  },
+  "relationship": {
+    "law": "the two surfaces are different quantities and are not interconvertible; neither may be substituted for the other",
+    "why_not_convertible": "Ĥ_route divides by ln|Eligible| (a property of the candidate set); the field divides by nothing and declares entropy_bound (a property of the field). A ratio of field values is not a distribution entropy, so deriving one from the other would be a fabricated normalisation.",
+    "sanctioned_bridge": {
+      "axis": "omega_entropy_threshold",
+      "kind": "explicit, dimensionless, router-facing opt-in axis on a FieldParamRecord",
+      "range": "0 < value <= 1",
+      "detail": "a field that wants to move the gate must speak the router's unit and say so by name; a field that only declares local_entropy/entropy_bound is refused rather than converted"
+    },
+    "unsanctioned": [
+      "comparing local_entropy with Ĥ_route directly",
+      "using entropy_bound as a threshold",
+      "dividing local_entropy by entropy_bound and calling the result a distribution entropy",
+      "accepting a threshold from a request payload"
+    ]
+  },
+  "precedence": {
+    "order": ["host_override", "field_record", "default"],
+    "law": "the gate threshold is host configuration or a loaded, declared record axis; a request payload can never move it",
+    "payload_claims": "ignored, and the fact that a claim was ignored is reported"
+  },
+  "provenance": {
+    "sources": ["default", "host_override", "field_record"],
+    "recorded_on": "every routing decision, as omega_threshold + omega_threshold_source + omega_threshold_detail"
+  },
+  "status_vocabulary": [
+    "ok",
+    "no_records",
+    "no_router_threshold_axis",
+    "threshold_out_of_range",
+    "non_finite"
+  ],
+  "invariants": {
+    "EB1": "the router threshold is a dimensionless number in (0, 1]; the field entropy is absolute; the two are never compared without a declared conversion",
+    "EB2": "no implicit conversion exists: a record that declares only local_entropy / entropy_bound / entropy_spike / entropy_delta is refused with no_router_threshold_axis",
+    "EB3": "the only sanctioned source is an explicit omega_entropy_threshold axis whose value lies in (0, 1]",
+    "EB4": "threshold precedence is host_override > field_record > default, and the resolved source is recorded on every decision",
+    "EB5": "a threshold claimed by a request payload is ignored and the ignore is reported; entropy can refuse premature collapse and can never grant it",
+    "EB6": "a non-finite or out-of-range threshold is a typed refusal, never a clamp that silently changes the gate"
+  }
+}

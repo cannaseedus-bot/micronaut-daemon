@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Generated key lookup bank from regex-fsm.key-grammar.jsonl; entries are data, not execution authority.-->
+  <category>
+    <pattern>LOOK UP KEY REGEXFSM:BRIDGE</pattern>
+    <template>Key REGEXFSM:BRIDGE. definition: Regex and FSM recognize the same regular language through pattern-centric and state-centric forms.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY REGEXFSM:FSM</pattern>
+    <template>Key REGEXFSM:FSM. definition: FSM answers what state is active and where execution transitions next.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY REGEXFSM:COMPILER</pattern>
+    <template>Key REGEXFSM:COMPILER. definition: Regular expressions compile into finite automata, usually NFA then DFA.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY REGEXFSM:NFA</pattern>
+    <template>Key REGEXFSM:NFA. definition: NFA is a finite automaton that may use epsilon or multiple possible transitions.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY REGEXFSM:DFA</pattern>
+    <template>Key REGEXFSM:DFA. definition: DFA is deterministic execution graph with one transition per symbol per state.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY REGEXFSM:PATTERN</pattern>
+    <template>Key REGEXFSM:PATTERN. definition: Pattern is the regex language description before compilation.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY REGEXFSM:MATCHER</pattern>
+    <template>Key REGEXFSM:MATCHER. definition: Matcher runs the compiled pattern over input and returns match or no_match.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY REGEXFSM:STATE</pattern>
+    <template>Key REGEXFSM:STATE. definition: State is an explicit automaton position.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY REGEXFSM:TRANSITION</pattern>
+    <template>Key REGEXFSM:TRANSITION. definition: Transition is a labeled edge from one state to another.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY REGEXFSM:ACCEPT</pattern>
+    <template>Key REGEXFSM:ACCEPT. definition: Accept state marks successful recognition of the language.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY REGEXFSM:APPLICATIONS</pattern>
+    <template>Key REGEXFSM:APPLICATIONS. definition: Lexers, parsers, NPC AI, protocols, dialogue systems, and workflows compile patterns into transitions.</template>
+  </category>
+</aiml>

@@ -1,0 +1,200 @@
+{
+  "schema": "kuhul.micronaut.atomic.v1",
+  "identity": {
+    "id": "LEARN-µ",
+    "name": "learn-µ",
+    "version": "1.0.0",
+    "authority_claim": "evolve_only"
+  },
+  "descriptor_status": "declarative_proposal",
+  "registered": false,
+  "registered_status": "unregistered; call register_micronaut() to activate",
+  "track_ref": "data/tracks/LEARN-u.semantic-tracks.v1.json",
+  "bindings_ref": null,
+  "manifest": {
+    "display_name": "learn-µ",
+    "tagline": "Phase-keyed micronaut evolution, chat scoring, and semantic factory",
+    "color": "#a0c4ff",
+    "icon_svg": "data/micronauts/assets/learn.svg",
+    "animated_svg": "data/micronauts/assets/learn.animated.svg",
+    "profile_card": {
+      "widget": "data/host/apps/micronaut-card.asx-app.json",
+      "props": { "id": "LEARN-µ", "phase": "Sek", "category": "evolution" }
+    }
+  },
+  "api": {
+    "namespace": "learn",
+    "note": "No HTTP server — learn-µ is a DLL-native + file-store system; keys resolve via native driver layer",
+    "atomic_keys": [
+      { "key": "learn.phase_state",      "description": "read current learn-µ engine phase state from .learning/phase_state.json" },
+      { "key": "learn.store_chat",       "description": "persist a chat interaction record to .learning/chats/<id>.json" },
+      { "key": "learn.score",            "description": "record a quality evaluation entry to .learning/evaluations.jsonl and monthly score file" },
+      { "key": "learn.recall",           "description": "retrieve scored chat records or seed micronauts by topic / phase / quality threshold" },
+      { "key": "learn.evolve",           "description": "run Micronaut.Evolution.dll evolution pass on a seed micronaut — writes updated seed to .learning/micronauts/<domain>/<phase>/" },
+      { "key": "learn.query_field",      "description": "execute XQuery over data/mx2lm.vectors.safetensors ngram field via field_query.py — Pop/Wo/Yax axes" },
+      { "key": "learn.factory_research", "description": "create semantic driver JSON from text via factory_research.py — writes to drivers/micronauts/semantic/<slug>.json" }
+    ]
+  },
+  "data_store": {
+    "root": ".learning/",
+    "files": {
+      "phase_state":        ".learning/phase_state.json",
+      "evaluations":        ".learning/evaluations.jsonl",
+      "monthly_scores":     ".learning/YYYYMM_scores.jsonl",
+      "chats":              ".learning/chats/*.json",
+      "knowledge_micronauts": ".learning/micronauts/<topic>.json",
+      "seed_micronauts":    ".learning/micronauts/<domain>/<phase>/seed_*.json",
+      "proof":              ".learning/PROOF_001_Program_Execution.md"
+    },
+    "schemas": {
+      "phase_state": {
+        "engine_ready": "bool",
+        "phase": "string — current C6 phase name",
+        "states": "object",
+        "transforms": "null|object",
+        "glyph": "string",
+        "observations": "null|object"
+      },
+      "evaluation_entry": {
+        "interaction_id": "string",
+        "timestamp": "ISO 8601",
+        "quality": "number 0–100",
+        "phase": "string",
+        "topic": "string"
+      },
+      "knowledge_micronaut": {
+        "id": "string",
+        "subject": "string",
+        "capability": "string",
+        "fold": "string",
+        "kind": "\"knowledge\"",
+        "patterns": { "entity": "string", "process": "string" },
+        "relations": "array",
+        "memories": "array",
+        "recognize": { "keywords": "string[]" },
+        "response": "string",
+        "temperament": "string",
+        "affectiveState": "string"
+      },
+      "seed_micronaut": {
+        "id": "string",
+        "subject": "string",
+        "fold": "string",
+        "model": "\"seed\"",
+        "quality": "number",
+        "semantic_signature": "string",
+        "response": "string",
+        "provenance": {
+          "source": "string",
+          "capability": "string",
+          "brain": "string",
+          "fold_trace": "string",
+          "terminal_fold": "string",
+          "interaction_id": "string",
+          "timestamp": "ISO 8601"
+        },
+        "authority": {
+          "control_mutation": "false — invariant",
+          "tool_grants": "string[]",
+          "opcode_grants": "string[]"
+        },
+        "tags": "string[]"
+      }
+    }
+  },
+  "tools": {
+    "field_query": {
+      "script": "tools/field_query.py",
+      "description": "XQuery-style REPL over data/mx2lm.vectors.safetensors ngram field",
+      "axes": { "Pop": "unigrams", "Wo": "bigrams", "Yax": "trigrams" },
+      "predicates": ["@weight (P(ngram))", "@cond (P(wn|context))", "@label (contains/starts-with/=/!=)"],
+      "query_syntax": "Pop::the / Wo::*[@cond > 0.3] / Yax::*[@cond > 0.5]",
+      "prerequisite": "py -3 tools\\arpa_to_safetensors.py tools\\mx2lm.arpa --min-prob 1e-6"
+    },
+    "factory_research": {
+      "script": "tools/factory_research.py",
+      "description": "Create semantic driver JSON from text, stdin, or LFM2.5 distillation",
+      "output": "drivers/micronauts/semantic/<slug>.json",
+      "optional_outputs": {
+        "eliza": "data/drivers/eliza/<slug>.eliza.json",
+        "aiml":  "data/alice/factory_<slug>.aiml"
+      },
+      "lfm_path": "C:/Users/canna/.lmstudio/models/lmstudio-community/LFM2.5-1.2B-Instruct-GGUF/LFM2.5-1.2B-Instruct-Q8_0.gguf"
+    }
+  },
+  "proof_invariants": {
+    "ref": ".learning/PROOF_001_Program_Execution.md",
+    "invariants": [
+      "fold trace MUST NOT be emitted unless that fold was actually entered by the Program Engine",
+      "Micronaut invocation MUST NOT be registered unless the corresponding Sek declaration was executed"
+    ]
+  },
+  "capabilities": [
+    "phase_state_tracking",
+    "chat_persistence",
+    "quality_scoring",
+    "micronaut_evolution",
+    "seed_creation",
+    "knowledge_micronaut_store",
+    "field_query_ngram",
+    "factory_research_semantic_driver",
+    "monthly_score_aggregation",
+    "chat_replay"
+  ],
+  "srai": {
+    "mode": "none",
+    "max_depth": 0
+  },
+  "xcfe": {
+    "authority": "evolve_only",
+    "forbidden": [
+      "emit_response",
+      "mutate_topology",
+      "commit_patterns",
+      "redirect_srai"
+    ],
+    "note": "learn-µ may write to .learning/ and evolve seed micronauts; it cannot alter topology or emit responses"
+  },
+  "program_contract": {
+    "format": "kuhul.micronaut-program/1",
+    "phase": "Sek",
+    "role": ["chat_persistence", "quality_scoring", "micronaut_evolution", "field_query", "factory_research"],
+    "effects": ["gramRead", "gramWrite", "evolve"],
+    "learning": {
+      "mode": "active_evolve",
+      "note": "learn-µ IS the learning subsystem — it writes evaluations, evolves seeds, and persists chat records"
+    },
+    "sandbox": {
+      "filesystem": ".learning/ (read+write), tools/ (read+execute), drivers/micronauts/semantic/ (write)",
+      "network": "none",
+      "process": "field_query.py subprocess, factory_research.py subprocess",
+      "effects": ["gramRead", "gramWrite", "evolve"],
+      "admission": "xcfe_gated"
+    },
+    "drivers": [
+      "Micronaut.Core.dll",
+      "Micronaut.Memory.dll",
+      "Micronaut.Reward.dll",
+      "Micronaut.Evolution.dll",
+      "micronaut_evolution.dll",
+      "Micronaut.Compute.dll",
+      "micronaut_factory_bridge.dll",
+      "micronaut_factory_core.dll"
+    ],
+    "driver_roles": {
+      "Micronaut.Core.dll":           "core micronaut runtime",
+      "Micronaut.Memory.dll":         "memory and learning storage — backs .learning/chats/ and phase_state",
+      "Micronaut.Reward.dll":         "quality scoring — backs .learning/evaluations.jsonl",
+      "Micronaut.Evolution.dll":      "learning evolution passes — promotes seeds across phase tiers",
+      "micronaut_evolution.dll":      "evolution co-driver — lower-level evolution kernel",
+      "Micronaut.Compute.dll":        "compute dispatch for evolution kernels",
+      "micronaut_factory_bridge.dll": "factory bridge — coordinates factory_research.py output with native driver layer",
+      "micronaut_factory_core.dll":   "factory core — seed creation and registration authority"
+    }
+  },
+  "cache": {
+    "ttl": 300,
+    "strategy": "phase_keyed_lru",
+    "max_entries": 2000
+  }
+}

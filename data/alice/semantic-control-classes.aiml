@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0.1"
+      xmlns="http://alicebot.org/2001/AIML-1.0.1"
+      xmlns:aiml="http://alicebot.org/2001/AIML-1.0.1">
+  <!-- Declarative semantic classes. These categories describe their tracks; they do not invoke them. -->
+  <category>
+    <pattern>SCFML</pattern>
+    <template><srai>WHAT IS SCFML</srai></template>
+  </category>
+  <category>
+    <pattern>SCFML HELP</pattern>
+    <template><srai>WHAT DOES SCFML DO</srai></template>
+  </category>
+  <category>
+    <pattern>WHAT IS SCFML</pattern>
+    <template>SCFML-µ is the Semantic Control Flow Machine Learning class. Its track normalizes branch surfaces, keeps SUPPORTED, MISS, UNKNOWN, and CONTRADICTED distinct, reasons over typed semantic-key relations, and proposes candidate moves to XCFE. SCFML proposals do not authorize execution.</template>
+  </category>
+  <category>
+    <pattern>WHAT DOES SCFML DO</pattern>
+    <template>SCFML-µ normalizes if/then/else/unknown branches, resolves their epistemic state, and may propose pattern-learning candidates. MISS is not contradiction, UNKNOWN is not else, and pattern promotion requires SUPPORTED evidence or user verification.</template>
+  </category>
+  <category>
+    <pattern>CFPC</pattern>
+    <template><srai>WHAT IS CFPC</srai></template>
+  </category>
+  <category>
+    <pattern>CFPC HELP</pattern>
+    <template><srai>WHAT DOES CFPC DO</srai></template>
+  </category>
+  <category>
+    <pattern>WHAT IS CFPC</pattern>
+    <template>CFPC-µ is the deterministic Context-Field Pattern Classifier class. It recognizes intent, classifies the context-field bitmap, and routes intent, query, or knowledge gaps. RESOLVED means required fields are present for routing; it does not mean the answer is verified.</template>
+  </category>
+  <category>
+    <pattern>WHAT DOES CFPC DO</pattern>
+    <template>CFPC-µ classifies context into RESOLVED, INTENT_GAP, QUERY_GAP, KNOWLEDGE_GAP_NO_KEYS, or KNOWLEDGE_GAP_NO_VALUES and proposes the corresponding route. Classification does not authorize tools or establish factual truth.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS XCFE</pattern>
+    <template>XCFE-µ is the host policy and execution-gate class. It evaluates phase, capability, and policy conditions for proposed moves. A SCFML branch, AIML category, or Micronaut declaration does not grant XCFE admission.</template>
+  </category>
+  <category>
+    <pattern>XCFE</pattern>
+    <template><srai>WHAT IS XCFE</srai></template>
+  </category>
+  <category>
+    <pattern>XCFE HELP</pattern>
+    <template><srai>WHAT DOES XCFE AUTHORIZE</srai></template>
+  </category>
+  <category>
+    <pattern>WHAT DOES XCFE AUTHORIZE</pattern>
+    <template>XCFE evaluates whether a proposed move is permitted under the active host policy and execution contracts. The host retains authority; a successful classification or branch selection is not itself an authorization.</template>
+  </category>
+  <category>
+    <pattern>SCFML VS XCFE</pattern>
+    <template>SCFML declares semantic branches, epistemic resolutions, and candidate moves. XCFE independently evaluates authorization and execution gates for those moves. SCFML proposes; XCFE authorizes.</template>
+  </category>
+  <category>
+    <pattern>CFPC VS SCFML</pattern>
+    <template>CFPC classifies intent, context fields, and gap routes. SCFML normalizes semantic control-flow branches, reasons over key relations, and proposes candidate moves. Neither classification nor proposal grants execution authority.</template>
+  </category>
+</aiml>

@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from quantum_field_boundaries.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH </pattern>
+    <template>source quantum_field_boundaries.gml; label Quantum_Field_Boundaries; identity 1206; directed 1; nodes 3; edges 2. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 1</pattern>
+    <template>Graph Quantum_Field_Boundaries; node 1; boundary_token: ◄art►; boundary_type: kirchhoff; divergence: 1.0; id: 1; label: Query_Origin; phase_shift: 0.0; singularity: source; text_boundary: article; vertex_pot: 0.0; x: -2.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Quantum_Field_Boundaries; node 1; boundary_token: ◄art►; boundary_type: kirchhoff; divergence: 1.0; id: 1; label: Query_Origin; phase_shift: 0.0; singularity: source; text_boundary: article; vertex_pot: 0.0; x: -2.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 2</pattern>
+    <template>Graph Quantum_Field_Boundaries; node 2; boundary_token: ◄/s►; boundary_type: kirchhoff; divergence: -1.0; id: 2; label: Sentence_Sink; phase_shift: 0.7853; singularity: sink; text_boundary: sentence; vertex_pot: 0.0; x: 0.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Quantum_Field_Boundaries; node 2; boundary_token: ◄/s►; boundary_type: kirchhoff; divergence: -1.0; id: 2; label: Sentence_Sink; phase_shift: 0.7853; singularity: sink; text_boundary: sentence; vertex_pot: 0.0; x: 0.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 3</pattern>
+    <template>Graph Quantum_Field_Boundaries; node 3; boundary_token: ◄par►; boundary_type: robin; divergence: 0.5; id: 3; label: Paragraph_Source; phase_shift: 1.5708; singularity: source; text_boundary: paragraph; vertex_pot: 0.2; x: 2.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Quantum_Field_Boundaries; node 3; boundary_token: ◄par►; boundary_type: robin; divergence: 0.5; id: 3; label: Paragraph_Source; phase_shift: 1.5708; singularity: source; text_boundary: paragraph; vertex_pot: 0.2; x: 2.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1  2</pattern>
+    <template>Graph Quantum_Field_Boundaries; edge 1 to 2; amplitude_im: 0.0; amplitude_re: 1.0; frequency: 0.75; id: 101; label: query_to_sentence_wave; length: 3.0; potential: 0.5; refractive: 1.0; source: 1; target: 2; verb: @requires; vx: 0.75; vy: 0.0; vz: 0.0; wave_number: 2.1; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 2  3</pattern>
+    <template>Graph Quantum_Field_Boundaries; edge 2 to 3; amplitude_im: 0.2; amplitude_re: 0.7; frequency: 0.75; id: 102; label: boundary_reset_bridge; length: 1.5; potential: 1.5; refractive: 3.4; source: 2; target: 3; verb: @defines; vx: 0.5; vy: 0.25; vz: 0.0; wave_number: 1.4; weight: 0.9. Data-only graph record.</template>
+  </category>
+</aiml>

@@ -1,0 +1,141 @@
+(* ============================================================ *)
+(* Script Pattern Runtime Grammar                               *)
+(* Lowest-level substrate: string search -> regex -> grammar ->  *)
+(* state machine -> behavior -> agent.                          *)
+(* ============================================================ *)
+
+Script         ::= Input Pattern Wildcard Search Match Response ;
+Input          ::= TextInput | GameState | GraphState | ClueSet | Observation ;
+
+Search         ::= StringSearch | RegexSearch | WildcardSearch | GraphMatch | SemanticMatch ;
+StringSearch   ::= Pattern Input Match ;
+RegexSearch    ::= Regex Input Match ;
+WildcardSearch ::= WildcardPattern Input Match ;
+
+Pattern        ::= Literal | WildcardPattern | Regex | GrammarPattern | StatePattern | BehaviorPattern ;
+Literal        ::= Token { Token } ;
+WildcardPattern ::= Token { Token | Wildcard } ;
+Wildcard      ::= "?" | "*" ;
+
+Regex          ::= RegexAtom { RegexOperator RegexAtom } ;
+RegexAtom      ::= Literal | CharClass | Group | Wildcard ;
+RegexOperator  ::= "*" | "+" | "?" | "|" ;
+CharClass      ::= "[" { Token } "]" ;
+Group          ::= "(" Regex ")" ;
+
+GrammarPattern ::= Nonterminal "=" Alternative { "|" Alternative } ;
+Alternative    ::= Symbol { Symbol } ;
+Symbol         ::= Nonterminal | Terminal | Wildcard ;
+Nonterminal    ::= Identifier ;
+Terminal       ::= '"' Token '"' ;
+
+StatePattern   ::= State Trigger Transition ;
+State          ::= Identifier ;
+Transition     ::= Trigger "->" State ;
+Trigger        ::= Identifier [ Comparator Value ] ;
+Comparator     ::= "=" | "!=" | "<" | ">" | "<=" | ">=" ;
+
+BehaviorPattern ::= Perceive Search Match Decide Act ;
+Perceive       ::= "perceive" "(" Input ")" ;
+Decide         ::= "decide" "(" Match ")" ;
+Act            ::= "act" "(" Response ")" ;
+
+Match          ::= ExactMatch | PatternMatch | RegexMatch | WildcardMatch | GraphMatch | SemanticMatch | NoMatch ;
+ExactMatch     ::= "exact_match" ;
+PatternMatch   ::= "pattern_match" ;
+RegexMatch     ::= "regex_match" ;
+WildcardMatch  ::= "wildcard_match" ;
+GraphMatch     ::= "graph_match" ;
+SemanticMatch  ::= "semantic_match" ;
+NoMatch        ::= "no_match" ;
+
+Response       ::= Action | Answer | Classification | Transition ;
+Action         ::= Identifier ;
+Answer         ::= String ;
+Classification ::= Identifier ;
+
+TextInput      ::= String ;
+GameState      ::= "game_state" "{" { Observation } "}" ;
+GraphState     ::= "graph" "{" { Edge } "}" ;
+ClueSet        ::= "clues" "{" { Observation } "}" ;
+Observation    ::= Identifier [ ":" Value ] ;
+Edge           ::= Identifier Relation Identifier ;
+Relation       ::= Identifier ;
+
+Token          ::= [A-Za-z0-9_:-]+ ;
+Identifier     ::= [A-Za-z_][A-Za-z0-9_:-]* ;
+Value          ::= Identifier | Number | String ;
+Number         ::= [0-9]+ [ "." [0-9]+ ] ;
+String         ::= '"' { ? any character except quote ? } '"' ;
+
+(* ============================================================ *)
+(* v2 EXTENSION — KEY-GRAMMAR v4 / AIML Runtime Grammar v5       *)
+(* This extension is additive: the original Script production   *)
+(* and all original matching/state/behavior rules are unchanged. *)
+(* Use PhaseScript as the opt-in v2 entrypoint.                  *)
+(* ============================================================ *)
+
+PhaseScript       ::= "phase_script" "{" TrackField GrammarBinding { FieldRecord } ContextActivation
+                      CandidatePipeline "}" ;
+
+(* Track = bounded field of play; context = query-specific activation. *)
+TrackField        ::= "track" "(" TrackId "," GrammarRef [ "," VectorFieldRef ] ")" ;
+TrackId           ::= Identifier ;
+GrammarRef        ::= "grammar_ref" "(" String ")" ;
+VectorFieldRef    ::= "vector_field_ref" "(" String ")" ;
+GrammarBinding    ::= "key_grammar" "(" String ")" ;
+
+FieldRecord       ::= UnigramRecord | BigramRecord | TrigramRecord
+                    | PatternTemplate | FoldTemplate ;
+
+(* Unigrams are immutable corpus-derived priors. Learned deltas are separate. *)
+UnigramRecord     ::= "unigram" "(" String "," Scalar ")" ;
+Scalar            ::= [ "-" ] Number ;
+
+(* Bigrams are ordered relational keys with vector geometry references. *)
+BigramRecord      ::= "bigram" "(" String "," String "," VectorRef ")" ;
+VectorRef         ::= "vector_ref" "(" String ")" ;
+
+(* Each trigram stores its own phase. A phase template cannot infer or change it. *)
+(* PatternRef can identify an ordered three-atom wildcard pattern.             *)
+TrigramRecord     ::= "trigram" "(" PatternRef "," Phase "," FoldRef
+                      [ "," BindingRef ] [ "," TemplateRef ] ")" ;
+PatternRef        ::= "pattern_ref" "(" TrigramKey ")" ;
+TrigramKey        ::= GramAtom "," GramAtom "," GramAtom ;
+GramAtom          ::= String | "*" | "?" ;
+Phase             ::= "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul" ;
+FoldRef           ::= "fold_ref" "(" String ")" ;
+BindingRef        ::= "binding_ref" "(" String ")" ;
+TemplateRef       ::= "template_ref" "(" String ")" ;
+
+(* Templates are reusable definitions, not phase authority. *)
+PatternTemplate   ::= "pattern_template" "(" String "," WildcardPattern ")" ;
+FoldTemplate      ::= "fold_template" "(" String "," String ")" ;
+
+(* Active context is scoped to one invocation and cannot mutate the track. *)
+ContextActivation ::= "context" "(" Input [ "," ContextBindings ] ")" ;
+ContextBindings   ::= ContextBinding { "," ContextBinding } ;
+ContextBinding    ::= "bind" "(" Identifier "," BindingSource "," Value ")" ;
+BindingSource     ::= "capture" | "lm_chain" | "char_overlap" | "explicit" ;
+
+(* Collection Map/Filter/Fold is distinct from K'UHUL's six-phase fold. *)
+CandidatePipeline ::= "pipeline" "(" "match" "," "bind" "," "filter" ","
+                      "map" "," "score" "," "phase_execute" ")" ;
+
+(* Runtime semantics and validation — not expressible by EBNF alone:
+   1. Preserve existing Script matching, state machine, and response behavior.
+   2. Trigram phase is required, stored per record, and authoritative.
+   3. Address trigrams by (track, ordered pattern, stored phase, fold identity)
+      so identical patterns in distinct phases are not overwritten.
+   4. Verify exactly three ordered atoms, wildcard capture arity and bindings.
+   5. Resolve fold, vector, template, and key references against the track.
+   6. Treat unigrams as frozen corpus weights; keep learned weights separate.
+   7. Treat bigram geometry as a typed relation, not automatic graph authority.
+   8. Filter is subject to XCFE admission and phase legality before execution.
+   9. Map may invoke registered Micronauts only under their executor contracts.
+  10. Phase execution follows Pop -> Wo -> Yax -> Sek -> Ch'en -> Xul.
+  11. Keep functional collection fold distinct from phase-governed execution.
+  12. For BSON/CBOR/SCXQ2 encoding, preserve keys, values, phase, fold refs,
+      captures, and executable semantics through validated round trips.
+  13. EBNF describes syntax only; host validator enforces these contracts.
+*)

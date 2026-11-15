@@ -1,0 +1,1584 @@
+{
+  "@type": "khanary.fold_event.conformance.v1",
+  "cases": [
+    {
+      "id": "valid_track",
+      "expect": "PASS",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-track",
+        "@event_kind": "EVENT_SHIFT_TRACK",
+        "@axis": "T",
+        "@trigger": "NAVIGATE",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "ADVISOR-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "proposed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "none",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "valid_phase",
+      "expect": "PASS",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-phase",
+        "@event_kind": "EVENT_CYCLE_PHASE",
+        "@axis": "phi",
+        "@trigger": "OPERATE",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Yax",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "proposed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "none",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "valid_fold-state",
+      "expect": "PASS",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-fold-state",
+        "@event_kind": "EVENT_FOLD_STATE",
+        "@axis": "s",
+        "@trigger": "UNFOLD",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "folded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "proposed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "none",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "valid_handshake",
+      "expect": "PASS",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-handshake",
+        "@event_kind": "EVENT_SUBSTRATE_HANDSHAKE",
+        "@axis": "X",
+        "@trigger": "TEACHER",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:local"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:teacher"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "proposed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "runtime_state",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "valid_competence-candidate",
+      "expect": "PASS",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-competence-candidate",
+        "@event_kind": "EVENT_COMPETENCE_CANDIDATE",
+        "@axis": "sigma",
+        "@trigger": "BURNER",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "autonomous",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "proposed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "none",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "valid_competence-upgrade",
+      "expect": "PASS",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-competence-upgrade",
+        "@event_kind": "EVENT_COMPETENCE_UPGRADE",
+        "@axis": "sigma",
+        "@trigger": "XUL",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "autonomous",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "authorized",
+          "@authorized": true,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "none",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "valid_field-gradient",
+      "expect": "PASS",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-field-gradient",
+        "@event_kind": "EVENT_FIELD_GRADIENT",
+        "@axis": "field",
+        "@trigger": "FIELD",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Yax",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Yax",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "proposed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "field_projection",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "candidate_navigation_pressure",
+          "@field_formula": "M_F(h) = bigoplus_tau B_tau[h,*] tensor W_tau"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "HLSL",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "valid_topology-candidate",
+      "expect": "PASS",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-topology-candidate",
+        "@event_kind": "EVENT_TOPOLOGY_CANDIDATE",
+        "@axis": "B",
+        "@trigger": "VERIFY",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Ch'en",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Ch'en",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "observed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "topology_candidate",
+          "@delta_B": true,
+          "@verified": true,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "valid_topology-commit",
+      "expect": "PASS",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-topology-commit",
+        "@event_kind": "EVENT_TOPOLOGY_COMMIT",
+        "@axis": "B",
+        "@trigger": "XUL",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Xul",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Xul",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "authorized",
+          "@authorized": true,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "topology_commit",
+          "@delta_B": true,
+          "@verified": true,
+          "@authorized": true,
+          "@fresh": true,
+          "@xul": true,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "axis_mismatch",
+      "expect": "FAIL",
+      "error": "EVENT_AXIS_MISMATCH",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-track",
+        "@event_kind": "EVENT_SHIFT_TRACK",
+        "@axis": "phi",
+        "@trigger": "NAVIGATE",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "ADVISOR-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "proposed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "none",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "shift_track_changes_phase",
+      "expect": "FAIL",
+      "error": "SHIFT_TRACK_CHANGED_PHASE",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-track",
+        "@event_kind": "EVENT_SHIFT_TRACK",
+        "@axis": "T",
+        "@trigger": "NAVIGATE",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Xul",
+          "@track": "ADVISOR-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "proposed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "none",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "shift_track_unchanged",
+      "expect": "FAIL",
+      "error": "SHIFT_TRACK_UNCHANGED",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-track",
+        "@event_kind": "EVENT_SHIFT_TRACK",
+        "@axis": "T",
+        "@trigger": "NAVIGATE",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "proposed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "none",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "cycle_phase_wrong_step",
+      "expect": "FAIL",
+      "error": "CYCLE_PHASE_WRONG_STEP",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-phase",
+        "@event_kind": "EVENT_CYCLE_PHASE",
+        "@axis": "phi",
+        "@trigger": "OPERATE",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Yax",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Xul",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "proposed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "none",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "cycle_phase_changes_track",
+      "expect": "FAIL",
+      "error": "CYCLE_PHASE_CHANGED_TRACK",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-phase",
+        "@event_kind": "EVENT_CYCLE_PHASE",
+        "@axis": "phi",
+        "@trigger": "OPERATE",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Yax",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "ADVISOR-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "proposed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "none",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "fold_state_not_toggled",
+      "expect": "FAIL",
+      "error": "FOLD_STATE_NOT_TOGGLED",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-fold-state",
+        "@event_kind": "EVENT_FOLD_STATE",
+        "@axis": "s",
+        "@trigger": "UNFOLD",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "folded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "folded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "proposed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "none",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "fold_state_changes_track",
+      "expect": "FAIL",
+      "error": "FOLD_STATE_CHANGED_PHASE_OR_TRACK",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-fold-state",
+        "@event_kind": "EVENT_FOLD_STATE",
+        "@axis": "s",
+        "@trigger": "UNFOLD",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "folded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "ADVISOR-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "proposed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "none",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "candidate_authorized",
+      "expect": "FAIL",
+      "error": "COMPETENCE_CANDIDATE_AUTHORIZED",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-competence-candidate",
+        "@event_kind": "EVENT_COMPETENCE_CANDIDATE",
+        "@axis": "sigma",
+        "@trigger": "BURNER",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "autonomous",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "authorized",
+          "@authorized": true,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "none",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "upgrade_not_authorized",
+      "expect": "FAIL",
+      "error": "COMPETENCE_UPGRADE_NOT_AUTHORIZED",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-competence-upgrade",
+        "@event_kind": "EVENT_COMPETENCE_UPGRADE",
+        "@axis": "sigma",
+        "@trigger": "XUL",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "autonomous",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "proposed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "none",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "gradient_commits_topology",
+      "expect": "FAIL",
+      "error": "FIELD_GRADIENT_MUST_NOT_COMMIT",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-field-gradient",
+        "@event_kind": "EVENT_FIELD_GRADIENT",
+        "@axis": "field",
+        "@trigger": "FIELD",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Yax",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Yax",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "proposed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "field_projection",
+          "@delta_B": true,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "candidate_navigation_pressure",
+          "@field_formula": "M_F(h) = bigoplus_tau B_tau[h,*] tensor W_tau"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "HLSL",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "topology_candidate_commit_kind",
+      "expect": "FAIL",
+      "error": "TOPOLOGY_CANDIDATE_COMMITTED",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-topology-candidate",
+        "@event_kind": "EVENT_TOPOLOGY_CANDIDATE",
+        "@axis": "B",
+        "@trigger": "VERIFY",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Ch'en",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Ch'en",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "observed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "topology_commit",
+          "@delta_B": true,
+          "@verified": true,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "topology_commit_missing_fresh",
+      "expect": "FAIL",
+      "error": "TOPOLOGY_COMMIT_REQUIRES_VERIFIED_AUTHORIZED_FRESH_XUL",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-topology-commit",
+        "@event_kind": "EVENT_TOPOLOGY_COMMIT",
+        "@axis": "B",
+        "@trigger": "XUL",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Xul",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Xul",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "authorized",
+          "@authorized": true,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "topology_commit",
+          "@delta_B": true,
+          "@verified": true,
+          "@authorized": true,
+          "@fresh": false,
+          "@xul": true,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "topology_commit_not_xul_phase",
+      "expect": "FAIL",
+      "error": "TOPOLOGY_COMMIT_REQUIRES_XUL_PHASE",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-topology-commit",
+        "@event_kind": "EVENT_TOPOLOGY_COMMIT",
+        "@axis": "B",
+        "@trigger": "XUL",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Ch'en",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Xul",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "authorized",
+          "@authorized": true,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "topology_commit",
+          "@delta_B": true,
+          "@verified": true,
+          "@authorized": true,
+          "@fresh": true,
+          "@xul": true,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "projection_claims_authority",
+      "expect": "FAIL",
+      "error": "SCHEMA_INVALID",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-track",
+        "@event_kind": "EVENT_SHIFT_TRACK",
+        "@axis": "T",
+        "@trigger": "NAVIGATE",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "ADVISOR-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "proposed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "none",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": true
+        }
+      }
+    },
+    {
+      "id": "bad_transition_law",
+      "expect": "FAIL",
+      "error": "SCHEMA_INVALID",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-track",
+        "@event_kind": "EVENT_SHIFT_TRACK",
+        "@axis": "T",
+        "@trigger": "NAVIGATE",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "ADVISOR-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "proposed",
+          "@authorized": false,
+          "@transition_law": "event applies transition",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "none",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "negative_evidence",
+      "expect": "FAIL",
+      "error": "SCHEMA_INVALID",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-track",
+        "@event_kind": "EVENT_SHIFT_TRACK",
+        "@axis": "T",
+        "@trigger": "NAVIGATE",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "ADVISOR-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "proposed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "none",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": -1,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 0.9,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    },
+    {
+      "id": "invalid_confidence",
+      "expect": "FAIL",
+      "error": "SCHEMA_INVALID",
+      "event": {
+        "@type": "khanary.fold_event.v1",
+        "@event_id": "evt-track",
+        "@event_kind": "EVENT_SHIFT_TRACK",
+        "@axis": "T",
+        "@trigger": "NAVIGATE",
+        "@before": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@proposed_after": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "ADVISOR-\u00b5",
+          "@fold_state": "unfolded",
+          "@competence": "validated",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-event:test"
+          }
+        },
+        "@xcfe": {
+          "@policy_ref": "xcfe://fold-event/default@1.0.0",
+          "@status": "proposed",
+          "@authorized": false,
+          "@transition_law": "p_next = delta_XCFE(p_t, e_t, Pi)",
+          "@reason": "fixture"
+        },
+        "@field_delta": {
+          "@kind": "none",
+          "@delta_B": false,
+          "@verified": false,
+          "@authorized": false,
+          "@fresh": false,
+          "@xul": false,
+          "@gradient_role": "none"
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 9,
+          "@exceptions": 1,
+          "@confidence": 1.5,
+          "@source": "fixture"
+        },
+        "@projection": {
+          "@target": "JROM",
+          "@semantic_authority": false
+        }
+      }
+    }
+  ]
+}

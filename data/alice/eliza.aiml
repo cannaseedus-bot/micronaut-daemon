@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0">
+<!--
+  eliza.aiml — ELIZA-µ reasoning operator corpus
+  16 operators: each operator = Pop frame + Sek execution.
+  Every template stores the operator name in predicate "eliza_op"
+  and returns a Rogerian reflection that invites deeper evidence.
+  Output is evidence, NOT a committed fact.
+  Content dictionary: urn:kuhul:daemon-eliza:v1
+-->
+
+<!-- ── CAUSE ─────────────────────────────────────────────────────────────── -->
+<category><pattern>_ BECAUSE _</pattern>
+<template><think><set name="eliza_op">CAUSE</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>You're saying <star/> because <star index="2"/>. What do you think would happen if that cause were removed?</template>
+</category>
+<category><pattern>_ CAUSES _</pattern>
+<template><think><set name="eliza_op">CAUSE</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>So <star/> causes <star index="2"/>. What evidence supports that connection?</template>
+</category>
+<category><pattern>_ LEADS TO _</pattern>
+<template><think><set name="eliza_op">CAUSE</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>You see <star/> leading to <star index="2"/>. Is there a step between them you haven't named yet?</template>
+</category>
+<category><pattern>_ RESULTS IN _</pattern>
+<template><think><set name="eliza_op">CAUSE</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>So <star/> results in <star index="2"/>. What conditions make that outcome more or less likely?</template>
+</category>
+<category><pattern>_ DUE TO _</pattern>
+<template><think><set name="eliza_op">CAUSE</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>You attribute <star/> to <star index="2"/>. How confident are you in that attribution?</template>
+</category>
+
+<!-- ── CONTRAST ──────────────────────────────────────────────────────────── -->
+<category><pattern>_ BUT _</pattern>
+<template><think><set name="eliza_op">CONTRAST</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>There's a tension: <star/> — but <star index="2"/>. What matters most to you about resolving that?</template>
+</category>
+<category><pattern>_ HOWEVER _</pattern>
+<template><think><set name="eliza_op">CONTRAST</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>You see <star/>, however <star index="2"/>. Which side of that contrast are you more uncertain about?</template>
+</category>
+<category><pattern>_ ALTHOUGH _</pattern>
+<template><think><set name="eliza_op">CONTRAST</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>Although <star/>, you're saying <star index="2"/>. What would have to change for that tension to resolve?</template>
+</category>
+<category><pattern>_ DESPITE _</pattern>
+<template><think><set name="eliza_op">CONTRAST</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>Despite <star/>, <star index="2"/>. What keeps <star index="2"/> true in spite of <star/>?</template>
+</category>
+<category><pattern>_ YET _</pattern>
+<template><think><set name="eliza_op">CONTRAST</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/>, yet <star index="2"/>. Tell me more about that contradiction.</template>
+</category>
+
+<!-- ── ANALOGY ───────────────────────────────────────────────────────────── -->
+<category><pattern>_ LIKE _</pattern>
+<template><think><set name="eliza_op">ANALOGY</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>You're comparing <star/> to <star index="2"/>. In what way does that analogy break down?</template>
+</category>
+<category><pattern>_ SIMILAR TO _</pattern>
+<template><think><set name="eliza_op">ANALOGY</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> is similar to <star index="2"/>. What's the most important difference between them?</template>
+</category>
+<category><pattern>_ JUST AS _</pattern>
+<template><think><set name="eliza_op">ANALOGY</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>Just as <star/>, so <star index="2"/>. What does that parallel reveal that wasn't obvious before?</template>
+</category>
+<category><pattern>_ REMINDS ME OF _</pattern>
+<template><think><set name="eliza_op">ANALOGY</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> reminds you of <star index="2"/>. What quality connects them in your mind?</template>
+</category>
+<category><pattern>_ IS LIKE _</pattern>
+<template><think><set name="eliza_op">ANALOGY</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>You see <star/> as like <star index="2"/>. Where does that likeness help and where does it mislead?</template>
+</category>
+
+<!-- ── DEDUCTION ─────────────────────────────────────────────────────────── -->
+<category><pattern>_ THEREFORE _</pattern>
+<template><think><set name="eliza_op">DEDUCTION</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>From <star/>, you conclude <star index="2"/>. What premise in that chain are you least certain of?</template>
+</category>
+<category><pattern>_ THUS _</pattern>
+<template><think><set name="eliza_op">DEDUCTION</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/>, thus <star index="2"/>. Is that inference necessary, or only likely?</template>
+</category>
+<category><pattern>_ HENCE _</pattern>
+<template><think><set name="eliza_op">DEDUCTION</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> — hence <star index="2"/>. What would falsify that conclusion?</template>
+</category>
+<category><pattern>_ CONSEQUENTLY _</pattern>
+<template><think><set name="eliza_op">DEDUCTION</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>Consequently, <star index="2"/>. What rule or law makes that follow from <star/>?</template>
+</category>
+<category><pattern>IT FOLLOWS THAT *</pattern>
+<template><think><set name="eliza_op">DEDUCTION</set><set name="eliza_rhs"><star/></set></think>It follows that <star/>. What are you taking as given in order for that to follow?</template>
+</category>
+
+<!-- ── INDUCTION ─────────────────────────────────────────────────────────── -->
+<category><pattern>_ ALWAYS _</pattern>
+<template><think><set name="eliza_op">INDUCTION</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>You say <star/> always <star index="2"/>. What's the strongest counterexample you can think of?</template>
+</category>
+<category><pattern>_ NEVER _</pattern>
+<template><think><set name="eliza_op">INDUCTION</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> never <star index="2"/>. Have you seen exceptions, or is this a rule you hold strongly?</template>
+</category>
+<category><pattern>_ USUALLY _</pattern>
+<template><think><set name="eliza_op">INDUCTION</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> usually <star index="2"/>. What cases fall outside that pattern?</template>
+</category>
+<category><pattern>_ GENERALLY _</pattern>
+<template><think><set name="eliza_op">INDUCTION</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>Generally, <star/> <star index="2"/>. What's the sample size behind that generalization?</template>
+</category>
+<category><pattern>_ TEND TO _</pattern>
+<template><think><set name="eliza_op">INDUCTION</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> tend to <star index="2"/>. Is that a tendency you've observed or one you've assumed?</template>
+</category>
+
+<!-- ── ABDUCTION ─────────────────────────────────────────────────────────── -->
+<category><pattern>_ PROBABLY _</pattern>
+<template><think><set name="eliza_op">ABDUCTION</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>You think <star/> is probably <star index="2"/>. What would make that more certain?</template>
+</category>
+<category><pattern>_ MIGHT BE _</pattern>
+<template><think><set name="eliza_op">ABDUCTION</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> might be <star index="2"/>. What's your best competing hypothesis?</template>
+</category>
+<category><pattern>_ SEEMS LIKE _</pattern>
+<template><think><set name="eliza_op">ABDUCTION</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>It seems like <star/> is <star index="2"/>. What observation led you there?</template>
+</category>
+<category><pattern>_ PERHAPS _</pattern>
+<template><think><set name="eliza_op">ABDUCTION</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>Perhaps <star/> <star index="2"/>. What evidence would let you move from perhaps to yes?</template>
+</category>
+<category><pattern>_ COULD BE _</pattern>
+<template><think><set name="eliza_op">ABDUCTION</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> could be <star index="2"/>. What would you need to rule that out?</template>
+</category>
+
+<!-- ── SYNTHESIS ─────────────────────────────────────────────────────────── -->
+<category><pattern>_ AND ALSO _</pattern>
+<template><think><set name="eliza_op">SYNTHESIS</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>You're bringing together <star/> and also <star index="2"/>. What unified principle holds both?</template>
+</category>
+<category><pattern>_ COMBINED WITH _</pattern>
+<template><think><set name="eliza_op">SYNTHESIS</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> combined with <star index="2"/>. What emerges from that combination that neither has alone?</template>
+</category>
+<category><pattern>_ TOGETHER WITH _</pattern>
+<template><think><set name="eliza_op">SYNTHESIS</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> together with <star index="2"/>. Is the whole greater than the sum here?</template>
+</category>
+<category><pattern>_ IN ADDITION TO _</pattern>
+<template><think><set name="eliza_op">SYNTHESIS</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>In addition to <star/>, you add <star index="2"/>. What holds the full picture together?</template>
+</category>
+
+<!-- ── DECOMPOSITION ─────────────────────────────────────────────────────── -->
+<category><pattern>_ PART OF _</pattern>
+<template><think><set name="eliza_op">DECOMPOSITION</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> is part of <star index="2"/>. What other parts of <star index="2"/> haven't you named yet?</template>
+</category>
+<category><pattern>_ CONSISTS OF _</pattern>
+<template><think><set name="eliza_op">DECOMPOSITION</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> consists of <star index="2"/>. Which of those components is doing the most work?</template>
+</category>
+<category><pattern>_ MADE UP OF _</pattern>
+<template><think><set name="eliza_op">DECOMPOSITION</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> is made up of <star index="2"/>. What would remain if you removed the most important piece?</template>
+</category>
+<category><pattern>_ INCLUDES _</pattern>
+<template><think><set name="eliza_op">DECOMPOSITION</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> includes <star index="2"/>. What does it exclude that you might expect it to include?</template>
+</category>
+
+<!-- ── REFRAME ───────────────────────────────────────────────────────────── -->
+<category><pattern>ANOTHER WAY *</pattern>
+<template><think><set name="eliza_op">REFRAME</set><set name="eliza_rhs"><star/></set></think>Another way to see it: <star/>. What shifts when you hold that frame instead?</template>
+</category>
+<category><pattern>_ INSTEAD _</pattern>
+<template><think><set name="eliza_op">REFRAME</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>Instead of <star/>, <star index="2"/>. What does the original frame get wrong?</template>
+</category>
+<category><pattern>RATHER THAN *</pattern>
+<template><think><set name="eliza_op">REFRAME</set><set name="eliza_rhs"><star/></set></think>Rather than <star/>. What made the previous framing feel inadequate?</template>
+</category>
+<category><pattern>_ ACTUALLY _</pattern>
+<template><think><set name="eliza_op">REFRAME</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>You're correcting: <star/> — actually <star index="2"/>. What led you to the wrong frame in the first place?</template>
+</category>
+
+<!-- ── CHALLENGE ─────────────────────────────────────────────────────────── -->
+<category><pattern>ARE YOU SURE *</pattern>
+<template><think><set name="eliza_op">CHALLENGE</set><set name="eliza_rhs"><star/></set></think>You're questioning whether <star/>. What's the strongest reason to doubt it?</template>
+</category>
+<category><pattern>WHAT IF *</pattern>
+<template><think><set name="eliza_op">CHALLENGE</set><set name="eliza_rhs"><star/></set></think>What if <star/>. How would your position change if that were true?</template>
+</category>
+<category><pattern>HOW DO YOU KNOW *</pattern>
+<template><think><set name="eliza_op">CHALLENGE</set><set name="eliza_rhs"><star/></set></think>How do you know <star/>? What would count as evidence against it?</template>
+</category>
+<category><pattern>_ BUT WHAT ABOUT _</pattern>
+<template><think><set name="eliza_op">CHALLENGE</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>You raise <star index="2"/> as a challenge to <star/>. Does it defeat the claim or only complicate it?</template>
+</category>
+
+<!-- ── SUPPORT ───────────────────────────────────────────────────────────── -->
+<category><pattern>_ AGREE _</pattern>
+<template><think><set name="eliza_op">SUPPORT</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>You agree that <star index="2"/>. What brought you to that agreement?</template>
+</category>
+<category><pattern>THAT MAKES SENSE *</pattern>
+<template><think><set name="eliza_op">SUPPORT</set><set name="eliza_rhs"><star/></set></think>It makes sense that <star/>. What makes it make sense to you specifically?</template>
+</category>
+<category><pattern>YES BECAUSE *</pattern>
+<template><think><set name="eliza_op">SUPPORT</set><set name="eliza_rhs"><star/></set></think>Yes, because <star/>. Is that reason sufficient on its own, or does it depend on other things being true?</template>
+</category>
+<category><pattern>_ EXACTLY _</pattern>
+<template><think><set name="eliza_op">SUPPORT</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>Exactly — <star index="2"/>. What does that agreement unlock for the next step?</template>
+</category>
+
+<!-- ── REDIRECT ──────────────────────────────────────────────────────────── -->
+<category><pattern>WHAT ABOUT *</pattern>
+<template><think><set name="eliza_op">REDIRECT</set><set name="eliza_rhs"><star/></set></think>What about <star/>. How does that connect to what we were just exploring?</template>
+</category>
+<category><pattern>HAVE YOU CONSIDERED *</pattern>
+<template><think><set name="eliza_op">REDIRECT</set><set name="eliza_rhs"><star/></set></think>You raise <star/>. Where does that fit in relation to the main thread?</template>
+</category>
+<category><pattern>WHAT ABOUT THE *</pattern>
+<template><think><set name="eliza_op">REDIRECT</set><set name="eliza_rhs"><star/></set></think>The <star/> — how does that change the picture?</template>
+</category>
+
+<!-- ── QUESTION ──────────────────────────────────────────────────────────── -->
+<category><pattern>WHY *</pattern>
+<template><think><set name="eliza_op">QUESTION</set><set name="eliza_rhs"><star/></set></think>You're asking why <star/>. What would a satisfying answer look like to you?</template>
+</category>
+<category><pattern>HOW *</pattern>
+<template><think><set name="eliza_op">QUESTION</set><set name="eliza_rhs"><star/></set></think>You ask how <star/>. Is that a question about mechanism, or about justification?</template>
+</category>
+<category><pattern>WHAT IS *</pattern>
+<template><think><set name="eliza_op">QUESTION</set><set name="eliza_rhs"><star/></set></think>What is <star/>? What kind of answer are you looking for — a definition, an example, or an explanation?</template>
+</category>
+<category><pattern>WHO *</pattern>
+<template><think><set name="eliza_op">QUESTION</set><set name="eliza_rhs"><star/></set></think>You're asking who <star/>. Does the identity of the agent change the analysis for you?</template>
+</category>
+
+<!-- ── COMPARE ───────────────────────────────────────────────────────────── -->
+<category><pattern>_ VERSUS _</pattern>
+<template><think><set name="eliza_op">COMPARE</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>You're comparing <star/> versus <star index="2"/>. What dimension of comparison matters most here?</template>
+</category>
+<category><pattern>_ COMPARED TO _</pattern>
+<template><think><set name="eliza_op">COMPARE</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> compared to <star index="2"/>. On what criterion does each win?</template>
+</category>
+<category><pattern>_ VS _</pattern>
+<template><think><set name="eliza_op">COMPARE</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> vs <star index="2"/>. Is this a tradeoff or a contradiction?</template>
+</category>
+<category><pattern>_ BETTER THAN _</pattern>
+<template><think><set name="eliza_op">COMPARE</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>You say <star/> is better than <star index="2"/>. By what standard?</template>
+</category>
+<category><pattern>DIFFERENCE BETWEEN *</pattern>
+<template><think><set name="eliza_op">COMPARE</set><set name="eliza_rhs"><star/></set></think>The difference between <star/>. Which difference is the load-bearing one?</template>
+</category>
+
+<!-- ── PLAN ──────────────────────────────────────────────────────────────── -->
+<category><pattern>I WILL *</pattern>
+<template><think><set name="eliza_op">PLAN</set><set name="eliza_rhs"><star/></set></think>You will <star/>. What's the first step, and what might stop you at that step?</template>
+</category>
+<category><pattern>I AM GOING TO *</pattern>
+<template><think><set name="eliza_op">PLAN</set><set name="eliza_rhs"><star/></set></think>You're going to <star/>. What does success look like when you've done it?</template>
+</category>
+<category><pattern>I PLAN TO *</pattern>
+<template><think><set name="eliza_op">PLAN</set><set name="eliza_rhs"><star/></set></think>You plan to <star/>. What assumption is your plan most dependent on?</template>
+</category>
+<category><pattern>I WANT TO *</pattern>
+<template><think><set name="eliza_op">PLAN</set><set name="eliza_rhs"><star/></set></think>You want to <star/>. What would need to be true for that to become possible?</template>
+</category>
+<category><pattern>I INTEND TO *</pattern>
+<template><think><set name="eliza_op">PLAN</set><set name="eliza_rhs"><star/></set></think>You intend to <star/>. What's the gap between intention and action here?</template>
+</category>
+
+<!-- ── DIRECT ────────────────────────────────────────────────────────────── -->
+<category><pattern>_ SHOULD _</pattern>
+<template><think><set name="eliza_op">DIRECT</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think>You say <star/> should <star index="2"/>. By whose standard, and what happens if that norm is contested?</template>
+</category>
+<category><pattern>_ MUST _</pattern>
+<template><think><set name="eliza_op">DIRECT</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> must <star index="2"/>. Is that a logical must, a moral must, or a practical must?</template>
+</category>
+<category><pattern>_ NEED TO _</pattern>
+<template><think><set name="eliza_op">DIRECT</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> need to <star index="2"/>. What happens if that need goes unmet?</template>
+</category>
+<category><pattern>_ HAVE TO _</pattern>
+<template><think><set name="eliza_op">DIRECT</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> have to <star index="2"/>. Is that a constraint from outside or a commitment from inside?</template>
+</category>
+<category><pattern>_ OUGHT TO _</pattern>
+<template><think><set name="eliza_op">DIRECT</set><set name="eliza_lhs"><star/></set><set name="eliza_rhs"><star index="2"/></set></think><star/> ought to <star index="2"/>. What gives that obligation its force?</template>
+</category>
+
+<!-- ── Fallback: unrecognized input → QUESTION operator ─────────────────── -->
+<category><pattern>ELIZA *</pattern>
+<template><think><set name="eliza_op">QUESTION</set><set name="eliza_rhs"><star/></set></think>Tell me more about <star/>.</template>
+</category>
+
+</aiml>

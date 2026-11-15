@@ -1,0 +1,212 @@
+{
+  "@no-eval": true,
+  "id": "PLAN-µ",
+
+  "schemes": ["plan"],
+  "description": "Bounded task decomposition and task-list projection.",
+  "phase": "Wo",
+  "category": "planning",
+  "confidence": 1.0,
+  "governs": [
+    "plan",
+    "roadmap",
+    "task",
+    "tasks",
+    "milestone",
+    "milestones",
+    "decompose",
+    "dependencies",
+    "next",
+    "branch",
+    "branches",
+    "UNKNOWN",
+    "MISS",
+    "memory:event:plan",
+    "semantic branch",
+    "@if",
+    "@then",
+    "@else",
+    "@unknown",
+    "key.grammar.semantic_branch.v1",
+    "aiml semantic branch",
+    "nested else-if",
+    "branch pattern candidate",
+    "SCFML",
+    "Semantic Control Flow Machine Learning",
+    "Pattern Learning",
+    "scfml:branch",
+    "scfml:pattern-learning",
+    "stb_tensor_brain",
+    "data/world/stb_tensor_brains.json"
+  ],
+  "capabilities": [
+    "goal_normalization",
+    "task_decomposition",
+    "dependency_ordering",
+    "task_list_projection",
+    "wpf_card",
+    "branch_expansion",
+    "plan_event_journaling",
+    "semantic_branch_resolution",
+    "unknown_branch_preservation",
+    "aiml_branch_surface_normalization",
+    "nested_else_if_normalization",
+    "scfml_surface_normalization",
+    "scfml_pattern_learning_admission",
+    "consume-stb-tensor-brain-binding",
+    "consume-track-local-gram-tensor-brain"
+  ],
+  "active_verbs": [
+    "refine",
+    "edit",
+    "verify",
+    "accept",
+    "execute",
+    "pause"
+  ],
+  "relations": [
+    {
+      "target": "Coordinator",
+      "verb": "@delegates_to",
+      "directed": true
+    },
+    {
+      "target": "ADVISOR-µ",
+      "verb": "@related_to",
+      "directed": false
+    },
+    {
+      "target": "MEMORY-µ",
+      "verb": "@supports",
+      "directed": false
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "gramRead",
+      "key": "plan_request"
+    },
+    {
+      "phase": "Pop",
+      "op": "unfold_ngram_context",
+      "track": "MEMORY-µ",
+      "gate": "request_ngrams_present"
+    },
+    {
+      "phase": "Wo",
+      "op": "decompose_task",
+      "gate": "declared_goal"
+    },
+    {
+      "phase": "Yax",
+      "op": "order_dependencies",
+      "gate": "task_list_present"
+    },
+    {
+      "phase": "Yax",
+      "op": "fold_ngram_evidence",
+      "scope": "plan_context"
+    },
+    {
+      "phase": "Sek",
+      "op": "emit_plan",
+      "gate": "authority == none"
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_plan",
+      "gate": "all_tasks_have_ids"
+    },
+    {
+      "phase": "Ch'en",
+      "op": "emit_plan_memory_event",
+      "key": "memory:event:plan:*",
+      "note": "journal plan branches without promoting UNKNOWN/MISS to fact"
+    },
+    {
+      "phase": "Yax",
+      "op": "resolve_semantic_branch_epistemics",
+      "key": "semantic_branch:*",
+      "note": "SUPPORTED selects then; CONTRADICTED may select else; MISS/UNKNOWN preserve or retrieve instead of falling through to else"
+    },
+    {
+      "phase": "Wo",
+      "op": "normalize_aiml_branch_surface",
+      "key": "aiml.semantic_branch:*",
+      "note": "Map if/pattern, then/template, else/template, unknown and nested else-if surfaces into canonical semantic_branch rows before Yax epistemic resolution"
+    },
+    {
+      "phase": "Ch'en",
+      "op": "admit_scfml_pattern_learning",
+      "key": "scfml:pattern-learning",
+      "note": "Promote observed branch/pattern events only when SUPPORTED or user verified; raw events remain non-fact evidence"
+    },
+    {
+      "phase": "Xul",
+      "op": "gramWrite",
+      "scope": "plan_candidate"
+    }
+  ],
+  "ui": {
+    "card": "⟁WIDGETCARD",
+    "label": "Plan",
+    "fields": [
+      "goal",
+      "tasks",
+      "dependencies",
+      "owner",
+      "phase",
+      "status",
+      "next"
+    ],
+    "tasks_field": "tasks",
+    "activation_key": "track"
+  },
+  "sandbox": {
+    "gram_ns": "PLAN-µ",
+    "manifest_access": [
+      "words",
+      "micronaut",
+      "kuhul"
+    ],
+    "effects": [
+      "gramRead",
+      "plan:emit",
+      "card:project"
+    ],
+    "ports": [],
+    "coordinator": false
+  },
+  "memory_patterns": [
+    "memory:event:plan:*",
+    "branch:UNKNOWN:*",
+    "plan_candidate",
+    "semantic_branch:*",
+    "branch:SUPPORTED:*",
+    "branch:CONTRADICTED:*",
+    "aiml.semantic_branch:*",
+    "semantic_branch:else_if:*",
+    "scfml:branch:*",
+    "scfml.pattern_learning:*"
+  ],
+  "stb_tensor_brain": {
+    "@type": "khanary.stb_tensor_brain.track_binding_ref.v1",
+    "registry": "data/world/stb_tensor_brains.json",
+    "checker": "tools/check_stb_tensor_brains.py",
+    "binding_key": "PLAN-µ",
+    "binding_kind": "track_local_gram_tensor_brain",
+    "brain_run": "brain4",
+    "fallback_brain_run": "brain3",
+    "slug": "plan_mu",
+    "projection_only": true,
+    "semantic_authority": false,
+    "topology_authority": false,
+    "authority_boundary": "Track can consume the STB tensor brain as projection evidence only; Ch_en/Xul still verify and persist semantic state."
+  },
+  "model": {
+    "gguf": "C:/Users/canna/.lmstudio/models/lmstudio-community/LFM2.5-1.2B-Instruct-GGUF/LFM2.5-1.2B-Instruct-Q8_0.gguf",
+    "template": "chatml",
+    "role": "instruction"
+  }
+}

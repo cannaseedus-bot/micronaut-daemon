@@ -1,0 +1,44 @@
+<sdm xmlns:k="https://kuhul.dev/">
+  <graph>
+    <node id="ORCH-µ" occurrence_id="root::ORCH-µ::0" type="micronaut" category="executive">
+      <graph>
+        <node id="REASON-µ" occurrence_id="ORCH-µ::REASON-µ::0" type="micronaut" category="cognitive"/>
+        <node id="CREATE-µ" occurrence_id="ORCH-µ::CREATE-µ::0" type="micronaut" category="creative"/>
+        <node id="PLAN-µ" occurrence_id="ORCH-µ::PLAN-µ::0" type="micronaut" category="executive"/>
+        <edge id="edge-0" occurrence_id="ORCH-µ::edge::0" from="REASON-µ" to="PLAN-µ" verb="@call" isLink="true"/>
+        <edge id="edge-1" occurrence_id="ORCH-µ::edge::1" from="CREATE-µ" to="REASON-µ" verb="@eval" isLink="true"/>
+        <edge id="edge-2" occurrence_id="ORCH-µ::edge::2" from="PLAN-µ" to="REASON-µ" verb="@call" isLink="true"/>
+      </graph>
+    </node>
+    <node id="REASON-µ" occurrence_id="root::REASON-µ::1" type="micronaut" category="cognitive"/>
+    <node id="MEM-µ" occurrence_id="root::MEM-µ::0" type="micronaut" category="storage"/>
+    <node id="CODE-µ" occurrence_id="root::CODE-µ::0" type="micronaut" category="cognitive"/>
+    <node id="GRAPHICS-µ" occurrence_id="root::GRAPHICS-µ::0" type="micronaut" category="creative"/>
+    <node id="FILE-µ" occurrence_id="root::FILE-µ::0" type="micronaut" category="storage"/>
+    <node id="NET-µ" occurrence_id="root::NET-µ::0" type="micronaut" category="cognitive"/>
+    <node id="INFER-µ" occurrence_id="root::INFER-µ::0" type="micronaut" category="cognitive"/>
+    <node id="MORPHISM-µ" occurrence_id="root::MORPHISM-µ::0" type="micronaut" category="structural"/>
+    <node id="FIXED-POINT-µ" occurrence_id="root::FIXED-POINT-µ::0" type="micronaut" category="structural"/>
+    <edge id="edge-3" occurrence_id="root::edge::3" from="ORCH-µ" to="REASON-µ" verb="@delegate" isLink="true"/>
+    <edge id="edge-4" occurrence_id="root::edge::4" from="ORCH-µ" to="CREATE-µ" verb="@delegate" isLink="true"/>
+    <edge id="edge-5" occurrence_id="root::edge::5" from="ORCH-µ" to="PLAN-µ" verb="@delegate" isLink="true"/>
+    <edge id="edge-6" occurrence_id="root::edge::6" from="REASON-µ" to="MEM-µ" verb="@call" isLink="true"/>
+    <edge id="edge-7" occurrence_id="root::edge::7" from="REASON-µ" to="CODE-µ" verb="@call" isLink="true"/>
+    <edge id="edge-8" occurrence_id="root::edge::8" from="REASON-µ" to="INFER-µ" verb="@call" isLink="true"/>
+    <edge id="edge-9" occurrence_id="root::edge::9" from="CREATE-µ" to="GRAPHICS-µ" verb="@compose" isLink="true"/>
+    <edge id="edge-10" occurrence_id="root::edge::10" from="CREATE-µ" to="CODE-µ" verb="@compose" isLink="true"/>
+    <edge id="edge-11" occurrence_id="root::edge::11" from="PLAN-µ" to="MEM-µ" verb="@call" isLink="true"/>
+    <edge id="edge-12" occurrence_id="root::edge::12" from="PLAN-µ" to="REASON-µ" verb="@call" isLink="true"/>
+    <edge id="edge-13" occurrence_id="root::edge::13" from="MEM-µ" to="FILE-µ" verb="@call" isLink="true"/>
+    <edge id="edge-14" occurrence_id="root::edge::14" from="CODE-µ" to="REASON-µ" verb="@eval" isLink="true"/>
+    <edge id="edge-15" occurrence_id="root::edge::15" from="INFER-µ" to="REASON-µ" verb="@call" isLink="true"/>
+    <edge id="edge-16" occurrence_id="root::edge::16" from="INFER-µ" to="MEM-µ" verb="@call" isLink="true"/>
+    <edge id="edge-17" occurrence_id="root::edge::17" from="NET-µ" to="CODE-µ" verb="@call" isLink="true"/>
+    <edge id="edge-18" occurrence_id="root::edge::18" from="NET-µ" to="FILE-µ" verb="@call" isLink="true"/>
+    <edge id="edge-19" occurrence_id="root::edge::19" from="MEM-µ" to="FILE-µ" verb="@relate" isLink="true" directed="false"/>
+    <edge id="edge-20" occurrence_id="root::edge::20" from="GRAPHICS-µ" to="REASON-µ" verb="@eval" isLink="true"/>
+    <edge id="edge-21" occurrence_id="root::edge::21" from="REASON-µ" to="MORPHISM-µ" verb="@informs" isLink="true"/>
+    <edge id="edge-22" occurrence_id="root::edge::22" from="MORPHISM-µ" to="FIXED-POINT-µ" verb="@informs" isLink="true"/>
+    <edge id="edge-23" occurrence_id="root::edge::23" from="FIXED-POINT-µ" to="MORPHISM-µ" verb="@informs" isLink="true"/>
+  </graph>
+</sdm>

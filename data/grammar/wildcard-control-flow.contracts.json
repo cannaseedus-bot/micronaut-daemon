@@ -1,0 +1,142 @@
+{
+  "@type": "qprime.wildcard_control_flow.v1",
+  "id": "urn:kuhul:qprime:wildcard-control-flow:v1",
+  "version": "1",
+  "family": "qprime.wildcard_control_flow",
+  "description": "Q-Prime question family for wildcard control-flow patterns. A wildcard match is not a resolved condition and a resolved condition is not authorized execution, so analysis produces questions and gap routes rather than branches.",
+
+  "authority": {
+    "grammar": "data/grammar/wildcard-control-flow.ebnf",
+    "implementations": ["src/micronaut/wildcard_control_flow.cpp"],
+    "runtime_types": "src/micronaut/wildcard_control_flow.h",
+    "aiml_registry": "data/grammar/srai-operators.contracts.json",
+    "fold_algebra": "data/grammar/kuhul-fold-algebra.contracts.json"
+  },
+
+  "boundary": {
+    "is_not": ["standard AIML", "an executor", "a branch selector", "a topology authority"],
+    "note": "In AIML, <srai> belongs in a template and redirects text; it is not a control-flow token inside a <pattern>. This family covers an extended wildcard surface and is parsed separately from the AIML loader.",
+    "execution": "proposal_only",
+    "effects": []
+  },
+
+  "capabilities": [
+    "wildcard_capture",
+    "recursive_resolution",
+    "conditional_composition",
+    "branch_disambiguation",
+    "phase_legality"
+  ],
+
+  "continuation_markers": {
+    "THEN": {
+      "meaning": "consequence",
+      "continuation": "conjunctive",
+      "question": "Which condition is true, and must both continuation expressions execute?",
+      "gap": null
+    },
+    "ELSE": {
+      "meaning": "alternative",
+      "continuation": "alternative",
+      "question": "What is the corresponding THEN branch, and what causes ELSE to execute?",
+      "gap": "QUERY_GAP",
+      "requires": "then_branch_known",
+      "note": "ELSE without a known preceding THEN is incomplete as executable control flow. It is recognised as a question pattern and routed to QUERY_GAP; the missing branch is never invented."
+    },
+    "BUT": {
+      "meaning": "contrast_or_exception",
+      "continuation": "contrast",
+      "question": "Does BUT introduce a contradiction, exception, or overriding constraint?",
+      "gap": "INTENT_GAP",
+      "aliases": [],
+      "note": "BUT is not an alias for ELSE. Until the contrast is resolved, taking a branch would be guessing."
+    }
+  },
+
+  "question_dimensions": [
+    {
+      "id": "capture",
+      "question": "Which wildcard matched which input span?"
+    },
+    {
+      "id": "binding",
+      "question": "Are repeated captures references to the same value or independent values?"
+    },
+    {
+      "id": "condition",
+      "question": "What expression determines whether the branch is taken?"
+    },
+    {
+      "id": "continuation",
+      "question": "Does THEN, ELSE, or BUT imply execution, fallback, or contrast?"
+    },
+    {
+      "id": "srai",
+      "question": "What target does the recursive redirection resolve to?"
+    },
+    {
+      "id": "legality",
+      "question": "Is the resulting branch allowed by XCFE in the current phase?"
+    }
+  ],
+
+  "gap_routes": {
+    "unbound_capture": "QUERY_GAP",
+    "ambiguous_operator": "INTENT_GAP",
+    "unknown_srai_target": "KNOWLEDGE_GAP",
+    "missing_branch": "QUERY_GAP",
+    "unauthorized_execution": "XCFE_REJECT"
+  },
+
+  "gap_precedence": ["XCFE_REJECT", "QUERY_GAP", "KNOWLEDGE_GAP", "INTENT_GAP"],
+
+  "parse_error_codes": [
+    "EMPTY_PATTERN",
+    "UNBALANCED_SRAI",
+    "UNEXPECTED_TOKEN",
+    "MISSING_IF",
+    "MISSING_CONDITION",
+    "MISSING_OPERATOR",
+    "MISSING_MARKER",
+    "MISSING_CONTINUATION"
+  ],
+
+  "fold_placement": {
+    "Pop": "match the wildcard production and capture spans",
+    "Wo": "resolve typed bindings and SRAI targets",
+    "Yax": "generate control-flow questions and alternatives",
+    "Sek": "evaluate candidate branch semantics and XCFE legality",
+    "Ch'en": "verify resolved bindings, conditions and evidence",
+    "Xul": "return the selected answer or clarification"
+  },
+
+  "invariants": [
+    "W1 a wildcard match is not a resolved condition and not authorized execution",
+    "W2 THEN implies consequence, ELSE implies alternative, BUT implies contrast or exception",
+    "W3 BUT is never read as ELSE and never synthesizes a THEN branch",
+    "W4 ELSE without a known THEN yields QUERY_GAP, never an invented branch",
+    "W5 a self-closing <srai/> has no target and yields KNOWLEDGE_GAP",
+    "W6 <srai> is its own AST node; it is never folded into the condition operator",
+    "W7 this grammar is parsed separately from standard AIML, where <srai> lives in templates",
+    "W8 capture slots are numbered in order of appearance, 1-based",
+    "W9 the legality question is asked before any branch is proposed",
+    "W10 a refused proposed branch yields XCFE_REJECT and the refusal code is preserved",
+    "W11 analysis is proposal-only: no record produced here can execute a branch",
+    "W12 two patterns' capture masks are compared by XOR; a differing mask measures the encodings, not a conflict between branches"
+  ],
+
+  "trace": {
+    "contract": "data/grammar/daemon-bot.trace.contracts.json",
+    "contributes": ["captures", "match.specificity"],
+    "law": "a wildcard match is recorded as capture bindings, never as a resolved condition or an authorised branch (W1, W11)",
+    "fields": {
+      "captures": "one {slot, value} per capture, numbered 1-based in order of appearance (W8)",
+      "match.specificity": "the count of literal words in the winning pattern; a ranking input, not evidence"
+    }
+  },
+  "validation": {
+    "checker": "tools/check_wildcard_control_flow.py",
+    "fixtures": "data/conformance/wildcard_control_flow.json",
+    "cpp_test": "KHANARY_WILDCARD_CONTROL_FLOW_TEST"
+  }
+}

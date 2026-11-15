@@ -1,0 +1,1219 @@
+{
+  "@type": "khanary.fold_graph.conformance.v1",
+  "contracts": "data/grammar/fold-graph.contracts.json",
+  "cases": [
+    {
+      "id": "valid_canonical_fold_graph",
+      "expect": "PASS",
+      "graph": {
+        "@type": "khanary.fold_graph.v1",
+        "@handle": "CAUSE",
+        "@nodes": [
+          "CAUSE",
+          "EVIDENCE",
+          "INFER"
+        ],
+        "@edges": [
+          {
+            "@id": "edge:0",
+            "@from": "CAUSE",
+            "@to": "EVIDENCE",
+            "@relation": "@requires",
+            "@typed": true,
+            "@orientation": "forward"
+          },
+          {
+            "@id": "edge:1",
+            "@from": "CAUSE",
+            "@to": "INFER",
+            "@relation": "@enables",
+            "@typed": true,
+            "@orientation": "forward"
+          }
+        ],
+        "@incidence": [
+          [
+            "CAUSE",
+            "edge:0"
+          ],
+          [
+            "EVIDENCE",
+            "edge:0"
+          ],
+          [
+            "CAUSE",
+            "edge:1"
+          ],
+          [
+            "INFER",
+            "edge:1"
+          ]
+        ],
+        "@weights": {
+          "@pattern_strength": {
+            "edge:0": 0.85,
+            "edge:1": 0.92
+          }
+        },
+        "@tau": "reasoning",
+        "@projection": "canonical-incidence",
+        "@query_conditioned": false,
+        "@active": false,
+        "@recoverability": {
+          "@fold": "Handle(CAUSE)",
+          "@unfold": "G_F(CAUSE)",
+          "@equivalent": true,
+          "@lossless_canonical": true
+        },
+        "@authority": {
+          "@semantic_authority": false,
+          "@xul_required_for_delta_B": true
+        },
+        "@boundary": {
+          "@local_valid": true,
+          "@boundary_compatible": true,
+          "@delta_B": false
+        },
+        "@fold_field": {
+          "node_id": "CAUSE",
+          "theta": 0,
+          "W": 1.0,
+          "C": 1.0,
+          "R": 1.0
+        },
+        "@product_graph": {
+          "runtime": "G_semantic □ G_phase",
+          "vertex": [
+            "CAUSE",
+            "Pop"
+          ],
+          "edge_weight_law": "W_arc*cos(delta_theta)"
+        },
+        "@convergence": {
+          "iteration": 0,
+          "distance": 0.0,
+          "contraction": 0.0,
+          "status": "CONVERGED"
+        }
+      }
+    },
+    {
+      "id": "valid_active_fold_graph",
+      "expect": "PASS",
+      "graph": {
+        "@type": "khanary.fold_graph.v1",
+        "@handle": "CAUSE",
+        "@nodes": [
+          "CAUSE",
+          "EVIDENCE"
+        ],
+        "@edges": [
+          {
+            "@id": "edge:0",
+            "@from": "CAUSE",
+            "@to": "EVIDENCE",
+            "@relation": "@requires",
+            "@typed": true,
+            "@orientation": "forward"
+          }
+        ],
+        "@incidence": [
+          [
+            "CAUSE",
+            "edge:0"
+          ],
+          [
+            "EVIDENCE",
+            "edge:0"
+          ]
+        ],
+        "@weights": {
+          "@pattern_strength": {
+            "edge:0": 0.85
+          }
+        },
+        "@tau": "reasoning",
+        "@projection": "canonical-incidence",
+        "@query_conditioned": true,
+        "@active": true,
+        "@query_gate": {
+          "@operator": "Gate_Q",
+          "@mask": {
+            "edge:0": true
+          }
+        },
+        "@recoverability": {
+          "@fold": "Handle(CAUSE)",
+          "@unfold": "G_F(CAUSE)",
+          "@equivalent": true,
+          "@lossless_canonical": true
+        },
+        "@authority": {
+          "@semantic_authority": false,
+          "@xul_required_for_delta_B": true
+        },
+        "@boundary": {
+          "@local_valid": true,
+          "@boundary_compatible": true,
+          "@delta_B": false
+        },
+        "@fold_field": {
+          "node_id": "CAUSE",
+          "theta": 0,
+          "W": 1.0,
+          "C": 1.0,
+          "R": 1.0
+        },
+        "@product_graph": {
+          "runtime": "G_semantic □ G_phase",
+          "vertex": [
+            "CAUSE",
+            "Pop"
+          ],
+          "edge_weight_law": "W_arc*cos(delta_theta)"
+        },
+        "@convergence": {
+          "iteration": 0,
+          "distance": 0.0,
+          "contraction": 0.0,
+          "status": "CONVERGED"
+        }
+      }
+    },
+    {
+      "id": "edge_endpoint_unknown",
+      "expect": "FAIL",
+      "error": "EDGE_ENDPOINT_UNKNOWN",
+      "graph": {
+        "@type": "khanary.fold_graph.v1",
+        "@handle": "CAUSE",
+        "@nodes": [
+          "CAUSE"
+        ],
+        "@edges": [
+          {
+            "@id": "edge:0",
+            "@from": "CAUSE",
+            "@to": "MISSING",
+            "@relation": "@requires",
+            "@typed": true,
+            "@orientation": "forward"
+          }
+        ],
+        "@incidence": [
+          [
+            "CAUSE",
+            "edge:0"
+          ]
+        ],
+        "@weights": {
+          "@pattern_strength": {
+            "edge:0": 0.5
+          }
+        },
+        "@tau": "reasoning",
+        "@projection": "canonical-incidence",
+        "@query_conditioned": false,
+        "@active": false,
+        "@recoverability": {
+          "@fold": "Handle(CAUSE)",
+          "@unfold": "G_F(CAUSE)",
+          "@equivalent": true,
+          "@lossless_canonical": true
+        },
+        "@authority": {
+          "@semantic_authority": false,
+          "@xul_required_for_delta_B": true
+        },
+        "@boundary": {
+          "@local_valid": true,
+          "@boundary_compatible": true,
+          "@delta_B": false
+        },
+        "@fold_field": {
+          "node_id": "CAUSE",
+          "theta": 0,
+          "W": 1.0,
+          "C": 1.0,
+          "R": 1.0
+        },
+        "@product_graph": {
+          "runtime": "G_semantic □ G_phase",
+          "vertex": [
+            "CAUSE",
+            "Pop"
+          ],
+          "edge_weight_law": "W_arc*cos(delta_theta)"
+        },
+        "@convergence": {
+          "iteration": 0,
+          "distance": 0.0,
+          "contraction": 0.0,
+          "status": "CONVERGED"
+        }
+      }
+    },
+    {
+      "id": "edge_not_typed",
+      "expect": "FAIL",
+      "error": "EDGE_NOT_TYPED",
+      "graph": {
+        "@type": "khanary.fold_graph.v1",
+        "@handle": "CAUSE",
+        "@nodes": [
+          "CAUSE",
+          "EVIDENCE"
+        ],
+        "@edges": [
+          {
+            "@id": "edge:0",
+            "@from": "CAUSE",
+            "@to": "EVIDENCE",
+            "@relation": "@requires",
+            "@typed": false,
+            "@orientation": "forward"
+          }
+        ],
+        "@incidence": [
+          [
+            "CAUSE",
+            "edge:0"
+          ],
+          [
+            "EVIDENCE",
+            "edge:0"
+          ]
+        ],
+        "@weights": {
+          "@pattern_strength": {
+            "edge:0": 0.5
+          }
+        },
+        "@tau": "reasoning",
+        "@projection": "canonical-incidence",
+        "@query_conditioned": false,
+        "@active": false,
+        "@recoverability": {
+          "@fold": "Handle(CAUSE)",
+          "@unfold": "G_F(CAUSE)",
+          "@equivalent": true,
+          "@lossless_canonical": true
+        },
+        "@authority": {
+          "@semantic_authority": false,
+          "@xul_required_for_delta_B": true
+        },
+        "@boundary": {
+          "@local_valid": true,
+          "@boundary_compatible": true,
+          "@delta_B": false
+        },
+        "@fold_field": {
+          "node_id": "CAUSE",
+          "theta": 0,
+          "W": 1.0,
+          "C": 1.0,
+          "R": 1.0
+        },
+        "@product_graph": {
+          "runtime": "G_semantic □ G_phase",
+          "vertex": [
+            "CAUSE",
+            "Pop"
+          ],
+          "edge_weight_law": "W_arc*cos(delta_theta)"
+        },
+        "@convergence": {
+          "iteration": 0,
+          "distance": 0.0,
+          "contraction": 0.0,
+          "status": "CONVERGED"
+        }
+      }
+    },
+    {
+      "id": "missing_incidence",
+      "expect": "FAIL",
+      "error": "MISSING_INCIDENCE",
+      "graph": {
+        "@type": "khanary.fold_graph.v1",
+        "@handle": "CAUSE",
+        "@nodes": [
+          "CAUSE",
+          "EVIDENCE"
+        ],
+        "@edges": [
+          {
+            "@id": "edge:0",
+            "@from": "CAUSE",
+            "@to": "EVIDENCE",
+            "@relation": "@requires",
+            "@typed": true,
+            "@orientation": "forward"
+          }
+        ],
+        "@incidence": [],
+        "@weights": {
+          "@pattern_strength": {
+            "edge:0": 0.5
+          }
+        },
+        "@tau": "reasoning",
+        "@projection": "canonical-incidence",
+        "@query_conditioned": false,
+        "@active": false,
+        "@recoverability": {
+          "@fold": "Handle(CAUSE)",
+          "@unfold": "G_F(CAUSE)",
+          "@equivalent": true,
+          "@lossless_canonical": true
+        },
+        "@authority": {
+          "@semantic_authority": false,
+          "@xul_required_for_delta_B": true
+        },
+        "@boundary": {
+          "@local_valid": true,
+          "@boundary_compatible": true,
+          "@delta_B": false
+        },
+        "@fold_field": {
+          "node_id": "CAUSE",
+          "theta": 0,
+          "W": 1.0,
+          "C": 1.0,
+          "R": 1.0
+        },
+        "@product_graph": {
+          "runtime": "G_semantic □ G_phase",
+          "vertex": [
+            "CAUSE",
+            "Pop"
+          ],
+          "edge_weight_law": "W_arc*cos(delta_theta)"
+        },
+        "@convergence": {
+          "iteration": 0,
+          "distance": 0.0,
+          "contraction": 0.0,
+          "status": "CONVERGED"
+        }
+      }
+    },
+    {
+      "id": "weight_out_of_range",
+      "expect": "FAIL",
+      "error": "WEIGHT_OUT_OF_RANGE",
+      "graph": {
+        "@type": "khanary.fold_graph.v1",
+        "@handle": "CAUSE",
+        "@nodes": [
+          "CAUSE",
+          "EVIDENCE"
+        ],
+        "@edges": [
+          {
+            "@id": "edge:0",
+            "@from": "CAUSE",
+            "@to": "EVIDENCE",
+            "@relation": "@requires",
+            "@typed": true,
+            "@orientation": "forward"
+          }
+        ],
+        "@incidence": [
+          [
+            "CAUSE",
+            "edge:0"
+          ],
+          [
+            "EVIDENCE",
+            "edge:0"
+          ]
+        ],
+        "@weights": {
+          "@pattern_strength": {
+            "edge:0": 1.5
+          }
+        },
+        "@tau": "reasoning",
+        "@projection": "canonical-incidence",
+        "@query_conditioned": false,
+        "@active": false,
+        "@recoverability": {
+          "@fold": "Handle(CAUSE)",
+          "@unfold": "G_F(CAUSE)",
+          "@equivalent": true,
+          "@lossless_canonical": true
+        },
+        "@authority": {
+          "@semantic_authority": false,
+          "@xul_required_for_delta_B": true
+        },
+        "@boundary": {
+          "@local_valid": true,
+          "@boundary_compatible": true,
+          "@delta_B": false
+        },
+        "@fold_field": {
+          "node_id": "CAUSE",
+          "theta": 0,
+          "W": 1.0,
+          "C": 1.0,
+          "R": 1.0
+        },
+        "@product_graph": {
+          "runtime": "G_semantic □ G_phase",
+          "vertex": [
+            "CAUSE",
+            "Pop"
+          ],
+          "edge_weight_law": "W_arc*cos(delta_theta)"
+        },
+        "@convergence": {
+          "iteration": 0,
+          "distance": 0.0,
+          "contraction": 0.0,
+          "status": "CONVERGED"
+        }
+      }
+    },
+    {
+      "id": "recoverability_broken",
+      "expect": "FAIL",
+      "error": "RECOVERABILITY_BROKEN",
+      "graph": {
+        "@type": "khanary.fold_graph.v1",
+        "@handle": "CAUSE",
+        "@nodes": [
+          "CAUSE",
+          "EVIDENCE"
+        ],
+        "@edges": [
+          {
+            "@id": "edge:0",
+            "@from": "CAUSE",
+            "@to": "EVIDENCE",
+            "@relation": "@requires",
+            "@typed": true,
+            "@orientation": "forward"
+          }
+        ],
+        "@incidence": [
+          [
+            "CAUSE",
+            "edge:0"
+          ],
+          [
+            "EVIDENCE",
+            "edge:0"
+          ]
+        ],
+        "@weights": {
+          "@pattern_strength": {
+            "edge:0": 0.5
+          }
+        },
+        "@tau": "reasoning",
+        "@projection": "canonical-incidence",
+        "@query_conditioned": false,
+        "@active": false,
+        "@recoverability": {
+          "@fold": "summary(CAUSE)",
+          "@unfold": "lost",
+          "@equivalent": false,
+          "@lossless_canonical": false
+        },
+        "@authority": {
+          "@semantic_authority": false,
+          "@xul_required_for_delta_B": true
+        },
+        "@boundary": {
+          "@local_valid": true,
+          "@boundary_compatible": true,
+          "@delta_B": false
+        },
+        "@fold_field": {
+          "node_id": "CAUSE",
+          "theta": 0,
+          "W": 1.0,
+          "C": 1.0,
+          "R": 1.0
+        },
+        "@product_graph": {
+          "runtime": "G_semantic □ G_phase",
+          "vertex": [
+            "CAUSE",
+            "Pop"
+          ],
+          "edge_weight_law": "W_arc*cos(delta_theta)"
+        },
+        "@convergence": {
+          "iteration": 0,
+          "distance": 0.0,
+          "contraction": 0.0,
+          "status": "CONVERGED"
+        }
+      }
+    },
+    {
+      "id": "semantic_authority_claimed",
+      "expect": "FAIL",
+      "error": "SEMANTIC_AUTHORITY_CLAIMED",
+      "graph": {
+        "@type": "khanary.fold_graph.v1",
+        "@handle": "CAUSE",
+        "@nodes": [
+          "CAUSE",
+          "EVIDENCE"
+        ],
+        "@edges": [
+          {
+            "@id": "edge:0",
+            "@from": "CAUSE",
+            "@to": "EVIDENCE",
+            "@relation": "@requires",
+            "@typed": true,
+            "@orientation": "forward"
+          }
+        ],
+        "@incidence": [
+          [
+            "CAUSE",
+            "edge:0"
+          ],
+          [
+            "EVIDENCE",
+            "edge:0"
+          ]
+        ],
+        "@weights": {
+          "@pattern_strength": {
+            "edge:0": 0.5
+          }
+        },
+        "@tau": "reasoning",
+        "@projection": "canonical-incidence",
+        "@query_conditioned": false,
+        "@active": false,
+        "@recoverability": {
+          "@fold": "Handle(CAUSE)",
+          "@unfold": "G_F(CAUSE)",
+          "@equivalent": true,
+          "@lossless_canonical": true
+        },
+        "@authority": {
+          "@semantic_authority": true,
+          "@xul_required_for_delta_B": true
+        },
+        "@boundary": {
+          "@local_valid": true,
+          "@boundary_compatible": true,
+          "@delta_B": false
+        },
+        "@fold_field": {
+          "node_id": "CAUSE",
+          "theta": 0,
+          "W": 1.0,
+          "C": 1.0,
+          "R": 1.0
+        },
+        "@product_graph": {
+          "runtime": "G_semantic □ G_phase",
+          "vertex": [
+            "CAUSE",
+            "Pop"
+          ],
+          "edge_weight_law": "W_arc*cos(delta_theta)"
+        },
+        "@convergence": {
+          "iteration": 0,
+          "distance": 0.0,
+          "contraction": 0.0,
+          "status": "CONVERGED"
+        }
+      }
+    },
+    {
+      "id": "xul_boundary_missing",
+      "expect": "FAIL",
+      "error": "XUL_BOUNDARY_MISSING",
+      "graph": {
+        "@type": "khanary.fold_graph.v1",
+        "@handle": "CAUSE",
+        "@nodes": [
+          "CAUSE",
+          "EVIDENCE"
+        ],
+        "@edges": [
+          {
+            "@id": "edge:0",
+            "@from": "CAUSE",
+            "@to": "EVIDENCE",
+            "@relation": "@requires",
+            "@typed": true,
+            "@orientation": "forward"
+          }
+        ],
+        "@incidence": [
+          [
+            "CAUSE",
+            "edge:0"
+          ],
+          [
+            "EVIDENCE",
+            "edge:0"
+          ]
+        ],
+        "@weights": {
+          "@pattern_strength": {
+            "edge:0": 0.5
+          }
+        },
+        "@tau": "reasoning",
+        "@projection": "canonical-incidence",
+        "@query_conditioned": false,
+        "@active": false,
+        "@recoverability": {
+          "@fold": "Handle(CAUSE)",
+          "@unfold": "G_F(CAUSE)",
+          "@equivalent": true,
+          "@lossless_canonical": true
+        },
+        "@authority": {
+          "@semantic_authority": false,
+          "@xul_required_for_delta_B": false
+        },
+        "@boundary": {
+          "@local_valid": true,
+          "@boundary_compatible": true,
+          "@delta_B": false
+        },
+        "@fold_field": {
+          "node_id": "CAUSE",
+          "theta": 0,
+          "W": 1.0,
+          "C": 1.0,
+          "R": 1.0
+        },
+        "@product_graph": {
+          "runtime": "G_semantic □ G_phase",
+          "vertex": [
+            "CAUSE",
+            "Pop"
+          ],
+          "edge_weight_law": "W_arc*cos(delta_theta)"
+        },
+        "@convergence": {
+          "iteration": 0,
+          "distance": 0.0,
+          "contraction": 0.0,
+          "status": "CONVERGED"
+        }
+      }
+    },
+    {
+      "id": "active_gate_missing",
+      "expect": "FAIL",
+      "error": "INVALID_ACTIVE_GATE",
+      "graph": {
+        "@type": "khanary.fold_graph.v1",
+        "@handle": "CAUSE",
+        "@nodes": [
+          "CAUSE",
+          "EVIDENCE"
+        ],
+        "@edges": [
+          {
+            "@id": "edge:0",
+            "@from": "CAUSE",
+            "@to": "EVIDENCE",
+            "@relation": "@requires",
+            "@typed": true,
+            "@orientation": "forward"
+          }
+        ],
+        "@incidence": [
+          [
+            "CAUSE",
+            "edge:0"
+          ],
+          [
+            "EVIDENCE",
+            "edge:0"
+          ]
+        ],
+        "@weights": {
+          "@pattern_strength": {
+            "edge:0": 0.5
+          }
+        },
+        "@tau": "reasoning",
+        "@projection": "canonical-incidence",
+        "@query_conditioned": true,
+        "@active": true,
+        "@recoverability": {
+          "@fold": "Handle(CAUSE)",
+          "@unfold": "G_F(CAUSE)",
+          "@equivalent": true,
+          "@lossless_canonical": true
+        },
+        "@authority": {
+          "@semantic_authority": false,
+          "@xul_required_for_delta_B": true
+        },
+        "@boundary": {
+          "@local_valid": true,
+          "@boundary_compatible": true,
+          "@delta_B": false
+        },
+        "@fold_field": {
+          "node_id": "CAUSE",
+          "theta": 0,
+          "W": 1.0,
+          "C": 1.0,
+          "R": 1.0
+        },
+        "@product_graph": {
+          "runtime": "G_semantic □ G_phase",
+          "vertex": [
+            "CAUSE",
+            "Pop"
+          ],
+          "edge_weight_law": "W_arc*cos(delta_theta)"
+        },
+        "@convergence": {
+          "iteration": 0,
+          "distance": 0.0,
+          "contraction": 0.0,
+          "status": "CONVERGED"
+        }
+      }
+    },
+    {
+      "id": "local_validity_failed",
+      "expect": "FAIL",
+      "error": "LOCAL_VALIDITY_FAILED",
+      "graph": {
+        "@type": "khanary.fold_graph.v1",
+        "@handle": "CAUSE",
+        "@nodes": [
+          "CAUSE",
+          "EVIDENCE"
+        ],
+        "@edges": [
+          {
+            "@id": "edge:0",
+            "@from": "CAUSE",
+            "@to": "EVIDENCE",
+            "@relation": "@requires",
+            "@typed": true,
+            "@orientation": "forward"
+          }
+        ],
+        "@incidence": [
+          [
+            "CAUSE",
+            "edge:0"
+          ],
+          [
+            "EVIDENCE",
+            "edge:0"
+          ]
+        ],
+        "@weights": {
+          "@pattern_strength": {
+            "edge:0": 0.5
+          }
+        },
+        "@tau": "reasoning",
+        "@projection": "canonical-incidence",
+        "@query_conditioned": false,
+        "@active": false,
+        "@recoverability": {
+          "@fold": "Handle(CAUSE)",
+          "@unfold": "G_F(CAUSE)",
+          "@equivalent": true,
+          "@lossless_canonical": true
+        },
+        "@authority": {
+          "@semantic_authority": false,
+          "@xul_required_for_delta_B": true
+        },
+        "@boundary": {
+          "@local_valid": false,
+          "@boundary_compatible": true,
+          "@delta_B": false
+        },
+        "@fold_field": {
+          "node_id": "CAUSE",
+          "theta": 0,
+          "W": 1.0,
+          "C": 1.0,
+          "R": 1.0
+        },
+        "@product_graph": {
+          "runtime": "G_semantic □ G_phase",
+          "vertex": [
+            "CAUSE",
+            "Pop"
+          ],
+          "edge_weight_law": "W_arc*cos(delta_theta)"
+        },
+        "@convergence": {
+          "iteration": 0,
+          "distance": 0.0,
+          "contraction": 0.0,
+          "status": "CONVERGED"
+        }
+      }
+    },
+    {
+      "id": "boundary_incompatible",
+      "expect": "FAIL",
+      "error": "BOUNDARY_INCOMPATIBLE",
+      "graph": {
+        "@type": "khanary.fold_graph.v1",
+        "@handle": "CAUSE",
+        "@nodes": [
+          "CAUSE",
+          "EVIDENCE"
+        ],
+        "@edges": [
+          {
+            "@id": "edge:0",
+            "@from": "CAUSE",
+            "@to": "EVIDENCE",
+            "@relation": "@requires",
+            "@typed": true,
+            "@orientation": "forward"
+          }
+        ],
+        "@incidence": [
+          [
+            "CAUSE",
+            "edge:0"
+          ],
+          [
+            "EVIDENCE",
+            "edge:0"
+          ]
+        ],
+        "@weights": {
+          "@pattern_strength": {
+            "edge:0": 0.5
+          }
+        },
+        "@tau": "reasoning",
+        "@projection": "canonical-incidence",
+        "@query_conditioned": false,
+        "@active": false,
+        "@recoverability": {
+          "@fold": "Handle(CAUSE)",
+          "@unfold": "G_F(CAUSE)",
+          "@equivalent": true,
+          "@lossless_canonical": true
+        },
+        "@authority": {
+          "@semantic_authority": false,
+          "@xul_required_for_delta_B": true
+        },
+        "@boundary": {
+          "@local_valid": true,
+          "@boundary_compatible": false,
+          "@delta_B": false
+        },
+        "@fold_field": {
+          "node_id": "CAUSE",
+          "theta": 0,
+          "W": 1.0,
+          "C": 1.0,
+          "R": 1.0
+        },
+        "@product_graph": {
+          "runtime": "G_semantic □ G_phase",
+          "vertex": [
+            "CAUSE",
+            "Pop"
+          ],
+          "edge_weight_law": "W_arc*cos(delta_theta)"
+        },
+        "@convergence": {
+          "iteration": 0,
+          "distance": 0.0,
+          "contraction": 0.0,
+          "status": "CONVERGED"
+        }
+      }
+    },
+    {
+      "id": "delta_b_without_xul_event",
+      "expect": "FAIL",
+      "error": "DELTA_B_REQUIRES_XUL_EVENT",
+      "graph": {
+        "@type": "khanary.fold_graph.v1",
+        "@handle": "CAUSE",
+        "@nodes": [
+          "CAUSE",
+          "EVIDENCE"
+        ],
+        "@edges": [
+          {
+            "@id": "edge:0",
+            "@from": "CAUSE",
+            "@to": "EVIDENCE",
+            "@relation": "@requires",
+            "@typed": true,
+            "@orientation": "forward"
+          }
+        ],
+        "@incidence": [
+          [
+            "CAUSE",
+            "edge:0"
+          ],
+          [
+            "EVIDENCE",
+            "edge:0"
+          ]
+        ],
+        "@weights": {
+          "@pattern_strength": {
+            "edge:0": 0.5
+          }
+        },
+        "@tau": "reasoning",
+        "@projection": "canonical-incidence",
+        "@query_conditioned": false,
+        "@active": false,
+        "@recoverability": {
+          "@fold": "Handle(CAUSE)",
+          "@unfold": "G_F(CAUSE)",
+          "@equivalent": true,
+          "@lossless_canonical": true
+        },
+        "@authority": {
+          "@semantic_authority": false,
+          "@xul_required_for_delta_B": true
+        },
+        "@boundary": {
+          "@local_valid": true,
+          "@boundary_compatible": true,
+          "@delta_B": true
+        },
+        "@fold_field": {
+          "node_id": "CAUSE",
+          "theta": 0,
+          "W": 1.0,
+          "C": 1.0,
+          "R": 1.0
+        },
+        "@product_graph": {
+          "runtime": "G_semantic □ G_phase",
+          "vertex": [
+            "CAUSE",
+            "Pop"
+          ],
+          "edge_weight_law": "W_arc*cos(delta_theta)"
+        },
+        "@convergence": {
+          "iteration": 0,
+          "distance": 0.0,
+          "contraction": 0.0,
+          "status": "CONVERGED"
+        }
+      }
+    },
+    {
+      "id": "edge_orientation_missing",
+      "expect": "FAIL",
+      "error": "EDGE_ORIENTATION_MISSING",
+      "graph": {
+        "@type": "khanary.fold_graph.v1",
+        "@handle": "CAUSE",
+        "@nodes": [
+          "CAUSE",
+          "EVIDENCE",
+          "INFER"
+        ],
+        "@edges": [
+          {
+            "@id": "edge:0",
+            "@from": "CAUSE",
+            "@to": "EVIDENCE",
+            "@relation": "@requires",
+            "@typed": true
+          },
+          {
+            "@id": "edge:1",
+            "@from": "CAUSE",
+            "@to": "INFER",
+            "@relation": "@enables",
+            "@typed": true,
+            "@orientation": "forward"
+          }
+        ],
+        "@incidence": [
+          [
+            "CAUSE",
+            "edge:0"
+          ],
+          [
+            "EVIDENCE",
+            "edge:0"
+          ],
+          [
+            "CAUSE",
+            "edge:1"
+          ],
+          [
+            "INFER",
+            "edge:1"
+          ]
+        ],
+        "@weights": {
+          "@pattern_strength": {
+            "edge:0": 0.85,
+            "edge:1": 0.92
+          }
+        },
+        "@tau": "reasoning",
+        "@projection": "canonical-incidence",
+        "@query_conditioned": false,
+        "@active": false,
+        "@recoverability": {
+          "@fold": "Handle(CAUSE)",
+          "@unfold": "G_F(CAUSE)",
+          "@equivalent": true,
+          "@lossless_canonical": true
+        },
+        "@authority": {
+          "@semantic_authority": false,
+          "@xul_required_for_delta_B": true
+        },
+        "@boundary": {
+          "@local_valid": true,
+          "@boundary_compatible": true,
+          "@delta_B": false
+        },
+        "@fold_field": {
+          "node_id": "CAUSE",
+          "theta": 0,
+          "W": 1.0,
+          "C": 1.0,
+          "R": 1.0
+        },
+        "@product_graph": {
+          "runtime": "G_semantic □ G_phase",
+          "vertex": [
+            "CAUSE",
+            "Pop"
+          ],
+          "edge_weight_law": "W_arc*cos(delta_theta)"
+        },
+        "@convergence": {
+          "iteration": 0,
+          "distance": 0.0,
+          "contraction": 0.0,
+          "status": "CONVERGED"
+        }
+      }
+    },
+    {
+      "id": "edge_orientation_invalid",
+      "expect": "FAIL",
+      "error": "EDGE_ORIENTATION_INVALID",
+      "graph": {
+        "@type": "khanary.fold_graph.v1",
+        "@handle": "CAUSE",
+        "@nodes": [
+          "CAUSE",
+          "EVIDENCE",
+          "INFER"
+        ],
+        "@edges": [
+          {
+            "@id": "edge:0",
+            "@from": "CAUSE",
+            "@to": "EVIDENCE",
+            "@relation": "@requires",
+            "@typed": true,
+            "@orientation": "sideways"
+          },
+          {
+            "@id": "edge:1",
+            "@from": "CAUSE",
+            "@to": "INFER",
+            "@relation": "@enables",
+            "@typed": true,
+            "@orientation": "forward"
+          }
+        ],
+        "@incidence": [
+          [
+            "CAUSE",
+            "edge:0"
+          ],
+          [
+            "EVIDENCE",
+            "edge:0"
+          ],
+          [
+            "CAUSE",
+            "edge:1"
+          ],
+          [
+            "INFER",
+            "edge:1"
+          ]
+        ],
+        "@weights": {
+          "@pattern_strength": {
+            "edge:0": 0.85,
+            "edge:1": 0.92
+          }
+        },
+        "@tau": "reasoning",
+        "@projection": "canonical-incidence",
+        "@query_conditioned": false,
+        "@active": false,
+        "@recoverability": {
+          "@fold": "Handle(CAUSE)",
+          "@unfold": "G_F(CAUSE)",
+          "@equivalent": true,
+          "@lossless_canonical": true
+        },
+        "@authority": {
+          "@semantic_authority": false,
+          "@xul_required_for_delta_B": true
+        },
+        "@boundary": {
+          "@local_valid": true,
+          "@boundary_compatible": true,
+          "@delta_B": false
+        },
+        "@fold_field": {
+          "node_id": "CAUSE",
+          "theta": 0,
+          "W": 1.0,
+          "C": 1.0,
+          "R": 1.0
+        },
+        "@product_graph": {
+          "runtime": "G_semantic □ G_phase",
+          "vertex": [
+            "CAUSE",
+            "Pop"
+          ],
+          "edge_weight_law": "W_arc*cos(delta_theta)"
+        },
+        "@convergence": {
+          "iteration": 0,
+          "distance": 0.0,
+          "contraction": 0.0,
+          "status": "CONVERGED"
+        }
+      }
+    }
+  ]
+}

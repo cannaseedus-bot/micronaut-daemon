@@ -1,0 +1,122 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "cheese-field.schema.json",
+  "title": "SHEOGORATH-µ Cheese Field Contract",
+  "description": "Adversarial semantic evaluation field for KHANARY. Accumulates pressure against accepting a candidate too easily and produces χ ∈ [0, 10]. χ = maximum rejection pressure; χ ≠ truth probability. Owned by SHEOGORATH-µ. Consumed by Xul when a collapse is requested.",
+  "type": "object",
+  "required": ["@kind", "@candidate", "@owner"],
+  "additionalProperties": false,
+  "properties": {
+
+    "@kind":      { "type": "string", "const": "semantic.cheese.v1" },
+    "@candidate": { "type": "string", "description": "ID of the candidate under evaluation." },
+    "@owner":     { "type": "string", "const": "SHEOGORATH-µ" },
+    "@context":   { "type": "string", "default": "cfpc.active_field" },
+    "@phase":     { "type": "string", "description": "Lifecycle phase at time of evaluation." },
+
+    "@formula": {
+      "type": "object",
+      "description": "Reference definition of critic pressure. Evidence strength, information gain, and task value remain separate measurements.",
+      "additionalProperties": false,
+      "properties": {
+        "expression": {
+          "type": "string",
+          "const": "Clamp[0,10]( 10 × (w_p·P + w_d·D + w_s·S + w_n·N + w_k·K) / (w_p+w_d+w_s+w_n+w_k) )"
+        },
+        "optional_policy_projection": { "type": "string", "description": "A consumer may apply an explicit policy transform to χ; no universal retention mapping is implied." },
+        "score_is_not":  { "type": "array", "items": { "type": "string" },
+                           "const": ["truth_probability", "reward", "information_gain", "candidate_value"] }
+      }
+    },
+
+    "@dimensions": {
+      "type": "object",
+      "description": "Normalized component values in [0, 1]. All default to 0.",
+      "additionalProperties": false,
+      "properties": {
+        "pessimism":           { "type": "number", "minimum": 0, "maximum": 1,
+                                 "description": "P: unresolved risk pressure." },
+        "doubt":               { "type": "number", "minimum": 0, "maximum": 1,
+                                 "description": "D: unverified or missing evidence." },
+        "reasoning_quality":   { "type": "number", "minimum": 0, "maximum": 1,
+                                 "description": "S: shallow, circular, or repeated reasoning. Directed at the argument, not the author." },
+        "counter_evidence":    { "type": "number", "minimum": 0, "maximum": 1,
+                                 "description": "N: negative evidence and counterexamples." },
+        "contradiction":       { "type": "number", "minimum": 0, "maximum": 1,
+                                 "description": "K: contradictions with known facts, or contextual staleness." },
+        "supporting_evidence": { "type": "number", "minimum": 0, "maximum": 1,
+                                 "description": "E: validated support. Subtractive — reduces χ." }
+      }
+    },
+
+    "@weights": {
+      "type": "object",
+      "description": "Calibration parameters. Not universal constants — tuned per domain or session. w_e ≥ 1 lets one verified support outweigh many weak objections.",
+      "additionalProperties": false,
+      "properties": {
+        "pessimism":           { "type": "number", "minimum": 0, "default": 1.0 },
+        "doubt":               { "type": "number", "minimum": 0, "default": 1.0 },
+        "reasoning_quality":   { "type": "number", "minimum": 0, "default": 1.0 },
+        "counter_evidence":    { "type": "number", "minimum": 0, "default": 1.0 },
+        "contradiction":       { "type": "number", "minimum": 0, "default": 1.0 },
+        "supporting_evidence": { "type": "number", "minimum": 0, "default": 1.0,
+                                 "description": "Legacy compatibility field; does not modify Cheese pressure." }
+      }
+    },
+
+    "@objections": {
+      "type": "array",
+      "description": "Structured reasons pushing the score up. Preserved for training signal.",
+      "items": { "$ref": "#/$defs/CheeseObjEntry" }
+    },
+
+    "@support": {
+      "type": "array",
+      "description": "Structured support/evidence records, measured separately from Cheese pressure.",
+      "items": { "$ref": "#/$defs/CheeseObjEntry" }
+    },
+
+    "@unresolved": {
+      "type": "array",
+      "description": "Open questions not yet evaluated. May promote to @objections on later recalculation.",
+      "items": { "$ref": "#/$defs/CheeseObjEntry" }
+    },
+
+    "@result": {
+      "type": "object",
+      "description": "Computed output. Assigned by SHEOGORATH-µ — not schema-admissible as input.",
+      "additionalProperties": false,
+      "properties": {
+        "score":          { "type": "number", "minimum": 0, "maximum": 10,
+                            "description": "χ: Cheese critic-pressure score. Higher = more challenge pressure; not a quality, truth, or value score." },
+        "policy_projection": { "type": "number", "minimum": 0, "maximum": 1,
+                               "description": "Optional consumer-defined transform. SHEOGORATH does not assign a universal retention value." }
+      }
+    },
+
+    "@authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode":                    { "type": "string", "const": "observation" },
+        "promote_generated_facts": { "type": "boolean", "const": false }
+      }
+    }
+  },
+
+  "$defs": {
+    "CheeseObjEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind":    { "type": "string",
+                     "enum": ["pessimism","doubt","disdain","contradiction","support","staleness","correction"] },
+        "pattern": { "type": "string",
+                     "description": "Detected reasoning pattern.",
+                     "examples": ["unsupported_assertion","circular_reasoning","repeated_model_error","no_independent_verification"] },
+        "ref":     { "type": "string", "description": "Fact or event ID being cited." },
+        "text":    { "type": "string", "description": "Free-text elaboration." }
+      }
+    }
+  }
+}

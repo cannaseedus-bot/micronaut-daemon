@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Generated key lookup bank from greeting-bank.key-grammar.jsonl; entries are data, not execution authority.-->
+  <category>
+    <pattern>LOOK UP KEY GREETING:POP:1</pattern>
+    <template>Key GREETING:POP:1. definition: Hello. I'm online and ready to help.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY GREETING:POP:2</pattern>
+    <template>Key GREETING:POP:2. definition: Hey — good to see you. What are we working on?</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY GREETING:POP:3</pattern>
+    <template>Key GREETING:POP:3. definition: Hi there. Systems nominal; ready when you are.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY GREETING:WO:1</pattern>
+    <template>Key GREETING:WO:1. definition: Hey {cue} — picked that up from you; good to be talking again.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY GREETING:WO:2</pattern>
+    <template>Key GREETING:WO:2. definition: {Cue}! Good to see you again. I keep learning how you talk.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY GREETING:WO:3</pattern>
+    <template>Key GREETING:WO:3. definition: Alright {cue}, I remembered that one. Let's go.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY GREETING:YAX:1</pattern>
+    <template>Key GREETING:YAX:1. definition: Hey {cue}, good to see you again.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY GREETING:YAX:2</pattern>
+    <template>Key GREETING:YAX:2. definition: Yo {cue}, ready when you are.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY GREETING:YAX:3</pattern>
+    <template>Key GREETING:YAX:3. definition: What's good {cue}? I'm online and locked in.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY GREETING:SEK:1</pattern>
+    <template>Key GREETING:SEK:1. definition: Reporting in: {turns} greetings so far and I'm adapting to how you talk. Ready when you are.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY GREETING:SEK:2</pattern>
+    <template>Key GREETING:SEK:2. definition: {turns} salutations logged. Each one teaches me your mannerisms. Ready.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY GREETING:CH'EN:1</pattern>
+    <template>Key GREETING:CH'EN:1. definition: Style check: {lingo_count} lingo cues learned so far. {Greeting}!</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY GREETING:CH'EN:2</pattern>
+    <template>Key GREETING:CH'EN:2. definition: {lingo_count} of your words are in my style profile now. {Greeting} back at you.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY GREETING:XUL:1</pattern>
+    <template>Key GREETING:XUL:1. definition: Last time you greeted me with "{last}". Memory holds — hello again.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY GREETING:XUL:2</pattern>
+    <template>Key GREETING:XUL:2. definition: I remembered your last greeting: "{last}". Same energy today.</template>
+  </category>
+</aiml>

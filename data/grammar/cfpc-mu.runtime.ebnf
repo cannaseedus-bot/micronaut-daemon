@@ -1,0 +1,135 @@
+(* ================================================================ *)
+(* CFPC-µ — Intent and Gap Classification Grammar                   *)
+(* Individual Micronaut domain language                             *)
+(* Role: classify                                                   *)
+(* Owns: intent classification, gap detection, capability dependency*)
+(* Does NOT own: question generation, WCR ranking, learning         *)
+(*               or execution dispatch                              *)
+(* ================================================================ *)
+
+
+(* ---- Part I: Program Surface Syntax ---- *)
+
+program       = { intent_rule | gap_rule | type_decl
+               | operation_contract_decl | comment } ;
+
+(* INTENT — classify an observed input into a named intent type *)
+(* Declaring a rule does not execute it; BIND names the output binding.
+   CLASSIFY produces an IntentLabel; it does not invoke any handler. *)
+intent_rule   = "INTENT" identifier "{"
+                  "WHEN" condition
+                  "CLASSIFY" intent_type
+                  [ "BIND" identifier ]
+                "}" ;
+
+(* GAP — classify a missing capability or knowledge deficit *)
+(* REQUIRE names a capability dependency; it declares the requirement
+   but does not invoke or authorize the named capability. *)
+gap_rule      = "GAP" identifier "{"
+                  "WHEN" condition
+                  "CLASSIFY" gap_type
+                  [ "REQUIRE" capability_id ]
+                "}" ;
+
+intent_type   = "DEFINE"
+              | "EXPLAIN"
+              | "COMPARE"
+              | "RELATION"
+              | "EXECUTE" ;
+
+gap_type      = "INTENT_GAP"
+              | "QUERY_GAP"
+              | "KNOWLEDGE_GAP" ;
+
+(* Conditions are evaluated at classification time; they are predicates,
+   not executable statements. TYPE identifier matches the input type tag. *)
+condition     = "PATTERN" string
+              | "TYPE" identifier
+              | "MISSING" identifier ;
+
+capability_id = identifier ;
+
+(* TYPE declarations make the type inventory machine-readable. *)
+type_decl               = "TYPE" type_id ":" string
+                          [ "requires_xcfe" ":" bool_lit ] ;
+type_id                 = identifier ;
+bool_lit                = true_lit | false_lit ;
+true_lit                = "true" ;
+false_lit               = "false" ;
+
+(* CONTRACT declarations make operation signatures machine-readable. *)
+operation_contract_decl = "CONTRACT" identifier
+                          "INPUT" type_id
+                          "OUTPUT" type_id
+                          "PHASE" phase_name
+                          [ "xcfe" ":" "required" ] ;
+
+(* ---- Shared terminals ---- *)
+phase_name  = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Chen" | "Ch_en" | "Xul" ;
+identifier  = letter { letter | digit | "_" | "-" | "." } ;
+string      = '"' { string_char } '"' ;
+string_char = ? any character except unescaped '"' or newline ? ;
+digit       = "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9" ;
+letter      = ? Unicode letter or underscore ? ;
+whitespace  = ? space, tab, CR, LF ? ;
+comment     = "#" { ? any character except newline ? } newline ;
+
+
+(* ================================================================ *)
+(* Part II: Static Signatures for CFPC-µ                            *)
+(* ================================================================ *)
+
+(*
+  Operation contracts
+  ┌──────────────────┬─────────────────────────┬────────────────────┬───────┐
+  │ Operation        │ Input                   │ Output             │ Phase │
+  ├──────────────────┼─────────────────────────┼────────────────────┼───────┤
+  │ INTENT/CLASSIFY  │ QueryRequest × condition│ IntentResolution   │ Yax   │
+  │ INTENT/BIND      │ IntentResolution        │ NamedBinding       │ Yax   │
+  │ GAP/CLASSIFY     │ QueryRequest × condition│ GapClassification  │ Yax   │
+  │ GAP/REQUIRE      │ GapClassification       │ CapabilityRequest  │ Yax   │
+  └──────────────────┴─────────────────────────┴────────────────────┴───────┘
+
+  Output type definitions
+  ─────────────────────────────────────────────────────────────────────
+  QueryRequest       — input text + intent classification request; read-only
+  IntentResolution   — classified intent with intent_type label; read-only
+  NamedBinding       — identifier bound to IntentResolution; for downstream use
+  GapClassification  — classified gap with gap_type label; read-only
+  CapabilityRequest  — named capability dependency declared by GAP/REQUIRE;
+                       not an invocation; fulfillment requires separate dispatch
+
+  Separation invariants
+  ─────────────────────────────────────────────────────────────────────
+  CLASSIFY produces a label; it does not trigger any handler or route
+  REQUIRE names a capability; it does not invoke or authorize it
+  BIND attaches a name to a resolution result; no side effects
+  Transitioning from CapabilityRequest to actual dispatch requires
+       a capability contract, XCFE admission, and callable edge declaration
+
+  Phase legality
+  ─────────────────────────────────────────────────────────────────────
+  INTENT/CLASSIFY:  Yax (R-phase: structural classification; no XCFE)
+  INTENT/BIND:      Yax (name binding; no XCFE)
+  GAP/CLASSIFY:     Yax (R-phase: gap detection; no XCFE)
+  GAP/REQUIRE:      Yax (capability dependency declaration; no XCFE;
+                        fulfillment is Sek or later with XCFE)
+
+  Static errors
+  ─────────────────────────────────────────────────────────────────────
+  - intent_duplicate_id
+  - gap_duplicate_id
+  - classify_without_condition
+  - require_on_non_gap_result
+  - bind_without_prior_classify
+
+  Authority
+  ─────────────────────────────────────────────────────────────────────
+  grammar_grants_execution: false
+  classify_grants_execution: false
+  require_grants_invocation: false
+  route_requires_xcfe_admission: true
+  persistence_requires_verified_authorized_fold: true
+  semantic_authority: false
+  commit_authority: false
+*)

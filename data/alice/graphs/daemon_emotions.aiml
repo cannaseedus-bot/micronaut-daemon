@@ -1,0 +1,176 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from daemon_emotions.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES</pattern>
+    <template>source daemon_emotions.gml; label DaemonEmotionPresentationCandidates; identity kuhul.daemon-emotions.v1; authority data_only; semantic_authority 0; purpose emotion cues suggest presentation modes; no diagnosis or admission; directed 1; nodes 16; edges 10. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE 1</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 1; icon_ref: data/icons/emotions.svg#joy; id: 1; kind: emotion_cue; label: joy. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE JOY</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 1; icon_ref: data/icons/emotions.svg#joy; id: 1; kind: emotion_cue; label: joy. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE 2</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 2; icon_ref: data/icons/emotions.svg#sadness; id: 2; kind: emotion_cue; label: sadness. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE SADNESS</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 2; icon_ref: data/icons/emotions.svg#sadness; id: 2; kind: emotion_cue; label: sadness. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE 3</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 3; icon_ref: data/icons/emotions.svg#anxiety; id: 3; kind: emotion_cue; label: anxiety. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE ANXIETY</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 3; icon_ref: data/icons/emotions.svg#anxiety; id: 3; kind: emotion_cue; label: anxiety. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE 4</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 4; icon_ref: data/icons/emotions.svg#anger; id: 4; kind: emotion_cue; label: anger. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE ANGER</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 4; icon_ref: data/icons/emotions.svg#anger; id: 4; kind: emotion_cue; label: anger. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE 5</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 5; icon_ref: data/icons/emotions.svg#curiosity; id: 5; kind: emotion_cue; label: curiosity. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE CURIOSITY</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 5; icon_ref: data/icons/emotions.svg#curiosity; id: 5; kind: emotion_cue; label: curiosity. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE 6</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 6; icon_ref: data/icons/emotions.svg#calm; id: 6; kind: emotion_cue; label: calm. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE CALM</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 6; icon_ref: data/icons/emotions.svg#calm; id: 6; kind: emotion_cue; label: calm. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE 7</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 7; icon_ref: data/icons/emotions.svg#frustration; id: 7; kind: emotion_cue; label: frustration. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE FRUSTRATION</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 7; icon_ref: data/icons/emotions.svg#frustration; id: 7; kind: emotion_cue; label: frustration. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE 8</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 8; icon_ref: data/icons/emotions.svg#loneliness; id: 8; kind: emotion_cue; label: loneliness. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE LONELINESS</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 8; icon_ref: data/icons/emotions.svg#loneliness; id: 8; kind: emotion_cue; label: loneliness. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE 101</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 101; id: 101; kind: behavior_mode; label: buddy; mode_ref: buddy. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE BUDDY</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 101; id: 101; kind: behavior_mode; label: buddy; mode_ref: buddy. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE 102</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 102; id: 102; kind: behavior_mode; label: listener; mode_ref: listener. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE LISTENER</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 102; id: 102; kind: behavior_mode; label: listener; mode_ref: listener. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE 103</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 103; id: 103; kind: behavior_mode; label: coach; mode_ref: coach. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE COACH</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 103; id: 103; kind: behavior_mode; label: coach; mode_ref: coach. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE 104</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 104; id: 104; kind: behavior_mode; label: mediator; mode_ref: mediator. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE MEDIATOR</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 104; id: 104; kind: behavior_mode; label: mediator; mode_ref: mediator. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE 105</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 105; id: 105; kind: behavior_mode; label: socratic; mode_ref: socratic. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE SOCRATIC</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 105; id: 105; kind: behavior_mode; label: socratic; mode_ref: socratic. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE 106</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 106; id: 106; kind: behavior_mode; label: debugger; mode_ref: debugger. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE DEBUGGER</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 106; id: 106; kind: behavior_mode; label: debugger; mode_ref: debugger. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE 107</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 107; id: 107; kind: behavior_mode; label: mentor; mode_ref: mentor. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE MENTOR</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 107; id: 107; kind: behavior_mode; label: mentor; mode_ref: mentor. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE 108</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 108; id: 108; kind: behavior_mode; label: grief-support; mode_ref: grief-support. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES NODE GRIEF-SUPPORT</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; node 108; id: 108; kind: behavior_mode; label: grief-support; mode_ref: grief-support. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES EDGE 1  101</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; edge 1 to 101; relation: presentation_candidate; source: 1; target: 101. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES EDGE 2  102</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; edge 2 to 102; relation: presentation_candidate; source: 2; target: 102. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES EDGE 2  108</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; edge 2 to 108; relation: presentation_candidate; source: 2; target: 108. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES EDGE 3  102</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; edge 3 to 102; relation: presentation_candidate; source: 3; target: 102. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES EDGE 4  104</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; edge 4 to 104; relation: presentation_candidate; source: 4; target: 104. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES EDGE 5  105</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; edge 5 to 105; relation: presentation_candidate; source: 5; target: 105. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES EDGE 6  107</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; edge 6 to 107; relation: presentation_candidate; source: 6; target: 107. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES EDGE 7  106</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; edge 7 to 106; relation: presentation_candidate; source: 7; target: 106. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES EDGE 8  101</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; edge 8 to 101; relation: presentation_candidate; source: 8; target: 101. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH DAEMONEMOTIONPRESENTATIONCANDIDATES EDGE 8  102</pattern>
+    <template>Graph DaemonEmotionPresentationCandidates; edge 8 to 102; relation: presentation_candidate; source: 8; target: 102. Data-only graph record.</template>
+  </category>
+</aiml>

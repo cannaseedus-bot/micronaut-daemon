@@ -1,0 +1,19 @@
+(* Fixed authority invariants for Micronaut.SRAI.AIML.
+   XUL may close and commit verified data only; no layer gets ambient execution. *)
+authority-matrix = aiml-contract, srai-contract, pi-contract, xcfe-contract, xul-contract, learning-contract ;
+aiml-contract = "aiml", ":", "match_only", "execute:false", "write:false", "close:false" ;
+srai-contract = "srai", ":", "redirect_only", "execute:false", "write:false", "close:false" ;
+pi-contract = "pi", ":", "rank_only", "execute:false", "write:false", "close:false" ;
+xcfe-contract = "xcfe", ":", "admission_only", "execute:false", "write:false", "close:false" ;
+xul-contract = "xul", ":", "close_only", "execute:false", "write:false", "close:true", "commit:verified_data_only" ;
+learning-contract = "learning", ":", "proposal_only", "execute:false", "write:false", "promote:false" ;
+
+invariant-aiml-match-only = aiml.authority == "match_only" and not aiml.can_execute and not aiml.can_write ;
+invariant-srai-redirect-only = srai.authority == "redirect_only" and srai.return_mode == "candidate" ;
+invariant-pi-rank-only = pi.authority == "rank_only" and pi.output == "ranked_candidates" ;
+invariant-xcfe-admit-only = xcfe.authority == "admission_only" and not xcfe.can_execute and not xcfe.can_close ;
+invariant-xul-close-only = xul.authority == "close_only" and xul.commit == "verified_data_only" ;
+invariant-learning-propose-only = learning.authority == "proposal_only" and not learning.can_write and not learning.can_promote ;
+invariant-single-rule-owner = pattern_bank.owner == aiml.id and categories_are_data ;
+invariant-route-edges-are-symbolic = route_graph.edge_kind == "srai" and route_graph.executes == false ;
+invariant-ordered-phases = phases == ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"] ;

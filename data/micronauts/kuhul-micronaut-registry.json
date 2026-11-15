@@ -1,0 +1,2257 @@
+{
+  "registry_contract": {
+    "format": "kuhul.micronaut-registry/1",
+    "shape": "full",
+    "document_status": "declarative_proposal",
+    "no_field_is_authority": true,
+    "non_grants": [
+      "identity.authority_claim",
+      "capabilities.declared",
+      "phase_descriptors.operators",
+      "questions.default_weight",
+      "xcfe.admission_requirement",
+      "program_contract.role",
+      "program_contract.bindings",
+      "program_contract.sandbox",
+      "program_contract.field_relativity",
+      "program_contract.implementation",
+      "program_contract.training",
+      "program_contract.learning",
+      "micronaut:IMAGE-SAMPLER.capabilities.declared"
+    ],
+    "grants_require": [
+      "capabilities.registered from active runtime registration",
+      "Eligible(micronaut, operation) from MicronautPatterns.mml",
+      "Bridge for cross-domain use",
+      "XCFE admission for the invocation and phase",
+      "authorized Xul commit for learning updates"
+    ],
+    "digest_rule": "sha256 of UTF-8 canonical JSON after removing generated_at and content_digest",
+    "content_digest": "sha256:c386c50ded432e979970f1fa9678629f323f22f53fd0d975ba7f3d3621685b28"
+  },
+  "phase_descriptors": {
+    "Pop": {
+      "code": "000",
+      "role": "ingress",
+      "operators": [
+        "MAP"
+      ]
+    },
+    "Wo": {
+      "code": "001",
+      "role": "assignment",
+      "operators": [
+        "FILTER",
+        "FOLD"
+      ]
+    },
+    "Yax": {
+      "code": "010",
+      "role": "expansion",
+      "operators": [
+        "MAP",
+        "FILTER"
+      ]
+    },
+    "Sek": {
+      "code": "011",
+      "role": "selection",
+      "operators": [
+        "MAP",
+        "FILTER",
+        "FOLD",
+        "REDUCE"
+      ]
+    },
+    "Ch'en": {
+      "code": "100",
+      "role": "verification",
+      "operators": [
+        "FILTER",
+        "REDUCE"
+      ]
+    },
+    "Xul": {
+      "code": "101",
+      "role": "closure",
+      "operators": [
+        "FOLD"
+      ]
+    }
+  },
+  "micronauts": {
+    "micronaut:ELIZA": {
+      "descriptor_status": "declarative_proposal",
+      "model_profile_ref": "field_generation",
+      "identity": {
+        "id": "micronaut:ELIZA",
+        "name": "ELIZA-µ",
+        "class": "conversational",
+        "version": "1.0",
+        "authority_claim": "proposal_only",
+        "evidence_refs": [
+          "data/manifest/eliza.manifest.json",
+          "data/manifest/aiml.manifest.json"
+        ]
+      },
+      "phase_bindings": {
+        "Pop": {
+          "role": "conversation_ingress",
+          "descriptor_ref": "phase:Pop"
+        },
+        "Wo": {
+          "role": "intent_binding",
+          "descriptor_ref": "phase:Wo"
+        },
+        "Yax": {
+          "role": "question_generation",
+          "descriptor_ref": "phase:Yax"
+        },
+        "Sek": {
+          "role": "candidate_selection",
+          "descriptor_ref": "phase:Sek"
+        },
+        "Ch'en": {
+          "role": "proposal_verification",
+          "descriptor_ref": "phase:Ch'en"
+        },
+        "Xul": {
+          "role": "fold_closure",
+          "descriptor_ref": "phase:Xul"
+        }
+      },
+      "capabilities": {
+        "declared": [
+          "question_proposal",
+          "pattern_matching",
+          "wildcard_capture",
+          "intent_reflection",
+          "gap_detection",
+          "semantic_routing",
+          "candidate_ranking"
+        ],
+        "registered": [],
+        "registered_status": "not_verified_in_this_declarative_document",
+        "registration_source": "active runtime registry"
+      },
+      "aiml": {
+        "grammar": "aiml.runtime/5",
+        "pattern_ref": "aiml:FORGETTING_PATTERN",
+        "pattern": "MY MODEL KEEPS FORGETTING *",
+        "capture_count": 1,
+        "capture_lane": "lane:WILDCARD",
+        "template_ref": "template:MEMORY_REFLECTION",
+        "status": "proposed_reference_unverified"
+      },
+      "srai": {
+        "redirect": "srai:DIAGNOSE_MEMORY",
+        "canonical_intent": "intent:MEMORY_DIAGNOSIS",
+        "max_redirects": 8,
+        "cycle_detection": true,
+        "status": "proposed_reference_unverified"
+      },
+      "cfpc": {
+        "intent": "cfpc:MEMORY_FAILURE",
+        "gap": "cfpc:MEMORY_FAILURE_MECHANISM",
+        "gap_family": "KNOWLEDGE_GAP_NO_VALUES",
+        "route": "micronaut:QUESTION_ENGINE",
+        "classification": "candidate"
+      },
+      "questions": [
+        {
+          "key": "question:STORAGE_OR_RETRIEVAL",
+          "text": "Is information lost from storage, or is retrieval failing?",
+          "default_weight": 0.9,
+          "source": "seed"
+        },
+        {
+          "key": "question:WHICH_SESSION",
+          "text": "Does the failure happen across sessions?",
+          "default_weight": 0.82,
+          "source": "seed"
+        },
+        {
+          "key": "question:MEMORY_SCOPE",
+          "text": "What information should the system remember?",
+          "default_weight": 0.76,
+          "source": "seed"
+        }
+      ],
+      "wcr": {
+        "weight_ref": "gramstore:W",
+        "confidence_ref": "evidence:C",
+        "relativity_ref": "context:R",
+        "score_formula_ref": "formula:WCR",
+        "gate_ref": "xcfe:ADMISSION"
+      },
+      "lanes": {
+        "input": "lane:CONVERSATION",
+        "pattern": "lane:WILDCARD",
+        "intent": "lane:INTENT",
+        "question": "lane:QUESTION",
+        "output": "lane:PROPOSAL"
+      },
+      "xcfe": {
+        "admission_requirement": "required_before_execution",
+        "execution_claim": "not_implicitly_authorized",
+        "proposal_authority_claim": "proposal_only",
+        "lane_authorization_requirement": "required",
+        "phase_authorization_requirement": "required",
+        "verification_phase_ref": "phase:Ch'en",
+        "closure_phase_ref": "phase:Xul"
+      },
+      "learning": {
+        "enabled_claim": true,
+        "mode_claim": "proposal_only",
+        "gradient_lane_ref": "lane:GRADIENT",
+        "feedback_lane_ref": "lane:FEEDBACK",
+        "target_ref": "gramstore:W_learned",
+        "commit_requirement": "authorized_xul_only",
+        "corpus_weights_claim": "immutable"
+      },
+      "output": {
+        "type": "QuestionProposal",
+        "format": "semantic_map",
+        "persistence_claim": false,
+        "dispatch_claim": false
+      },
+      "program_contract": {
+        "format": "kuhul.micronaut-program/1",
+        "reference_base": "repository_root",
+        "program_model": "typed_python_runtime",
+        "role": [
+          "intent_resolution",
+          "question_proposal",
+          "semantic_routing"
+        ],
+        "program_refs": [
+          "micronaut/daemon_eliza.py",
+          "micronaut/question_engine.py",
+          "micronaut/intent_graph.py"
+        ],
+        "grammar_refs": [
+          "vendor/key-grammar-kit/data/manifest/aiml.manifest.json"
+        ],
+        "contract_refs": [
+          "vendor/key-grammar-kit/data/manifest/eliza.manifest.json"
+        ],
+        "entry_points": [
+          "classify_context",
+          "run_pipeline"
+        ],
+        "bindings": {
+          "inputs": [
+            {
+              "name": "utterance",
+              "type": "String",
+              "lane_ref": "lane:CONVERSATION",
+              "binding_ref": "query:eliza.input",
+              "resolution_status": "external_resolution_required"
+            }
+          ],
+          "query_bindings": [
+            {
+              "name": "intent",
+              "type": "IntentResolution",
+              "lane_ref": "lane:INTENT",
+              "binding_ref": "query:eliza.intent",
+              "resolution_status": "external_resolution_required"
+            },
+            {
+              "name": "field",
+              "type": "SemanticField",
+              "lane_ref": "lane:FIELD",
+              "binding_ref": "query:eliza.field",
+              "resolution_status": "external_resolution_required"
+            }
+          ],
+          "output": {
+            "type": "QuestionOrFactResponseProposal",
+            "lane_ref": "lane:PROPOSAL",
+            "consumer": "host_or_downstream_micronaut",
+            "direct_user_delivery": false
+          }
+        },
+        "interaction": {
+          "host_binding_required": true,
+          "direct_user_io": false
+        },
+        "sandbox": {
+          "filesystem": "host_managed",
+          "network": "host_allowlist",
+          "process": "none",
+          "effects": [
+            "read_local_semantic_data",
+            "emit_response_proposal",
+            "append_jrom_evidence_trace"
+          ],
+          "admission": "host_policy"
+        },
+        "field_relativity": {
+          "anchor": "semantic_field",
+          "scope": "neighbor_fields",
+          "relation_types": [
+            "field_member",
+            "semantic_relation"
+          ],
+          "max_hops": 2,
+          "cross_track": "references_only"
+        },
+        "learning": {
+          "mode": "proposal_only",
+          "replay_policy": "record_evidence_only",
+          "confidence_source": "verified_evidence_and_feedback",
+          "confidence_target": "GramStore.W_learned",
+          "commit_requirement": "authorized_xul_only"
+        },
+        "implementation": {
+          "source_status": "source_present",
+          "runtime_registration": "unverified",
+          "validation_status": "not_recorded"
+        }
+      }
+    },
+    "micronaut:QUESTION_ENGINE": {
+      "descriptor_status": "declarative_proposal",
+      "model_profile_ref": "question_generation",
+      "identity": {
+        "id": "micronaut:QUESTION_ENGINE",
+        "name": "Question Engine",
+        "class": "question_generation",
+        "authority_claim": "proposal_only",
+        "evidence_refs": [
+          "vendor/key-grammar-kit/data/grammar/question-mu.runtime.ebnf"
+        ]
+      },
+      "phase_bindings": {
+        "Yax": {
+          "role": "question_generation",
+          "descriptor_ref": "phase:Yax"
+        },
+        "Sek": {
+          "role": "candidate_ranking",
+          "descriptor_ref": "phase:Sek"
+        }
+      },
+      "capabilities": {
+        "declared": [
+          "question_generation",
+          "candidate_ranking"
+        ],
+        "registered": [],
+        "registered_status": "not_verified_in_this_declarative_document",
+        "registration_source": "active runtime registry"
+      },
+      "lanes": {
+        "input": "lane:GAP",
+        "output": "lane:QUESTION"
+      },
+      "xcfe": {
+        "admission_requirement": "required_before_execution",
+        "execution_claim": "not_implicitly_authorized",
+        "proposal_authority_claim": "proposal_only",
+        "lane_authorization_requirement": "required",
+        "phase_authorization_requirement": "required"
+      },
+      "output": {
+        "type": "QuestionProposal",
+        "persistence_claim": false,
+        "dispatch_claim": false
+      },
+      "program_contract": {
+        "format": "kuhul.micronaut-program/1",
+        "reference_base": "repository_root",
+        "program_model": "typed_python_runtime",
+        "role": [
+          "question_generation",
+          "candidate_ranking"
+        ],
+        "program_refs": [
+          "micronaut/question_engine.py",
+          "micronaut/intent_graph.py"
+        ],
+        "grammar_refs": [
+          "vendor/key-grammar-kit/data/grammar/question-mu.runtime.ebnf"
+        ],
+        "contract_refs": [],
+        "entry_points": [
+          "propose",
+          "eliza_question_candidates",
+          "IntentGraph.propose_questions"
+        ],
+        "bindings": {
+          "inputs": [
+            {
+              "name": "gap",
+              "type": "CFPCGap",
+              "lane_ref": "lane:GAP",
+              "binding_ref": "query:question.gap",
+              "resolution_status": "external_resolution_required"
+            },
+            {
+              "name": "field",
+              "type": "SemanticField",
+              "lane_ref": "lane:FIELD",
+              "binding_ref": "query:question.neighborhood",
+              "resolution_status": "external_resolution_required"
+            }
+          ],
+          "query_bindings": [
+            {
+              "name": "unresolved_query",
+              "type": "UnresolvedQuery",
+              "lane_ref": "lane:QUERY",
+              "binding_ref": "query:question.unresolved",
+              "resolution_status": "external_resolution_required"
+            }
+          ],
+          "output": {
+            "type": "QuestionCandidates",
+            "lane_ref": "lane:QUESTION",
+            "consumer": "host_or_downstream_micronaut",
+            "direct_user_delivery": false
+          }
+        },
+        "interaction": {
+          "host_binding_required": true,
+          "direct_user_io": false
+        },
+        "sandbox": {
+          "filesystem": "input_only",
+          "network": "none",
+          "process": "none",
+          "effects": [
+            "emit_question_candidates"
+          ],
+          "admission": "host_policy"
+        },
+        "field_relativity": {
+          "anchor": "semantic_field",
+          "scope": "neighbor_fields",
+          "relation_types": [
+            "field_member",
+            "unfolds_to_bigram"
+          ],
+          "max_hops": 2,
+          "cross_track": "references_only"
+        },
+        "learning": {
+          "mode": "disabled",
+          "replay_policy": "none",
+          "commit_requirement": "not_applicable"
+        },
+        "implementation": {
+          "source_status": "source_present",
+          "runtime_registration": "unverified",
+          "validation_status": "not_recorded"
+        }
+      }
+    },
+    "micronaut:CFPC": {
+      "descriptor_status": "declarative_proposal",
+      "model_profile_ref": null,
+      "identity": {
+        "id": "micronaut:CFPC",
+        "name": "CFPC-µ",
+        "class": "classification",
+        "authority_claim": "classification_only"
+      },
+      "phase_bindings": {
+        "Wo": {
+          "role": "intent_and_gap_classification",
+          "descriptor_ref": "phase:Wo"
+        }
+      },
+      "capabilities": {
+        "declared": [
+          "intent_classification",
+          "gap_classification",
+          "capability_routing"
+        ],
+        "registered": [],
+        "registered_status": "not_verified_in_this_declarative_document",
+        "registration_source": "active runtime registry"
+      },
+      "lanes": {
+        "input": "lane:INTENT",
+        "output": "lane:GAP"
+      },
+      "xcfe": {
+        "admission_requirement": "required_before_execution",
+        "execution_claim": "not_implicitly_authorized",
+        "classification_authority_claim": "classification_only"
+      },
+      "output": {
+        "type": "GapCandidate",
+        "persistence_claim": false,
+        "dispatch_claim": false
+      },
+      "program_contract": {
+        "format": "kuhul.micronaut-program/1",
+        "reference_base": "repository_root",
+        "program_model": "typed_python_runtime",
+        "role": [
+          "intent_classification",
+          "gap_classification",
+          "fact_binding_resolution"
+        ],
+        "program_refs": [
+          "micronaut/cfpc_classifier.py"
+        ],
+        "grammar_refs": [
+          "vendor/key-grammar-kit/data/grammar/cfpc-mu.runtime.ebnf"
+        ],
+        "contract_refs": [
+          "vendor/key-grammar-kit/data/schema/cfpc-task.schema.json"
+        ],
+        "entry_points": [
+          "recognize_intents",
+          "match_pattern",
+          "classify_gap",
+          "run_cfpc"
+        ],
+        "bindings": {
+          "inputs": [
+            {
+              "name": "utterance",
+              "type": "String",
+              "lane_ref": "lane:CONVERSATION",
+              "binding_ref": "query:cfpc.input",
+              "resolution_status": "external_resolution_required"
+            }
+          ],
+          "query_bindings": [
+            {
+              "name": "fact_manifest",
+              "type": "FactsManifest",
+              "lane_ref": "lane:FACTS",
+              "binding_ref": "query:cfpc.fact_binding",
+              "resolution_status": "external_resolution_required"
+            }
+          ],
+          "output": {
+            "type": "IntentResolution",
+            "lane_ref": "lane:GAP",
+            "consumer": "host_or_downstream_micronaut",
+            "direct_user_delivery": false
+          }
+        },
+        "interaction": {
+          "host_binding_required": true,
+          "direct_user_io": false
+        },
+        "sandbox": {
+          "filesystem": "input_only",
+          "network": "none",
+          "process": "none",
+          "effects": [
+            "read_cfpc_patterns",
+            "read_fact_manifest",
+            "emit_classification"
+          ],
+          "admission": "host_policy"
+        },
+        "field_relativity": {
+          "anchor": "query",
+          "scope": "input",
+          "relation_types": [],
+          "max_hops": 0,
+          "cross_track": "deny"
+        },
+        "learning": {
+          "mode": "disabled",
+          "replay_policy": "none",
+          "commit_requirement": "not_applicable"
+        },
+        "implementation": {
+          "source_status": "source_present",
+          "runtime_registration": "unverified",
+          "validation_status": "not_recorded"
+        }
+      }
+    },
+    "micronaut:SHEOGORATH": {
+      "descriptor_status": "declarative_proposal",
+      "model_profile_ref": null,
+      "identity": {
+        "id": "micronaut:SHEOGORATH",
+        "name": "SHEOGORATH-µ",
+        "class": "candidate_generation",
+        "authority_claim": "proposal_only",
+        "evidence_refs": [
+          "data/micronaut/sheogorath.manifest.json"
+        ]
+      },
+      "phase_bindings": {
+        "Yax": {
+          "role": "candidate_expansion",
+          "descriptor_ref": "phase:Yax"
+        }
+      },
+      "capabilities": {
+        "declared": [
+          "candidate_expansion",
+          "challenge_generation",
+          "entropy_exploration"
+        ],
+        "registered": [],
+        "registered_status": "not_verified_in_this_declarative_document",
+        "registration_source": "active runtime registry"
+      },
+      "lanes": {
+        "input": "lane:QUESTION",
+        "output": "lane:CANDIDATES"
+      },
+      "registration_requirement": "explicit_runtime_registration",
+      "xcfe": {
+        "admission_requirement": "required_before_execution",
+        "execution_claim": "not_implicitly_authorized",
+        "proposal_authority_claim": "proposal_only"
+      },
+      "output": {
+        "type": "CandidateSet",
+        "persistence_claim": false,
+        "dispatch_claim": false
+      },
+      "program_contract": {
+        "format": "kuhul.micronaut-program/1",
+        "reference_base": "repository_root",
+        "program_model": "manifest_only",
+        "role": [
+          "candidate_expansion",
+          "challenge_proposal"
+        ],
+        "program_refs": [],
+        "grammar_refs": [],
+        "contract_refs": [
+          "vendor/key-grammar-kit/data/micronaut/sheogorath.manifest.json"
+        ],
+        "entry_points": [],
+        "bindings": {
+          "inputs": [
+            {
+              "name": "question",
+              "type": "Question",
+              "lane_ref": "lane:QUESTION",
+              "binding_ref": "query:sheogorath.input",
+              "resolution_status": "external_resolution_required"
+            }
+          ],
+          "query_bindings": [],
+          "output": {
+            "type": "CandidateSet",
+            "lane_ref": "lane:CANDIDATES",
+            "consumer": "host_or_downstream_micronaut",
+            "direct_user_delivery": false
+          }
+        },
+        "interaction": {
+          "host_binding_required": true,
+          "direct_user_io": false
+        },
+        "sandbox": {
+          "filesystem": "input_only",
+          "network": "none",
+          "process": "none",
+          "effects": [],
+          "admission": "host_policy"
+        },
+        "field_relativity": {
+          "anchor": "question",
+          "scope": "input",
+          "relation_types": [],
+          "max_hops": 0,
+          "cross_track": "deny"
+        },
+        "learning": {
+          "mode": "disabled",
+          "replay_policy": "none",
+          "commit_requirement": "not_applicable"
+        },
+        "implementation": {
+          "source_status": "manifest_only",
+          "runtime_registration": "not_registered",
+          "validation_status": "not_recorded"
+        }
+      }
+    },
+    "micronaut:JYGGALAG": {
+      "descriptor_status": "declarative_proposal",
+      "model_profile_ref": null,
+      "identity": {
+        "id": "micronaut:JYGGALAG",
+        "name": "JYGGALAG-µ",
+        "class": "candidate_selection",
+        "authority_claim": "selection_only"
+      },
+      "phase_bindings": {
+        "Sek": {
+          "role": "deterministic_selection",
+          "descriptor_ref": "phase:Sek"
+        },
+        "Ch'en": {
+          "role": "constraint_verification",
+          "descriptor_ref": "phase:Ch'en"
+        }
+      },
+      "capabilities": {
+        "declared": [
+          "constraint_filtering",
+          "deterministic_selection"
+        ],
+        "registered": [],
+        "registered_status": "not_verified_in_this_declarative_document",
+        "registration_source": "active runtime registry"
+      },
+      "lanes": {
+        "input": "lane:CANDIDATES",
+        "output": "lane:SELECTION"
+      },
+      "registration_requirement": "explicit_runtime_registration",
+      "xcfe": {
+        "admission_requirement": "required_before_execution",
+        "execution_claim": "not_implicitly_authorized",
+        "selection_authority_claim": "selection_only"
+      },
+      "output": {
+        "type": "SelectionProposal",
+        "persistence_claim": false,
+        "dispatch_claim": false
+      },
+      "program_contract": {
+        "format": "kuhul.micronaut-program/1",
+        "reference_base": "repository_root",
+        "program_model": "unimplemented",
+        "role": [
+          "constraint_filtering",
+          "deterministic_selection"
+        ],
+        "program_refs": [],
+        "grammar_refs": [],
+        "contract_refs": [],
+        "entry_points": [],
+        "bindings": {
+          "inputs": [
+            {
+              "name": "candidates",
+              "type": "CandidateSet",
+              "lane_ref": "lane:CANDIDATES",
+              "binding_ref": "query:jyggalag.input",
+              "resolution_status": "external_resolution_required"
+            }
+          ],
+          "query_bindings": [],
+          "output": {
+            "type": "SelectionProposal",
+            "lane_ref": "lane:SELECTION",
+            "consumer": "host_or_downstream_micronaut",
+            "direct_user_delivery": false
+          }
+        },
+        "interaction": {
+          "host_binding_required": true,
+          "direct_user_io": false
+        },
+        "sandbox": {
+          "filesystem": "input_only",
+          "network": "none",
+          "process": "none",
+          "effects": [],
+          "admission": "host_policy"
+        },
+        "field_relativity": {
+          "anchor": "candidate_set",
+          "scope": "local_field",
+          "relation_types": [],
+          "max_hops": 0,
+          "cross_track": "deny"
+        },
+        "learning": {
+          "mode": "disabled",
+          "replay_policy": "none",
+          "commit_requirement": "not_applicable"
+        },
+        "implementation": {
+          "source_status": "not_found",
+          "runtime_registration": "not_registered",
+          "validation_status": "not_recorded"
+        }
+      }
+    },
+    "micronaut:LEARNING": {
+      "descriptor_status": "declarative_proposal",
+      "model_profile_ref": null,
+      "identity": {
+        "id": "micronaut:LEARNING",
+        "name": "Learning Micronaut",
+        "class": "learning_proposal",
+        "authority_claim": "proposal_only"
+      },
+      "phase_bindings": {
+        "Ch'en": {
+          "role": "feedback_evaluation",
+          "descriptor_ref": "phase:Ch'en"
+        },
+        "Xul": {
+          "role": "authorized_delta_closure",
+          "descriptor_ref": "phase:Xul"
+        }
+      },
+      "capabilities": {
+        "declared": [
+          "feedback_evaluation",
+          "gradient_proposal"
+        ],
+        "registered": [],
+        "registered_status": "not_verified_in_this_declarative_document",
+        "registration_source": "active runtime registry"
+      },
+      "lanes": {
+        "input": "lane:FEEDBACK",
+        "output": "lane:LEARNING_DELTA"
+      },
+      "learning": {
+        "mode_claim": "proposal_only",
+        "target_ref": "gramstore:W_learned",
+        "commit_requirement": "authorized_xul_only",
+        "corpus_weights_claim": "immutable"
+      },
+      "xcfe": {
+        "admission_requirement": "required_before_execution",
+        "execution_claim": "not_implicitly_authorized",
+        "proposal_authority_claim": "proposal_only"
+      },
+      "output": {
+        "type": "LearningDeltaProposal",
+        "persistence_claim": false,
+        "dispatch_claim": false
+      },
+      "program_contract": {
+        "format": "kuhul.micronaut-program/1",
+        "reference_base": "repository_root",
+        "program_model": "typed_python_runtime",
+        "role": [
+          "feedback_evaluation",
+          "learning_delta_proposal",
+          "gated_commit"
+        ],
+        "program_refs": [
+          "micronaut/learning_lane.py"
+        ],
+        "grammar_refs": [],
+        "contract_refs": [],
+        "entry_points": [
+          "LearningLane.propose",
+          "LearningLane.verify",
+          "LearningLane.commit"
+        ],
+        "bindings": {
+          "inputs": [
+            {
+              "name": "feedback",
+              "type": "VerifiedFeedback",
+              "lane_ref": "lane:FEEDBACK",
+              "binding_ref": "query:learning.feedback",
+              "resolution_status": "external_resolution_required"
+            }
+          ],
+          "query_bindings": [],
+          "output": {
+            "type": "LearningProposal",
+            "lane_ref": "lane:LEARNING_DELTA",
+            "consumer": "host_or_downstream_micronaut",
+            "direct_user_delivery": false
+          }
+        },
+        "interaction": {
+          "host_binding_required": true,
+          "direct_user_io": false
+        },
+        "sandbox": {
+          "filesystem": "host_managed",
+          "network": "none",
+          "process": "none",
+          "effects": [
+            "read_verified_feedback",
+            "emit_learning_proposal",
+            "commit_after_admission_sek_chen_xul"
+          ],
+          "admission": "host_policy"
+        },
+        "field_relativity": {
+          "anchor": "feedback",
+          "scope": "input",
+          "relation_types": [],
+          "max_hops": 0,
+          "cross_track": "deny"
+        },
+        "learning": {
+          "mode": "proposal_and_gated_commit",
+          "replay_policy": "consume_evidence_only",
+          "confidence_source": "verified_feedback",
+          "confidence_target": "GramStore.W_learned",
+          "commit_requirement": "admission_and_sek_and_chen_and_authorized_xul"
+        },
+        "implementation": {
+          "source_status": "source_present",
+          "runtime_registration": "unverified",
+          "validation_status": "not_recorded"
+        }
+      }
+    },
+    "micronaut:SNOBOL": {
+      "descriptor_status": "declarative_proposal",
+      "model_profile_ref": null,
+      "identity": {
+        "id": "micronaut:SNOBOL",
+        "name": "SNOBOL-µ",
+        "class": "pattern_match_engine",
+        "authority_claim": "proposal_only",
+        "evidence_refs": [
+          "snobol-mu.kl"
+        ]
+      },
+      "phase_bindings": {
+        "Pop": {
+          "role": "pattern_receive",
+          "descriptor_ref": "phase:Pop"
+        },
+        "Wo": {
+          "role": "pattern_binding",
+          "descriptor_ref": "phase:Wo"
+        },
+        "Yax": {
+          "role": "pattern_evaluation",
+          "descriptor_ref": "phase:Yax"
+        },
+        "Sek": {
+          "role": "match_selection",
+          "descriptor_ref": "phase:Sek"
+        },
+        "Ch'en": {
+          "role": "capture_verification",
+          "descriptor_ref": "phase:Ch'en"
+        },
+        "Xul": {
+          "role": "fold_closure",
+          "descriptor_ref": "phase:Xul"
+        }
+      },
+      "capabilities": {
+        "declared": [
+          "pattern_matching",
+          "pattern_capture",
+          "pattern_replace",
+          "route_selection"
+        ],
+        "registered": [],
+        "registered_status": "not_verified_in_this_declarative_document",
+        "registration_source": "active runtime registry"
+      },
+      "kernel_ref": "snobol-mu.kl",
+      "route_map_ref": "kuhul.advisor-map.v1",
+      "lanes": {
+        "input": "lane:PATTERN_SUBJECT",
+        "route_map": "lane:ADVISOR_MAP",
+        "output": "lane:MATCH_RESULT"
+      },
+      "registration_requirement": "explicit_runtime_registration",
+      "xcfe": {
+        "admission_requirement": "required_before_execution",
+        "execution_claim": "not_implicitly_authorized",
+        "dispatch_claim": "host_controlled",
+        "route_authority_claim": "proposal_only",
+        "phase_authorization_requirement": "required"
+      },
+      "output": {
+        "type": "PatternMatchProposal",
+        "persistence_claim": false,
+        "dispatch_claim": false
+      },
+      "program_contract": {
+        "format": "kuhul.micronaut-program/1",
+        "reference_base": "repository_root",
+        "program_model": "ebnf_program",
+        "role": [
+          "parse",
+          "pattern_match",
+          "capture",
+          "replace",
+          "route_proposal"
+        ],
+        "program_refs": [],
+        "grammar_refs": [
+          "vendor/key-grammar-kit/data/grammar/snobol-mu.runtime.ebnf"
+        ],
+        "contract_refs": [
+          "vendor/key-grammar-kit/snobol-mu.kgf",
+          "vendor/key-grammar-kit/data/micronauts/snobol-mu.kl"
+        ],
+        "entry_points": [],
+        "bindings": {
+          "inputs": [
+            {
+              "name": "program_input",
+              "type": "String",
+              "lane_ref": "lane:PATTERN_SUBJECT",
+              "binding_ref": "query:snobol.input",
+              "resolution_status": "external_resolution_required"
+            }
+          ],
+          "query_bindings": [
+            {
+              "name": "route_context",
+              "type": "RouteContext",
+              "lane_ref": "lane:ADVISOR_MAP",
+              "binding_ref": "query:snobol.route_context",
+              "resolution_status": "external_resolution_required"
+            }
+          ],
+          "output": {
+            "type": "PatternMatchProposal",
+            "lane_ref": "lane:MATCH_RESULT",
+            "consumer": "host_or_downstream_micronaut",
+            "direct_user_delivery": false
+          }
+        },
+        "interaction": {
+          "host_binding_required": true,
+          "direct_user_io": false
+        },
+        "sandbox": {
+          "filesystem": "input_only",
+          "network": "none",
+          "process": "none",
+          "effects": [],
+          "admission": "host_policy"
+        },
+        "field_relativity": {
+          "anchor": "program_input",
+          "scope": "input",
+          "relation_types": [],
+          "max_hops": 0,
+          "cross_track": "deny"
+        },
+        "learning": {
+          "mode": "disabled",
+          "replay_policy": "none",
+          "commit_requirement": "not_applicable"
+        },
+        "implementation": {
+          "source_status": "grammar_only",
+          "runtime_registration": "not_registered",
+          "validation_status": "not_recorded"
+        }
+      }
+    },
+    "micronaut:ADVISOR": {
+      "descriptor_status": "declarative_proposal",
+      "model_profile_ref": "advisor",
+      "identity": {
+        "id": "micronaut:ADVISOR",
+        "name": "ADVISOR-µ",
+        "class": "request_to_expert_router",
+        "authority_claim": "none",
+        "evidence_refs": [
+          "advisor-bootstrap.json"
+        ]
+      },
+      "phase_bindings": {
+        "Pop": {
+          "role": "request_ingress",
+          "descriptor_ref": "phase:Pop"
+        },
+        "Wo": {
+          "role": "request_classification",
+          "descriptor_ref": "phase:Wo"
+        },
+        "Yax": {
+          "role": "expert_route_proposal",
+          "descriptor_ref": "phase:Yax"
+        },
+        "Sek": {
+          "role": "candidate_route_selection",
+          "descriptor_ref": "phase:Sek"
+        },
+        "Ch'en": {
+          "role": "route_contract_verification",
+          "descriptor_ref": "phase:Ch'en"
+        },
+        "Xul": {
+          "role": "proposal_closure",
+          "descriptor_ref": "phase:Xul"
+        }
+      },
+      "capabilities": {
+        "declared": [
+          "request_classification",
+          "route_proposal"
+        ],
+        "registered": [],
+        "registered_status": "not_verified_in_this_declarative_document",
+        "registration_source": "active runtime registry"
+      },
+      "route_contract_ref": "MICRONAUT:ADVISOR:ROUTE",
+      "callable_surface_status": "not_declared",
+      "routes_ref": "registry:advisor-semantic-map",
+      "aiml": {
+        "projection_ref": "aiml:ADVISOR_PROJECTION",
+        "source_ref": "advisor-bootstrap.json",
+        "projection_status": "generated_projection_runtime_router_authoritative"
+      },
+      "lanes": {
+        "input": "lane:CONVERSATION",
+        "candidate": "lane:ROUTE_CANDIDATE",
+        "output": "lane:PROPOSAL"
+      },
+      "xcfe": {
+        "admission_requirement": "required_before_dispatch",
+        "dispatch_claim": "host_controlled",
+        "route_authority_claim": "proposal_only",
+        "registration_check_requirement": "required",
+        "eligibility_check_requirement": "required",
+        "phase_authorization_requirement": "required"
+      },
+      "output": {
+        "type": "ExpertRouteProposal",
+        "persistence_claim": false,
+        "dispatch_claim": false
+      },
+      "program_contract": {
+        "format": "kuhul.micronaut-program/1",
+        "reference_base": "repository_root",
+        "program_model": "route_map_compiler",
+        "role": [
+          "compile_route_map"
+        ],
+        "program_refs": [
+          "tools/advisor_map.py"
+        ],
+        "grammar_refs": [
+          "vendor/key-grammar-kit/data/grammar/advisor-mu.runtime.ebnf"
+        ],
+        "contract_refs": [
+          "vendor/key-grammar-kit/data/advisor-bootstrap.json"
+        ],
+        "entry_points": [
+          "build_map",
+          "build_aiml"
+        ],
+        "bindings": {
+          "inputs": [
+            {
+              "name": "bootstrap",
+              "type": "AdvisorBootstrap",
+              "lane_ref": "lane:ROUTE_CONTRACT",
+              "binding_ref": "query:advisor.bootstrap",
+              "resolution_status": "external_resolution_required"
+            }
+          ],
+          "query_bindings": [],
+          "output": {
+            "type": "AdvisorRouteMap",
+            "lane_ref": "lane:PROPOSAL",
+            "consumer": "host_or_downstream_micronaut",
+            "direct_user_delivery": false
+          }
+        },
+        "interaction": {
+          "host_binding_required": true,
+          "direct_user_io": false
+        },
+        "sandbox": {
+          "filesystem": "host_managed",
+          "network": "none",
+          "process": "host_allowlist",
+          "effects": [
+            "read_bootstrap",
+            "emit_route_map_projection",
+            "emit_aiml_projection"
+          ],
+          "admission": "host_policy"
+        },
+        "field_relativity": {
+          "anchor": "route_contract",
+          "scope": "track",
+          "relation_types": [
+            "route_contract"
+          ],
+          "max_hops": 1,
+          "cross_track": "references_only"
+        },
+        "learning": {
+          "mode": "disabled",
+          "replay_policy": "none",
+          "commit_requirement": "not_applicable"
+        },
+        "implementation": {
+          "source_status": "source_present",
+          "runtime_registration": "unverified",
+          "validation_status": "not_recorded"
+        }
+      }
+    },
+    "micronaut:IMAGE-SAMPLER": {
+      "descriptor_status": "declarative_proposal",
+      "model_profile_ref": null,
+      "identity": {
+        "id": "micronaut:IMAGE-SAMPLER",
+        "name": "IMAGE-SAMPLER-µ",
+        "class": "image_sampling_resolution",
+        "version": "1.0",
+        "authority_claim": "proposal_only",
+        "evidence_refs": [
+          "vendor/key-grammar-kit/data/grammar/image-gradient-lod.contract.v1.json",
+          "vendor/key-grammar-kit/data/schema/image-gradient-lod.contract.v1.schema.json"
+        ]
+      },
+      "phase_bindings": {
+        "Pop": {
+          "role": "receive_derivative_and_image_metadata_inputs",
+          "descriptor_ref": "phase:Pop"
+        },
+        "Wo": {
+          "role": "bind_float2_derivatives_and_mip_bounds",
+          "descriptor_ref": "phase:Wo"
+        },
+        "Yax": {
+          "role": "estimate_sampling_footprint_and_lod",
+          "descriptor_ref": "phase:Yax"
+        },
+        "Ch'en": {
+          "role": "verify_finite_inputs_and_lod_bounds",
+          "descriptor_ref": "phase:Ch'en"
+        },
+        "Xul": {
+          "role": "close_lod_proposal_only",
+          "descriptor_ref": "phase:Xul"
+        }
+      },
+      "capabilities": {
+        "declared": [
+          "estimate_sampling_resolution",
+          "propose_mipmap_lod"
+        ],
+        "registered": [],
+        "registered_status": "not_verified_in_this_declarative_document",
+        "registration_source": "active runtime registry"
+      },
+      "lanes": {
+        "derivative_x": "lane:GRADIENT_DX",
+        "derivative_y": "lane:GRADIENT_DY",
+        "image_metadata": "lane:IMAGE_METADATA",
+        "output": "lane:LOD_PROPOSAL"
+      },
+      "xcfe": {
+        "admission_requirement": "required_before_execution",
+        "execution_claim": "not_implicitly_authorized"
+      },
+      "output": {
+        "type": "MipLODProposal",
+        "format": "typed_kernel_contract",
+        "persistence_claim": false,
+        "dispatch_claim": false
+      },
+      "program_contract": {
+        "format": "kuhul.micronaut-program/1",
+        "reference_base": "repository_root",
+        "program_model": "typed_gpu_kernel_contract",
+        "role": "estimate_sampling_resolution",
+        "program_refs": [],
+        "grammar_refs": [],
+        "contract_refs": [
+          "vendor/key-grammar-kit/data/grammar/image-gradient-lod.contract.v1.json",
+          "vendor/key-grammar-kit/data/schema/image-gradient-lod.contract.v1.schema.json"
+        ],
+        "entry_points": [],
+        "bindings": {
+          "inputs": [
+            {
+              "name": "dx",
+              "type": "float2",
+              "lane_ref": "lane:GRADIENT_DX",
+              "binding_ref": "input:uv_derivative_x",
+              "resolution_status": "external_resolution_required"
+            },
+            {
+              "name": "dy",
+              "type": "float2",
+              "lane_ref": "lane:GRADIENT_DY",
+              "binding_ref": "input:uv_derivative_y",
+              "resolution_status": "external_resolution_required"
+            },
+            {
+              "name": "image_dimensions",
+              "type": "uint2",
+              "lane_ref": "lane:IMAGE_METADATA",
+              "binding_ref": "input:image_dimensions",
+              "resolution_status": "external_resolution_required"
+            },
+            {
+              "name": "mip_level_count",
+              "type": "uint",
+              "lane_ref": "lane:IMAGE_METADATA",
+              "binding_ref": "input:mip_level_count",
+              "resolution_status": "external_resolution_required"
+            }
+          ],
+          "query_bindings": [],
+          "output": {
+            "type": "MipLODProposal",
+            "lane_ref": "lane:LOD_PROPOSAL",
+            "consumer": "host_or_registered_image_sampler",
+            "direct_user_delivery": false
+          }
+        },
+        "interaction": {
+          "host_binding_required": true,
+          "direct_user_io": false
+        },
+        "sandbox": {
+          "filesystem": "none",
+          "network": "none",
+          "process": "none",
+          "effects": [
+            "emit_lod_proposal"
+          ],
+          "admission": "host_policy"
+        },
+        "field_relativity": {
+          "anchor": "coordinate_derivatives",
+          "scope": "input",
+          "relation_types": [],
+          "max_hops": 0,
+          "cross_track": "deny"
+        },
+        "learning": {
+          "mode": "disabled",
+          "replay_policy": "none",
+          "commit_requirement": "not_applicable"
+        },
+        "training": {
+          "mode": "forward_only",
+          "backward_status": "not_implemented",
+          "trainable_targets": [],
+          "gradient_outputs": [],
+          "learning_owner_ref": "micronaut:LEARNING",
+          "commit_requirement": "separate_admission_chen_verification_authorized_xul"
+        },
+        "implementation": {
+          "source_status": "not_found",
+          "runtime_registration": "not_registered",
+          "validation_status": "not_recorded"
+        }
+      }
+    },
+    "micronaut:CODEX": {
+      "descriptor_status": "declarative_proposal",
+      "model_profile_ref": null,
+      "identity": {
+        "id": "micronaut:CODEX",
+        "name": "CODEX-µ",
+        "class": "code_review_expert",
+        "version": "2.0.0",
+        "authority_claim": "proposal_only",
+        "evidence_refs": [
+          "micronaut/micronaut-codex/config.toml",
+          "micronaut/micronaut-codex/tools.json",
+          "micronaut/micronaut-codex/expert-code-v1.s7"
+        ]
+      },
+      "phase_bindings": {
+        "Yax": {
+          "role": "ast_construction",
+          "descriptor_ref": "phase:Yax"
+        },
+        "Sek": {
+          "role": "target_format_backend_selection",
+          "descriptor_ref": "phase:Sek"
+        },
+        "Ch'en": {
+          "role": "verify_ast_and_generated_output_contract",
+          "descriptor_ref": "phase:Ch'en"
+        }
+      },
+      "capabilities": {
+        "declared": [
+          "code_review",
+          "code_refactoring",
+          "test_generation",
+          "documentation_generation",
+          "optimization_proposal",
+          "bigram_triggered_routing",
+          "ast_compilation"
+        ],
+        "registered": [],
+        "registered_status": "not_verified_in_this_declarative_document",
+        "registration_source": "active runtime registry"
+      },
+      "expert_model": {
+        "schema": "xcfe-model-1",
+        "file_ref": "micronaut/micronaut-codex/expert-code-v1.s7",
+        "model_id": "code-expert-v1",
+        "version": "1.0.0",
+        "training_records": 70395,
+        "epochs": 3,
+        "bigram_count": 1289,
+        "domain_distribution": {
+          "JavaScript": 31814,
+          "unknown": 17632,
+          "Python": 17101,
+          "CSharp": 4601,
+          "CPlusPlus": 2444,
+          "Java": 509
+        }
+      },
+      "lanes": {
+        "input": "lane:CODE_REQUEST",
+        "tool_map": "lane:BIGRAM_TOOL_MAP",
+        "output": "lane:CODE_REVIEW_PROPOSAL"
+      },
+      "xcfe": {
+        "admission_requirement": "required_before_execution",
+        "execution_claim": "not_implicitly_authorized",
+        "dual_validator_requirement": "s7_mini_gguf_and_desp_v1",
+        "proposal_authority_claim": "proposal_only",
+        "phase_authorization_requirement": "required"
+      },
+      "output": {
+        "type": "CodeReviewProposal",
+        "persistence_claim": false,
+        "dispatch_claim": false
+      },
+      "program_contract": {
+        "format": "kuhul.micronaut-program/1",
+        "reference_base": "repository_root",
+        "program_model": "node_http_expert_service",
+        "role": [
+          "ast_compilation",
+          "code_review",
+          "code_refactoring",
+          "test_generation",
+          "documentation_generation",
+          "optimization_proposal"
+        ],
+        "program_refs": [
+          "micronaut/micronaut-codex/run.mjs",
+          "micronaut/micronaut-codex/shard-loader-esm.mjs",
+          "micronaut/micronaut-coder/CodeWASM/generator.js"
+        ],
+        "grammar_refs": [
+          "vendor/key-grammar-kit/data/grammar/codex-mu.runtime.ebnf"
+        ],
+        "contract_refs": [
+          "micronaut/micronaut-codex/config.toml",
+          "micronaut/micronaut-codex/tools.json",
+          "vendor/key-grammar-kit/data/code-wildcard.gml"
+        ],
+        "entry_points": [
+          "POST /review",
+          "POST /refactor",
+          "GET /status"
+        ],
+        "bindings": {
+          "inputs": [
+            {
+              "name": "code_request",
+              "type": "CodeReviewRequest",
+              "lane_ref": "lane:CODE_REQUEST",
+              "binding_ref": "query:codex.input",
+              "resolution_status": "external_resolution_required"
+            }
+          ],
+          "query_bindings": [
+            {
+              "name": "bigram_tool_map",
+              "type": "BigramToolMap",
+              "lane_ref": "lane:BIGRAM_TOOL_MAP",
+              "binding_ref": "query:codex.tool_map",
+              "resolution_status": "external_resolution_required"
+            }
+          ],
+          "output": {
+            "type": "CodeReviewProposal",
+            "lane_ref": "lane:CODE_REVIEW_PROPOSAL",
+            "consumer": "host_or_downstream_micronaut",
+            "direct_user_delivery": false
+          }
+        },
+        "interaction": {
+          "host_binding_required": true,
+          "direct_user_io": false
+        },
+        "sandbox": {
+          "filesystem": "host_managed",
+          "network": "loopback_allowlist",
+          "process": "host_allowlist",
+          "external_shard_path": "C:/public_html/MX2LM/codex/AS-XCFE/artifacts/shards/code",
+          "external_path_note": "shard_directory is outside repository_root; host must verify path before admitting",
+          "effects": [
+            "read_expert_model_shards",
+            "emit_code_review_proposal",
+            "append_deterministic_v6_trace"
+          ],
+          "admission": "host_policy"
+        },
+        "field_relativity": {
+          "anchor": "code_token_space",
+          "scope": "language_domain",
+          "relation_types": [
+            "bigram_relation",
+            "code_structure"
+          ],
+          "max_hops": 1,
+          "cross_track": "references_only"
+        },
+        "learning": {
+          "mode": "disabled",
+          "replay_policy": "none",
+          "commit_requirement": "not_applicable"
+        },
+        "training": {
+          "mode": "pretrained_external",
+          "training_records": 70395,
+          "epochs": 3,
+          "schema": "xcfe-model-1",
+          "backward_status": "not_implemented",
+          "trainable_targets": [],
+          "gradient_outputs": [],
+          "learning_owner_ref": "micronaut:LEARNING",
+          "commit_requirement": "separate_admission_chen_verification_authorized_xul"
+        },
+        "implementation": {
+          "source_status": "source_present",
+          "runtime_registration": "unverified",
+          "validation_status": "not_recorded"
+        }
+      }
+    },
+    "micronaut:CODEGEN": {
+      "descriptor_status": "declarative_proposal",
+      "model_profile_ref": null,
+      "identity": {
+        "id": "micronaut:CODEGEN",
+        "name": "CODEGEN-µ",
+        "class": "code_generation_orchestrator",
+        "version": "1.0",
+        "authority_claim": "proposal_only",
+        "evidence_refs": [
+          "vendor/key-grammar-kit/data/tracks/CODEGEN-u.semantic-tracks.v1.json",
+          "vendor/key-grammar-kit/data/gram/codegen-index.v1.json"
+        ]
+      },
+      "phase_bindings": {
+        "Pop": {
+          "role": "gram_read_code_task",
+          "descriptor_ref": "phase:Pop"
+        },
+        "Wo": {
+          "role": "language_classification_and_child_selection",
+          "descriptor_ref": "phase:Wo"
+        },
+        "Sek": {
+          "role": "tool_chain_execution_proposal",
+          "descriptor_ref": "phase:Sek"
+        },
+        "Ch'en": {
+          "role": "output_shape_verification",
+          "descriptor_ref": "phase:Ch'en"
+        },
+        "Xul": {
+          "role": "gram_write_evidence_closure",
+          "descriptor_ref": "phase:Xul"
+        }
+      },
+      "capabilities": {
+        "declared": [
+          "code_generation",
+          "debug_triage",
+          "refactor",
+          "test_generation",
+          "tool_calls",
+          "language_classification",
+          "sub_micronaut_delegation"
+        ],
+        "registered": [],
+        "registered_status": "not_verified_in_this_declarative_document",
+        "registration_source": "active runtime registry"
+      },
+      "corpus": {
+        "schema": "khanary.codegen.index.v1",
+        "index_ref": "vendor/key-grammar-kit/data/gram/codegen-index.v1.json",
+        "total_records": 155763,
+        "phase_distribution": {
+          "Wo": 155763
+        },
+        "source_root": "C:/Users/canna/.KHANARY.CPP",
+        "domain_distribution": {
+          "cpp": 56176,
+          "py": 42105,
+          "h": 25003,
+          "json": 14929,
+          "html": 11417,
+          "js": 3691,
+          "hlsl": 1347,
+          "kxml": 974,
+          "ts": 48,
+          "css": 73
+        }
+      },
+      "sub_micronauts": {
+        "coder": {
+          "relation": "delegates_to",
+          "registration_status": "not_in_registry"
+        },
+        "TOOL-µ": {
+          "relation": "delegates_to",
+          "registration_status": "not_in_registry"
+        },
+        "PLAN-µ": {
+          "relation": "delegates_to",
+          "registration_status": "not_in_registry"
+        },
+        "CREATE-µ": {
+          "relation": "delegates_to",
+          "registration_status": "not_in_registry"
+        },
+        "NGRAM-KEY-µ": {
+          "relation": "delegates_to",
+          "registration_status": "not_in_registry"
+        },
+        "FACTORY-µ": {
+          "relation": "delegates_to",
+          "registration_status": "not_in_registry"
+        },
+        "SNOBOL-µ": {
+          "relation": "delegates_to",
+          "registration_status": "registered",
+          "registry_ref": "micronaut:SNOBOL"
+        }
+      },
+      "relations": [
+        {
+          "target": "micronaut:CODEX",
+          "verb": "delegates_to",
+          "directed": true,
+          "note": "generated output routed to CODEX-µ for review"
+        },
+        {
+          "target": "micronaut:ADVISOR",
+          "verb": "supports",
+          "directed": true
+        },
+        {
+          "target": "micronaut:SNOBOL",
+          "verb": "delegates_to",
+          "directed": true
+        }
+      ],
+      "model": {
+        "gguf": "C:/Users/canna/.lmstudio/models/lmstudio-community/gemma-3-1B-it-QAT-GGUF/gemma-3-1B-it-QAT-Q4_0.gguf",
+        "role": "code-generation",
+        "template": "gemma"
+      },
+      "pattern_registry": {
+        "insert_key": "CODEGEN:",
+        "invoke_node": "@codegen",
+        "wrapper": "<mx2lm>codegen-u op={op} language={language} task={task} phase={phase}</mx2lm>",
+        "fallback": "<mx2lm>codegen-u {input}</mx2lm>"
+      },
+      "lanes": {
+        "input": "lane:CODE_TASK",
+        "corpus": "lane:BIGRAM_CORPUS",
+        "output": "lane:GENERATED_CODE_PROPOSAL"
+      },
+      "xcfe": {
+        "admission_requirement": "required_before_execution",
+        "execution_claim": "not_implicitly_authorized",
+        "delegate_dispatch_requirement": "xcfe_gated_per_sub_micronaut",
+        "proposal_authority_claim": "proposal_only",
+        "phase_authorization_requirement": "required"
+      },
+      "output": {
+        "type": "GeneratedCodeProposal",
+        "persistence_claim": false,
+        "dispatch_claim": false
+      },
+      "program_contract": {
+        "format": "kuhul.micronaut-program/1",
+        "reference_base": "repository_root",
+        "program_model": "typed_semantic_tracks",
+        "role": [
+          "language_classification",
+          "code_generation",
+          "sub_micronaut_delegation",
+          "gram_read_write"
+        ],
+        "program_refs": [],
+        "grammar_refs": [
+          "vendor/key-grammar-kit/data/grammar/codegen-mu.runtime.ebnf",
+          "vendor/key-grammar-kit/data/grammar/cpp.code-grammar.ebnf"
+        ],
+        "contract_refs": [
+          "vendor/key-grammar-kit/data/tracks/CODEGEN-u.semantic-tracks.v1.json",
+          "vendor/key-grammar-kit/data/gram/codegen-index.v1.json",
+          "vendor/key-grammar-kit/data/code-wildcard.gml"
+        ],
+        "entry_points": [],
+        "bindings": {
+          "inputs": [
+            {
+              "name": "code_task",
+              "type": "CodeTask",
+              "lane_ref": "lane:CODE_TASK",
+              "binding_ref": "query:codegen.input",
+              "resolution_status": "external_resolution_required"
+            }
+          ],
+          "query_bindings": [
+            {
+              "name": "bigram_corpus",
+              "type": "BigramCorpus",
+              "lane_ref": "lane:BIGRAM_CORPUS",
+              "binding_ref": "query:codegen.corpus",
+              "resolution_status": "external_resolution_required"
+            }
+          ],
+          "output": {
+            "type": "GeneratedCodeProposal",
+            "lane_ref": "lane:GENERATED_CODE_PROPOSAL",
+            "consumer": "host_or_downstream_micronaut",
+            "direct_user_delivery": false
+          }
+        },
+        "interaction": {
+          "host_binding_required": true,
+          "direct_user_io": false
+        },
+        "sandbox": {
+          "filesystem": "host_managed",
+          "network": "loopback_allowlist",
+          "process": "host_allowlist",
+          "gram_namespace": "CODEGEN",
+          "effects": [
+            "gramRead_code_task",
+            "read_bigram_corpus",
+            "emit_generated_code_proposal",
+            "gramWrite_evidence_trace"
+          ],
+          "admission": "host_policy"
+        },
+        "field_relativity": {
+          "anchor": "code_task",
+          "scope": "language_domain",
+          "relation_types": [
+            "bigram_relation",
+            "language_domain"
+          ],
+          "max_hops": 1,
+          "cross_track": "references_only"
+        },
+        "learning": {
+          "mode": "disabled",
+          "replay_policy": "none",
+          "commit_requirement": "not_applicable"
+        },
+        "training": {
+          "mode": "pretrained_external",
+          "corpus_records": 155763,
+          "corpus_schema": "khanary.codegen.index.v1",
+          "backward_status": "not_implemented",
+          "trainable_targets": [],
+          "gradient_outputs": [],
+          "learning_owner_ref": "micronaut:LEARNING",
+          "commit_requirement": "separate_admission_chen_verification_authorized_xul"
+        },
+        "implementation": {
+          "source_status": "bundled_in_micronaut_bson",
+          "bundle_path": "vendor/key-grammar-kit/data/tracks/CODEGEN-u.semantic-tracks.v1.json",
+          "runtime_registration": "unverified",
+          "validation_status": "not_recorded"
+        }
+      }
+    },
+    "micronaut:MX2LM": {
+      "descriptor_status": "declarative_proposal",
+      "model_profile_ref": null,
+      "identity": {
+        "id": "micronaut:MX2LM",
+        "name": "MX2LM-µ",
+        "class": "ngram_vocabulary_provider",
+        "version": "1.0",
+        "authority_claim": "data_only",
+        "evidence_refs": [
+          "vendor/key-grammar-kit/data/mx2lm/gram_pool_registry.json"
+        ]
+      },
+      "phase_bindings": {
+        "Pop": {
+          "role": "gram_read_ngram_vocabulary",
+          "descriptor_ref": "phase:Pop"
+        },
+        "Wo": {
+          "role": "channel_selection_and_distribution",
+          "descriptor_ref": "phase:Wo"
+        },
+        "Sek": {
+          "role": "token_distribution_proposal",
+          "descriptor_ref": "phase:Sek"
+        },
+        "Xul": {
+          "role": "gram_write_evidence_closure",
+          "descriptor_ref": "phase:Xul"
+        }
+      },
+      "capabilities": {
+        "declared": [
+          "ngram_vocabulary_provision",
+          "channel_selection",
+          "token_distribution_proposal",
+          "gram_read_write"
+        ],
+        "registered": [],
+        "registered_status": "not_verified_in_this_declarative_document",
+        "registration_source": "active runtime registry"
+      },
+      "pool_tracks": {
+        "Mx2LM": {
+          "lexical_units": 13500000,
+          "rows": 30000,
+          "channels": [
+            "unigram",
+            "bigram",
+            "trigram",
+            "quadgram",
+            "coarse_gram",
+            "function_gram",
+            "tool_gram"
+          ],
+          "top_k_per_channel": 512,
+          "binary_snapshot": "vendor/key-grammar-kit/data/mx2lm/dataset.ngram.bin",
+          "pattern_container": "vendor/key-grammar-kit/data/mx2lm/mx2lm_pattern_container.json",
+          "ngram_summary": "vendor/key-grammar-kit/data/mx2lm/mx2lm_ngram_summary.json"
+        },
+        "ADVISOR-µ": {
+          "lexical_units": 19300000,
+          "rows": 634000,
+          "channels": [
+            "unigram",
+            "bigram",
+            "trigram",
+            "quadgram",
+            "coarse_gram",
+            "function_gram",
+            "tool_gram"
+          ],
+          "top_k_per_channel": 512,
+          "binary_snapshot": "vendor/key-grammar-kit/data/mx2lm/dataset.ngram.advisor_mu.bin",
+          "pattern_container": "vendor/key-grammar-kit/data/mx2lm/advisor_mu_pattern_container.json",
+          "ngram_summary": "vendor/key-grammar-kit/data/mx2lm/advisor_mu_ngram_summary.json",
+          "registry_ref": "micronaut:ADVISOR"
+        },
+        "PLAN-µ": {
+          "lexical_units": 179000,
+          "rows": 1000,
+          "channels": [
+            "unigram",
+            "bigram",
+            "trigram",
+            "quadgram",
+            "coarse_gram",
+            "function_gram",
+            "tool_gram"
+          ],
+          "top_k_per_channel": 512,
+          "binary_snapshot": "vendor/key-grammar-kit/data/mx2lm/dataset.ngram.plan_mu.bin",
+          "pattern_container": null,
+          "ngram_summary": null
+        },
+        "POLITICS-µ": {
+          "lexical_units": 295000,
+          "rows": 286,
+          "channels": [
+            "unigram",
+            "bigram",
+            "trigram",
+            "quadgram",
+            "coarse_gram",
+            "function_gram",
+            "tool_gram"
+          ],
+          "top_k_per_channel": 512,
+          "binary_snapshot": "vendor/key-grammar-kit/data/mx2lm/dataset.ngram.politics_mu.bin",
+          "pattern_container": null,
+          "ngram_summary": null
+        },
+        "JOKE-µ": {
+          "lexical_units": 15000,
+          "rows": 500,
+          "channels": [
+            "unigram",
+            "bigram",
+            "trigram",
+            "quadgram",
+            "coarse_gram",
+            "function_gram",
+            "tool_gram"
+          ],
+          "top_k_per_channel": 512,
+          "binary_snapshot": "vendor/key-grammar-kit/data/mx2lm/dataset.ngram.joke_mu.bin",
+          "pattern_container": "vendor/key-grammar-kit/data/mx2lm/joke_mu_pattern_container.json",
+          "ngram_summary": "vendor/key-grammar-kit/data/mx2lm/joke_mu_ngram_summary.json"
+        }
+      },
+      "checkpoint_connection": {
+        "inference_target": "kuhul_pi_and_daemon_bots",
+        "checkpoints": [
+          {
+            "file": ".micronaut/checkpoints/neighborhood-attention.safetensors",
+            "role": "trained_gqa_attention_weights",
+            "index_ref": ".micronaut/checkpoints/neighborhood-attention.safetensors.index.json"
+          },
+          {
+            "file": ".micronaut/checkpoints/neighborhood-attention.bones.safetensors",
+            "role": "fold_bone_vocabulary",
+            "schema": "kuhul.fold-bone-rig.v1",
+            "bone_count": 991,
+            "bones_manifest": ".micronaut/checkpoints/neighborhood-attention.bones.json"
+          },
+          {
+            "file": ".micronaut/checkpoints/gqa-demo.safetensors",
+            "role": "gqa_demo_weights"
+          }
+        ],
+        "note": "MX2LM ngram vocabulary provides token distribution priors to the neighbourhood-attention model. Data is universal; connection is through gram_pool_registry.json and the safetensors checkpoint reader."
+      },
+      "lanes": {
+        "input": "lane:GRAM_NAMESPACE",
+        "channel": "lane:NGRAM_CHANNEL",
+        "output": "lane:NGRAM_DISTRIBUTION"
+      },
+      "xcfe": {
+        "admission_requirement": "required_before_execution",
+        "execution_claim": "not_implicitly_authorized",
+        "vocabulary_match_grants_inference": false,
+        "proposal_authority_claim": "data_only"
+      },
+      "output": {
+        "type": "NgramDistributionProposal",
+        "persistence_claim": false,
+        "dispatch_claim": false
+      },
+      "program_contract": {
+        "format": "kuhul.micronaut-program/1",
+        "reference_base": "repository_root",
+        "program_model": "typed_ngram_pool",
+        "role": [
+          "ngram_vocabulary_provision",
+          "channel_selection",
+          "token_distribution_proposal",
+          "gram_read_write"
+        ],
+        "program_refs": [],
+        "grammar_refs": [
+          "vendor/key-grammar-kit/data/grammar/mx2lm-mu.runtime.ebnf"
+        ],
+        "contract_refs": [
+          "vendor/key-grammar-kit/data/mx2lm/gram_pool_registry.json"
+        ],
+        "entry_points": [],
+        "bindings": {
+          "inputs": [
+            {
+              "name": "gram_namespace",
+              "type": "GramNamespace",
+              "lane_ref": "lane:GRAM_NAMESPACE",
+              "binding_ref": "query:mx2lm.namespace",
+              "resolution_status": "external_resolution_required"
+            }
+          ],
+          "query_bindings": [
+            {
+              "name": "channel_selector",
+              "type": "ChannelSelector",
+              "lane_ref": "lane:NGRAM_CHANNEL",
+              "binding_ref": "query:mx2lm.channel",
+              "resolution_status": "external_resolution_required"
+            }
+          ],
+          "output": {
+            "type": "NgramDistributionProposal",
+            "lane_ref": "lane:NGRAM_DISTRIBUTION",
+            "consumer": "kuhul_pi_or_daemon_bot_inference_layer",
+            "direct_user_delivery": false
+          }
+        },
+        "interaction": {
+          "host_binding_required": true,
+          "direct_user_io": false
+        },
+        "sandbox": {
+          "filesystem": "host_managed",
+          "network": "none",
+          "process": "none",
+          "gram_namespace": "MX2LM",
+          "effects": [
+            "gramRead_ngram_vocabulary",
+            "emit_ngram_distribution_proposal",
+            "gramWrite_evidence_trace"
+          ],
+          "admission": "host_policy"
+        },
+        "field_relativity": {
+          "anchor": "gram_namespace",
+          "scope": "ngram_pool",
+          "relation_types": [
+            "ngram_channel",
+            "token_distribution"
+          ],
+          "max_hops": 1,
+          "cross_track": "references_only"
+        },
+        "learning": {
+          "mode": "disabled",
+          "replay_policy": "none",
+          "commit_requirement": "not_applicable"
+        },
+        "training": {
+          "mode": "pretrained_external",
+          "training_tool": "tools/build_dataset_ingestion.py",
+          "generated_at": "2026-10-14",
+          "backward_status": "not_implemented",
+          "trainable_targets": [],
+          "gradient_outputs": [],
+          "learning_owner_ref": "micronaut:LEARNING",
+          "commit_requirement": "separate_admission_chen_verification_authorized_xul"
+        },
+        "implementation": {
+          "source_status": "binary_snapshot_present",
+          "runtime_registration": "unverified",
+          "validation_status": "not_recorded"
+        }
+      }
+    },
+    "micronaut:GRAPH-THEORY": {
+      "descriptor_status": "declarative_proposal",
+      "model_profile_ref": null,
+      "identity": {
+        "id": "micronaut:GRAPH-THEORY",
+        "name": "GRAPH-THEORY-µ",
+        "class": "read_only_graph_query",
+        "version": "1.0.0",
+        "authority_claim": "xcfe_gated_read_only",
+        "evidence_refs": [
+          "data/micronauts/graph-theory-micronaut.v1.json",
+          "data/micronauts/graph-lane-bindings.v1.json",
+          "data/alice/graph-fold-field.aiml"
+        ]
+      },
+      "phase_bindings": {
+        "Pop": {
+          "role": "capture_graph_query",
+          "descriptor_ref": "phase:Pop"
+        },
+        "Wo": {
+          "role": "bind_allowlisted_graph",
+          "descriptor_ref": "phase:Wo"
+        },
+        "Yax": {
+          "role": "form_graph_query_candidate",
+          "descriptor_ref": "phase:Yax"
+        },
+        "Sek": {
+          "role": "execute_xcfe_admitted_read",
+          "descriptor_ref": "phase:Sek"
+        },
+        "Ch'en": {
+          "role": "verify_result_provenance_and_bounds",
+          "descriptor_ref": "phase:Ch'en"
+        },
+        "Xul": {
+          "role": "close_read_only_result",
+          "descriptor_ref": "phase:Xul"
+        }
+      },
+      "capabilities": {
+        "declared": [
+          "read_graph_inventory",
+          "propose_neighborhood_query",
+          "propose_path_query",
+          "propose_dictionary_relation_query",
+          "rank_graph_candidates"
+        ],
+        "registered": [
+          "read_graph_inventory",
+          "propose_neighborhood_query",
+          "propose_path_query",
+          "propose_dictionary_relation_query"
+        ],
+        "registered_status": "verified",
+        "registration_source": "data/programs/tools/tool_registry.json + data/host/executor-bindings.json"
+      },
+      "aiml": {
+        "grammar": "aiml.runtime/5",
+        "pattern_ref": "data/alice/graph-fold-field.aiml",
+        "status": "proposed_reference_unverified"
+      },
+      "srai": {
+        "redirect": "redirect_only",
+        "max_redirects": 16,
+        "cycle_detection": true,
+        "status": "bounded_proposal"
+      },
+      "xcfe": {
+        "admission_requirement": "required_before_execution",
+        "execution_claim": "not_implicitly_authorized"
+      },
+      "output": {
+        "type": "GraphQueryResult",
+        "authority": "DATA_ONLY",
+        "direct_dispatch": false,
+        "persistent_write": false
+      },
+      "program_contract": {
+        "format": "kuhul.micronaut-program/1",
+        "reference_base": "repository_root",
+        "program_model": "typed_python_runtime",
+        "role": [
+          "read_graph_inventory",
+          "propose_neighborhood_query",
+          "propose_path_query",
+          "propose_dictionary_relation_query",
+          "rank_graph_candidates"
+        ],
+        "program_refs": [
+          "micronaut/graph_executor.py",
+          "tools/query_micronaut_graphs.py"
+        ],
+        "grammar_refs": [
+          "data/micronauts/Micronaut.SRAI.AIML.ebnf",
+          "data/grammar/gml.khanary.ebnf",
+          "data/grammar/runtime-graph.contracts.json"
+        ],
+        "contract_refs": [
+          "data/micronauts/graph-lane-bindings.v1.json",
+          "data/micronauts/graph-theory-micronaut.v1.json",
+          "data/alice/graph-fold-field.aiml",
+          "data/programs/xcfe.aiml-micronaut-dispatch.json"
+        ],
+        "entry_points": [
+          "micronaut.graph_executor.execute_graph_query"
+        ],
+        "bindings": {
+          "inputs": [
+            {
+              "name": "graph_id",
+              "type": "AllowlistedGraphId",
+              "lane_ref": "lane:GRAPH_TOPOLOGY",
+              "binding_ref": "tool:micronaut.graph.query.graph_id",
+              "resolution_status": "resolved"
+            },
+            {
+              "name": "operation",
+              "type": "GraphReadOperation",
+              "lane_ref": "lane:GRAPH_QUERY",
+              "binding_ref": "tool:micronaut.graph.query.operation",
+              "resolution_status": "resolved"
+            },
+            {
+              "name": "node",
+              "type": "GraphNodeLabel",
+              "lane_ref": "lane:GRAPH_QUERY",
+              "binding_ref": "aiml:wildcard_capture",
+              "resolution_status": "resolved"
+            },
+            {
+              "name": "target",
+              "type": "GraphNodeLabel",
+              "lane_ref": "lane:GRAPH_QUERY",
+              "binding_ref": "aiml:wildcard_capture",
+              "resolution_status": "resolved"
+            }
+          ],
+          "query_bindings": [],
+          "output": {
+            "type": "GraphQueryResult",
+            "lane_ref": "lane:GRAPH_RESULT",
+            "consumer": "XCFE-admitted Micronaut caller",
+            "direct_user_delivery": false
+          }
+        },
+        "interaction": {
+          "host_binding_required": true,
+          "direct_user_io": false
+        },
+        "sandbox": {
+          "filesystem": "host_managed",
+          "network": "none",
+          "process": "none",
+          "effects": [
+            "read_allowlisted_graph_assets",
+            "emit_graph_query_result"
+          ],
+          "admission": "host_policy"
+        },
+        "field_relativity": {
+          "anchor": "graph_id",
+          "scope": "graph",
+          "relation_types": [
+            "typed_edge",
+            "phase_edge",
+            "lexical_evidence"
+          ],
+          "max_hops": 1,
+          "cross_track": "references_only"
+        },
+        "learning": {
+          "mode": "disabled",
+          "replay_policy": "record_evidence_only",
+          "commit_requirement": "no_graph_mutation"
+        },
+        "implementation": {
+          "source_status": "source_present",
+          "runtime_registration": "verified",
+          "validation_status": "passed"
+        }
+      }
+    }
+  },
+  "code_generation_pipeline": {
+    "format": "kuhul.code-generation-pipeline/1",
+    "authority": "declarative_only",
+    "stages": [
+      {
+        "stage": "ast_compilation",
+        "owner": "micronaut:CODEX",
+        "role": "compile_code_request_to_language_neutral_ast",
+        "input_type": [
+          "CodeRequest",
+          "source_language",
+          "target_language"
+        ],
+        "output_type": "kuhul.ast/1",
+        "implementation_refs": [
+          "micronaut/micronaut-codex/run.mjs",
+          "micronaut/micronaut-codex/tools.json"
+        ],
+        "implementation_status": "unverified",
+        "observed_behavior": "The registry identifies CODEX as a code-review expert; the AST compiler output interface is not evidenced by the referenced runtime files yet."
+      },
+      {
+        "stage": "target_format_generation",
+        "owner": "runtime:CodeWASM",
+        "role": "generate_requested_source_format_from_normalized_ast",
+        "input_type": [
+          "kuhul.ast/1",
+          "target_language"
+        ],
+        "output_type": "kuhul.generated-source/1",
+        "implementation_refs": [
+          "micronaut/micronaut-coder/CodeWASM/generator.js"
+        ],
+        "implementation_status": "partial",
+        "observed_behavior": "generator.js emits JavaScript, Python, C, or C++ from the documented normalized AST subset. CodeWASM/parse.js is a separate Tree-sitter source parser and does not generate code."
+      }
+    ]
+  }
+}

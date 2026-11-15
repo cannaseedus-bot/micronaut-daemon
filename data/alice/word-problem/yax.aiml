@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0">
+
+<!-- Yax phase bank: word-problem candidate admission patterns.
+     K'UHUL Yax ops: admit_neighborhood — present candidate solution paths from the Active Fold Graph.
+     These patterns activate during candidate selection, not at initial input recognition (Pop). -->
+
+<category>
+<pattern>WORD PROBLEM CANDIDATE *</pattern>
+<template>
+<mx2lm>
+Admitting candidate solution path: <star/>
+Evidence state: evaluating candidate …
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>SOLUTION PATH RATE DISTANCE *</pattern>
+<template>
+<mx2lm>
+Candidate path: relative-rate approach.
+Admitted: rate × time = distance governs.
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>SOLUTION PATH PERCENTAGE *</pattern>
+<template>
+<mx2lm>
+Candidate path: percentage formula.
+Admitted: result = (value ÷ 100) × base governs.
+</mx2lm>
+</template>
+</category>
+
+</aiml>

@@ -1,0 +1,39 @@
+{
+  "@kind": "kuhul.khanary-gguf-adapter.v1",
+  "@id": "adapter://khanary-server/gguf",
+  "@version": "1.0.0",
+  "description": "Explicit GGUF inference adapter for Khanary/llama-compatible servers and the WebGL2/ggml-XCFE proof path.",
+  "engine": {
+    "preferred": "dist/khanary-server/llama-server.exe",
+    "experimental_provider": "dist/khanary-server/khanary-server.exe",
+    "api": "openai-compatible",
+    "endpoint": "http://127.0.0.1:9000/v1/chat/completions",
+    "health": "http://127.0.0.1:9000/health",
+    "formats": ["gguf"],
+    "not_supported_directly": ["safetensors", "pytorch_bin", "stb"],
+    "safe_tensors_boundary": "Convert/export explicitly to GGUF or use the native SafeTensors coder/trainer path."
+  },
+  "webgl2_proof": {
+    "native_driver": "dist/khanary-server/ggml-xcfe.dll",
+    "gpu_programs": [
+      "programs/shader.registry.json",
+      "drivers/webgl2",
+      "dist/v3.5.0-WebX/shaders"
+    ],
+    "validation": ["/v1/models", "/props", "/slots", "/v1/chat/completions"],
+    "fallback_policy": "Use CPU or llama-server when the XCFE/WebGL2 provider reports device or architecture incompatibility."
+  },
+  "model_selection": {
+    "chat": "GGUF with the model's declared chat template",
+    "coder": "GGUF exported from coder_ast_json_fp16.safetensors only after validation",
+    "native_coder": "E:/models/GPT2/coder_micronaut/coder_ast_json_fp16.safetensors",
+    "current_coder_gguf_baseline": "E:/models/GPT2/coder_micronaut/ultrachat_coder_skeleton_slerp_0p40.gguf",
+    "template_rule": "Use tokenizer metadata/chat_template; do not force ChatML onto non-ChatML GPT-2 or coder exports."
+  },
+  "continuation": {
+    "client": "micronaut-ui-chat-app.ps1",
+    "protocol": "repeat the message history, append the assistant segment, then request continuation",
+    "max_rounds": 4,
+    "requires": ["preserved messages", "finish_reason or client truncation detection"]
+  }
+}

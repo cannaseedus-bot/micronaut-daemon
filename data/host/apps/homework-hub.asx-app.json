@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "homework-hub",
+  "@key": "⟁APP:HOMEWORK_HUB",
+  "@mount": "⟁ROOT:HOMEWORK_HUB",
+  "@theme": { "accent": "#f59e0b", "bg": "#080500", "surface": "#140e00", "text": "#fef3c7", "hero_phase": "Sek", "tagline": "Assignments organised. Deadlines met." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "assignments", "component": "⟁WIDGET:ASSIGNMENTS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "assignments": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:HOMEWORK_HUB": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:ADD_TASK", "⟁ACTION:CALENDAR_VIEW"] },
+    "⟁ACTION:ADD_TASK": { "@type": "button", "@text": "Add Assignment", "@on": { "click": "hw.open_compose" } },
+    "⟁ACTION:CALENDAR_VIEW": { "@type": "button", "@text": "Calendar", "@on": { "click": "hw.open_calendar" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:ASSIGNMENTS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:ASSIGNMENTS": { "@type": "feed", "@bind": "state.assignments", "@children": ["⟁WIDGET:ASSIGN_CARD"] },
+    "⟁WIDGET:ASSIGN_CARD": { "@type": "drag-card", "@bind": "assignment", "@on": { "done": "hw.mark_done", "view": "hw.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:DUE_SOON", "⟁WIDGET:SUBJECTS"] },
+    "⟁WIDGET:DUE_SOON": { "@type": "list", "@bind": "data.due_soon" },
+    "⟁WIDGET:SUBJECTS": { "@type": "tag-cloud", "@bind": "data.subjects" }
+  },
+  "@programs": {
+    "hw.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "hw.open_calendar": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "hw.mark_done": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_done", "@out": "status" }] },
+    "hw.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "assign.add": "hw.open_compose", "calendar.open": "hw.open_calendar", "assign.done": "hw.mark_done", "assign.view": "hw.view" },
+  "@imports": [{ "ref": "assignment", "mode": "schema_table" }, { "ref": "subject", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "reminder", "name": "Deadline Reminders", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Alerts 24h and 1h before any assignment deadline." },
+      { "id": "grade-tracker", "name": "Grade Tracker", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Log grades per assignment and see your running GPA." },
+      { "id": "study-bot", "name": "Study Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "AI-powered Q&A bot for any subject you're studying." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "hw.add", "pattern": "ADD ASSIGNMENT|NEW HOMEWORK|DUE * BY *", "intent": "open_compose" },
+      { "id": "hw.due", "pattern": "WHAT IS DUE|DUE TODAY|UPCOMING DEADLINES", "intent": "view_due_soon" }
+    ]
+  },
+  "@data": {
+    "due_soon": [{ "title": "Math Problem Set 7", "subject": "Mathematics", "due": "2026-10-30" }, { "title": "Essay Draft — K'UHUL", "subject": "CS Theory", "due": "2026-11-02" }],
+    "subjects": ["Mathematics", "Physics", "CS Theory", "History", "English"],
+    "spotlight": [
+      { "id": "sp1", "title": "Math Problem Set 7", "subject": "Mathematics", "badge": "Due Tomorrow", "points": 20, "excerpt": "12 problems. Covering integrals and differential equations." },
+      { "id": "sp2", "title": "Group Project — Phase Engine", "subject": "CS Theory", "badge": "In Progress", "team_size": 3, "excerpt": "Team of 3. Prototype due in 4 days." },
+      { "id": "sp3", "title": "History Essay Draft", "subject": "History", "badge": "Completed", "grade": "A-", "excerpt": "Submitted on time. Feedback pending." }
+    ],
+    "schema": {
+      "assignment": { "primaryKey": "assign_id", "fields": { "assign_id": { "type": "string" }, "title": { "type": "string", "required": true }, "subject_id": { "type": "string" }, "description": { "type": "text" }, "due_at": { "type": "datetime", "required": true }, "points": { "type": "integer" }, "status": { "type": "string" }, "grade": { "type": "string" } } },
+      "subject": { "primaryKey": "subject_id", "fields": { "subject_id": { "type": "string" }, "name": { "type": "string", "required": true }, "teacher": { "type": "string" }, "color": { "type": "string" } } }
+    }
+  }
+}

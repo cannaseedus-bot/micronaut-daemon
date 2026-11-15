@@ -1,0 +1,11 @@
+(* KHANARY / CFPC grammar package — proposed syntax contract v0.1. *)
+(* EBNF conventions: { X } repetition, [ X ] optional, | alternation. *)
+(* Quoted XML tags are literal terminals. Character data is parsed by the XML host. *)
+elaborate = "<elaborate>", { context | think | function_ref | tool_ref | compare | mathematics | instructions | research | learn | structure | policy | result }, "</elaborate>" ;
+compare = "<compare>", { pro | con | evidence }, "</compare>" ;
+mathematics = "<mathematics>", text_value, "</mathematics>" ;
+instructions = "<instructions>", { task | content }, "</instructions>" ;
+research = "<research>", { query | tool_ref | evidence }, "</research>" ;
+pro = "<pro>", text_value, "</pro>" ;
+con = "<con>", text_value, "</con>" ;
+(* Elaborate expands/evaluates/composes; it cannot itself promote authority. *)

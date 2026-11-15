@@ -1,0 +1,142 @@
+[MetA SemanticMemory]
+  name: "Semantic Memory Program"
+  version: "1.0.0"
+  description: "Transforms semantic artifacts into usable working memory"
+
+  required_micronauts: [
+    "MEM-µ",
+    "REASON-µ",
+    "VERIFY-µ",
+    "PLAN-µ",
+    "NET-µ"
+  ]
+
+  persistence_level: "high"
+  conformance_version: "2.0.0"
+  semantic_layer: "KXML"
+  container: "JROM+CBOR"
+  template_adapter: "programs/micronauts/jrom-template-adapter.json"
+  brain_adapter: "programs/micronauts/mx2-brain-jrom-adapter.json"
+  cm1_control: "dist/MX-2/CM1_FOLD_TENSOR.s7"
+  mx2_memory_authority: "dist/MX-2/mx2db.sqlite"
+[MetX]
+
+[Pop SemanticMemory]
+  [Wo memory = {
+    role: "semantic_memory",
+    persistence: true,
+    executable: true,
+    mutable: true,
+    append_only_history: true
+  }]
+
+  [Wo mixture = {
+    MEM-µ:    0.40,
+    REASON-µ: 0.20,
+    VERIFY-µ: 0.20,
+    PLAN-µ:   0.10,
+    NET-µ:    0.10
+  }]
+
+  [Wo admission = {
+    minimum_confidence: 0.55,
+    canonical_confidence: 0.85,
+    preserve_corrections: true,
+    preserve_provenance: true,
+    allow_refold: true
+  }]
+
+  [Wo adapter = {
+    semantic_format: "KXML",
+    compiled_container: "JROM",
+    wire_format: "JROM+CBOR",
+    brain_catalog: "dist/MX-2/brains/brain_catalog.json",
+    approved_profiles: ["atomic_fast", "atomic_deep", "tri_brain"],
+    cm1_gate_required: true
+  }]
+
+  [Wo state = {
+    subject: input.subject,
+    query: input.query,
+    notation: [],
+    notes: [],
+    evidence: [],
+    relations: [],
+    contradictions: [],
+    corrections: [],
+    related_micronauts: []
+  }]
+
+  [Yax state.subject]
+    [Sek MEM-µ retrieve_notation state.subject -> notation]
+    [Sek MEM-µ retrieve_notes state.subject -> notes]
+    [Sek MEM-µ retrieve_related state.subject -> related_micronauts]
+
+  [Yax notation]
+    [Sek expand_notation notation -> semantic_terms]
+    [Sek merge semantic_terms state -> state]
+
+  [Yax notes]
+    [Sek classify notes -> classified_notes]
+    [Sek score_confidence classified_notes -> scored_notes]
+
+  [Yax scored_notes]
+    [Sek REASON-µ resolve_relations scored_notes -> relations]
+    [Sek REASON-µ detect_contradictions scored_notes -> contradictions]
+
+  [Yax contradictions.count > 0]
+    [Sek VERIFY-µ compare contradictions -> verification]
+
+    [Yax verification.correctable == true]
+      [Sek derive_correction verification -> correction]
+      [Sek MEM-µ write_correction correction -> corrections]
+
+  [Yax relations]
+    [Sek VERIFY-µ verify relations -> verified_relations]
+
+  [Yax verified_relations.confidence >= admission.minimum_confidence]
+    [Sek MEM-µ admit verified_relations -> working_memory]
+
+  [Yax verified_relations.confidence >= admission.canonical_confidence]
+    [Sek MEM-µ promote verified_relations -> canonical_memory]
+
+  [Yax state.query]
+    [Sek REASON-µ apply working_memory state.query -> memory_context]
+
+  [Ch'en {
+    subject: state.subject,
+    context: memory_context,
+    notation: notation,
+    relations: verified_relations,
+    contradictions: contradictions,
+    corrections: corrections,
+    related_micronauts: related_micronauts
+  }]
+
+  [Yax memory_context.improvement_detected == true]
+    [Sek PLAN-µ derive_improvement memory_context -> improvement]
+    [Sek MEM-µ write_note {
+      subject: state.subject,
+      type: "improvement",
+      content: improvement,
+      confidence: memory_context.confidence
+    }]
+
+  [Yax memory_context.research_needed == true]
+    [Sek NET-µ research state.subject -> research]
+
+    [Yax research.confidence >= admission.minimum_confidence]
+      [Sek MEM-µ write_note {
+        subject: state.subject,
+        type: "research",
+        content: research,
+        confidence: research.confidence
+      }]
+
+  [Xul memory_context.complete == true]
+    [Yax true]
+      [Sek collapse SemanticMemory]
+
+    [Yax false]
+      [Sek fold SemanticMemory]
+[Xul]

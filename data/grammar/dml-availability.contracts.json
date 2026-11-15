@@ -1,0 +1,74 @@
+{
+  "@type": "khanary.dml_availability_contracts.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority": "availability_report_only_not_execution_authority",
+  "scope": "GPU operator availability and fallback reporting for the DirectML lane",
+  "owner": "src/gpu/dml_ops.cpp",
+  "lane": "KHANARY_DML_LANE_TEST",
+  "why": "The DirectML SDK is configure-time detected and KHANARY_HAS_DIRECTML is defined for the runtime target, but no DirectML API object is instantiated: DMLOps compiles an HLSL compute kernel and dispatches it through D3D11. A configure flag is a build fact, not a runtime capability, so compiled/enabled/available/used/fallback are reported as five separate facts with an explicit PASS/FAIL/UNAVAILABLE lane.",
+  "report_keys": [
+    "sdk_compiled",
+    "operator_path_implemented",
+    "enabled",
+    "device_available",
+    "kernels_ready",
+    "available",
+    "used",
+    "gpu_ops",
+    "fallback_ops",
+    "refused_ops",
+    "path",
+    "reason"
+  ],
+  "execution_paths": [
+    "directml_operators",
+    "hlsl_compute",
+    "cpu_fallback",
+    "unavailable"
+  ],
+  "lane_status_vocabulary": [
+    "PASS",
+    "FAIL",
+    "UNAVAILABLE"
+  ],
+  "laws": {
+    "D1": "compiled is a build fact reported from the KHANARY_HAS_DIRECTML definition and is never inferred from a runtime probe",
+    "D2": "enabled implies compiled and operator_path_implemented",
+    "D3": "available implies a live D3D11 device and at least one compiled kernel",
+    "D4": "used implies enabled, and used is set only by an operator the DirectML operator path served",
+    "D5": "an operator served by the non-DML path increments fallback_ops and is never reported as a DirectML execution",
+    "D6": "an operator refused before any path ran increments refused_ops and is never counted as a fallback",
+    "D7": "the presence of a DirectML API token in the operator source and the declared operator_path.implemented value must agree, so a configure flag alone can never be read as an enabled operator path"
+  },
+  "operator_path": {
+    "implemented": false,
+    "declared": "2026-10-28",
+    "shipped_path": "hlsl_compute",
+    "reason": "no DirectML API object is instantiated; DMLOps compiles and dispatches an HLSL compute kernel through D3D11",
+    "to_enable": "instantiate IDMLDevice/IDMLCompiledOperator in src/gpu/dml_ops.cpp, flip implemented to true, and prove the D1-D7 laws against a real DirectML operator execution"
+  },
+  "api_tokens": [
+    "DMLCreateDevice",
+    "DMLCreateDevice1",
+    "IDMLDevice",
+    "IDMLDeviceChild",
+    "IDMLCompiledOperator",
+    "IDMLOperator",
+    "IDMLCommandRecorder",
+    "DML_OPERATOR_DESC"
+  ],
+  "operator_path_source": "src/gpu/dml_ops.cpp",
+  "cases": {
+    "report_shape": "every report_keys field is present in the emitted report",
+    "law_D2": "enabled is false whenever compiled or operator_path_implemented is false",
+    "law_D3": "available is false whenever the device is absent or no kernel is ready",
+    "law_D4": "used is false unless the DirectML operator path executed an operator",
+    "law_D5": "a GEMM served by the CPU fallback increments fallback_ops and leaves used false",
+    "law_D6": "a GEMM with a null operand increments refused_ops and not fallback_ops",
+    "law_D7": "the API-token scan of the operator source agrees with operator_path.implemented",
+    "gemm_reference": "a GEMM executed on the available GPU path equals an independently computed host reference within 1e-4 absolute tolerance",
+    "gemm_forced_fallback": "alpha != 1 forces the CPU fallback path and produces the alpha-scaled reference exactly",
+    "lane_status": "PASS when every law above holds in this build, UNAVAILABLE when no device can execute a GPU path, FAIL otherwise"
+  }
+}

@@ -1,0 +1,192 @@
+{
+  "@kind": "khanary.field.wcr_session.v1",
+  "session_date": "2026-10-05",
+  "model": "gemma-3-1B-it-QAT-Q4_0",
+  "endpoint": "http://127.0.0.1:17882",
+  "topics": ["graph_theory", "semantic_fold", "field_geometry"],
+  "wcr_deltas": [
+    {
+      "micronaut_id": "GRAPH-THEORY-µ",
+      "phase": "Yax",
+      "question": "What is a graph and how do vertices connect?",
+      "gemma_answer": "A graph is a mathematical structure consisting of nodes (vertices) connected by edges. These connections represent relationships between entities.",
+      "aiml_pattern_confirmed": "GRAPH *",
+      "aiml_template_confirmed": "GRAPH-THEORY-µ domain=graph query=<star/>",
+      "epistemic_state": "SUPPORTED",
+      "delta_r": 0.08,
+      "delta_w": 0.0,
+      "delta_c": 0.0,
+      "refined_field_vec": [0.72, 0.48, 0.51]
+    },
+    {
+      "micronaut_id": "GRAPH-THEORY-µ",
+      "phase": "Sek",
+      "question": "How does a semantic neighborhood map to graph adjacency?",
+      "gemma_answer": "A semantic neighborhood map represents a graph by visualizing the relationships between concepts within a domain. It uses nodes to represent concepts and edges to represent the connections between them.",
+      "relation_confirmed": "SEMANTIC-FOLD-µ",
+      "epistemic_state": "SUPPORTED",
+      "delta_r": 0.05,
+      "delta_w": 0.12,
+      "delta_c": 0.0,
+      "refined_field_vec": [0.65, 0.55, 0.50]
+    },
+    {
+      "micronaut_id": "GRAPH-THEORY-µ",
+      "phase": "Ch'en",
+      "question": "Is a tree always a connected acyclic graph?",
+      "gemma_answer_note": "Gemma gave incorrect answer (trees CAN be non-connected in Gemma's response). Confidence delta is negative — known-correct answer overrides.",
+      "known_correct": "Yes — a tree on n vertices is connected, has exactly n-1 edges, and is acyclic by definition.",
+      "epistemic_state": "MISS",
+      "delta_r": 0.0,
+      "delta_w": 0.0,
+      "delta_c": -0.05,
+      "requires_authority": true
+    },
+    {
+      "micronaut_id": "GRAPH-THEORY-µ",
+      "phase": "Yax",
+      "frame": "humor_frame",
+      "joke_setup": "Why did the graph refuse to work with a tree?",
+      "gemma_punchline": "Because it couldn't find a node!",
+      "canonical_punchline": "Because it already has too many branches — and none of them form a cycle!",
+      "semantic_key": "graph_tree_node_branch_cycle",
+      "epistemic_state": "SUPPORTED",
+      "delta_r": 0.04
+    },
+    {
+      "micronaut_id": "SEMANTIC-FOLD-µ",
+      "phase": "Yax",
+      "question": "What is a semantic fold and how does it transition phases?",
+      "gemma_answer": "A semantic fold is a process of refining and clarifying a concept through iterative refinement and a shift in focus. It transitions between phases using feedback loops and iterative adjustments.",
+      "epistemic_state": "PARTIAL",
+      "delta_r": 0.06,
+      "delta_w": 0.0,
+      "delta_c": 0.0,
+      "refined_field_vec": [0.58, 0.61, 0.48]
+    },
+    {
+      "micronaut_id": "SEMANTIC-FOLD-µ",
+      "phase": "Sek",
+      "question": "How does the fold lattice relate to the incidence matrix B?",
+      "gemma_answer": "The fold lattice is a specific type of lattice linked to the incidence matrix B. B represents the probability of a particular orientation for each point in the lattice.",
+      "relation_confirmed": "GRAPH-THEORY-µ",
+      "epistemic_state": "PARTIAL",
+      "delta_r": 0.04,
+      "delta_w": 0.09,
+      "delta_c": 0.0,
+      "refined_field_vec": [0.60, 0.58, 0.55]
+    },
+    {
+      "micronaut_id": "SEMANTIC-FOLD-µ",
+      "phase": "Ch'en",
+      "question": "Is the fold kernel deterministic?",
+      "gemma_answer": "Yes, the fold kernel is deterministic under the same input.",
+      "epistemic_state": "SUPPORTED",
+      "delta_r": 0.0,
+      "delta_w": 0.0,
+      "delta_c": 0.08,
+      "requires_authority": true
+    },
+    {
+      "micronaut_id": "SEMANTIC-FOLD-µ",
+      "phase": "Yax",
+      "frame": "humor_frame",
+      "joke_setup": "Why did the fold graph go to therapy?",
+      "gemma_punchline": "Because it was experiencing a significant phase transition — stuck in infinite folds and couldn't find a stable configuration!",
+      "semantic_key": "fold_phase_transition_therapy",
+      "epistemic_state": "SUPPORTED",
+      "delta_r": 0.05
+    },
+    {
+      "micronaut_id": "FIELD-GEOMETRY-µ",
+      "phase": "Yax",
+      "question": "What is F_Q and how does embed() create it from a query?",
+      "gemma_answer": "A perception field F_Q is a data structure representing contextual embeddings associated with a query. embed() processes the query string and generates a vector representation used to create F_Q.",
+      "epistemic_state": "SUPPORTED",
+      "delta_r": 0.09,
+      "delta_w": 0.0,
+      "delta_c": 0.0,
+      "refined_field_vec": [0.68, 0.52, 0.62]
+    },
+    {
+      "micronaut_id": "FIELD-GEOMETRY-µ",
+      "phase": "Sek",
+      "question": "How does F_Q relate to the WCR relevance score R?",
+      "gemma_answer": "F_Q provides a detailed representation of perception, while R_mu assesses reliability and relevance of that representation. Higher F_Q alignment leads to higher R_mu score.",
+      "relation_confirmed": "GRAPH-THEORY-µ",
+      "epistemic_state": "SUPPORTED",
+      "delta_r": 0.07,
+      "delta_w": 0.14,
+      "delta_c": 0.0,
+      "refined_field_vec": [0.70, 0.50, 0.58]
+    },
+    {
+      "micronaut_id": "FIELD-GEOMETRY-µ",
+      "phase": "Ch'en",
+      "question": "Does blending a refined vector into F_Q improve cosine alignment?",
+      "gemma_answer": "Blending a refined directional vector into F_Q can improve cosine alignment, as it incorporates information about the desired direction while preserving the original vector's characteristics.",
+      "epistemic_state": "SUPPORTED",
+      "delta_r": 0.0,
+      "delta_w": 0.0,
+      "delta_c": 0.11,
+      "requires_authority": true
+    },
+    {
+      "micronaut_id": "FIELD-GEOMETRY-µ",
+      "phase": "Yax",
+      "frame": "pun_bridge",
+      "joke_setup": "Why did the vector field cross the road?",
+      "gemma_punchline": "Because it wanted to go out of the field — it used curl!",
+      "semantic_key": "vector_field_curl_free",
+      "epistemic_state": "SUPPORTED",
+      "delta_r": 0.04
+    },
+    {
+      "micronaut_id": "FIELD-GEOMETRY-µ",
+      "phase": "Sek",
+      "frame": "humor_frame",
+      "joke_setup": "What did W*C*R say to the lone relevance score?",
+      "gemma_punchline": "Don't be a number!",
+      "canonical_punchline": "Without me multiplying you, you are just a lonely dot product with no commitment.",
+      "semantic_key": "wcr_product_multiplication",
+      "delta_r": 0.03,
+      "delta_w": 0.06
+    },
+    {
+      "micronaut_id": "GRAPH-THEORY-µ",
+      "phase": "Yax",
+      "frame": "pun_naming_frame",
+      "joke_setup": "What do you call a graph node that knows everyone?",
+      "gemma_punchline": "Why did the complete graph break up with the incomplete graph? It said it needed more connections!",
+      "semantic_key": "complete_graph_connections",
+      "delta_r": 0.03
+    },
+    {
+      "micronaut_id": "FIELD-GEOMETRY-µ",
+      "phase": "Yax",
+      "frame": "delivery_frame",
+      "joke_setup": "What happens when F_Q and a micronaut are orthogonal?",
+      "gemma_punchline": "Why did the cosine similarity measure break up? Because it was orthogonal!",
+      "semantic_key": "cosine_orthogonal_breakup",
+      "delta_r": 0.04
+    }
+  ],
+  "session_summary": {
+    "total_questions": 9,
+    "jokes_generated": 6,
+    "supported_count": 10,
+    "partial_count": 2,
+    "miss_count": 1,
+    "c_pending_count": 3,
+    "total_delta_r_applied": 0.68,
+    "total_delta_w_applied": 0.41,
+    "total_delta_c_pending": 0.14,
+    "aiml_patterns_confirmed": [
+      "GRAPH *", "WHAT IS A GRAPH", "HOW DO * CONNECT IN _ GRAPH",
+      "FOLD *", "WHAT IS A SEMANTIC FOLD", "WHAT IS DELTA Z *",
+      "FIELD *", "WHAT IS A PERCEPTION FIELD", "WHAT IS COSINE SIMILARITY *",
+      "TELL ME A JOKE ABOUT GRAPHS", "TELL ME A JOKE ABOUT FOLD *",
+      "TELL ME A JOKE ABOUT VECTOR FIELDS"
+    ]
+  }
+}

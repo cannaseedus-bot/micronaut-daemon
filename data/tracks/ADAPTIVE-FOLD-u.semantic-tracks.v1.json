@@ -1,0 +1,300 @@
+{
+  "@no-eval": true,
+  "id": "ADAPTIVE-FOLD-µ",
+
+  "schemes": ["adaptive-fold"],
+  "description": "Adaptive fold learning loop — §65: φ_t is the learned combining algebra; reward updates (ψ_{t+1},W_{t+1},C_{t+1},g_{t+1},φ_{t+1}); same T different result = learning; adaptive opcode FOLD_{φ_t}(Structure); residence law: learned structure lives in fold system not model tensor weights.",
+  "phase": "Ch'en",
+  "category": "executive",
+  "confidence": 0.91,
+  "static_weight": 0.94,
+  "health": 1.0,
+  "governs": [
+    "adaptive fold",
+    "adaptive algebra",
+    "learned algebra",
+    "phi t",
+    "phi_t",
+    "psi t",
+    "psi_t",
+    "adaptive catamorphism",
+    "adaptive anamorphism",
+    "learning loop",
+    "reward update",
+    "fold learning",
+    "same structure different result",
+    "cata phi t",
+    "adaptive opcode",
+    "FOLD phi t",
+    "execution changes parameters",
+    "model vs fold learning",
+    "residence law",
+    "learned structure lives in",
+    "model tensor weights frozen",
+    "model oracle",
+    "fold adaptive object",
+    "delta psi",
+    "delta phi",
+    "delta w delta c delta r",
+    "w t plus one",
+    "c t plus one",
+    "phi t plus one",
+    "both ana and cata learn",
+    "ana learning",
+    "cata learning",
+    "kuhul system table",
+    "topology ana attention cata learning",
+    "five axes kuhul",
+    "F*_Q",
+    "F star Q",
+    "ranked candidate field",
+    "WCR threshold",
+    "scored field",
+    "candidates above threshold",
+    "@adaptive-fold",
+    "adaptive-fold:"
+  ],
+  "capabilities": [
+    "ADAPTIVE_FOLD_EXPLAIN",
+    "LEARNING_LOOP_TRACE",
+    "ANA_LEARNING_UPDATE",
+    "CATA_LEARNING_UPDATE",
+    "RESIDENCE_LAW_CHECK",
+    "ADAPTIVE_OPCODE_DISPATCH",
+    "REWARD_PROPAGATE",
+    "SYSTEM_TABLE_EXPLAIN"
+  ],
+  "conformance": {
+    "questions": [
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is the full K'UHUL adaptive fold learning loop?",
+        "expected_key": "B Q Ana psi_t F_Q WCR_t F*_Q Cata phi_t C_Q Reward psi_t+1 W_t+1 C_t+1 g_t+1 phi_t+1",
+        "delta_r": 0.12
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What does ψ_t → ψ_{t+1} change versus φ_t → φ_{t+1}?",
+        "expected_key": "psi changes what gets unfolded candidate field shape phi changes how unfolded gets folded back reduction result for same structure",
+        "delta_r": 0.11
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is the test for whether a fold has learned?",
+        "expected_key": "Cata phi_t T equals A but Cata phi_t+1 T equals B same structure T different result after learning if they are equal phi did not change nothing was learned",
+        "delta_r": 0.1
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is the adaptive combining algebra φ_µ and what does it contain?",
+        "expected_key": "phi mu Q T W C R g Pi weight confidence relevance geometry canonical projection carries micronaut learned state participates in reduction not decoration",
+        "relation_confirmed": "FOLDGRAPH-µ",
+        "delta_w": 0.13
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "How does FOLD_{φ_t}(Structure) differ from ADD(a,b)?",
+        "expected_key": "ADD is stateless same result always FOLD phi_t is adaptive execution changes parameters governing future execution phi_t evolved from prior executions",
+        "relation_confirmed": "KUHUL-GLYPH-µ",
+        "delta_w": 0.12
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is the K'UHUL system table — the five independent axes?",
+        "expected_key": "Topology Q_n C_6 what transformations are legal Ana psi what structure becomes available Attention WCR what receives selection pressure Cata phi how structure combined Learning delta how future folds change",
+        "relation_confirmed": "MICRONAUT-PROGRAM-µ",
+        "delta_w": 0.11
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "Where does persistent learned structure live in K'UHUL?",
+        "expected_key": "folds grams relations confidence weights policies NOT model tensor weights frozen after training model is oracle proposing information fold is adaptive computational object that learns from outcomes",
+        "delta_c": 0.11
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "What is the role of the model versus the role of the fold in K'UHUL learning?",
+        "expected_key": "model is oracle proposing information into the fold system model tensor weights frozen fold is adaptive computational object phi_t updates at inference time from reward model provides prior fold carries posterior",
+        "delta_c": 0.12
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is F*_Q in the adaptive fold loop and how does it differ from F_Q?",
+        "expected_key": "F_Q is the raw candidate field produced by Ana psi_t all neighborhoods expanded F*_Q is the ranked scored field after WCR threshold tau applied nodes below tau rejected F_Q to WCR_t to F*_Q to Cata not F_Q directly to Cata threshold is the boundary between expansion and reduction",
+        "relation_confirmed": "FOLDGRAPH-µ",
+        "delta_w": 0.12
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does the adaptive combining algebra φ_µ evolve during the fold learning process?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What criteria determine whether a structural update in FOLD_{φ_t} should be considered a successful learning event?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "In what way does the K'UHUL system table reflect the independent axes of adaptive learning?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does the role of the fold differ from that of the model in the overall K'UHUL framework?",
+        "expected_key": "",
+        "delta_r": 0.08
+      }
+    ],
+    "jokes": [
+      {
+        "pattern": "WHAT IS THE DIFFERENCE BETWEEN AN ADAPTIVE FOLD AND A NORMAL FOLD",
+        "punchline": "A normal fold has a static algebra: fold the same tree and you always get the same result. An adaptive fold has phi_t: fold the same tree before and after learning and you get A the first time and B the second. The tree did not change. The fold did. That is the operational definition of learning.",
+        "frame": "delivery_frame",
+        "semantic_key": "adaptive_fold_same_tree_different_result"
+      },
+      {
+        "pattern": "WHY DOES THE MODEL NOT LEARN IN KUHUL",
+        "punchline": "The model does learn — but once, during training, when its tensor weights were frozen. After that it is an oracle: you ask it a question and it proposes a candidate. The fold is what learns at inference time. The model is the prior. The fold is the posterior that updates. They collaborate — they do not compete.",
+        "frame": "pun_bridge",
+        "semantic_key": "model_prior_fold_posterior_collaboration"
+      },
+      {
+        "pattern": "WHY IS FOLD PHI T MORE INTERESTING THAN ADD A B",
+        "punchline": "ADD has no memory. ADD(2,3) was 5 in 1950 and will be 5 in 2150. FOLD_{phi_t}(Structure) was answer A before the reward and is answer B after. The opcode evolved. In K'UHUL, execution changes the parameters governing future execution. The instruction set grows up.",
+        "frame": "humor_frame",
+        "semantic_key": "fold_phi_t_vs_add_memory_evolution"
+      },
+      {
+        "pattern": "DOES ANA LEARN OR ONLY CATA LEARNS",
+        "punchline": "Both. Psi_t changes what gets unfolded — the shape of the candidate field. Phi_t changes how what was unfolded gets collapsed back. Before learning, you look at certain things and conclude a certain answer. After learning, you look at different things and conclude a different answer. Two updates, two directions, one loop.",
+        "frame": "humor_frame",
+        "semantic_key": "ana_and_cata_both_learn_two_directions"
+      },
+      {
+        "pattern": "WHY DOES THE ADAPTIVE FOLD ALWAYS SEEM TO MISINTERPRET THE STRUCTURE OF A TENSOR",
+        "punchline": "Because φ_t is the learned combining algebra — it’s not just interpreting shapes, it’s rewriting them mid-training.",
+        "frame": "humor_frame",
+        "semantic_key": "why_does_the_adaptive_fold_always_seem_to_misinter"
+      },
+      {
+        "pattern": "WHEN THE MODEL LEARNS IN KUHUL, IT’S LIKE WATCHING A TREE GROW — SAME CODE, DIFF",
+        "punchline": "The residence law says the learned structure lives in the fold system, not just the model’s weight tensor.",
+        "frame": "humor_frame",
+        "semantic_key": "when_the_model_learns_in_kuhul_it_s_like_watching_"
+      },
+      {
+        "pattern": "ADDING A BIAS FEELS LIKE ADDING A NUMBER TO A STORY — IT CHANGES THE OUTCOME COM",
+        "punchline": "ψ_{t+1} updates with a twist: the same training step can yield different results depending on ψ.",
+        "frame": "humor_frame",
+        "semantic_key": "adding_a_bias_feels_like_adding_a_number_to_a_stor"
+      },
+      {
+        "pattern": "FOLD Φ_T IS NOT JUST A PARAMETER — IT’S THE KEY THAT UNLOCKS THE NEXT LAYER OF L",
+        "punchline": "The adaptive opcode FOLD_{φ_t} ensures that only the structure evolves, not the static model weights.",
+        "frame": "humor_frame",
+        "semantic_key": "fold_φ_t_is_not_just_a_parameter_it_s_the_key_that"
+      }
+    ]
+  },
+  "relations": [
+    {
+      "target": "FOLDGRAPH-µ",
+      "verb": "@extends",
+      "directed": true
+    },
+    {
+      "target": "FIXED-POINT-µ",
+      "verb": "@informs",
+      "directed": true
+    },
+    {
+      "target": "MICRONAUT-PROGRAM-µ",
+      "verb": "@informs",
+      "directed": true
+    },
+    {
+      "target": "KUHUL-GLYPH-µ",
+      "verb": "@depends_on",
+      "directed": true
+    },
+    {
+      "target": "ANAMORPHISM-µ",
+      "verb": "@extends",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "gramRead",
+      "key": "adaptive_fold_query",
+      "weight": 1.0
+    },
+    {
+      "phase": "Wo",
+      "op": "lower_adaptive_fold_aiml",
+      "note": "L_A §65 learning loop law",
+      "weight": 1.0
+    },
+    {
+      "phase": "Yax",
+      "op": "derive_phi_t_candidate",
+      "note": "R adaptive algebra expand",
+      "weight": 1.0
+    },
+    {
+      "phase": "Sek",
+      "op": "resolve_reward_update",
+      "note": "W phi arc update from reward",
+      "weight": 1.0
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_residence_law",
+      "note": "C fold vs model boundary",
+      "weight": 1.0
+    },
+    {
+      "phase": "Xul",
+      "op": "emit_answer",
+      "scope": "local",
+      "weight": 1.0
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "ADAPTIVE-FOLD-µ",
+    "manifest_access": [
+      "words",
+      "micronaut",
+      "kuhul",
+      "fold_graph",
+      "memory"
+    ],
+    "effects": [
+      "gramRead",
+      "gramWrite",
+      "fold:query",
+      "fold:learning_update",
+      "fold:reward_propagate"
+    ],
+    "ports": [],
+    "coordinator": false
+  }
+}

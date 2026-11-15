@@ -1,0 +1,180 @@
+{
+  "@type": "khanary.uri_address_contracts.v1",
+  "@schema": "urn:kuhul:khanary:contracts:uri-address:v1",
+  "owner": "src/io/request_router.cpp",
+  "docs": "docs/KHANARY-CPP-SPEC.md",
+  "semantic_authority": false,
+  "purpose": "An explicit scheme address is either well formed and parsed once, or refused with a typed reason. It never decays into token routing, and a prose URL never seeds a micronaut dispatch.",
+  "grammar": {
+    "production": "micronaut-uri = scheme '://' authority [ '/' path ] [ '?' query ] [ '#' fragment ]",
+    "scheme": {
+      "pattern": "[a-z][a-z0-9+.-]*",
+      "max_length": 32,
+      "case": "input is lowercased; the canonical form is lowercase",
+      "percent_escapes": "rejected (a scheme is not a percent-decoded component)"
+    },
+    "authority": {
+      "required": true,
+      "terminates_at": [
+        "/",
+        "?",
+        "#",
+        "whitespace"
+      ],
+      "percent_escapes": "validated and decoded before matching"
+    },
+    "path": {
+      "separator": "/",
+      "empty_segments": "dropped",
+      "percent_escapes": "validated and decoded exactly once before matching"
+    },
+    "query": {
+      "routed": false,
+      "percent_escapes": "validated but never matched"
+    },
+    "fragment": {
+      "routed": false,
+      "stripped": true
+    },
+    "max_total_length": 512,
+    "control_characters": "rejected (0x00-0x1f, 0x7f)"
+  },
+  "token_boundary": {
+    "start": "the address ends at the first whitespace; the token before `://` scans back over non-space characters",
+    "trailing_punctuation": [
+      ".",
+      ",",
+      ";",
+      ":",
+      "!",
+      "?",
+      ")",
+      "]",
+      "}",
+      ">",
+      "\"",
+      "'"
+    ],
+    "trailing_punctuation_policy": "stripped from the address, so a sentence-final `math://solve.` is the same address as `math://solve`",
+    "glued_prefix_policy": "a glued prefix is folded into the scheme by the scan and refused as scheme_invalid; there is no silently-routed address hidden inside `x(math://\u2026`",
+    "trailing_prose": "words after the address are allowed: `math://solve algebra` is the address `math://solve` plus prose"
+  },
+  "compatibility": {
+    "authority_as_first_segment": true,
+    "rule": "the authority is folded into the leading path segment, so the historical shape `scheme://<op>` keeps meaning `op` while `scheme://<op>/<rest>` keeps parsing exactly as before"
+  },
+  "scheme_declaration": {
+    "policy": "the address participates in routing only when an active micronaut declares the scheme",
+    "undeclared_result": "scheme_not_declared",
+    "prose_url_policy": "a prose URL (`https://\u2026`) is parsed, named in the diagnostic, and contributes no tokens to routing",
+    "declared_scheme_sources": [
+      "route_contract.schemes (explicit declaration)",
+      "entry id and its compatibility derivations"
+    ]
+  },
+  "reject_reasons": [
+    "scheme_missing",
+    "scheme_invalid",
+    "scheme_too_long",
+    "authority_missing",
+    "malformed_percent_escape",
+    "control_character",
+    "uri_too_long",
+    "scheme_not_declared",
+    "scheme_ambiguous"
+  ],
+  "diagnostics": {
+    "surface": "io::RouteResult",
+    "fields": [
+      "uri_scheme",
+      "uri_authority",
+      "uri_kind",
+      "uri_operation",
+      "uri_reject_reason",
+      "uri_scheme_source",
+      "uri_matched"
+    ],
+    "empty_reject_reason_means": "either the address was accepted, or the request contained no `://` at all",
+    "uri_matched_means": "the address itself selected at least one entry; a valid address that resolves to nobody falls back to prose routing and says so instead of pretending it matched"
+  },
+  "invariants": {
+    "URI1": {
+      "name": "an_address_is_parsed_at_most_once",
+      "check": "the single parser produces the scheme, authority, kind and operation consumed by matching"
+    },
+    "URI2": {
+      "name": "a_malformed_address_is_refused_by_name",
+      "check": "every refusal carries one of reject_reasons"
+    },
+    "URI3": {
+      "name": "an_authority_is_required",
+      "check": "scheme:// and scheme:///\u2026 are refused as authority_missing"
+    },
+    "URI4": {
+      "name": "percent_escapes_decode_exactly_once",
+      "check": "sol%76e and solve are the same operation; an invalid escape is refused, never matched literally"
+    },
+    "URI5": {
+      "name": "the_query_is_not_address",
+      "check": "math://solve?expr=2%2B2 has operation solve"
+    },
+    "URI6": {
+      "name": "a_prose_url_is_inert",
+      "check": "an undeclared scheme yields scheme_not_declared and contributes no routing tokens"
+    },
+    "URI7": {
+      "name": "refusal_is_not_token_routing",
+      "check": "a refused address scopes no candidates; the query still routes on its own tokens only"
+    },
+    "URI8": {
+      "name": "declared_schemes_are_authoritative",
+      "check": "a declaring entry wins over a heavier derived-claim entry"
+    },
+    "URI9": {
+      "name": "derived_alias_collisions_are_refused",
+      "check": "two derived claims with no declaration yield scheme_ambiguous"
+    },
+    "URI10": {
+      "name": "an_operation_is_matched_by_name",
+      "check": "pattern_ops / template_ops membership decides, not catalogue non-emptiness"
+    }
+  },
+  "scheme_ownership": {
+    "policy": "declared_schemes_are_authoritative",
+    "declared_source": "route_contract.schemes (explicit)",
+    "compatibility_source": "entry id derivations (id, id-before-first-dash, id without -u/-agent)",
+    "precedence": "a declaration settles ownership; entries that only derive the scheme do not compete with the declaring entry",
+    "compatibility_only": "routes while exactly one entry derives the alias and nothing declares it; recorded as scheme_derived_compat:<scheme>",
+    "ambiguous": "two or more entries derive the alias with no declaration to settle it: refused as scheme_ambiguous, never resolved by weight",
+    "diagnostics_surface": [
+      "SchemeDiagnostics",
+      "RequestRouter::scheme_diagnostics()"
+    ],
+    "diagnostics_fields": [
+      "declared",
+      "compatibility_only",
+      "ambiguous",
+      "entries_without_declared"
+    ],
+    "declaration_requirement": "every shipped track declares at least one `schemes` entry; no two tracks may declare the same address, and a shared derived alias is only safe when a declaration settles who owns it",
+    "known_ambiguous_umbrella_aliases": {
+      "fold": "FOLD-FIELD-u and FOLD-HOF-u both derive it; no track declares it, so fold:// is refused as scheme_ambiguous rather than routed by weight",
+      "phil": "PHIL-AI-u and PHIL-SELF-u both derive it; no track declares it, so phil:// is refused as scheme_ambiguous rather than routed by weight"
+    },
+    "data_validator": "tools/check_track_schemes.py"
+  },
+  "pattern_operation_matching": {
+    "policy": "an operation is matched by name, never by the existence of a catalogue",
+    "addresses": [
+      "scheme://pattern/<op>",
+      "scheme://template/<op>"
+    ],
+    "declared_operation_sources": [
+      "route_contract.pattern_ops",
+      "route_contract.template_ops"
+    ],
+    "fallback": "the raw aiml_patterns / aiml_templates text may match the operation exactly (case-insensitive)",
+    "undeclared_result": "no entry matches the address; the address resolves to nobody",
+    "removed_behaviour": "an entry with any pattern or template used to accept every operation"
+  }
+}

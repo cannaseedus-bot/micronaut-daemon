@@ -1,0 +1,92 @@
+{
+  "@type": "khanary.memory_scope.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "identity_is_a_fold_property_and_personalisation_is_never_authorisation",
+  "lane": "KHANARY_MEMORY_SCOPE_TEST",
+  "owner": "src/kuhul/memory_scope.cpp",
+  "why": "Without user-bound ingress, memory is an undifferentiated pool and one user's execution delta can contaminate another's state. But binding identity to the fold introduces a specific danger: that personalisation quietly becomes authorisation. So identity, memory ownership, memory visibility and execution authority are four separate typed bindings, every read and every write is checked against the owner and scope, and nothing is durable merely because Xul closed a fold.",
+  "fold": {
+    "law": "F_t = (P_u, S_t, W_p, A_t, M_t): authenticated principal, session, workspace/project scope, host-granted authority, permitted memory lanes",
+    "inheritance": "all six phases inherit this context; a Micronaut may narrow its scope but cannot expand it without a new authorization",
+    "host_assigned": "the security-relevant bindings are assigned by the host at Pop and immutable afterwards"
+  },
+  "four_bindings": {
+    "identity": "P_u — the authenticated principal",
+    "ownership": "owner(m) — which principal (or project, or nobody) the memory node belongs to",
+    "visibility": "scope(m) — who may read it: private, project or shared",
+    "authority": "A_t — what the host granted this session to do",
+    "law": "the four are distinct: being the owner is not read authority, read authority is not write authority, and write authority is not execution authority"
+  },
+  "claims_are_not_authority": {
+    "law": "a workspace path is a locator, not proof of identity or authorization; a status string is a claim, not a decision",
+    "examples": [
+      "`C:\\Users\\canna\\.NNC-K\\` identifies a workspace; the host must resolve the principal and verify access to it independently",
+      "the string `XCFE_USER_SCOPE_ALLOWED` is only a claim unless it came from a trusted authorization decision"
+    ],
+    "rule": "authority enters the fold as a host-issued grant with a trusted flag, never as text inside the payload or the envelope"
+  },
+  "memory_lanes": {
+    "session": {
+      "content": "current conversation state",
+      "persistence": "temporary",
+      "consent": "implicit_operational"
+    },
+    "explicit_user_memory": {
+      "content": "user-authorized remembered information",
+      "persistence": "persistent",
+      "consent": "explicit"
+    },
+    "user_learned_patterns": {
+      "content": "personal syntax, preferences, routing heuristics",
+      "persistence": "policy_controlled",
+      "consent": "explicit"
+    },
+    "project": {
+      "content": "repository knowledge, architecture, task context",
+      "persistence": "workspace_scoped",
+      "consent": "project_policy"
+    },
+    "shared_knowledge": {
+      "content": "general reusable knowledge",
+      "persistence": "shared",
+      "consent": "explicit_grant"
+    },
+    "law": "learning a user's shorthand is not the same as remembering a personal fact, so the lanes are separate and their consent rules differ"
+  },
+  "invariants_memory": {
+    "write": "Write(d, m) requires authorization over (P_u, owner(m), scope(m)) — no cross-user writes",
+    "read": "Read(P_u, m) requires CanRead(P_u, m) — cross-user *reads* are as dangerous as writes, and refusing writes alone is not enough",
+    "shared": "shared memory is opened by explicit grant, never by assuming that anything outside a personal namespace is public",
+    "deny": "an absent grant is a denial, and every denial names its reason"
+  },
+  "personalisation": {
+    "law": "Delta W = f(evidence, mode, phase, user scope): one Micronaut program serves many user-specific behavioural fields, each learned independently",
+    "isolation": "personal weights and memories stay isolated; the executable Micronaut stays reusable",
+    "not_training_data": "learning that a user's fragments contain phase instructions improves interpretation without copying private project content into a global corpus"
+  },
+  "consent": {
+    "law": "personal memory is user-controlled; Xul closing a fold is not consent",
+    "permitted_always": "a minimal operational outcome may be recorded where policy permits",
+    "requires_explicit": [
+      "explicit_user_memory",
+      "user_learned_patterns"
+    ],
+    "requires_grant": [
+      "shared_knowledge"
+    ],
+    "rule": "durable personal facts, sensitive information and cross-session preferences need explicit policy and user control before they may be committed"
+  },
+  "invariants": {
+    "MS1": "identity, ownership, visibility and authority are four separate typed bindings, and none implies another",
+    "MS2": "the security-relevant bindings are host-assigned at Pop and immutable; a phase or Micronaut may narrow them and never expand them",
+    "MS3": "a workspace path or a status string inside the envelope is a claim, not authority: it confers nothing without a host-issued trusted grant",
+    "MS4": "the five memory lanes are distinct, with the persistence and consent rules each declares",
+    "MS5": "a write requires authority over the principal, the node's owner and its scope; an absent grant is a denial",
+    "MS6": "a read requires CanRead for the same principal, owner and scope; cross-user reads are refused as firmly as writes",
+    "MS7": "shared knowledge is opened by explicit grant rather than assumed public",
+    "MS8": "no durable personal commit happens because a fold closed: personal lanes need explicit consent, and only the minimal operational outcome is recordable without it",
+    "MS9": "personalisation is a learning axis, not an authority axis: one program serves many user-specific behavioural fields with isolated weights",
+    "MS10": "every denial names a typed reason, so an audit can distinguish a missing grant from a scope mismatch or a forged claim"
+  }
+}

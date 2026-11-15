@@ -1,0 +1,57 @@
+{
+  "@kind": "asx.mini-app.contract.v1",
+  "@version": "1.0.0",
+  "required": [
+    "@kind",
+    "@id",
+    "@key",
+    "@mount",
+    "@state",
+    "@components",
+    "@programs",
+    "@events",
+    "@imports",
+    "@permissions",
+    "@lifecycle"
+  ],
+  "key_scope": "⟁APP:<ID>/⟁LOCAL:KEY",
+  "key_grammar": "data/grammar/asx-mini-app.key-grammar.jsonl",
+  "app_local_key_grammar": "@key_grammar",
+  "program_contracts": [
+    "semantic.json-program.v1",
+    "asx.state-program.v1 lowered to MicroXcfe"
+  ],
+  "authority": {
+    "ui": "projection_only",
+    "program": "observation_only",
+    "semantic_commit": false,
+    "commit_route": "JSON-RPC :8787 or MCP :8764 through the shared authority boundary"
+  },
+  "invariants": [
+    "component children resolve inside the app scope",
+    "app-local @key_grammar rows are scoped to and owned by the app manifest",
+    "editing app settings updates only that app manifest, never the global base manifest",
+    "events resolve to declared programs",
+    "programs lower into the shared JSON program dispatcher",
+    "imports are references and are never copied into component identity",
+    "state supplied by a caller is request-scoped and is not persisted",
+    "a mini-app cannot self-declare semantic commit authority",
+    "optional extensions cannot grant permissions beyond the app manifest or host policy"
+  ],
+  "optional_fields": [
+    "@title",
+    "@description",
+    "@settings",
+    "@publication",
+    "@extensions",
+    "@key_grammar"
+  ],
+  "extension_contract": {
+    "kind": "optional_app_feature_modules",
+    "manifest_field": "@extensions",
+    "subscription_model": "monthly_subscription",
+    "billing_provider_required": true,
+    "default_enabled": [],
+    "billing_is_active_by_default": false
+  }
+}

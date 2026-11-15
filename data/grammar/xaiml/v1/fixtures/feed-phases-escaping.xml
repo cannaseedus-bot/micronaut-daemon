@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml-feed>
+  <track id="CODEGEN-PY-µ" grammar_ref="gram:py.gpt4@2025-11"
+         vector_field_ref="vf:py.codegen@3"/>
+  <trigram track="CODEGEN-PY-µ" pattern="def foo bar" phase="Yax"
+           fold_ref="fold:py.defn@7" binding_ref="bind:py.params"
+           template_ref="tmpl:py.defn">
+    <bind name="x" source="capture" index="1"/>
+    <bind name="y" source="lm_chain"/>
+  </trigram>
+  <trigram track="CODEGEN-PY-µ" pattern="def foo bar" phase="Pop"
+           fold_ref="fold:py.defn@7"/>
+  <trigram track="CODEGEN-PY-µ" phase="Sek" fold_ref="fold:py.special@1">
+    <atom>a#b</atom><atom>x@y</atom><atom>_</atom>
+  </trigram>
+  <trigram track="CODEGEN-PY-µ" phase="Xul" fold_ref="fold:py.wild@1">
+    <atom>*</atom><atom>middle</atom><atom>µ</atom>
+  </trigram>
+</aiml-feed>

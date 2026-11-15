@@ -1,0 +1,173 @@
+{
+  "MX2LM:": [
+    "@mx2lm-runtime",
+    "Mx2LM:",
+    "mx2lm",
+    "intent:mx2lm_dispatch",
+    "⟁Wo",
+    "⟁Sek",
+    "⟁Ch'en"
+  ],
+  "@mx2lm-runtime": [
+    "@node:Mx2LM",
+    "MX2LM:",
+    "mx2lm:ngram-build",
+    "mx2lm:pattern-learn",
+    "mx2lm:vector-project",
+    "mx2lm:ngram-query",
+    "mx2lm:wcr",
+    "mx2lm:relation-typing"
+  ],
+  "mx2lm:contract": [
+    "nodes=meaning",
+    "relations=association",
+    "association_weight:pattern_strength_only",
+    "relation_confidence:earned_signal",
+    "execution_authority:canonical_only"
+  ],
+  "mx2lm:ngram-build": [
+    "bigrams",
+    "trigrams",
+    "phrasegrams",
+    "phase:Sek"
+  ],
+  "mx2lm:pattern-learn": [
+    "mx2lm:pattern_container:v1",
+    "source_track",
+    "source_phase",
+    "gram_container",
+    "outcome",
+    "phase:Xul"
+  ],
+  "mx2lm:vector-project": [
+    "@node:VECTOR-µ",
+    "vector:projection_container:v1",
+    "mx2lm:gram_container:v1",
+    "mx2lm:pattern_container:v1",
+    "RelationISA",
+    "projection-only",
+    "semantic_authority:false",
+    "phase:Wo",
+    "phase:Xul"
+  ],
+  "vector:projection_container:v1": [
+    "VECTOR-µ",
+    "Project(F)->v",
+    "Similarity(vq,vk)",
+    "RelationConditionedScore(vA,vB,r)",
+    "PrincipalDirection(vector-provider)",
+    "generation",
+    "learner_version",
+    "derived_geometry_projection_only"
+  ],
+  "mx2lm:ngram-query": [
+    "selector",
+    "top-k",
+    "manifest-expansion",
+    "phase:Pop"
+  ],
+  "mx2lm:relation-typing": [
+    "infer_relation_from_lexical",
+    "relation_phase_hint",
+    "phase:Yax",
+    "phase:Ch'en"
+  ],
+  "mx2lm:wcr": [
+    "Wc",
+    "Cc",
+    "Rc(Q)",
+    "candidate-selection",
+    "phase:Yax"
+  ],
+  "mx2lm:association-channels": [
+    "assoc:char",
+    "assoc:morph",
+    "assoc:word",
+    "assoc:syntax",
+    "assoc:semantic"
+  ],
+  "mx2lm:lexical-equivalence": [
+    "word_similarity",
+    "synonym",
+    "dictionary-neighborhood",
+    "phase:Wo",
+    "phase:Yax",
+    "phase:Ch'en"
+  ],
+  "mx2lm:synonymize": [
+    "lexical_variance",
+    "semantic_invariance_gate",
+    "rewrite_words",
+    "phase:Sek",
+    "phase:Xul"
+  ],
+  "mx2lm:fold-parser-bridge": [
+    "fold_graph_parse",
+    "atoms",
+    "relations",
+    "books",
+    "candidates",
+    "provenance"
+  ],
+  "mx2lm:confidence-flow": [
+    "BAD_ANSWER",
+    "GOOD_ANSWER",
+    "Ch'en_pending",
+    "Xul_commit"
+  ],
+  "mx2lm:memory-event-reuse": [
+    "memory:event:*",
+    "key.grammar.memory_event.v1",
+    "source_kind:prompt|model_response|plan",
+    "pattern_seed:aiml_pattern_candidate",
+    "pattern_seed:key_grammar_candidate",
+    "phase:Ch'en",
+    "phase:Xul"
+  ],
+  "mx2lm:aiml-pattern-seed": [
+    "<pattern>{surface}</pattern>",
+    "<template>{response_or_plan}</template>",
+    "source:memory_event",
+    "requires:SUPPORTED_or_user_verified",
+    "MISS_not_negative_pattern",
+    "UNKNOWN_branch_not_fact"
+  ],
+  "mx2lm:semantic-branch-reuse": [
+    "key.grammar.semantic_branch.v1",
+    "memory:event:*",
+    "pattern_seed:conditional_template_candidate",
+    "AIML:condition_pattern_candidate",
+    "requires:SUPPORTED_or_user_verified",
+    "UNKNOWN_branch_not_fact",
+    "MISS_not_negative_pattern",
+    "else_not_not",
+    "source:aiml.semantic_branch:surface",
+    "normalize:any_order_to_canonical_branch",
+    "then_pattern_candidate_supported",
+    "else_if_nested_branch_supported",
+    "literal_markup_requires_escape_or_CDATA",
+    "SCFML:",
+    "schema:scfml.branch.v1",
+    "pattern_learning:scfml.pattern_learning.v1"
+  ],
+  "mx2lm:aiml-branch-surface": [
+    "<if><pattern>*</pattern></if>",
+    "<then><template>*</template></then>",
+    "<else><template>*</template></else>",
+    "<unknown>*</unknown>",
+    "<then><pattern>*</pattern></then>",
+    "<else><if>...</if><then>...</then></else>",
+    "role:semantic_branch_admission",
+    "not:direct_boolean_execution"
+  ],
+  "mx2lm:scfml-pattern-learning": [
+    "SCFML:",
+    "scfml:pattern-learning",
+    "source:memory:event:*",
+    "source:aiml.semantic_branch:surface",
+    "candidate:aiml_pattern|semantic_branch|key_grammar",
+    "requires:SUPPORTED_or_user_verified",
+    "UNKNOWN_branch_not_fact",
+    "MISS_not_negative_pattern"
+  ]
+}

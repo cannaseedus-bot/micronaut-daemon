@@ -1,0 +1,60 @@
+{
+  "@kind": "asx.asxg.lane-registry.v1",
+  "@version": "1.0.0",
+  "envelope": "ASXG.v1",
+  "descriptor_contract": "asxg.lanes.v1",
+  "schema": "data/host/asxg/extensions/asxg-lane-descriptors.v1.schema.json",
+  "conformance_fixtures": "data/host/asxg/lane-descriptor-fixtures.json",
+  "interpretation": "explicit_admission_only",
+  "lanes": {
+    "NGramLane": {
+      "role": "statistical_evidence_and_retrieval_addresses",
+      "executable": false,
+      "orders": {
+        "probability": [
+          1,
+          2,
+          3
+        ],
+        "retrieval_min": 4
+      }
+    },
+    "PhaseLane": {
+      "role": "phase_bound_registered_capability_reference",
+      "executable": false,
+      "phase_list": [
+        "Pop",
+        "Wo",
+        "Yax",
+        "Sek",
+        "Ch'en",
+        "Xul"
+      ]
+    },
+    "ObjectiveLane": {
+      "role": "passive_objective_and_policy_references",
+      "executable": false,
+      "extension_schema": "data/host/asxg/extensions/objective-lane-v1.schema.json",
+      "evaluation": "downstream_registry_only",
+      "requires_admission": true
+    },
+    "EnvironmentHypothesisLane": {
+      "role": "registered_predictive_program_and_measured_error_references",
+      "executable": false,
+      "extension_schema": "data/host/asxg/extensions/environment-hypothesis-lane-v1.schema.json",
+      "candidate_programs": "existing_micronaut_program_registry_only",
+      "measurement_phase": "Ch'en",
+      "requires_admission": true
+    },
+    "HistoryLane": {
+      "role": "memory_owned_interaction_history_and_evidence_references",
+      "executable": false,
+      "extension_schema": "data/host/asxg/extensions/history-lane-v1.schema.json",
+      "owner": "registered_memory_micronaut",
+      "scope_bound": true,
+      "stores_hypothesis_references": true,
+      "hypothesis_interpretation": "downstream_reasoning_or_inference_programs",
+      "requires_read_admission": true
+    }
+  }
+}

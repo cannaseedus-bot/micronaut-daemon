@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "cheese-training.schema.json",
+  "title": "Cheese Training Record Contract",
+  "description": "Caller-selected preference pair produced through the SHEOGORATH-µ path. Cheese alone does not determine preference or grounding. Authority: SHEOGORATH-µ:candidate — this is a preference candidate, not ground truth. @validated must be true before use as a training example.",
+  "type": "object",
+  "required": ["@kind", "@prompt", "@candidates", "@preference"],
+  "additionalProperties": false,
+  "properties": {
+
+    "@kind":      { "type": "string", "const": "semantic.cheese.training.v1" },
+    "@prompt":    { "type": "string", "description": "The question or context that generated the candidates." },
+
+    "@candidates": {
+      "type": "array",
+      "minItems": 2,
+      "description": "At minimum the chosen and rejected candidate.",
+      "items": {
+        "type": "object",
+        "required": ["id", "answer", "cheese"],
+        "additionalProperties": false,
+        "properties": {
+          "id":          { "type": "string" },
+          "answer":      { "type": "string", "description": "The candidate's claim or response." },
+          "cheese":      { "type": "number", "minimum": 0, "maximum": 10,
+                           "description": "χ assigned by cheese_evaluate()." },
+          "objections":  { "type": "array",  "items": { "type": "string" },
+                           "description": "Pattern labels from @objections that raised this candidate's score." },
+          "support":     { "type": "array",  "items": { "type": "string" },
+                           "description": "Evidence/support refs reported separately from this candidate's Cheese score." }
+        }
+      }
+    },
+
+    "@preference": {
+      "type": "object",
+      "required": ["chosen", "rejected"],
+      "additionalProperties": false,
+      "description": "Preference candidate supplied under an explicit selection policy. Cheese alone does not determine preference or grounding.",
+      "properties": {
+        "chosen":   { "type": "string", "description": "ID selected by the caller's explicit preference policy." },
+        "rejected": { "type": "string", "description": "ID not selected by that policy." }
+      }
+    },
+
+    "@authority":  {
+      "type": "string",
+      "const": "SHEOGORATH-µ:candidate",
+      "description": "Preference candidate — not ground truth. Requires independent validation."
+    },
+
+    "@validated": {
+      "type": "boolean",
+      "default": false,
+      "description": "Must be true before this record is used as a training example. Set by a validation pass, not by SHEOGORATH-µ."
+    },
+
+    "@training_mechanisms": {
+      "type": "array",
+      "description": "Which training paths this record is eligible for once validated.",
+      "items": {
+        "type": "string",
+        "enum": ["preference_learning", "contrastive_learning", "micronaut_evolution"]
+      }
+    }
+  }
+}

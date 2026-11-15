@@ -1,0 +1,57 @@
+{
+  "@kind": "khanary.ngram_key_grammar.conformance.v0.1",
+  "canonical": {
+    "contract_ref": "data/grammar/ngram-key-grammar.contracts.json",
+    "expect": "PASS"
+  },
+  "negative_cases": [
+    {
+      "name": "recognizer_grants_semantic_authority",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/recognizer/semantic_authority",
+          "value": true
+        }
+      ],
+      "expect": "FAIL",
+      "error": "RECOGNIZER_SEMANTIC_AUTHORITY"
+    },
+    {
+      "name": "semantic_collapse_in_recognizer",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/recognizer/collapse_authority",
+          "value": true
+        }
+      ],
+      "expect": "FAIL",
+      "error": "RECOGNIZER_COLLAPSE_AUTHORITY"
+    },
+    {
+      "name": "phase_equals_hof",
+      "patch": [
+        {
+          "op": "add",
+          "path": "/phase_hof_examples/-",
+          "value": "Sek=Filter"
+        }
+      ],
+      "expect": "FAIL",
+      "error": "PHASE_HOF_CONFLATION"
+    },
+    {
+      "name": "fold_equals_catamorphism",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/laws/kuhul_fold_container",
+          "value": "K'UHUL fold is identical to catamorphism."
+        }
+      ],
+      "expect": "FAIL",
+      "error": "FOLD_CATA_CONFLATION"
+    }
+  ]
+}

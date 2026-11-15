@@ -1,0 +1,120 @@
+{
+  "@program": "gpt.chat",
+  "@kind": "kuhul.chat.gpt.v1",
+  "@fold": "Wo",
+  "@node": "gpt-chat-node",
+  "@version": "1.0.0",
+  "description": "Standard ChatML/OpenAI-protocol chat program. Covers Dolphin Phi-2 (:9003), Phi-3 Micronaut (:25506), and Gemma 3 (:9003 rerouted). Fold Wo: route attention between active model and conversation context.",
+
+  "template": "chatml",
+  "protocol": "openai-v1",
+
+  "models": {
+    "primary": {
+      "id": "dolphin_phi2",
+      "name": "Dolphin Phi-2 (ChatML)",
+      "weights": "models/dolphin-phi2/dolphin-2_6-phi-2.Q8_0.gguf",
+      "endpoint": "http://127.0.0.1:9003/v1/chat/completions",
+      "template": "chatml",
+      "ctx": 4096,
+      "server_args": ["--chat-template", "chatml", "--ctx-size", "4096", "--parallel", "2"],
+      "status": "confirmed-working"
+    },
+    "secondary": {
+      "id": "phi3_micronaut",
+      "name": "Phi-3 Micronaut (ChatML)",
+      "endpoint": "http://127.0.0.1:25506/v1/chat/completions",
+      "template": "chatml",
+      "status": "hive-mm-hosted"
+    },
+    "fallback": {
+      "id": "gemma3",
+      "name": "Gemma 3 (rerouted to Dolphin)",
+      "note": "gemma-3-1b-it-q8.gguf is the multimodal variant; outputs [multimodal] tokens for text queries. Rerouted to Dolphin :9003.",
+      "endpoint": "http://127.0.0.1:9003/v1/chat/completions",
+      "template": "chatml",
+      "status": "rerouted-multimodal-broken"
+    }
+  },
+
+  "message_format": {
+    "type": "openai-messages-array",
+    "roles": ["system", "user", "assistant"],
+    "system_slot": "Get-AtomicDomCapabilityContext + brain_context",
+    "history": "append_prior_turns_before_user",
+    "max_tokens": { "fast": 128, "balanced": 256, "deep": 512 },
+    "temperature": 0.7,
+    "stop": []
+  },
+
+  "response_contract": {
+    "path": "choices[0].message.content",
+    "empty_guard": true,
+    "empty_action": "emit system message with finish_reason",
+    "tool_output": "plain text; tool calls handled by semantic router upstream"
+  },
+
+  "folds": {
+    "Pop": "load conversation history and AtomicDOM capability context",
+    "Wo":  "select active ChatML model; build messages array; dispatch HTTP POST",
+    "Yax": "validate response non-empty; check finish_reason",
+    "Sek": "pass content to Add-AIMessage; save inference turn",
+    "Chen": "check for semantic route escalation or continuation signal",
+    "Xul": "emit response to UI; update status indicator"
+  },
+
+  "@state": {
+    "model_id": null,
+    "endpoint": null,
+    "messages": null,
+    "response": null,
+    "content": null,
+    "finish_reason": null,
+    "valid": false
+  },
+
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "gpt-chat-node" },
+    { "@op": "CALL", "@fn": "Get-AtomicDomCapabilityContext", "@args": ["$route"], "@out": "sys_prompt" },
+    { "@op": "CALL", "@fn": "build_messages", "@args": ["$sys_prompt", "$history", "$message"], "@out": "messages" },
+    { "@op": "SET", "@key": "endpoint", "@args": ["$active_model.Endpoint"] },
+    { "@op": "FOLD_EXIT", "@fold": "Wo", "@node": "gpt-chat-node", "@args": ["$messages", "$endpoint"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Wo", "@node": "gpt-chat-dispatch" },
+    { "@op": "HTTP_POST", "@uri": "$endpoint",
+      "@body": { "model": "$active_model.Id", "messages": "$messages", "max_tokens": "$max_tokens", "temperature": 0.7 },
+      "@out": "response" },
+    { "@op": "FOLD_EXIT", "@fold": "Yax", "@node": "gpt-chat-dispatch", "@args": ["$response"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Yax", "@node": "gpt-chat-validate" },
+    { "@op": "CALL", "@fn": "extract_content", "@args": ["$response.choices[0].message.content"], "@out": "content" },
+    { "@op": "CALL", "@fn": "is_non_empty", "@args": ["$content"], "@out": "valid" },
+    { "@op": "IF",
+      "@cond": "$valid",
+      "@then": { "@op": "FOLD_EXIT", "@fold": "Sek", "@node": "gpt-chat-validate", "@args": ["$content"] },
+      "@else": { "@op": "LOG", "@args": ["[gpt.chat] empty response — finish_reason=$response.choices[0].finish_reason"] }
+    },
+
+    { "@op": "FOLD_ENTER", "@fold": "Sek", "@node": "gpt-chat-emit" },
+    { "@op": "CALL", "@fn": "Add-AIMessage", "@args": ["$content"] },
+    { "@op": "CALL", "@fn": "Save-InferenceTurn", "@args": ["chatml", "$endpoint", "$messages", "$content", "$response"] },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "gpt-chat-emit", "@args": ["$content"] }
+  ],
+
+  "providers": {
+    "server": "dist/khanary-server/llama-server.exe",
+    "gateway": "dist/khanary-server/kuhul-server.cjs",
+    "ports": {
+      "dolphin_phi2": 9003,
+      "phi3_micronaut": 25506,
+      "kuhul_gateway": 8764
+    }
+  },
+
+  "registry": {
+    "atomic_manifest": "models/dolphin-phi2/atomic.manifest.json",
+    "face_projection": "programs/micronaut-face-projection.json",
+    "semantic_router": "programs/programs_dispatcher.json",
+    "threads": "programs/threads.manifest.json"
+  }
+}

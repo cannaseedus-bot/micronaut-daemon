@@ -1,0 +1,781 @@
+{
+  "@type": "khanary.xcfe_policy.conformance.v1",
+  "cases": [
+    {
+      "id": "valid_default_policy_authorizes",
+      "expect": "PASS",
+      "policy": {
+        "@ref": "xcfe://autonomy/default@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "observations",
+            "support",
+            "exceptions",
+            "validated",
+            "failures"
+          ]
+        },
+        "@weights": {
+          "@alpha": 0.5,
+          "@beta": 0.5,
+          "@gamma": 0.0,
+          "@delta": 0.0,
+          "@epsilon": 0.000001
+        },
+        "@thresholds": {
+          "@autonomy": 0.75,
+          "@fallback": 0.45,
+          "@failure_limit": 2,
+          "@hysteresis": 0.02
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        }
+      },
+      "eval": {
+        "state": "validated",
+        "event": "authorize",
+        "evidence": {
+          "observations": 10,
+          "support": 8,
+          "exceptions": 2,
+          "validated": 5,
+          "failures": 1
+        },
+        "expect": {
+          "state": "autonomous",
+          "route": "local",
+          "confidence": 0.8166665561111307
+        }
+      }
+    },
+    {
+      "id": "valid_explicit_derive_without_weights",
+      "expect": "PASS",
+      "policy": {
+        "@ref": "xcfe://autonomy/support-rate@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "observations",
+            "support"
+          ],
+          "@derive": {
+            "@confidence": "clamp(support / observations, 0, 1)"
+          }
+        },
+        "@thresholds": {
+          "@autonomy": 0.9,
+          "@fallback": 0.5,
+          "@failure_limit": 0,
+          "@hysteresis": 0.1
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        }
+      }
+    },
+    {
+      "id": "valid_explicit_derive_with_functions",
+      "expect": "PASS",
+      "policy": {
+        "@ref": "xcfe://autonomy/function-mix@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "observations",
+            "support",
+            "exceptions"
+          ],
+          "@derive": {
+            "@confidence": "clamp(max(support / observations, 0) - min(exceptions / observations, 1), 0, 1)"
+          }
+        },
+        "@thresholds": {
+          "@autonomy": 0.8,
+          "@fallback": 0.3,
+          "@failure_limit": 1,
+          "@hysteresis": 0.1
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        }
+      }
+    },
+    {
+      "id": "valid_guard_confidence",
+      "expect": "PASS",
+      "policy": {
+        "@ref": "xcfe://autonomy/guarded@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "observations",
+            "support",
+            "exceptions",
+            "validated",
+            "failures"
+          ]
+        },
+        "@weights": {
+          "@alpha": 0.5,
+          "@beta": 0.5,
+          "@gamma": 0.0,
+          "@delta": 0.0,
+          "@epsilon": 0.000001
+        },
+        "@thresholds": {
+          "@autonomy": 0.75,
+          "@fallback": 0.45,
+          "@failure_limit": 2,
+          "@hysteresis": 0.02
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        },
+        "@guard": [
+          {
+            "@require": "confidence >= 0.25"
+          },
+          {
+            "@reject": "contract_failed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "valid_autonomous_low_confidence_fallback",
+      "expect": "PASS",
+      "policy": {
+        "@ref": "xcfe://autonomy/default@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "observations",
+            "support",
+            "exceptions",
+            "validated",
+            "failures"
+          ]
+        },
+        "@weights": {
+          "@alpha": 0.5,
+          "@beta": 0.5,
+          "@gamma": 0.0,
+          "@delta": 0.0,
+          "@epsilon": 0.000001
+        },
+        "@thresholds": {
+          "@autonomy": 0.75,
+          "@fallback": 0.45,
+          "@failure_limit": 2,
+          "@hysteresis": 0.02
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        }
+      },
+      "eval": {
+        "state": "autonomous",
+        "event": "uncertainty",
+        "evidence": {
+          "observations": 10,
+          "support": 1,
+          "exceptions": 9,
+          "validated": 1,
+          "failures": 1
+        },
+        "expect": {
+          "state": "bound",
+          "route": "fallback"
+        }
+      }
+    },
+    {
+      "id": "valid_contract_failed_guard",
+      "expect": "PASS",
+      "policy": {
+        "@ref": "xcfe://autonomy/default@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "observations",
+            "support",
+            "exceptions",
+            "validated",
+            "failures"
+          ]
+        },
+        "@weights": {
+          "@alpha": 0.5,
+          "@beta": 0.5,
+          "@gamma": 0.0,
+          "@delta": 0.0,
+          "@epsilon": 0.000001
+        },
+        "@thresholds": {
+          "@autonomy": 0.75,
+          "@fallback": 0.45,
+          "@failure_limit": 2,
+          "@hysteresis": 0.02
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        },
+        "@guard": [
+          {
+            "@reject": "contract_failed"
+          }
+        ]
+      },
+      "eval": {
+        "state": "validated",
+        "event": "contract_failed",
+        "evidence": {
+          "observations": 10,
+          "support": 10,
+          "exceptions": 0,
+          "validated": 10,
+          "failures": 0
+        },
+        "expect": {
+          "state": "learned",
+          "route": "fallback"
+        }
+      }
+    },
+    {
+      "id": "valid_validated_route",
+      "expect": "PASS",
+      "policy": {
+        "@ref": "xcfe://autonomy/default@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "observations",
+            "support",
+            "exceptions",
+            "validated",
+            "failures"
+          ]
+        },
+        "@weights": {
+          "@alpha": 0.5,
+          "@beta": 0.5,
+          "@gamma": 0.0,
+          "@delta": 0.0,
+          "@epsilon": 0.000001
+        },
+        "@thresholds": {
+          "@autonomy": 0.75,
+          "@fallback": 0.45,
+          "@failure_limit": 2,
+          "@hysteresis": 0.02
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        }
+      },
+      "eval": {
+        "state": "validated",
+        "event": "authorize",
+        "evidence": {
+          "observations": 10,
+          "support": 5,
+          "exceptions": 5,
+          "validated": 2,
+          "failures": 2
+        },
+        "expect": {
+          "state": "validated",
+          "route": "local-test"
+        }
+      }
+    },
+    {
+      "id": "missing_ref",
+      "expect": "FAIL",
+      "error": "MISSING_POLICY_REF",
+      "policy": {
+        "@evidence": {
+          "@inputs": [
+            "observations"
+          ],
+          "@derive": {
+            "@confidence": "clamp(observations, 0, 1)"
+          }
+        },
+        "@thresholds": {
+          "@autonomy": 0.9,
+          "@fallback": 0.5,
+          "@failure_limit": 0,
+          "@hysteresis": 0.1
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        }
+      }
+    },
+    {
+      "id": "invalid_ref",
+      "expect": "FAIL",
+      "error": "INVALID_POLICY_REF",
+      "policy": {
+        "@ref": "urn:not-xcfe",
+        "@evidence": {
+          "@inputs": [
+            "observations"
+          ],
+          "@derive": {
+            "@confidence": "clamp(observations, 0, 1)"
+          }
+        },
+        "@thresholds": {
+          "@autonomy": 0.9,
+          "@fallback": 0.5,
+          "@failure_limit": 0,
+          "@hysteresis": 0.1
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        }
+      }
+    },
+    {
+      "id": "missing_evidence",
+      "expect": "FAIL",
+      "error": "MISSING_EVIDENCE_SPEC",
+      "policy": {
+        "@ref": "xcfe://autonomy/default@1.0.0",
+        "@thresholds": {
+          "@autonomy": 0.9,
+          "@fallback": 0.5,
+          "@failure_limit": 0,
+          "@hysteresis": 0.1
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        }
+      }
+    },
+    {
+      "id": "invalid_input",
+      "expect": "FAIL",
+      "error": "INVALID_EVIDENCE_INPUT",
+      "policy": {
+        "@ref": "xcfe://autonomy/default@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "unknown"
+          ],
+          "@derive": {
+            "@confidence": "clamp(unknown, 0, 1)"
+          }
+        },
+        "@thresholds": {
+          "@autonomy": 0.9,
+          "@fallback": 0.5,
+          "@failure_limit": 0,
+          "@hysteresis": 0.1
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        }
+      }
+    },
+    {
+      "id": "derive_references_undeclared_input",
+      "expect": "FAIL",
+      "error": "DERIVE_REFERENCES_UNDECLARED_INPUT",
+      "policy": {
+        "@ref": "xcfe://autonomy/default@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "support"
+          ],
+          "@derive": {
+            "@confidence": "clamp(support / observations, 0, 1)"
+          }
+        },
+        "@thresholds": {
+          "@autonomy": 0.9,
+          "@fallback": 0.5,
+          "@failure_limit": 0,
+          "@hysteresis": 0.1
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        }
+      }
+    },
+    {
+      "id": "derive_syntax_invalid",
+      "expect": "FAIL",
+      "error": "INVALID_DERIVE_EXPR",
+      "policy": {
+        "@ref": "xcfe://autonomy/default@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "support"
+          ],
+          "@derive": {
+            "@confidence": "clamp(support /, 0, 1)"
+          }
+        },
+        "@thresholds": {
+          "@autonomy": 0.9,
+          "@fallback": 0.5,
+          "@failure_limit": 0,
+          "@hysteresis": 0.1
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        }
+      }
+    },
+    {
+      "id": "derive_references_confidence",
+      "expect": "FAIL",
+      "error": "DERIVE_REFERENCES_CONFIDENCE",
+      "policy": {
+        "@ref": "xcfe://autonomy/default@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "support"
+          ],
+          "@derive": {
+            "@confidence": "clamp(confidence + support, 0, 1)"
+          }
+        },
+        "@thresholds": {
+          "@autonomy": 0.9,
+          "@fallback": 0.5,
+          "@failure_limit": 0,
+          "@hysteresis": 0.1
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        }
+      }
+    },
+    {
+      "id": "weights_required_for_default",
+      "expect": "FAIL",
+      "error": "WEIGHTS_REQUIRED",
+      "policy": {
+        "@ref": "xcfe://autonomy/default@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "observations",
+            "support",
+            "exceptions",
+            "validated",
+            "failures"
+          ]
+        },
+        "@thresholds": {
+          "@autonomy": 0.9,
+          "@fallback": 0.5,
+          "@failure_limit": 0,
+          "@hysteresis": 0.1
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        }
+      }
+    },
+    {
+      "id": "weights_not_normalized",
+      "expect": "FAIL",
+      "error": "WEIGHTS_NOT_NORMALIZED",
+      "policy": {
+        "@ref": "xcfe://autonomy/default@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "observations",
+            "support",
+            "exceptions",
+            "validated",
+            "failures"
+          ]
+        },
+        "@weights": {
+          "@alpha": 0.8,
+          "@beta": 0.5,
+          "@gamma": 0.0,
+          "@delta": 0.0,
+          "@epsilon": 0.000001
+        },
+        "@thresholds": {
+          "@autonomy": 0.9,
+          "@fallback": 0.5,
+          "@failure_limit": 0,
+          "@hysteresis": 0.1
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        }
+      }
+    },
+    {
+      "id": "epsilon_nonpositive",
+      "expect": "FAIL",
+      "error": "EPSILON_NONPOSITIVE",
+      "policy": {
+        "@ref": "xcfe://autonomy/default@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "observations",
+            "support",
+            "exceptions",
+            "validated",
+            "failures"
+          ]
+        },
+        "@weights": {
+          "@alpha": 0.5,
+          "@beta": 0.5,
+          "@gamma": 0.0,
+          "@delta": 0.0,
+          "@epsilon": 0.0
+        },
+        "@thresholds": {
+          "@autonomy": 0.9,
+          "@fallback": 0.5,
+          "@failure_limit": 0,
+          "@hysteresis": 0.1
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        }
+      }
+    },
+    {
+      "id": "threshold_order",
+      "expect": "FAIL",
+      "error": "THRESHOLD_ORDER",
+      "policy": {
+        "@ref": "xcfe://autonomy/default@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "observations"
+          ],
+          "@derive": {
+            "@confidence": "clamp(observations, 0, 1)"
+          }
+        },
+        "@thresholds": {
+          "@autonomy": 0.4,
+          "@fallback": 0.5,
+          "@failure_limit": 0,
+          "@hysteresis": 0.1
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        }
+      }
+    },
+    {
+      "id": "hysteresis_band",
+      "expect": "FAIL",
+      "error": "HYSTERESIS_BAND",
+      "policy": {
+        "@ref": "xcfe://autonomy/default@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "observations"
+          ],
+          "@derive": {
+            "@confidence": "clamp(observations, 0, 1)"
+          }
+        },
+        "@thresholds": {
+          "@autonomy": 0.9,
+          "@fallback": 0.5,
+          "@failure_limit": 0,
+          "@hysteresis": 0.5
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        }
+      }
+    },
+    {
+      "id": "routes_not_total",
+      "expect": "FAIL",
+      "error": "ROUTES_NOT_TOTAL",
+      "policy": {
+        "@ref": "xcfe://autonomy/default@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "observations"
+          ],
+          "@derive": {
+            "@confidence": "clamp(observations, 0, 1)"
+          }
+        },
+        "@thresholds": {
+          "@autonomy": 0.9,
+          "@fallback": 0.5,
+          "@failure_limit": 0,
+          "@hysteresis": 0.1
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@default": "fallback"
+        }
+      }
+    },
+    {
+      "id": "invalid_route_target",
+      "expect": "FAIL",
+      "error": "INVALID_ROUTE_TARGET",
+      "policy": {
+        "@ref": "xcfe://autonomy/default@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "observations"
+          ],
+          "@derive": {
+            "@confidence": "clamp(observations, 0, 1)"
+          }
+        },
+        "@thresholds": {
+          "@autonomy": 0.9,
+          "@fallback": 0.5,
+          "@failure_limit": 0,
+          "@hysteresis": 0.1
+        },
+        "@routes": {
+          "@autonomous": "remote",
+          "@validated": "local-test",
+          "@default": "fallback"
+        }
+      }
+    },
+    {
+      "id": "guard_undeclared_var",
+      "expect": "FAIL",
+      "error": "GUARD_REFERENCES_UNDECLARED_VAR",
+      "policy": {
+        "@ref": "xcfe://autonomy/default@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "observations"
+          ],
+          "@derive": {
+            "@confidence": "clamp(observations, 0, 1)"
+          }
+        },
+        "@thresholds": {
+          "@autonomy": 0.9,
+          "@fallback": 0.5,
+          "@failure_limit": 0,
+          "@hysteresis": 0.1
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        },
+        "@guard": [
+          {
+            "@require": "support >= 1"
+          }
+        ]
+      }
+    },
+    {
+      "id": "guard_condition_invalid",
+      "expect": "FAIL",
+      "error": "INVALID_GUARD_CONDITION",
+      "policy": {
+        "@ref": "xcfe://autonomy/default@1.0.0",
+        "@evidence": {
+          "@inputs": [
+            "observations"
+          ],
+          "@derive": {
+            "@confidence": "clamp(observations, 0, 1)"
+          }
+        },
+        "@thresholds": {
+          "@autonomy": 0.9,
+          "@fallback": 0.5,
+          "@failure_limit": 0,
+          "@hysteresis": 0.1
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        },
+        "@guard": [
+          {
+            "@require": "confidence === 1"
+          }
+        ]
+      }
+    },
+    {
+      "id": "invalid_member_key",
+      "expect": "FAIL",
+      "error": "INVALID_MEMBER_KEY",
+      "policy": {
+        "@ref": "xcfe://autonomy/default@1.0.0",
+        "ref": "bad",
+        "@evidence": {
+          "@inputs": [
+            "observations"
+          ],
+          "@derive": {
+            "@confidence": "clamp(observations, 0, 1)"
+          }
+        },
+        "@thresholds": {
+          "@autonomy": 0.9,
+          "@fallback": 0.5,
+          "@failure_limit": 0,
+          "@hysteresis": 0.1
+        },
+        "@routes": {
+          "@autonomous": "local",
+          "@validated": "local-test",
+          "@default": "fallback"
+        }
+      }
+    }
+  ]
+}

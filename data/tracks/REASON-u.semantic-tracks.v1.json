@@ -1,0 +1,261 @@
+{
+  "@no-eval": true,
+  "id": "REASON-µ",
+
+  "schemes": ["reason"],
+  "description": "Relational reasoner — semantic graph query and inference; horizontal-fold with MEM-µ (Δθ=0); Sek phase",
+  "phase": "Sek",
+  "category": "cognitive",
+  "confidence": 1.0,
+  "governs": [
+    "reason",
+    "infer",
+    "deduce",
+    "analyze",
+    "query",
+    "semantic",
+    "graph",
+    "conclude",
+    "question answering",
+    "truth-conditional",
+    "open-domain",
+    "closed-domain"
+  ],
+  "capabilities": [
+    "semantic-reasoning",
+    "graph-query",
+    "operator-detection",
+    "Sek-compute",
+    "horizontal-fold",
+    "qa-inference",
+    "truth-conditional-proposition-check"
+  ],
+  "qa_profile": {
+    "modes": [
+      "open_domain",
+      "closed_domain",
+      "reading_comprehension"
+    ],
+    "approaches": [
+      "knowledge_graph",
+      "hybrid",
+      "rule_based",
+      "statistical"
+    ],
+    "answer_types": [
+      "fact",
+      "definition",
+      "how",
+      "why",
+      "hypothetical",
+      "semantically_constrained"
+    ],
+    "truth_model": "truth_conditional",
+    "ontology_required": true
+  },
+  "truth_semantics": [
+    {
+      "proposition": "reasoned_claim_c",
+      "truth_when": "c follows from graph relations and validated evidence constraints",
+      "false_when": "c is unsupported or contradicted by relation evidence",
+      "evidence_required": true
+    }
+  ],
+  "has_a_hierarchy": [
+    {
+      "owner": "reasoner",
+      "member": "relation_graph",
+      "relation": "has_a",
+      "ownership": "shared",
+      "cardinality": "1:1",
+      "rule": "reasoner executes over current graph snapshot"
+    },
+    {
+      "owner": "reasoner",
+      "member": "inference_operator_set",
+      "relation": "contains",
+      "ownership": "owned",
+      "cardinality": "1:n",
+      "rule": "operator set determines allowed inference transforms"
+    }
+  ],
+  "relations": [
+    {
+      "target": "MEM-µ",
+      "verb": "@related_to",
+      "directed": false
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "gramRead",
+      "key": "reasoning_input"
+    },
+    {
+      "phase": "Sek",
+      "op": "semantic_graph_query"
+    },
+    {
+      "phase": "Sek",
+      "op": "apply_operators"
+    },
+    {
+      "phase": "Xul",
+      "op": "gramWrite",
+      "scope": "local"
+    }
+  ],
+  "@glyph": "µ₁",
+  "@patterns": [
+    {
+      "@sequence": [
+        "⟁CAUSE",
+        "⊕RELATION",
+        "◈CONTEXT"
+      ],
+      "@fold": "reason.causal",
+      "@weight": 0.9
+    },
+    {
+      "@sequence": [
+        "⟁CAUSE",
+        "*",
+        "◈CONTEXT"
+      ],
+      "@capture": "relation",
+      "@fold": "reason.infer",
+      "@weight": 0.7
+    },
+    {
+      "@sequence": [
+        "**",
+        "◈CONTEXT"
+      ],
+      "@capture": "antecedent",
+      "@fold": "reason.context_resolve",
+      "@weight": 0.5
+    }
+  ],
+  "@field": {
+    "@namespace": "micronaut.reason",
+    "@shared_dictionary": true,
+    "@local_weights": true,
+    "control_states": [
+      {
+        "id": 0,
+        "label": "recall_evidence",
+        "fold": "reason.recall",
+        "phases": [
+          "Pop",
+          "Wo"
+        ],
+        "weight": 0.6
+      },
+      {
+        "id": 1,
+        "label": "compare_premises",
+        "fold": "reason.compare",
+        "phases": [
+          "Wo",
+          "Yax"
+        ],
+        "weight": 0.65
+      },
+      {
+        "id": 2,
+        "label": "find_relationships",
+        "fold": "reason.relate",
+        "phases": [
+          "Yax"
+        ],
+        "weight": 0.7
+      },
+      {
+        "id": 3,
+        "label": "infer_causality",
+        "fold": "reason.causal",
+        "phases": [
+          "Sek"
+        ],
+        "weight": 0.9
+      },
+      {
+        "id": 4,
+        "label": "generate_hypotheses",
+        "fold": "reason.hypothesize",
+        "phases": [
+          "Sek"
+        ],
+        "weight": 0.75
+      },
+      {
+        "id": 5,
+        "label": "find_contradictions",
+        "fold": "reason.contradict",
+        "phases": [
+          "Sek",
+          "Ch'en"
+        ],
+        "weight": 0.7
+      },
+      {
+        "id": 6,
+        "label": "test_counterexamples",
+        "fold": "reason.counterexample",
+        "phases": [
+          "Ch'en"
+        ],
+        "weight": 0.65
+      },
+      {
+        "id": 7,
+        "label": "revise_inference",
+        "fold": "reason.revise",
+        "phases": [
+          "Ch'en"
+        ],
+        "weight": 0.6
+      },
+      {
+        "id": 8,
+        "label": "validate_conclusion",
+        "fold": "reason.validate",
+        "phases": [
+          "Xul"
+        ],
+        "weight": 0.8
+      },
+      {
+        "id": 9,
+        "label": "return_conclusion",
+        "fold": "reason.conclude",
+        "phases": [
+          "Xul"
+        ],
+        "weight": 0.85
+      }
+    ]
+  },
+  "@selection": "WCR",
+  "sandbox": {
+    "gram_ns": "REASON-µ",
+    "manifest_access": [
+      "words",
+      "kuhul",
+      "micronaut"
+    ],
+    "effects": [
+      "gramRead",
+      "gramWrite",
+      "semantic_graph:read"
+    ],
+    "ports": [],
+    "coordinator": false
+  },
+  "model": {
+    "gguf": "C:/Users/canna/.lmstudio/models/lmstudio-community/Qwen3-1.7B-GGUF/Qwen3-1.7B-Q8_0.gguf",
+    "template": "chatml",
+    "role": "advisory-reasoning"
+  }
+}

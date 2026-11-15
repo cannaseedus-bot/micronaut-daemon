@@ -1,0 +1,109 @@
+{
+  "@type": "khanary.fold_space_contracts.v1",
+  "version": "1.0.0",
+  "authority": "fold_space_navigation_contract_not_semantic_authority",
+  "semantic_authority": false,
+  "law": {
+    "name": "F_K = K'UHUL Fold Space",
+    "coordinate": "p_t = (h, phi, T, s, X_t)",
+    "learning_coordinate": "p_t = (h, phi, T, s, sigma, X_t)",
+    "lattice_slice": "Fold Lattice K = (theta, sigma) is a projection/slice of Fold Space, not the full position.",
+    "phase_authority": "C6 is execution coordinates; S1 is geometric projection only.",
+    "movement_axes": "horizontal = Delta T, vertical = Delta phi, radial = Delta s",
+    "book": "Book(h) == N(h); Unfold(h,tau) = { e | B_tau[h,e] != 0 }",
+    "attention": "Handle -> Unfold -> Neighborhood -> Attention -> Fold",
+    "pipeline": "LOCATE -> UNFOLD -> NAVIGATE -> OPERATE -> VERIFY -> FOLD -> XUL",
+    "boundary": "Fold Space != Fold Lattice != Fold Kernel != XCFE Policy != Execution",
+    "fold_boundary": "Fold != Xul; fold/unfold toggles s while Xul remains the commit/collapse phase.",
+    "proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits.",
+    "event_transition_boundary": "Fold Events record proposed/observed movement; XCFE evaluates p_next = delta_XCFE(p_t,e_t,Pi)."
+  },
+  "phase_cycle": [
+    "Pop",
+    "Wo",
+    "Yax",
+    "Sek",
+    "Ch'en",
+    "Xul"
+  ],
+  "phase_order": {
+    "Pop": 0,
+    "Wo": 1,
+    "Yax": 2,
+    "Sek": 3,
+    "Ch'en": 4,
+    "Xul": 5
+  },
+  "phase_angles": {
+    "Pop": 0.0,
+    "Wo": 1.0471975511965976,
+    "Yax": 2.0943951023931953,
+    "Sek": 3.141592653589793,
+    "Ch'en": 4.1887902047863905,
+    "Xul": 5.235987755982989
+  },
+  "fold_states": [
+    "folded",
+    "unfolded"
+  ],
+  "competence_axis": [
+    "unbound",
+    "observed",
+    "learned",
+    "bound",
+    "validated",
+    "autonomous"
+  ],
+  "movement_types": [
+    "horizontal",
+    "vertical",
+    "radial"
+  ],
+  "distance_metrics": {
+    "semantic": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+    "phase": "d_phase = shortest path distance on C6",
+    "track": "d_track = semantic field/track alignment distance",
+    "behavior": "d_behavior = Burner-induced execution-pattern distance",
+    "fold_field": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]"
+  },
+  "pipeline": [
+    "LOCATE",
+    "UNFOLD",
+    "NAVIGATE",
+    "OPERATE",
+    "VERIFY",
+    "FOLD",
+    "XUL"
+  ],
+  "authority_required": {
+    "c6_authority": true,
+    "s1_projection_only": true,
+    "semantic_authority": false,
+    "route_authority": "XCFE",
+    "proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+  },
+  "lattice_contract": "data/grammar/fold-lattice.contracts.json",
+  "invariants": {
+    "FS1": "h identifies a semantic Fold/handle",
+    "FS2": "phi in C6 phase_cycle",
+    "FS3": "T identifies an active semantic track",
+    "FS4": "s in {folded, unfolded}",
+    "FS5": "X_t is mutable runtime state, not semantic topology",
+    "FS6": "sigma is optional, but if present sigma in competence_axis",
+    "FS7": "horizontal movement changes T while holding phi",
+    "FS8": "vertical movement advances phi by one C6 step while holding T",
+    "FS9": "radial movement toggles s while holding phi and T",
+    "FS10": "C6 is authoritative execution coordinate; S1 angle is projection only",
+    "FS11": "Book(h) = N(h) and Unfold(h,tau) is bounded by B_tau[h,e] != 0",
+    "FS12": "distance is typed: semantic, phase, track, or behavior; no universal metric is implied",
+    "FS13": "navigation order is LOCATE -> UNFOLD -> NAVIGATE -> OPERATE -> VERIFY -> FOLD -> XUL",
+    "FS14": "Fold != Xul",
+    "FS15": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits",
+    "FS16": "FoldField vertex = (node_id, theta, W, C, R); score() = W*C*R; theta from C6 canonical phase_angle()",
+    "FS17": "fold_relevance(a,b) = sqrt(W_a·W_b)·sqrt(C_a·C_b)·cos(θ_b−θ_a) (approx); exact form: W_arc·sqrt(C_a·C_b)·cos(Δθ)",
+    "FS18": "(Fold∘Unfold)(h)≡h identity invariant; violation drops sigma to UNBOUND",
+    "FS19": "fold_distance typed: alpha*L1(field)/2 + (1-alpha)*mean_abs_dev(wcr); alpha=0.7 default; range [0,1]"
+  },
+  "fold_event_schema": "data/schema/fold-event.schema.json",
+  "fold_event_contract": "data/grammar/fold-event.contracts.json"
+}

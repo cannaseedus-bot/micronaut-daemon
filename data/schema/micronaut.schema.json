@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "khanary:micronaut.schema",
+  "title": "Micronaut",
+  "description": "Pattern-bound continuation with memory, WCR state, and callable edges. §61: Micronaut = Pattern + Guard + Continuation + Edges + WCR.",
+  "type": "object",
+  "required": ["key", "patterns", "guards", "continuations", "callableEdges", "semanticEdges", "wcr"],
+  "properties": {
+    "key": {
+      "type": "string",
+      "pattern": "^µ://.+",
+      "description": "µ:// address of this micronaut"
+    },
+    "patterns": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Pattern strings matched against query scrutinee (§56-§60 pattern hierarchy)"
+    },
+    "guards": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Threshold guards applied after pattern match (e.g. 'confidence > 0.6')"
+    },
+    "continuations": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Named operations executed when this micronaut is selected"
+    },
+    "callableEdges": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^µ://.+" },
+      "description": "Micronauts this one may invoke (Xul-promoted callable edges only)"
+    },
+    "semanticEdges": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Related concepts/domains (inference only; NOT callable without promotion)"
+    },
+    "wcr": {
+      "type": "object",
+      "required": ["weight", "confidence"],
+      "properties": {
+        "weight":     { "type": "number", "minimum": 0, "maximum": 1, "description": "Structural importance W in S=W·C·R" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1, "description": "Evidence strength C in S=W·C·R" },
+        "relevance":  { "type": "number", "minimum": 0, "maximum": 1, "description": "Query relevance R(Q,K_u) in S=W·C·R" }
+      }
+    },
+    "domainField": {
+      "type": "object",
+      "description": "Optional: domain field this micronaut emerged from",
+      "properties": {
+        "name":            { "type": "string" },
+        "promotionScore":  { "type": "number" },
+        "successfulFolds": { "type": "integer" }
+      }
+    }
+  },
+  "x-khanary-law": "Micronaut=Pattern-Bound Continuation. µ.pattern=SNOBOL value+WCR. µ.continuation=AIML template+callable route.",
+  "x-khanary-section": "§61",
+  "x-khanary-edge-law": "semantic_edge ≠ callable_edge. Promotion requires Xul gate (requirePromotion=true)."
+}

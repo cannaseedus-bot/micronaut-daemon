@@ -1,0 +1,256 @@
+{
+  "schema": "khanary.template-registry.v1",
+  "description": "ASX design kit registry. source_type:html kits are filled by CSS-var injection + title swap. source_type:vite kits are multi-file scaffolds.",
+  "house_tokens": {
+    "brand_accent":    "#16f2aa",
+    "brand_secondary": "#38bdf8",
+    "brand_bg":        "#020617",
+    "brand_surface":   "#0f172a",
+    "brand_text":      "#e2e8f0"
+  },
+  "slot_definitions": {
+    "app_name":       { "type": "app_name",    "phase": "Pop",   "edge_kind": "@provides",   "unit": "identity_token",   "css_vars": [],                                                                      "description": "Application display name — sets <title> and first h1/h2" },
+    "brand_accent":   { "type": "css_color",   "phase": "Xul",   "edge_kind": "@configures", "unit": "brand_token",      "css_vars": ["--accent","--asx-primary","--atomic-border","--kuhul-color"],          "description": "Primary accent color (hex)" },
+    "brand_secondary":{ "type": "css_color",   "phase": "Xul",   "edge_kind": "@configures", "unit": "brand_token",      "css_vars": ["--asx-secondary","--accent-blue"],                                     "description": "Secondary accent color (hex)" },
+    "brand_bg":       { "type": "css_color",   "phase": "Xul",   "edge_kind": "@configures", "unit": "brand_token",      "css_vars": ["--bg","--bg-primary","--asx-bg","--dark-pool"],                        "description": "Page background color (hex)" },
+    "brand_surface":  { "type": "css_color",   "phase": "Xul",   "edge_kind": "@configures", "unit": "brand_token",      "css_vars": ["--asx-surface"],                                                        "description": "Card / panel surface color (hex)" },
+    "brand_text":     { "type": "css_color",   "phase": "Xul",   "edge_kind": "@configures", "unit": "brand_token",      "css_vars": ["--asx-color"],                                                          "description": "Body text color (hex)" },
+    "logo_url":       { "type": "url",         "phase": "Pop",   "edge_kind": "@provides",   "unit": "identity_token",   "css_vars": [],                                                                      "description": "Logo image URL injected at top-left" },
+    "description":    { "type": "string",      "phase": "Yax",   "edge_kind": "@provides",   "unit": "content_token",    "css_vars": [],                                                                      "description": "Short app description for meta/README" },
+    "rpc_port":       { "type": "port",        "phase": "Sek",   "edge_kind": "@configures", "unit": "connection_token", "css_vars": [],                                                                      "description": "KHANARY JSON-RPC port (default 8787)" },
+    "features":       { "type": "feature_list","phase": "Yax",   "edge_kind": "@configures", "unit": "feature_token",    "css_vars": [],                                                                      "description": "Extra feature labels driving scaffold content" },
+    "template":       { "type": "template_ref","phase": "Yax",   "edge_kind": "@requires",   "unit": "content_token",    "css_vars": [],                                                                      "description": "Kit id to switch to (template switcher value)" }
+  },
+  "kits": [
+    {
+      "id": "asx-atomic",
+      "name": "ASX Atomic CSS Guide",
+      "category": "design-system",
+      "source_type": "html",
+      "source": "docs/ASX-design-kit.html",
+      "description": "Canonical atomic CSS guide with [x]/[xt] attribute selectors and 8-token scale.",
+      "slots": ["app_name","brand_accent","brand_bg","brand_secondary","description"],
+      "governs": ["atomic","css","design-system","tokens"]
+    },
+    {
+      "id": "asx-atomic-guide",
+      "name": "ASX Atomic SCXQ2 Runtime Guide",
+      "category": "design-system",
+      "source_type": "html",
+      "source": "docs/atmoic-asx-guide.html",
+      "description": "SCXQ2 atomic index / runtime guide — same tokens as asx-atomic.",
+      "slots": ["app_name","brand_accent","brand_bg","description"],
+      "governs": ["atomic","scxq2","runtime","guide"]
+    },
+    {
+      "id": "asx-components",
+      "name": "ASX Component Showcase",
+      "category": "component-library",
+      "source_type": "html",
+      "source": "docs/ASX-COMPONENTS.html",
+      "description": "Glyph/block component showcase with --atomic-* and --asx-* token set.",
+      "slots": ["app_name","brand_accent","brand_bg","brand_secondary","description"],
+      "governs": ["components","blocks","glyphs","atomic"]
+    },
+    {
+      "id": "asx-blocks",
+      "name": "ASX Blocks v2 App Shell",
+      "category": "app-shell",
+      "source_type": "html",
+      "source": "docs/axs-blocks-v2.html",
+      "description": "3-region app shell skeleton: topbar + sidebar + main content area.",
+      "slots": ["app_name","brand_accent","brand_bg","brand_secondary","brand_surface","description"],
+      "governs": ["shell","layout","sidebar","topbar","blocks"]
+    },
+    {
+      "id": "asx-blocks-ui",
+      "name": "ASX Blocks UI",
+      "category": "app-shell",
+      "source_type": "html",
+      "source": "docs/ASX-BLOCKS-UI.html",
+      "description": "Extended blocks UI layout.",
+      "slots": ["app_name","brand_accent","brand_bg","brand_secondary","description"],
+      "governs": ["shell","layout","blocks","ui"]
+    },
+    {
+      "id": "asx-chat",
+      "name": "NEXUS Chat UI",
+      "category": "chat",
+      "source_type": "html",
+      "source": "docs/NEXUS-CHAT.html",
+      "description": "Full chat UI — sidebar thread list, message thread, composer input.",
+      "slots": ["app_name","brand_accent","brand_bg","description"],
+      "governs": ["chat","nexus","thread","messaging","conversation"]
+    },
+    {
+      "id": "asx-terminal",
+      "name": "Console Terminal",
+      "category": "terminal",
+      "source_type": "html",
+      "source": "docs/console-terminal.html",
+      "description": "3-panel console: Thread / Process / Executor columns, monospace.",
+      "slots": ["app_name","brand_accent","brand_bg","description"],
+      "governs": ["terminal","console","process","executor","monospace"]
+    },
+    {
+      "id": "asx-terminal-adv",
+      "name": "Advanced Terminal",
+      "category": "terminal",
+      "source_type": "html",
+      "source": "docs/advanced-terminal.html",
+      "description": "Advanced terminal UI layout.",
+      "slots": ["app_name","brand_accent","brand_bg","description"],
+      "governs": ["terminal","advanced","console"]
+    },
+    {
+      "id": "asx-console-html",
+      "name": "Console HTML",
+      "category": "terminal",
+      "source_type": "html",
+      "source": "docs/console-html.html",
+      "description": "HTML console interface.",
+      "slots": ["app_name","brand_accent","brand_bg","description"],
+      "governs": ["console","html","terminal"]
+    },
+    {
+      "id": "asx-control",
+      "name": "Control Panel",
+      "category": "dashboard",
+      "source_type": "html",
+      "source": "docs/control-panel.html",
+      "description": "OS-kernel dashboard with glassmorphism panels: sidebar rail + editor + terminal.",
+      "slots": ["app_name","brand_accent","brand_bg","brand_secondary","description"],
+      "governs": ["control","dashboard","panel","glass","kernel"]
+    },
+    {
+      "id": "asx-ghost",
+      "name": "Sub Ghost Shell",
+      "category": "app-shell",
+      "source_type": "html",
+      "source": "docs/SUB-GHOST-SHELL.html",
+      "description": "App shell / tape builder with embedded DNS router and JSON manifest.",
+      "slots": ["app_name","brand_accent","brand_bg","brand_secondary","description"],
+      "governs": ["ghost","shell","dns","router","tape","manifest"]
+    },
+    {
+      "id": "asx-cockpit",
+      "name": "ASX Command Cockpit",
+      "category": "hud",
+      "source_type": "html",
+      "source": "docs/ASX_Command_Cockpit_BOOT-IFAL.html",
+      "description": "Sci-fi HUD boot screen with star field, scanlines, crosshair, and dock.",
+      "slots": ["app_name","brand_accent","brand_bg","description"],
+      "governs": ["cockpit","hud","boot","sci-fi","command","dock"]
+    },
+    {
+      "id": "asx-trading",
+      "name": "Stock Trades Dashboard",
+      "category": "dashboard",
+      "source_type": "html",
+      "source": "docs/stock-trades.html",
+      "description": "Bloomberg-style trading dashboard: ticker bar, sidebar, grid widgets.",
+      "slots": ["app_name","brand_accent","brand_bg","description"],
+      "governs": ["trading","stocks","dashboard","ticker","market","data"]
+    },
+    {
+      "id": "asx-tunnel",
+      "name": "ASX Prime Tunnel",
+      "category": "visual",
+      "source_type": "html",
+      "source": "docs/asx-prime-tunnel.html",
+      "description": "Prime tunnel visual / animation.",
+      "slots": ["app_name","brand_accent","brand_bg","description"],
+      "governs": ["tunnel","visual","animation","prime"]
+    },
+    {
+      "id": "asx-compression",
+      "name": "ASX Compression",
+      "category": "visual",
+      "source_type": "html",
+      "source": "docs/asx-compression.html",
+      "description": "ASX compression visualization (dark variant).",
+      "slots": ["app_name","brand_accent","brand_bg","description"],
+      "governs": ["compression","visual","asx"]
+    },
+    {
+      "id": "asx-compression-white",
+      "name": "ASX Compression (Light)",
+      "category": "visual",
+      "source_type": "html",
+      "source": "docs/asx-comresssion-white.html",
+      "description": "ASX compression visualization (light/white variant).",
+      "slots": ["app_name","brand_accent","brand_bg","description"],
+      "governs": ["compression","visual","white","light"]
+    },
+    {
+      "id": "asx-guix-chat",
+      "name": "GUIX SVG Chat",
+      "category": "chat",
+      "source_type": "html",
+      "source": "docs/guix-svg-chat.html",
+      "description": "SVG-based chat interface.",
+      "slots": ["app_name","brand_accent","brand_bg","description"],
+      "governs": ["guix","svg","chat","vector"]
+    },
+    {
+      "id": "asx-mathml",
+      "name": "MathML + K'UHUL",
+      "category": "compute",
+      "source_type": "html",
+      "source": "docs/MATHML+KUHUL.html",
+      "description": "MathML K'UHUL compute interface.",
+      "slots": ["app_name","brand_accent","brand_bg","description"],
+      "governs": ["mathml","kuhul","compute","math"]
+    },
+    {
+      "id": "asx-klsl-compiler",
+      "name": "KUHUL-KLSL Compiler UI",
+      "category": "compute",
+      "source_type": "html",
+      "source": "docs/kuhul-klsl-khlc-compiler.html",
+      "description": "KUHUL/KLSL/KHLC compiler interface.",
+      "slots": ["app_name","brand_accent","brand_bg","description"],
+      "governs": ["klsl","khlc","compiler","kuhul","compute"]
+    },
+    {
+      "id": "asx-terminaa",
+      "name": "Terminaa Console Desktop",
+      "category": "terminal",
+      "source_type": "html",
+      "source": "docs/terminaa-console-desktop.html",
+      "description": "Terminal/console desktop layout.",
+      "slots": ["app_name","brand_accent","brand_bg","description"],
+      "governs": ["terminaa","console","desktop","terminal"]
+    },
+    {
+      "id": "asx-scx-spec",
+      "name": "SCX File Spec",
+      "category": "docs",
+      "source_type": "html",
+      "source": "docs/scx-file-spec-v1.html",
+      "description": "SCX file format specification document.",
+      "slots": ["app_name","brand_accent","brand_bg","description"],
+      "governs": ["scx","spec","file-format","docs"]
+    },
+    {
+      "id": "asx-studio",
+      "name": "Studio App Generator",
+      "category": "tool",
+      "source_type": "html",
+      "source": "C:/Users/canna/Downloads/studio-app-generator.html",
+      "description": "Studio-style app generator interface.",
+      "slots": ["app_name","brand_accent","brand_bg","brand_secondary","description"],
+      "governs": ["studio","generator","app","scaffold"]
+    },
+    {
+      "id": "vite-react-ts",
+      "name": "Vite + React + TypeScript",
+      "category": "spa",
+      "source_type": "vite",
+      "source": "data/templates/vite-react-ts/",
+      "description": "Multi-file Vite+React+TS+Tailwind SPA with KHANARY RPC client stub.",
+      "slots": ["app_name","brand_color","brand_dark","description","rpc_port","features"],
+      "governs": ["vite","react","typescript","tailwind","spa"]
+    }
+  ]
+}

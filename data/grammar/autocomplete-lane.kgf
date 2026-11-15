@@ -1,0 +1,34 @@
+keygraph "AutocompleteLane" version "2.0";
+namespace autocomplete:core domain custom;
+namespace fold:core domain fold;
+namespace gram:core domain gram;
+namespace track:core domain track;
+namespace xcfe:core domain xcfe;
+key autocomplete:CONTEXT kind field value "input_tokens";
+key autocomplete:NGRAM kind field value "ngram_predictions";
+key autocomplete:WILDCARD kind field value "autocomplete.wildcard.gml";
+key autocomplete:SYLLABLE kind field value "syllable.gml";
+key autocomplete:BIAS kind field value "continuation-bias.gml";
+key autocomplete:SUGGESTIONS kind field value "ranked_continuations";
+key autocomplete:SYLLABLE_WORDS kind field value "matched_words";
+template fold:COLLECT domain fold { operator MAP; input context; output candidates; };
+template fold:SYLLABLE_FILTER domain fold { operator FILTER; input candidates; input matched_words; output filtered_candidates; };
+template fold:RANK domain fold { operator FOLD; input filtered_candidates; input bias; output suggestions; };
+trigram gram:AUTOCOMPLETE_YAX ("complete",*,*) phase Yax fold fold:COLLECT bindings [context:explicit];
+trigram gram:AUTOCOMPLETE_FILTER ("filter",*,*) phase Yax fold fold:SYLLABLE_FILTER bindings [candidates:explicit,matched_words:explicit];
+trigram gram:AUTOCOMPLETE_SEK ("rank",*,*) phase Sek fold fold:RANK bindings [filtered_candidates:explicit,bias:explicit];
+track track:AUTOCOMPLETE { include autocomplete:CONTEXT; include autocomplete:NGRAM; include autocomplete:WILDCARD; include autocomplete:SYLLABLE; include autocomplete:BIAS; };
+policy xcfe:AUTOCOMPLETE_POLICY { score wcr; max_depth 4; allow_cycle false; match_policy exact; };
+resolver autocomplete:COMPLETE domain custom mode select policy xcfe:AUTOCOMPLETE_POLICY;
+program autocomplete:SUGGEST track track:AUTOCOMPLETE entry fold:COLLECT phase Yax;
+program autocomplete:FILTER track track:AUTOCOMPLETE entry fold:SYLLABLE_FILTER phase Yax;
+program autocomplete:RANK track track:AUTOCOMPLETE entry fold:RANK phase Sek;
+(* Read-only inference. Execution sequence is COLLECT -> SYLLABLE_FILTER -> RANK;
+   this KGF is a declaration, the Python runtime implements that order.
+
+   syllable.gml decides eligibility only. It never enters the base score, the
+   learned bias or WCR: a syllable hit says two words sound alike at that beat,
+   not that one means or predicts the other. Filtering tests the next predicted
+   word, so a multiword completion is judged on its first token. An empty
+   syllable match returns no candidates rather than widening the query.
+   Candidate acceptance is feedback, not authorization. *)

@@ -1,0 +1,360 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Generated key lookup bank from css.key-grammar.jsonl; entries are data, not execution authority.-->
+  <category>
+    <pattern>LOOK UP KEY CSS:PANEL</pattern>
+    <template>Key CSS:PANEL. expands_to: ["BGpanel", "BRlg", "BORDER"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:CARD</pattern>
+    <template>Key CSS:CARD. expands_to: ["PANEL"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BGPANEL</pattern>
+    <template>Key CSS:BGPANEL. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BGALT</pattern>
+    <template>Key CSS:BGALT. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BGTERM</pattern>
+    <template>Key CSS:BGTERM. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BRSM</pattern>
+    <template>Key CSS:BRSM. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BRMD</pattern>
+    <template>Key CSS:BRMD. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BRLG</pattern>
+    <template>Key CSS:BRLG. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BORDER</pattern>
+    <template>Key CSS:BORDER. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BORDERGLOW</pattern>
+    <template>Key CSS:BORDERGLOW. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:FLEX</pattern>
+    <template>Key CSS:FLEX. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:FLEXROW</pattern>
+    <template>Key CSS:FLEXROW. expands_to: ["FLEX"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:FLEXCOL</pattern>
+    <template>Key CSS:FLEXCOL. expands_to: ["FLEX"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:GRID</pattern>
+    <template>Key CSS:GRID. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:GRID2</pattern>
+    <template>Key CSS:GRID2. expands_to: ["GRID"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:GRID3</pattern>
+    <template>Key CSS:GRID3. expands_to: ["GRID"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:GAP</pattern>
+    <template>Key CSS:GAP. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:GAPSM</pattern>
+    <template>Key CSS:GAPSM. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:GAPLG</pattern>
+    <template>Key CSS:GAPLG. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:PPRIMARY</pattern>
+    <template>Key CSS:PPRIMARY. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:PSECONDARY</pattern>
+    <template>Key CSS:PSECONDARY. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:PACCENT</pattern>
+    <template>Key CSS:PACCENT. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:PDANGER</pattern>
+    <template>Key CSS:PDANGER. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:PWARNING</pattern>
+    <template>Key CSS:PWARNING. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:PSUCCESS</pattern>
+    <template>Key CSS:PSUCCESS. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:TEXT</pattern>
+    <template>Key CSS:TEXT. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:TEXTSOFT</pattern>
+    <template>Key CSS:TEXTSOFT. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:TEXTFAINT</pattern>
+    <template>Key CSS:TEXTFAINT. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:TEXTSTRONG</pattern>
+    <template>Key CSS:TEXTSTRONG. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:MONO</pattern>
+    <template>Key CSS:MONO. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:SANS</pattern>
+    <template>Key CSS:SANS. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:HUD</pattern>
+    <template>Key CSS:HUD. expands_to: ["FLEXROW", "GAP", "BORDERglow", "BRmd"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:DIALOG</pattern>
+    <template>Key CSS:DIALOG. expands_to: ["CARD", "Psecondary"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:NAV</pattern>
+    <template>Key CSS:NAV. expands_to: ["FLEXROW", "GAP", "BGpanel", "BORDER"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:FORMKIT</pattern>
+    <template>Key CSS:FORMKIT. expands_to: ["FLEXCOL", "GAP", "TEXT"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:FIELDSET</pattern>
+    <template>Key CSS:FIELDSET. expands_to: ["FLEXCOL", "GAPSM"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:LABEL</pattern>
+    <template>Key CSS:LABEL. expands_to: ["TEXTsoft"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:CTRLBASE</pattern>
+    <template>Key CSS:CTRLBASE. expands_to: ["SANS", "TEXT", "BGalt", "BORDER", "BRmd"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:INPUT</pattern>
+    <template>Key CSS:INPUT. expands_to: ["CTRLBASE"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:TEXTAREA</pattern>
+    <template>Key CSS:TEXTAREA. expands_to: ["CTRLBASE"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:SELECT</pattern>
+    <template>Key CSS:SELECT. expands_to: ["CTRLBASE"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:CHECKROW</pattern>
+    <template>Key CSS:CHECKROW. expands_to: ["FLEXROW", "GAPSM"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BTNBASE</pattern>
+    <template>Key CSS:BTNBASE. expands_to: ["SANS", "BORDER", "BRmd"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BTNPRIMARY</pattern>
+    <template>Key CSS:BTNPRIMARY. expands_to: ["BTNBASE", "Pprimary", "BORDERglow"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BTNSECONDARY</pattern>
+    <template>Key CSS:BTNSECONDARY. expands_to: ["BTNBASE", "Psecondary"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BTNDANGER</pattern>
+    <template>Key CSS:BTNDANGER. expands_to: ["BTNBASE", "Pdanger"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BTNGHOST</pattern>
+    <template>Key CSS:BTNGHOST. expands_to: ["BTNBASE", "TEXTsoft"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:FORMDEFAULTS</pattern>
+    <template>Key CSS:FORMDEFAULTS. expands_to: ["FORMKIT", "FIELDSET", "LABEL", "INPUT", "BTNPRIMARY"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:WIDGETBTN</pattern>
+    <template>Key CSS:WIDGETBTN. expands_to: ["BTNPRIMARY", "HUD"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:ICONBTN</pattern>
+    <template>Key CSS:ICONBTN. expands_to: ["WIDGETBTN", "MONO"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:WIDGETCARD</pattern>
+    <template>Key CSS:WIDGETCARD. expands_to: ["CARD", "FLEXCOL", "GAP"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:WIDGETHEADER</pattern>
+    <template>Key CSS:WIDGETHEADER. expands_to: ["FLEXROW", "TEXTstrong"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:WIDGETBODY</pattern>
+    <template>Key CSS:WIDGETBODY. expands_to: ["FLEXCOL", "GAPSM", "TEXT"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:WIDGETFOOTER</pattern>
+    <template>Key CSS:WIDGETFOOTER. expands_to: ["FLEXROW", "GAPSM"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:MODALBACKDROP</pattern>
+    <template>Key CSS:MODALBACKDROP. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:MODALCARD</pattern>
+    <template>Key CSS:MODALCARD. expands_to: ["WIDGETCARD", "BORDERglow"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:WIDGETMODAL</pattern>
+    <template>Key CSS:WIDGETMODAL. expands_to: ["MODALBACKDROP", "FLEX"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:WIDGETDOCK</pattern>
+    <template>Key CSS:WIDGETDOCK. expands_to: ["FLEXROW", "GAPSM", "BGpanel", "BORDER", "BRlg"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:WIDGETGRID</pattern>
+    <template>Key CSS:WIDGETGRID. expands_to: ["GRID", "GAP"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:WIDGET</pattern>
+    <template>Key CSS:WIDGET. expands_to: ["WIDGETCARD", "WIDGETHEADER", "WIDGETBODY", "WIDGETFOOTER", "WIDGETBTN"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:HTMLROOT</pattern>
+    <template>Key CSS:HTMLROOT. expands_to: ["SANS", "TEXT", "BGterm"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:HTMLSHELL</pattern>
+    <template>Key CSS:HTMLSHELL. expands_to: ["HTMLROOT", "FLEXCOL", "GAPLG"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:HTMLPAGE</pattern>
+    <template>Key CSS:HTMLPAGE. expands_to: ["HTMLSHELL", "GRID", "GAPLG"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:HTML</pattern>
+    <template>Key CSS:HTML. expands_to: ["HTMLROOT", "HTMLSHELL", "APP", "WIDGETGRID"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:HTMLTITLE</pattern>
+    <template>Key CSS:HTMLTITLE. expands_to: ["TEXTstrong"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:HTMLMETA</pattern>
+    <template>Key CSS:HTMLMETA. expands_to: ["TEXTsoft"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:H1</pattern>
+    <template>Key CSS:H1. expands_to: ["HTMLTITLE"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:H2</pattern>
+    <template>Key CSS:H2. expands_to: ["TEXTstrong"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:P</pattern>
+    <template>Key CSS:P. expands_to: ["TEXT"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:LIST</pattern>
+    <template>Key CSS:LIST. expands_to: ["FLEXCOL", "GAPSM"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:LISTITEM</pattern>
+    <template>Key CSS:LISTITEM. expands_to: ["TEXT"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:MEDIAFRAME</pattern>
+    <template>Key CSS:MEDIAFRAME. expands_to: ["CARD"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:IMAGECREDIT</pattern>
+    <template>Key CSS:IMAGECREDIT. expands_to: ["TEXTsoft"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BLOGLAYOUT</pattern>
+    <template>Key CSS:BLOGLAYOUT. expands_to: ["HTMLPAGE"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BLOGPOSTCARD</pattern>
+    <template>Key CSS:BLOGPOSTCARD. expands_to: ["WIDGETCARD"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BLOGTITLE</pattern>
+    <template>Key CSS:BLOGTITLE. expands_to: ["TEXTstrong"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BLOGMETA</pattern>
+    <template>Key CSS:BLOGMETA. expands_to: ["TEXTsoft", "FLEXROW", "GAPSM"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BLOGBODY</pattern>
+    <template>Key CSS:BLOGBODY. expands_to: ["TEXT"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BLOGEDITOR</pattern>
+    <template>Key CSS:BLOGEDITOR. expands_to: ["FORMKIT", "TEXTAREA", "BTNPRIMARY"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BLOGTOOLBAR</pattern>
+    <template>Key CSS:BLOGTOOLBAR. expands_to: ["NAV", "BTNSECONDARY", "BTNGHOST"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BLOGMODAL</pattern>
+    <template>Key CSS:BLOGMODAL. expands_to: ["WIDGETMODAL", "MODALCARD", "BLOGEDITOR"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:BLOG</pattern>
+    <template>Key CSS:BLOG. expands_to: ["BLOGLAYOUT", "BLOGPOSTCARD", "BLOGTITLE", "BLOGMETA", "BLOGBODY", "BLOGEDITOR"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:DOGWALKCARD</pattern>
+    <template>Key CSS:DOGWALKCARD. expands_to: ["BLOGPOSTCARD", "WIDGET", "ICONBTN"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:DOGWALKROUTE</pattern>
+    <template>Key CSS:DOGWALKROUTE. expands_to: ["CARD", "TEXT", "Psuccess"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:DOGWALKSCHED</pattern>
+    <template>Key CSS:DOGWALKSCHED. expands_to: ["FORMKIT", "INPUT", "SELECT", "BTNPRIMARY", "CHECKROW"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:DOGWALKAPP</pattern>
+    <template>Key CSS:DOGWALKAPP. expands_to: ["BLOG", "DOGWALKCARD", "DOGWALKROUTE", "DOGWALKSCHED"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:MX2LM</pattern>
+    <template>Key CSS:MX2LM. expands_to: ["CARD", "MONO", "Psecondary", "BORDERglow"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:MX2LMGRAM</pattern>
+    <template>Key CSS:MX2LMGRAM. expands_to: ["MX2LM", "GAPSM"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CSS:APP</pattern>
+    <template>Key CSS:APP. expands_to: ["DIALOG", "HUD", "NAV"]</template>
+  </category>
+</aiml>

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:micronaut:aiml-relation-grams:1",
+  "title": "AIML Relation Grams v1",
+  "type": "object",
+  "required": ["schema", "source", "authority", "semantic_commit", "embedding_contract", "relations", "words", "stats", "grams", "records", "embedding_vectors"],
+  "properties": {
+    "schema": { "const": "micronaut.aiml.relation-grams.v1" },
+    "description": { "type": "string" },
+    "source": { "type": "object" },
+    "authority": { "const": "data_only" },
+    "semantic_commit": { "const": false },
+    "embedding_contract": { "type": "object" },
+    "relations": { "type": "array", "items": { "$ref": "#/$defs/relation" } },
+    "words": { "type": "array", "items": { "$ref": "#/$defs/word" } },
+    "stats": { "type": "object", "required": ["unique_words", "relation_patterns", "relation_prompts", "relation_grams"] },
+    "grams": { "type": "array", "items": { "$ref": "#/$defs/gram" } },
+    "records": { "type": "array", "items": { "$ref": "#/$defs/record" } },
+    "embedding_vectors": { "$ref": "#/$defs/vectors" }
+  },
+  "$defs": {
+    "relation": { "type": "object", "required": ["id", "atom_id", "relation", "pattern", "pattern_phase", "source", "candidate_phase", "embedding_only"], "properties": { "id": { "type": "integer", "minimum": 0 }, "atom_id": { "type": "string" }, "relation": { "type": "string" }, "pattern": { "type": "string" }, "pattern_phase": { "type": "string" }, "source": { "type": "string" }, "candidate_phase": { "type": "string" }, "embedding_only": { "type": "boolean" } } },
+    "word": { "type": "object", "required": ["id", "word", "count", "category_count", "frequency_prior", "examples"], "properties": { "id": { "type": "integer", "minimum": 0 }, "word": { "type": "string" }, "count": { "type": "integer", "minimum": 0 }, "category_count": { "type": "integer", "minimum": 0 }, "frequency_prior": { "type": "number", "minimum": 0 }, "examples": { "type": "array" } } },
+    "gram": { "type": "object", "required": ["id", "relation_id", "size", "gram", "phase", "lane", "count", "word_support"], "properties": { "id": { "type": "integer", "minimum": 0 }, "relation_id": { "type": "integer", "minimum": 0 }, "size": { "type": "integer", "minimum": 1 }, "gram": { "type": "string" }, "phase": { "type": "string" }, "lane": { "type": "string" }, "count": { "type": "integer", "minimum": 0 }, "word_support": { "type": "integer", "minimum": 0 } } },
+    "record": { "type": "object", "required": ["vector_row", "relation_id", "word_id", "prompt", "gram_ids"], "properties": { "vector_row": { "type": "integer", "minimum": 0 }, "relation_id": { "type": "integer", "minimum": 0 }, "word_id": { "type": "integer", "minimum": 0 }, "prompt": { "type": "string" }, "gram_ids": { "type": "array", "items": { "type": "integer", "minimum": 0 } } } },
+    "vectors": { "type": "object", "required": ["file", "shape", "dtype", "normalized", "model", "prompt_name", "sha256"], "properties": { "file": { "type": "string" }, "shape": { "type": "array", "prefixItems": [{ "type": "integer", "minimum": 0 }, { "type": "integer", "minimum": 1 }], "minItems": 2, "maxItems": 2 }, "dtype": { "type": "string" }, "normalized": { "type": "boolean" }, "model": { "type": "string" }, "prompt_name": { "type": "string" }, "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" } } }
+  },
+  "additionalProperties": true
+}

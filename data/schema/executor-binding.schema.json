@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:khanary:schema:executor-binding:1",
+  "title": "KHANARY Executor Bindings",
+  "description": "Every route resolves to an in-stack callable. An executor may not name an external binary: the pattern below rejects anything but inproc.*. A binding that cannot execute says so, with a reason, rather than pretending.",
+  "type": "object",
+  "required": ["@kind", "bindings"],
+  "properties": {
+    "@kind": { "const": "khanary.executor.bindings.v1" },
+    "authority": { "type": "string" },
+    "boundary": { "const": "inproc_only" },
+    "note": { "type": "string" },
+    "$schema": { "type": "string" },
+    "bindings": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+      "additionalProperties": { "$ref": "#/$defs/binding" }
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "binding": {
+      "type": "object",
+      "required": ["executor", "module", "entrypoint", "capability", "authority", "executes_shell"],
+      "properties": {
+        "executor": {
+          "type": "string",
+          "pattern": "^inproc\\.[a-z_]+$",
+          "description": "In-stack executor id. A binary path cannot satisfy this pattern."
+        },
+        "module": { "type": "string", "pattern": "^(micronaut|lib)\\.[a-z_]+$" },
+        "entrypoint": { "type": "string", "pattern": "^[a-z_][a-z0-9_]*$" },
+        "capability": { "enum": ["available", "partial", "unavailable"] },
+        "reason": { "type": "string", "minLength": 1 },
+        "operations": {
+          "type": "object",
+          "additionalProperties": { "enum": ["available", "unavailable"] }
+        },
+        "unavailable_operations": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "authority": { "type": "string", "minLength": 1 },
+        "executes_shell": { "const": false }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": { "properties": { "capability": { "const": "unavailable" } }, "required": ["capability"] },
+          "then": { "required": ["reason"] }
+        }
+      ]
+    }
+  }
+}

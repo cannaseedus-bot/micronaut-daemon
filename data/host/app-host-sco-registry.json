@@ -1,0 +1,5 @@
+{
+  "@kind": "khanary.app_host.sco.registry.v1",
+  "role": "SCO identity records addressable by sco://alias. Each object: alias (string, unique), optional sha256/path/type/endpoint, optional data object. When path and sha256 are present, SCO_RESOLVE hashes the contained local file and reports verification without turning identity into authority. It performs no remote I/O. Populate explicitly; never fabricate entries.",
+  "objects": []
+}

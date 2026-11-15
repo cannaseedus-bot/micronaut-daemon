@@ -1,0 +1,63 @@
+{
+  "@kind": "semantic.think.v1",
+  "@id": "math_step_by_step",
+  "@owner": "MATH-µ",
+  "@mode": "step_by_step",
+  "@subject": "arithmetic_or_algebraic_problem",
+  "@context": "cfpc.field",
+  "@functions": [
+    {
+      "@kind": "semantic.function.v1",
+      "@id": "parse_quantities",
+      "@owner": "MATH-µ",
+      "@governs": ["math", "equation", "solve", "evaluate", "quantity"],
+      "@capabilities": ["MATH_SYMBOLIC_EVALUATE"],
+      "@bindings": {
+        "problem": {"type": "text", "required": true, "wildcard": "{problem}"}
+      },
+      "@backend": {
+        "type": "micronaut",
+        "capability": "MATH_SYMBOLIC_EVALUATE"
+      },
+      "@policy": {
+        "max_depth": 3,
+        "cycle_detection": true,
+        "allow_dynamic_resolution": false
+      },
+      "@result": {
+        "retain_provenance": true,
+        "retain_gaps": true,
+        "allow_pattern_candidates": false
+      }
+    },
+    {
+      "@kind": "semantic.function.v1",
+      "@id": "apply_operations",
+      "@owner": "MATH-µ",
+      "@governs": ["algebra", "simplify", "factor", "expand", "solve"],
+      "@capabilities": ["MATH_SYMBOLIC_SOLVE"],
+      "@bindings": {
+        "expression": {"type": "text", "required": true, "wildcard": "{expression}"}
+      },
+      "@backend": {
+        "type": "micronaut",
+        "capability": "MATH_SYMBOLIC_SOLVE"
+      },
+      "@policy": {
+        "max_depth": 2,
+        "cycle_detection": true,
+        "allow_dynamic_resolution": false
+      },
+      "@result": {
+        "retain_provenance": true,
+        "retain_gaps": false,
+        "allow_pattern_candidates": false
+      }
+    }
+  ],
+  "@policy": {
+    "max_depth": 3,
+    "max_operations": 6,
+    "cycle_detection": true
+  }
+}

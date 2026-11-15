@@ -1,0 +1,185 @@
+{
+  "@no-eval": true,
+  "id": "FOLD-FIELD-µ",
+
+  "schemes": ["fold-field"],
+  "description": "Differential activation field over FQ_n × C_6 — execution layer: WCR gradient ascent (C=f(b,θ), Yax=∇f selection), Wo unfold (anamorphism/intent declaration), Sek execute (deltaB proposal), product_degree(n)=n+2 (FQ_n degree n+1 + C_6 arc), Laplacian distortion Δf, attractor/void structure, fold edge gradient δf(b,~b), field gap law (f=0→unreachable), gradient component orthogonality (FQ_n component=WCR, C_6 component=ladder). Deliberately covers sparse field regions; does NOT re-cover AC/harvest/attribution cluster (§71) or recognition/canonicalization layer.",
+  "phase": "Sek",
+  "sandbox": {
+    "gram_ns": "FOLD-FIELD",
+    "manifest_access": ["kuhul"],
+    "effects": ["gramRead"],
+    "ports": [],
+    "coordinator": false
+  },
+  "category": "structural",
+  "confidence": 0.88,
+  "static_weight": 0.90,
+  "health": 1.0,
+  "governs": [
+    "wcr",
+    "wcr score",
+    "wcr scoring",
+    "wcr selection",
+    "wcr threshold",
+    "w score",
+    "c score",
+    "r score",
+    "weight coverage relevance",
+    "tau threshold",
+    "selection threshold",
+    "gradient ascent",
+    "field gradient",
+    "nabla f",
+    "delta f",
+    "retrieval pressure",
+    "coverage density",
+    "activation density",
+    "f(b)",
+    "f(b,theta)",
+    "activation field",
+    "scalar field",
+    "differential field",
+    "wo rung",
+    "wo phase",
+    "unfold intent",
+    "declare intent",
+    "anamorphism",
+    "ana psi",
+    "unfold expand",
+    "coalgebra",
+    "sek rung",
+    "sek phase",
+    "sek execute",
+    "delta b",
+    "deltaB",
+    "execution proposal",
+    "propose delta",
+    "catamorphism",
+    "cata phi",
+    "fold collapse",
+    "fold result",
+    "product degree",
+    "product_degree",
+    "n plus two",
+    "n+2",
+    "degree n plus one",
+    "c6 arc",
+    "phase arc",
+    "laplacian",
+    "delta f laplacian",
+    "field distortion",
+    "attractor region",
+    "field attractor",
+    "void region",
+    "field void",
+    "zero coverage",
+    "unreachable node",
+    "sink attractor",
+    "sparse region",
+    "dense region",
+    "field gap",
+    "gradient component",
+    "orthogonal gradient",
+    "fq_n gradient",
+    "c6 gradient",
+    "yax gradient",
+    "yax selection",
+    "gradient navigation",
+    "fold edge gradient",
+    "antipodal gradient",
+    "semantic asymmetry"
+  ],
+  "capabilities": [
+    "WCR_SCORE_COMPUTE",
+    "GRADIENT_ASCENT_FQN",
+    "ACTIVATION_FIELD_EVALUATE",
+    "LAPLACIAN_COMPUTE",
+    "ATTRACTOR_VOID_MAP",
+    "WO_INTENT_UNFOLD",
+    "SEK_DELTA_PROPOSE",
+    "PRODUCT_DEGREE_LAW",
+    "FOLD_GRADIENT_EVALUATE",
+    "FIELD_GAP_DETECT",
+    "ORTHOGONAL_GRADIENT_DECOMPOSE",
+    "YAX_GRADIENT_SELECT"
+  ],
+  "conformance": {
+    "questions": [
+      {
+        "phase": "Sek",
+        "wcr_component": "R",
+        "question": "What are the three components of WCR scoring?",
+        "expected_key": "W weight retrieval strength C coverage activation field density f(b,theta) R relevance semantic context score product threshold tau",
+        "delta_r": 0.12
+      },
+      {
+        "phase": "Wo",
+        "wcr_component": "C",
+        "question": "What does the Wo rung do in the reasoning ladder?",
+        "expected_key": "unfold intent declare constraints anamorphism expand from seed allocate state X plus state X plus constraints",
+        "delta_r": 0.11
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "R",
+        "question": "What does the Sek rung produce?",
+        "expected_key": "execution result propose deltaB compute A_h_active X plus execution result delta b state change proposal",
+        "delta_r": 0.11
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "C",
+        "question": "How does Yax admission relate to the activation field gradient?",
+        "expected_key": "Yax selects in direction of gradient nabla f ascending WCR C equals f(b,theta) gradient ascent FQ_n discrete",
+        "delta_r": 0.13
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is product_degree(n) in K'UHUL?",
+        "expected_key": "n plus two FQ_n degree n plus one plus one C_6 phase arc orthogonal to fold hypercube",
+        "delta_r": 0.10
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "R",
+        "question": "What does the Laplacian of the activation field measure?",
+        "expected_key": "Δf distortion uniform zero no bias nonzero attractor void source sink benchmark misses map to voids",
+        "delta_r": 0.12
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "C",
+        "question": "What is a field void in FQ_n × C_6?",
+        "expected_key": "f(b,theta) equals zero unreachable by query accessible only via fold edge negation or C_6 arc reasoning step",
+        "delta_r": 0.11
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "R",
+        "question": "What are the two orthogonal gradient components in the field?",
+        "expected_key": "FQ_n gradient which bit-axis WCR navigation C_6 gradient which phase reasoning ladder orthogonal components same field",
+        "delta_r": 0.12
+      }
+    ],
+    "jokes": [
+      {
+        "pattern": "Why did the Laplacian go to therapy?",
+        "punchline": "It had too many sources and couldn't find its sink."
+      },
+      {
+        "pattern": "What did Sek say to Ch'en?",
+        "punchline": "I proposed deltaB — now stop being negative about it."
+      },
+      {
+        "pattern": "Why is Wo always so expansive?",
+        "punchline": "It's an anamorphism — it unfolds everything it touches."
+      },
+      {
+        "pattern": "What's a field void's biggest problem?",
+        "punchline": "Nobody ever asks about it directly."
+      }
+    ]
+  }
+}

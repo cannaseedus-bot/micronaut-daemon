@@ -1,0 +1,246 @@
+(* ======================================================================= *)
+(* K'UHUL v8.0.0 Standalone EBNF Grammar                                   *)
+(* Extended for Hyperbolic Event Coordinates, Einstein Contractions,        *)
+(* Holographic Mesh Boundaries, and CDATA GPU Kernel Dispatches             *)
+(* Fold namespace boundary: K'UHUL semantic folds are algebraic             *)
+(* interpretation/catamorphism folds. KLSL/KXC/KHLC folds are backend       *)
+(* lowering/projection folds unless explicitly preserving that contract.     *)
+(* Fold bindings are the contract-carrying links from semantic folds/phases  *)
+(* to backend executors: Fold -> Binding -> KXC -> backend -> hardware.      *)
+(* ======================================================================= *)
+
+program         = { statement | bundle_decl | manifold_decl | universe_decl | cso_decl | fold_binding_decl } ;
+
+(* ── Tensor Bundle & Geodesic Manifold Declarations ───────────────────── *)
+bundle_decl     = "bundle" identifier "over" identifier "{" { bundle_section } "}" ;
+bundle_section  = fiber_section | connection_section | geodesic_section | tensor_section ;
+
+fiber_section   = "fiber" "{"
+                    "rank" ":" tensor_rank ","
+                    "dimension" ":" integer ","
+                    "stride" ":" integer
+                  "}" ;
+
+connection_section = "connection" "{"
+                       "type" ":" connection_type ","
+                       "arc_weight" ":" expression ","
+                       "holonomy" ":" holonomy_type
+                     "}" ;
+
+geodesic_section = "geodesic" "{"
+                     "propagator" ":" identifier ","
+                     "minimizes" ":" minimization_target [ "," ]
+                     [ "raychaudhuri" ":" raychaudhuri_metric ]
+                   "}" ;
+
+tensor_section  = "tensor" "{"
+                    "rank" ":" tensor_rank ","
+                    "authority" ":" projection_authority
+                  "}" ;
+
+tensor_rank     = "(" integer "," integer ")" ;
+connection_type = "riemannian" | "levi_civita" | "discrete" | "discrete_circle" ;
+holonomy_type   = "path_ordered" | "abelian" ;
+minimization_target = "entropy" | "action" | "length" ;
+projection_authority = "projection_only" | "semantic_authority_false" ;
+
+raychaudhuri_metric = "{"
+                        "focusing" ":" expression ","
+                        "expansion" ":" expression
+                      "}" ;
+
+(* ── Manifold Topology with Minkowski Event Bounds ────────────────────── *)
+manifold_decl   = "manifold" identifier ":" manifold_type [ "(" integer ")" ] [ block ] ;
+manifold_type   = "euclidean" | "riemannian" | "minkowski" | "pi_harmonic" | "geodesic" | "spherical" | "smooth" ;
+
+universe_decl   = "universe" identifier [ ":" expression ] [ block ] ;
+
+(* ── CSO & CDATA Hardware Processing Primitives ───────────────────────── *)
+cso_decl        = "cso" identifier [ "id" ":" cso_hash_id ] "{"
+                    "manifest" ":" block ","
+                    "kernel" ":" cdata_block
+                  "}" ;
+
+cdata_block     = "<![CDATA[" , hlsl_kernel_source , "]]>" ;
+
+(* ── Fold Binding Contracts ────────────────────────────────────────────── *)
+(* K'UHUL owns alpha and theta. Backends provide entrypoints only when their
+   contract satisfies the semantic phase contract:
+   Bind_backend(alpha_theta) = K_theta^backend
+   Valid iff K_theta^backend models Contract(alpha_theta). *)
+fold_binding_decl = "bind" "fold" identifier "phase" phase_expression
+                    "to" backend_type "entry" identifier "{"
+                      { fold_binding_section }
+                    "}" ;
+
+fold_binding_section = "semantic" ":" string
+                     | "dispatch" ":" dispatch_shape
+                     | "contract" ":" hoare_contract ;
+
+backend_type    = "hlsl" | "cuda" | "cpp" | "scxq2" | "wgsl" | "cpu" | "kxc" | "khlc" ;
+dispatch_shape  = "[" integer "," integer "," integer "]" ;
+hoare_contract  = "{"
+                    "pre" ":" contract_predicate ","
+                    "post" ":" contract_predicate
+                  "}" ;
+contract_predicate = string | identifier ;
+
+(* ── Core Statement Architecture ──────────────────────────────────────── *)
+statement       = universe_decl | funcDecl | typeDecl | varDecl | ifStmt |
+                  whileStmt | forStmt | returnStmt | exprStmt |
+                  phaseDecl | bundle_decl | manifold_decl | cso_decl | event_decl |
+                  fold_binding_decl | fold_field_decl ;
+
+funcDecl        = "func" identifier "(" [ parameters ] ")" [ "->" type ] [ block ] ;
+typeDecl        = "type" identifier "=" type ;
+varDecl         = "let" identifier [ ":" type ] [ "=" expression ] ;
+ifStmt          = "if" "(" expression ")" statement [ "else" statement ] ;
+whileStmt       = "while" "(" expression ")" statement ;
+forStmt         = "for" "(" [ varDecl | expression ] ";" [ expression ] ";" [ expression ] ")" statement ;
+returnStmt      = "return" [ expression ] ;
+exprStmt        = expression [ ";" ] ;
+block           = "{" { statement } "}" ;
+
+(* ── Minkowski Future-Directed Event Primitives ───────────────────────── *)
+event_decl      = "event" identifier "at" minkowski_four_vector "{"
+                    "track" ":" string ","
+                    "rapidity" ":" expression ","
+                    "direction" ":" array_literal ","
+                    "interval" ":" interval_signature [ "," ]
+                    [ "holographic_boundary" ":" mesh_inequality ]
+                  "}" ;
+
+minkowski_four_vector = "[" expression "," expression "," expression "," expression "]" ;
+interval_signature    = "timelike" | "spacelike" | "lightlike" ;
+
+mesh_inequality       = "{"
+                          "circumradius_R" ":" expression ","
+                          "inradius_r" ":" expression
+                        "}" ;
+
+(* ── K'UHUL Catamorphic Phase Algebra ─────────────────────────────────── *)
+phaseDecl       = "phase" identifier [ "=" phase_expression ] ;
+phase_expression = "Pop" | "Wo" | "Yax" | "Sek" | "Chen" | "Ch'en" | "Xul" ;
+
+(* ── Multilinear Expressions with Einstein Contraction Bounds ─────────── *)
+expression      = assignment ;
+assignment      = ternary [ ( "=" | "+=" | "-=" | "*=" | "/=" ) assignment ] ;
+ternary         = logicalOr [ "?" expression ":" expression ] ;
+logicalOr       = logicalAnd { "||" logicalAnd } ;
+logicalAnd      = equality { "&&" equality } ;
+equality        = comparison { ( "==" | "!=" ) comparison } ;
+comparison      = additive { ( "<" | ">" | "<=" | ">=" ) additive } ;
+additive        = multiplicative { ( "+" | "-" ) multiplicative } ;
+multiplicative  = contractionExpr { ( "*" | "/" | "%" ) contractionExpr } ;
+
+(* Einstein summation and tensor product primitives. *)
+contractionExpr = tensorExpr { "⊓" tensorExpr } ; (* explicit lower-to-upper dummy index matching *)
+tensorExpr      = exponentiation { "⊗" exponentiation } ;
+exponentiation  = unary [ "^" exponentiation ] ;
+unary           = [ ( "!" | "-" | "+" | "~" | "∇" | "d" | "ι" | "Π" ) ] postfix ;
+postfix         = primary { ( "(" [ args ] ")" | "[" expression "]" | "." identifier ) } ;
+primary         = number | string | bool | identifier | "(" expression ")" |
+                  array_literal | "{" [ pairs ] "}" ;
+
+array_literal   = "[" [ expressions ] "]" ;
+
+(* ── Structural Type Signatures ───────────────────────────────────────── *)
+type            = typeBase [ "?" | ( "[" "]" ) ] ;
+typeBase        = identifier | "(" [ types ] ")" "->" type | bundle_type | fiber_type | connection_t | geodesic_t ;
+bundle_type     = "bundle" "<" identifier "," integer "," integer ">" ;
+fiber_type      = "fiber" "<" integer "," integer ">" ;
+connection_t    = "connection" ;
+geodesic_t      = "geodesic" ;
+
+(* ── Lexer Placeholders ────────────────────────────────────────────────── *)
+identifier      = ( letter | "_" ) , { letter | digit | "_" } ;
+cso_hash_id     = '"' , "cso://" , ( cso_sha256_id | cso_raw_hex_id ) , '"' ;
+cso_sha256_id   = "sha256(" , hex_digit , { hex_digit } , ")" ;
+cso_raw_hex_id  = hex_digit , { hex_digit } ;
+letter          = ? ASCII letter a-z or A-Z ? ;
+hex_digit       = digit | "a" | "b" | "c" | "d" | "e" | "f" | "A" | "B" | "C" | "D" | "E" | "F" ;
+integer         = [ "-" | "+" ] , digit , { digit } ;
+digit           = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+number          = integer , [ "." , digit , { digit } ] , [ ( "e" | "E" ) , [ "-" | "+" ] , digit , { digit } ] ;
+string          = '"', { string_char }, '"' ;
+string_char     = ? any UTF-8 character except '"' and '\\' ? | "\\" , ( '"' | "\\" | "n" | "t" ) ;
+bool            = "true" | "false" ;
+parameters      = ? parameter list ? ;
+args            = ? argument list ? ;
+expressions     = expression { "," expression } ;
+pairs           = ? object pairs ? ;
+types           = type { "," type } ;
+
+(* ── §35  Fold Field, Product Graph, and Convergence ────────────────────── *)
+(* G_runtime = G_semantic □ G_phase.  Vertex F_i = (node_id, theta, W, C, R);
+   score = W*C*R.  Legal atomic transition ↔ d_H = 1 (one-bit flip or one
+   C6 step).  Kleene fixed point: Xul = lim f^n(query) when fold_distance < ε.
+   @node ≠ fold: node_id names the micronaut address, not the cata operation. *)
+
+(* Statement wrapper — allows fold_field records inside a K'UHUL program. *)
+fold_field_decl = "fold_field" identifier "=" fold_field_record ;
+
+fold_field_record
+    = "{"
+        "node_id"    ":" string ","
+        "theta"      ":" number ","          (* phase angle in [0, 2π)  *)
+        "W"          ":" number ","          (* arc weight  ∈ [0, 1]   *)
+        "C"          ":" number ","          (* confidence  ∈ [0, 1]   *)
+        "R"          ":" number             (* relevance   ∈ [0, 1]   *)
+      "}" ;
+
+product_graph_edge_record
+    = "{"
+        "source"     ":" identifier ","
+        "target"     ":" identifier ","
+        "W_arc"      ":" number ","          (* semantic arc weight        *)
+        "cos_dtheta" ":" number ","          (* cos(theta_target - theta_source) *)
+        "weight"     ":" number             (* W_arc * cos_dtheta         *)
+      "}" ;
+
+convergence_record
+    = "{"
+        "iteration"   ":" integer ","
+        "distance"    ":" number ","         (* fold_distance(f^n, f^(n+1)) *)
+        "contraction" ":" number ","         (* k = d_n / d_(n-1); SC-k     *)
+        "status"      ":" convergence_status
+      "}" ;
+
+convergence_status = "ITERATING" | "CONVERGED" | "DIVERGING" | "MAX_ITER" ;
+
+(* SC-k  Contraction factor direction — counter-intuitive naming trap.
+   k = d_n / d_(n-1).
+   k < 1  =>  distance SHRINKING  =>  CONTRACTING  =>  status ITERATING (good)
+   k = 1  =>  distance STATIC     =>  PLATEAUING   =>  MAX_ITER approaching
+   k > 1  =>  distance GROWING    =>  EXPANDING    =>  status DIVERGING (reset sigma)
+   "Large k" = DIVERGING, NOT fast convergence.
+   The field is named 'contraction' because it SHOULD be contracting (k<1).
+   k >= 1 means the Banach contraction condition has FAILED. *)
+
+fold_distance_record
+    = "{"
+        "alpha"    ":" number ","            (* field vs WCR balance ∈ [0, 1] *)
+        "d_field"  ":" number ","            (* L1 distance over field vector  *)
+        "d_wcr"    ":" number ","            (* |score_a - score_b| normalised *)
+        "distance" ":" number               (* alpha*d_field + (1-alpha)*d_wcr *)
+      "}" ;
+
+hylomorphism_step
+    = "{"
+        "n"       ":" integer ","            (* iteration index                *)
+        "query"   ":" identifier ","         (* input handle h                 *)
+        "ana_out" ":" identifier ","         (* Unfold(h) = ana(g)(h)          *)
+        "cata_out" ":" identifier ","        (* Fold(ana) = cata(f)(ana)       *)
+        "identity" ":" bool                 (* (Fold∘Unfold)(h) ≡ h           *)
+      "}" ;
+
+(* SC-28  @node-not-fold invariant.
+   fold_field_record.node_id names the @node root (micronaut address in the
+   topology, e.g. "REASON-µ").  It must NOT equal "fold" or any token that
+   names a cata/ana operation.  The fold algebra is separate from the address. *)
+
+(* SC-29  Identity invariant: (Fold∘Unfold)(h) ≡ h.
+   In any hylomorphism_step where n > 0 and Delta_phi == 0, the identity
+   field MUST be true.  A false value indicates fold-field coordinate drift;
+   the evolution sigma MUST be reset to unbound. *)
+hlsl_kernel_source = ? raw unescaped HLSL/DirectCompute shader source code text ? ;

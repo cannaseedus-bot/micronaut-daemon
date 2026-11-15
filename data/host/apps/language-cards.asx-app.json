@@ -1,0 +1,57 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "language-cards",
+  "@key": "⟁APP:LANGUAGE_CARDS",
+  "@mount": "⟁ROOT:LANGUAGE_CARDS",
+  "@theme": { "accent": "#f472b6", "bg": "#060010", "surface": "#0e001a", "text": "#fce7f3", "hero_phase": "Yax", "tagline": "Learn words. Remember them." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "deck", "component": "⟁WIDGET:DECK", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "decks": [], "active_deck": null, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:LANGUAGE_CARDS": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:NEW_DECK", "⟁ACTION:STUDY"] },
+    "⟁ACTION:NEW_DECK": { "@type": "button", "@text": "New Deck", "@on": { "click": "lc.open_compose" } },
+    "⟁ACTION:STUDY": { "@type": "button", "@text": "Study", "@on": { "click": "lc.study" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:DECK", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:DECK": { "@type": "grid", "@bind": "state.decks", "@children": ["⟁WIDGET:DECK_CARD"] },
+    "⟁WIDGET:DECK_CARD": { "@type": "content-card", "@bind": "deck", "@on": { "study": "lc.study", "edit": "lc.edit" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:PROGRESS", "⟁WIDGET:LANGUAGES"] },
+    "⟁WIDGET:PROGRESS": { "@type": "stat", "@bind": "data.progress" },
+    "⟁WIDGET:LANGUAGES": { "@type": "tag-cloud", "@bind": "data.languages" }
+  },
+  "@programs": {
+    "lc.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "lc.study": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_deck", "@out": "active_deck" }] },
+    "lc.edit": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "deck.new": "lc.open_compose", "deck.study": "lc.study", "deck.edit": "lc.edit" },
+  "@imports": [{ "ref": "deck", "mode": "schema_table" }, { "ref": "card", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "srs", "name": "Spaced Repetition", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "SM-2 algorithm schedules cards at optimal review intervals." },
+      { "id": "audio-pronunc", "name": "Audio Pronunciation", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Hear native-speaker pronunciation for every card." },
+      { "id": "image-import", "name": "Image Cards", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Add images to cards for visual vocabulary learning." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "lc.study", "pattern": "STUDY CARDS|REVIEW DECK *|PRACTICE LANGUAGE *", "intent": "study" },
+      { "id": "lc.add", "pattern": "ADD CARD|NEW VOCABULARY|ADD WORD *", "intent": "open_compose" }
+    ]
+  },
+  "@data": {
+    "progress": { "total_cards": 484, "due_today": 32, "streak_days": 14 },
+    "languages": ["Japanese", "Spanish", "French", "K'UHUL Glyphs"],
+    "spotlight": [
+      { "id": "sp1", "title": "Japanese N3 Vocab — 500 cards", "language": "Japanese", "badge": "Largest Deck", "mastered": 312, "excerpt": "312 mastered, 188 still learning. 14-day review streak." },
+      { "id": "sp2", "title": "K'UHUL Phase Glyphs", "language": "K'UHUL", "badge": "Custom", "cards": 24, "excerpt": "24 glyphs mapped to their semantic roles. Pop through Xul." },
+      { "id": "sp3", "title": "Spanish Travel Phrases", "language": "Spanish", "badge": "Quick Start", "cards": 80, "excerpt": "Practical phrases for travel. High-frequency vocabulary." }
+    ],
+    "schema": {
+      "deck": { "primaryKey": "deck_id", "fields": { "deck_id": { "type": "string" }, "name": { "type": "string", "required": true }, "language": { "type": "string" }, "description": { "type": "text" }, "card_count": { "type": "integer" }, "created_at": { "type": "datetime" } } },
+      "card": { "primaryKey": "card_id", "fields": { "card_id": { "type": "string" }, "deck_id": { "type": "string", "required": true }, "front": { "type": "text", "required": true }, "back": { "type": "text", "required": true }, "audio_url": { "type": "string" }, "next_review": { "type": "datetime" }, "ease_factor": { "type": "float" } } }
+    }
+  }
+}

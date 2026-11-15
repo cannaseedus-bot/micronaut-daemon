@@ -1,0 +1,288 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from syllable.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH SYLLABLEGRAPH</pattern>
+    <template>source syllable.gml; label SyllableGraph; identity syllable; directed 1; nodes 24; edges 22. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 1</pattern>
+    <template>Graph SyllableGraph; node 1; beats: 3; id: 1; kind: word; label: tomato. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE TOMATO</pattern>
+    <template>Graph SyllableGraph; node 1; beats: 3; id: 1; kind: word; label: tomato. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 2</pattern>
+    <template>Graph SyllableGraph; node 2; id: 2; kind: syllable; label: to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE TO</pattern>
+    <template>Graph SyllableGraph; node 2; id: 2; kind: syllable; label: to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 3</pattern>
+    <template>Graph SyllableGraph; node 3; id: 3; kind: syllable; label: ma. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE MA</pattern>
+    <template>Graph SyllableGraph; node 3; id: 3; kind: syllable; label: ma. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 4</pattern>
+    <template>Graph SyllableGraph; node 4; beats: 3; id: 4; kind: word; label: banana. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE BANANA</pattern>
+    <template>Graph SyllableGraph; node 4; beats: 3; id: 4; kind: word; label: banana. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 5</pattern>
+    <template>Graph SyllableGraph; node 5; id: 5; kind: syllable; label: ba. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE BA</pattern>
+    <template>Graph SyllableGraph; node 5; id: 5; kind: syllable; label: ba. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 6</pattern>
+    <template>Graph SyllableGraph; node 6; id: 6; kind: syllable; label: na. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE NA</pattern>
+    <template>Graph SyllableGraph; node 6; id: 6; kind: syllable; label: na. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 7</pattern>
+    <template>Graph SyllableGraph; node 7; beats: 3; id: 7; kind: word; label: computer. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE COMPUTER</pattern>
+    <template>Graph SyllableGraph; node 7; beats: 3; id: 7; kind: word; label: computer. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 8</pattern>
+    <template>Graph SyllableGraph; node 8; id: 8; ipa: k\u0259m; kind: syllable; label: com. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE COM</pattern>
+    <template>Graph SyllableGraph; node 8; id: 8; ipa: k\u0259m; kind: syllable; label: com. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 9</pattern>
+    <template>Graph SyllableGraph; node 9; id: 9; kind: syllable; label: pu. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE PU</pattern>
+    <template>Graph SyllableGraph; node 9; id: 9; kind: syllable; label: pu. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 10</pattern>
+    <template>Graph SyllableGraph; node 10; id: 10; kind: syllable; label: ter. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE TER</pattern>
+    <template>Graph SyllableGraph; node 10; id: 10; kind: syllable; label: ter. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 11</pattern>
+    <template>Graph SyllableGraph; node 11; beats: 3; id: 11; kind: word; label: prediction. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE PREDICTION</pattern>
+    <template>Graph SyllableGraph; node 11; beats: 3; id: 11; kind: word; label: prediction. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 12</pattern>
+    <template>Graph SyllableGraph; node 12; id: 12; kind: syllable; label: pre. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE PRE</pattern>
+    <template>Graph SyllableGraph; node 12; id: 12; kind: syllable; label: pre. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 13</pattern>
+    <template>Graph SyllableGraph; node 13; id: 13; kind: syllable; label: dic. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE DIC</pattern>
+    <template>Graph SyllableGraph; node 13; id: 13; kind: syllable; label: dic. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 14</pattern>
+    <template>Graph SyllableGraph; node 14; id: 14; kind: syllable; label: tion. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE TION</pattern>
+    <template>Graph SyllableGraph; node 14; id: 14; kind: syllable; label: tion. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 15</pattern>
+    <template>Graph SyllableGraph; node 15; beats: 2; id: 15; kind: word; label: complete. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE COMPLETE</pattern>
+    <template>Graph SyllableGraph; node 15; beats: 2; id: 15; kind: word; label: complete. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 16</pattern>
+    <template>Graph SyllableGraph; node 16; id: 16; kind: syllable; label: plete. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE PLETE</pattern>
+    <template>Graph SyllableGraph; node 16; id: 16; kind: syllable; label: plete. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 17</pattern>
+    <template>Graph SyllableGraph; node 17; beats: 2; id: 17; kind: word; label: combine. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE COMBINE</pattern>
+    <template>Graph SyllableGraph; node 17; beats: 2; id: 17; kind: word; label: combine. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 18</pattern>
+    <template>Graph SyllableGraph; node 18; id: 18; kind: syllable; label: bine. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE BINE</pattern>
+    <template>Graph SyllableGraph; node 18; id: 18; kind: syllable; label: bine. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 19</pattern>
+    <template>Graph SyllableGraph; node 19; beats: 2; id: 19; kind: word; label: compare. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE COMPARE</pattern>
+    <template>Graph SyllableGraph; node 19; beats: 2; id: 19; kind: word; label: compare. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 20</pattern>
+    <template>Graph SyllableGraph; node 20; id: 20; kind: syllable; label: pare. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE PARE</pattern>
+    <template>Graph SyllableGraph; node 20; id: 20; kind: syllable; label: pare. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 21</pattern>
+    <template>Graph SyllableGraph; node 21; beats: 2; id: 21; kind: word; label: command. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE COMMAND</pattern>
+    <template>Graph SyllableGraph; node 21; beats: 2; id: 21; kind: word; label: command. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 22</pattern>
+    <template>Graph SyllableGraph; node 22; id: 22; kind: syllable; label: mand. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE MAND</pattern>
+    <template>Graph SyllableGraph; node 22; id: 22; kind: syllable; label: mand. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 23</pattern>
+    <template>Graph SyllableGraph; node 23; beats: 2; id: 23; kind: word; label: compete. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE COMPETE</pattern>
+    <template>Graph SyllableGraph; node 23; beats: 2; id: 23; kind: word; label: compete. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE 24</pattern>
+    <template>Graph SyllableGraph; node 24; id: 24; kind: syllable; label: pete. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH NODE PETE</pattern>
+    <template>Graph SyllableGraph; node 24; id: 24; kind: syllable; label: pete. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 1 CONTAINS 2</pattern>
+    <template>Graph SyllableGraph; edge 1 to 2; position: 0; relation: contains; source: 1; target: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 1 CONTAINS 3</pattern>
+    <template>Graph SyllableGraph; edge 1 to 3; position: 1; relation: contains; source: 1; target: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 1 CONTAINS 2</pattern>
+    <template>Graph SyllableGraph; edge 1 to 2; position: 2; relation: contains; source: 1; target: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 4 CONTAINS 5</pattern>
+    <template>Graph SyllableGraph; edge 4 to 5; position: 0; relation: contains; source: 4; target: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 4 CONTAINS 6</pattern>
+    <template>Graph SyllableGraph; edge 4 to 6; position: 1; relation: contains; source: 4; target: 6. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 4 CONTAINS 6</pattern>
+    <template>Graph SyllableGraph; edge 4 to 6; position: 2; relation: contains; source: 4; target: 6. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 7 CONTAINS 8</pattern>
+    <template>Graph SyllableGraph; edge 7 to 8; position: 0; relation: contains; source: 7; target: 8. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 7 CONTAINS 9</pattern>
+    <template>Graph SyllableGraph; edge 7 to 9; position: 1; relation: contains; source: 7; target: 9. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 7 CONTAINS 10</pattern>
+    <template>Graph SyllableGraph; edge 7 to 10; position: 2; relation: contains; source: 7; target: 10. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 11 CONTAINS 12</pattern>
+    <template>Graph SyllableGraph; edge 11 to 12; position: 0; relation: contains; source: 11; target: 12. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 11 CONTAINS 13</pattern>
+    <template>Graph SyllableGraph; edge 11 to 13; position: 1; relation: contains; source: 11; target: 13. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 11 CONTAINS 14</pattern>
+    <template>Graph SyllableGraph; edge 11 to 14; position: 2; relation: contains; source: 11; target: 14. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 15 CONTAINS 8</pattern>
+    <template>Graph SyllableGraph; edge 15 to 8; position: 0; relation: contains; source: 15; target: 8. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 15 CONTAINS 16</pattern>
+    <template>Graph SyllableGraph; edge 15 to 16; position: 1; relation: contains; source: 15; target: 16. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 17 CONTAINS 8</pattern>
+    <template>Graph SyllableGraph; edge 17 to 8; position: 0; relation: contains; source: 17; target: 8. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 17 CONTAINS 18</pattern>
+    <template>Graph SyllableGraph; edge 17 to 18; position: 1; relation: contains; source: 17; target: 18. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 19 CONTAINS 8</pattern>
+    <template>Graph SyllableGraph; edge 19 to 8; position: 0; relation: contains; source: 19; target: 8. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 19 CONTAINS 20</pattern>
+    <template>Graph SyllableGraph; edge 19 to 20; position: 1; relation: contains; source: 19; target: 20. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 21 CONTAINS 8</pattern>
+    <template>Graph SyllableGraph; edge 21 to 8; position: 0; relation: contains; source: 21; target: 8. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 21 CONTAINS 22</pattern>
+    <template>Graph SyllableGraph; edge 21 to 22; position: 1; relation: contains; source: 21; target: 22. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 23 CONTAINS 8</pattern>
+    <template>Graph SyllableGraph; edge 23 to 8; position: 0; relation: contains; source: 23; target: 8. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH SYLLABLEGRAPH EDGE 23 CONTAINS 24</pattern>
+    <template>Graph SyllableGraph; edge 23 to 24; position: 1; relation: contains; source: 23; target: 24. Data-only graph record.</template>
+  </category>
+</aiml>

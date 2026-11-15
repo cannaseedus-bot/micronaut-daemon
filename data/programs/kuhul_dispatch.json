@@ -1,0 +1,45 @@
+{
+  "@program": "kuhul_dispatch",
+  "@fold": "Pop",
+  "@node": "dispatch-root",
+  "@state": {
+    "input":              null,
+    "candidates":         [],
+    "selected":           null,
+    "dominant_micronaut": null,
+    "verified":           false,
+    "result":             null
+  },
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "dispatch-root" },
+    { "@op": "GET",  "@key": "input", "@out": "input" },
+    { "@op": "LOG",  "@args": ["[kuhul_dispatch] Pop — observe input=$input"] },
+    { "@op": "FOLD_EXIT", "@fold": "Wo", "@node": "dispatch-root", "@args": ["$input"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Wo", "@node": "dispatch-scheduler" },
+    { "@op": "CALL", "@fn": "schedule_candidates", "@args": ["$input"], "@out": "candidates" },
+    { "@op": "LOG",  "@args": ["[kuhul_dispatch] Wo — candidates scheduled"] },
+    { "@op": "FOLD_EXIT", "@fold": "Yax", "@node": "dispatch-scheduler", "@args": ["$candidates"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Yax", "@node": "dispatch-branch" },
+    { "@op": "CALL", "@fn": "select_best", "@args": ["$candidates"], "@out": "selected" },
+    { "@op": "LOG",  "@args": ["[kuhul_dispatch] Yax — selected=$selected"] },
+    { "@op": "FOLD_EXIT", "@fold": "Sek", "@node": "dispatch-branch", "@args": ["$selected"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Sek", "@node": "dispatch-execute" },
+    { "@op": "GPU_DISPATCH", "@args": ["micronaut.cso"], "@out": "dominant_micronaut" },
+    { "@op": "CALL", "@fn": "execute_selected", "@args": ["$selected", "$dominant_micronaut"], "@out": "result" },
+    { "@op": "LOG",  "@args": ["[kuhul_dispatch] Sek — executed, dominant=$dominant_micronaut"] },
+    { "@op": "FOLD_EXIT", "@fold": "Chen", "@node": "dispatch-execute", "@args": ["$result"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Chen", "@node": "dispatch-verify" },
+    { "@op": "CALL", "@fn": "verify_result", "@args": ["$result", "$selected"], "@out": "verified" },
+    { "@op": "LOG",  "@args": ["[kuhul_dispatch] Chen — verified=$verified"] },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "dispatch-verify", "@args": ["$result", "$verified"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Xul", "@node": "dispatch-emit" },
+    { "@op": "SET",  "@key": "result", "@args": ["$result"] },
+    { "@op": "LOG",  "@args": ["[kuhul_dispatch] Xul — emit result=$result verified=$verified"] },
+    { "@op": "FOLD_EXIT", "@fold": "Pop", "@node": "dispatch-emit", "@args": ["$result"] }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "@type": "khanary.xcfe_program.v1",
+  "@no-eval": true,
+  "id": "xcfe.condition",
+  "program_class": "CONDITION",
+  "phase": "Wo",
+  "input_role": "predicate",
+  "output_role": "branch_result",
+  "admission": "explicit",
+  "description": "Evaluates a conditional predicate (@if/@then/@else) and produces a branch result. CONDITION class — canonical authority phase Wo.",
+  "steps": [
+    { "phase": "Pop",  "op": "gramRead",   "id": "xcfe_condition" },
+    { "phase": "Wo",   "op": "bind",       "id": "predicate" },
+    { "phase": "Yax",  "op": "select",     "id": "branch" },
+    { "phase": "Xul",  "op": "gramWrite",  "id": "branch_result" }
+  ],
+  "authority": {
+    "semantic_authority": false,
+    "topology_mutation": false,
+    "commit_authorized": false
+  }
+}

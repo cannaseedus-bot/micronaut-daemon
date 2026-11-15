@@ -1,0 +1,132 @@
+{
+  "@program": "think.template",
+  "@kind": "kuhul.think.eliza.v1",
+  "@fold": "Wo",
+  "@node": "think-node",
+  "@version": "1.0.0",
+  "description": "Eliza-style if/else think scaffold for SCX-EXPERT and other small models. Classifies input, selects a branch rule, prepends a structured Think: header to the prompt so the model fills in reasoning before the A: slot. Small models follow scaffolded structure far better than open-ended Q/A.",
+
+  "prompt_format": {
+    "inference": "Q: {message}\nThink: topic={topic} intent={intent}\n→ {branch_hint}\nA:",
+    "training":  "Q: {message}\nThink: topic={topic} intent={intent}\n→ {think_line_1}\n→ {think_line_2}\nA: {response}",
+    "stop": ["<|endoftext|>", "\nQ:", "\n\n"]
+  },
+
+  "branches": {
+    "greeting": {
+      "signals": ["hello", "hi", "hey", "good morning", "good evening", "greetings", "howdy", "what's up", "sup"],
+      "think_hint": "user is greeting — respond warmly and offer to help",
+      "eliza_reflect": "acknowledge the greeting, invite the topic"
+    },
+    "howto": {
+      "signals": ["how do i", "how to", "how can i", "how would i", "steps to", "install", "setup", "configure", "enable", "connect"],
+      "think_hint": "user wants step-by-step instructions — list what is known, then give ordered steps",
+      "eliza_reflect": "repeat the subject back, then give steps"
+    },
+    "explain": {
+      "signals": ["what is", "what are", "explain", "define", "describe", "tell me about", "what does", "meaning of"],
+      "think_hint": "user wants a definition or explanation — state what the subject is, then expand",
+      "eliza_reflect": "restate the subject, then explain"
+    },
+    "whyask": {
+      "signals": ["why", "why is", "why does", "why would", "reason", "cause"],
+      "think_hint": "user wants a reason — identify cause/effect, then answer",
+      "eliza_reflect": "name the cause, then elaborate"
+    },
+    "compare": {
+      "signals": ["difference between", "vs", "versus", "compare", "better", "worse", "which is", "pros and cons"],
+      "think_hint": "user wants a comparison — list key dimensions then compare",
+      "eliza_reflect": "name the two subjects, compare on key axes"
+    },
+    "command": {
+      "signals": ["write", "create", "build", "generate", "make", "list", "show", "print", "output", "give me"],
+      "think_hint": "user issued a command — identify output type, then produce it",
+      "eliza_reflect": "confirm the command subject, then produce output"
+    },
+    "reflect": {
+      "signals": ["i feel", "i am", "i think", "i want", "i need", "i have", "i'm"],
+      "think_hint": "user is expressing state — reflect the statement back, invite elaboration",
+      "eliza_reflect": "mirror: 'You feel/think/want {X}. Tell me more about that.'"
+    },
+    "debug": {
+      "signals": ["error", "exception", "crash", "fail", "broken", "not working", "bug", "wrong output", "stacktrace"],
+      "think_hint": "user has an error — identify language/tool, reproduce the symptom, propose fix",
+      "eliza_reflect": "name the error, then suggest a fix"
+    },
+    "unknown": {
+      "signals": [],
+      "think_hint": "topic unclear — ask one clarifying question",
+      "eliza_reflect": "ask: 'Can you tell me more about what you mean by {last_noun_phrase}?'"
+    }
+  },
+
+  "classifier": {
+    "method": "first-match-longest-signal",
+    "case_sensitive": false,
+    "tie_break": "unknown",
+    "topic_extraction": "first noun phrase after question word or verb"
+  },
+
+  "folds": {
+    "Pop": "receive user message; extract topic and intent",
+    "Wo":  "classify against branch signals; select branch rule",
+    "Yax": "build Think: header with topic, intent, branch hint",
+    "Sek": "inject scaffold into prompt; POST to /completion endpoint",
+    "Chen": "validate response non-empty; strip trailing scaffold artifacts",
+    "Xul": "emit clean A: response to UI"
+  },
+
+  "@state": {
+    "message": null,
+    "topic": null,
+    "intent": null,
+    "branch": null,
+    "branch_hint": null,
+    "prompt": null,
+    "response": null,
+    "content": null,
+    "valid": false
+  },
+
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "think-node" },
+    { "@op": "CALL", "@fn": "extract_topic_intent", "@args": ["$message"], "@out": "topic_intent" },
+    { "@op": "SET", "@key": "topic", "@args": ["$topic_intent.topic"] },
+    { "@op": "SET", "@key": "intent", "@args": ["$topic_intent.intent"] },
+    { "@op": "FOLD_EXIT", "@fold": "Wo", "@node": "think-node", "@args": ["$topic", "$intent"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Wo", "@node": "think-classify" },
+    { "@op": "CALL", "@fn": "classify_branch", "@args": ["$message", "$branches"], "@out": "branch" },
+    { "@op": "CALL", "@fn": "get_branch_hint", "@args": ["$branch", "$branches"], "@out": "branch_hint" },
+    { "@op": "FOLD_EXIT", "@fold": "Yax", "@node": "think-classify", "@args": ["$branch", "$branch_hint"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Yax", "@node": "think-build-prompt" },
+    { "@op": "CALL", "@fn": "format_think_prompt",
+      "@args": ["$message", "$topic", "$intent", "$branch_hint"],
+      "@template": "Q: {message}\nThink: topic={topic} intent={intent}\n→ {branch_hint}\nA:",
+      "@out": "prompt" },
+    { "@op": "FOLD_EXIT", "@fold": "Sek", "@node": "think-build-prompt", "@args": ["$prompt"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Sek", "@node": "think-dispatch" },
+    { "@op": "HTTP_POST", "@uri": "http://127.0.0.1:9010/completion",
+      "@body": { "prompt": "$prompt", "max_tokens": 200, "temperature": 0.8, "stop": ["<|endoftext|>", "\nQ:", "\n\n"] },
+      "@out": "response" },
+    { "@op": "CALL", "@fn": "extract_content", "@args": ["$response.content"], "@out": "content" },
+    { "@op": "CALL", "@fn": "is_non_empty", "@args": ["$content"], "@out": "valid" },
+    { "@op": "FOLD_EXIT", "@fold": "Chen", "@node": "think-dispatch", "@args": ["$content", "$valid"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Chen", "@node": "think-validate" },
+    { "@op": "IF",
+      "@cond": "$valid",
+      "@then": { "@op": "CALL", "@fn": "strip_scaffold_artifacts", "@args": ["$content"], "@out": "content" },
+      "@else": { "@op": "LOG", "@args": ["[think.template] empty — branch=$branch stop_type=$response.stop_type"] }
+    },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "think-validate", "@args": ["$content"] }
+  ],
+
+  "registry": {
+    "parent_chat": "programs/scx-expert.chat.json",
+    "training_gen": "tools/gen_think_train.py",
+    "training_data": "E:/models/GPT2/from_zero/trained/think-v1/think_train.jsonl"
+  }
+}

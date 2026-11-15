@@ -1,0 +1,26 @@
+{
+  "@kind": "micronaut.invocation",
+  "caller": "ORCH-u",
+  "intent": "resolve",
+  "@query": {
+    "pattern": "what is {subject}",
+    "captures": {
+      "subject": "decision"
+    }
+  },
+  "@route": {
+    "max_depth": 3,
+    "cycle_detection": true,
+    "authority": "read_only"
+  },
+  "@execution": {
+    "verb": "@infer",
+    "params": {}
+  },
+  "@result": {
+    "retain_provenance": true,
+    "retain_gaps": true,
+    "allow_pattern_candidates": false,
+    "promote_generated_facts": false
+  }
+}

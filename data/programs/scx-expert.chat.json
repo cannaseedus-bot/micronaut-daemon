@@ -1,0 +1,154 @@
+{
+  "@program": "scx-expert.chat",
+  "@kind": "kuhul.chat.scx-expert.v1",
+  "@fold": "Sek",
+  "@node": "scx-expert-node",
+  "@version": "1.0.0",
+  "description": "SCX-EXPERT from_zero chat program. Custom GPT-2 Large (355M, F32) trained on Claude history + UltraChat + KSON lane corpus. Uses raw llama.cpp /completion endpoint with Q&A prompt format — no ChatML template (EOS = <|endoftext|>; ChatML special tokens not yet stable).",
+
+  "template": "qa-plain",
+  "protocol": "llama-completion",
+
+  "model": {
+    "id": "scx-expert-8",
+    "name": "SCX-EXPERT (from_zero trained)",
+    "architecture": "gpt2-large",
+    "n_layer": 24,
+    "n_embd": 1024,
+    "n_head": 16,
+    "vocab": 50257,
+    "n_ctx_train": 1024,
+    "dtype": "F32",
+    "weights": "E:/models/GPT2/from_zero/trained/SCX-EXPERT.gguf",
+    "weights_source": "kson-ultrachat-slerp-0p40-top4.safetensors (SLERP alpha=0.40 of ultrachat-kson-lane-20k + coder base)",
+    "endpoint": "http://127.0.0.1:9010/completion",
+    "server_args": [
+      "--model", "E:/models/GPT2/from_zero/trained/SCX-EXPERT.gguf",
+      "--alias", "scx-expert-8",
+      "--host", "127.0.0.1",
+      "--port", "9010",
+      "--ctx-size", "1024",
+      "--n-gpu-layers", "0",
+      "--parallel", "1",
+      "--threads", "4"
+    ],
+    "status": "operational — text generation confirmed; chat training in-progress (chat-v2 LoRA)"
+  },
+
+  "training": {
+    "lineage": [
+      { "phase": "from_zero v0.1-v0.5", "data": "KSON AST + fold corpus", "steps": "phase1+2" },
+      { "phase": "from_zero v0.6_merged", "data": "pi-kuhul KXML folds", "steps": "phase2+3 done 2026-08-04" },
+      { "phase": "ultrachat-kson-lane-20k", "data": "UltraChat KSON lane (20k)", "steps": "10000" },
+      { "phase": "slerp-0p40-top4", "data": "SLERP merge alpha=0.40 (ultrachat + coder)", "steps": "merged" },
+      { "phase": "pi-kuhul-talker-lanes", "data": "lanes/chatml.jsonl seq=128", "steps": "40000", "loss": 0.062, "note": "block_size=128 caused fragment context — suboptimal chat quality" },
+      { "phase": "chat-v2-lora (in-progress)", "data": "E:/data/claude_history/ (39771 records, seq=512)", "steps": "10000", "lora_layers": "20-23", "lora_rank": 8, "lr": "2e-5", "log": "E:/models/GPT2/from_zero/trained/chat-v2/train.log" }
+    ],
+    "known_issues": [
+      "EOS = <|endoftext|>; ChatML <|im_start|>/<|im_end|> not stable — model generates template tokens as content when /chat/completions template is applied",
+      "code completion returns whitespace — code lane not yet converged",
+      "factual accuracy low at current training stage — associative rather than grounded"
+    ]
+  },
+
+  "prompt_format": {
+    "type": "qa-plain",
+    "template": "Q: {user_message}\nA:",
+    "stop": ["<|endoftext|>", "\nQ:", "\n\n"],
+    "max_tokens": { "fast": 120, "balanced": 200, "deep": 280 },
+    "temperature": 0.8,
+    "note": "Standard GPT-2 BPE tokenizer (50257 vocab). No special ChatML tokens in generation path."
+  },
+
+  "tool_contract": {
+    "format": "json-in-text",
+    "schema": { "tool": "write_file|read_file|list_files", "arguments": {} },
+    "detection": "JSON.parse on trimmed response",
+    "write_policy": "Resolve-ApprovedPath + Add-InlineFileEditRequest — user approves per-file",
+    "max_commands_per_turn": 1
+  },
+
+  "response_contract": {
+    "path": "content",
+    "empty_guard": true,
+    "empty_action": "emit system message with stop_type; note model may still be training",
+    "tool_intercept": true
+  },
+
+  "folds": {
+    "Pop": "load workspace context and server readiness check",
+    "Sek": "build Q&A prompt; POST /completion; parse response",
+    "Chen": "validate non-empty; detect JSON tool command",
+    "Xul": "emit AI message or inline file edit request; save inference turn"
+  },
+
+  "@state": {
+    "prompt": null,
+    "response": null,
+    "content": null,
+    "stop_type": null,
+    "tool_cmd": null,
+    "valid": false
+  },
+
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "scx-expert-node" },
+    { "@op": "CALL", "@fn": "Start-Scx8IfNeeded", "@args": [], "@out": "server_ready" },
+    { "@op": "IF",
+      "@cond": "$server_ready",
+      "@then": { "@op": "FOLD_EXIT", "@fold": "Sek", "@node": "scx-expert-node" },
+      "@else": { "@op": "SET", "@key": "result", "@args": [{ "error": "server_unavailable" }] }
+    },
+
+    { "@op": "FOLD_ENTER", "@fold": "Sek", "@node": "scx-expert-dispatch" },
+    { "@op": "CALL", "@fn": "build_qa_prompt", "@args": ["$message"], "@out": "prompt" },
+    { "@op": "HTTP_POST", "@uri": "http://127.0.0.1:9010/completion",
+      "@body": { "prompt": "$prompt", "max_tokens": "$max_tokens", "temperature": 0.8, "stop": ["<|endoftext|>", "\nQ:", "\n\n"] },
+      "@out": "response" },
+    { "@op": "CALL", "@fn": "extract_content", "@args": ["$response.content"], "@out": "content" },
+    { "@op": "CALL", "@fn": "is_non_empty", "@args": ["$content"], "@out": "valid" },
+    { "@op": "FOLD_EXIT", "@fold": "Chen", "@node": "scx-expert-dispatch", "@args": ["$content", "$valid", "$response.stop_type"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Chen", "@node": "scx-expert-validate" },
+    { "@op": "IF",
+      "@cond": "$valid",
+      "@then": { "@op": "CALL", "@fn": "try_parse_json", "@args": ["$content"], "@out": "tool_cmd" },
+      "@else": { "@op": "LOG", "@args": ["[scx-expert.chat] empty response — stop_type=$stop_type. Model training in-progress."] }
+    },
+    { "@op": "IF",
+      "@cond": "$tool_cmd.tool",
+      "@then": { "@op": "CALL", "@fn": "dispatch_tool_cmd", "@args": ["$tool_cmd"], "@out": "tool_result" },
+      "@else": { "@op": "CALL", "@fn": "Add-AIMessage", "@args": ["$content"] }
+    },
+    { "@op": "CALL", "@fn": "Save-InferenceTurn", "@args": ["scx8", "http://127.0.0.1:9010/completion", "$prompt", "$content", "$response.stop_type"] },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "scx-expert-validate", "@args": ["$content"] }
+  ],
+
+  "geodesic_cache": {
+    "ref": "programs/gpt_oss_geodesic_cache_jrom.json",
+    "note": "SCX-EXPERT uses the same geodesic cache contract shape but without SCXQDDS residency — weights are F32 GGUF, loaded fully into system RAM."
+  },
+
+  "providers": {
+    "server": "dist/khanary-server/llama-server.exe",
+    "port": 9010,
+    "backend": "CPU (DirectXMath SIMD x 4 threads)",
+    "gpu_note": "HD 4600 OpenCL 1.2 not compatible with llama.cpp OpenCL backend — CPU only",
+    "threads_manifest": "programs/threads.manifest.json"
+  },
+
+  "registry": {
+    "atomic_manifest": "models/from_zero/atomic.manifest.json",
+    "bimodal_ref": "programs/bimodal.attention.json",
+    "face_projection": "programs/micronaut-face-projection.json",
+    "weights_contract": "programs/weights.tensors.json",
+    "training_plan": "programs/training/from-zero-chat-layer-plan.json"
+  },
+
+  "next_steps": [
+    "await chat-v2 LoRA checkpoint (1000-step saves); convert to GGUF and test at each checkpoint",
+    "convert: python tools/gpt2_safetensors_to_gguf.py --in E:/models/GPT2/from_zero/trained/chat-v2/model.safetensors --out E:/models/GPT2/from_zero/trained/SCX-EXPERT-v2.gguf",
+    "restart server on :9010 with new GGUF and run Q&A probes to gauge chat convergence",
+    "once chat is stable: train tool_call lane (Q: ... A: {tool_json}) on mm-toolcall.bin"
+  ]
+}

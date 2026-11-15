@@ -1,0 +1,619 @@
+{
+  "id": "fold.runtime.v1",
+  "kind": "fold_runtime_config",
+  "internal_manifest_schema_links_only": true,
+  "schema_stack_links": {
+    "cycle_hash_spec": "data/schema/cycle-hash.spec.json",
+    "runtime_metadata": "data/schema/kuhul.fold-runtime.json",
+    "xsd_contract": "data/schema/kuhul.xsd",
+    "resolver_primitives": "data/schema/resolver.primitives.json",
+    "math_isa": "data/schema/math-isa.json"
+  },
+  "fold_adt": {
+    "identity": {
+      "anchor": "fold://runtime/default",
+      "superordinate": "semantic_fold",
+      "version": "1.0.0"
+    },
+    "incidence_operand": {
+      "tau": "all",
+      "row_ref": "B_tau[h,*]"
+    },
+    "pattern_strength_channel": {
+      "name": "W_E",
+      "range": [0.0, 1.0]
+    },
+    "state": {
+      "phase": "Pop",
+      "confidence": 1.0,
+      "static_weight": 1.0,
+      "health": 1.0,
+      "active": true
+    },
+    "computational_boundary": {
+      "topology_mutable": false,
+      "projection_authority": "non_authoritative"
+    }
+  },
+  "phase_algebra": {
+    "states": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"],
+    "transition_matrix": [
+      [0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0],
+      [0, 1, 0, 0, 0, 0],
+      [0, 0, 1, 0, 0, 0],
+      [0, 0, 0, 1, 0, 0],
+      [0, 0, 0, 0, 1, 0]
+    ],
+    "invariants": [
+      "P^6 = I",
+      "for all phi != Xul, T_phi(B) = B"
+    ]
+  },
+  "operator_contracts": {
+    "Pop": "observe",
+    "Wo": "state_and_constraints",
+    "Yax": "admit_neighborhood",
+    "Sek": "compute_over_admitted_structure",
+    "Ch'en": "assert_and_verify_candidate",
+    "Xul": "compare_and_commit"
+  },
+  "phase_driver_weights": {
+    "Pop": 1.0,
+    "Wo": 1.0,
+    "Yax": 1.0,
+    "Sek": 1.0,
+    "Ch'en": 1.0,
+    "Xul": 1.0
+  },
+  "phase_driver_profile": "default",
+  "phase_driver_contracts": {
+    "Pop": "data/drivers/phases/pop.json",
+    "Wo": "data/drivers/phases/wo.json",
+    "Yax": "data/drivers/phases/yax.json",
+    "Sek": "data/drivers/phases/sek.json",
+    "Ch'en": "data/drivers/phases/chen.json",
+    "Xul": "data/drivers/phases/xul.json"
+  },
+  "phase_driver_contract_profiles": {
+    "default": {
+      "Pop": "data/drivers/phases/pop.json",
+      "Wo": "data/drivers/phases/wo.json",
+      "Yax": "data/drivers/phases/yax.json",
+      "Sek": "data/drivers/phases/sek.json",
+      "Ch'en": "data/drivers/phases/chen.json",
+      "Xul": "data/drivers/phases/xul.json"
+    },
+    "unigram": {
+      "Pop": "data/drivers/phases/unigram.pop.json",
+      "Wo": "data/drivers/phases/unigram.wo.json",
+      "Yax": "data/drivers/phases/unigram.yax.json",
+      "Sek": "data/drivers/phases/unigram.sek.json",
+      "Ch'en": "data/drivers/phases/unigram.chen.json",
+      "Xul": "data/drivers/phases/unigram.xul.json"
+    }
+  },
+  "projection_contract": {
+    "lossless_representations": ["GraphML", "B_matrix", "SCXQ2"],
+    "lossy_representations": ["SDR", "SVG_3D", "JSON_Book_view"],
+    "rule": "projection_is_not_object"
+  },
+  "chen_verification_contract": {
+    "status_enum": ["PASS", "FAIL", "UNKNOWN"],
+    "resolution_classification_enum": [
+      "VERIFIED",
+      "CONTRADICTED",
+      "MISS",
+      "AMBIGUOUS",
+      "INSUFFICIENT_CONTEXT",
+      "INVALID"
+    ],
+    "miss_rule": "MISS != WRONG",
+    "verified_rule": "all required assertions PASS",
+    "rewrite_authorized_by_chen": false,
+    "required_assertion_classes": ["STRUCTURAL", "SEMANTIC", "STATE", "AUTHORITY"],
+    "resolution_transition_policy": {
+      "VERIFIED": "Xul",
+      "CONTRADICTED": "Revise",
+      "MISS": "Acquire/Unfold",
+      "AMBIGUOUS": "Branch/Disambiguate",
+      "INSUFFICIENT_CONTEXT": "Acquire/Unfold",
+      "INVALID": "Reject"
+    }
+  },
+  "miss_deficit_contract": {
+    "definition": "MISS(Q) = RequiredContext(Q) - ResolvedContext(F_Q)",
+    "description": "MISS is an epistemic deficit vector, not an error verdict.",
+    "research_pressure_formula": "rho_research = D * R * U",
+    "research_pressure_components": {
+      "D": "dependency pressure from unresolved context magnitude",
+      "R": "query relevance from incidence-aware routing channels",
+      "U": "continuous unresolvedness (1 - confidence)"
+    },
+    "routing_rule": "rho_research -> 1 implies acquire evidence before collapse",
+    "miss_kind_enum": [
+      "semantic",
+      "topology",
+      "memory",
+      "factual",
+      "mathematical",
+      "capability",
+      "evidence",
+      "relation"
+    ],
+    "miss_kind_transitions": {
+      "semantic": "unfold additional Book/fold",
+      "topology": "graph/incidence query",
+      "memory": "recall memory trace",
+      "factual": "RAG/external research",
+      "mathematical": "MathML/deterministic executor",
+      "capability": "delegate Micronaut",
+      "evidence": "acquire/verify source",
+      "relation": "acquire stronger typed relation evidence"
+    }
+  },
+  "runtime_attention_contract": {
+    "model": "SGSFG_RSA",
+    "formula": "A(v) = R * U * D * P",
+    "combine_mode": "product",
+    "relevance": {
+      "normal_rule": "R = clamp(max(0.05, relevance_score), 0, 1)",
+      "cold_start_rule": "if key_terms empty and topic_anchor=global then R = clamp(max(0.30, lexical_prior), 0, 1)",
+      "lexical_prior": "0.5 * bow_score + 0.5 * distributional_score"
+    },
+    "unresolvedness": {
+      "rule": "U = clamp(max(0.15, 1 - confidence_score), 0, 1)",
+      "mode": "continuous"
+    },
+    "dependency_pressure": {
+      "rule": "D = clamp(missing_context_count / max(1, required_fold_count), 0, 1)",
+      "primary_focus_boost": "+0.15 (clamped to 1.0)",
+      "secondary_focus_factor": "0.75"
+    },
+    "priority": {
+      "route_rule": "P_route = clamp(static_weight * health_score, 0, 1)",
+      "query_rule_default": "P_query = 0.50",
+      "query_rule_urgent": "P_query = 0.90 when query includes urgent/asap/now/immediately/blocker/critical",
+      "query_rule_deferred": "P_query = 0.30 when query includes later/optional/whenever/nice to have",
+      "blend": "P = clamp(0.80 * P_route + 0.20 * P_query, 0, 1)"
+    },
+    "admission": {
+      "threshold": 0.35,
+      "rule": "admitted = A(v) >= threshold"
+    },
+    "tie_break_policy": "score_desc,D_desc,R_desc,node_id_asc",
+    "resolver_selection": {
+      "formula": "S_mu(v)=static_weight*pattern_strength*fold_weight*phase_driver_weight*confidence_score*health_score*relevance_score",
+      "delegate_policy": "web-research fallback may override route candidate"
+    }
+  },
+  "isa_extension_contract": {
+    "base_compiler": "L_A",
+    "base_isa": "GraphPlan",
+    "domain_extensions": [
+      {
+        "domain": "math",
+        "source_aiml": "data/alice/math.aiml",
+        "isa_declaration": "data/schema/math-isa.json",
+        "runtime_route": "key_query",
+        "dynamic_op_invention": false
+      }
+    ],
+    "rule": "AIML categories may only emit ops declared in a domain extension file."
+  },
+  "resolver_primitive_contract": {
+    "declaration": "data/schema/resolver.primitives.json",
+    "dispatch_rule": "GraphPlan op -> resolver capability -> resolver primitive op",
+    "attention_invariance": "Resolver primitive changes execution backend, not runtime attention semantics.",
+    "math_policy": {
+      "symbolic_default": true,
+      "matrix_required_for": [
+        "linear_system_solve",
+        "eigenvalue",
+        "decomposition",
+        "large_dense_matmul"
+      ]
+    }
+  },
+  "resolver_policy_boundary_contract": {
+    "invariant": "Policy constrains attention without becoming attention.",
+    "yax": "Read task requirements/resolver policy and compute EligibleResolvers(v).",
+    "ranking": "Run WCR only over EligibleResolvers(v): mu*=argmax_{mu in Eligible} W_mu*C_mu*R_mu(v).",
+    "xcfe": "Authorize selected resolver dispatch primitive/op.",
+    "sek": "Revalidate capability + policy + XCFE before primitive dispatch.",
+    "dispatch_formula": "DispatchAllowed = Selected && Capable && PolicySatisfied && XCFEAuthorized",
+    "empty_eligible_set_rule": "EligibleResolvers(v)=empty -> MISS_capability (not WRONG)."
+  },
+  "semantic_attention_shader_contract": {
+    "authority": "Yax defines semantic attention algebra; shader may execute it.",
+    "backend": "data/shaders/attention.hlsl",
+    "input_surface": "semantic records (node/fold/relation/governs/phase/W/C/R/state/policy gates)",
+    "score_law": "S = W * C * R",
+    "admission_law": "A = 1 if (S >= tau && legal_gate==1) else 0",
+    "legal_gate": "capable && policy_ok && xcfe_ok",
+    "non_goal": "This is not transformer QKV attention."
+  },
+  "xul_commit_contract": {
+    "mode": "compare_and_commit",
+    "requires": [
+      "Verified(V)",
+      "Authorized(V)",
+      "Fresh(V)",
+      "certificate_hash_match",
+      "topology_hash_match"
+    ],
+    "on_fail": "reject_delta_keep_topology"
+  },
+  "semantic_hypernym_fold": {
+    "formal_definition": "SHF(h, tau) = < h, B_tau[h,*], N_tau(h), W_tau, State(h) >",
+    "components": {
+      "h": "semantic superordinate / identity",
+      "B_tau_row": "typed incidence fingerprint — row of the tau-projected B matrix",
+      "N_tau_h": "neighborhood obtained by unfolding those incidences",
+      "W_tau": "pattern strengths over participating relations",
+      "State_h": "runtime tensor state"
+    },
+    "typed_projection": {
+      "formula": "B_tau = B M_tau",
+      "canonical_default_types": ["phase_fold", "relation"],
+      "excluded_by_default": ["legacy_delegate"],
+      "override": "pass edge_type=all to include all columns"
+    },
+    "fold_unfold": {
+      "fold":   "{ contexts, relations, nodes } -> h",
+      "unfold": "(h, tau) -> { e | B_tau[h,e] != 0 }"
+    },
+    "axiom": "Fold is structure. Phase is operation / state over that structure.",
+    "reference": "docs/SEMANTIC_FOLDS.md"
+  },
+  "yax_wsd_contract": {
+    "description": "Yax admission is the word-sense disambiguation mechanism. No separate WSD step is required — sense resolution falls out of the admission gate.",
+    "mechanism": {
+      "admission_gate": "m_h = Gate_Q( B_tau[h,*], W_E )",
+      "active_neighborhood": "B_h_active = B_tau[h,*] ⊙ m_h   (local scratch; not persisted)",
+      "semantics": "Same node h (e.g. 'bank') has a full incidence row across all sense-bearing contexts. Yax selects which neighborhood columns activate under the current query Q. The activated subset IS the resolved sense."
+    },
+    "invariant": "T_Yax(B) = B — topology is read-only; Yax only constructs the admission mask, never writes back.",
+    "resolution_states": {
+      "VERIFIED":              "one sense neighborhood dominated — collapse to Xul",
+      "AMBIGUOUS":             "multiple neighborhoods activated with near-equal evidence — Branch/Disambiguate before Sek",
+      "MISS":                  "sense-discriminating context was not unfolded — acquire additional Book, re-run Yax → Sek → Ch'en",
+      "INSUFFICIENT_CONTEXT":  "Book exists but coverage too thin to gate a sense — widen tau or expand fold",
+      "CONTRADICTED":          "active neighborhood contradicts asserted sense — Revise",
+      "INVALID":               "no legal sense neighborhood exists for h under tau — Reject"
+    },
+    "miss_rule": "MISS != WRONG. Missing context means the Yax gate cannot fire cleanly, not that the answer is incorrect.",
+    "research_pressure": {
+      "formula": "rho_research = M * I * U",
+      "terms": {
+        "M": "missing-context magnitude — |RequiredContext(Q) - ResolvedContext(F_Q)|",
+        "I": "importance of the missing context to the requested conclusion",
+        "U": "uncertainty given current admitted neighborhood"
+      },
+      "rule": "high rho_research => acquire evidence and re-run Yax before collapse"
+    },
+    "miss_kind_routing": {
+      "semantic_miss":     "unfold additional Book / SHF fold",
+      "topology_miss":     "incidence_matrix or field_dag query",
+      "memory_miss":       "recall trace via jrom_replay",
+      "factual_miss":      "RAG / external research",
+      "mathematical_miss": "deterministic MathML / executor path",
+      "capability_miss":   "delegate to Micronaut",
+      "evidence_miss":     "source acquisition / provenance verification"
+    },
+    "semantic_atoms": {
+      "description": "Coarse-grain sense axes used to anchor admission. Derived from lexical/morpheme cues in derive_semantic_atom_grounding().",
+      "atoms": ["CONDITION", "CONSEQUENCE", "CAUSAL", "VERIFICATION", "NEGATION", "CAPABILITY", "SELECTION", "EXECUTION", "COMMIT", "ROUTING", "MEMORY", "KUHUL_RUNTIME"],
+      "role": "Atoms bias which incidence columns Gate_Q activates, providing a deterministic prior for sense selection before distributional evidence is available."
+    },
+    "reference": "src/io/runtime_attention.h"
+  },
+  "relation_isa_contract": {
+    "closed_relation_families": [
+      "semantic",
+      "causal",
+      "epistemic",
+      "dependency",
+      "context",
+      "control",
+      "runtime"
+    ],
+    "canonical_relations": [
+      "@is_a",
+      "@part_of",
+      "@has_a",
+      "@has_part",
+      "@has_property",
+      "@value",
+      "@possesses",
+      "@related_to",
+      "@contains",
+      "@declares",
+      "@defines",
+      "@causes",
+      "@prevents",
+      "@enables",
+      "@supports",
+      "@contradicts",
+      "@evidence_for",
+      "@requires",
+      "@produces",
+      "@depends_on",
+      "@imports",
+      "@uses",
+      "@accesses",
+      "@reads",
+      "@samples",
+      "@returns",
+      "@context",
+      "@previous",
+      "@next",
+      "@annotates",
+      "@via",
+      "@governs",
+      "@redirect",
+      "@calls",
+      "@delegates_to",
+      "@return_to",
+      "@resumes"
+    ],
+    "operator_rule": "TRAVERSE is the operation; relation_type is an operand.",
+    "typed_projection_rule": "B_tau may be projected by relation family/type masks before fold operations.",
+    "fallback_rule": "When relation_type is requested, @related_to does not silently upgrade it; emit MISS_relation when only weak association exists."
+  },
+  "lexicon_attention_contract": {
+    "lexicon_layer": "Unigrams are lexical identity addresses (word->key->Book), not full contextual meaning.",
+    "ngram_layer": "N-grams are contextual association evidence derived from observed corpora.",
+    "book_layer": "Books hold semantic neighborhoods for lexical keys.",
+    "attention_layer": "Yax performs semantic attention over relation-typed neighborhoods, not over raw token frequency.",
+    "confidence_update_rule": "Newer verified confidence rewards may replace older attention weighting through Ch'en candidate updates and Xul commits."
+  },
+  "semantic_code_parser_graph": {
+    "description": "Grammar-driven fold-native code structure graph. Any language with a .code-grammar.json becomes queryable via the same fold surface as track nodes.",
+    "pipeline_layers": [
+      "Surface Language",
+      "Grammar Adapter",
+      "AST (Abstract Syntax Transpiler)",
+      "Canonical Atoms + Relation ISA",
+      "Fold Graph",
+      "K'UHUL",
+      "Execution/Projection"
+    ],
+    "layer_responsibilities": {
+      "AST": "Normalize surface syntax into canonical node/edge candidates; AST means Abstract Syntax Transpiler.",
+      "K'UHUL": "Phase execution authority over canonical structure (Pop/Wo/Yax/Sek/Ch'en/Xul)."
+    },
+    "binary_keyspace_contract": {
+      "artifact": "factory_keys.bin",
+      "semantic_rule": "Binary is a serialization envelope for already-keyed records; tokenization/keying occurs before byte encoding.",
+      "record_fields": ["key", "response", "hash", "hits", "confidence"],
+      "lookup_rule": "hash:<id> resolves key buckets deterministically."
+    },
+    "syntax_unit_kinds": [
+      "Atom",
+      "Snippet",
+      "Block",
+      "Component",
+      "Layout",
+      "File",
+      "Application"
+    ],
+    "granularity_rule": "Any source may compile as SyntaxUnit at snippet/block/layout/file/application resolution using one SyntaxGraph contract.",
+    "typescript_resolution_note": "TypeScript commonly compiles at snippet/construct resolution before file/application composition.",
+    "grammar_format": {
+      "token_object": {
+        "type":      "string — node type label",
+        "pattern":   "string — ECMAScript regex applied to source text",
+        "captures":  "array<string> — named capture group labels (positional, 1-indexed)",
+        "edge_kind": "string — canonical relation verb (prefer @verb form)"
+      },
+      "edge_rule_object": {
+        "from_type": "string — source token type",
+        "to_type":   "string — destination token type",
+        "kind":      "string — canonical relation verb (becomes a fold column kind)",
+        "condition": "sequence | precedes | file"
+      }
+    },
+    "edge_conditions": {
+      "sequence": "from_node -> first to_node appearing after it in source position order",
+      "precedes": "from_node on the line immediately before to_node",
+      "file":     "all from_nodes x all to_nodes in the same parse (file-scope)"
+    },
+    "output_contract": {
+      "nodes":             "CodeNode per regex match: id, type, text, line, col, captures",
+      "edges":             "CodeEdge per rule application: from, to, kind, weight",
+      "fold_fingerprints": "B_tau[v,*] built from code graph edges — same incidence model as semantic_fold; grammar edge kinds become fold column kinds"
+    },
+    "mcp_tool": "code_parse",
+    "mcp_params": {
+      "source":        "string (required) — source text to parse",
+      "grammar_file":  "string (required) — grammar filename, resolved against data/grammar/",
+      "include_fold":  "bool (default true) — also compute fold fingerprints"
+    },
+    "builtin_grammars": [
+      "data/grammar/klsl.code-grammar.json",
+      "data/grammar/cpp.code-grammar.json",
+      "data/grammar/typescript.code-grammar.json"
+    ],
+    "fold_queryability": "code graph nodes are immediately fingerprint-queryable via the same B_tau incidence surface as track nodes — grammar edge types become fold column kinds",
+    "reference": "src/io/code_parser.h"
+  },
+  "phase_driver_lock": {
+    "enabled": true,
+    "mode": "enforce",
+    "dll_root": "data/drivers/phases",
+    "contract": "phase execution is gated by per-phase driver artifact presence and SHA-256 integrity under enforce mode",
+    "entry_symbol": "khanary_phase_driver_entry_v1",
+    "phases": [
+      {
+        "phase": "Pop",
+        "dll": "pop.json",
+        "required_in_enforce_mode": true
+      },
+      {
+        "phase": "Wo",
+        "dll": "wo.json",
+        "required_in_enforce_mode": true
+      },
+      {
+        "phase": "Yax",
+        "dll": "yax.json",
+        "required_in_enforce_mode": true
+      },
+      {
+        "phase": "Sek",
+        "dll": "sek.json",
+        "required_in_enforce_mode": true
+      },
+      {
+        "phase": "Ch'en",
+        "dll": "chen.json",
+        "required_in_enforce_mode": true
+      },
+      {
+        "phase": "Xul",
+        "dll": "xul.json",
+        "required_in_enforce_mode": true
+      }
+    ],
+    "policy": {
+      "audit": "log status and permit execution even if DLLs are missing or pending hash",
+      "enforce": "deny phase execution when required phase artifact/hash verification fails"
+    }
+  },
+  "multi_track_fold_unfold": {
+    "description": "General mechanism for traversing multiple tracks' semantic spaces via alternating unfold/fold steps within and across K'UHUL phases. Fold and unfold are operations on semantic structure — they do not advance phase. Phase advances independently (vertical transition). Xul alone commits topology.",
+
+    "machine_state_model": {
+      "state":       "Ω = (φ, T, s)  where φ = current phase, T = active track, s ∈ {0=folded, 1=unfolded}",
+      "coordinates": {
+        "phi":     "K'UHUL phase (C6 wheel: Pop/Wo/Yax/Sek/Ch'en/Xul) — answers WHEN/WHERE",
+        "T":       "active track (semantic space: MEMORY-µ, TOOL-µ, ELIZA, ...) — answers WHO/WHICH",
+        "s":       "fold state: 0 = bounded/compressed, 1 = expanded/addressable — answers HOW"
+      },
+      "independence": "The three coordinates are orthogonal. A fold/unfold step changes s (and T) but not φ. A vertical transition changes φ but not s or T."
+    },
+
+    "critical_invariant": "Fold ≠ Xul.  A fold locally compresses working context into a bounded intermediate state (C_T). It does NOT commit topology. Only Xul's compare-and-commit mutates B.",
+
+    "semantics": {
+      "unfold_op": "unfold(T): expand track T's neighborhood N_τ(h, T) into the active semantic field F_Q.  s → 1.  F_Q grows.",
+      "fold_op":   "fold(T):   compress what was learned from T into a bounded intermediate C_T.  s → 0.  F_Q bounded.",
+      "formal_traversal": "F_Q^(0) → unfold(T_1) → fold(T_1) → C_T1 → unfold(T_2) → fold(T_2) → C_T2 → ...",
+      "semantic_field":   "F_Q accumulates bounded projections C_Ti from each track. It is the running semantic field, not a commit buffer.",
+      "commit":    "Xul receives F_Q as evidence and performs compare-and-commit on B. This is the only topology mutation."
+    },
+
+    "movement_kinds": {
+      "horizontal": {
+        "definition": "(φ, T_A) → (φ, T_B)  — same phase, different track",
+        "delta_theta": 0,
+        "description": "Change semantic neighborhood without advancing control phase.",
+        "example": "Yax/ADVISOR-µ ↔ Yax/MEMORY-µ ↔ Yax/RESEARCH-µ"
+      },
+      "vertical": {
+        "definition": "(φ, T) → (φ + π/3, T)  — same track, next phase",
+        "delta_theta": "π/3",
+        "description": "Advance control phase within the same semantic space.",
+        "example": "Yax/ADVISOR-µ → Sek/ADVISOR-µ"
+      },
+      "diagonal": {
+        "definition": "(φ, T_A) → (φ + π/3, T_B)  — different phase AND different track",
+        "description": "Combine horizontal and vertical in one step; legal but must be declared explicitly."
+      }
+    },
+
+    "folds_array_notation": {
+      "description": "Track folds[] declare unfold/fold pairs within a phase. Pairs at the same phase are horizontal; phase change is vertical. unfold precedes fold for each track.",
+      "example": [
+        { "phase": "Yax", "op": "unfold", "track": "MEMORY-µ",   "note": "bring memory neighborhood into F_Q" },
+        { "phase": "Yax", "op": "fold",   "track": "MEMORY-µ",   "note": "bound memory result as C_memory" },
+        { "phase": "Yax", "op": "unfold", "track": "RESEARCH-µ", "note": "bring research neighborhood into F_Q" },
+        { "phase": "Yax", "op": "fold",   "track": "RESEARCH-µ", "note": "bound research result as C_research" },
+        { "phase": "Yax", "op": "unfold", "track": "ADVISOR-µ",  "note": "Advisor resumes with richer F_Q" },
+        { "phase": "Yax", "op": "fold",   "track": "ADVISOR-µ",  "note": "bound Advisor state" },
+        { "phase": "Wo",  "op": "unfold", "track": "PLAN-µ",     "note": "planning support enters F_Q" },
+        { "phase": "Pop", "op": "unfold", "track": "ngram-context", "note": "expand lexical ngram neighborhood before planning" },
+        { "phase": "Yax", "op": "fold",   "track": "ngram-context", "note": "bind bounded ngram evidence into plan context" },
+        { "phase": "Wo",  "op": "fold",   "track": "PLAN-µ",     "note": "bound task list and approval state" },
+        { "phase": "Xul", "op": "unfold", "track": "MEMORY-µ",   "note": "distillation context enters F_Q" },
+        { "phase": "Xul", "op": "fold",   "track": "MEMORY-µ",   "note": "persist accepted result and provenance" },
+        { "phase": "Sek", "op": "unfold", "track": "ADVISOR-µ",  "note": "vertical: Sek picks up Advisor context" },
+        { "phase": "Sek", "op": "fold",   "track": "ADVISOR-µ",  "note": "bound Advisor Sek result" },
+        { "phase": "Sek", "op": "unfold", "track": "TOOL-µ",     "note": "horizontal: bring tool context into F_Q" },
+        { "phase": "Sek", "op": "fold",   "track": "TOOL-µ",     "note": "bound tool Sek result" },
+        { "phase": "Xul", "op": "gramWrite", "scope": "local",   "note": "commit F_Q — Xul is the ONLY topology mutation" }
+      ],
+      "rule": "Each phase may contain n unfold/fold pairs (horizontal traversal). Xul terminates the sequence."
+    },
+
+    "scope_accumulation_modes": {
+      "union":        "F_Q += N_τ(h, T)   — default; each unfold broadens the active field",
+      "intersection": "F_Q ∩= N_τ(h, T)  — each unfold narrows to the agreement zone; use when tracks must agree",
+      "weighted":     "F_Q += w_T * N_τ(h, T)  — W_E weight of the relation edge determines track contribution"
+    },
+
+    "micronaut_composition": {
+      "description": "Micronauts are nodes and folds that unfold. When one micronaut needs another's context, it unfolds that micronaut's track horizontally — not via imperative function call but via semantic field expansion.",
+      "pattern": [
+        "unfold(ADVISOR-µ)  → Advisor neighborhood enters F_Q",
+        "fold(ADVISOR-µ)    → 'need language + grammar evidence'",
+        "unfold(RESEARCH-µ) → research neighborhood enters F_Q",
+        "fold(RESEARCH-µ)   → bounded research result",
+        "unfold(MEMORY-µ)   → prior grammar experience enters F_Q",
+        "fold(MEMORY-µ)     → relevant prior associations",
+        "unfold(ADVISOR-µ)  → Advisor resumes with richer F_Q"
+      ],
+      "vs_imperative": "This is F_Advisor ↔ F_Research ↔ F_Memory (field coupling), not Advisor calls Research calls Memory (stack)."
+    },
+
+    "fold_unfold_as_binary_oscillation": {
+      "description": "The s coordinate (fold state) oscillates: 0 → 1 → 0 → 1 ... while φ advances independently along C6.",
+      "0_state": "fold = bounded/compressed — C_T intermediate state",
+      "1_state": "unfold = expanded/addressable — N_τ(h, T) visible in F_Q",
+      "two_dimensions": "K'UHUL phase wheel × fold/unfold oscillation × track space — three orthogonal axes of motion"
+    },
+
+    "termination_conditions": [
+      "Xul gramWrite fired (compare-and-commit executed — F_Q → B)",
+      "max_alternation_depth reached (escalate to rho_research)",
+      "fixed-point: F_Q unchanged after a complete unfold/fold pair",
+      "Ch'en FAIL: certificate rejected — abandon current traversal path"
+    ],
+
+    "max_alternation_depth": 6,
+    "depth_note": "Depth 6 = one full C6 cycle of horizontal steps. If F_Q has not converged, escalate via rho_research rather than cycling further.",
+
+    "connection_to_miss_routing": {
+      "rule":          "MISS → Acquire/Unfold is an instance of this mechanism with depth=1 at the current phase",
+      "semantic_miss": "unfold(Book/SHF track) → fold → re-run Yax",
+      "memory_miss":   "unfold(MEMORY-µ) → fold → bring gram-store evidence into F_Q",
+      "factual_miss":  "unfold(WEB-RESEARCH-µ) after advisor response → fold → acquired keys enter F_Q"
+    },
+
+    "relation_to_shf": {
+      "shf_single":   "SHF(h, τ) = one unfold/fold pair on a single track",
+      "multi_track":  "Multi-track traversal = iterated SHF: ∪_i SHF(h, T_i) accumulated into F_Q",
+      "primitive":    "Handle → unfold → Neighborhood → Attention → fold → Handle'  — the recursive unit"
+    },
+
+    "connection_to_ngram_pipeline": {
+      "YaxNGram":  "unfold = open-world admit; fold = Yax gate fires, bounded admitted set",
+      "SekNGram":  "unfold = infer_relations brings endpoints into F_Q; fold = scoring bounds them",
+      "ChenNGram": "miss kinds map to specific unfold targets; advisor is an unfold(external)",
+      "XulNGram":  "gramWrite is the Xul commit — closes the traversal"
+    },
+
+    "runtime_ops": {
+      "unfold_op": "incidence_matrix MCP tool (head=h, tau=T) — returns N_τ(h,T) for scope extension",
+      "fold_op":   "semantic_fold MCP tool (phase=φ, head=h, tau=T) — compresses to fingerprint C_T",
+      "commit_op": "gram_write (phase=Xul) or XulNGram::process — topology mutation, Xul only"
+    }
+  },
+
+  "sha256": {
+    "algorithm": "sha256",
+    "cycle_hash_spec": "sha256:3313c79c6407b0f8a3d2df1da11e5d75efb35875b246c199611d6f650d1ae0e0",
+    "binding": "validated at load time by Ch'en/Xul pipeline"
+  }
+}

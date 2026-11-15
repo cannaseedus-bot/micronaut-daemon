@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  _template.aiml — Generic ASX key-binding patterns for ghost-shell apps.
+
+  Included by every app-scoped {app_id}.aiml. Provides:
+    1. Generic CRUD verbs that any app can inherit
+    2. Phase-aware context patterns (Pop/Yax/Sek/Xul)
+    3. App help / discovery patterns
+    4. Wildcard passthrough for prompt context injection
+
+  App-scoped files shadow these patterns with more-specific versions.
+  Authority: data/grammar/app-aiml-addon.contracts.json
+-->
+<aiml version="1.0">
+
+  <!-- ── Discovery / help ────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>WHAT CAN I DO</pattern>
+    <template>You can create, view, search, and manage items in this app. Try: ADD [item] — to add something new. SHOW [item] — to find it. LIST — to see everything. DELETE [item] — to remove it (requires confirmation).</template>
+  </category>
+
+  <category>
+    <pattern>HELP</pattern>
+    <template><srai>WHAT CAN I DO</srai></template>
+  </category>
+
+  <category>
+    <pattern>APP COMMANDS</pattern>
+    <template><srai>WHAT CAN I DO</srai></template>
+  </category>
+
+  <!-- ── Generic CREATE / ADD ────────────────────────────────────────── -->
+  <!-- App files override these with table-specific and key-targeted versions. -->
+
+  <category>
+    <pattern>ADD *</pattern>
+    <template>[XCFE:KEY_WRITE table=items key=⟁WIDGET:FEED] {"text":"<star/>"}</template>
+  </category>
+
+  <category>
+    <pattern>CREATE *</pattern>
+    <template><srai>ADD <star/></srai></template>
+  </category>
+
+  <category>
+    <pattern>NEW *</pattern>
+    <template><srai>ADD <star/></srai></template>
+  </category>
+
+  <category>
+    <pattern>SAVE *</pattern>
+    <template><srai>ADD <star/></srai></template>
+  </category>
+
+  <category>
+    <pattern>POST *</pattern>
+    <template><srai>ADD <star/></srai></template>
+  </category>
+
+  <category>
+    <pattern>LOG *</pattern>
+    <template>[XCFE:KEY_APPEND table=logs key=⟁WIDGET:FEED] {"text":"<star/>"}</template>
+  </category>
+
+  <category>
+    <pattern>RECORD *</pattern>
+    <template><srai>LOG <star/></srai></template>
+  </category>
+
+  <category>
+    <pattern>NOTE *</pattern>
+    <template><srai>LOG <star/></srai></template>
+  </category>
+
+  <category>
+    <pattern>TRACK *</pattern>
+    <template><srai>LOG <star/></srai></template>
+  </category>
+
+  <!-- ADD * WITH TITLE * BODY * — two-field capture -->
+  <category>
+    <pattern>ADD TITLE * BODY *</pattern>
+    <template>[XCFE:KEY_WRITE table=items key=⟁WIDGET:FEED] {"title":"<star index='1'/>","body":"<star index='2'/>"}</template>
+  </category>
+
+  <!-- ── Generic READ / SEARCH ───────────────────────────────────────── -->
+
+  <category>
+    <pattern>SHOW *</pattern>
+    <template>[XCFE:KEY_READ key=⟁WIDGET:FEED] <star/></template>
+  </category>
+
+  <category>
+    <pattern>GET *</pattern>
+    <template><srai>SHOW <star/></srai></template>
+  </category>
+
+  <category>
+    <pattern>FIND *</pattern>
+    <template><srai>SHOW <star/></srai></template>
+  </category>
+
+  <category>
+    <pattern>OPEN *</pattern>
+    <template><srai>SHOW <star/></srai></template>
+  </category>
+
+  <category>
+    <pattern>SEARCH *</pattern>
+    <template>[XCFE:KEY_LIST table=items key=⟁WIDGET:FEED] <star/></template>
+  </category>
+
+  <category>
+    <pattern>LIST</pattern>
+    <template>[XCFE:KEY_LIST table=items key=⟁WIDGET:FEED]</template>
+  </category>
+
+  <category>
+    <pattern>LIST *</pattern>
+    <template>[XCFE:KEY_LIST table=items key=⟁WIDGET:FEED] <star/></template>
+  </category>
+
+  <category>
+    <pattern>SHOW ALL</pattern>
+    <template><srai>LIST</srai></template>
+  </category>
+
+  <category>
+    <pattern>VIEW *</pattern>
+    <template><srai>SHOW <star/></srai></template>
+  </category>
+
+  <!-- ── Generic UPDATE ──────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>UPDATE * TO *</pattern>
+    <template>[XCFE:KEY_WRITE table=items key=⟁WIDGET:FEED] {"id":"<star index='1'/>","update":"<star index='2'/>"}</template>
+  </category>
+
+  <category>
+    <pattern>EDIT * SET *</pattern>
+    <template><srai>UPDATE <star index='1'/> TO <star index='2'/></srai></template>
+  </category>
+
+  <category>
+    <pattern>RENAME * TO *</pattern>
+    <template>[XCFE:KEY_WRITE table=items key=⟁WIDGET:FEED] {"id":"<star index='1'/>","title":"<star index='2'/>"}</template>
+  </category>
+
+  <category>
+    <pattern>MARK * AS *</pattern>
+    <template>[XCFE:KEY_WRITE table=items key=⟁WIDGET:FEED] {"id":"<star index='1'/>","status":"<star index='2'/>"}</template>
+  </category>
+
+  <!-- ── Generic DELETE (guard required) ─────────────────────────────── -->
+
+  <category>
+    <pattern>DELETE *</pattern>
+    <template>Are you sure you want to delete "<star/>"? Say CONFIRM DELETE <star/> to proceed.</template>
+  </category>
+
+  <category>
+    <pattern>CONFIRM DELETE *</pattern>
+    <template>[XCFE:KEY_DELETE table=items key=⟁WIDGET:FEED id="<star/>"]</template>
+  </category>
+
+  <category>
+    <pattern>REMOVE *</pattern>
+    <template><srai>DELETE <star/></srai></template>
+  </category>
+
+  <category>
+    <pattern>ARCHIVE *</pattern>
+    <template><srai>MARK <star/> AS archived</srai></template>
+  </category>
+
+  <!-- ── Counter / increment ─────────────────────────────────────────── -->
+
+  <category>
+    <pattern>INCREMENT *</pattern>
+    <template>[XCFE:KEY_APPEND table=counters key=⟁COUNTER] {"subject":"<star/>","delta":1}</template>
+  </category>
+
+  <category>
+    <pattern>COUNT *</pattern>
+    <template><srai>INCREMENT <star/></srai></template>
+  </category>
+
+  <category>
+    <pattern>TICK *</pattern>
+    <template><srai>INCREMENT <star/></srai></template>
+  </category>
+
+  <!-- ── Phase-aware patterns ─────────────────────────────────────────── -->
+  <!-- Pop — seed / first-load / discovery -->
+
+  <category>
+    <pattern>WELCOME</pattern>
+    <template>[XCFE:KEY_READ key=⟁WIDGET:HERO] Showing your home view.</template>
+  </category>
+
+  <category>
+    <pattern>START</pattern>
+    <template><srai>WELCOME</srai></template>
+  </category>
+
+  <!-- Yax — browse / explore -->
+
+  <category>
+    <pattern>BROWSE</pattern>
+    <template>[XCFE:KEY_LIST table=items key=⟁WIDGET:FEED]</template>
+  </category>
+
+  <category>
+    <pattern>EXPLORE *</pattern>
+    <template>[XCFE:KEY_LIST table=items key=⟁WIDGET:FEED] <star/></template>
+  </category>
+
+  <category>
+    <pattern>FILTER BY *</pattern>
+    <template>[XCFE:KEY_LIST table=items key=⟁WIDGET:FEED] <star/></template>
+  </category>
+
+  <!-- Sek — do-work / compose -->
+
+  <category>
+    <pattern>COMPOSE</pattern>
+    <template>[XCFE:KEY_READ key=⟁ACTION:COMPOSE] Opening compose panel.</template>
+  </category>
+
+  <category>
+    <pattern>RUN *</pattern>
+    <template>[XCFE:KEY_READ key=⟁ACTION:RUN] <star/></template>
+  </category>
+
+  <!-- Ch'en — review / verify -->
+
+  <category>
+    <pattern>REVIEW *</pattern>
+    <template>[XCFE:KEY_READ key=⟁WIDGET:REVIEW] <star/></template>
+  </category>
+
+  <category>
+    <pattern>CHECK *</pattern>
+    <template><srai>REVIEW <star/></srai></template>
+  </category>
+
+  <!-- Xul — commit / publish / finalize -->
+
+  <category>
+    <pattern>PUBLISH *</pattern>
+    <template>[XCFE:KEY_WRITE table=items key=⟁WIDGET:FEED] {"title":"<star/>","status":"published"}</template>
+  </category>
+
+  <category>
+    <pattern>SUBMIT *</pattern>
+    <template><srai>PUBLISH <star/></srai></template>
+  </category>
+
+  <category>
+    <pattern>FINALIZE *</pattern>
+    <template><srai>PUBLISH <star/></srai></template>
+  </category>
+
+  <!-- ── Settings / prefs ─────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>SET THEME *</pattern>
+    <template>[XCFE:KEY_WRITE table=prefs key=⟁WIDGET:SETTINGS] {"theme":"<star/>"}</template>
+  </category>
+
+  <category>
+    <pattern>SET * TO *</pattern>
+    <template>[XCFE:KEY_WRITE table=prefs key=⟁WIDGET:SETTINGS] {"<star index='1'/>":"<star index='2'/>"}</template>
+  </category>
+
+  <category>
+    <pattern>RESET SETTINGS</pattern>
+    <template>[XCFE:KEY_DELETE table=prefs key=⟁WIDGET:SETTINGS id=singleton]</template>
+  </category>
+
+  <!-- ── Share / export ───────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>SHARE *</pattern>
+    <template>[XCFE:KEY_READ key=⟁ACTION:SHARE] <star/></template>
+  </category>
+
+  <category>
+    <pattern>EXPORT *</pattern>
+    <template>[XCFE:KEY_READ key=⟁ACTION:EXPORT] <star/></template>
+  </category>
+
+  <category>
+    <pattern>DOWNLOAD *</pattern>
+    <template><srai>EXPORT <star/></srai></template>
+  </category>
+
+  <!-- ── Catch-all passthrough ────────────────────────────────────────── -->
+  <!-- Reaches here only when no app-scoped pattern matches. -->
+
+  <category>
+    <pattern>_</pattern>
+    <template>I didn't recognize that command. Try HELP to see what this app supports, or be more specific: ADD [item], SHOW [item], LIST, or SEARCH [term].</template>
+  </category>
+
+</aiml>

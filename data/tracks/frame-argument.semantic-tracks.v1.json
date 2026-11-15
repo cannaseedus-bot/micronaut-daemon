@@ -1,0 +1,75 @@
+{
+  "@no-eval": true,
+  "id": "frame:argument",
+
+  "schemes": ["frameargument"],
+  "schema": "semantic-tracks.v1",
+  "description": "Abstract argument-frame node used as a relation target for tracks that operate on claim, warrant, grounds, rebuttal, and closure structure. Projection-only; it is not an executor and has no semantic or topology authority.",
+  "phase": "Yax",
+  "category": "abstract-frame",
+  "confidence": 1.0,
+  "static_weight": 0.2,
+  "health": 1.0,
+  "governs": [
+    "frame:argument",
+    "argument",
+    "claim",
+    "counter-claim",
+    "warrant",
+    "grounds",
+    "rebuttal",
+    "argument:verify"
+  ],
+  "capabilities": [],
+  "relations": [
+    {
+      "target": "POLITICS-µ",
+      "verb": "@related_to",
+      "directed": false
+    },
+    {
+      "target": "REASON-µ",
+      "verb": "@supports",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "identify_argument_handle",
+      "key": "frame:argument",
+      "note": "Resolve an argument-frame handle without selecting a political position."
+    },
+    {
+      "phase": "Wo",
+      "op": "bind_argument_roles",
+      "key": "frame:argument",
+      "note": "Expose claim, warrant, grounds, counter-claim, and rebuttal slots as structure only."
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_argument_closure",
+      "key": "argument:verify",
+      "note": "Check structural closure; does not endorse or author a position."
+    }
+  ],
+  "boundary_rules": [
+    {
+      "id": "abstract_frame_not_executor",
+      "rule": "frame:argument is a projection target only and cannot execute operations."
+    },
+    {
+      "id": "structure_not_position",
+      "rule": "Argument structure is distinct from a selected or endorsed position."
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "frame:argument",
+    "manifest_access": [
+      "kuhul"
+    ],
+    "effects": [],
+    "ports": [],
+    "coordinator": false
+  }
+}

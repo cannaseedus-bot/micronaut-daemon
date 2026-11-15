@@ -1,0 +1,9 @@
+{
+  "@xjson_type":"self_executing",
+  "@kuhul_binding":"fn.self.execute",
+  "@ast_transform":"SELF_TRANSFORM",
+  "logic":{"operation":"add","operands":[5,10]},
+  "execution":{"function":"fn.self.execute","parameters":{"input":"parameter"},"context":{"self":true}},
+  "transformation":{"pattern":"self","replacement":"self.improved","rules":["RULE_SELF_IMPROVE","RULE_SELF_EXECUTE","RULE_SELF_TRANSFORM"]},
+  "metadata":{"self_referential":true,"execution_count":0,"improvement_cycle":"READY"}
+}

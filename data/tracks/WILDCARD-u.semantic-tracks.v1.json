@@ -1,0 +1,122 @@
+{
+  "@no-eval": true,
+  "schema": "semantic-tracks.v1",
+  "id": "WILDCARD-µ",
+
+  "schemes": ["wildcard"],
+  "description": "Deterministic typed-wildcard Micronaut. Lowers Key Grammar wildcards to ordinary AIML captures, preserves exact capture spans, resolves semantic bindings with provenance, and proposes grounded Question Graph expansions. Match evidence never implies semantic authority.",
+  "phase": "Yax",
+  "category": "structural",
+  "intent": "resolve_typed_wildcard",
+  "confidence": 1.0,
+  "static_weight": 1.0,
+  "health": 1.0,
+  "governs": [
+    "wildcard", "wildcard capture", "wildcard binding", "typed wildcard",
+    "*:entity", "*:relation", "*:property", "*:question", "*:program",
+    "capture span", "semantic binding", "question expansion"
+  ],
+  "capabilities": [
+    "lower-typed-wildcard-to-aiml",
+    "preserve-capture-order",
+    "preserve-exact-capture-span",
+    "resolve-entity-binding",
+    "resolve-relation-binding",
+    "resolve-property-binding",
+    "validate-question-binding",
+    "resolve-registered-program",
+    "expand-grounded-question-graph",
+    "record-evaluated-binding-competence"
+  ],
+  "route_contract": {
+    "schemes": ["wildcard"],
+    "verbs": ["resolve", "compile", "expand", "evaluate"],
+    "aiml_patterns": [
+      "HOW IS * RELATED TO *",
+      "HOW DOES * AFFECT *",
+      "HOW DOES * DIFFER FROM *"
+    ],
+    "key_patterns": [
+      "HOW IS *:entity RELATED TO *:entity",
+      "HOW DOES *:entity AFFECT *:entity",
+      "HOW DOES *:entity DIFFER FROM *:entity",
+      "CALL *:program",
+      "VERIFY *:question"
+    ],
+    "key_templates": [
+      "What relation connects {capture_1} and {capture_2}?",
+      "What changes in {capture_2} when {capture_1} changes?",
+      "Which evidence distinguishes {capture_1} from {capture_2}?"
+    ],
+    "key_grammar": [
+      "*", "*:entity", "*:relation", "*:property", "*:question", "*:program"
+    ],
+    "tokens": [
+      "wildcard", "capture", "binding", "entity", "relation", "property", "question", "program"
+    ]
+  },
+  "relations": [
+    { "target": "NGRAM-µ",  "verb": "@uses",         "directed": true },
+    { "target": "MEMORY-µ", "verb": "@reads",        "directed": true },
+    { "target": "INFER-µ",  "verb": "@supports",     "directed": true },
+    { "target": "CONTROL-µ","verb": "@delegates_to", "directed": true }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "capture_surface",
+      "note": "Preserve the exact input substring, capture index, and character span."
+    },
+    {
+      "phase": "Wo",
+      "op": "compile_typed_pattern",
+      "note": "Lower typed Key Grammar wildcards to ordinary AIML stars while retaining declared binding types."
+    },
+    {
+      "phase": "Yax",
+      "op": "resolve_semantic_binding",
+      "note": "Generate candidate identities, neighborhoods, and capabilities without promoting a fact."
+    },
+    {
+      "phase": "Sek",
+      "op": "admit_typed_binding",
+      "gate": "type_and_provenance",
+      "note": "A surface match is insufficient; the declared type and local evidence must validate."
+    },
+    {
+      "phase": "Ch'en",
+      "op": "record_binding_evaluation",
+      "scope": "local",
+      "note": "Record evaluated success or failure for competence estimation."
+    },
+    {
+      "phase": "Xul",
+      "op": "emit_binding_and_questions",
+      "scope": "local",
+      "note": "Return TypedBinding values and admitted Question Graph proposals; never commit facts."
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "WILDCARD",
+    "manifest_access": ["words", "micronaut", "gram"],
+    "effects": ["gramRead", "gramWrite", "wildcard:resolve", "question:propose"],
+    "key_prefix_allow": ["wildcard_competence:"],
+    "key_prefix_deny": ["fact:", "xcfe.", "ctrl:"],
+    "ports": [],
+    "coordinator": false
+  },
+  "grammar_files": [
+    "wildcard-micronauts-mu.kgf",
+    "wildcard-micronauts-mu.runtime-grammar.ebnf"
+  ],
+  "grammar_contract": {
+    "package_root": "vendor/key-grammar-kit",
+    "kgf_ref": "wildcard-micronauts-mu.kgf",
+    "ebnf_ref": "wildcard-micronauts-mu.runtime-grammar.ebnf",
+    "version": "1.0",
+    "scope": "full_program_syntax_and_static_type_rules",
+    "role": ["compile", "resolve"],
+    "authority": "syntax_and_static_signatures_only",
+    "runtime_implementation": "not_registered"
+  }
+}

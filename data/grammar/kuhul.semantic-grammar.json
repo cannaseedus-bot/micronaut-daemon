@@ -1,0 +1,536 @@
+{
+  "@kind": "khanary.semantic.grammar.v1",
+  "language": "kuhul-semantic",
+  "version": "1.0",
+  "rungs": [
+    "Pop",
+    "Wo",
+    "Yax",
+    "Sek",
+    "Ch'en",
+    "Xul"
+  ],
+  "routings": [
+    {
+      "atom": "CONDITION",
+      "rung": "Wo"
+    },
+    {
+      "atom": "ROUTING",
+      "rung": "Wo"
+    },
+    {
+      "atom": "CAUSAL",
+      "rung": "Wo"
+    },
+    {
+      "atom": "STRUCTURE",
+      "rung": "Wo"
+    },
+    {
+      "atom": "SELECTION",
+      "rung": "Yax"
+    },
+    {
+      "atom": "EXECUTION",
+      "rung": "Sek"
+    },
+    {
+      "atom": "CAPABILITY",
+      "rung": "Sek"
+    },
+    {
+      "atom": "TRANSFORM",
+      "rung": "Sek"
+    },
+    {
+      "atom": "VERIFICATION",
+      "rung": "Ch'en"
+    },
+    {
+      "atom": "CONSEQUENCE",
+      "rung": "Ch'en"
+    },
+    {
+      "atom": "COMMIT",
+      "rung": "Xul"
+    },
+    {
+      "atom": "MEMORY",
+      "rung": "Pop"
+    },
+    {
+      "atom": "NEGATION",
+      "rung": "Pop"
+    },
+    {
+      "atom": "KUHUL_RUNTIME",
+      "rung": "Pop"
+    }
+  ],
+  "operators": [
+    {
+      "name": "DEPENDENCY",
+      "node_class": "CONDITION"
+    },
+    {
+      "name": "CONSTRAINT",
+      "node_class": "CONDITION"
+    },
+    {
+      "name": "ROUTING",
+      "node_class": "ROUTING"
+    },
+    {
+      "name": "CAUSE",
+      "node_class": "CAUSAL"
+    },
+    {
+      "name": "BOUNDARY",
+      "node_class": "STRUCTURE"
+    },
+    {
+      "name": "RELATION",
+      "node_class": "STRUCTURE"
+    },
+    {
+      "name": "ALTERNATIVE",
+      "node_class": "SELECTION"
+    },
+    {
+      "name": "DIRECT",
+      "node_class": "EXECUTION"
+    },
+    {
+      "name": "CAPABILITY",
+      "node_class": "CAPABILITY"
+    },
+    {
+      "name": "SUBSTITUTE",
+      "node_class": "TRANSFORM"
+    },
+    {
+      "name": "EVIDENCE",
+      "node_class": "VERIFICATION"
+    },
+    {
+      "name": "TEST",
+      "node_class": "VERIFICATION"
+    },
+    {
+      "name": "VERIFY",
+      "node_class": "VERIFICATION"
+    },
+    {
+      "name": "SEQUENCE",
+      "node_class": "CONSEQUENCE"
+    },
+    {
+      "name": "COMMIT",
+      "node_class": "COMMIT"
+    },
+    {
+      "name": "INVARIANT",
+      "node_class": "MEMORY"
+    },
+    {
+      "name": "STATE",
+      "node_class": "MEMORY"
+    },
+    {
+      "name": "MEMORY",
+      "node_class": "MEMORY"
+    },
+    {
+      "name": "CONFLICT",
+      "node_class": "NEGATION"
+    },
+    {
+      "name": "CONTRAST",
+      "node_class": "NEGATION"
+    },
+    {
+      "name": "KUHUL_RUNTIME",
+      "node_class": "KUHUL_RUNTIME"
+    },
+    {
+      "name": "IDENTITY",
+      "node_class": "KUHUL_RUNTIME"
+    }
+  ],
+  "glyph_ops": [
+    "MATMUL",
+    "CONV",
+    "ATTN",
+    "SOFTMAX",
+    "AFFINE",
+    "COMPRESS",
+    "SPHERICAL",
+    "TORSION",
+    "RADIAL",
+    "WAVE",
+    "NOP",
+    "WCR"
+  ],
+  "gram_channels": [
+    "general",
+    "similarity",
+    "control",
+    "predication",
+    "taxonomy_geometry",
+    "confidence",
+    "template"
+  ],
+  "cues": [
+    {
+      "cue": "if",
+      "atom": "CONDITION"
+    },
+    {
+      "cue": "when",
+      "atom": "CONDITION"
+    },
+    {
+      "cue": "condition",
+      "atom": "CONDITION"
+    },
+    {
+      "cue": "unless",
+      "atom": "CONDITION"
+    },
+    {
+      "cue": "then",
+      "atom": "CONSEQUENCE"
+    },
+    {
+      "cue": "result",
+      "atom": "CONSEQUENCE"
+    },
+    {
+      "cue": "consequence",
+      "atom": "CONSEQUENCE"
+    },
+    {
+      "cue": "therefore",
+      "atom": "CONSEQUENCE"
+    },
+    {
+      "cue": "because",
+      "atom": "CAUSAL"
+    },
+    {
+      "cue": "cause",
+      "atom": "CAUSAL"
+    },
+    {
+      "cue": "reason",
+      "atom": "CAUSAL"
+    },
+    {
+      "cue": "verify",
+      "atom": "VERIFICATION"
+    },
+    {
+      "cue": "verification",
+      "atom": "VERIFICATION"
+    },
+    {
+      "cue": "check",
+      "atom": "VERIFICATION"
+    },
+    {
+      "cue": "confirm",
+      "atom": "VERIFICATION"
+    },
+    {
+      "cue": "validate",
+      "atom": "VERIFICATION"
+    },
+    {
+      "cue": "prove",
+      "atom": "VERIFICATION"
+    },
+    {
+      "cue": "evidence",
+      "atom": "VERIFICATION"
+    },
+    {
+      "cue": "support",
+      "atom": "VERIFICATION"
+    },
+    {
+      "cue": "supported",
+      "atom": "VERIFICATION"
+    },
+    {
+      "cue": "not",
+      "atom": "NEGATION"
+    },
+    {
+      "cue": "no",
+      "atom": "NEGATION"
+    },
+    {
+      "cue": "never",
+      "atom": "NEGATION"
+    },
+    {
+      "cue": "without",
+      "atom": "NEGATION"
+    },
+    {
+      "cue": "absence",
+      "atom": "NEGATION"
+    },
+    {
+      "cue": "prefix:un",
+      "atom": "NEGATION"
+    },
+    {
+      "cue": "prefix:non",
+      "atom": "NEGATION"
+    },
+    {
+      "cue": "prefix:dis",
+      "atom": "NEGATION"
+    },
+    {
+      "cue": "prefix:in",
+      "atom": "NEGATION"
+    },
+    {
+      "cue": "prefix:im",
+      "atom": "NEGATION"
+    },
+    {
+      "cue": "prefix:ir",
+      "atom": "NEGATION"
+    },
+    {
+      "cue": "prefix:il",
+      "atom": "NEGATION"
+    },
+    {
+      "cue": "ability",
+      "atom": "CAPABILITY"
+    },
+    {
+      "cue": "capability",
+      "atom": "CAPABILITY"
+    },
+    {
+      "cue": "suffix:able",
+      "atom": "CAPABILITY"
+    },
+    {
+      "cue": "suffix:ible",
+      "atom": "CAPABILITY"
+    },
+    {
+      "cue": "choose",
+      "atom": "SELECTION"
+    },
+    {
+      "cue": "select",
+      "atom": "SELECTION"
+    },
+    {
+      "cue": "selection",
+      "atom": "SELECTION"
+    },
+    {
+      "cue": "filter",
+      "atom": "SELECTION"
+    },
+    {
+      "cue": "rank",
+      "atom": "SELECTION"
+    },
+    {
+      "cue": "relevance",
+      "atom": "SELECTION"
+    },
+    {
+      "cue": "candidate",
+      "atom": "SELECTION"
+    },
+    {
+      "cue": "execute",
+      "atom": "EXECUTION"
+    },
+    {
+      "cue": "execution",
+      "atom": "EXECUTION"
+    },
+    {
+      "cue": "run",
+      "atom": "EXECUTION"
+    },
+    {
+      "cue": "dispatch",
+      "atom": "EXECUTION"
+    },
+    {
+      "cue": "call",
+      "atom": "EXECUTION"
+    },
+    {
+      "cue": "commit",
+      "atom": "COMMIT"
+    },
+    {
+      "cue": "archive",
+      "atom": "COMMIT"
+    },
+    {
+      "cue": "persist",
+      "atom": "COMMIT"
+    },
+    {
+      "cue": "store",
+      "atom": "COMMIT"
+    },
+    {
+      "cue": "finalize",
+      "atom": "COMMIT"
+    },
+    {
+      "cue": "route",
+      "atom": "ROUTING"
+    },
+    {
+      "cue": "routing",
+      "atom": "ROUTING"
+    },
+    {
+      "cue": "router",
+      "atom": "ROUTING"
+    },
+    {
+      "cue": "delegate",
+      "atom": "ROUTING"
+    },
+    {
+      "cue": "memory",
+      "atom": "MEMORY"
+    },
+    {
+      "cue": "recall",
+      "atom": "MEMORY"
+    },
+    {
+      "cue": "history",
+      "atom": "MEMORY"
+    },
+    {
+      "cue": "kuhul",
+      "atom": "KUHUL_RUNTIME"
+    },
+    {
+      "cue": "k'uhul",
+      "atom": "KUHUL_RUNTIME"
+    },
+    {
+      "cue": "fold",
+      "atom": "KUHUL_RUNTIME"
+    },
+    {
+      "cue": "phase",
+      "atom": "KUHUL_RUNTIME"
+    },
+    {
+      "cue": "runtime",
+      "atom": "KUHUL_RUNTIME"
+    },
+    {
+      "cue": "pop",
+      "atom": "KUHUL_RUNTIME"
+    },
+    {
+      "cue": "wo",
+      "atom": "KUHUL_RUNTIME"
+    },
+    {
+      "cue": "yax",
+      "atom": "KUHUL_RUNTIME"
+    },
+    {
+      "cue": "sek",
+      "atom": "KUHUL_RUNTIME"
+    },
+    {
+      "cue": "ch'en",
+      "atom": "KUHUL_RUNTIME"
+    },
+    {
+      "cue": "xul",
+      "atom": "KUHUL_RUNTIME"
+    }
+  ],
+  "morphemes": [
+    {
+      "kind": "prefix",
+      "form": "un",
+      "min_stem": 3,
+      "cue": "prefix:un",
+      "atom": "NEGATION"
+    },
+    {
+      "kind": "prefix",
+      "form": "non",
+      "min_stem": 3,
+      "cue": "prefix:non",
+      "atom": "NEGATION"
+    },
+    {
+      "kind": "prefix",
+      "form": "dis",
+      "min_stem": 3,
+      "cue": "prefix:dis",
+      "atom": "NEGATION"
+    },
+    {
+      "kind": "prefix",
+      "form": "in",
+      "min_stem": 3,
+      "cue": "prefix:in",
+      "atom": "NEGATION"
+    },
+    {
+      "kind": "prefix",
+      "form": "im",
+      "min_stem": 3,
+      "cue": "prefix:im",
+      "atom": "NEGATION"
+    },
+    {
+      "kind": "prefix",
+      "form": "ir",
+      "min_stem": 3,
+      "cue": "prefix:ir",
+      "atom": "NEGATION"
+    },
+    {
+      "kind": "prefix",
+      "form": "il",
+      "min_stem": 3,
+      "cue": "prefix:il",
+      "atom": "NEGATION"
+    },
+    {
+      "kind": "suffix",
+      "form": "able",
+      "min_stem": 2,
+      "cue": "suffix:able",
+      "atom": "CAPABILITY"
+    },
+    {
+      "kind": "suffix",
+      "form": "ible",
+      "min_stem": 2,
+      "cue": "suffix:ible",
+      "atom": "CAPABILITY"
+    }
+  ],
+  "transpiles": []
+}

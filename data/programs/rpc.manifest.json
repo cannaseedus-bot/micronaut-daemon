@@ -1,0 +1,19 @@
+{
+  "@kind": "kuhul.rpc.manifest.v1",
+  "transport": "http-json",
+  "host": "127.0.0.1",
+  "endpoints": {
+    "json_runtime": { "port": 9000, "base": "/api", "health": "/api/health", "run": "/api/run" },
+    "gateway": { "port": 8764, "base": "/", "plan": "/api/plan" },
+    "glsl_server": { "port": 9060, "base": "/", "note": "OpenGL compute server (broken PyInstaller bundle)" },
+    "oss_infer": { "port": 18788, "base": "/", "health": "/health", "infer": "/infer?token=N" }
+  },
+  "coder_api": {
+    "parse": "/api/coder/parse",
+    "compile": "/api/coder/compile",
+    "generate": "/api/coder/generate",
+    "api_write": "/api/coder/api-write",
+    "todos": "/api/coder/todos"
+  },
+  "note": "RPC endpoints for the micronaut stack. JSON over HTTP."
+}

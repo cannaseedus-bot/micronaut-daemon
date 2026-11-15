@@ -1,0 +1,163 @@
+(* ============================================================ *)
+(* Content MathML Generator Grammar                            *)
+(* Serializes a Content MathML AST to output representations.  *)
+(* ============================================================ *)
+
+(* The generator occupies the Xul (TERMINATE/EMIT) phase of MATH-µ.
+   It takes the AST produced by the compiler (mathml.compiler.ebnf),
+   plus the numeric evaluation result, and produces:
+     (a) The Xul route label   ARITHMETIC:local_eval · TRACK:MATH-µ
+     (b) The display text      e.g.  "sqrt(16) = 4"
+     (c) The Content MathML XML string stored in run.mathMl
+         for JROM recording and downstream learning lanes
+
+   The generator has no authority; it emits data only.
+   It never modifies run state; it reads it.
+
+   Phase contract:
+     Xul: generate(run) → { text, route, mathml } *)
+
+
+(* ============================================================ *)
+(* 1. ROUTE LABEL GRAMMAR                                       *)
+(* ============================================================ *)
+
+(* The Xul response includes a 'route' field identifying which
+   resolution path produced the answer. Priority order: *)
+
+RouteLabel    ::= ArithmeticRoute
+               | XAIMLRoute
+               | ELIZARoute
+               | ModelRoute
+               ;
+
+ArithmeticRoute ::= "ARITHMETIC:local_eval · TRACK:" TrackId ;
+XAIMLRoute      ::= "XAIML:" PatternId ;
+ELIZARoute      ::= "ELIZA-GML:" CandidateId " · " FieldId ;
+ModelRoute      ::= "MODEL:" Backend "/" ModelName ModelSuffix " · TRACK:" TrackId ;
+ModelSuffix     ::= " · EVIDENCE_CONTEXT" | "" ;
+
+(* ArithmeticRoute is emitted iff run.mathEvaled = true,
+   regardless of which path set it (Yax bypass or Sek EVALUATE handler). *)
+
+TrackId     ::= Identifier ;
+PatternId   ::= Identifier ;
+CandidateId ::= Identifier ;
+FieldId     ::= UnicodeString ;
+Backend     ::= "ollama" | "lmstudio" | "local" | "openai_compatible" ;
+ModelName   ::= String ;
+
+
+(* ============================================================ *)
+(* 2. DISPLAY TEXT GRAMMAR                                      *)
+(* ============================================================ *)
+
+(* The 'text' field of the Xul response for arithmetic results. *)
+
+DisplayText    ::= ExprDisplay " = " ResultDisplay ;
+ExprDisplay    ::= run.mathMlEval.display ;      (* normalized infix expression *)
+ResultDisplay  ::= run.mathMlEval.result         (* numeric string *)
+                 | "Infinity" | "-Infinity" ;
+
+(* Examples:
+       "2 + 2 = 4"
+       "sqrt(16) = 4"
+       "2 ^ 8 = 256"
+       "pi * 2 = 6.283185307"
+       "5 * 20 = 100"                             *)
+
+
+(* ============================================================ *)
+(* 3. CONTENT MATHML XML SERIALIZER                             *)
+(* ============================================================ *)
+
+(* The serializer encodes an AST node to a Content MathML 3 string. *)
+
+Serialize     ::= SerializeCN | SerializeCI | SerializeApply ;
+
+SerializeCN   ::= IntegerNode | DoubleNode ;
+IntegerNode   ::= "<cn>" Integer "</cn>"
+                  where Integer is Number.isInteger(value) ;
+DoubleNode    ::= '<cn type="double">' FloatLiteral "</cn>" ;
+
+SerializeCI   ::= "<ci>" Identifier "</ci>" ;
+
+SerializeApply ::= "<apply>" OperatorElement Serialize+ "</apply>" ;
+
+OperatorElement ::= "<plus/>"    (* plus   *)
+                  | "<minus/>"   (* minus  *)
+                  | "<times/>"   (* times  *)
+                  | "<divide/>"  (* divide *)
+                  | "<power/>"   (* power  *)
+                  | "<root/>"    (* root   *)
+                  | "<rem/>"     (* rem    *)
+                  | "<abs/>"     (* abs    *)
+                  | "<sin/>"     | "<cos/>"    | "<tan/>"
+                  | "<arcsin/>"  | "<arccos/>" | "<arctan/>"
+                  | "<exp/>"     | "<ln/>"     | "<log/>"
+                  | "<floor/>"   | "<ceiling/>" | "<round/>"
+                  | "<ci>" UnknownOp "</ci>"   (* forward-compat fallback *)
+                  ;
+
+MathXML       ::= '<math xmlns="http://www.w3.org/1998/Math/MathML">'
+                  Serialize
+                  "</math>" ;
+
+
+(* ============================================================ *)
+(* 4. JROM RECORD EXTENSION                                     *)
+(* ============================================================ *)
+
+(* When run.mathEvaled = true, persistPhaseRun() includes the
+   mathml field in the JROM phase-run record for the learning lanes. *)
+
+JROMPhaseRecord ::= "{" BasePhaseMember "," MathMLMember? "}" ;
+MathMLMember    ::= '"mathml":' MathXML ;
+
+(* The mathml field is DATA_ONLY. Its presence in the record does not
+   authorize the resolver to re-execute the expression in a future fold.
+   Corpus prior is immutable; math records feed the learning lane
+   delta (Micronaut: delta = eta * gradient), never overwrite a prior. *)
+
+
+(* ============================================================ *)
+(* 5. NUMERIC FORMATTING RULES                                  *)
+(* ============================================================ *)
+
+FormatResult  ::= InfinityCase | IntegerCase | FloatCase | NaNCase ;
+InfinityCase  ::= value = Infinity   → "Infinity"
+               | value = -Infinity  → "-Infinity" ;
+IntegerCase   ::= Number.isInteger(toPrecision(10)) → String(integer) ;
+FloatCase     ::= parseFloat(toPrecision(10).toString()) → compact decimal string ;
+NaNCase       ::= !Number.isFinite(value) → null ;   (* null: caller drops result *)
+
+(* toPrecision(10) limits output to 10 significant digits,
+   then parseFloat removes trailing zeros from the decimal form. *)
+
+
+(* ============================================================ *)
+(* 6. SEMANTIC INVARIANTS                                       *)
+(* ============================================================ *)
+
+G1  ::= ArithmeticRoute is emitted iff run.mathEvaled = true ;
+G2  ::= DisplayText always has form "<expr> = <result>" ;
+G3  ::= ExprDisplay is run.mathMlEval.display, never reconstructed from the AST ;
+G4  ::= MathXML wraps one and only one ContentExpr ;
+G5  ::= serializing a cn node: integer values omit type="double" ;
+G6  ::= unknown operator names fall back to <ci>name</ci>, never error ;
+G7  ::= JROM mathml field is DATA_ONLY; it does not re-grant execution ;
+G8  ::= NaN result causes null return; caller must not set run.answer ;
+
+
+(* ============================================================ *)
+(* 7. TOKEN DEFINITIONS                                         *)
+(* ============================================================ *)
+
+Identifier   ::= Letter ( Letter | Digit | "_" )* ;
+Letter       ::= "a" .. "z" | "A" .. "Z" ;
+Digit        ::= "0" .. "9" ;
+Integer      ::= JSON_Integer ;
+FloatLiteral ::= JSON_Number ;
+String       ::= JSON_String ;
+UnicodeString ::= ? any Unicode string ? ;
+UnknownOp    ::= Identifier ;

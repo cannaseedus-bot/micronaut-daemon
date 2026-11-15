@@ -1,0 +1,23 @@
+{
+  "@type": "khanary.xcfe_program.v1",
+  "@no-eval": true,
+  "id": "xcfe.composition",
+  "program_class": "COMPOSITION",
+  "phase": "Sek",
+  "input_role": "program_list",
+  "output_role": "composed_result",
+  "admission": "explicit",
+  "description": "Composes two or more sub-programs into a single result. COMPOSITION is a program-descriptor class only — it does not appear in the 14-class XCFE node ISA. Candidate assembly at Yax; composition executed at Sek.",
+  "steps": [
+    { "phase": "Pop",   "op": "gramRead",   "id": "xcfe_programs" },
+    { "phase": "Yax",   "op": "select",     "id": "program_list" },
+    { "phase": "Sek",   "op": "dispatch",   "id": "compose" },
+    { "phase": "Ch'en", "op": "verify",     "id": "compose_valid" },
+    { "phase": "Xul",   "op": "gramWrite",  "id": "composed_result" }
+  ],
+  "authority": {
+    "semantic_authority": false,
+    "topology_mutation": false,
+    "commit_authorized": false
+  }
+}

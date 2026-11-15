@@ -1,0 +1,79 @@
+{
+  "@type": "khanary.response_fold.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "phase_driver_keeps_phase_authority_format_is_an_output_contract_mode_is_a_modifier",
+  "lane": "KHANARY_RESPONSE_FOLD_TEST",
+  "owner": "src/kuhul/response_fold.cpp",
+  "why": "Three things were being conflated: the execution grammar (the K'uhul phase cycle), the behavioural modifier (the active mode), and the output contract (how the response is shaped). Conflating them invites exactly what this architecture keeps refusing — a second lifecycle for AIML modes, or a mode quietly replacing the response format. There is one phase cycle; a mode conditions the work inside a phase; a format is selected, validated and serialized by the phases themselves.",
+  "three_layers": {
+    "phase": "execution grammar — the canonical C6 cycle, owned by the phase driver, never duplicated here",
+    "mode": "behavioural modifier — patterns, vectors, Micronauts and question generation inside a phase",
+    "format": "output contract — the structure of the finished response, independent of both of the above"
+  },
+  "phase_roles": {
+    "Pop": "initialize the response fold and capture the input",
+    "Wo": "establish intent, context and bindings; establish the output contract if none is selected",
+    "Yax": "expand questions, hypotheses and candidates; propose a suitable response structure",
+    "Sek": "select, dispatch, transform or reject",
+    "Ch'en": "verify evidence, constraints and results",
+    "Xul": "close the accumulator and return the response"
+  },
+  "fold": {
+    "law": "R = Xul(Ch'en(Sek(Yax(Wo(Pop(I))))))",
+    "meaning": "the response is a phase-folded accumulator, not a per-mode pipeline: each phase transforms the same accumulator record in order",
+    "why": "storing one response pipeline per mode would duplicate the fold engine and create a second execution system"
+  },
+  "formats": {
+    "vocabulary": [
+      "conversation",
+      "tutorial",
+      "brainstorm",
+      "planning",
+      "diagnostic",
+      "guided_steps",
+      "inquiry"
+    ],
+    "source": "the catalog's `interaction` dimension (data/grammar/daemon-behavior-modes.v1.json), so the format axis and the mode axis cannot drift apart",
+    "unset": "a fold may start with no format; the phases then select one",
+    "example": "<teacher> and <buddy> share the phase cycle but emit a step-by-step explanation versus a casual conversational answer"
+  },
+  "selection": {
+    "law": "if a format is already selected, a mode operates inside it and may not replace it",
+    "when_unset": "Wo may establish a contract, Yax may propose a structure, Sek selects, Ch'en validates, Xul serializes",
+    "stage_authority": {
+      "establish": "Wo",
+      "propose": "Yax",
+      "select": "Sek",
+      "validate": "Ch'en",
+      "serialize": "Xul"
+    },
+    "proposal_not_transition": "a proposal or a mode's preference is not a selection; only Sek selects, and the earlier proposal stays evidence"
+  },
+  "mode_within_format": {
+    "law": "a mode conditions what happens inside a phase, never the phase and never a chosen format",
+    "allowed": [
+      "pattern activation",
+      "question generation",
+      "candidate scoring",
+      "response style within the selected structure"
+    ],
+    "refused": [
+      "replacing a selected format",
+      "changing the phase",
+      "granting authority"
+    ]
+  },
+  "invariants": {
+    "RF1": "there is exactly one lifecycle: every stage runs inside the canonical C6 phases, and this layer adds no second execution system",
+    "RF2": "phase, mode and format stay distinct; a fold records all three and no one of them is derivable from another",
+    "RF3": "a selected format is not replaceable by a mode; a mode may only refine inside it, and an attempted replacement is a typed refusal",
+    "RF4": "with no format selected, Wo establishes, Yax proposes, Sek selects, Ch'en validates and Xul serializes — and a proposal never counts as a selection",
+    "RF5": "each stage may run only in its own phase; a stage attempted outside its phase is refused",
+    "RF6": "the response is the phase-folded accumulator: no stage may skip its predecessor, and Xul closes only a verified accumulator",
+    "RF7": "serialization requires verification: Xul refuses an accumulator Ch'en has not verified",
+    "RF8": "the format vocabulary is the catalog's interaction dimension; an unknown format is refused rather than approximated",
+    "RF9": "a mode never changes the phase, and no stage may claim phase or commit authority",
+    "RF10": "the six C6 phases and the closed 14-class XCFE node ISA are unchanged by this layer"
+  }
+}

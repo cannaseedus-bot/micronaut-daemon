@@ -1,0 +1,245 @@
+(* wildcard-micronauts-µ program grammar v1.0
+   Defines the notation for typed-wildcard programs processed by the
+   WILDCARD-µ micronaut.
+
+   This micronaut has two roles:
+     compile  — lower typed Key Grammar wildcards to plain AIML stars
+     resolve  — generate candidate semantic bindings from capture spans
+
+   Programs are written in Key Grammar notation (typed wildcards) and
+   compiled to AIML patterns (plain wildcards).  Resolution generates
+   candidate edges and bindings without promoting any fact.
+
+   Grammar defines notation and static type contracts only.
+   No fact assertion, no semantic authority, and no write authorization
+   are implied by grammar recognition or type-rule satisfaction.
+   XCFE admission is required before any CandidateEdges are persisted. *)
+
+
+(* ================================================================
+   Two-Layer Program Structure
+   ================================================================
+   Layer 1 — Key Grammar (typed):   what the author writes
+   Layer 2 — AIML lowered (plain):  what the matcher sees after COMPILE
+
+   The COMPILE operation lowers *:type → * and emits a TypedBinding
+   constraint that records the declared type for Sek validation.
+   ================================================================ *)
+
+program           = { statement } ;
+statement         = pattern_decl
+                  | binding_decl
+                  | relation_query
+                  | compile_stmt
+                  | call_stmt
+                  | verify_stmt
+                  | comment
+                  | newline
+                  ;
+comment           = "#", { any_line_char }, newline ;
+
+
+(* ----------------------------------------------------------------
+   Pattern declarations — Key Grammar typed form
+   A typed_pattern is a sequence of words, typed wildcards, and
+   plain wildcards.  The author writes the Key Grammar form;
+   the compiler produces the AIML lowered form.
+   ---------------------------------------------------------------- *)
+pattern_decl      = "pattern", ws, typed_pattern, ws, ";" ;
+
+typed_pattern     = typed_pattern_elem, { ws, typed_pattern_elem } ;
+typed_pattern_elem= typed_wildcard
+                  | plain_wildcard
+                  | string_literal
+                  | identifier
+                  ;
+typed_wildcard    = "*", ":", wildcard_type ;       (* typed Key Grammar wildcard *)
+plain_wildcard    = "*" ;                           (* AIML plain wildcard *)
+wildcard_type     = "entity"
+                  | "relation"
+                  | "property"
+                  | "question"
+                  | "program"
+                  ;
+
+
+(* ----------------------------------------------------------------
+   Relation queries — the three entry forms from the KGF program
+   AFFECTS and RELATED_TO dispatch to fold:AFFECT / fold:RELATED at Yax.
+   DIFFERS_FROM dispatches to fold:DIFFERENCE at Sek.
+   ---------------------------------------------------------------- *)
+relation_query    = affect_query | related_query | differ_query ;
+
+affect_query      = "HOW", ws, "DOES", ws, entity_expr, ws,
+                    "AFFECT", ws, entity_expr ;             (* AFFECTS → Yax *)
+
+related_query     = "HOW", ws, "IS", ws, entity_expr, ws,
+                    "RELATED", ws, "TO", ws, entity_expr ;  (* RELATED_TO → Yax *)
+
+differ_query      = "HOW", ws, "DOES", ws, entity_expr, ws,
+                    "DIFFER", ws, "FROM", ws, entity_expr ; (* DIFFERS_FROM → Sek *)
+
+entity_expr       = typed_wildcard               (* *:entity — typed form *)
+                  | variable_ref                 (* $binding from prior statement *)
+                  | string_literal               (* literal entity name *)
+                  ;
+
+
+(* ----------------------------------------------------------------
+   COMPILE — lower a typed pattern to its AIML (plain) form.
+   Phase: Wo.  Output: AimlPattern.
+   The resulting AimlPattern has type annotations stripped; they are
+   recorded in the emitted TypedBinding constraints.
+   ---------------------------------------------------------------- *)
+compile_stmt      = "COMPILE", ws, typed_pattern,
+                    [ ws, "as", ws, identifier ] ;
+
+
+(* ----------------------------------------------------------------
+   CALL — invoke a registered program entry.
+   Pattern: CALL *:program
+   ---------------------------------------------------------------- *)
+call_stmt         = "CALL", ws, ( typed_wildcard | variable_ref | string_literal ) ;
+
+
+(* ----------------------------------------------------------------
+   VERIFY — validate a question against admitted evidence.
+   Pattern: VERIFY *:question
+   ---------------------------------------------------------------- *)
+verify_stmt       = "VERIFY", ws, ( typed_wildcard | variable_ref | string_literal ) ;
+
+
+(* ----------------------------------------------------------------
+   Binding declaration — assert a TypedBinding with provenance.
+   A TypedBinding records: declared wildcard type, capture span, and
+   the evidence reference that supports this binding.
+   ---------------------------------------------------------------- *)
+binding_decl      = "binding", ws, typed_wildcard, ws, "=", ws, arg_expr,
+                    [ ws, "proof", ws, ":", ws, provenance_ref ]
+                  ;
+provenance_ref    = string_literal | qualified_key ;
+
+
+(* ----------------------------------------------------------------
+   Shared expression forms
+   ---------------------------------------------------------------- *)
+arg_expr          = string_literal
+                  | qualified_key
+                  | variable_ref
+                  ;
+qualified_key     = identifier, ":", identifier, { ":", identifier } ;
+variable_ref      = "$", identifier ;
+
+
+(* ----------------------------------------------------------------
+   Literals and lexical basics
+   ---------------------------------------------------------------- *)
+string_literal    = '"', { string_char_dq }, '"'
+                  | "'", { string_char_sq }, "'"
+                  ;
+identifier        = letter, { letter | digit | "_" | "-" } ;
+letter            = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J"
+                  | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T"
+                  | "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d"
+                  | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n"
+                  | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x"
+                  | "y" | "z" ;
+digit             = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+newline           = "\n" | "\r\n" | ";" ;
+ws                = " " | "\t", { " " | "\t" } ;
+any_line_char     = ? any Unicode scalar except newline ? ;
+(* string_char_dq: any Unicode scalar except unescaped double-quote or backslash.
+   string_char_sq: same, except for single-quote. *)
+
+
+(* ================================================================
+   Static Signatures  (declarative type contracts; no execution authority)
+   ================================================================
+
+   Operation      Input                               Output              Phase
+   ─────────────────────────────────────────────────────────────────────────────
+   AFFECTS        Cause:entity × Target:entity        CandidateEdges      Yax
+   RELATED_TO     Source:entity × Target:entity       CandidateEdges      Yax
+   DIFFERS_FROM   Left:entity × Right:entity          Distinctions        Sek
+   COMPILE        TypedPattern                        AimlPattern         Wo
+   RESOLVE        TypedWildcard × CaptureSpan         TypedBinding        Yax
+   EXPAND         TypedBinding                        QuestionGraph       Xul
+   EVALUATE       TypedBinding                        BindingEvaluation   Sek
+
+   Type definitions:
+     TypedWildcard
+       A wildcard with a declared type annotation: *:entity, *:relation,
+       *:property, *:question, or *:program.
+       A plain * is a lowered (compiled) wildcard — no type information.
+
+     CaptureSpan
+       The exact substring matched by a wildcard in the input, together
+       with its capture index and character-level byte offset.
+
+     TypedBinding
+       A resolved binding: { type, capture_span, candidates, provenance }.
+       Candidates are identities, neighborhoods, or capabilities generated
+       at Yax; they are not promoted facts.
+
+     CandidateEdges
+       Proposed semantic edges (AFFECTS or RELATED_TO) between two entity
+       bindings.  CandidateEdges are proposals; they require XCFE admission
+       before any gram-key write.
+
+     Distinctions
+       The set of distinguishing features observed between Left and Right
+       at Sek.  Distinctions are read-only observations; they do not assert
+       that the difference is causal, authoritative, or final.
+
+     AimlPattern
+       The compiled form of a TypedPattern with all *:type wildcards
+       replaced by plain * stars.  Type constraints are carried in the
+       emitted TypedBinding record, not in the AIML pattern itself.
+
+     QuestionGraph
+       A set of grounded question proposals generated at Xul from admitted
+       TypedBindings: templates filled with the resolved entity names.
+       QuestionGraph proposals are advisory; they do not create facts.
+
+     BindingEvaluation
+       A local record of whether a TypedBinding was admitted (success) or
+       rejected (failure) at Sek, stored to wildcard_competence: namespace.
+
+   Wildcard type invariants:
+     *:entity   — the capture span names a thing (noun, identifier, key).
+     *:relation — the capture span names a semantic relation verb.
+     *:property — the capture span names an attribute or property name.
+     *:question — the capture span is a registered question identifier.
+     *:program  — the capture span names a registered K'UHUL program key.
+
+   Surface-match invariant:
+     A surface match (a plain * matched in AIML) is NOT a TypedBinding.
+     The declared type and local evidence must validate at Sek before
+     a binding is admitted.  "It matched" is not evidence.
+
+   Provenance invariant:
+     Every admitted TypedBinding must carry at least one provenance_ref
+     (a gram key or string reference) supporting the binding.
+     A binding with no provenance is rejected at Ch'en.
+
+   Gram-key namespace constraints (from sandbox):
+     Writes are permitted only under: wildcard_competence:
+     Writes to fact:, xcfe., ctrl:  are denied.
+
+   Fact-assertion invariant:
+     Xul emits TypedBindings and QuestionGraph proposals.
+     Xul never commits facts.  CandidateEdges require XCFE admission
+     and an authorized Xul fold in a separate pipeline pass.
+
+   Static errors:
+     - typed_wildcard_used_as_plain_star_in_input (type annotation stripped
+       before COMPILE — type information is lost)
+     - binding_with_no_provenance
+     - gram_key_write_to_denied_namespace
+     - surface_match_treated_as_admitted_binding
+
+   Authority:
+     Parsing this grammar and checking these type rules produces a parse
+     tree and a diagnostic list only.  No fact assertion, no semantic
+     authority, no XCFE dispatch, and no write authorization are granted.
+   ================================================================ *)

@@ -1,0 +1,57 @@
+{
+  "⟁PROJECTION_ABI_v1": {
+    "description": "Versioned contract for project_v(). This Book defines what crosses the neural boundary and under what conditions. project_v() implements this Book; it does not define it.",
+
+    "dimensions": [
+      "⟁FIELD",
+      "⟁EVIDENCE",
+      "⟁INFER",
+      "⟁COUNTEREXAMPLE",
+      "⟁VERIFY",
+      "⟁XUL"
+    ],
+
+    "targets": ["chat", "code", "patch", "kuhul"],
+    "thinking": ["low", "medium", "high"],
+
+    "authorized_events": {
+      "NOTE": "Default first-pass derived from fold ops in semantic-tracks v1. User-owned policy — tune as track definitions evolve.",
+      "⟁FIELD":          ["decompose_task", "emit_manifest_entry", "dispatch_parallel",
+                           "aggregate_results", "select_target", "dispatch_call",
+                           "compose_output", "load_patterns", "template_fill", "gramRead",
+                           "popular_intent_plan", "common_tool_call_plan", "utility_intent", "startup"],
+      "⟁EVIDENCE":       ["intent_match", "score_evidence", "semantic_graph_query",
+                           "lexical_activate_candidates", "synonym_collapse",
+                           "manifest_lookup", "find_best_pattern_match",
+                           "web_research", "research_fallback_plan", "prompt_archive", "memory_recall"],
+      "⟁INFER":          ["accumulate_verdict", "apply_operators", "compose_plan",
+                           "replay_candidate", "evolve_candidate", "governor_advisory"],
+      "⟁COUNTEREXAMPLE": ["knowledge_gap", "fact_miss", "miss_deficit_vector"],
+      "⟁VERIFY":         ["verify_semantic_invariance", "verify_relation_invariance",
+                           "verify_syntax_constraints", "verify_delegation", "verify_result", "check_provenance_weights",
+                           "micronaut_confidence_update", "confidence_get", "xcfe_condition_check",
+                           "gyro_observe", "chen_resolution"],
+      "⟁XUL":            ["gramWrite", "memory_append", "factory_mutation", "shutdown"]
+    },
+
+    "thinking_retention": {
+      "low":    ["⟁FIELD", "⟁VERIFY", "⟁XUL"],
+      "medium": ["⟁FIELD", "⟁EVIDENCE", "⟁INFER", "⟁VERIFY", "⟁XUL"],
+      "high":   ["⟁FIELD", "⟁EVIDENCE", "⟁INFER", "⟁COUNTEREXAMPLE", "⟁VERIFY", "⟁XUL"]
+    },
+
+    "target_exposure": {
+      "chat":  ["⟁FIELD", "⟁EVIDENCE", "⟁INFER", "⟁VERIFY", "⟁XUL"],
+      "code":  ["⟁FIELD", "⟁INFER", "⟁VERIFY", "⟁XUL"],
+      "patch": ["⟁FIELD", "⟁INFER", "⟁COUNTEREXAMPLE", "⟁VERIFY", "⟁XUL"],
+      "kuhul": ["⟁FIELD", "⟁EVIDENCE", "⟁INFER", "⟁COUNTEREXAMPLE", "⟁VERIFY", "⟁XUL"]
+    },
+
+    "semantic_invariance": {
+      "lexical_equivalence_enabled": true,
+      "synonym_routes": ["SYNONYMIZE:", "synonym:", "syn:", "@syn"],
+      "confidence_gate": "Ch'en lexical preservation threshold",
+      "invariant": "lexical association can propose candidate meaning, but canonical phase contracts keep execution authority."
+    }
+  }
+}

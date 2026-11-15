@@ -1,0 +1,72 @@
+{
+  "@kind": "khanary.executor.bindings.v1",
+  "$schema": "../schema/executor-binding.schema.json",
+  "authority": "observation_only",
+  "boundary": "inproc_only",
+  "note": "Every route that used to name a khanary binary now resolves here. No subprocess, no loopback HTTP, no external executable. A binding that cannot execute reports unavailable with a reason; it does not pretend to run.",
+  "aliases": {
+    "khanary.exe": "inproc.native",
+    "khanary.wasm": "inproc.wasm",
+    "khanary.app_host.exe": "inproc.app_host",
+    "khanary.app_host": "inproc.app_host"
+  },
+  "alias_note": "Legacy identifiers may survive inside generated corpora and older artifacts. They are names, not executables: resolution consults this table and never spawns a process. Corpora under data/gram are content and are not rewritten.",
+  "bindings": {
+    "native-exec": {
+      "executor": "inproc.native",
+      "module": "micronaut.executors",
+      "entrypoint": "native_exec",
+      "capability": "unavailable",
+      "reason": "no native program executor is bound in this stack; routes resolve here rather than shelling out",
+      "authority": "observation_only",
+      "executes_shell": false
+    },
+    "wasm-exec": {
+      "executor": "inproc.wasm",
+      "module": "micronaut.executors",
+      "entrypoint": "wasm_exec",
+      "capability": "unavailable",
+      "reason": "no wasm runtime is bound in this stack; the module export is declared, not executed",
+      "authority": "observation_only",
+      "executes_shell": false
+    },
+    "app-host": {
+      "executor": "inproc.app_host",
+      "module": "micronaut.executors",
+      "entrypoint": "app_host_call",
+      "capability": "partial",
+      "operations": {
+        "aiml.match": "available",
+        "cdata.init": "available",
+        "cdata.put": "available",
+        "cdata.get_all": "available",
+        "aiml.index": "unavailable",
+        "aiml.template": "unavailable",
+        "aiml.fold.record": "unavailable",
+        "app.call": "unavailable"
+      },
+      "unavailable_operations": [
+        "aiml.index",
+        "aiml.template",
+        "aiml.fold.record",
+        "app.call"
+      ],
+      "reason": "handlers exist for aiml.match and the cdata store; the rest are declared and refused",
+      "authority": "app_host_manifest",
+      "executes_shell": false
+    },
+    "graph-query": {
+      "executor": "inproc.graph_query",
+      "module": "micronaut.graph_executor",
+      "entrypoint": "execute_graph_query",
+      "capability": "available",
+      "operations": {
+        "inventory": "available",
+        "neighborhood": "available",
+        "path": "available"
+      },
+      "authority": "read_only_xcfe_gated",
+      "executes_shell": false
+    }
+  }
+}

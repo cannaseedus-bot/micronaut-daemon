@@ -1,0 +1,26 @@
+(* Data-only SRAI route graph. Cycles are rejected at verification. *)
+route-graph = "route-graph", identifier, "{", version, entry-points, nodes, edges, limits, "}" ;
+version = "version", ":", semver, ";" ;
+entry-points = "entry-points", ":", "[", entry-point, { ",", entry-point }, "]", ";" ;
+entry-point = "{", "pattern", ":", pattern-string, ",", "node", ":", string, "}" ;
+nodes = "nodes", ":", "[", route-node, { ",", route-node }, "]", ";" ;
+route-node = "{", "id", ":", string, ",", "pattern", ":", pattern-string, ",", "topic", ":", string,
+             [ ",", "that", ":", pattern-string ], ",", "kind", ":", ( "match" | "redirect" | "fallback" ), "}" ;
+edges = "edges", ":", "[", route-edge, { ",", route-edge }, "]", ";" ;
+route-edge = "{", "from", ":", string, ",", "to", ":", string, ",", "kind", ":", "srai", "}" ;
+limits = "limits", ":", "{", "max-depth", ":", integer, ",", "cycle-policy", ":", "reject", "}", ";" ;
+pattern-string = '"', { literal | wildcard }, '"' ;
+wildcard = "*" | "_" ;
+literal = ? any Unicode scalar except quote and unescaped wildcard ? ;
+semver = integer, ".", integer, ".", integer ;
+string = '"', { ? escaped Unicode string character ? }, '"' ;
+identifier = letter, { letter | digit | "_" | "-" } ;
+integer = digit, { digit } ;
+letter = "A".."Z" | "a".."z" ;
+digit = "0".."9" ;
+
+invariant-edge-target-exists = every edge.to is a route-node.id ;
+invariant-entry-exists = every entry-point.node is a route-node.id ;
+invariant-no-cycle = route graph is acyclic ;
+invariant-bounded-depth = 1 <= max-depth and max-depth <= 16 ;
+invariant-redirect-is-data = route-edge carries no executable payload ;

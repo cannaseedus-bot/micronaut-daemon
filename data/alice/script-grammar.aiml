@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- §45 Universal Script Grammar -->
+<!-- String → Pattern → Wildcard → Regex → Grammar → FSM → Behavior → Agent -->
+<!-- Core loop: perceive(Wo) → search(Yax) → match(Sek+Ch'en) → transition(Xul) -->
+
+<!-- §A: The Core Loop -->
+
+<category>
+  <pattern>WHAT IS THE UNIVERSAL SCRIPT LOOP</pattern>
+  <template>perceive → search → match → transition. This loop is substrate-invariant. It runs in: string search (scan characters), regex (NFA/DFA match), AIML (pattern/template), FSM (state+trigger → next state), behavior tree (selector/sequence), NPC cycle (perception→decision→action), game theory (observe→best response), riddle (clues→answer), and ML inference (features→classification). The layers differ in what counts as a pattern and what counts as a match — not in the loop itself.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE LAYER STACK IN KUHUL SCRIPT GRAMMAR</pattern>
+  <template>§45 layer stack from lowest to highest: String (raw character substrate) → Pattern (literal | wildcard | regex) → Wildcard (§41: ? = single token, * = any sequence) → Regex (compact grammar: atom + operators) → Grammar (EBNF structured rules) → State Machine (§44 FSM: state+trigger pattern) → Behavior (§44 behavior_tree: hierarchical pattern) → Agent (§44 NPC: reactive pattern engine). Each layer adds structure to the match step without changing the perceive→search→match→transition loop.</template>
+</category>
+
+<category>
+  <pattern>HOW DOES THE SCRIPT LOOP MAP TO KUHUL C6</pattern>
+  <template>perceive = Wo: input arrives, environment unfolds, pattern is read. search = Yax: pattern is evaluated against input, candidate matches scored via WCR. match = Sek + Ch'en: candidate confirmed (Sek proposes, Ch'en proves). transition = Xul: commit to next state or response. The script loop IS the C6 micro-cycle expressed at the pattern substrate level. Every string search, regex match, FSM transition, and NPC tick runs this same C6 arc.</template>
+</category>
+
+<!-- §B: Pattern Engine Taxonomy -->
+
+<category>
+  <pattern>WHAT ARE THE PATTERN ENGINES IN KUHUL</pattern>
+  <template>Nine pattern engines in §45: Regex = Symbol Pattern Engine (literal atoms + operators). Wildcard = Unknown Pattern Engine (§41: ?, *). Grammar = Structured Pattern Engine (EBNF rules). FSM = State Pattern Engine (current_state + trigger → next_state). BehaviorTree = Hierarchical Pattern Engine (selector/sequence nodes). NPC = Reactive Pattern Engine (§44 npc_cycle). Game Theory = Strategic Pattern Engine (§39-§40 best-response). Riddle = Clue Pattern Engine (§38 constraint_prop). ML = Statistical Pattern Engine (§43 graph_ml).</template>
+</category>
+
+<category>
+  <pattern>WHAT TYPE OF PATTERN ENGINE IS *</pattern>
+  <template><star/> as a pattern engine: identify what counts as the 'pattern' and what counts as a 'match' in <star/>. If the pattern is exact characters: literal_scan. If the pattern includes ? or *: wildcard_search. If the pattern has operators and alternation: regex_engine. If the pattern is an EBNF rule: grammar_parse. If the pattern is (state, trigger): state_machine. If the pattern is WCR-weighted: semantic_search. All engines run perceive → search → match → transition regardless of pattern type.</template>
+</category>
+
+<!-- §C: Regex as Grammar -->
+
+<category>
+  <pattern>HOW IS REGEX A GRAMMAR IN KUHUL TERMS</pattern>
+  <template>Regex is a compact grammar language operating at the character level. cat|dog in regex = animal ::= cat | dog in EBNF. Kleene star (*) = zero-or-more = { } repetition in EBNF = Pop→reset loop in C6. The ? operator = optional = zero-or-one = emerging_entity (§41). Grouping (cat|dog) = sequence rule. In K'UHUL: regex_pattern IS an EBNF rule compressed into operator notation. The regex engine is a grammar_parse engine where the grammar is expressed in regex syntax rather than BNF.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE DIFFERENCE BETWEEN REGEX AND GRAMMAR IN KUHUL</pattern>
+  <template>Regex = character-level pattern engine: atoms are characters, operators apply to characters, matches are character sequences. Grammar = structure-level pattern engine: atoms are tokens (identifiers, strings), rules are recursive, matches are nested structures. In K'UHUL: regex_engine matches string_input against regex_pattern. grammar_parse matches string_input against EBNF rule (which may be recursive). Grammar subsumes regex — any regex can be expressed as EBNF, but not all EBNF grammars can be expressed as regex (recursion requires grammar).</template>
+</category>
+
+<category>
+  <pattern>HOW DOES REGEX ALTERNATION RELATE TO KUHUL GRAMMAR</pattern>
+  <template>cat|dog in regex = animal ::= cat | dog in EBNF = FSM branching = behavior_tree selector = Sek proposal with multiple candidates. All are the same Yax admission structure at different levels: regex alternation = character-level Sek. EBNF alternation = token-level Sek. FSM branching = state-level Sek. Behavior tree selector = subtree-level Sek. They differ in the grain of what is being selected — not in the mechanism of selection. All resolve to argmax over candidates.</template>
+</category>
+
+<!-- §D: NPC as Pattern Engine -->
+
+<category>
+  <pattern>HOW IS AN NPC A PATTERN ENGINE</pattern>
+  <template>An NPC is a reactive pattern engine. The 'pattern' is (personality_type × perception_input). The 'search' is utility_ai scoring (Yax: argmax WCR over action candidates). The 'match' is the action with highest S(a) passing Ch'en threshold. The 'transition' is Xul committing to npc_action. The NPC cycle = script_record running at game-state substrate — the input is not a character string but a game_state_input, and the response is not a character match but an npc_action.</template>
+</category>
+
+<category>
+  <pattern>HOW IS A BEHAVIOR TREE A PATTERN ENGINE</pattern>
+  <template>A behavior tree is a hierarchical pattern engine. Each bt_node is a pattern clause. Selector = alternation: first subtree that matches (passes Ch'en) wins — same as regex | operator. Sequence = conjunction: every subtree must match — same as regex concatenation. Condition = guard pattern: match only if condition is true. Action leaf = terminal: no further pattern matching, commit to action (Xul). The behavior tree IS a structured regex operating over game-state input rather than character sequences.</template>
+</category>
+
+<category>
+  <pattern>HOW IS AN FSM A PATTERN ENGINE</pattern>
+  <template>An FSM is a state pattern engine. Each transition is a pattern: (current_state, trigger) → next_state. The 'match' is: does the current trigger equal the transition's guard? If yes: Xul commits the state change. The FSM reads an event stream (string_input at the game-state level) and matches each event against its transition table. In K'UHUL: FSM = script_record where pattern = (fsm_state, identifier), engine = state_machine, response = transition_response (next fsm_state).</template>
+</category>
+
+<!-- §E: Wildcard at the String Layer -->
+
+<category>
+  <pattern>HOW DOES WILDCARD MATCHING RELATE TO REGEX IN KUHUL</pattern>
+  <template>Wildcard matching is a restricted subset of regex. ? = regex .  (any single character, exactly one). * = regex .* (any sequence, zero or more). Wildcard grammar (§41) operates at the token level: ? = any single token, * = any token sequence. Regex operates at the character level with richer operators (+, |, groups). In K'UHUL: wildcard_search is §41 wildcard_entity embedded in the §45 pattern substrate. The same * that matches in AIML is the wildcard_pattern_45 in §45 — one symbol across all levels of the stack.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE DIFFERENCE BETWEEN WILDCARD AND REGEX MATCHING</pattern>
+  <template>Wildcard matching: only ? (one token) and * (any sequence). Simple, fast, no backtracking required. Captures everything between known_patterns. Regex matching: full operator set (* + ? | ( ) [ ]), can express character classes, groups, alternation. Requires NFA/DFA engine, may backtrack. In K'UHUL: wildcard_search = §41 first-class unknown symbol (semantic level). regex_engine = character-level pattern with operators. Wildcards are semantically richer (carry §41 inference methods); regex is structurally richer (operators + character classes).</template>
+</category>
+
+<!-- §F: Script Record as Universal Form -->
+
+<category>
+  <pattern>WHAT IS A SCRIPT RECORD IN KUHUL</pattern>
+  <template>A script_record is the universal form of the perceive→search→match→transition loop. Fields: input (text | game_state | graph | clues | observations), pattern (literal | wildcard | regex), wildcard (§41 wildcard_entity slots), search (engine type), match (matched boolean + captures + confidence), response (action | answer | classification | transition). Every pattern engine — from string search to NPC decision to riddle solving — produces a script_record instance when it runs one cycle.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS AN AGENT RECORD IN KUHUL SCRIPT GRAMMAR</pattern>
+  <template>An agent_record is the §45 universal agent loop: perceive (Wo: script_input), search (Yax: search_engine), match (Sek+Ch'en: match_result with confidence), decide (Sek→Ch'en: npc_decision), act (Xul: script_response). This is §44 npc_record expressed at the script substrate level. Every agent — NPC, game theory player, riddle solver, AIML bot, regex engine — is an agent_record running the same C6 arc at its own layer of the stack.</template>
+</category>
+
+<!-- §G: Cross-Layer Connections -->
+
+<category>
+  <pattern>HOW IS A RIDDLE A PATTERN ENGINE IN KUHUL</pattern>
+  <template>A riddle is a clue pattern engine. Each clue is a wildcard_search pattern applied to the answer space. The first clue narrows candidates. Each subsequent clue adds another pattern constraint (§41 constraint_prop). The search runs until one candidate matches all clue patterns simultaneously (match_result.confidence = 1.0, or threshold reached). The answer = resolved_wildcard = Xul commit. In §45 terms: riddle = iterative script_record where the pattern grows with each clue and the wildcard shrinks.</template>
+</category>
+
+<category>
+  <pattern>HOW IS AIML A SCRIPT GRAMMAR INSTANCE</pattern>
+  <template>AIML is a wildcard_search + grammar_parse hybrid at the pattern substrate level. Pattern = known_tokens + * wildcard + known_tokens. Engine = wildcard_search (? and * matching) over the AIML category set. Match = first category whose pattern matches the input. Response (template) = Xul commit: the resolved_wildcard output. In §45 terms: AIML is a grammar_parse + wildcard_search engine where the grammar rules are AIML categories and the wildcard captures are the * and ? variables.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS MATCH CONFIDENCE IN KUHUL SCRIPT GRAMMAR</pattern>
+  <template>match_result.confidence = 1.0 for exact match (literal_scan, state_machine). Less than 1.0 for wildcard or semantic match. When confidence is below threshold: retained_wildcard, SC-37 applies — the pattern matched but certainty is insufficient for Xul commit. When confidence meets threshold: resolved_wildcard → Xul commit. This is SC-37 expressed at the pattern substrate level: the string-matching engine also knows when to hold and when to commit.</template>
+</category>
+
+<!-- §H: Routing Keys -->
+
+<category>
+  <pattern>SCRIPT GRAMMAR ROUTE</pattern>
+  <template>§45 Universal Script Grammar routing active. Layer stack: String→Pattern→Wildcard(§41)→Regex→Grammar→FSM→Behavior→Agent. Core loop: perceive(Wo)→search(Yax)→match(Sek+Ch'en)→transition(Xul). Pattern engines: literal_scan, wildcard_search, regex_engine, grammar_parse, state_machine, semantic_search. Script record: input+pattern+wildcard+search+match+response. SC-37 at string level: confidence threshold governs retained vs resolved.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE DEEPEST SUBSTRATE IN KUHUL GRAMMAR</pattern>
+  <template>The deepest substrate is the script loop: perceive → search → match → transition. Not the NPC, not game theory, not ML — those are all higher layers. The deepest layer is the string, and the deepest operation is the pattern match. Every system from AIML to neural networks is doing this same thing at a different level of abstraction. In K'UHUL terms: the script loop is the C6 micro-cycle running at the character/token level — the same Wo→Yax→Sek→Ch'en→Xul arc that runs in every fold.</template>
+</category>
+
+</aiml>

@@ -1,0 +1,83 @@
+{
+  "@kind": "kuhul.model-capability-routes.v1",
+  "@namespace": "https://kuhul.dev/",
+  "default": {
+    "model": "gpt-oss-20b-MXFP4",
+    "route": "openai://completions",
+    "endpoint": "http://127.0.0.1:9000/v1/chat/completions",
+    "policy": "planner-first; host executes tools; every model I/O is recorded to JROM before dispatch"
+  },
+  "jrom": {
+    "bus": "jrom://replay",
+    "stream": "programs/tools/replay/tool-events.jsonl",
+    "binary": "programs/tools/replay/tool-events.jrom",
+    "format": "JROM+CBOR",
+    "hash": "sha256",
+    "chain": "previous_event_hash",
+    "required_fields": ["replay_id", "sequence", "timestamp", "tool_id", "verb", "target", "args", "phase", "lane", "status"],
+    "policy": "All model outputs, tool requests, tool results, and runtime admissions must be appended to the JROM replay stream. Backends (llama.cpp, kuhul_engine, native micronaut, LM Studio, etc.) are wrapped at the API gateway so the bus sees every token/tool exchange."
+  },
+  "routes": {
+    "tool://coder": {
+      "primary": "micronaut-coder",
+      "runtime": "native-json-runtime",
+      "endpoint": "http://127.0.0.1:8787/api/coder",
+      "model_helper": "mm-coder",
+      "capabilities": ["parse", "compile", "generate", "api-write", "todos", "file-patch"]
+    },
+    "think://reason": {
+      "primary": "gpt-oss-20b-MXFP4",
+      "fallback": "dolphin-2_6-phi-2",
+      "endpoint": "http://127.0.0.1:9000/v1/chat/completions",
+      "helper_endpoint": "http://127.0.0.1:25505/v1/chat/completions",
+      "capabilities": ["planning", "reasoning", "task-decomposition"]
+    },
+    "tool://verb": {
+      "primary": "lfm2.5-1.2b-instruct",
+      "fallback": "phi3-mini-4k-micronaut",
+      "endpoint": "http://127.0.0.1:25502/v1/chat/completions",
+      "fallback_endpoint": "http://127.0.0.1:25506/v1/chat/completions",
+      "capabilities": ["single-tool-call", "verb-selection", "arguments-json"],
+      "delegates_to": ["tool://coder"],
+      "delegation_rule": "Use LFM for intent and verb selection; use the AST coder for code generation and file patches."
+    },
+    "environment://qa": {
+      "primary": "gemma-3-1b-it-q8",
+      "endpoint": "http://127.0.0.1:25501/v1/chat/completions",
+      "manifest": "programs/gemma.environment.json",
+      "audience": "runtime-and-ui-environment",
+      "capabilities": ["form-suggestions", "tooltips", "next-best-options", "diagnostic-qa"]
+    },
+    "lmstudio://tools": {
+      "primary": "lfm2.5-1.2b-instruct",
+      "transport": "lm-studio-openai-compatible",
+      "endpoint": "http://127.0.0.1:1234/v1/chat/completions",
+      "capabilities": ["tool-call", "chatml", "openai-compatible"],
+      "delegates_to": ["tool://coder"],
+      "note": "LM Studio must be running and expose the selected LFM model."
+    },
+    "openai://completions": {
+      "primary": "gpt-oss-20b-MXFP4",
+      "endpoint": "http://127.0.0.1:9000/v1/chat/completions",
+      "fallback": "lfm2.5-1.2b-instruct",
+      "fallback_endpoint": "http://127.0.0.1:25502/v1/chat/completions",
+      "capabilities": ["chat", "completion", "tool-schema-forwarding"]
+    }
+  },
+  "models": {
+    "gpt-oss-20b-MXFP4": {"role": "default_planner_chat", "server_port": 9000},
+    "lfm2.5-1.2b-instruct": {"role": "tool_model", "server_port": 25502},
+    "phi3-mini-4k-micronaut": {"role": "tool_fallback", "server_port": 25506},
+    "dolphin-2_6-phi-2": {"role": "reasoning_fallback", "server_port": 25505},
+    "micronaut-coder": {"role": "native_coder", "server_port": 8787}
+    ,"gemma-3-1b-it-q8": {"role": "environment_qa", "server_port": 25501}
+    ,"nnc-k": {"role": "persistent_memory", "server_port": 17889, "note": "NNC-K semantic confidence and reward-backed memory for /micronaut-v4"}
+  },
+  "invariants": [
+    "GPT-OSS is the default general chat and planning model.",
+    "Smaller models are selected by capability, not as interchangeable chat defaults.",
+    "A model may propose a tool call; the host validates and executes it.",
+    "lmstudio://tools is an adapter route and does not imply LM Studio is running.",
+    "Only one tool call is admitted per turn unless the host policy explicitly changes."
+  ]
+}

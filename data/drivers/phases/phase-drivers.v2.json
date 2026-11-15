@@ -1,0 +1,244 @@
+{
+  "@kind": "khanary.phase-drivers.v2",
+  "phase_cycle": [
+    "Pop",
+    "Wo",
+    "Yax",
+    "Sek",
+    "Ch'en",
+    "Xul"
+  ],
+  "drivers": [
+    {
+      "id": "phase-driver.pop.v2",
+      "phase": "Pop",
+      "phase_order": 0,
+      "profile": "default",
+      "driver_weight": 1.0,
+      "ops": [
+        "gramRead",
+        "manifest_lookup",
+        "lexical_activate_candidates",
+        "find_best_pattern_match",
+        "sense_inventory_lookup",
+        "candidate_sense_bind",
+        "embedgemma_prompt_vectorize",
+        "key_lane_bind",
+        "mx2lm_ngram_lane_bind",
+        "micronaut_context_fanout",
+        "mathml_query_detect",
+        "xcfe_condition_check",
+        "srai_intent_detect"
+      ],
+      "semantic_channels": {
+        "word_sense_disambiguation": {
+          "enabled": true,
+          "weight": 1.05,
+          "ops": [
+            "sense_inventory_lookup",
+            "local_context_window",
+            "candidate_sense_bind"
+          ]
+        },
+        "distributional_context": {
+          "enabled": true,
+          "weight": 1.0,
+          "ops": [
+            "context_neighbor_scan"
+          ]
+        },
+        "function_gram": {
+          "enabled": true,
+          "weight": 1.0,
+          "ops": [
+            "function_word_structure_probe"
+          ]
+        },
+        "tool_gram": {
+          "enabled": true,
+          "weight": 0.85,
+          "ops": [
+            "tool_keyword_probe"
+          ]
+        },
+        "typed_runtime_lanes": {
+          "enabled": true,
+          "weight": 1.0,
+          "ops": [
+            "embedgemma_prompt_vectorize",
+            "key_lane_bind",
+            "mx2lm_ngram_lane_bind",
+            "micronaut_context_fanout",
+            "mathml_query_detect"
+          ],
+          "invariant": "candidate_context_only_until_later_phase_gate"
+        }
+      },
+      "emits": {
+        "data": true,
+        "next_phase_hint": true,
+        "verb": true,
+        "noun": true,
+        "opcode": true,
+        "confidence_delta": true,
+        "word_sense_hints": true
+      },
+      "default_verb": "@read",
+      "terminal": false
+    },
+    {
+      "id": "phase-driver.wo.v2",
+      "phase": "Wo",
+      "phase_order": 1,
+      "profile": "default",
+      "driver_weight": 1.0,
+      "ops": [
+        "state_and_constraints",
+        "unfold_linguistic_resolution",
+        "decompose_task",
+        "plan_task",
+        "xcfe_auth_check",
+        "srai_recursion_guard_init"
+      ],
+      "semantic_channels": {},
+      "emits": {
+        "data": true,
+        "next_phase_hint": true,
+        "verb": true,
+        "noun": true,
+        "opcode": true,
+        "confidence_delta": true
+      },
+      "default_verb": "@delegate",
+      "terminal": false
+    },
+    {
+      "id": "phase-driver.yax.v2",
+      "phase": "Yax",
+      "phase_order": 2,
+      "profile": "default",
+      "driver_weight": 1.0,
+      "ops": [
+        "admit_neighborhood",
+        "compose",
+        "aggregate",
+        "resolve_eliza_field_candidates",
+        "graph_bfs",
+        "srai_program_project",
+        "pi_triangle_route"
+      ],
+      "semantic_channels": {},
+      "emits": {
+        "data": true,
+        "next_phase_hint": true,
+        "verb": true,
+        "noun": true,
+        "opcode": true,
+        "confidence_delta": true
+      },
+      "default_verb": "@compose",
+      "terminal": false
+    },
+    {
+      "id": "phase-driver.sek.v2",
+      "phase": "Sek",
+      "phase_order": 3,
+      "profile": "default",
+      "driver_weight": 1.0,
+      "ops": [
+        "compute_over_admitted_structure",
+        "resolve_xaiml_candidate",
+        "select_eliza_field_candidate",
+        "execute_tool_chain",
+        "srai_xcfe_propose",
+        "dispatch_call",
+        "build_ngrams"
+      ],
+      "semantic_channels": {
+        "high_confidence_miss": {
+          "enabled": true,
+          "weight": 1.15,
+          "ops": [
+            "miss_kind_classify",
+            "dispatch_call",
+            "execute_tool_chain"
+          ],
+          "miss_kind_routing": {
+            "semantic": "unfold_book",
+            "factual": "web_search_dispatch",
+            "capability": "delegate_micronaut",
+            "memory": "jrom_replay",
+            "mathematical": "deterministic_executor",
+            "evidence": "source_acquisition"
+          }
+        }
+      },
+      "emits": {
+        "data": true,
+        "next_phase_hint": true,
+        "verb": true,
+        "noun": true,
+        "opcode": true,
+        "confidence_delta": true
+      },
+      "default_verb": "@call",
+      "terminal": false
+    },
+    {
+      "id": "phase-driver.ch'en.v2",
+      "phase": "Ch'en",
+      "phase_order": 4,
+      "profile": "default",
+      "driver_weight": 1.0,
+      "ops": [
+        "assert_and_verify_candidate",
+        "verify_eliza_candidate_provenance",
+        "verify_srai_recursion_limits",
+        "verify_semantic_invariance",
+        "verify_relation_invariance",
+        "verify_syntax_constraints",
+        "verify_delegation",
+        "verify_ngram_confidence",
+        "classify_resolution"
+      ],
+      "semantic_channels": {},
+      "emits": {
+        "data": true,
+        "next_phase_hint": true,
+        "verb": true,
+        "noun": true,
+        "opcode": true,
+        "confidence_delta": true
+      },
+      "default_verb": "@verify",
+      "terminal": false
+    },
+    {
+      "id": "phase-driver.xul.v2",
+      "phase": "Xul",
+      "phase_order": 5,
+      "profile": "default",
+      "driver_weight": 1.0,
+      "ops": [
+        "compare_and_commit",
+        "gramWrite",
+        "record_phase_evidence",
+        "emit_answer",
+        "persist_state",
+        "record_phase_evidence",
+        "fold_reasoning_result"
+      ],
+      "semantic_channels": {},
+      "emits": {
+        "data": true,
+        "next_phase_hint": false,
+        "verb": true,
+        "noun": true,
+        "opcode": true,
+        "confidence_delta": true
+      },
+      "default_verb": "@commit",
+      "terminal": true
+    }
+  ]
+}

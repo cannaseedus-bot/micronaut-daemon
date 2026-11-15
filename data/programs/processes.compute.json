@@ -1,0 +1,26 @@
+{
+  "@program": "processes.compute",
+  "@kind": "kuhul.opencl.compute.v1",
+  "@backend": "opencl_1_2",
+  "@fallback": "opencl_1_2_cpu",
+  "@orchestration": "host_processes_schedule_opencl_kernels",
+  "@state": {
+    "phase": "Pop",
+    "context": null,
+    "queue": null,
+    "active_kernels": [],
+    "results": null,
+    "registry": "programs/opencl.kernel.json"
+  },
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "processes.context" },
+    { "@op": "OPENCL_CONTEXT_CREATE", "@device_type": "GPU", "@cpu_fallback": true, "@out": "context" },
+    { "@op": "FOLD_EXIT", "@fold": "Wo", "@node": "processes.context", "@args": ["$context"] },
+    { "@op": "OPENCL_QUEUE_CREATE", "@context": "$context", "@out": "queue" },
+    { "@op": "OPENCL_PROGRAM_SELECT", "@registry": "programs/opencl.kernel.json", "@out": "selected" },
+    { "@op": "OPENCL_DISPATCH_SEQUENCE", "@queue": "$queue", "@programs": "$selected", "@out": "results" },
+    { "@op": "OPENCL_FINISH", "@queue": "$queue", "@out": "complete" },
+    { "@op": "FOLD_EXIT", "@fold": "Chen", "@node": "processes.verify", "@args": ["$complete"] },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "processes.commit", "@args": ["$results"] }
+  ]
+}

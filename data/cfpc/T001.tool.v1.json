@@ -1,0 +1,9 @@
+{
+  "@kind": "semantic.tool.v1",
+  "@id": "T001",
+  "@capability": "file_read",
+  "@provider_ref": "system.file",
+  "@provider_type": "system",
+  "@governs": ["file", "filesystem"],
+  "@description": "Reads file contents from the local filesystem. Provider resolved at dispatch time by ToolRegistry."
+}

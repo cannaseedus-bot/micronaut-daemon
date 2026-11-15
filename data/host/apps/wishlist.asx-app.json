@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "wishlist",
+  "@key": "⟁APP:WISHLIST",
+  "@mount": "⟁ROOT:WISHLIST",
+  "@theme": { "accent": "#f472b6", "bg": "#140010", "surface": "#21001c", "text": "#fce7f3", "hero_phase": "Pop", "tagline": "Wish it. Share it. Get it." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "wishes", "component": "⟁WIDGET:WISHES", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "wishes": [], "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:WISHLIST": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:ADD_WISH"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:ADD_WISH": { "@type": "button", "@text": "Add Wish", "@on": { "click": "wishlist.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:WISHES", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:WISHES": { "@type": "grid", "@bind": "state.wishes", "@children": ["⟁WIDGET:WISH_CARD"] },
+    "⟁WIDGET:WISH_CARD": { "@type": "media-card", "@bind": "wish", "@on": { "claim": "wishlist.claim", "view": "wishlist.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:CLAIMED", "⟁WIDGET:SHARE"] },
+    "⟁WIDGET:CLAIMED": { "@type": "stat", "@bind": "data.claimed_count" },
+    "⟁WIDGET:SHARE": { "@type": "cta", "@bind": "data.share_link" }
+  },
+  "@programs": {
+    "wishlist.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "wishlist.claim": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "wishlist.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "wishlist.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "wish.claim": "wishlist.claim", "wish.view": "wishlist.view", "compose.open": "wishlist.open_compose", "search.input": "wishlist.search" },
+  "@imports": [{ "ref": "wish", "mode": "schema_table" }, { "ref": "claim", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "price-alerts", "name": "Price Drop Alerts", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Notify when a wished item drops in price." },
+      { "id": "group-gift", "name": "Group Gift Pool", "category": "community", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Multiple people can contribute toward a single wish." },
+      { "id": "gift-bot", "name": "Gift Suggestion Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Suggest similar items based on the wishlist theme." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "wishlist.add", "pattern": "ADD WISH|NEW WISH|I WANT *", "intent": "open_compose" },
+      { "id": "wishlist.claim", "pattern": "CLAIM *|GIFTING *|RESERVE *", "intent": "claim_wish" }
+    ]
+  },
+  "@data": {
+    "claimed_count": 3,
+    "share_link": { "cta": "Share this list", "url": "/share/wishlist" },
+    "spotlight": [
+      { "id": "sp1", "title": "Sony WH-1000XM5 Headphones", "price": 349, "badge": "Top Wish", "claimed": false, "excerpt": "Noise cancellation king. Works with every device I own." },
+      { "id": "sp2", "title": "Moleskine Cahier Notebook Set", "price": 22, "badge": "Affordable", "claimed": true, "excerpt": "The pocket-sized ones in kraft brown. Three-pack." },
+      { "id": "sp3", "title": "Kindle Paperwhite", "price": 139, "badge": "Claimed", "claimed": true, "excerpt": "Backlit, waterproof, three-week battery." }
+    ],
+    "schema": {
+      "wish": { "primaryKey": "wish_id", "fields": { "wish_id": { "type": "string" }, "title": { "type": "string", "required": true }, "url": { "type": "uri" }, "price": { "type": "float" }, "priority": { "type": "string" }, "notes": { "type": "text" }, "claimed": { "type": "bool" }, "added_at": { "type": "datetime" } } },
+      "claim": { "primaryKey": "claim_id", "fields": { "claim_id": { "type": "string" }, "wish_id": { "type": "string", "required": true }, "claimer_name": { "type": "string", "required": true }, "message": { "type": "text" }, "claimed_at": { "type": "datetime" } } }
+    }
+  }
+}

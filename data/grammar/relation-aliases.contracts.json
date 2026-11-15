@@ -1,0 +1,196 @@
+{
+  "@type": "khanary.relation_aliases.v1",
+  "id": "urn:kuhul:relation-aliases:v1",
+  "version": "1.0.0",
+  "authority": "alias_index_not_relation_authority",
+  "semantic_authority": false,
+  "commit_authorized": false,
+
+  "purpose": "Record the verb spellings used by the RELATIONAL book against the canonical relation vocabulary, without promoting any of them to VerifiedRelation.",
+
+  "law": {
+    "promoter": "src/micronaut/relation_isa.h",
+    "promoter_note": "VerifiedRelation requires an exact case-sensitive match against the C++ relation ISA. That header is not present in this tree, so nothing here can be promoted locally.",
+    "candidate": "A verb not in the canonical enum parses through the grammar's string catch-all and becomes a RelationCandidate with confidence < 1.0. It must pass Ch'en before use in B.",
+    "no_silent_promotion": "data/grammar/gml.validator.json relation_authority: a near-miss verb is a RelationCandidate with reduced confidence, not a VerifiedRelation with a typo",
+    "consequence": "Editing relation_verb to list these spellings would BE the silent promotion the law forbids. The enum is left untouched."
+  },
+
+  "sources": {
+    "grammar": "data/grammar/gml.khanary.ebnf :: relation_verb (canonical enum + string catch-all)",
+    "validator": "data/grammar/gml.validator.json :: relation_authority",
+    "book": "data/grammar/kuhul-relational-graph.xml",
+    "rows": "data/grammar/kuhul-relational.key-grammar.jsonl",
+    "semantics": "data/grammar/SEMANTICS.md"
+  },
+
+  "vocabularies": [
+    {
+      "id": "gml-canonical",
+      "source": "data/grammar/gml.khanary.ebnf",
+      "rule": "relation_verb enum",
+      "authority": "canonical"
+    },
+    {
+      "id": "relational-book",
+      "source": "data/grammar/kuhul-relational.key-grammar.jsonl",
+      "rule": "relational.verb over unit=relational_edge",
+      "authority": "alias"
+    },
+    {
+      "id": "kgf-relation-key",
+      "source": "*.kgf",
+      "rule": "key relation:*",
+      "authority": "alias"
+    },
+    {
+      "id": "kgf-edge-type",
+      "source": "*.kgf",
+      "rule": "edge A -> B type <name>",
+      "authority": "alias"
+    }
+  ],
+
+
+  "aliases": [
+    {
+      "spelling": "@call",
+      "book": "RELATIONAL",
+      "intent": "@calls",
+      "verified": false,
+      "status": "RelationCandidate",
+      "confidence": "<1.0",
+      "note": "Singular form of the canonical invocation verb."
+    },
+    {
+      "spelling": "@delegate",
+      "book": "RELATIONAL",
+      "intent": "@delegates_to",
+      "verified": false,
+      "status": "RelationCandidate",
+      "confidence": "<1.0",
+      "note": "Bare verb form of the canonical gerund."
+    },
+    {
+      "spelling": "@relate",
+      "book": "RELATIONAL",
+      "intent": "@related_to",
+      "verified": false,
+      "status": "RelationCandidate",
+      "confidence": "<1.0",
+      "note": "Undirected association; the canonical form is broader."
+    },
+    {
+      "spelling": "@eval",
+      "book": "RELATIONAL",
+      "intent": null,
+      "verified": false,
+      "status": "RelationCandidate",
+      "confidence": "<1.0",
+      "book_local": true,
+      "note": "No canonical counterpart. Means 'route through a reasoning target'; only meaningful in the RELATIONAL book."
+    },
+    {
+      "spelling": "@compose",
+      "book": "RELATIONAL",
+      "intent": null,
+      "verified": false,
+      "status": "RelationCandidate",
+      "confidence": "<1.0",
+      "book_local": true,
+      "note": "No canonical counterpart. Means 'assemble an artifact kind'."
+    },
+    {
+      "spelling": "@informs",
+      "book": "RELATIONAL",
+      "intent": null,
+      "verified": false,
+      "status": "RelationCandidate",
+      "confidence": "<1.0",
+      "book_local": true,
+      "note": "No canonical counterpart. Carries the REASON-µ to MORPHISM-µ to FIXED-POINT-µ proof chain; the only cycle in the book."
+    },
+    {
+      "spelling": "relation:RELATED_TO",
+      "surface": "kgf-relation-key",
+      "book": "wildcard-micronauts",
+      "intent": "@related_to",
+      "verified": false,
+      "status": "RelationCandidate",
+      "confidence": "<1.0",
+      "note": "KGF fold operator RELATE over source to target."
+    },
+    {
+      "spelling": "relation:AFFECTS",
+      "surface": "kgf-relation-key",
+      "book": "wildcard-micronauts",
+      "intent": null,
+      "verified": false,
+      "status": "RelationCandidate",
+      "confidence": "<1.0",
+      "book_local": true,
+      "note": "KGF fold operator RELATE over cause to target. Reads like @causes but the fold is RELATE, so it is not claimed as one."
+    },
+    {
+      "spelling": "relation:DIFFERS_FROM",
+      "surface": "kgf-relation-key",
+      "book": "wildcard-micronauts",
+      "intent": null,
+      "verified": false,
+      "status": "RelationCandidate",
+      "confidence": "<1.0",
+      "book_local": true,
+      "note": "KGF fold operator COMPARE over left and right. No canonical counterpart."
+    },
+    {
+      "spelling": "calls",
+      "surface": "kgf-edge-type",
+      "book": "wildcard-micronauts,2d-key-graph-execution-field",
+      "intent": "@calls",
+      "verified": false,
+      "status": "RelationCandidate",
+      "confidence": "<1.0",
+      "note": "Bare edge-type form of the canonical invocation verb."
+    },
+    {
+      "spelling": "requires",
+      "surface": "kgf-edge-type",
+      "book": "wildcard-micronauts,2d-key-graph-execution-field",
+      "intent": "@requires",
+      "verified": false,
+      "status": "RelationCandidate",
+      "confidence": "<1.0",
+      "note": "Bare edge-type form of the canonical precondition verb."
+    },
+    {
+      "spelling": "references",
+      "surface": "kgf-edge-type",
+      "book": "2d-key-graph-execution-field",
+      "intent": null,
+      "verified": false,
+      "status": "RelationCandidate",
+      "confidence": "<1.0",
+      "book_local": true,
+      "note": "Only in 2d-key-graph-execution-field.example.kgf (v1.0). No canonical counterpart."
+    }
+  ],
+
+  "trace": {
+    "contract": "data/grammar/daemon-bot.trace.contracts.json",
+    "contributes": ["xcfe"],
+    "law": "a recorded RELATION dispatch never promotes an alias spelling to a VerifiedRelation; the trace preserves the spelling and the candidate status it had",
+    "fields": {
+      "xcfe": "the dispatched operator name, preserved verbatim"
+    }
+  },
+  "realization": {
+    "rule": "an alias spelling may be realized as prose by a declarative template, because rendering an edge is not verifying it",
+    "requirement": "every template for a non-canonical spelling must declare the spelling in via_alias, so the frame never implies VerifiedRelation",
+    "forbidden": [
+      "claiming VerifiedRelation for an alias spelling",
+      "raising confidence above 1.0 by repetition",
+      "omitting the alias declaration when non-canonical",
+      "writing an alias spelling into relation_verb"
+    ]
+  }
+}

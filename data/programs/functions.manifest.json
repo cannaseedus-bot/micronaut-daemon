@@ -1,0 +1,369 @@
+{
+  "@kind": "kuhul.functions.manifest.v1",
+  "programs_dir": "programs/",
+  "stdlib_dir": "stdlib/",
+  "semantic_stdlib": {
+    "core": {
+      "source": "stdlib/core.kuhul",
+      "kast": "stdlib/core.kson",
+      "provider": "core",
+      "depends_on": []
+    },
+    "constants": {
+      "source": "stdlib/constants.kuhul",
+      "kast": "stdlib/constants.kson",
+      "provider": "constants",
+      "depends_on": ["core.kuhul"]
+    },
+    "pi": {
+      "source": "stdlib/pi.kuhul",
+      "kast": "stdlib/pi.kson",
+      "provider": "pi",
+      "depends_on": ["constants.kuhul"]
+    },
+    "functions": {
+      "source": "stdlib/functions.kuhul",
+      "kast": "stdlib/functions.kson",
+      "provider": "functions",
+      "capabilities": ["tensor.map"],
+      "phase_hooks": { "Sek": "dispatch", "Ch'en": "collect_status", "Xul": "commit_tensor_state" },
+      "depends_on": ["pi.kuhul"]
+    },
+    "geometry": {
+      "source": "stdlib/geometry.kuhul",
+      "kast": "stdlib/geometry.kson",
+      "provider": "geometry",
+      "depends_on": ["functions.kuhul"]
+    },
+    "gravity": {
+      "source": "stdlib/gravity.kuhul",
+      "kast": "stdlib/gravity.kson",
+      "provider": "gravity",
+      "depends_on": ["geometry.kuhul"]
+    },
+    "glsl": {
+      "source": "stdlib/glsl.kuhul",
+      "kast": "stdlib/glsl.kson",
+      "provider": "glsl",
+      "api": "OpenGL",
+      "depends_on": ["gravity.kuhul"]
+    },
+    "hlsl": {
+      "source": "stdlib/hlsl.kuhul",
+      "kast": "stdlib/hlsl.kson",
+      "provider": "hlsl",
+      "api": "HLSL",
+      "depends_on": ["gravity.kuhul"]
+    },
+    "domain_modules": {
+      "sources": [
+        "stdlib/audio.kuhul",
+        "stdlib/colors.kuhul",
+        "stdlib/fibonacci.kuhul",
+        "stdlib/image.kuhul",
+        "stdlib/matrices.kuhul",
+        "stdlib/random.kuhul",
+        "stdlib/statistics.kuhul",
+        "stdlib/tensors.kuhul",
+        "stdlib/time.kuhul",
+        "stdlib/vectors.kuhul"
+      ],
+      "note": "Domain libraries compile to sibling .kson files and depend on core/functions/geometry layers."
+    }
+  },
+  "functions": {
+    "json_runtime": {
+      "parse": {
+        "class": "JsonRuntime.Runtime",
+        "method": "parse",
+        "impl": "dist/json-runtime/include/JsonRuntime.h",
+        "primitive": "native.EVAL",
+        "args": ["manifest_or_program"],
+        "returns": "program"
+      },
+      "run": {
+        "class": "JsonRuntime.Runtime",
+        "method": "run",
+        "impl": "dist/json-runtime/include/JsonRuntime.h",
+        "primitive": "native.CALL",
+        "target": "dist/json-runtime/build/Release/json_runtime.exe",
+        "args": ["program"],
+        "returns": "result"
+      },
+      "run_file": {
+        "class": "JsonRuntime.Runtime",
+        "method": "run_file",
+        "impl": "dist/json-runtime/include/JsonRuntime.h",
+        "primitive": "native.CALL",
+        "target": "dist/json-runtime/build/Release/json_runtime.exe",
+        "args": ["path"],
+        "returns": "result"
+      },
+      "serve": {
+        "class": "JsonRuntime.Runtime",
+        "method": "serve",
+        "impl": "dist/json-runtime/include/JsonRuntime.h",
+        "primitive": "native.CALL",
+        "args": ["manifest", "port"],
+        "returns": "server"
+      },
+      "health": {
+        "class": "JsonRuntime.Runtime",
+        "method": "health",
+        "impl": "dist/json-runtime/include/JsonRuntime.h",
+        "primitive": "native.READ",
+        "endpoint": "/api/health",
+        "returns": "status"
+      }
+    },
+    "json_host": {
+      "load_manifest": {
+        "class": "JsonRuntime.Host",
+        "method": "load_manifest",
+        "impl": "dist/json-runtime/src/json_runtime_api.cpp",
+        "primitive": "native.READ",
+        "args": ["path"],
+        "returns": "manifest"
+      },
+      "boot": {
+        "class": "JsonRuntime.Host",
+        "method": "boot",
+        "impl": "dist/json-runtime/src/json_runtime_api.cpp",
+        "primitive": "native.PHASE",
+        "args": ["manifest"],
+        "returns": "runtime_context"
+      },
+      "run_inline": {
+        "class": "JsonRuntime.Host",
+        "method": "run_inline",
+        "impl": "dist/json-runtime/src/json_runtime_api.cpp",
+        "primitive": "native.CALL",
+        "args": ["program"],
+        "returns": "result"
+      },
+      "run_file": {
+        "class": "JsonRuntime.Host",
+        "method": "run_file",
+        "impl": "dist/json-runtime/src/json_runtime_api.cpp",
+        "primitive": "native.CALL",
+        "args": ["path"],
+        "returns": "result"
+      }
+    },
+    "fold": {
+      "schedule_candidates": {
+        "primitive": "native.EVAL",
+        "semantic_source": "stdlib/functions.kuhul",
+        "phase": "Wo",
+        "args": ["input"],
+        "returns": "candidates",
+        "used_by": ["programs/kuhul_dispatch.json"]
+      },
+      "select_best": {
+        "primitive": "native.EVAL",
+        "semantic_source": "stdlib/functions.kuhul",
+        "phase": "Yax",
+        "args": ["candidates"],
+        "returns": "selected",
+        "used_by": ["programs/kuhul_dispatch.json"]
+      },
+      "execute_selected": {
+        "primitive": "native.CALL",
+        "phase": "Sek",
+        "args": ["selected", "dominant_micronaut"],
+        "returns": "result",
+        "used_by": ["programs/kuhul_dispatch.json"]
+      },
+      "verify_result": {
+        "primitive": "native.EVAL",
+        "semantic_source": "stdlib/functions.kuhul",
+        "phase": "Chen",
+        "args": ["result", "selected"],
+        "returns": "verified",
+        "used_by": ["programs/kuhul_dispatch.json"]
+      }
+    },
+    "program_dispatch": {
+      "load_program": {
+        "primitive": "native.READ",
+        "args": ["program_ref"],
+        "returns": "program",
+        "used_by": ["programs/programs_dispatcher.json"]
+      },
+      "resolve_stdlib": {
+        "primitive": "native.READ",
+        "args": ["program"],
+        "returns": "op_table",
+        "source": "programs/stdlib.json",
+        "used_by": ["programs/programs_dispatcher.json"]
+      },
+      "validate_state": {
+        "primitive": "native.EVAL",
+        "args": ["program", "op_table"],
+        "returns": "valid",
+        "used_by": ["programs/programs_dispatcher.json"]
+      },
+      "dispatch_program": {
+        "primitive": "native.CALL",
+        "args": ["program", "op_table"],
+        "returns": "result",
+        "used_by": ["programs/programs_dispatcher.json"]
+      }
+    },
+    "gpu": {
+      "dispatch_micronaut": {
+        "primitive": "native.EVAL",
+        "op": "GPU_DISPATCH",
+        "shader": "micronaut.cso",
+        "semantic_source": "stdlib/gravity.kuhul",
+        "args": ["micronaut_pool", "physics_state"],
+        "returns": "dominant_micronaut",
+        "used_by": ["programs/kuhul_dispatch.json", "programs/programs_dispatcher.json"]
+      },
+      "scxq2_init_device": {
+        "primitive": "native.CALL",
+        "target": "sidecar://scxq2_gpu/INIT_DEVICE",
+        "args": ["container", "softmax_shader", "vmul_shader", "int4_shader"],
+        "returns": "device_ready",
+        "used_by": ["programs/scxq2_tile_upload.json"]
+      },
+      "scxq2_resolve_hash": {
+        "primitive": "native.CALL",
+        "target": "sidecar://scxq2_gpu/RESOLVE_HASH",
+        "args": ["layer_idx", "head_idx", "lane"],
+        "returns": "active_hash",
+        "used_by": ["programs/scxq2_tile_upload.json"]
+      },
+      "scxq2_request_shard": {
+        "primitive": "native.CALL",
+        "target": "sidecar://scxq2_gpu/REQUEST_SHARD",
+        "args": ["hash"],
+        "returns": "queued",
+        "used_by": ["programs/scxq2_tile_upload.json"]
+      },
+      "scxq2_poll_ready": {
+        "primitive": "native.CALL",
+        "target": "sidecar://scxq2_gpu/POLL_READY",
+        "args": ["hash"],
+        "returns": "ready",
+        "used_by": ["programs/scxq2_tile_upload.json"]
+      },
+      "scxq2_decode_int4": {
+        "primitive": "native.CALL",
+        "target": "sidecar://scxq2_gpu/DECODE_INT4",
+        "returns": "weights",
+        "used_by": ["programs/scxq2_tile_upload.json"]
+      },
+      "scxq2_run_attention": {
+        "primitive": "native.CALL",
+        "target": "sidecar://scxq2_gpu/RUN_ATTENTION",
+        "returns": "attention",
+        "used_by": ["programs/scxq2_tile_upload.json"]
+      },
+      "scxq2_readback": {
+        "primitive": "native.CALL",
+        "target": "sidecar://scxq2_gpu/READBACK",
+        "args": ["out_key"],
+        "returns": "result",
+        "used_by": ["programs/scxq2_tile_upload.json"]
+      },
+      "scxq2_advance": {
+        "primitive": "native.CALL",
+        "target": "sidecar://scxq2_gpu/ADVANCE",
+        "returns": "next_window",
+        "used_by": ["programs/scxq2_tile_upload.json"]
+      }
+    },
+    "native_glyph_engine": {
+      "load": {
+        "class": "NativeGlyphEngine",
+        "method": "load",
+        "primitive": "native.CALL",
+        "target": "dist/Kuhul-c++/build/Release/native_glyph_engine.dll",
+        "abi": "dist/Kuhul-c++/build/Release/native_glyph_engine_abi.dll",
+        "args": ["glyph_manifest"],
+        "returns": "engine"
+      },
+      "cli": {
+        "class": "NativeGlyphEngine.Cli",
+        "method": "run",
+        "primitive": "native.CALL",
+        "target": "dist/Kuhul-c++/build/Release/native_glyph_engine_cli.exe",
+        "args": ["command", "input"],
+        "returns": "result"
+      },
+      "phase_tick": {
+        "class": "NativeGlyphEngine",
+        "method": "phase_tick",
+        "primitive": "native.PHASE",
+        "semantic_source": "stdlib/core.kuhul",
+        "args": ["phase", "node", "state"],
+        "returns": "phase_state"
+      },
+      "glyph_dispatch": {
+        "class": "NativeGlyphEngine",
+        "method": "dispatch",
+        "primitive": "native.CALL",
+        "semantic_source": "stdlib/functions.kuhul",
+        "args": ["glyph", "payload", "runtime_context"],
+        "returns": "dispatch_result"
+      },
+      "render_glyph": {
+        "class": "NativeGlyphEngine",
+        "method": "render",
+        "primitive": "native.CALL",
+        "semantic_source": "stdlib/geometry.kuhul",
+        "args": ["glyph", "geometry_state"],
+        "returns": "glyph_frame"
+      }
+    },
+    "coder": {
+      "parse": {
+        "class": "Parser",
+        "method": "parse",
+        "target": "dist/micronaut-coder/micronaut_coder_pipeline.exe",
+        "endpoint": "/api/coder/parse",
+        "args": ["grammar", "source"],
+        "returns": "ast"
+      },
+      "compile": {
+        "class": "Compiler",
+        "method": "compile",
+        "target": "dist/micronaut-coder/micronaut_coder_pipeline.exe",
+        "endpoint": "/api/coder/compile",
+        "args": ["grammar", "source"],
+        "returns": "artifact"
+      },
+      "generate": {
+        "class": "Generator",
+        "method": "generate",
+        "target": "dist/micronaut-coder/micronaut_coder_pipeline.exe",
+        "endpoint": "/api/coder/generate",
+        "args": ["grammar", "fn_name"],
+        "returns": "source"
+      },
+      "api_write": {
+        "class": "ApiWriter",
+        "method": "write",
+        "target": "dist/micronaut-coder/micronaut_coder_pipeline.exe",
+        "endpoint": "/api/coder/api-write",
+        "args": ["grammar", "source"],
+        "returns": "api_patch"
+      },
+      "todos": {
+        "class": "TodoCreator",
+        "method": "extract_todos",
+        "target": "dist/micronaut-coder/code-micronaut/micronaut_coder_helpers.exe",
+        "endpoint": "/api/coder/todos",
+        "args": ["source"],
+        "returns": "todos"
+      }
+    }
+  },
+  "notes": [
+    "Functions map runtime-callable names to primitives, class methods, endpoints, sidecars, and program users.",
+    "stdlib.json remains the primitive opcode table; this manifest is the higher-level function registry.",
+    "stdlib/ contains K'UHUL semantic source and compiled KSON providers; programs/stdlib.json contains JSON-runtime primitive opcode bindings.",
+    "Native binaries are execution engines. JSON/XJSON manifests and K'UHUL phase law remain orchestration authority."
+  ]
+}

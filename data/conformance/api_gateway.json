@@ -1,0 +1,632 @@
+{
+  "@type": "khanary.api_gateway.conformance.v1",
+  "contracts": "data/grammar/api-gateway.contracts.json",
+  "cases": [
+    {
+      "id": "valid_root_info",
+      "expect": "PASS",
+      "endpoint": {
+        "id": "root_info",
+        "method": "GET",
+        "path": "/",
+        "surface": "service_info",
+        "requires_session": false,
+        "semantic_authority": false
+      }
+    },
+    {
+      "id": "valid_v1_info",
+      "expect": "PASS",
+      "endpoint": {
+        "id": "v1_info",
+        "method": "GET",
+        "path": "/v1",
+        "surface": "service_info",
+        "requires_session": false,
+        "semantic_authority": false
+      }
+    },
+    {
+      "id": "valid_models",
+      "expect": "PASS",
+      "endpoint": {
+        "id": "models",
+        "method": "GET",
+        "path": "/v1/models",
+        "surface": "model_list",
+        "requires_session": false,
+        "semantic_authority": false
+      }
+    },
+    {
+      "id": "valid_text_completions",
+      "expect": "PASS",
+      "endpoint": {
+        "id": "text_completions",
+        "method": "POST",
+        "path": "/v1/chat/completions",
+        "surface": "text_completions",
+        "operation": "key_query",
+        "requires_session": true,
+        "emits_learning_event": true,
+        "semantic_authority": false,
+        "topology_mutation": false,
+        "commit_authorized": false,
+        "next_gate": "Ch'en/XCFE/Xul"
+      }
+    },
+    {
+      "id": "valid_code_modification",
+      "expect": "PASS",
+      "endpoint": {
+        "id": "code_modification",
+        "method": "POST",
+        "path": "/v1/code/modify",
+        "surface": "code_modification",
+        "object": "code.modification.proposal",
+        "requires_session": true,
+        "emits_learning_event": true,
+        "applies_patch": false,
+        "semantic_authority": false,
+        "topology_mutation": false,
+        "commit_authorized": false,
+        "next_gate": "Ch'en/XCFE/Xul"
+      }
+    },
+    {
+      "id": "valid_image_generation",
+      "expect": "PASS",
+      "endpoint": {
+        "id": "image_generation",
+        "method": "POST",
+        "path": "/v1/images/generations",
+        "surface": "image_generation",
+        "object": "image.generation.request",
+        "requires_session": true,
+        "emits_learning_event": true,
+        "semantic_authority": false,
+        "topology_mutation": false,
+        "commit_authorized": false,
+        "next_gate": "Ch'en/XCFE/Xul"
+      }
+    },
+    {
+      "id": "valid_learning_events",
+      "expect": "PASS",
+      "endpoint": {
+        "id": "learning_events",
+        "method": "POST",
+        "path": "/v1/learn/events",
+        "surface": "learning_events",
+        "object": "learning.event",
+        "requires_session": true,
+        "status": "learning_commenced",
+        "semantic_authority": false,
+        "topology_mutation": false,
+        "commit_authorized": false,
+        "next_gate": "Ch'en/XCFE/Xul"
+      }
+    },
+    {
+      "id": "valid_rpc_bridge",
+      "expect": "PASS",
+      "endpoint": {
+        "id": "rpc_bridge",
+        "method": "POST",
+        "path": "/rpc",
+        "surface": "json_rpc_bridge",
+        "requires_session": true,
+        "allowlisted_only": true,
+        "semantic_authority": false,
+        "topology_mutation": false,
+        "commit_authorized": false,
+        "next_gate": "Ch'en/XCFE/Xul"
+      }
+    },
+    {
+      "id": "invalid_public_port",
+      "expect": "FAIL",
+      "error": "PUBLIC_PORT_NOT_443",
+      "contract_patch": {
+        "public_port": 8443
+      },
+      "endpoint": {
+        "id": "text_completions",
+        "method": "POST",
+        "path": "/v1/chat/completions",
+        "surface": "text_completions",
+        "operation": "key_query",
+        "requires_session": true,
+        "emits_learning_event": true,
+        "semantic_authority": false,
+        "topology_mutation": false,
+        "commit_authorized": false,
+        "next_gate": "Ch'en/XCFE/Xul"
+      }
+    },
+    {
+      "id": "invalid_missing_endpoint",
+      "expect": "FAIL",
+      "error": "ENDPOINT_NOT_DECLARED",
+      "endpoint": {
+        "id": "unknown_surface",
+        "method": "POST",
+        "path": "/v1/unknown",
+        "surface": "unknown",
+        "requires_session": true,
+        "semantic_authority": false
+      }
+    },
+    {
+      "id": "invalid_code_applies_patch",
+      "expect": "FAIL",
+      "error": "CODE_ENDPOINT_APPLIES_PATCH",
+      "endpoint": {
+        "id": "code_modification",
+        "method": "POST",
+        "path": "/v1/code/modify",
+        "surface": "code_modification",
+        "object": "code.modification.proposal",
+        "requires_session": true,
+        "emits_learning_event": true,
+        "applies_patch": true,
+        "semantic_authority": false,
+        "topology_mutation": false,
+        "commit_authorized": false,
+        "next_gate": "Ch'en/XCFE/Xul"
+      }
+    },
+    {
+      "id": "invalid_image_claims_authority",
+      "expect": "FAIL",
+      "error": "ENDPOINT_CLAIMS_AUTHORITY",
+      "endpoint": {
+        "id": "image_generation",
+        "method": "POST",
+        "path": "/v1/images/generations",
+        "surface": "image_generation",
+        "object": "image.generation.request",
+        "requires_session": true,
+        "emits_learning_event": true,
+        "semantic_authority": true,
+        "topology_mutation": false,
+        "commit_authorized": false,
+        "next_gate": "Ch'en/XCFE/Xul"
+      }
+    },
+    {
+      "id": "invalid_learning_status",
+      "expect": "FAIL",
+      "error": "LEARNING_STATUS_INVALID",
+      "endpoint": {
+        "id": "learning_events",
+        "method": "POST",
+        "path": "/v1/learn/events",
+        "surface": "learning_events",
+        "object": "learning.event",
+        "requires_session": true,
+        "status": "learned",
+        "semantic_authority": false,
+        "topology_mutation": false,
+        "commit_authorized": false,
+        "next_gate": "Ch'en/XCFE/Xul"
+      }
+    },
+    {
+      "id": "invalid_learning_topology_mutation",
+      "expect": "FAIL",
+      "error": "ENDPOINT_MUTATES_TOPOLOGY",
+      "endpoint": {
+        "id": "learning_events",
+        "method": "POST",
+        "path": "/v1/learn/events",
+        "surface": "learning_events",
+        "object": "learning.event",
+        "requires_session": true,
+        "status": "learning_commenced",
+        "semantic_authority": false,
+        "topology_mutation": true,
+        "commit_authorized": false,
+        "next_gate": "Ch'en/XCFE/Xul"
+      }
+    },
+    {
+      "id": "invalid_rpc_not_allowlisted",
+      "expect": "FAIL",
+      "error": "RPC_METHOD_NOT_ALLOWLISTED",
+      "rpc_method": "delete_topology",
+      "endpoint": {
+        "id": "rpc_bridge",
+        "method": "POST",
+        "path": "/rpc",
+        "surface": "json_rpc_bridge",
+        "requires_session": true,
+        "allowlisted_only": true,
+        "semantic_authority": false,
+        "topology_mutation": false,
+        "commit_authorized": false,
+        "next_gate": "Ch'en/XCFE/Xul"
+      }
+    },
+    {
+      "id": "invalid_public_post_without_session",
+      "expect": "FAIL",
+      "error": "PUBLIC_ENDPOINT_REQUIRES_SESSION",
+      "endpoint": {
+        "id": "text_completions",
+        "method": "POST",
+        "path": "/v1/chat/completions",
+        "surface": "text_completions",
+        "operation": "key_query",
+        "requires_session": false,
+        "emits_learning_event": true,
+        "semantic_authority": false,
+        "topology_mutation": false,
+        "commit_authorized": false,
+        "next_gate": "Ch'en/XCFE/Xul"
+      }
+    },
+    {
+      "id": "invalid_wrong_next_gate",
+      "expect": "FAIL",
+      "error": "NEXT_GATE_INVALID",
+      "endpoint": {
+        "id": "image_generation",
+        "method": "POST",
+        "path": "/v1/images/generations",
+        "surface": "image_generation",
+        "object": "image.generation.request",
+        "requires_session": true,
+        "emits_learning_event": true,
+        "semantic_authority": false,
+        "topology_mutation": false,
+        "commit_authorized": false,
+        "next_gate": "Xul"
+      }
+    },
+    {
+      "id": "invalid_commit_authorized",
+      "expect": "FAIL",
+      "error": "ENDPOINT_AUTHORIZES_COMMIT",
+      "endpoint": {
+        "id": "code_modification",
+        "method": "POST",
+        "path": "/v1/code/modify",
+        "surface": "code_modification",
+        "object": "code.modification.proposal",
+        "requires_session": true,
+        "emits_learning_event": true,
+        "applies_patch": false,
+        "semantic_authority": false,
+        "topology_mutation": false,
+        "commit_authorized": true,
+        "next_gate": "Ch'en/XCFE/Xul"
+      }
+    }
+  ],
+  "policy_cases": [
+    {
+      "id": "bind_loopback_without_token",
+      "kind": "bind",
+      "host": "127.0.0.1",
+      "token": "",
+      "expect": "ALLOW"
+    },
+    {
+      "id": "bind_localhost_without_token",
+      "kind": "bind",
+      "host": "localhost",
+      "token": "",
+      "expect": "ALLOW"
+    },
+    {
+      "id": "bind_ipv6_loopback_without_token",
+      "kind": "bind",
+      "host": "::1",
+      "token": "",
+      "expect": "ALLOW"
+    },
+    {
+      "id": "bind_any_without_token",
+      "kind": "bind",
+      "host": "0.0.0.0",
+      "token": "",
+      "expect": "REFUSE",
+      "error": "non_loopback_bind_requires_token"
+    },
+    {
+      "id": "bind_any_with_token",
+      "kind": "bind",
+      "host": "0.0.0.0",
+      "token": "secret",
+      "expect": "ALLOW",
+      "error": ""
+    },
+    {
+      "id": "bind_public_ip_without_token",
+      "kind": "bind",
+      "host": "10.1.2.3",
+      "token": "",
+      "expect": "REFUSE",
+      "error": "non_loopback_bind_requires_token"
+    },
+    {
+      "id": "cors_loopback_dev_origin",
+      "kind": "cors",
+      "origin": "http://127.0.0.1:5173",
+      "expect": "ALLOW",
+      "header": "http://127.0.0.1:5173"
+    },
+    {
+      "id": "cors_localhost_dev_origin",
+      "kind": "cors",
+      "origin": "http://localhost:3000",
+      "expect": "ALLOW",
+      "header": "http://localhost:3000"
+    },
+    {
+      "id": "cors_public_edge_origin",
+      "kind": "cors",
+      "origin": "https://api.kuhul.dev",
+      "expect": "ALLOW",
+      "header": "https://api.kuhul.dev"
+    },
+    {
+      "id": "cors_unknown_origin",
+      "kind": "cors",
+      "origin": "https://evil.example",
+      "expect": "NONE",
+      "header": ""
+    },
+    {
+      "id": "cors_absent_origin",
+      "kind": "cors",
+      "origin": "",
+      "expect": "NONE",
+      "header": ""
+    },
+    {
+      "id": "cors_explicit_allowlist_member",
+      "kind": "cors",
+      "origin": "https://app.example",
+      "allowed": [
+        "https://app.example"
+      ],
+      "expect": "ALLOW",
+      "header": "https://app.example"
+    },
+    {
+      "id": "cors_wildcard_refused",
+      "kind": "wildcard",
+      "values": [
+        "*"
+      ],
+      "expect": "ERROR",
+      "error": "wildcard_origin_not_permitted"
+    },
+    {
+      "id": "cors_comma_separated_origins",
+      "kind": "wildcard",
+      "values": [
+        "https://a.example, https://b.example"
+      ],
+      "expect": "ALLOW",
+      "accepted": [
+        "https://a.example",
+        "https://b.example"
+      ]
+    },
+    {
+      "id": "auth_missing_header",
+      "kind": "auth",
+      "header": "",
+      "token": "secret",
+      "expect": "REFUSE",
+      "error": "missing_authorization"
+    },
+    {
+      "id": "auth_wrong_scheme",
+      "kind": "auth",
+      "header": "Basic secret",
+      "token": "secret",
+      "expect": "REFUSE",
+      "error": "unsupported_authorization_scheme"
+    },
+    {
+      "id": "auth_empty_credential",
+      "kind": "auth",
+      "header": "Bearer ",
+      "token": "secret",
+      "expect": "REFUSE",
+      "error": "missing_bearer_credential"
+    },
+    {
+      "id": "auth_wrong_token",
+      "kind": "auth",
+      "header": "Bearer nope",
+      "token": "secret",
+      "expect": "REFUSE",
+      "error": "invalid_token"
+    },
+    {
+      "id": "auth_valid_token",
+      "kind": "auth",
+      "header": "Bearer secret",
+      "token": "secret",
+      "expect": "ALLOW",
+      "error": ""
+    },
+    {
+      "id": "auth_disabled_loopback_mode",
+      "kind": "auth",
+      "header": "",
+      "token": "",
+      "expect": "ALLOW",
+      "error": ""
+    },
+    {
+      "id": "messages_text_only",
+      "kind": "messages",
+      "messages": [
+        {
+          "role": "system",
+          "content": "be terse"
+        },
+        {
+          "role": "user",
+          "content": "hello"
+        }
+      ],
+      "expect": "OK",
+      "turns": 2,
+      "latest_user": "hello",
+      "roles": [
+        "system",
+        "user"
+      ]
+    },
+    {
+      "id": "messages_structured_text_parts",
+      "kind": "messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "one "
+            },
+            {
+              "type": "text",
+              "text": "two"
+            }
+          ]
+        }
+      ],
+      "expect": "OK",
+      "turns": 1,
+      "latest_user": "one two"
+    },
+    {
+      "id": "messages_null_content_assistant_turn",
+      "kind": "messages",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": null
+        },
+        {
+          "role": "user",
+          "content": "ping"
+        }
+      ],
+      "expect": "OK",
+      "turns": 2,
+      "latest_user": "ping"
+    },
+    {
+      "id": "messages_default_phase_state",
+      "kind": "messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": "ping"
+        }
+      ],
+      "expect": "OK",
+      "turns": 1,
+      "latest_user": "ping"
+    },
+    {
+      "id": "messages_image_part_rejected",
+      "kind": "messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "http://x/y.png"
+              }
+            }
+          ]
+        }
+      ],
+      "expect": "ERROR",
+      "error": "unsupported_content_part:image_url"
+    },
+    {
+      "id": "messages_audio_part_rejected",
+      "kind": "messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_audio",
+              "input_audio": {}
+            }
+          ]
+        }
+      ],
+      "expect": "ERROR",
+      "error": "unsupported_content_part:input_audio"
+    },
+    {
+      "id": "messages_unknown_role_rejected",
+      "kind": "messages",
+      "messages": [
+        {
+          "role": "wizard",
+          "content": "hi"
+        }
+      ],
+      "expect": "ERROR",
+      "error": "unsupported_role:wizard"
+    },
+    {
+      "id": "messages_non_object_rejected",
+      "kind": "messages",
+      "messages": [
+        "hello"
+      ],
+      "expect": "ERROR",
+      "error": "invalid_message:0"
+    },
+    {
+      "id": "messages_bad_content_type_rejected",
+      "kind": "messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": 42
+        }
+      ],
+      "expect": "ERROR",
+      "error": "invalid_content:0"
+    },
+    {
+      "id": "messages_system_only_has_no_user_turn",
+      "kind": "messages",
+      "messages": [
+        {
+          "role": "system",
+          "content": "no user here"
+        }
+      ],
+      "expect": "OK",
+      "turns": 1,
+      "latest_user": ""
+    },
+    {
+      "id": "messages_not_a_list_rejected",
+      "kind": "messages",
+      "messages": {
+        "role": "user"
+      },
+      "expect": "ERROR",
+      "error": "messages must be an array"
+    }
+  ]
+}

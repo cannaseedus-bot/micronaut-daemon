@@ -1,0 +1,18 @@
+{
+  "@program": "formats",
+  "@fold": "Wo",
+  "@node": "format-node",
+  "@CDATA": "=>GGUF",
+  "@cdata_content": "GGUF|kuhul_custom|f32|2880x2880",
+  "@SVG": "=>PNG",
+  "@svg_content": "<svg width='32' height='32'><rect width='32' height='32' fill='#238636'/></svg>",
+  "@XML": "=>FEED",
+  "@xml_content": "<feed><item id='1'/><item id='2'/></feed>",
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Wo", "@node": "format-node" },
+    { "@op": "CONVERT", "@from": "CDATA", "@to": "GGUF", "@out": "model_bytes" },
+    { "@op": "CONVERT", "@from": "SVG", "@to": "PNG", "@out": "image_bytes" },
+    { "@op": "CONVERT", "@from": "XML", "@to": "FEED", "@out": "feed_items" },
+    { "@op": "FOLD_EXIT", "@fold": "Yax", "@node": "format-node", "@args": ["$model_bytes", "$image_bytes", "$feed_items"] }
+  ]
+}

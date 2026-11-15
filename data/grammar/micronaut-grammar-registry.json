@@ -1,0 +1,78 @@
+{
+  "@no-eval": true,
+  "@kind": "kuhul.micronaut-grammar-registry.v1",
+  "description": "Typed binding registry for individual Micronaut domain program grammars. Each entry declares an independent grammar; the shared orchestration grammar (program.grammar.ebnf) composes them through ANA, MATCH, WCR, CATA, ADMIT, and callable edges.",
+  "authority": "discovery_and_binding_only; no grammar entry grants execution authority",
+  "orchestrator_grammar": "../../program.grammar.ebnf",
+  "xcfe_boundary": "one XCFE boundary governs all entries; individual grammars declare type contracts only",
+  "grammars": {
+    "SNOBOL-µ": {
+      "file": "snobol-mu.runtime.ebnf",
+      "role": "parse",
+      "input": "PatternRequest",
+      "output": "MatchResult",
+      "phase": "Wo",
+      "implementation_status": "grammar_only"
+    },
+    "CFPC-µ": {
+      "file": "cfpc-mu.runtime.ebnf",
+      "role": "classify",
+      "input": "QueryRequest",
+      "output": "IntentResolution",
+      "phase": "Yax",
+      "implementation_status": "grammar_only"
+    },
+    "ADVISOR-µ": {
+      "file": "advisor-mu.runtime.ebnf",
+      "role": "route-map",
+      "input": "IntentResolution",
+      "output": "ActionProposal",
+      "phase": "Sek",
+      "implementation_status": "grammar_only"
+    },
+    "QUESTION-µ": {
+      "file": "question-mu.runtime.ebnf",
+      "role": "generate",
+      "input": "UnresolvedQuery",
+      "output": "QuestionCandidates",
+      "phase": "Yax",
+      "implementation_status": "grammar_only"
+    },
+    "CODEX-µ": {
+      "file": "codex-mu.runtime.ebnf",
+      "role": "review",
+      "input": "CodeReviewRequest",
+      "output": "CodeReviewProposal",
+      "phase": "Sek",
+      "implementation_status": "source_present"
+    },
+    "CODEGEN-µ": {
+      "file": "codegen-mu.runtime.ebnf",
+      "role": "generate",
+      "input": "CodeTask",
+      "output": "GeneratedCodeProposal",
+      "phase": "Wo",
+      "implementation_status": "bundled_in_micronaut_bson"
+    },
+    "CODER-µ": {
+      "file": "cpp.code-grammar.ebnf",
+      "artifacts": ["cpp.code-grammar.json", "typescript.code-grammar.json"],
+      "role": "generate_parse_compile_grammar_validate_ast",
+      "input": "CodeGrammarRequest",
+      "output": "CodeProposalOrParseOrGrammarValidation",
+      "phase": "Sek",
+      "implementation_status": "host_tool_present",
+      "tool": "tools/coder_grammar.py",
+      "bus_binding": "coder.grammar"
+    },
+    "MX2LM-µ": {
+      "file": "mx2lm-mu.runtime.ebnf",
+      "role": "provide",
+      "input": "GramNamespace",
+      "output": "NgramDistributionProposal",
+      "phase": "Pop",
+      "implementation_status": "binary_snapshot_present"
+    }
+  },
+  "composition_note": "Adding a new Micronaut does not require modifying any existing entry. Register a new entry here with its grammar file, role, typed input/output, and phase. The orchestrator composes via MICRONAUT decl in program.grammar.ebnf."
+}

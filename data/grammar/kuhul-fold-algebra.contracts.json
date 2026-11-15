@@ -1,0 +1,517 @@
+{
+  "@type": "kuhul.fold_algebra.v1",
+  "id": "urn:kuhul:fold-algebra:v1",
+  "version": "1",
+  "name": "KFA",
+  "description": "K'UHUL Fold Algebra: the composition law of typed state transitions. A fold is F_phi : S -> S; the cycle is F_Xul . F_Ch'en . F_Sek . F_Yax . F_Wo . F_Pop, rightmost executing first. KFA decides structural composability; XCFE decides admission; Ch'en decides verification; Xul decides commit.",
+  "authority": {
+    "grammar": "data/grammar/kuhul-fold-algebra.ebnf",
+    "operator_registry": "data/grammar/srai-operators.contracts.json",
+    "algebra_registry": "data/grammar/algebra-isa.contracts.json",
+    "runtime_types": "src/kuhul/fold_algebra.h",
+    "implementation": "src/kuhul/fold_algebra.cpp"
+  },
+  "boundary": {
+    "KFA_is_not": [
+      "Fold Graph",
+      "Fold Lattice",
+      "Fold Kernel",
+      "Fold Space",
+      "XCFE Policy",
+      "Execution"
+    ],
+    "note": "KFA owns neither topology (Fold Graph B), nor lifecycle state (Fold Lattice / Fold Kernel), nor admission (XCFE), nor execution. It owns one thing: whether two typed state transitions, or a sequence of them, may legally compose."
+  },
+  "carrier": "typed_fold_state",
+  "composition": {
+    "operator": "FOLD_COMPOSE",
+    "identity": "FOLD_IDENTITY",
+    "notation": "compose(after, before) = after . before; `before` executes first",
+    "associative": true,
+    "unital": true,
+    "commutative": false,
+    "requires_compatible_types": true,
+    "requires_xcfe_admission": true,
+    "is_algebra_over_field": false,
+    "laws": [
+      "C1 associativity holds unconditionally: composition of total functions is associative, (F.G).H = F.(G.H)",
+      "C2 FOLD_IDENTITY is the two-sided unit: F.I = I.F = F",
+      "C3 composition is NOT commutative: F.G != G.F in general, because the phases and the operand types are ordered",
+      "C4 a collection of state transitions under composition is a monoid, not a K-algebra: there is no addition, no scalar multiplication and no bilinear product on transitions",
+      "C5 End_K(V) is an associative unital algebra, but K'UHUL execution folds include branching, gating, verification and memory effects, so they are not linear transformations",
+      "C6 composability is pairwise-local: a plan is admissible exactly when every adjacent pair is, which is why regrouping the pairs cannot change the answer"
+    ]
+  },
+  "phase_order": [
+    "Pop",
+    "Wo",
+    "Yax",
+    "Sek",
+    "Ch'en",
+    "Xul"
+  ],
+  "types": {
+    "runtime_input": "whatever entered the fold: text, candidate payload, or a substrate handle",
+    "feature_set": "extracted features and patterns (Pop projection)",
+    "bound_context": "bindings and constraints established over the features (Wo)",
+    "candidate_set": "generated possibilities (Yax)",
+    "scored_candidates": "candidate_set with numeric evidence attached (SCORE)",
+    "ranked_candidates": "scored_candidates in admission order (RANK)",
+    "collapsed_candidate": "the single survivor named by a total-order reduction (COLLAPSE)",
+    "verified_outcome": "the Ch'en gate token; the only value that unlocks TRAIN",
+    "committed_result": "output written at Xul",
+    "weight_delta": "a proposed W_learned delta; it is not the commit",
+    "comparison_report": "structured comparison of two candidates",
+    "gram_evidence": "retrieved gram events",
+    "question_record": "a clarification request",
+    "intent_gap": "an identified missing intent",
+    "substrate": "a vector or tensor substrate",
+    "folded_value": "the single value a REDUCE produces",
+    "state": "mutable runtime state",
+    "any": "wildcard carrier (only FOLD_IDENTITY uses it)"
+  },
+  "phases": [
+    {
+      "fold": "F_Pop",
+      "phase": "Pop",
+      "interpretation": "projection",
+      "input_types": [
+        "runtime_input"
+      ],
+      "output_type": "feature_set",
+      "effects": [
+        "read",
+        "transition"
+      ],
+      "pure": true,
+      "deterministic": true,
+      "operators": [
+        "ADVANCE_PHASE",
+        "IDENTITY_STATE",
+        "RECALL"
+      ],
+      "description": "Project the incoming payload onto the features the cycle will reason about. Pop is where memory is read; it establishes no bindings."
+    },
+    {
+      "fold": "F_Wo",
+      "phase": "Wo",
+      "interpretation": "state transformation",
+      "input_types": [
+        "feature_set"
+      ],
+      "output_type": "bound_context",
+      "effects": [],
+      "pure": true,
+      "deterministic": true,
+      "operators": [],
+      "description": "Establish bindings and constraints. Wo changes what the features mean, not which features exist. No SRAI operator is bound here yet; the fold is structural."
+    },
+    {
+      "fold": "F_Yax",
+      "phase": "Yax",
+      "interpretation": "expansion",
+      "input_types": [
+        "bound_context"
+      ],
+      "output_type": "candidate_set",
+      "effects": [
+        "read",
+        "project",
+        "emit"
+      ],
+      "pure": true,
+      "deterministic": true,
+      "operators": [
+        "IDENTITY_TRANSFORM",
+        "PROJECT",
+        "QUESTION"
+      ],
+      "description": "Generate candidate possibilities. Expansion is where the search space grows; nothing is admitted and nothing is committed."
+    },
+    {
+      "fold": "F_Sek",
+      "phase": "Sek",
+      "interpretation": "selection",
+      "input_types": [
+        "candidate_set"
+      ],
+      "output_type": "ranked_candidates",
+      "effects": [
+        "read",
+        "measure",
+        "order"
+      ],
+      "pure": true,
+      "deterministic": true,
+      "operators": [
+        "RANK",
+        "SCORE"
+      ],
+      "description": "Evaluate and admit legal candidates. Sek proposes; a high score promotes nothing by itself, because XCFE legality is a separate hard gate."
+    },
+    {
+      "fold": "F_Ch'en",
+      "phase": "Ch'en",
+      "interpretation": "verification",
+      "input_types": [
+        "ranked_candidates"
+      ],
+      "output_type": "verified_outcome",
+      "effects": [
+        "read",
+        "collapse",
+        "gate",
+        "analyze"
+      ],
+      "pure": true,
+      "deterministic": true,
+      "operators": [
+        "COLLAPSE",
+        "COMPARE",
+        "VERIFY"
+      ],
+      "description": "Measure evidence and confidence. Ch'en proves; the verified_outcome token it produces is the only value that unlocks TRAIN."
+    },
+    {
+      "fold": "F_Xul",
+      "phase": "Xul",
+      "interpretation": "collapse",
+      "input_types": [
+        "verified_outcome"
+      ],
+      "output_type": "committed_result",
+      "effects": [
+        "propose_delta"
+      ],
+      "pure": false,
+      "deterministic": false,
+      "operators": [
+        "TRAIN"
+      ],
+      "description": "Produce output and authorize commitment. Xul commits; it is the only impure fold in the canonical cycle, and it is the only one whose effects propose a delta."
+    }
+  ],
+  "inner_operators": [
+    {
+      "fold": "FOLD_IDENTITY",
+      "phase": "any",
+      "input_types": [
+        "*"
+      ],
+      "output_type": "*",
+      "effects": [],
+      "pure": true,
+      "deterministic": true,
+      "is_identity": true,
+      "description": "I(S) = S. The unit of the composition monoid and the only wildcard fold: its carrier is '*', so it composes with every fold and is elided from every execution order. A typed identity (IDENTITY_STATE, IDENTITY_TRANSFORM) is a stronger claim and elides only where its carrier chains."
+    },
+    {
+      "fold": "MAP",
+      "phase": "any",
+      "input_types": [
+        "candidate_set"
+      ],
+      "output_type": "candidate_set",
+      "effects": [
+        "read",
+        "project"
+      ],
+      "pure": true,
+      "deterministic": true,
+      "description": "Map_f(X) = { f(x) | x in X }. Cardinality is preserved, so a map inside a phase cannot admit or discard a candidate."
+    },
+    {
+      "fold": "FILTER",
+      "phase": "any",
+      "input_types": [
+        "candidate_set"
+      ],
+      "output_type": "candidate_set",
+      "effects": [
+        "read"
+      ],
+      "pure": true,
+      "deterministic": true,
+      "description": "Filter_P(X) = { x in X | P(x) }. Cardinality may only shrink; the predicate is XCFE legality, so filtering is where admission happens inside a phase."
+    },
+    {
+      "fold": "REDUCE",
+      "phase": "any",
+      "input_types": [
+        "candidate_set"
+      ],
+      "output_type": "folded_value",
+      "effects": [
+        "read"
+      ],
+      "pure": true,
+      "deterministic": true,
+      "description": "Reduce_(+,e)(X). A reduce carries no algebra of its own: its associativity, identity and regrouping licence come from the specific reducer's Algebraic Operator ISA contract."
+    }
+  ],
+  "operator_folds": [
+    {
+      "fold": "SCORE",
+      "phase": "Sek",
+      "input_types": [
+        "candidate_set"
+      ],
+      "output_type": "scored_candidates",
+      "effects": [
+        "read",
+        "measure"
+      ],
+      "pure": true,
+      "deterministic": true,
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#SCORE"
+    },
+    {
+      "fold": "RANK",
+      "phase": "Sek",
+      "input_types": [
+        "candidate_set",
+        "scored_candidates",
+        "ranked_candidates"
+      ],
+      "output_type": "ranked_candidates",
+      "effects": [
+        "read",
+        "order"
+      ],
+      "pure": true,
+      "deterministic": true,
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#RANK"
+    },
+    {
+      "fold": "COLLAPSE",
+      "phase": "Ch'en",
+      "input_types": [
+        "ranked_candidates"
+      ],
+      "output_type": "collapsed_candidate",
+      "effects": [
+        "read",
+        "collapse"
+      ],
+      "pure": true,
+      "deterministic": true,
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#COLLAPSE"
+    },
+    {
+      "fold": "VERIFY",
+      "phase": "Ch'en",
+      "input_types": [
+        "scored_candidates",
+        "ranked_candidates",
+        "collapsed_candidate"
+      ],
+      "output_type": "verified_outcome",
+      "effects": [
+        "read",
+        "gate"
+      ],
+      "pure": true,
+      "deterministic": true,
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#VERIFY"
+    },
+    {
+      "fold": "TRAIN",
+      "phase": "Xul",
+      "input_types": [
+        "scored_candidates",
+        "verified_outcome",
+        "weight_delta"
+      ],
+      "output_type": "weight_delta",
+      "effects": [
+        "propose_delta"
+      ],
+      "pure": false,
+      "deterministic": false,
+      "requires_verification": true,
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#TRAIN",
+      "description": "TRAIN composes with anything whose output type it accepts, but it only composes LEGALLY when the value flowing in is a verified_outcome. That is the structural form of the rule that raw rank alone does not authorize learning."
+    },
+    {
+      "fold": "COMPARE",
+      "phase": "Ch'en",
+      "input_types": [
+        "candidate_set",
+        "scored_candidates"
+      ],
+      "output_type": "comparison_report",
+      "effects": [
+        "read",
+        "analyze"
+      ],
+      "pure": true,
+      "deterministic": true,
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#COMPARE"
+    },
+    {
+      "fold": "RECALL",
+      "phase": "Pop",
+      "input_types": [
+        "runtime_input"
+      ],
+      "output_type": "gram_evidence",
+      "effects": [
+        "read"
+      ],
+      "pure": true,
+      "deterministic": true,
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#RECALL"
+    },
+    {
+      "fold": "PROJECT",
+      "phase": "Yax",
+      "input_types": [
+        "substrate",
+        "bound_context"
+      ],
+      "output_type": "substrate",
+      "effects": [
+        "read",
+        "project"
+      ],
+      "pure": true,
+      "deterministic": true,
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#PROJECT"
+    },
+    {
+      "fold": "QUESTION",
+      "phase": "Yax",
+      "input_types": [
+        "intent_gap",
+        "bound_context"
+      ],
+      "output_type": "question_record",
+      "effects": [
+        "read",
+        "emit"
+      ],
+      "pure": false,
+      "deterministic": false,
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#QUESTION"
+    },
+    {
+      "fold": "IDENTITY_STATE",
+      "phase": "Pop",
+      "input_types": [
+        "state"
+      ],
+      "output_type": "state",
+      "effects": [],
+      "pure": true,
+      "deterministic": true,
+      "is_identity": true,
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#IDENTITY_STATE",
+      "description": "The typed unit on FoldState. It is an identity, not a transition: eliding it is always sound, and using it to move the phase never is."
+    },
+    {
+      "fold": "IDENTITY_TRANSFORM",
+      "phase": "Yax",
+      "input_types": [
+        "substrate"
+      ],
+      "output_type": "substrate",
+      "effects": [],
+      "pure": true,
+      "deterministic": true,
+      "is_identity": true,
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#IDENTITY_TRANSFORM",
+      "description": "The typed unit on substrate transformations."
+    },
+    {
+      "fold": "ADVANCE_PHASE",
+      "phase": "Pop",
+      "input_types": [
+        "state"
+      ],
+      "output_type": "state",
+      "effects": [
+        "transition"
+      ],
+      "pure": false,
+      "deterministic": true,
+      "algebra_ref": "urn:kuhul:algebra-isa:v1#ADVANCE_PHASE",
+      "description": "Not an identity. It carries phase authority, so it is impure even though its carrier is unchanged: the state is the same kind of thing, the control position is not."
+    }
+  ],
+  "canonical_plans": [
+    {
+      "id": "kfa-cycle",
+      "description": "The six-fold K'UHUL cycle. Structurally legal; five phase crossings, each of which XCFE must still admit.",
+      "sequence": [
+        "F_Pop",
+        "F_Wo",
+        "F_Yax",
+        "F_Sek",
+        "F_Ch'en",
+        "F_Xul"
+      ],
+      "expect": "legal"
+    },
+    {
+      "id": "kfa-srai-pipeline",
+      "description": "The SRAI dispatch pipeline. Legal end to end, because VERIFY stands between RANK and TRAIN.",
+      "sequence": [
+        "SCORE",
+        "RANK",
+        "COLLAPSE",
+        "VERIFY",
+        "TRAIN"
+      ],
+      "expect": "legal"
+    },
+    {
+      "id": "kfa-sek-inner",
+      "description": "Sek(C) = Rank(Filter_XCFE(Map_WCR(C))). Inner operators are phase-agnostic, so they impose no ordering and cross no boundary.",
+      "sequence": [
+        "MAP",
+        "FILTER",
+        "RANK"
+      ],
+      "expect": "legal"
+    },
+    {
+      "id": "kfa-train-shortcut",
+      "description": "TRAIN fed straight from SCORE. The types chain, so this is exactly the case where only the verification rule saves it.",
+      "sequence": [
+        "SCORE",
+        "TRAIN"
+      ],
+      "expect_code": "REQUIRES_VERIFICATION"
+    },
+    {
+      "id": "kfa-train-backwards",
+      "description": "A plan that would run Xul before Sek traverses the cycle backwards.",
+      "sequence": [
+        "TRAIN",
+        "SCORE"
+      ],
+      "expect_code": "PHASE_OUT_OF_ORDER"
+    }
+  ],
+  "invariants": [
+    "K1 a fold is a typed state transition F_phi : S -> S; composition is the only combinator",
+    "K2 a composition is structurally legal only when the earlier fold's output_type is among the later fold's input_types",
+    "K3 a plan traverses the cycle at most once and only forwards; a second traversal is a new plan, not a longer composition",
+    "K4 a phase crossing is plannable but not authorized: requires_admission is true and XCFE owns the decision",
+    "K5 a fold declaring requires_verification composes legally only downstream of a verified_outcome",
+    "K6 FOLD_IDENTITY is the two-sided unit and is elided from the execution order; a typed identity elides only where its types chain",
+    "K7 composition is associative unconditionally, because composition of total functions is associative",
+    "K8 composition is not commutative; operand order is the execution order",
+    "K9 a monoid of transitions is not an algebra over a field: no addition, no scalar multiplication, no bilinear product on folds",
+    "K10 composability is pairwise-local, so a plan is admissible exactly when every adjacent pair is",
+    "K11 the rewrite licence of a plan is the intersection of its members' licences: a composition is not more algebraic than its weakest stage",
+    "K12 KFA decides composition, XCFE decides admission, Ch'en decides verification, Xul decides commit; no layer may answer for another",
+    "K13 every SRAI operator resolves to exactly one KFA fold whose phase, effects and algebra_ref match the SRAI and AOI registries",
+    "K14 the phase fold's operator set is exactly the SRAI operators declared at that phase; an operator may not appear in two phases"
+  ],
+  "validation": {
+    "checker": "tools/check_fold_algebra.py",
+    "fixtures": "data/conformance/fold_algebra.json",
+    "cpp_test": "KHANARY_FOLD_ALGEBRA_TEST"
+  }
+}

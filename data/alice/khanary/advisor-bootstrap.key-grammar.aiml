@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Generated key lookup bank from advisor-bootstrap.key-grammar.jsonl; entries are data, not execution authority.-->
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:MATH-Μ:1</pattern>
+    <template>Key ADVISOR:MATH-µ:1. definition: ADVISE MATH * -&gt; MATH-µ (Yax-&gt;Sek)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:CODER:2</pattern>
+    <template>Key ADVISOR:coder:2. definition: ADVISE CODE * -&gt; coder (Yax-&gt;Sek)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:WEB-RESEARCH-Μ:3</pattern>
+    <template>Key ADVISOR:WEB-RESEARCH-µ:3. definition: ADVISE RESEARCH * -&gt; WEB-RESEARCH-µ (Yax-&gt;Ch'en)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:WEB-RESEARCH-Μ:4</pattern>
+    <template>Key ADVISOR:WEB-RESEARCH-µ:4. definition: ADVISE RESEARCH FACT MISS -&gt; WEB-RESEARCH-µ (Yax-&gt;Ch'en)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:WEB-RESEARCH-Μ:5</pattern>
+    <template>Key ADVISOR:WEB-RESEARCH-µ:5. definition: ADVISE RESEARCH FACT MISS * -&gt; WEB-RESEARCH-µ (Yax-&gt;Ch'en)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:WEB-RESEARCH-Μ:6</pattern>
+    <template>Key ADVISOR:WEB-RESEARCH-µ:6. definition: I DON'T KNOW THE ANSWER TO THAT QUESTION -&gt; WEB-RESEARCH-µ (Yax-&gt;Ch'en)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:WEB-RESEARCH-Μ:7</pattern>
+    <template>Key ADVISOR:WEB-RESEARCH-µ:7. definition: I DON'T KNOW THE ANSWER TO THAT QUESTION * -&gt; WEB-RESEARCH-µ (Yax-&gt;Ch'en)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:WEB-RESEARCH-Μ:8</pattern>
+    <template>Key ADVISOR:WEB-RESEARCH-µ:8. definition: I DO NOT KNOW THE ANSWER TO THAT QUESTION -&gt; WEB-RESEARCH-µ (Yax-&gt;Ch'en)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:WEB-RESEARCH-Μ:9</pattern>
+    <template>Key ADVISOR:WEB-RESEARCH-µ:9. definition: I DO NOT KNOW THE ANSWER TO THAT QUESTION * -&gt; WEB-RESEARCH-µ (Yax-&gt;Ch'en)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:WEB-RESEARCH-Μ:10</pattern>
+    <template>Key ADVISOR:WEB-RESEARCH-µ:10. definition: LET ME SEARCH THE WEB AND ASK MY ADVISOR -&gt; WEB-RESEARCH-µ (Yax-&gt;Ch'en)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:WEB-RESEARCH-Μ:11</pattern>
+    <template>Key ADVISOR:WEB-RESEARCH-µ:11. definition: LET ME SEARCH THE WEB AND ASK MY ADVISOR * -&gt; WEB-RESEARCH-µ (Yax-&gt;Ch'en)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:REASONER:12</pattern>
+    <template>Key ADVISOR:reasoner:12. definition: ADVISE EXPLAIN * -&gt; reasoner (Yax-&gt;Sek)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:CHAT-U:13</pattern>
+    <template>Key ADVISOR:CHAT-u:13. definition: ADVISE TOOL HELP LFM -&gt; CHAT-u (Wo-&gt;Sek)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:CHAT-U:14</pattern>
+    <template>Key ADVISOR:CHAT-u:14. definition: ADVISE TOOL HELP LFM * -&gt; CHAT-u (Wo-&gt;Sek)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:CHAT-U:15</pattern>
+    <template>Key ADVISOR:CHAT-u:15. definition: I'M NOT SURE WHAT TOOL TO USE -&gt; CHAT-u (Wo-&gt;Sek)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:CHAT-U:16</pattern>
+    <template>Key ADVISOR:CHAT-u:16. definition: I'M NOT SURE WHAT TOOL TO USE * -&gt; CHAT-u (Wo-&gt;Sek)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:CHAT-U:17</pattern>
+    <template>Key ADVISOR:CHAT-u:17. definition: I AM NOT SURE WHAT TOOL TO USE -&gt; CHAT-u (Wo-&gt;Sek)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:CHAT-U:18</pattern>
+    <template>Key ADVISOR:CHAT-u:18. definition: I AM NOT SURE WHAT TOOL TO USE * -&gt; CHAT-u (Wo-&gt;Sek)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:CHAT-U:19</pattern>
+    <template>Key ADVISOR:CHAT-u:19. definition: LET ME ASK FOR HELP FROM LFM -&gt; CHAT-u (Wo-&gt;Sek)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:CHAT-U:20</pattern>
+    <template>Key ADVISOR:CHAT-u:20. definition: LET ME ASK FOR HELP FROM LFM * -&gt; CHAT-u (Wo-&gt;Sek)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:COORDINATOR:21</pattern>
+    <template>Key ADVISOR:Coordinator:21. definition: ADVISE PLAN * -&gt; Coordinator (Wo-&gt;Ch'en)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:COORDINATOR:22</pattern>
+    <template>Key ADVISOR:Coordinator:22. definition: ADVISE * -&gt; Coordinator (Wo-&gt;Ch'en)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:COORDINATOR:23</pattern>
+    <template>Key ADVISOR:Coordinator:23. definition: I NEED HELP WITH * -&gt; Coordinator (Wo-&gt;Ch'en)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:COORDINATOR:24</pattern>
+    <template>Key ADVISOR:Coordinator:24. definition: HELP ME WITH * -&gt; Coordinator (Wo-&gt;Ch'en)</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ADVISOR:COORDINATOR:25</pattern>
+    <template>Key ADVISOR:Coordinator:25. definition: WHO CAN HELP WITH * -&gt; Coordinator (Wo-&gt;Ch'en)</template>
+  </category>
+</aiml>

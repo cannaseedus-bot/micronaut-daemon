@@ -1,0 +1,29 @@
+{
+  "id": "phase-driver.ch'en.v2",
+  "phase": "Ch'en",
+  "phase_order": 4,
+  "profile": "default",
+  "driver_weight": 1.0,
+  "ops": [
+    "assert_and_verify_candidate",
+    "verify_eliza_candidate_provenance",
+    "verify_srai_recursion_limits",
+    "verify_semantic_invariance",
+    "verify_relation_invariance",
+    "verify_syntax_constraints",
+    "verify_delegation",
+    "verify_ngram_confidence",
+    "classify_resolution"
+  ],
+  "semantic_channels": {},
+  "emits": {
+    "data": true,
+    "next_phase_hint": true,
+    "verb": true,
+    "noun": true,
+    "opcode": true,
+    "confidence_delta": true
+  },
+  "default_verb": "@verify",
+  "terminal": false
+}

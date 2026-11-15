@@ -1,0 +1,141 @@
+{
+  "@program":     "scxq2_tile_upload",
+  "@version":     "2.0",
+  "@description": "XCFE orchestration: SCXQ2 container → triple-buffer stream → iGPU INT4 attention",
+  "@schema":      "xcfe://program/v1",
+  "@format":      "scxq2://container/v3",
+
+  "@state": {
+    "device_ready":    false,
+    "container_path":  "C:/Users/canna/.micronaut/micronaut/Micronaut_V1/tools/streaming/tiles_final/model.scxq2",
+    "current_layer":   0,
+    "current_head":    0,
+    "max_layers":      24,
+    "heads_per_layer": 16,
+    "lane":            2,
+    "active_hash":     null,
+    "result":          null,
+    "error":           null
+  },
+
+  "@control": [
+
+    {
+      "step":  1,
+      "label": "init_gpu",
+      "op":    "native.CALL",
+      "target":"sidecar://scxq2_gpu/INIT_DEVICE",
+      "args":  {
+        "container": "{state.container_path}",
+        "softmax_shader": "native/shaders/tile_qk_softmax.hlsl",
+        "vmul_shader":    "native/shaders/tile_v_mul.hlsl",
+        "int4_shader":    "native/shaders/scxq2_int4_lane.hlsl"
+      },
+      "on_success": { "state.device_ready": true },
+      "on_fail":    { "state.error": "GPU init failed", "halt": true }
+    },
+
+    {
+      "step":  2,
+      "label": "resolve_hash",
+      "op":    "native.CALL",
+      "target":"sidecar://scxq2_gpu/RESOLVE_HASH",
+      "args":  {
+        "layer_idx": "{state.current_layer}",
+        "head_idx":  "{state.current_head}",
+        "lane":      "{state.lane}"
+      },
+      "out":      "state.active_hash",
+      "on_fail":  { "state.error": "hash resolve failed — shard not in index", "halt": true }
+    },
+
+    {
+      "step":  3,
+      "label": "request_shard",
+      "op":    "native.CALL",
+      "target":"sidecar://scxq2_gpu/REQUEST_SHARD",
+      "args":  { "hash": "{state.active_hash}" },
+      "description": "Triple-buffer: disk read → staging → GPU upload"
+    },
+
+    {
+      "step":  4,
+      "label": "wait_ready",
+      "op":    "native.CALL",
+      "target":"sidecar://scxq2_gpu/POLL_READY",
+      "retry": { "max": 100, "interval_ms": 1 },
+      "on_fail": { "state.error": "shard not ready after timeout", "halt": true }
+    },
+
+    {
+      "step":  5,
+      "label": "decode_int4",
+      "op":    "native.CALL",
+      "target":"sidecar://scxq2_gpu/DECODE_INT4",
+      "description": "scxq2_int4_lane.hlsl CSMain: StructuredBuffer<uint> → float weights"
+    },
+
+    {
+      "step":  6,
+      "label": "run_attention",
+      "op":    "native.CALL",
+      "target":"sidecar://scxq2_gpu/RUN_ATTENTION",
+      "description": "tile_qk_softmax + tile_v_mul, no JSON in GPU path"
+    },
+
+    {
+      "step":  7,
+      "label": "readback",
+      "op":    "native.CALL",
+      "target":"sidecar://scxq2_gpu/READBACK",
+      "args":  { "out_key": "state.result" }
+    },
+
+    {
+      "step":  8,
+      "label": "advance_loader",
+      "op":    "native.CALL",
+      "target":"sidecar://scxq2_gpu/ADVANCE",
+      "description": "Rotate triple-buffer: A→recycle, B→A, C→B, start next prefetch"
+    },
+
+    {
+      "step":  9,
+      "label": "advance_head",
+      "op":    "native.EVAL",
+      "expr":  "state.current_head = (state.current_head + 1) % state.heads_per_layer",
+      "then": {
+        "if":   "state.current_head == 0",
+        "then": { "op": "native.EVAL", "expr": "state.current_layer += 1" }
+      }
+    },
+
+    {
+      "step":   10,
+      "label":  "loop_or_done",
+      "op":     "native.EVAL",
+      "expr":   "state.current_layer < state.max_layers",
+      "if_true":  { "goto": 2 },
+      "if_false": { "halt": false, "label": "all_layers_complete" }
+    }
+
+  ],
+
+  "@gpu_path": {
+    "description": "What actually touches the GPU — nothing else",
+    "stages": [
+      "StructuredBuffer<uint> (packed INT4 payload)",
+      "CSMain: scxq2_int4_lane.hlsl (decode → float)",
+      "CSMain: tile_qk_softmax.hlsl (QK^T + softmax)",
+      "CSMain: tile_v_mul.hlsl (P * V → ctx)",
+      "Staging readback → CPU float[65536]"
+    ],
+    "never_on_gpu": ["JSON", "BSON", "hex strings", "SCXQ2 metadata"]
+  },
+
+  "@content_addressing": {
+    "description": "Every shard identified by SHA-256 of its payload",
+    "benefits": ["deduplication", "integrity", "relocatable", "mesh-ready"],
+    "index_type": "ShardIndexEntry[shardCount] at indexOffset"
+  }
+}

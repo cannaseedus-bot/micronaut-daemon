@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "affiliate-links",
+  "@key": "⟁APP:AFFILIATE_LINKS",
+  "@mount": "⟁ROOT:AFFILIATE_LINKS",
+  "@theme": { "accent": "#fbbf24", "bg": "#080600", "surface": "#100e00", "text": "#fefce8", "hero_phase": "Sek", "tagline": "Your links. Your income." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "links", "component": "⟁WIDGET:LINKS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "links": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:AFFILIATE_LINKS": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:ADD_LINK", "⟁ACTION:ANALYTICS"] },
+    "⟁ACTION:ADD_LINK": { "@type": "button", "@text": "Add Link", "@on": { "click": "aff.open_compose" } },
+    "⟁ACTION:ANALYTICS": { "@type": "button", "@text": "Analytics", "@on": { "click": "aff.open_analytics" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:LINKS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:LINKS": { "@type": "feed", "@bind": "state.links", "@children": ["⟁WIDGET:LINK_CARD"] },
+    "⟁WIDGET:LINK_CARD": { "@type": "content-card", "@bind": "link", "@on": { "view": "aff.view", "copy": "aff.copy" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:EARNINGS", "⟁WIDGET:TOP_LINKS"] },
+    "⟁WIDGET:EARNINGS": { "@type": "stat", "@bind": "data.earnings" },
+    "⟁WIDGET:TOP_LINKS": { "@type": "list", "@bind": "data.top_links" }
+  },
+  "@programs": {
+    "aff.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "aff.open_analytics": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "aff.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "aff.copy": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_copied", "@out": "copied_id" }] }
+  },
+  "@events": { "link.add": "aff.open_compose", "analytics.open": "aff.open_analytics", "link.view": "aff.view", "link.copy": "aff.copy" },
+  "@imports": [{ "ref": "affiliate_link", "mode": "schema_table" }, { "ref": "click_event", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "link-rotator", "name": "Link Rotator", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "A/B test multiple destination URLs under one short link." },
+      { "id": "click-heatmap", "name": "Click Heatmap", "category": "analytics", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Visualise click patterns on your link pages over time." },
+      { "id": "csv-export", "name": "Revenue CSV Export", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Export clicks and earnings by program to CSV for tax reporting." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "aff.add", "pattern": "ADD AFFILIATE LINK|NEW LINK|TRACK LINK *", "intent": "open_compose" },
+      { "id": "aff.stats", "pattern": "AFFILIATE EARNINGS|LINK CLICKS|TOP LINKS", "intent": "open_analytics" }
+    ]
+  },
+  "@data": {
+    "earnings": { "this_month_usd": 342, "total_usd": 2148, "clicks_this_month": 1821 },
+    "top_links": [{ "title": "MX2LM API Docs", "clicks": 418, "earnings_usd": 84 }, { "title": "KHANARY Merch", "clicks": 302, "earnings_usd": 121 }],
+    "spotlight": [
+      { "id": "sp1", "title": "MX2LM Partner Program", "program": "KHANARY", "badge": "Top Earner", "clicks": 418, "commission_pct": 20, "excerpt": "Highest clicking link. 20% commission on first purchase." },
+      { "id": "sp2", "title": "Tools Roundup Article", "program": "Various", "badge": "Multi-Link Page", "clicks": 312, "excerpt": "Single landing page with 7 affiliate links. Converts at 4.2%." },
+      { "id": "sp3", "title": "Holiday Gear Guide", "program": "Amazon", "badge": "Seasonal", "clicks": 187, "excerpt": "Seasonal pick list. Spikes each October." }
+    ],
+    "schema": {
+      "affiliate_link": { "primaryKey": "link_id", "fields": { "link_id": { "type": "string" }, "title": { "type": "string", "required": true }, "destination_url": { "type": "string", "required": true }, "short_slug": { "type": "string" }, "program": { "type": "string" }, "commission_pct": { "type": "float" }, "created_at": { "type": "datetime" } } },
+      "click_event": { "primaryKey": "click_id", "fields": { "click_id": { "type": "string" }, "link_id": { "type": "string", "required": true }, "referrer": { "type": "string" }, "converted": { "type": "boolean" }, "clicked_at": { "type": "datetime", "required": true } } }
+    }
+  }
+}

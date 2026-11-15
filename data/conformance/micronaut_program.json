@@ -1,0 +1,51 @@
+{
+  "@kind": "khanary.micronaut_program.conformance.v1",
+  "canonical": {
+    "program_ref": "data/micronaut/micronaut.program.v0.1.json",
+    "expect": "PASS"
+  },
+  "negative_cases": [
+    {
+      "name": "callable_edge_without_route_contract",
+      "program": {
+        "patch": [
+          {
+            "op": "replace",
+            "path": "/edges/callable/0/route_contract_required",
+            "value": false
+          }
+        ]
+      },
+      "expect": "FAIL",
+      "error": "CALLABLE_EDGE_WITHOUT_ROUTE_CONTRACT"
+    },
+    {
+      "name": "unknown_callable_target",
+      "program": {
+        "patch": [
+          {
+            "op": "add",
+            "path": "/registry/micronauts/0/callable_edges/-",
+            "value": "µ://missing"
+          }
+        ]
+      },
+      "expect": "FAIL",
+      "error": "UNKNOWN_CALLABLE_EDGE_TARGET"
+    },
+    {
+      "name": "promotion_without_xul_gate",
+      "program": {
+        "patch": [
+          {
+            "op": "replace",
+            "path": "/learning/promotion_requires_xul",
+            "value": false
+          }
+        ]
+      },
+      "expect": "FAIL",
+      "error": "PROMOTION_REQUIRES_XUL"
+    }
+  ]
+}

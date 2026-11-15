@@ -1,0 +1,24 @@
+{
+  "@kind": "kuhul.actions.manifest.v1",
+  "programs_dir": "programs/",
+  "actions": {
+    "coder": {
+      "parse": "dist/micronaut-coder/micronaut_coder_pipeline.exe",
+      "generate": "dist/micronaut-coder/micronaut_coder_pipeline.exe",
+      "todos": "dist/micronaut-coder/code-micronaut/micronaut_coder_helpers.exe"
+    },
+    "factory": {
+      "create": "dist/micronaut-factory/test_runtime_flow.exe",
+      "research": "web-research bots -> create_micronaut_from_research"
+    },
+    "runtime": {
+      "run": "dist/json-runtime/build/Release/json_runtime.exe",
+      "health": "GET /api/health"
+    },
+    "gpu": {
+      "matvec": "scratch/cl_moe_matvec.exe (OpenCL)",
+      "harness": "scratch/cl_harness.exe (OpenCL 1.2)"
+    }
+  },
+  "note": "The actions the stack can perform, mapped to their executables."
+}

@@ -1,0 +1,63 @@
+{
+  "@kind": "kuhul.micronaut.atomic.v1",
+  "id": "MEMORY-µ",
+  "descriptor_status": "active",
+  "track_ref": "data/tracks/MEMORY-u.semantic-tracks.v1.json",
+  "manifest": {
+    "name": "MEMORY-µ",
+    "version": "1.0.0",
+    "description": "Long-term memory micronaut (Xul phase) — save user preferences, session context, and micronaut data; recall by key/category/ngram evidence; forget entries; memory event journal. xcfe_gated for write ops."
+  },
+  "api": {
+    "namespace": "memory",
+    "atomic_keys": ["memory.save", "memory.recall", "memory.forget", "memory.journal", "memory.health"],
+    "verb_surface": ["REMEMBER *", "RECALL *", "FORGET *", "MEMORY JOURNAL", "MEMORY STATUS"]
+  },
+  "xcfe": {
+    "mode": "xcfe_gated_read_only",
+    "escalation_mode": "proposal_only",
+    "authority": "xcfe_gated_read_only",
+    "forbidden": ["emit_response", "mutate_topology", "commit_patterns", "direct_dispatch"]
+  },
+  "atomic_key_defs": {
+    "memory.save": {
+      "@type": "save_memory",
+      "description": "Xul-phase: save user preference, session context, or micronaut data to the memory store. Writes memory event journal entry. xcfe_required for all writes.",
+      "phases": ["Xul"],
+      "xcfe_required": true,
+      "categories": ["preference", "session_context", "micronaut_data"],
+      "authority": "xcfe_gated"
+    },
+    "memory.recall": {
+      "@type": "recall_memory",
+      "description": "Pop/Yax-phase: recall memory entries — score_recall_candidates by ngram evidence, fold_ngram_evidence for relevance weighting, verify_key_authority before returning.",
+      "phases": ["Pop", "Yax"],
+      "authority": "data_only"
+    },
+    "memory.forget": {
+      "@type": "forget_memory",
+      "description": "Xul-phase: mark memory entry as forgotten — writes forget event to journal, removes from recall index. xcfe_required.",
+      "phases": ["Xul"],
+      "xcfe_required": true,
+      "authority": "xcfe_gated"
+    },
+    "memory.journal": {
+      "@type": "read_journal",
+      "description": "Pop-phase: read memory event journal — returns chronological log of save/recall/forget events with timestamps and category.",
+      "phases": ["Pop"],
+      "authority": "data_only"
+    },
+    "memory.health": {
+      "@type": "status",
+      "description": "Pop-phase: reports memory store size by category, journal entry count, recall scoring engine status.",
+      "phases": ["Pop"]
+    }
+  },
+  "program_contract": {
+    "drivers": ["Micronaut.Core.dll", "Micronaut.Memory.dll"],
+    "sandbox": "xcfe_gated_read_only",
+    "learning": false
+  },
+  "srai": { "enabled": false },
+  "capabilities": ["save-user-preference", "save-session-context", "save-micronaut-data", "recall-memory", "forget-memory"]
+}

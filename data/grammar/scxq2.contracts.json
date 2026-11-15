@@ -1,0 +1,64 @@
+{
+  "@type": "khanary.scxq2_contracts.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority": "container_compression_profile_only_not_semantic_authority",
+  "lane": "KHANARY_SCXQ2_TEST",
+  "runtime_subject": "src/atomic/AtomicExecLane.js",
+  "runtime_host_validator": "src/host/server.cpp",
+  "correction": {
+    "retired_claim": "SCXQ2 bytecode is present in artifacts/native-asx/bridge.scx2",
+    "fact": "no .scx2 bytecode artifact exists in the tree; the shipped SCXQ2 surface is the ASXG binary-glyph container's scxq2 block, authored by AtomicExecLane.pack() and validated by the apps host before admission",
+    "retired_on": "2026-10-28"
+  },
+  "scope": "SCXQ2 is the symbolic compression profile declared inside an ASXG v1 container. It records how the container payload is encoded; it does not carry semantic authority, and it never substitutes for SDDS tensor storage.",
+  "container_law": {
+    "magic": "ASXG",
+    "version": 1,
+    "encoding": "binary-glyph-container",
+    "payload_field": "payload",
+    "block_field": "scxq2"
+  },
+  "block_fields": [
+    "algorithm",
+    "version",
+    "mode",
+    "compressed",
+    "original_bytes",
+    "decoded_bytes"
+  ],
+  "algorithm": "SCXQ2",
+  "algorithm_version": 1,
+  "modes": [
+    "symbolic"
+  ],
+  "invariants": {
+    "SQ1": "the container declares magic ASXG, version 1 and encoding binary-glyph-container",
+    "SQ2": "the scxq2 block declares algorithm SCXQ2, a supported version and a declared mode",
+    "SQ3": "decoded_bytes equals the payload byte length exactly; a mismatch refuses the container",
+    "SQ4": "in symbolic mode compressed is false and original_bytes equals decoded_bytes, so the declared transformation is the identity and byte parity is exact",
+    "SQ5": "the payload bytes are the tensor bytes: for an SDDS-sourced payload the container payload must equal the SDDS chunk bytes and their SHA-256 must agree",
+    "SQ6": "an ASXG container is not semantic authority: it may be decoded, described and dispatched, but it cannot assert verification or commit"
+  },
+  "parity": {
+    "reference_vector": "data/conformance/scxq2.json#reference_vector",
+    "sdds": "data/conformance/scxq2.json#sdds_parity",
+    "law": "pack -> decode is the byte-identity for symbolic containers, and an SDDS tensor's bytes survive the container round trip with the same SHA-256"
+  },
+  "error_codes": [
+    "container_not_object",
+    "container_magic_invalid",
+    "container_version_invalid",
+    "container_encoding_invalid",
+    "block_missing",
+    "algorithm_invalid",
+    "algorithm_version_unsupported",
+    "mode_unsupported",
+    "compressed_in_symbolic_mode",
+    "original_decoded_mismatch",
+    "decoded_length_mismatch",
+    "edge_endpoint_unresolved",
+    "tensor_byte_length_mismatch",
+    "payload_parity_mismatch"
+  ]
+}

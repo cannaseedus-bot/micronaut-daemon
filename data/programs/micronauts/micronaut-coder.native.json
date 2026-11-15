@@ -1,0 +1,111 @@
+{
+  "@kind": "kuhul.micronaut.native-coder.v1",
+  "@id": "micronaut://coder-native",
+  "@version": "1.0.0",
+  "description": "Native coder model adapter: AST corpus, GPT2 weights, SCXQ2/XSHARD residency, and KXML execution.",
+  "authority": {
+    "source_of_truth": "SafeTensors or GPT2-compatible GGUF",
+    "runtime": "native micronaut-coder",
+    "execution": "AtomicDOM-approved command plan",
+    "writes": "disabled-unless-approved"
+  },
+  "model": {
+    "architecture": "gpt2",
+    "role": "source-to-kuhul-ast-and-tool-plan",
+    "chat_template": "chatml-compatible-adapter",
+    "weights": {
+      "preferred": "E:/models/GPT2/coder_micronaut/coder_ast_json_fp16.safetensors",
+      "serving_gguf": "E:/models/GPT2/coder_micronaut/ultrachat_coder_skeleton_slerp_0p40.gguf",
+      "trained_lineage": "E:/models/GPT2/coder_micronaut/coder_ast_json_fp16_step4800.safetensors",
+      "training_checkpoint": "E:/models/GPT2/layered_ckpts/layered_code.safetensors",
+      "large_checkpoint": "E:/models/GPT2/lg-GPT2/model.safetensors",
+      "native_rule": "Prefer the AST-trained SafeTensors checkpoint in the native coder/trainer. Use serving_gguf only for a llama/Khanary ChatML endpoint after an explicit export and hash record. Do not silently substitute weights."
+    },
+    "capabilities": [
+      "source_to_ast",
+      "kxml_fold_planning",
+      "ebnf_guided_parse",
+      "single_command_tool_plan",
+      "format_preserving_writer"
+    ]
+  },
+  "pipeline": [
+    {
+      "phase": "Pop",
+      "name": "prepare_ast_corpus",
+      "tool": "tools/prep_ast_corpus.py",
+      "command": "python tools/prep_ast_corpus.py --src <source-root> --out <workspace>/coder_ast.jsonl --fold-wrap"
+    },
+    {
+      "phase": "Wo",
+      "name": "select_weight_source",
+      "tool": "tools/gpt2_safetensors_to_gguf.py",
+      "input": "SafeTensors only",
+      "note": "Use this direction when producing GGUF from GPT2 SafeTensors; tools/gguf_to_safetensors.py is for LLaMA/Gemma-style names and is not the GPT2 reverse converter."
+    },
+    {
+      "phase": "Yax",
+      "name": "plan_scxq2_residency",
+      "tools": [
+        "tools/safetensors_to_xshard.py",
+        "tools/scxq2_tiles.py",
+        "tools/smgm_address.py"
+      ],
+      "output": "XSHARD/1 or DDS tile manifest with HOT/WARM/COLD residency"
+    },
+    {
+      "phase": "Sek",
+      "name": "native_inference",
+      "runtime": "tools/scxqdds_runtime.py",
+      "adapter": "tools/scxq2_adapter.py",
+      "native_backend": "DirectXMath CPU or configured GPU driver"
+    },
+    {
+      "phase": "Chen",
+      "name": "verify_artifacts",
+      "tools": [
+        "tools/stb.py",
+        "tools/safetensors_to_stb.py",
+        "tools/safetensors_to_model_stb.py"
+      ],
+      "checks": ["source_hash", "tensor_shape", "tensor_count", "round_trip", "fold_manifest"]
+    },
+    {
+      "phase": "Xul",
+      "name": "commit_jrom_adapter",
+      "tools": [
+        "tools/pi_kuhul_adapter_to_scxq2.py",
+        "tools/pi_kuhul_adapter_mutate.py"
+      ],
+      "output": "JROM metadata and SCXQ2 adapter record"
+    }
+  ],
+  "formats": {
+    "source_weights": ["safetensors", "gguf"],
+    "native_residency": ["xshard", "dds", "scxq2"],
+    "model_container": "stb",
+    "semantic_program": "kxml",
+    "compiled_plan": "kbc1"
+  },
+  "tools": {
+    "moe_server": "tools/scx_moe_serve.py",
+    "tensor_conversion": [
+      "tools/safetensors_to_xshard.py",
+      "tools/safetensors_to_stb.py",
+      "tools/safetensors_to_model_stb.py",
+      "tools/scxq2_tiles.py",
+      "tools/scxq2_adapter.py"
+    ],
+    "model_conversion": [
+      "tools/gpt2_safetensors_to_gguf.py",
+      "tools/make_gguf.py",
+      "tools/gguf_to_safetensors.py"
+    ]
+  },
+  "constraints": [
+    "GGUF is a model container, not an AST compiler.",
+    "The coder model proposes AST or one tool command; the host parser, EBNF grammar, and AtomicDOM validate it.",
+    "Existing SMGM DDS preview packs must pass full-payload and source-hash verification before production inference.",
+    "safetensors_to_model_stb.py currently uses an 8-bit tensor id and requires a format-v2 extension above 256 tensors."
+  ]
+}

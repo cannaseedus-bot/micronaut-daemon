@@ -1,0 +1,148 @@
+{
+  "@type": "khanary.app_aiml_addon_contracts.v1",
+  "semantic_authority": false,
+  "topology_mutation": false,
+  "commit_authorized": false,
+  "description": "Machine-readable contract for AIML pattern add-ons in asx.mini-app.v1 manifests. Each app-scoped .aiml file extends the KHANARY AIML engine with wildcard patterns that bind captured content to specific ASX key operations and table writes.",
+
+  "authority": {
+    "apps_doc":        "APPS.md",
+    "grammar":         "data/grammar/app-aiml.ebnf",
+    "aiml_engine":     "src/micronaut/aiml_engine.cpp",
+    "xcfe_executor":   "src/kuhul/xcfe_executor.cpp",
+    "dispatcher":      "src/host/server.cpp:dispatch_xcfe_app_frames",
+    "base_aiml":       "data/alice/khanary-distilled.aiml",
+    "template_aiml":   "data/host/apps/_template.aiml",
+    "example":         "data/host/apps/blog.aiml"
+  },
+
+  "file_convention": {
+    "location":  "data/host/apps/{app_id}.aiml",
+    "include_base": "khanary-distilled.aiml is loaded first; app .aiml overlays on top",
+    "priority":  "app-scoped patterns shadow base patterns; more-specific patterns always win",
+    "charset":   "UTF-8"
+  },
+
+  "frame_syntax": {
+    "description": "App AIML templates emit XCFE key-frame strings that dispatch_xcfe_app_frames() intercepts.",
+    "key_write_frame":   "[XCFE:KEY_WRITE table={table_id} key={asx_key}] {content}",
+    "key_read_frame":    "[XCFE:KEY_READ key={asx_key}]",
+    "key_append_frame":  "[XCFE:KEY_APPEND table={table_id} key={asx_key}] {content}",
+    "key_delete_frame":  "[XCFE:KEY_DELETE table={table_id} key={asx_key} id={row_id}]",
+    "table_list_frame":  "[XCFE:KEY_LIST table={table_id} key={asx_key}]",
+    "phase_gate": {
+      "KEY_WRITE":  "Xul",
+      "KEY_APPEND": "Xul",
+      "KEY_DELETE": "Xul",
+      "KEY_READ":   "Pop",
+      "KEY_LIST":   "Pop"
+    }
+  },
+
+  "wildcard_binding": {
+    "description": "AIML wildcards (* and _) capture user-supplied content. <star/> inserts the first wildcard; <star index='N'/> addresses the Nth.",
+    "star_to_row_body": "Captured <star/> text is JSON-serialized as { text: <star/> } or merged into a declared @fields template from @assistant_patterns.",
+    "prompt_context_vars": {
+      "@app_id":    "Current app_id from AimlRequestCtx.session_id resolution",
+      "@user_id":   "AimlRequestCtx.user_id (empty string when unauthenticated)",
+      "@phase":     "Current K'UHUL phase from phase_engine",
+      "@key":       "Active ASX key from the request context, if supplied"
+    },
+    "field_template": "An @assistant_pattern may declare @fields to map star indices to named schema columns: { 'title': '<star index=1/>', 'body': '<star index=2/>' }"
+  },
+
+  "pattern_classes": {
+    "CREATE":  { "verbs": ["ADD","CREATE","NEW","MAKE","WRITE","POST","SAVE","LOG","RECORD"], "phase": "Xul", "op": "KEY_WRITE" },
+    "READ":    { "verbs": ["GET","SHOW","OPEN","LOAD","READ","FIND","SEARCH","LIST","VIEW"],  "phase": "Pop", "op": "KEY_READ"  },
+    "UPDATE":  { "verbs": ["UPDATE","EDIT","CHANGE","RENAME","SET","MARK"],                  "phase": "Xul", "op": "KEY_WRITE" },
+    "DELETE":  { "verbs": ["DELETE","REMOVE","CLEAR","ARCHIVE"],                             "phase": "Xul", "op": "KEY_DELETE", "guard_required": true },
+    "APPEND":  { "verbs": ["APPEND","LOG","TRACK","NOTE","RECORD"],                          "phase": "Xul", "op": "KEY_APPEND" },
+    "COUNT":   { "verbs": ["COUNT","INCREMENT","TICK","BUMP"],                               "phase": "Xul", "op": "KEY_APPEND" }
+  },
+
+  "manifest_addon_entry": {
+    "description": "Add-on entry shape for @extensions.@available in the app manifest.",
+    "example": {
+      "id":          "aiml-templates",
+      "name":        "AIML Pattern Add-ons",
+      "category":    "agents",
+      "price":       "free",
+      "status":      "available_unconfigured",
+      "aiml_file":   "data/host/apps/{app_id}.aiml",
+      "description": "Natural language patterns that write to app tables and update ASX keys. Wildcard * captures user content; context vars inject phase and user_id."
+    }
+  },
+
+  "assistant_pattern_extension": {
+    "description": "Each @assistant_pattern entry may now declare key_target and fields alongside intent.",
+    "fields": {
+      "id":         "Unique pattern id within this app",
+      "pattern":    "AIML-style uppercase pattern with * wildcards",
+      "intent":     "Semantic intent label (matches micronaut-control template intents)",
+      "op":         "KEY_WRITE | KEY_READ | KEY_APPEND | KEY_LIST | KEY_DELETE",
+      "table":      "table_id declared in @tables",
+      "key_target": "ASX key to update in the ghost shell after the operation completes",
+      "fields":     "Map of star-index → schema field name",
+      "guard":      "Optional AIML pattern that must succeed before this pattern fires (for DELETE)"
+    }
+  },
+
+  "invariants": {
+    "AA1": "An app AIML file may only target tables declared in its own @tables block. Cross-app table writes are not permitted.",
+    "AA2": "KEY_WRITE and KEY_APPEND require an authenticated session (AimlRequestCtx.authenticated() == true). Unauthenticated matches produce a SESSION_REQUIRED response.",
+    "AA3": "KEY_DELETE requires a guard pattern to have matched first in the same session. Unguarded DELETE patterns are rejected with GUARD_REQUIRED.",
+    "AA4": "star_to_row_body produces server-stamped rows. The AIML template may not inject _written_by or _written_at.",
+    "AA5": "App AIML patterns are loaded after khanary-distilled.aiml. More-specific patterns always take priority; shorter patterns in the base file do not shadow app-specific longer patterns.",
+    "AA6": "key_target is advisory — it tells the ghost shell which ASX key to re-render after the write. It does not grant semantic authority to that key.",
+    "AA7": "prompt_context_vars are injected read-only. An AIML template may read @user_id but may not write it.",
+    "AA8": "The aiml_engine.cpp wildcard match is the only admission gate. No fallback synthesis is permitted when no pattern matches — the engine returns MISS."
+  },
+
+  "example_patterns": [
+    {
+      "app_id": "blog",
+      "pattern": "ADD POST * BODY *",
+      "template": "[XCFE:KEY_WRITE table=posts key=⟁WIDGET:FEED] {\"title\":\"<star index='1'/>\",\"body\":\"<star index='2'/>\"}",
+      "fields": { "1": "title", "2": "body" },
+      "table": "posts",
+      "key_target": "⟁WIDGET:FEED",
+      "phase": "Xul"
+    },
+    {
+      "app_id": "wishlist",
+      "pattern": "ADD * TO MY WISHLIST",
+      "template": "[XCFE:KEY_APPEND table=wishes key=⟁WIDGET:FEED] {\"item\":\"<star/>\"}",
+      "fields": { "1": "item" },
+      "table": "wishes",
+      "key_target": "⟁WIDGET:FEED",
+      "phase": "Xul"
+    },
+    {
+      "app_id": "habit-tracker",
+      "pattern": "I DID *",
+      "template": "[XCFE:KEY_APPEND table=logs key=⟁WIDGET:STREAK] {\"habit\":\"<star/>\"}",
+      "fields": { "1": "habit" },
+      "table": "logs",
+      "key_target": "⟁WIDGET:STREAK",
+      "phase": "Xul"
+    },
+    {
+      "app_id": "recipe-book",
+      "pattern": "SHOW ME * RECIPES",
+      "template": "[XCFE:KEY_LIST table=recipes key=⟁WIDGET:FEED] <star/>",
+      "fields": { "1": "search_term" },
+      "table": "recipes",
+      "key_target": "⟁WIDGET:FEED",
+      "phase": "Pop"
+    },
+    {
+      "app_id": "guestbook",
+      "pattern": "SIGN * FROM *",
+      "template": "[XCFE:KEY_APPEND table=entries key=⟁WIDGET:FEED] {\"message\":\"<star index='1'/>\",\"name\":\"<star index='2'/>\"}",
+      "fields": { "1": "message", "2": "name" },
+      "table": "entries",
+      "key_target": "⟁WIDGET:FEED",
+      "phase": "Xul"
+    }
+  ]
+}

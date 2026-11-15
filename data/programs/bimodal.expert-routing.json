@@ -1,0 +1,40 @@
+{
+  "@program": "bimodal.expert-routing",
+  "@schema": "kuhul.bimodal.expert-routing.v1",
+  "@version": "1.0.0",
+  "@description": "Chat/AST/Tool gated residual routing using OpenCL fold-node experts and WebGL2 projection.",
+  "modes": {
+    "chat": { "lane": "CHATML", "role_tokens": ["USER", "ASSISTANT"] },
+    "ast": { "lane": "KSON", "role_tokens": ["AST", "CODE"] },
+    "tool": { "lane": "CAPABILITY", "role_tokens": ["TOOL", "VERB"] }
+  },
+  "opencl_expert": {
+    "backend": "opencl_1_2",
+    "source": "drivers/opencl_1_2/kson_fold_node_expert.cl",
+    "entry": "kson_fold_node_gate",
+    "build_options": ["-cl-std=CL1.2"],
+    "inputs": ["hidden", "fold_scores", "node_scores"],
+    "output": "correction",
+    "residual_scale": 0.1
+  },
+  "webgl2_projection": {
+    "backend": "webgl2",
+    "fragment": "drivers/webgl2/kson_expert_correction.frag",
+    "inputs": ["hidden_texture", "gate_texture"],
+    "transport": "WASM linear memory or WebView2 postMessage"
+  },
+  "merge": {
+    "formula": "h_out = h_chat + gate_ast * correction_ast + gate_tool * correction_tool",
+    "gate_source": "fold/node score softmax",
+    "bounded_residual": true,
+    "fallback": "chat_hidden_unchanged"
+  },
+  "phase_hooks": {
+    "Pop": "load_chat_ast_tool_buffers",
+    "Wo": "route_lane_and_fold",
+    "Yax": "select_expert",
+    "Sek": "dispatch_opencl_fold_node_gate",
+    "Chen": "validate_lane_and_residual_bounds",
+    "Xul": "commit_corrected_hidden_state"
+  }
+}

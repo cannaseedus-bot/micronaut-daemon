@@ -1,0 +1,33 @@
+{
+  "@kind": "khanary.cfpc.pattern.v1",
+  "id": "explain",
+  "intent": "Resolve an explanation request — what a concept means or how it should be understood.",
+  "phase": "Sek",
+  "@captures": {
+    "subject": {
+      "wildcard": "*",
+      "strip_prefix": "explain "
+    }
+  },
+  "neighborhood_resolve": {
+    "from_captures": [
+      "subject"
+    ],
+    "max_hops": 2
+  },
+  "question_templates": [
+    "What does {subject} mean?",
+    "How is {subject} defined in this context?",
+    "What distinguishes {subject} from related concepts?",
+    "How does {subject} interact with {neighbor}?",
+    "What are the key properties of {subject}?"
+  ],
+  "context_template": "Concept to explain: {subject}\nSemantic field: {field_keys}\nRelated domains: {neighbors}\nEpistemic state: UNKNOWN -- model verification required.",
+  "match": {
+    "rules": [
+      {
+        "prefix": "explain"
+      }
+    ]
+  }
+}

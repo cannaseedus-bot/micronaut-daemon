@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Generated key lookup bank from npc-theory.key-grammar.jsonl; entries are data, not execution authority.-->
+  <category>
+    <pattern>LOOK UP KEY NPC:LOOP</pattern>
+    <template>Key NPC:LOOP. definition: NPC behavior reduces to perception, decision, action, and feedback.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY NPC:IDENTITY</pattern>
+    <template>Key NPC:IDENTITY. definition: Identity binds role, personality, and faction before decision.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY NPC:GOALS</pattern>
+    <template>Key NPC:GOALS. definition: Goals are objectives that bias NPC decision selection.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY NPC:PERCEPTION</pattern>
+    <template>Key NPC:PERCEPTION. definition: Perception gathers environment, player state, and NPC state.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY NPC:MEMORY</pattern>
+    <template>Key NPC:MEMORY. definition: Memory stores known facts and relationship graph evidence.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY NPC:DECISION</pattern>
+    <template>Key NPC:DECISION. definition: Decision selects a behavior model: FSM, behavior tree, utility AI, planner, or wildcard reasoning.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY NPC:ACTION</pattern>
+    <template>Key NPC:ACTION. definition: Action is the visible behavior emitted by the NPC.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY NPC:FEEDBACK</pattern>
+    <template>Key NPC:FEEDBACK. definition: Feedback updates memory, relationships, and goals after action.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY NPC:DECISION:FSM</pattern>
+    <template>Key NPC:DECISION:FSM. definition: FSM maps state and trigger to next state.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY NPC:DECISION:PLANNER</pattern>
+    <template>Key NPC:DECISION:PLANNER. definition: Planner searches constraints and goals to select a state-pattern path.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY NPC:DECISION:WILDCARD</pattern>
+    <template>Key NPC:DECISION:WILDCARD. definition: Wildcard reasoning preserves unknown situations as explicit observe-evaluate-learn states.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY NPC:MERCHANT</pattern>
+    <template>Key NPC:MERCHANT. definition: Merchant behavior binds inventory, pricing, and negotiation.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY NPC:COMBAT</pattern>
+    <template>Key NPC:COMBAT. definition: Combat NPC behavior detects, targets, chooses tactic, and executes.</template>
+  </category>
+</aiml>

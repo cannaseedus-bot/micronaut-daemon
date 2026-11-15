@@ -1,0 +1,34 @@
+{
+  "@program": "pi_kuhul.gravity-corrective",
+  "@kind": "kuhul.training.corrective.v1",
+  "@description": "Bounded weight-field correction for pi-KUHUL training.",
+  "@authority": "tools/pi_kuhul.py#GradientGravityCorrector",
+  "@semantics": {
+    "potential": "U(w)=0.5*w*w",
+    "force": "F=-gradient(U)=-w",
+    "optimizer_gradient": "g_corrected=g+scale*w",
+    "bound": "abs(correction)<=clip*gradient_rms"
+  },
+  "@inputs": {
+    "weights": "detached PyTorch parameter tensor",
+    "gradients": "parameter.grad after backpropagation"
+  },
+  "@outputs": {
+    "gradients": "bounded corrected gradients",
+    "texture_source": "detached parameter tiles suitable for GPU upload",
+    "stats": ["tensors", "correction_rms"]
+  },
+  "@backends": {
+    "cpu_reference": "PyTorch no_grad implementation",
+    "d3d11": "trainer/shaders/cs_gravity_field_layer_.hlsl",
+    "opencl_1_2": "scratch/opencl_matrix5x4_bridge.exe",
+    "webgl2": "drivers/webgl2/gravity_corrective.frag",
+    "webgl2_wasm_bridge": "drivers/webgl2/gravity_corrective.mjs",
+    "wasm_parser_inputs": "drivers/wasm/tree-sitter-*.wasm"
+  },
+  "@defaults": {
+    "gravity_scale": 0.0,
+    "gravity_clip": 0.25,
+    "policy": "opt_in"
+  }
+}

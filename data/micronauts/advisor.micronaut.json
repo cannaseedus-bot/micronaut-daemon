@@ -1,0 +1,127 @@
+{
+  "@kind": "kuhul.micronaut.atomic.v1",
+  "id": "ADVISOR-µ",
+  "descriptor_status": "active",
+  "track_ref": "data/tracks/ADVISOR-u.semantic-tracks.v1.json",
+  "bindings_ref": "data/advisor-map.json",
+  "manifest": {
+    "name": "ADVISOR-µ",
+    "version": "2.0.0",
+    "description": "Escalation advisor — classifies MISS cues, escalates coding and deep reasoning misses to Qwen3-4B at http://127.0.0.1:8081/, exposes proposal state for XCFE verification. proposal_only authority."
+  },
+  "api": {
+    "atomic_keys": [
+      "advisor.classify",
+      "advisor.qwen_escalate",
+      "advisor.propose",
+      "advisor.verify",
+      "advisor.health"
+    ],
+    "verb_surface": [
+      "ADVISE *",
+      "ADVISOR ESCALATE *",
+      "ADVISE QWEN *",
+      "GEMMA MISS CODING *",
+      "GEMMA MISS REASON *",
+      "ADVISOR STATUS"
+    ]
+  },
+  "xcfe": {
+    "mode": "xcfe_gated_read_only",
+    "escalation_mode": "proposal_only",
+    "authority": "none",
+    "forbidden": [
+      "emit_response", "write_state", "mutate_topology",
+      "commit_patterns", "direct_dispatch"
+    ]
+  },
+  "model_binding": {
+    "model": "Qwen3-4B",
+    "model_id": "C:\\Users\\canna\\.llama-haswell\\model\\Qwen3-4B-Q8_0.gguf",
+    "endpoint": "http://127.0.0.1:8081",
+    "api": "OpenAI-compatible chat completions",
+    "env_override": "ADVISOR_QWEN_URL",
+    "script": "agents/advisor_bot.py",
+    "cues": ["coding", "reasoning", "general"],
+    "thinking_mode": {
+      "reasoning": "/think prefix on user message",
+      "coding":    "/no_think prefix on user message",
+      "general":   "/no_think prefix on user message"
+    },
+    "fallback": "OSS advisor at http://127.0.0.1:17887 (Invoke-AdvisorQuery)"
+  },
+  "program_contract": {
+    "drivers": [
+      "Micronaut.Core.dll",
+      "CFPC.Patterns.dll"
+    ],
+    "driver_roles": {
+      "Micronaut.Core.dll": "lifecycle and phase dispatch",
+      "CFPC.Patterns.dll": "miss cue classification and gap detection"
+    },
+    "sandbox": "xcfe_gated_read_only",
+    "learning": false,
+    "grammar_refs": ["data/advisor-bootstrap.json", "data/advisor-map.json"],
+    "contract_refs": []
+  },
+  "atomic_key_defs": {
+    "advisor.classify": {
+      "@type": "route_classify",
+      "description": "Pop-phase miss-cue classifier: reads advisor_request from gram store, matches route pattern against advisor-map.json, identifies cue type (coding | reasoning | general | research | plan)",
+      "phases": ["Pop"],
+      "source": "data/advisor-map.json"
+    },
+    "advisor.qwen_escalate": {
+      "@type": "llm_escalate",
+      "description": "Sek-phase Qwen3-4B escalation: calls http://127.0.0.1:8081/v1/chat/completions with cue-specific system prompt. /think prefix for reasoning cues activates chain-of-thought. Returns typed proposal (xcfe_status: pending_admission).",
+      "phases": ["Sek"],
+      "model": "Qwen3-4B",
+      "endpoint": "http://127.0.0.1:8081",
+      "script": "agents/advisor_bot.py",
+      "system_prompts": {
+        "coding":    "ADVISOR-µ coding MISS: provide correct implementation or diagnosis. Lead with the answer. No preamble.",
+        "reasoning": "ADVISOR-µ reasoning MISS: state constraints, reason step-by-step, give well-supported conclusion.",
+        "general":   "ADVISOR-µ: answer accurately and concisely. Sek-phase escalation proposal."
+      },
+      "cue_triggers": {
+        "coding":    ["miss_kind ~ code|coding|compile|syntax|impl"],
+        "reasoning": ["miss_kind ~ reason|infer|analyze|deep|proof|derive"]
+      }
+    },
+    "advisor.propose": {
+      "@type": "emit",
+      "description": "Sek-phase proposal emit: wraps Qwen response into advisor_proposal (xcfe_status: pending_admission), writes to gram store. proposal_only — does not execute.",
+      "phases": ["Sek"],
+      "gram_ns": "ADVISOR-µ",
+      "keys": ["advisor:last_proposal", "advisor:cue", "advisor:model"]
+    },
+    "advisor.verify": {
+      "@type": "verify",
+      "description": "Ch'en-phase proposal verification: confirms evidence_and_target_present, checks xcfe admission, confirms proposal has not been modified post-emission.",
+      "phases": ["Ch'en"],
+      "gate": "evidence_and_target_present"
+    },
+    "advisor.health": {
+      "@type": "status",
+      "description": "Pop-phase status: reports Qwen endpoint liveness, model ID, available cues, last proposal summary.",
+      "phases": ["Pop"],
+      "reports": ["qwen_online", "model_id", "cues", "last_proposal_cue"]
+    }
+  },
+  "srai": {
+    "enabled": false
+  },
+  "capabilities": [
+    "request_classification", "expert_admission", "proposal_projection",
+    "gap_reporting", "wpf_card",
+    "qwen3-escalation", "miss-coding-escalation", "miss-reasoning-escalation"
+  ],
+  "cache": {
+    "proposal_cache": false,
+    "note": "Proposals are not cached — each escalation is fresh"
+  },
+  "pair_constraint": {
+    "mode": "Pop_Sek_pair",
+    "forbid_unmatched_emit": true
+  }
+}

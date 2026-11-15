@@ -1,0 +1,59 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "newsletter",
+  "@key": "⟁APP:NEWSLETTER",
+  "@mount": "⟁ROOT:NEWSLETTER",
+  "@theme": { "accent": "#818cf8", "bg": "#0f172a", "surface": "#1e1b4b", "text": "#e2e8f0", "hero_phase": "Yax", "tagline": "Stories worth subscribing to" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "primary_feed", "component": "⟁WIDGET:ISSUES", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null, "username": null }, "issues": [], "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:NEWSLETTER": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:NEW_ISSUE", "⟁ACTION:SUBSCRIBE"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:NEW_ISSUE": { "@type": "button", "@text": "New Issue", "@on": { "click": "newsletter.open_compose" } },
+    "⟁ACTION:SUBSCRIBE": { "@type": "button", "@text": "Subscribe", "@on": { "click": "newsletter.open_subscribe" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:ISSUES", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:ISSUES": { "@type": "feed", "@bind": "state.issues", "@children": ["⟁WIDGET:ISSUE_CARD"] },
+    "⟁WIDGET:ISSUE_CARD": { "@type": "content-card", "@bind": "issue", "@on": { "read": "newsletter.read" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:SUBSCRIBER_COUNT", "⟁WIDGET:RECENT_ISSUES"] },
+    "⟁WIDGET:SUBSCRIBER_COUNT": { "@type": "stat", "@bind": "data.subscriber_count" },
+    "⟁WIDGET:RECENT_ISSUES": { "@type": "list", "@bind": "data.recent_issues" }
+  },
+  "@programs": {
+    "newsletter.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "newsletter.open_subscribe": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "newsletter.read": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "newsletter.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "compose.open": "newsletter.open_compose", "subscribe.open": "newsletter.open_subscribe", "issue.read": "newsletter.read", "search.input": "newsletter.search" },
+  "@imports": [{ "ref": "issue", "mode": "schema_table" }, { "ref": "subscriber", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "subscriber-export", "name": "Subscriber Export", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Export subscriber list as CSV." },
+      { "id": "send-bot", "name": "Send Bot", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Auto-schedule and send issues to subscribers." },
+      { "id": "open-rate", "name": "Open Rate Tracker", "category": "analytics", "price": "optional", "status": "available_unconfigured", "description": "Track open rates per issue." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "newsletter.new-issue", "pattern": "NEW ISSUE|CREATE ISSUE|WRITE ISSUE", "intent": "open_compose" },
+      { "id": "newsletter.subscribe", "pattern": "SUBSCRIBE *", "intent": "open_subscribe" }
+    ]
+  },
+  "@data": {
+    "subscriber_count": 142,
+    "recent_issues": ["Issue #12 — Dev Tools", "Issue #11 — AI Update", "Issue #10 — Open Source"],
+    "spotlight": [
+      { "id": "sp1", "title": "Issue #12 — The Best Dev Tools of 2025", "issue_num": 12, "badge": "Latest", "excerpt": "A curated roundup of the tools shaping modern development." },
+      { "id": "sp2", "title": "Issue #9 — Building in Public", "issue_num": 9, "badge": "Popular", "excerpt": "Why transparency is a growth strategy." },
+      { "id": "sp3", "title": "Issue #1 — Welcome", "issue_num": 1, "badge": "First", "excerpt": "Why I started this newsletter and what you can expect." }
+    ],
+    "schema": {
+      "issue": { "primaryKey": "issue_id", "fields": { "issue_id": { "type": "string" }, "issue_num": { "type": "integer", "required": true }, "title": { "type": "string", "required": true }, "body": { "type": "textarea", "required": true }, "published_at": { "type": "datetime" }, "open_count": { "type": "integer" } } },
+      "subscriber": { "primaryKey": "sub_id", "fields": { "sub_id": { "type": "string" }, "email": { "type": "email", "required": true }, "subscribed_at": { "type": "datetime" }, "active": { "type": "bool" } } }
+    }
+  }
+}

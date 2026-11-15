@@ -1,0 +1,44 @@
+{
+  "@program": "weights.tensors",
+  "@fold": "Pop",
+  "@node": "weights-tensors-root",
+  "@state": {
+    "model": "E:/models/GPT2/coder_micronaut/ultrachat_coder_slerp_0p35.webgl2.dashboard.safetensors",
+    "output": "E:/models/GPT2/micronaut_four_lanes_v2",
+    "model_format": "safetensors",
+    "backend": "xvm_fiber",
+    "tensor_filter": "",
+    "weights": null,
+    "staged": null,
+    "verified": false
+  },
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "weights-validate" },
+    { "@op": "CALL", "@fn": "validate_safetensors", "@args": ["$model"], "@out": "model_valid" },
+    { "@op": "CALL", "@fn": "read_safetensors_metadata", "@args": ["$model"], "@out": "metadata" },
+    { "@op": "LOG", "@args": ["[weights.tensors] safetensors weights validated"] },
+    { "@op": "FOLD_EXIT", "@fold": "Wo", "@node": "weights-validate", "@args": ["$model_valid", "$metadata"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Wo", "@node": "weights-discover" },
+    { "@op": "CALL", "@fn": "discover_hf_tensors", "@args": ["$model", "$tensor_filter"], "@out": "weights" },
+    { "@op": "LOG", "@args": ["[weights.tensors] tensor weights discovered"] },
+    { "@op": "FOLD_EXIT", "@fold": "Yax", "@node": "weights-discover", "@args": ["$weights"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Yax", "@node": "weights-stage" },
+    { "@op": "GPU_DISPATCH", "@args": ["fabric_kernels.hlsl", "$model", "$weights", "$backend"], "@out": "gpu_stage" },
+    { "@op": "CALL", "@fn": "stage_tensor_weights", "@args": ["$gpu_stage", "$output"], "@out": "staged" },
+    { "@op": "LOG", "@args": ["[weights.tensors] weights staged through the fabric"] },
+    { "@op": "FOLD_EXIT", "@fold": "Sek", "@node": "weights-stage", "@args": ["$staged"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Sek", "@node": "weights-sync" },
+    { "@op": "CALL", "@fn": "weights_synchronize", "@args": ["$staged"], "@out": "synced" },
+    { "@op": "CALL", "@fn": "verify_safetensors_output", "@args": ["$synced", "$output"], "@out": "verified" },
+    { "@op": "LOG", "@args": ["[weights.tensors] weights synchronized and verified=$verified"] },
+    { "@op": "FOLD_EXIT", "@fold": "Chen", "@node": "weights-sync", "@args": ["$synced", "$verified"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Chen", "@node": "weights-emit" },
+    { "@op": "SET", "@key": "staged", "@args": ["$synced"] },
+    { "@op": "LOG", "@args": ["[weights.tensors] emitted staged weights"] },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "weights-emit", "@args": ["$synced", "$verified"] }
+  ]
+}

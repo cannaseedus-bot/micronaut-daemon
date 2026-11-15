@@ -1,0 +1,52 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "writing-pad",
+  "@key": "⟁APP:WRITING_PAD",
+  "@mount": "⟁ROOT:WRITING_PAD",
+  "@theme": { "accent": "#f9a8d4", "bg": "#060208", "surface": "#0e0414", "text": "#fdf4ff", "hero_phase": "Pop", "tagline": "Just start writing" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "editor", "component": "⟁WIDGET:EDITOR", "position": "center" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "documents": [], "active_doc": null, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:WRITING_PAD": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:NEW_DOC", "⟁ACTION:EXPORT"] },
+    "⟁ACTION:NEW_DOC": { "@type": "button", "@text": "New Document", "@on": { "click": "wp.new_doc" } },
+    "⟁ACTION:EXPORT": { "@type": "button", "@text": "Export", "@on": { "click": "wp.export" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:EDITOR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation", "@children": ["⟁WIDGET:DOC_LIST"] },
+    "⟁WIDGET:DOC_LIST": { "@type": "list", "@bind": "state.documents", "@on": { "select": "wp.open_doc" } },
+    "⟁WIDGET:EDITOR": { "@type": "markdown", "@bind": "state.active_doc", "@on": { "change": "wp.save" } }
+  },
+  "@programs": {
+    "wp.new_doc": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_new_doc", "@out": "active_doc" }] },
+    "wp.open_doc": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_doc", "@out": "active_doc" }] },
+    "wp.save": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_content", "@out": "active_doc.content" }] },
+    "wp.export": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "doc.new": "wp.new_doc", "doc.open": "wp.open_doc", "doc.save": "wp.save", "doc.export": "wp.export" },
+  "@imports": [{ "ref": "document", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "focus-mode", "name": "Focus Mode", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Distraction-free fullscreen writing mode." },
+      { "id": "version-history", "name": "Version History", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Browse and restore previous versions of any document." },
+      { "id": "writing-bot", "name": "Writing Assistant", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "AI suggestions for clarity, tone, and structure." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "wp.new", "pattern": "NEW DOCUMENT|START WRITING|CREATE DOC", "intent": "new_doc" },
+      { "id": "wp.open", "pattern": "OPEN *|CONTINUE WRITING *|OPEN DOCUMENT", "intent": "open_doc" }
+    ]
+  },
+  "@data": {
+    "spotlight": [
+      { "id": "sp1", "title": "KHANARY Architecture Notes", "words": 3840, "badge": "In Progress", "updated": "2026-10-27", "excerpt": "3,840 words. Technical overview of the phase engine and fold semantics." },
+      { "id": "sp2", "title": "Weekly Retrospective #42", "words": 620, "badge": "Complete", "updated": "2026-10-20", "excerpt": "What went well, what to improve. Consistent weekly log." },
+      { "id": "sp3", "title": "Project ALEPH — Draft 1", "words": 8200, "badge": "Long-form", "updated": "2026-09-14", "excerpt": "Speculative fiction. A world where fold geometry is geography." }
+    ],
+    "schema": {
+      "document": { "primaryKey": "doc_id", "fields": { "doc_id": { "type": "string" }, "title": { "type": "string", "required": true }, "content": { "type": "text" }, "format": { "type": "string" }, "tags": { "type": "json" }, "created_at": { "type": "datetime" }, "updated_at": { "type": "datetime" } } }
+    }
+  }
+}

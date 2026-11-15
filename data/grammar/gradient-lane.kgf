@@ -1,0 +1,55 @@
+keygraph "GradientLane" version "2.0";
+namespace gradient:core domain custom;
+namespace fold:core domain fold;
+namespace gram:core domain gram;
+namespace track:core domain track;
+namespace micro:core domain micro;
+namespace xcfe:core domain xcfe;
+namespace learning:core domain custom;
+
+key gradient:FEEDBACK kind field value "prediction_feedback";
+key gradient:ERROR kind field value "target_minus_prediction";
+key gradient:DELTA kind field value "learning_rate*gradient";
+key xcfe:GRADIENT_ADMISSION kind contract;
+key micro:STUDENT kind program;
+
+key gradient:LANE_MODE kind policy value "propose";
+key gradient:SOURCE kind policy value "prediction_feedback";
+key gradient:RULE kind policy value "target_minus_prediction";
+key gradient:LEARNING_RATE kind policy value "0.05";
+key gradient:OUTPUT kind policy value "learning:GRADIENT";
+
+edge micro:STUDENT -> gradient:FEEDBACK type candidate;
+edge gradient:FEEDBACK -> gradient:ERROR type derives;
+edge gradient:ERROR -> gradient:DELTA type derives;
+edge xcfe:GRADIENT_ADMISSION -> gradient:DELTA type governs;
+
+template fold:GRADIENT_MAP domain fold { operator DERIVE; input feedback; output gradient; };
+template fold:GRADIENT_SELECT domain fold { operator SELECT; input gradient; output delta_candidate; };
+template fold:GRADIENT_VERIFY domain fold { operator VERIFY; input delta_candidate; output verified_gradient; };
+template fold:GRADIENT_CLOSE domain fold { operator CLOSE; input verified_gradient; output proposal; };
+
+trigram gram:GRADIENT_YAX ("derive",*,*) phase Yax fold fold:GRADIENT_MAP bindings [feedback:explicit];
+trigram gram:GRADIENT_SEK ("select",*,*) phase Sek fold fold:GRADIENT_SELECT bindings [gradient:explicit];
+trigram gram:GRADIENT_CHEN ("check",*,*) phase Ch'en fold fold:GRADIENT_VERIFY bindings [delta_candidate:explicit];
+trigram gram:GRADIENT_XUL ("close",*,*) phase Xul fold fold:GRADIENT_CLOSE bindings [verified_gradient:explicit];
+
+track track:GRADIENT { include micro:STUDENT; include gram:GRADIENT_YAX; include gram:GRADIENT_SEK; include gram:GRADIENT_CHEN; include gram:GRADIENT_XUL; };
+policy xcfe:GRADIENT_POLICY { score custom; admission xcfe:GRADIENT_ADMISSION; max_depth 3; allow_cycle false; commit_phase Xul; };
+resolver gradient:PROPOSAL_SELECT domain custom mode select policy xcfe:GRADIENT_POLICY;
+program gradient:DERIVE track track:GRADIENT entry fold:GRADIENT_MAP phase Yax;
+program gradient:SELECT track track:GRADIENT entry fold:GRADIENT_SELECT phase Sek;
+program gradient:VERIFY track track:GRADIENT entry fold:GRADIENT_VERIFY phase Ch'en;
+program gradient:CLOSE track track:GRADIENT entry fold:GRADIENT_CLOSE phase Xul;
+
+(* Host-side contract: GradientLane derives a typed learning signal and closes a
+   proposal fold. It does not persist and it holds no mutation authority.
+
+   rule   gradient = target - prediction        (signed error, not a full derivative)
+   delta  = learning_rate * gradient
+   output learning:GRADIENT, consumed by LearningLane as the candidate's gradient
+
+   target and prediction are probabilities in [0,1]. A prediction of 0.30 against
+   target 1.00 yields gradient 0.70 and, at eta 0.05, delta 0.035.
+   Persistence still requires LearningLane's separate admission, Ch'en and Xul gates.
+*)

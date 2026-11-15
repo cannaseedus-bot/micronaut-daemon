@@ -1,0 +1,278 @@
+{
+  "@no-eval": true,
+  "id": "FOLD-HOF-µ",
+
+  "schemes": ["fold-hof"],
+  "description": "Fold as higher-order function — catamorphism, foldr/foldl, scan, F-algebra, duality with anamorphism, Haskell strictness, Fourier hylomorphism.",
+  "phase": "Sek",
+  "category": "structural",
+  "confidence": 0.88,
+  "static_weight": 0.91,
+  "health": 1.0,
+  "governs": [
+    "fold",
+    "foldr",
+    "foldl",
+    "foldl'",
+    "reduce",
+    "catamorphism",
+    "scan",
+    "scanl",
+    "scanr",
+    "prefix sum",
+    "running total",
+    "f-algebra",
+    "initial algebra",
+    "higher order function",
+    "accumulator",
+    "combine",
+    "aggregate",
+    "strict fold",
+    "lazy fold",
+    "stack overflow",
+    "hylomorphism",
+    "banana split",
+    "church encoding",
+    "fold left",
+    "fold right",
+    "fold function",
+    "@fold",
+    "fold:"
+  ],
+  "capabilities": [
+    "FOLD_DEFINE",
+    "FOLD_COMPARE_LR",
+    "FOLD_IMPLEMENT",
+    "FOLD_CATAMORPHISM",
+    "FOLD_SCAN",
+    "FOLD_STRICTNESS",
+    "FOLD_HYLOMORPHISM",
+    "FOLD_CROSS_DOMAIN"
+  ],
+  "conformance": {
+    "questions": [
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is fold as a higher-order function?",
+        "expected_key": "reduce catamorphism combining function accumulator single value",
+        "gemma_answer": "Takes a collection, returns single value by applying function to each element — core aggregation technique.",
+        "gemma_epistemic": "SUPPORTED",
+        "delta_r": 0.09
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is the difference between foldr and foldl?",
+        "expected_key": "foldr right-associative lazy short-circuit foldl left accumulates thunk strict foldl'",
+        "gemma_answer": "foldr iterates right-to-left more efficient; foldl iterates left-to-right one at a time.",
+        "gemma_epistemic": "PARTIAL",
+        "canonical_answer": "foldr is lazy, right-associative, handles infinite lists. foldl builds thunk chain (use foldl' for strict left fold).",
+        "delta_r": 0.07
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does fold implement sum, product, and list reversal?",
+        "expected_key": "foldl (+) 0 sum foldl (*) 1 product foldl flip(:) [] reversal",
+        "gemma_answer": "Fold creates new sequence — sum is concatenation, product repeated concatenation, reversal by folding back.",
+        "gemma_epistemic": "PARTIAL",
+        "canonical_answer": "sum=foldl(+)0; product=foldl(*)1; reverse=foldl(flip(:))[]. Same pattern, different function and zero.",
+        "delta_r": 0.06
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is a scan and how does it differ from fold?",
+        "expected_key": "scanl all intermediate accumulator values prefix sum history",
+        "gemma_answer": "Scan iterates producing sequence without knowing collection size; fold produces single value based on length.",
+        "gemma_epistemic": "PARTIAL",
+        "canonical_answer": "scanl f z [a,b,c] = [z, f z a, f(f z a)b, ...] — every intermediate accumulator, not just the final result.",
+        "delta_r": 0.07
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "How is fold a catamorphism over a list?",
+        "expected_key": "F X = 1 + A*X Nil→z Cons→f initial algebra morphism",
+        "gemma_answer": "Fold merges elements within a list, mirroring catamorphism that transforms a set into another set.",
+        "gemma_epistemic": "PARTIAL",
+        "canonical_answer": "List is initial algebra of F X=1+A×X. Cata replaces Nil with z, Cons with f — that is exactly foldr f z.",
+        "relation_confirmed": "ANAMORPHISM-µ",
+        "delta_w": 0.14
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "How are fold and unfold dual to each other?",
+        "expected_key": "initial algebra terminal coalgebra reversed arrows functor F",
+        "gemma_answer": "They represent opposite operations — one reverses folding, the other reverses unfolding, providing different perspectives.",
+        "gemma_epistemic": "SUPPORTED",
+        "relation_confirmed": "ANAMORPHISM-µ",
+        "delta_w": 0.13
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "Is foldl always strict and foldr always lazy in Haskell?",
+        "expected_key": "foldl lazy by default foldl' strict foldr lazy short-circuits",
+        "gemma_answer": "Yes, both are strictly evaluated; foldl lazy when accumulator returns value, foldr same exception.",
+        "gemma_epistemic": "MISS",
+        "canonical_answer": "No — foldl is lazy (thunk) by default; use foldl' for strict. foldr is lazy and handles infinite lists.",
+        "delta_c": -0.08,
+        "requires_authority": true
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does the catamorphism structure of fold relate to the duality with anamorphism in Haskell?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "Can you explain how the strictness of fold affects its behavior compared to foldl in practice?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What are the implications of using scan with a strict list versus a lazy one?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How can the Fourier hylomorphism be applied to understand the transformation of functions in fold operations?",
+        "expected_key": "",
+        "delta_r": 0.08
+      }
+    ],
+    "jokes": [
+      {
+        "pattern": "WHY DID FOLDL BREAK UP WITH FOLDR",
+        "gemma_punchline": "Terrible relationship — foldr monolithic, foldl couldn't handle accumulation order. Stack overflow.",
+        "canonical_punchline": "One accumulated grievances left, the other built from the right. The whole relationship was an unevaluated thunk that blew the stack.",
+        "frame": "humor_frame",
+        "semantic_key": "foldl_foldr_thunk_stack"
+      },
+      {
+        "pattern": "WHAT DO YOU CALL A FOLD THAT NEVER FINISHES",
+        "gemma_punchline": "A fold-out.",
+        "canonical_punchline": "A fold-out — it keeps unfolding and never commits to a final value. Also called a productive corecursive stream when well-behaved.",
+        "frame": "pun_naming_frame",
+        "semantic_key": "fold_infinite_productive"
+      },
+      {
+        "pattern": "WHY IS FOLD THE MOST PHILOSOPHICAL HIGHER ORDER FUNCTION",
+        "gemma_punchline": "Because it is constantly collapsing complex data into simpler representations!",
+        "canonical_punchline": "It looks at every element, reduces everything to a single value, then asks: was this accumulator worth it? Fold is the catamorphism of meaning.",
+        "frame": "delivery_frame",
+        "semantic_key": "fold_philosophical_meaning"
+      },
+      {
+        "pattern": "WHY DID THE FOLD LEARN TO DANCE IN A CATAMORPHISM",
+        "punchline": "Because it wanted to master the art of folding without falling apart—literally and figuratively.",
+        "frame": "humor_frame",
+        "semantic_key": "why_did_the_fold_learn_to_dance_in_a_catamorphism_"
+      },
+      {
+        "pattern": "WHAT HAPPENS WHEN YOU APPLY FOLDR TO A FUNCTION THAT LOVES AMBIGUITY",
+        "punchline": "It folds the logic into a beautiful, non-deterministic structure—because sometimes clarity is overrated.",
+        "frame": "humor_frame",
+        "semantic_key": "what_happens_when_you_apply_foldr_to_a_function_th"
+      },
+      {
+        "pattern": "WHY IS FOLD THE MOST PHILOSOPHICAL HIGHER-ORDER FUNCTION IN HASKELL",
+        "punchline": "Because it embodies the tension between strictness and flexibility, a true duality in type theory.",
+        "frame": "humor_frame",
+        "semantic_key": "why_is_fold_the_most_philosophical_higher_order_fu"
+      },
+      {
+        "pattern": "HOW DOES A FOLD OVER A FOURIER HYLOMORPHISM TREAT PERIODICITY",
+        "punchline": "It preserves the rhythm of the signal while folding it into a coherent whole—proof that order can emerge from chaos.",
+        "frame": "humor_frame",
+        "semantic_key": "how_does_a_fold_over_a_fourier_hylomorphism_treat_"
+      }
+    ]
+  },
+  "relations": [
+    {
+      "target": "ANAMORPHISM-µ",
+      "verb": "@related_to",
+      "directed": true
+    },
+    {
+      "target": "PI-PHASE-µ",
+      "verb": "@supports",
+      "directed": true
+    },
+    {
+      "target": "MATH-µ",
+      "verb": "@delegates_to",
+      "directed": true
+    },
+    {
+      "target": "SEMANTIC-FOLD-µ",
+      "verb": "@related_to",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "gramRead",
+      "key": "fold_hof_query",
+      "weight": 1.0
+    },
+    {
+      "phase": "Wo",
+      "op": "lower_fold_hof_aiml",
+      "note": "L_A fold ISA",
+      "weight": 1.0
+    },
+    {
+      "phase": "Yax",
+      "op": "derive_fold_pattern",
+      "note": "R reduce align",
+      "weight": 1.0
+    },
+    {
+      "phase": "Sek",
+      "op": "resolve_fold_relation",
+      "note": "W cata arc update",
+      "weight": 1.0
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_fold_confidence",
+      "note": "C strictness gate",
+      "weight": 1.0
+    },
+    {
+      "phase": "Xul",
+      "op": "emit_answer",
+      "scope": "local",
+      "weight": 1.0
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "FOLD-HOF-µ",
+    "manifest_access": [
+      "words",
+      "micronaut",
+      "kuhul"
+    ],
+    "effects": [
+      "gramRead",
+      "gramWrite",
+      "fold:query",
+      "fold:catamorphism"
+    ],
+    "ports": [],
+    "coordinator": false
+  }
+}

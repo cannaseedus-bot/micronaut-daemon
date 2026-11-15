@@ -1,0 +1,157 @@
+{
+  "@type": "khanary.app_host_conformance.v1",
+  "cases": [
+    {
+      "id": "valid_contract",
+      "expect": "PASS"
+    },
+    {
+      "id": "reject_apps_equal_mcp",
+      "contract_patch": {
+        "apps_are_mcp": true
+      },
+      "expect": "FAIL",
+      "error": "APPS_AND_MCP_MERGED"
+    },
+    {
+      "id": "reject_mcp_equal_apps",
+      "contract_patch": {
+        "mcp_is_apps": true
+      },
+      "expect": "FAIL",
+      "error": "MCP_AND_APPS_MERGED"
+    },
+    {
+      "id": "reject_apps_authority",
+      "contract_patch": {
+        "host_layer": {
+          "authority": {
+            "semantic_authority": true
+          }
+        }
+      },
+      "expect": "FAIL",
+      "error": "APP_HOST_CLAIMS_AUTHORITY"
+    },
+    {
+      "id": "reject_mcp_user_sessions",
+      "contract_patch": {
+        "mcp_layer": {
+          "owns": [
+            "tool_invocation",
+            "app_user_sessions"
+          ]
+        }
+      },
+      "expect": "FAIL",
+      "error": "MCP_OWNS_APP_STATE"
+    },
+    {
+      "id": "reject_app_raw_mcp_exposure",
+      "contract_patch": {
+        "host_layer": {
+          "must_not_expose": []
+        }
+      },
+      "expect": "FAIL",
+      "error": "APP_HOST_EXPOSES_MCP"
+    },
+    {
+      "id": "reject_non_bin_output",
+      "contract_patch": {
+        "canonical_output_dir": "build/apps"
+      },
+      "expect": "FAIL",
+      "error": "APP_HOST_OUTPUT_NOT_BIN"
+    },
+    {
+      "id": "reject_non_atomic_widget_substrate",
+      "contract_patch": {
+        "host_layer": {
+          "widget_substrate": "raw_dom"
+        }
+      },
+      "expect": "FAIL",
+      "error": "APP_WIDGET_SUBSTRATE_INVALID"
+    },
+    {
+      "id": "reject_missing_atomic_widgets",
+      "contract_patch": {
+        "host_layer": {
+          "widget_surfaces": [
+            "typescript_mu_playground",
+            "kuhul_mu_playground"
+          ]
+        }
+      },
+      "expect": "FAIL",
+      "error": "APP_WIDGET_SURFACE_MISSING"
+    },
+    {
+      "id": "reject_atomic_dom_missing_asx_blocks",
+      "contract_patch": {
+        "host_layer": {
+          "atomic_dom": {
+            "declares": [
+              "atomic_css_key_grammar"
+            ]
+          }
+        }
+      },
+      "expect": "FAIL",
+      "error": "APP_ATOMIC_DOM_DECLARATION_INVALID"
+    },
+    {
+      "id": "reject_atomic_css_manifest_path",
+      "contract_patch": {
+        "host_layer": {
+          "atomic_dom": {
+            "css_key_grammar_manifest": "data/manifest/other.json"
+          }
+        }
+      },
+      "expect": "FAIL",
+      "error": "APP_ATOMIC_CSS_MANIFEST_INVALID"
+    },
+    {
+      "id": "reject_atomic_dom_missing_redundancy_purpose",
+      "contract_patch": {
+        "host_layer": {
+          "atomic_dom": {
+            "purpose": [
+              "project_key_grammar_tokens_to_widgets"
+            ]
+          }
+        }
+      },
+      "expect": "FAIL",
+      "error": "APP_ATOMIC_DOM_PURPOSE_INVALID"
+    },
+    {
+      "id": "reject_atomic_dom_missing_callable_api",
+      "contract_patch": {
+        "host_layer": {
+          "atomic_dom": {
+            "callable_api": {
+              "file": "src/host/OtherDOM.js"
+            }
+          }
+        }
+      },
+      "expect": "FAIL",
+      "error": "APP_ATOMIC_DOM_API_INVALID"
+    },
+    {
+      "id": "reject_atomic_dom_secret_storage",
+      "contract_patch": {
+        "host_layer": {
+          "atomic_dom": {
+            "stores_secret_values": true
+          }
+        }
+      },
+      "expect": "FAIL",
+      "error": "APP_ATOMIC_DOM_STORES_SECRETS"
+    }
+  ]
+}

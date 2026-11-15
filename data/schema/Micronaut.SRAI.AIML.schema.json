@@ -1,0 +1,604 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kuhul:micronaut-srai-aiml-program:1",
+  "title": "Micronaut SRAI AIML Program v1",
+  "description": "JSON interchange for data-only AIML/SRAI semantic dispatch declarations.",
+  "type": "object",
+  "required": [
+    "schema",
+    "phase_order",
+    "authority",
+    "micronauts",
+    "pattern_bank",
+    "route_graph"
+  ],
+  "properties": {
+    "schema": {
+      "const": "kuhul.micronaut.srai-aiml.program.v1"
+    },
+    "phase_order": {
+      "const": [
+        "Pop",
+        "Wo",
+        "Yax",
+        "Sek",
+        "Ch'en",
+        "Xul"
+      ]
+    },
+    "authority": {
+      "$ref": "#/$defs/authority"
+    },
+    "micronauts": {
+      "type": "array",
+      "minItems": 6,
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/aimlMicronaut"
+          },
+          {
+            "$ref": "#/$defs/sraiMicronaut"
+          },
+          {
+            "$ref": "#/$defs/piMicronaut"
+          },
+          {
+            "$ref": "#/$defs/xcfeMicronaut"
+          },
+          {
+            "$ref": "#/$defs/xulMicronaut"
+          },
+          {
+            "$ref": "#/$defs/learningMicronaut"
+          }
+        ]
+      },
+      "allOf": [
+        { "contains": { "properties": { "type": { "const": "aiml" } }, "required": ["type"] }, "minContains": 1, "maxContains": 1 },
+        { "contains": { "properties": { "type": { "const": "srai" } }, "required": ["type"] }, "minContains": 1, "maxContains": 1 },
+        { "contains": { "properties": { "type": { "const": "pi" } }, "required": ["type"] }, "minContains": 1, "maxContains": 1 },
+        { "contains": { "properties": { "type": { "const": "xcfe" } }, "required": ["type"] }, "minContains": 1, "maxContains": 1 },
+        { "contains": { "properties": { "type": { "const": "xul" } }, "required": ["type"] }, "minContains": 1, "maxContains": 1 },
+        { "contains": { "properties": { "type": { "const": "learning" } }, "required": ["type"] }, "minContains": 1, "maxContains": 1 }
+      ]
+    },
+    "pattern_bank": {
+      "$ref": "#/$defs/patternBank"
+    },
+    "route_graph": {
+      "$ref": "#/$defs/routeGraph"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "authority": {
+      "type": "object",
+      "required": [
+        "aiml",
+        "srai",
+        "pi",
+        "xcfe",
+        "xul",
+        "learning"
+      ],
+      "properties": {
+        "aiml": {
+          "const": "match_only"
+        },
+        "srai": {
+          "const": "redirect_only"
+        },
+        "pi": {
+          "const": "rank_only"
+        },
+        "xcfe": {
+          "const": "admission_only"
+        },
+        "xul": {
+          "const": "close_only"
+        },
+        "learning": {
+          "const": "proposal_only"
+        }
+      },
+      "additionalProperties": false
+    },
+    "identity": {
+      "type": "object",
+      "required": [
+        "id",
+        "role",
+        "version"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        }
+      },
+      "additionalProperties": true
+    },
+    "aimlMicronaut": {
+      "type": "object",
+      "required": [
+        "type",
+        "identity",
+        "authority",
+        "normalization",
+        "matching"
+      ],
+      "properties": {
+        "type": {
+          "const": "aiml"
+        },
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "authority": {
+          "const": "match_only"
+        },
+        "can_execute": {
+          "const": false
+        },
+        "can_write": {
+          "const": false
+        },
+        "can_close": {
+          "const": false
+        },
+        "normalization": {
+          "type": "object",
+          "required": [
+            "uppercase",
+            "strip_punctuation",
+            "collapse_whitespace"
+          ],
+          "properties": {
+            "uppercase": {
+              "type": "boolean"
+            },
+            "strip_punctuation": {
+              "type": "boolean"
+            },
+            "collapse_whitespace": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        },
+        "matching": {
+          "type": "object",
+          "required": [
+            "specificity_source",
+            "wildcard_priority"
+          ],
+          "properties": {
+            "specificity_source": {
+              "const": "declared"
+            },
+            "wildcard_priority": {
+              "const": [
+                "exact",
+                "_",
+                "*"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "sraiMicronaut": {
+      "type": "object",
+      "required": [
+        "type",
+        "identity",
+        "authority",
+        "limits",
+        "return_mode"
+      ],
+      "properties": {
+        "type": {
+          "const": "srai"
+        },
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "authority": {
+          "const": "redirect_only"
+        },
+        "can_execute": {
+          "const": false
+        },
+        "can_write": {
+          "const": false
+        },
+        "can_close": {
+          "const": false
+        },
+        "limits": {
+          "type": "object",
+          "required": [
+            "max_depth",
+            "cycle_policy"
+          ],
+          "properties": {
+            "max_depth": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 16
+            },
+            "cycle_policy": {
+              "const": "reject"
+            }
+          },
+          "additionalProperties": false
+        },
+        "return_mode": {
+          "const": "candidate"
+        }
+      },
+      "additionalProperties": false
+    },
+    "piMicronaut": {
+      "type": "object",
+      "required": [
+        "type",
+        "identity",
+        "authority",
+        "metric",
+        "output"
+      ],
+      "properties": {
+        "type": {
+          "const": "pi"
+        },
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "authority": {
+          "const": "rank_only"
+        },
+        "can_execute": {
+          "const": false
+        },
+        "can_write": {
+          "const": false
+        },
+        "can_close": {
+          "const": false
+        },
+        "metric": {
+          "enum": [
+            "cosine",
+            "dot",
+            "euclidean"
+          ]
+        },
+        "output": {
+          "const": "ranked_candidates"
+        }
+      },
+      "additionalProperties": false
+    },
+    "xcfeMicronaut": {
+      "type": "object",
+      "required": [
+        "type",
+        "identity",
+        "authority",
+        "dispatch"
+      ],
+      "properties": {
+        "type": {
+          "const": "xcfe"
+        },
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "authority": {
+          "const": "admission_only"
+        },
+        "can_execute": {
+          "const": false
+        },
+        "can_write": {
+          "const": false
+        },
+        "can_close": {
+          "const": false
+        },
+        "dispatch": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "xulMicronaut": {
+      "type": "object",
+      "required": [
+        "type",
+        "identity",
+        "authority",
+        "commit"
+      ],
+      "properties": {
+        "type": {
+          "const": "xul"
+        },
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "authority": {
+          "const": "close_only"
+        },
+        "can_execute": {
+          "const": false
+        },
+        "can_write": {
+          "const": false
+        },
+        "can_close": {
+          "const": true
+        },
+        "commit": {
+          "const": "verified_data_only"
+        }
+      },
+      "additionalProperties": false
+    },
+    "learningMicronaut": {
+      "type": "object",
+      "required": [
+        "type",
+        "identity",
+        "authority",
+        "event_log",
+        "append_only"
+      ],
+      "properties": {
+        "type": {
+          "const": "learning"
+        },
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "authority": {
+          "const": "proposal_only"
+        },
+        "can_execute": {
+          "const": false
+        },
+        "can_write": {
+          "const": false
+        },
+        "can_promote": {
+          "const": false
+        },
+        "event_log": {
+          "type": "string"
+        },
+        "append_only": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "patternBank": {
+      "type": "object",
+      "required": [
+        "authority",
+        "owner",
+        "rules"
+      ],
+      "properties": {
+        "authority": {
+          "const": "data_only"
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rule"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "rule": {
+      "type": "object",
+      "required": [
+        "id",
+        "pattern",
+        "template"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pattern": {
+          "type": "string",
+          "minLength": 1
+        },
+        "topic": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "that": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "template": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": [
+                  "kind",
+                  "text"
+                ],
+                "properties": {
+                  "kind": {
+                    "const": "text"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "required": [
+                  "kind",
+                  "parts"
+                ],
+                "properties": {
+                  "kind": {
+                    "const": "srai"
+                  },
+                  "parts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "required": [
+                  "kind",
+                  "index"
+                ],
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "star",
+                      "thatstar",
+                      "topicstar"
+                    ]
+                  },
+                  "index": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "required": [
+                  "kind",
+                  "name"
+                ],
+                "properties": {
+                  "kind": {
+                    "const": "forbidden"
+                  },
+                  "name": {
+                    "enum": [
+                      "sraix",
+                      "learn",
+                      "learnf",
+                      "system",
+                      "javascript"
+                    ]
+                  }
+                },
+                "additionalProperties": false
+              }
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "routeGraph": {
+      "type": "object",
+      "required": [
+        "authority",
+        "max_depth",
+        "cycle_policy",
+        "nodes",
+        "edges"
+      ],
+      "properties": {
+        "authority": {
+          "const": "data_only"
+        },
+        "max_depth": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16
+        },
+        "cycle_policy": {
+          "const": "reject"
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "pattern"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "pattern": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "from",
+              "to",
+              "kind"
+            ],
+            "properties": {
+              "from": {
+                "type": "string"
+              },
+              "to": {
+                "type": "string"
+              },
+              "kind": {
+                "const": "srai"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

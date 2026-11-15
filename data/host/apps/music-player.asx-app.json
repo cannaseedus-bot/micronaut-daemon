@@ -1,0 +1,57 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "music-player",
+  "@key": "⟁APP:MUSIC_PLAYER",
+  "@mount": "⟁ROOT:MUSIC_PLAYER",
+  "@theme": { "accent": "#c084fc", "bg": "#04010a", "surface": "#080018", "text": "#f3e8ff", "hero_phase": "Pop", "tagline": "Play what moves you" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "library", "component": "⟁WIDGET:LIBRARY", "position": "center" }, { "id": "player", "component": "⟁WIDGET:PLAYER", "position": "bottom" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "tracks": [], "queue": [], "current": null, "playing": false, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:MUSIC_PLAYER": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS", "⟁WIDGET:PLAYER"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:IMPORT"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@placeholder": "Search library...", "@on": { "input": "mp.search" } },
+    "⟁ACTION:IMPORT": { "@type": "button", "@text": "Import", "@on": { "click": "mp.open_import" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:LIBRARY"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:LIBRARY": { "@type": "grid", "@bind": "state.tracks", "@children": ["⟁WIDGET:TRACK_CARD"] },
+    "⟁WIDGET:TRACK_CARD": { "@type": "media-card", "@bind": "track", "@on": { "play": "mp.play", "queue": "mp.enqueue" } },
+    "⟁WIDGET:PLAYER": { "@type": "audio-player", "@bind": "state.current", "@on": { "play": "mp.toggle", "next": "mp.next", "prev": "mp.prev" } }
+  },
+  "@programs": {
+    "mp.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] },
+    "mp.open_import": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "mp.play": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_track", "@out": "current" }] },
+    "mp.enqueue": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "APPEND", "@from": "event_track", "@out": "queue" }] },
+    "mp.toggle": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_playing", "@out": "playing" }] },
+    "mp.next": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_next", "@out": "current" }] },
+    "mp.prev": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_prev", "@out": "current" }] }
+  },
+  "@events": { "track.play": "mp.play", "track.queue": "mp.enqueue", "player.toggle": "mp.toggle", "player.next": "mp.next", "player.prev": "mp.prev" },
+  "@imports": [{ "ref": "track", "mode": "schema_table" }, { "ref": "playlist", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "equalizer", "name": "Equalizer", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "10-band EQ with presets." },
+      { "id": "smart-playlist", "name": "Smart Playlists", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Auto-curated playlists based on mood, energy, and time of day." },
+      { "id": "lyrics-view", "name": "Lyrics View", "category": "content", "price": "optional", "status": "available_unconfigured", "description": "Display synced lyrics while a track plays." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "mp.play", "pattern": "PLAY *|PLAY MUSIC|START PLAYBACK", "intent": "play" },
+      { "id": "mp.queue", "pattern": "QUEUE *|ADD * TO QUEUE|PLAY NEXT", "intent": "enqueue" }
+    ]
+  },
+  "@data": {
+    "spotlight": [
+      { "id": "sp1", "title": "Recently Added", "badge": "Fresh", "count": 8, "excerpt": "8 new tracks imported this week from local files." },
+      { "id": "sp2", "title": "Focus Playlist", "badge": "Most Played", "tracks": 22, "total_min": 94, "excerpt": "22 tracks, 94 minutes. Your go-to deep work playlist." },
+      { "id": "sp3", "title": "Late Night Session", "badge": "Curated", "tracks": 14, "excerpt": "Ambient electronic picks. Played at 11pm+ most nights." }
+    ],
+    "schema": {
+      "track": { "primaryKey": "track_id", "fields": { "track_id": { "type": "string" }, "title": { "type": "string", "required": true }, "artist": { "type": "string" }, "album": { "type": "string" }, "duration_sec": { "type": "integer" }, "file_path": { "type": "string" }, "added_at": { "type": "datetime" } } },
+      "playlist": { "primaryKey": "playlist_id", "fields": { "playlist_id": { "type": "string" }, "name": { "type": "string", "required": true }, "track_ids": { "type": "json" }, "created_at": { "type": "datetime" } } }
+    }
+  }
+}

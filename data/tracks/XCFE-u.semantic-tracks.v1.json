@@ -1,0 +1,57 @@
+{
+  "@no-eval": true,
+  "id": "XCFE-µ",
+  "aiml_class": "XCFE-µ",
+  "aiml_source": "data/alice/semantic-control-classes.aiml",
+
+  "schemes": ["xcfe", "policy", "control"],
+  "description": "XCFE policy evaluator — owns @if/@then/@else/@for/@from/@cause/@direct operator execution and phase-gate enforcement across the full C6 cycle. 14-class node ISA: CONDITION/ROUTING/CAUSAL/STRUCTURE at Wo, SELECTION at Yax, EXECUTION/CAPABILITY/TRANSFORM at Sek, VERIFICATION/CONSEQUENCE at Ch'en, COMMIT at Xul, MEMORY/NEGATION/KUHUL_RUNTIME at Pop. Deterministic; no LLM. Route authority stays with XCFE — operators are data, not executors.",
+  "phase": "Wo",
+  "category": "native",
+  "confidence": 1.0,
+  "governs": [
+    "if", "then", "else", "for", "from", "cause", "direct",
+    "policy", "gate", "phase gate", "operator", "dispatch",
+    "condition", "routing", "causal", "structure",
+    "selection", "execution", "capability", "transform",
+    "verification", "consequence", "commit",
+    "control lower", "xcfe", "authority phase", "flow phase",
+    "class", "node isa", "wcr", "eligible", "entropy"
+  ],
+  "capabilities": [
+    "xcfe.eval",
+    "phase.gate",
+    "policy.eval",
+    "operator.dispatch",
+    "control.lower"
+  ],
+  "realizes": ["Wo.policy_bind", "Ch'en.verify_gate", "Xul.commit_authority"],
+  "pattern_registry": {
+    "insert_key": "XCFE:",
+    "invoke_node": "@xcfe",
+    "wrapper": "<mx2lm>xcfe op={operator} class={node_class} flow_phase={flow_phase} authority_phase={authority_phase} {text}</mx2lm>",
+    "fallback": "<mx2lm>xcfe eval {input}</mx2lm>"
+  },
+  "relations": [
+    { "target": "Coordinator", "verb": "@delegates_to", "directed": true },
+    { "target": "CONTROL-µ",   "verb": "@related_to",   "directed": false },
+    { "target": "CFPC-µ",      "verb": "@related_to",   "directed": false }
+  ],
+  "folds": [
+    { "phase": "Pop",   "op": "gramRead",              "key": "xcfe_policy" },
+    { "phase": "Pop",   "op": "detect_memory_negation" },
+    { "phase": "Wo",    "op": "bind_condition_routing" },
+    { "phase": "Yax",   "op": "select_candidate" },
+    { "phase": "Sek",   "op": "dispatch_execution" },
+    { "phase": "Ch'en", "op": "verify_consequence" },
+    { "phase": "Xul",   "op": "gramWrite",             "scope": "local" }
+  ],
+  "memory_patterns": ["xcfe_policy_rows", "operator_dispatch_table", "phase_gate_log"],
+  "sandbox": {
+    "gram_ns":         "XCFE",
+    "manifest_access": ["words", "micronaut", "kuhul"],
+    "effects":         ["gramRead", "gramWrite", "xcfe:eval", "phase:gate", "policy:eval"],
+    "ports":           [],
+    "coordinator":     false
+  }
+}

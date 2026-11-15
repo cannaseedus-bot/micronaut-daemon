@@ -1,0 +1,33 @@
+{
+  "@type": "memory.field.v1",
+  "authority": "memoryfield:ngram-key",
+  "entries": [
+    {
+      "id": "mf_00000000",
+      "name": "decision_theory_fold",
+      "surface": "decision theory fold field operator",
+      "template_body": "Apply decision theory fold to resolve operator binding under phase {{phase}}.",
+      "phase": "Wo",
+      "role": "semantic",
+      "ngram_keys": []
+    },
+    {
+      "id": "mf_00000001",
+      "name": "semantic_role_binding",
+      "surface": "semantic role binding anchor control",
+      "template_body": "Bind semantic role {{role}} to anchor {{anchor}} via control operator.",
+      "phase": "Sek",
+      "role": "control",
+      "ngram_keys": []
+    },
+    {
+      "id": "mf_00000002",
+      "name": "ngram_key_store",
+      "surface": "ngram key store pattern template retrieval",
+      "template_body": "Retrieve pattern by ngram key {{key}} from memory field store.",
+      "phase": "Wo",
+      "role": "tool",
+      "ngram_keys": []
+    }
+  ]
+}

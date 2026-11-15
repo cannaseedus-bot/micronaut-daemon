@@ -1,0 +1,25 @@
+{
+  "status": "proposed",
+  "source": "ADVISOR-µ",
+  "authority": "none",
+  "keys": ["author", "klsl", "grammar"],
+  "ngrams": {
+    "unigram": ["author", "klsl", "grammar"],
+    "bigram": ["author klsl", "klsl grammar"],
+    "trigram": ["author klsl grammar"]
+  },
+  "typed_grams": {
+    "unigram": [{"gram":"author","count":1,"width":1,"role":"semantic_address","phase":"Pop","position":0,"provenance":"advisor_submission"}],
+    "bigram": [{"gram":"author klsl","count":1,"width":2,"role":"context_association","phase":"Wo","position":0,"provenance":"advisor_submission"}],
+    "trigram": [{"gram":"author klsl grammar","count":1,"width":3,"role":"context_association","phase":"Wo","position":0,"provenance":"advisor_submission"}],
+    "coarse_gram": [{"gram":"c c","count":1,"width":2,"role":"structural_shape","phase":"Yax","position":0,"provenance":"advisor_submission"}],
+    "tool_gram": [{"gram":"author klsl","count":1,"width":2,"role":"tool_dispatch_intent","phase":"Sek","position":0,"provenance":"advisor_submission"}]
+  },
+  "tracks": ["ADVISOR-µ", "coder"],
+  "micronauts": ["coder"],
+  "provenance": {
+    "model": "Qwen3-4B-Q8_0.gguf",
+    "action": "advise",
+    "request": "author the missing KLSL grammar"
+  }
+}

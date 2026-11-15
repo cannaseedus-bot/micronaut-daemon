@@ -1,0 +1,936 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from intent-graph.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH</pattern>
+    <template>source intent-graph.gml; label K'UHUL Intent / Field / Wildcard Question Graph; identity kgf.intent-graph/1; authority data_only; directed 1; nodes 65; edges 102. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 1</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 1; authority: data_only; id: 1; kind: semantic_field; label: ⟁CAR; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁CAR</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 1; authority: data_only; id: 1; kind: semantic_field; label: ⟁CAR; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 2</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 2; authority: data_only; id: 2; kind: semantic_key; label: ⟁CARRIAGE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁CARRIAGE</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 2; authority: data_only; id: 2; kind: semantic_key; label: ⟁CARRIAGE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 3</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 3; authority: data_only; id: 3; kind: semantic_key; label: ⟁AUTOMOBILE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁AUTOMOBILE</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 3; authority: data_only; id: 3; kind: semantic_key; label: ⟁AUTOMOBILE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 4</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 4; also_field: 1; authority: data_only; id: 4; kind: semantic_key; label: ⟁GASOLINE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁GASOLINE</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 4; also_field: 1; authority: data_only; id: 4; kind: semantic_key; label: ⟁GASOLINE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 5</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 5; also_field: 1; authority: data_only; id: 5; kind: semantic_key; label: ⟁ELECTRIC. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁ELECTRIC</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 5; also_field: 1; authority: data_only; id: 5; kind: semantic_key; label: ⟁ELECTRIC. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 6</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 6; authority: data_only; id: 6; kind: semantic_field; label: ⟁COMBUSTION; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁COMBUSTION</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 6; authority: data_only; id: 6; kind: semantic_field; label: ⟁COMBUSTION; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 7</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 7; authority: data_only; id: 7; kind: semantic_key; label: ⟁ROCKET. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁ROCKET</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 7; authority: data_only; id: 7; kind: semantic_key; label: ⟁ROCKET. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 8</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 8; authority: data_only; id: 8; kind: semantic_key; label: ⟁GUNPOWDER. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁GUNPOWDER</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 8; authority: data_only; id: 8; kind: semantic_key; label: ⟁GUNPOWDER. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 9</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 9; authority: data_only; id: 9; kind: semantic_key; label: ⟁ENGINE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁ENGINE</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 9; authority: data_only; id: 9; kind: semantic_key; label: ⟁ENGINE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 10</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 10; authority: data_only; id: 10; kind: semantic_key; label: ⟁PETROLEUM. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁PETROLEUM</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 10; authority: data_only; id: 10; kind: semantic_key; label: ⟁PETROLEUM. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 11</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 11; authority: data_only; id: 11; kind: semantic_key; label: ⟁ECONOMY. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁ECONOMY</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 11; authority: data_only; id: 11; kind: semantic_key; label: ⟁ECONOMY. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 12</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 12; authority: data_only; id: 12; kind: semantic_key; label: ⟁VOLTAGE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁VOLTAGE</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 12; authority: data_only; id: 12; kind: semantic_key; label: ⟁VOLTAGE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 13</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 13; authority: data_only; id: 13; kind: semantic_key; label: ⟁BATTERY. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁BATTERY</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 13; authority: data_only; id: 13; kind: semantic_key; label: ⟁BATTERY. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 14</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 14; authority: data_only; id: 14; kind: semantic_key; label: ⟁UTILITY. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁UTILITY</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 14; authority: data_only; id: 14; kind: semantic_key; label: ⟁UTILITY. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 15</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 15; authority: host_gated; id: 15; kind: intent; label: intent:RELATIONSHIP_QUERY; phase: Pop. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE </pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 15; authority: host_gated; id: 15; kind: intent; label: intent:RELATIONSHIP_QUERY; phase: Pop. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 16</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 16; authority: host_gated; id: 16; kind: cfpc_gap; label: cfpc:INTENT_GAP; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE </pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 16; authority: host_gated; id: 16; kind: cfpc_gap; label: cfpc:INTENT_GAP; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 17</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 17; authority: host_gated; id: 17; kind: cfpc_gap; label: cfpc:QUERY_GAP; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE </pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 17; authority: host_gated; id: 17; kind: cfpc_gap; label: cfpc:QUERY_GAP; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 18</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 18; authority: host_gated; id: 18; kind: cfpc_gap; label: cfpc:KNOWLEDGE_GAP; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE </pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 18; authority: host_gated; id: 18; kind: cfpc_gap; label: cfpc:KNOWLEDGE_GAP; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 19</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 19; authority: proposal_only; id: 19; kind: wildcard_pattern; label: pattern:HOW_IS_*_RELATED_TO_*; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE </pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 19; authority: proposal_only; id: 19; kind: wildcard_pattern; label: pattern:HOW_IS_*_RELATED_TO_*; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 20</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 20; authority: proposal_only; id: 20; kind: wildcard_pattern; label: pattern:HOW_TO_*; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE </pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 20; authority: proposal_only; id: 20; kind: wildcard_pattern; label: pattern:HOW_TO_*; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 21</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 21; authority: proposal_only; id: 21; kind: trigram_pattern; label: gram:RELATED_YAX; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE </pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 21; authority: proposal_only; id: 21; kind: trigram_pattern; label: gram:RELATED_YAX; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 22</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 22; authority: proposal_only; id: 22; kind: trigram_pattern; label: gram:AFFECT_YAX; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE </pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 22; authority: proposal_only; id: 22; kind: trigram_pattern; label: gram:AFFECT_YAX; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 23</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 23; authority: proposal_only; id: 23; kind: trigram_pattern; label: gram:DIFFERENCE_SEK; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE </pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 23; authority: proposal_only; id: 23; kind: trigram_pattern; label: gram:DIFFERENCE_SEK; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 24</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 24; authority: host_gated; id: 24; kind: fold; label: fold:RELATED; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE FOLD:RELATED</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 24; authority: host_gated; id: 24; kind: fold; label: fold:RELATED; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 25</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 25; authority: host_gated; id: 25; kind: fold; label: fold:AFFECT; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE FOLD:AFFECT</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 25; authority: host_gated; id: 25; kind: fold; label: fold:AFFECT; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 26</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 26; authority: host_gated; id: 26; kind: fold; label: fold:DIFFERENCE; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE FOLD:DIFFERENCE</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 26; authority: host_gated; id: 26; kind: fold; label: fold:DIFFERENCE; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 27</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 27; authority: host_gated; id: 27; kind: micronaut; label: micro:WILDCARD_ENTITY; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE </pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 27; authority: host_gated; id: 27; kind: micronaut; label: micro:WILDCARD_ENTITY; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 28</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 28; authority: host_gated; id: 28; kind: micronaut; label: micro:RELATIONSHIP; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE MICRO:RELATIONSHIP</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 28; authority: host_gated; id: 28; kind: micronaut; label: micro:RELATIONSHIP; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 29</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 29; authority: host_gated; id: 29; kind: track; label: track:WILDCARD_RELATIONS; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE </pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 29; authority: host_gated; id: 29; kind: track; label: track:WILDCARD_RELATIONS; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 30</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 30; authority: host_gated; id: 30; kind: execution_gate; label: xcfe:BINDING_ADMISSION; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE </pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 30; authority: host_gated; id: 30; kind: execution_gate; label: xcfe:BINDING_ADMISSION; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 31</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 31; authority: host_gated; id: 31; kind: policy; label: xcfe:WILDCARD_POLICY; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE </pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 31; authority: host_gated; id: 31; kind: policy; label: xcfe:WILDCARD_POLICY; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 32</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 32; authority: host_gated; id: 32; kind: verification_gate; label: phase:CHEN_VERIFY; phase: Ch'en. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE </pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 32; authority: host_gated; id: 32; kind: verification_gate; label: phase:CHEN_VERIFY; phase: Ch'en. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 33</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 33; authority: host_gated; id: 33; kind: closure_gate; label: phase:XUL_CLOSE; phase: Xul. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE </pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 33; authority: host_gated; id: 33; kind: closure_gate; label: phase:XUL_CLOSE; phase: Xul. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 34</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 34; authority: proposal_only; id: 34; kind: proposal; label: output:RELATION_CANDIDATE; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE </pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 34; authority: proposal_only; id: 34; kind: proposal; label: output:RELATION_CANDIDATE; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 35</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 35; authority: proposal_only; id: 35; kind: proposal; label: output:QUESTION_CANDIDATE; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE </pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 35; authority: proposal_only; id: 35; kind: proposal; label: output:QUESTION_CANDIDATE; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 36</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 36; authority: host_gated; id: 36; kind: verified_result; label: output:VERIFIED_RELATION; phase: Ch'en. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE </pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 36; authority: host_gated; id: 36; kind: verified_result; label: output:VERIFIED_RELATION; phase: Ch'en. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 37</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 37; authority: host_gated; id: 37; kind: persistence_target; label: store:GRAMSTORE; phase: Xul. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE STORE:GRAMSTORE</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 37; authority: host_gated; id: 37; kind: persistence_target; label: store:GRAMSTORE; phase: Xul. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 54</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 54; authority: example_only; id: 54; kind: ngram_example; label: example:how to grow tomatoes; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE EXAMPLE:HOW TO GROW TOMATOES</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 54; authority: example_only; id: 54; kind: ngram_example; label: example:how to grow tomatoes; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 55</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 55; authority: example_only; id: 55; kind: ngram_example; label: example:how to grow peppers; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE EXAMPLE:HOW TO GROW PEPPERS</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 55; authority: example_only; id: 55; kind: ngram_example; label: example:how to grow peppers; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 56</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 56; authority: data_only; definition_ref: ../../../kuhul-field.json#⟁KUHUL; id: 56; kind: semantic_field; label: ⟁KUHUL; phase: Pop. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁KUHUL</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 56; authority: data_only; definition_ref: ../../../kuhul-field.json#⟁KUHUL; id: 56; kind: semantic_field; label: ⟁KUHUL; phase: Pop. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 57</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 57; authority: data_only; id: 57; kind: semantic_key; label: ⟁KEY. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁KEY</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 57; authority: data_only; id: 57; kind: semantic_key; label: ⟁KEY. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 58</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 58; authority: data_only; id: 58; kind: semantic_key; label: ⟁FIELD. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁FIELD</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 58; authority: data_only; id: 58; kind: semantic_key; label: ⟁FIELD. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 59</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 59; authority: data_only; id: 59; kind: semantic_key; label: ⟁KGF. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁KGF</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 59; authority: data_only; id: 59; kind: semantic_key; label: ⟁KGF. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 60</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 60; authority: data_only; id: 60; kind: semantic_key; label: ⟁XJSON. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁XJSON</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 60; authority: data_only; id: 60; kind: semantic_key; label: ⟁XJSON. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 61</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 61; authority: data_only; id: 61; kind: semantic_key; label: ⟁XSL. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁XSL</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 61; authority: data_only; id: 61; kind: semantic_key; label: ⟁XSL. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 62</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 62; authority: data_only; id: 62; kind: semantic_key; label: ⟁MICRONAUT. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁MICRONAUT</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 62; authority: data_only; id: 62; kind: semantic_key; label: ⟁MICRONAUT. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 63</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 63; authority: data_only; id: 63; kind: semantic_key; label: ⟁PHASE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁PHASE</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 63; authority: data_only; id: 63; kind: semantic_key; label: ⟁PHASE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 64</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 64; authority: data_only; id: 64; kind: semantic_key; label: ⟁XCFE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁XCFE</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 64; authority: data_only; id: 64; kind: semantic_key; label: ⟁XCFE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 65</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 65; authority: data_only; id: 65; kind: semantic_key; label: ⟁MATHML. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE ⟁MATHML</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 65; authority: data_only; id: 65; kind: semantic_key; label: ⟁MATHML. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 38</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 38; authority: proposal_only; id: 38; kind: bigram_candidate; label: bigram:⟁CAR|⟁CARRIAGE; left: ⟁CAR; phase: Yax; right: ⟁CARRIAGE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE BIGRAM:⟁CAR|⟁CARRIAGE</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 38; authority: proposal_only; id: 38; kind: bigram_candidate; label: bigram:⟁CAR|⟁CARRIAGE; left: ⟁CAR; phase: Yax; right: ⟁CARRIAGE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 39</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 39; authority: proposal_only; id: 39; kind: bigram_candidate; label: bigram:⟁CAR|⟁AUTOMOBILE; left: ⟁CAR; phase: Yax; right: ⟁AUTOMOBILE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE BIGRAM:⟁CAR|⟁AUTOMOBILE</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 39; authority: proposal_only; id: 39; kind: bigram_candidate; label: bigram:⟁CAR|⟁AUTOMOBILE; left: ⟁CAR; phase: Yax; right: ⟁AUTOMOBILE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 40</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 40; authority: proposal_only; id: 40; kind: bigram_candidate; label: bigram:⟁CAR|⟁GASOLINE; left: ⟁CAR; phase: Yax; right: ⟁GASOLINE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE BIGRAM:⟁CAR|⟁GASOLINE</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 40; authority: proposal_only; id: 40; kind: bigram_candidate; label: bigram:⟁CAR|⟁GASOLINE; left: ⟁CAR; phase: Yax; right: ⟁GASOLINE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 41</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 41; authority: proposal_only; id: 41; kind: bigram_candidate; label: bigram:⟁CAR|⟁ELECTRIC; left: ⟁CAR; phase: Yax; right: ⟁ELECTRIC. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE BIGRAM:⟁CAR|⟁ELECTRIC</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 41; authority: proposal_only; id: 41; kind: bigram_candidate; label: bigram:⟁CAR|⟁ELECTRIC; left: ⟁CAR; phase: Yax; right: ⟁ELECTRIC. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 42</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 42; authority: proposal_only; id: 42; kind: bigram_candidate; label: bigram:⟁COMBUSTION|⟁ROCKET; left: ⟁COMBUSTION; phase: Yax; right: ⟁ROCKET. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE BIGRAM:⟁COMBUSTION|⟁ROCKET</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 42; authority: proposal_only; id: 42; kind: bigram_candidate; label: bigram:⟁COMBUSTION|⟁ROCKET; left: ⟁COMBUSTION; phase: Yax; right: ⟁ROCKET. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 43</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 43; authority: proposal_only; id: 43; kind: bigram_candidate; label: bigram:⟁COMBUSTION|⟁GUNPOWDER; left: ⟁COMBUSTION; phase: Yax; right: ⟁GUNPOWDER. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE BIGRAM:⟁COMBUSTION|⟁GUNPOWDER</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 43; authority: proposal_only; id: 43; kind: bigram_candidate; label: bigram:⟁COMBUSTION|⟁GUNPOWDER; left: ⟁COMBUSTION; phase: Yax; right: ⟁GUNPOWDER. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 44</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 44; authority: proposal_only; id: 44; kind: bigram_candidate; label: bigram:⟁COMBUSTION|⟁ENGINE; left: ⟁COMBUSTION; phase: Yax; right: ⟁ENGINE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE BIGRAM:⟁COMBUSTION|⟁ENGINE</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 44; authority: proposal_only; id: 44; kind: bigram_candidate; label: bigram:⟁COMBUSTION|⟁ENGINE; left: ⟁COMBUSTION; phase: Yax; right: ⟁ENGINE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 45</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 45; authority: proposal_only; id: 45; kind: bigram_candidate; label: bigram:⟁COMBUSTION|⟁GASOLINE; left: ⟁COMBUSTION; phase: Yax; right: ⟁GASOLINE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE BIGRAM:⟁COMBUSTION|⟁GASOLINE</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 45; authority: proposal_only; id: 45; kind: bigram_candidate; label: bigram:⟁COMBUSTION|⟁GASOLINE; left: ⟁COMBUSTION; phase: Yax; right: ⟁GASOLINE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 46</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 46; authority: proposal_only; id: 46; kind: bigram_candidate; label: bigram:⟁GASOLINE|⟁AUTOMOBILE; left: ⟁GASOLINE; phase: Yax; right: ⟁AUTOMOBILE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE BIGRAM:⟁GASOLINE|⟁AUTOMOBILE</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 46; authority: proposal_only; id: 46; kind: bigram_candidate; label: bigram:⟁GASOLINE|⟁AUTOMOBILE; left: ⟁GASOLINE; phase: Yax; right: ⟁AUTOMOBILE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 47</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 47; authority: proposal_only; id: 47; kind: bigram_candidate; label: bigram:⟁GASOLINE|⟁ENGINE; left: ⟁GASOLINE; phase: Yax; right: ⟁ENGINE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE BIGRAM:⟁GASOLINE|⟁ENGINE</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 47; authority: proposal_only; id: 47; kind: bigram_candidate; label: bigram:⟁GASOLINE|⟁ENGINE; left: ⟁GASOLINE; phase: Yax; right: ⟁ENGINE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 48</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 48; authority: proposal_only; id: 48; kind: bigram_candidate; label: bigram:⟁GASOLINE|⟁PETROLEUM; left: ⟁GASOLINE; phase: Yax; right: ⟁PETROLEUM. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE BIGRAM:⟁GASOLINE|⟁PETROLEUM</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 48; authority: proposal_only; id: 48; kind: bigram_candidate; label: bigram:⟁GASOLINE|⟁PETROLEUM; left: ⟁GASOLINE; phase: Yax; right: ⟁PETROLEUM. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 49</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 49; authority: proposal_only; id: 49; kind: bigram_candidate; label: bigram:⟁GASOLINE|⟁ECONOMY; left: ⟁GASOLINE; phase: Yax; right: ⟁ECONOMY. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE BIGRAM:⟁GASOLINE|⟁ECONOMY</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 49; authority: proposal_only; id: 49; kind: bigram_candidate; label: bigram:⟁GASOLINE|⟁ECONOMY; left: ⟁GASOLINE; phase: Yax; right: ⟁ECONOMY. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 50</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 50; authority: proposal_only; id: 50; kind: bigram_candidate; label: bigram:⟁ELECTRIC|⟁VOLTAGE; left: ⟁ELECTRIC; phase: Yax; right: ⟁VOLTAGE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE BIGRAM:⟁ELECTRIC|⟁VOLTAGE</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 50; authority: proposal_only; id: 50; kind: bigram_candidate; label: bigram:⟁ELECTRIC|⟁VOLTAGE; left: ⟁ELECTRIC; phase: Yax; right: ⟁VOLTAGE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 51</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 51; authority: proposal_only; id: 51; kind: bigram_candidate; label: bigram:⟁ELECTRIC|⟁ENGINE; left: ⟁ELECTRIC; phase: Yax; right: ⟁ENGINE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE BIGRAM:⟁ELECTRIC|⟁ENGINE</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 51; authority: proposal_only; id: 51; kind: bigram_candidate; label: bigram:⟁ELECTRIC|⟁ENGINE; left: ⟁ELECTRIC; phase: Yax; right: ⟁ENGINE. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 52</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 52; authority: proposal_only; id: 52; kind: bigram_candidate; label: bigram:⟁ELECTRIC|⟁BATTERY; left: ⟁ELECTRIC; phase: Yax; right: ⟁BATTERY. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE BIGRAM:⟁ELECTRIC|⟁BATTERY</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 52; authority: proposal_only; id: 52; kind: bigram_candidate; label: bigram:⟁ELECTRIC|⟁BATTERY; left: ⟁ELECTRIC; phase: Yax; right: ⟁BATTERY. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE 53</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 53; authority: proposal_only; id: 53; kind: bigram_candidate; label: bigram:⟁ELECTRIC|⟁UTILITY; left: ⟁ELECTRIC; phase: Yax; right: ⟁UTILITY. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH NODE BIGRAM:⟁ELECTRIC|⟁UTILITY</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; node 53; authority: proposal_only; id: 53; kind: bigram_candidate; label: bigram:⟁ELECTRIC|⟁UTILITY; left: ⟁ELECTRIC; phase: Yax; right: ⟁UTILITY. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 1  2</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 1 to 2; directed_relation: 1; relation: field_member; source: 1; status: declared; target: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 1  3</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 1 to 3; directed_relation: 1; relation: field_member; source: 1; status: declared; target: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 1  4</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 1 to 4; directed_relation: 1; relation: field_member; source: 1; status: declared; target: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 1  5</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 1 to 5; directed_relation: 1; relation: field_member; source: 1; status: declared; target: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 6  7</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 6 to 7; directed_relation: 1; relation: field_member; source: 6; status: declared; target: 7. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 6  8</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 6 to 8; directed_relation: 1; relation: field_member; source: 6; status: declared; target: 8. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 6  9</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 6 to 9; directed_relation: 1; relation: field_member; source: 6; status: declared; target: 9. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 6  4</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 6 to 4; directed_relation: 1; relation: field_member; source: 6; status: declared; target: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 4  3</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 4 to 3; directed_relation: 1; relation: field_member; source: 4; status: declared; target: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 4  9</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 4 to 9; directed_relation: 1; relation: field_member; source: 4; status: declared; target: 9. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 4  10</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 4 to 10; directed_relation: 1; relation: field_member; source: 4; status: declared; target: 10. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 4  11</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 4 to 11; directed_relation: 1; relation: field_member; source: 4; status: declared; target: 11. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 5  12</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 5 to 12; directed_relation: 1; relation: field_member; source: 5; status: declared; target: 12. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 5  9</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 5 to 9; directed_relation: 1; relation: field_member; source: 5; status: declared; target: 9. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 5  13</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 5 to 13; directed_relation: 1; relation: field_member; source: 5; status: declared; target: 13. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 5  14</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 5 to 14; directed_relation: 1; relation: field_member; source: 5; status: declared; target: 14. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 15  16</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 15 to 16; relation: classify_gap; source: 15; target: 16. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 15  17</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 15 to 17; relation: classify_gap; source: 15; target: 17. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 15  18</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 15 to 18; relation: classify_gap; source: 15; target: 18. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 15 MATCHES 19</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 15 to 19; relation: matches; source: 15; target: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 19  21</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 19 to 21; relation: projects_to; source: 19; target: 21. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 21  24</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 21 to 24; relation: binds_fold; source: 21; target: 24. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 22  25</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 22 to 25; relation: binds_fold; source: 22; target: 25. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 23  26</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 23 to 26; relation: binds_fold; source: 23; target: 26. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 29 INCLUDES 21</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 29 to 21; relation: includes; source: 29; target: 21. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 29 INCLUDES 22</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 29 to 22; relation: includes; source: 29; target: 22. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 29 INCLUDES 23</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 29 to 23; relation: includes; source: 29; target: 23. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 29 INCLUDES 27</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 29 to 27; relation: includes; source: 29; target: 27. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 29 INCLUDES 28</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 29 to 28; relation: includes; source: 29; target: 28. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 28 REQUIRES 27</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 28 to 27; relation: requires; source: 28; target: 27. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 28  24</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 28 to 24; relation: calls_candidate; source: 28; target: 24. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 28  25</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 28 to 25; relation: calls_candidate; source: 28; target: 25. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 28  26</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 28 to 26; relation: calls_candidate; source: 28; target: 26. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 19  35</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 19 to 35; relation: generates_candidate; source: 19; target: 35. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 24  34</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 24 to 34; relation: generates_candidate; source: 24; target: 34. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 35  28</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 35 to 28; relation: candidate_handoff; source: 35; target: 28. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 34  30</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 34 to 30; relation: requires_admission; source: 34; target: 30. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 28  31</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 28 to 31; relation: subject_to_policy; source: 28; target: 31. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 31  30</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 31 to 30; relation: requires_gate; source: 31; target: 30. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 30  32</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 30 to 32; relation: authorized_dispatch_requires_verification; source: 30; target: 32. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 32  36</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 32 to 36; relation: produces_if_evidence_sufficient; source: 32; target: 36. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 36  33</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 36 to 33; relation: requires_authorized_closure; source: 36; target: 33. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 33  37</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 33 to 37; relation: authorized_persistence_only; source: 33; target: 37. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 1  38</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 1 to 38; relation: unfolds_to_bigram; source: 1; target: 38. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 2  38</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 2 to 38; relation: bigram_target; source: 2; target: 38. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 38  19</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 38 to 19; relation: instantiates_question; source: 38; status: candidate; target: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 1  39</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 1 to 39; relation: unfolds_to_bigram; source: 1; target: 39. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 3  39</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 3 to 39; relation: bigram_target; source: 3; target: 39. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 39  19</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 39 to 19; relation: instantiates_question; source: 39; status: candidate; target: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 1  40</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 1 to 40; relation: unfolds_to_bigram; source: 1; target: 40. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 4  40</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 4 to 40; relation: bigram_target; source: 4; target: 40. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 40  19</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 40 to 19; relation: instantiates_question; source: 40; status: candidate; target: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 1  41</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 1 to 41; relation: unfolds_to_bigram; source: 1; target: 41. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 5  41</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 5 to 41; relation: bigram_target; source: 5; target: 41. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 41  19</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 41 to 19; relation: instantiates_question; source: 41; status: candidate; target: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 6  42</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 6 to 42; relation: unfolds_to_bigram; source: 6; target: 42. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 7  42</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 7 to 42; relation: bigram_target; source: 7; target: 42. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 42  19</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 42 to 19; relation: instantiates_question; source: 42; status: candidate; target: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 6  43</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 6 to 43; relation: unfolds_to_bigram; source: 6; target: 43. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 8  43</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 8 to 43; relation: bigram_target; source: 8; target: 43. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 43  19</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 43 to 19; relation: instantiates_question; source: 43; status: candidate; target: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 6  44</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 6 to 44; relation: unfolds_to_bigram; source: 6; target: 44. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 9  44</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 9 to 44; relation: bigram_target; source: 9; target: 44. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 44  19</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 44 to 19; relation: instantiates_question; source: 44; status: candidate; target: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 6  45</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 6 to 45; relation: unfolds_to_bigram; source: 6; target: 45. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 4  45</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 4 to 45; relation: bigram_target; source: 4; target: 45. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 45  19</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 45 to 19; relation: instantiates_question; source: 45; status: candidate; target: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 4  46</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 4 to 46; relation: unfolds_to_bigram; source: 4; target: 46. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 3  46</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 3 to 46; relation: bigram_target; source: 3; target: 46. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 46  19</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 46 to 19; relation: instantiates_question; source: 46; status: candidate; target: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 4  47</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 4 to 47; relation: unfolds_to_bigram; source: 4; target: 47. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 9  47</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 9 to 47; relation: bigram_target; source: 9; target: 47. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 47  19</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 47 to 19; relation: instantiates_question; source: 47; status: candidate; target: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 4  48</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 4 to 48; relation: unfolds_to_bigram; source: 4; target: 48. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 10  48</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 10 to 48; relation: bigram_target; source: 10; target: 48. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 48  19</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 48 to 19; relation: instantiates_question; source: 48; status: candidate; target: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 4  49</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 4 to 49; relation: unfolds_to_bigram; source: 4; target: 49. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 11  49</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 11 to 49; relation: bigram_target; source: 11; target: 49. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 49  19</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 49 to 19; relation: instantiates_question; source: 49; status: candidate; target: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 5  50</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 5 to 50; relation: unfolds_to_bigram; source: 5; target: 50. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 12  50</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 12 to 50; relation: bigram_target; source: 12; target: 50. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 50  19</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 50 to 19; relation: instantiates_question; source: 50; status: candidate; target: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 5  51</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 5 to 51; relation: unfolds_to_bigram; source: 5; target: 51. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 9  51</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 9 to 51; relation: bigram_target; source: 9; target: 51. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 51  19</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 51 to 19; relation: instantiates_question; source: 51; status: candidate; target: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 5  52</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 5 to 52; relation: unfolds_to_bigram; source: 5; target: 52. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 13  52</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 13 to 52; relation: bigram_target; source: 13; target: 52. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 52  19</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 52 to 19; relation: instantiates_question; source: 52; status: candidate; target: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 5  53</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 5 to 53; relation: unfolds_to_bigram; source: 5; target: 53. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 14  53</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 14 to 53; relation: bigram_target; source: 14; target: 53. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 53  19</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 53 to 19; relation: instantiates_question; source: 53; status: candidate; target: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 20  54</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 20 to 54; relation: example_match; source: 20; strength: 0.55; target: 54. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 20  55</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 20 to 55; relation: example_match; source: 20; strength: 0.45; target: 55. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 56  57</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 56 to 57; directed_relation: 1; relation: field_member; source: 56; status: declared; target: 57. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 56  58</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 56 to 58; directed_relation: 1; relation: field_member; source: 56; status: declared; target: 58. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 56  59</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 56 to 59; directed_relation: 1; relation: field_member; source: 56; status: declared; target: 59. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 56  60</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 56 to 60; directed_relation: 1; relation: field_member; source: 56; status: declared; target: 60. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 56  61</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 56 to 61; directed_relation: 1; relation: field_member; source: 56; status: declared; target: 61. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 56  62</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 56 to 62; directed_relation: 1; relation: field_member; source: 56; status: declared; target: 62. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 56  63</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 56 to 63; directed_relation: 1; relation: field_member; source: 56; status: declared; target: 63. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 56  64</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 56 to 64; directed_relation: 1; relation: field_member; source: 56; status: declared; target: 64. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH K'UHUL INTENT / FIELD / WILDCARD QUESTION GRAPH EDGE 56  65</pattern>
+    <template>Graph K'UHUL Intent / Field / Wildcard Question Graph; edge 56 to 65; directed_relation: 1; relation: field_member; source: 56; status: declared; target: 65. Data-only graph record.</template>
+  </category>
+</aiml>

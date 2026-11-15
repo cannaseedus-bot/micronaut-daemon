@@ -1,0 +1,544 @@
+{
+  "schema": "kuhul.advisor.semantic-map.v1",
+  "value_model": "XPath31Map",
+  "source_ref": "advisor-bootstrap.json",
+  "source_schema": "key.grammar.advisor_bootstrap.v1",
+  "grammar_ref": "micronaut.runtime-grammar.v2.ebnf#semantic_map_section",
+  "track_ref": "track:ADVISOR-µ",
+  "route_contract_ref": "MICRONAUT:ADVISOR:ROUTE",
+  "callable_surface": {
+    "schemes": [],
+    "verbs": [],
+    "aiml_patterns": [],
+    "aiml_templates": [],
+    "key_patterns": [],
+    "key_templates": [],
+    "key_grammar": [],
+    "tokens": []
+  },
+  "callable_surface_status": "not_declared",
+  "route_contract_authority_boundary": "route_contract_declares_callable_surface_not_fact",
+  "fact_authority": false,
+  "card": {
+    "id": "advisor",
+    "label": "Advisor",
+    "symbol": "⟁WIDGETCARD",
+    "fields": [
+      "task",
+      "target",
+      "evidence",
+      "gaps",
+      "proposal",
+      "authority",
+      "next"
+    ],
+    "authority_claim": "none"
+  },
+  "capabilities": {
+    "declared": [
+      "request_classification",
+      "route_proposal"
+    ],
+    "registered": [],
+    "registered_status": "not_verified_in_this_declarative_map"
+  },
+  "routing": {
+    "route_order": [
+      "advisor:route:006",
+      "advisor:route:008",
+      "advisor:route:010",
+      "advisor:route:007",
+      "advisor:route:009",
+      "advisor:route:011",
+      "advisor:route:015",
+      "advisor:route:017",
+      "advisor:route:016",
+      "advisor:route:018",
+      "advisor:route:019",
+      "advisor:route:020",
+      "advisor:route:004",
+      "advisor:route:013",
+      "advisor:route:005",
+      "advisor:route:014",
+      "advisor:route:023",
+      "advisor:route:025",
+      "advisor:route:024",
+      "advisor:route:001",
+      "advisor:route:002",
+      "advisor:route:003",
+      "advisor:route:012",
+      "advisor:route:021",
+      "advisor:route:022"
+    ],
+    "precedence_rule": [
+      "literal_token_count_desc",
+      "wildcard_count_asc",
+      "token_count_desc",
+      "bootstrap_source_order"
+    ],
+    "fallback_route_ref": "advisor:route:022",
+    "assistant_generated_text_authorizes_dispatch": false,
+    "projection_status": "generated_aiml_is_projection_runtime_track_router_authoritative"
+  },
+  "routes": {
+    "advisor:route:006": {
+      "source_pattern": "I DON'T KNOW THE ANSWER TO THAT QUESTION",
+      "normalized_pattern": "I DON T KNOW THE ANSWER TO THAT QUESTION",
+      "expert_ref": "micronaut:WEB-RESEARCH-µ",
+      "phase_ref": "phase:Yax",
+      "next_phase_ref": "phase:Ch'en",
+      "projection_prefix": "search: event=advisor_web_research_trigger cue=miss_low_confidence",
+      "precedence": {
+        "rank": 1,
+        "literal_token_count": 9,
+        "wildcard_count": 0,
+        "token_count": 9,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:008": {
+      "source_pattern": "I DO NOT KNOW THE ANSWER TO THAT QUESTION",
+      "normalized_pattern": "I DO NOT KNOW THE ANSWER TO THAT QUESTION",
+      "expert_ref": "micronaut:WEB-RESEARCH-µ",
+      "phase_ref": "phase:Yax",
+      "next_phase_ref": "phase:Ch'en",
+      "projection_prefix": "search: event=advisor_web_research_trigger cue=miss_low_confidence",
+      "precedence": {
+        "rank": 2,
+        "literal_token_count": 9,
+        "wildcard_count": 0,
+        "token_count": 9,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:010": {
+      "source_pattern": "LET ME SEARCH THE WEB AND ASK MY ADVISOR",
+      "normalized_pattern": "LET ME SEARCH THE WEB AND ASK MY ADVISOR",
+      "expert_ref": "micronaut:WEB-RESEARCH-µ",
+      "phase_ref": "phase:Yax",
+      "next_phase_ref": "phase:Ch'en",
+      "projection_prefix": "search: event=advisor_web_research_trigger cue=miss_low_confidence",
+      "precedence": {
+        "rank": 3,
+        "literal_token_count": 9,
+        "wildcard_count": 0,
+        "token_count": 9,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:007": {
+      "source_pattern": "I DON'T KNOW THE ANSWER TO THAT QUESTION *",
+      "normalized_pattern": "I DON T KNOW THE ANSWER TO THAT QUESTION *",
+      "expert_ref": "micronaut:WEB-RESEARCH-µ",
+      "phase_ref": "phase:Yax",
+      "next_phase_ref": "phase:Ch'en",
+      "projection_prefix": "search: event=advisor_web_research_trigger cue=miss_low_confidence",
+      "precedence": {
+        "rank": 4,
+        "literal_token_count": 9,
+        "wildcard_count": 1,
+        "token_count": 10,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:009": {
+      "source_pattern": "I DO NOT KNOW THE ANSWER TO THAT QUESTION *",
+      "normalized_pattern": "I DO NOT KNOW THE ANSWER TO THAT QUESTION *",
+      "expert_ref": "micronaut:WEB-RESEARCH-µ",
+      "phase_ref": "phase:Yax",
+      "next_phase_ref": "phase:Ch'en",
+      "projection_prefix": "search: event=advisor_web_research_trigger cue=miss_low_confidence",
+      "precedence": {
+        "rank": 5,
+        "literal_token_count": 9,
+        "wildcard_count": 1,
+        "token_count": 10,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:011": {
+      "source_pattern": "LET ME SEARCH THE WEB AND ASK MY ADVISOR *",
+      "normalized_pattern": "LET ME SEARCH THE WEB AND ASK MY ADVISOR *",
+      "expert_ref": "micronaut:WEB-RESEARCH-µ",
+      "phase_ref": "phase:Yax",
+      "next_phase_ref": "phase:Ch'en",
+      "projection_prefix": "search: event=advisor_web_research_trigger cue=miss_low_confidence",
+      "precedence": {
+        "rank": 6,
+        "literal_token_count": 9,
+        "wildcard_count": 1,
+        "token_count": 10,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:015": {
+      "source_pattern": "I'M NOT SURE WHAT TOOL TO USE",
+      "normalized_pattern": "I M NOT SURE WHAT TOOL TO USE",
+      "expert_ref": "micronaut:CHAT-u",
+      "phase_ref": "phase:Wo",
+      "next_phase_ref": "phase:Sek",
+      "projection_prefix": "chat-u op=tool_selection_help event=lfm_tool_help_trigger cue=tool_uncertain",
+      "precedence": {
+        "rank": 7,
+        "literal_token_count": 8,
+        "wildcard_count": 0,
+        "token_count": 8,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:017": {
+      "source_pattern": "I AM NOT SURE WHAT TOOL TO USE",
+      "normalized_pattern": "I AM NOT SURE WHAT TOOL TO USE",
+      "expert_ref": "micronaut:CHAT-u",
+      "phase_ref": "phase:Wo",
+      "next_phase_ref": "phase:Sek",
+      "projection_prefix": "chat-u op=tool_selection_help event=lfm_tool_help_trigger cue=tool_uncertain",
+      "precedence": {
+        "rank": 8,
+        "literal_token_count": 8,
+        "wildcard_count": 0,
+        "token_count": 8,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:016": {
+      "source_pattern": "I'M NOT SURE WHAT TOOL TO USE *",
+      "normalized_pattern": "I M NOT SURE WHAT TOOL TO USE *",
+      "expert_ref": "micronaut:CHAT-u",
+      "phase_ref": "phase:Wo",
+      "next_phase_ref": "phase:Sek",
+      "projection_prefix": "chat-u op=tool_selection_help event=lfm_tool_help_trigger cue=tool_uncertain",
+      "precedence": {
+        "rank": 9,
+        "literal_token_count": 8,
+        "wildcard_count": 1,
+        "token_count": 9,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:018": {
+      "source_pattern": "I AM NOT SURE WHAT TOOL TO USE *",
+      "normalized_pattern": "I AM NOT SURE WHAT TOOL TO USE *",
+      "expert_ref": "micronaut:CHAT-u",
+      "phase_ref": "phase:Wo",
+      "next_phase_ref": "phase:Sek",
+      "projection_prefix": "chat-u op=tool_selection_help event=lfm_tool_help_trigger cue=tool_uncertain",
+      "precedence": {
+        "rank": 10,
+        "literal_token_count": 8,
+        "wildcard_count": 1,
+        "token_count": 9,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:019": {
+      "source_pattern": "LET ME ASK FOR HELP FROM LFM",
+      "normalized_pattern": "LET ME ASK FOR HELP FROM LFM",
+      "expert_ref": "micronaut:CHAT-u",
+      "phase_ref": "phase:Wo",
+      "next_phase_ref": "phase:Sek",
+      "projection_prefix": "chat-u op=tool_selection_help event=lfm_tool_help_trigger cue=tool_uncertain",
+      "precedence": {
+        "rank": 11,
+        "literal_token_count": 7,
+        "wildcard_count": 0,
+        "token_count": 7,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:020": {
+      "source_pattern": "LET ME ASK FOR HELP FROM LFM *",
+      "normalized_pattern": "LET ME ASK FOR HELP FROM LFM *",
+      "expert_ref": "micronaut:CHAT-u",
+      "phase_ref": "phase:Wo",
+      "next_phase_ref": "phase:Sek",
+      "projection_prefix": "chat-u op=tool_selection_help event=lfm_tool_help_trigger cue=tool_uncertain",
+      "precedence": {
+        "rank": 12,
+        "literal_token_count": 7,
+        "wildcard_count": 1,
+        "token_count": 8,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:004": {
+      "source_pattern": "ADVISE RESEARCH FACT MISS",
+      "normalized_pattern": "ADVISE RESEARCH FACT MISS",
+      "expert_ref": "micronaut:WEB-RESEARCH-µ",
+      "phase_ref": "phase:Yax",
+      "next_phase_ref": "phase:Ch'en",
+      "projection_prefix": "search: event=advisor_web_research_trigger cue=miss_low_confidence",
+      "precedence": {
+        "rank": 13,
+        "literal_token_count": 4,
+        "wildcard_count": 0,
+        "token_count": 4,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:013": {
+      "source_pattern": "ADVISE TOOL HELP LFM",
+      "normalized_pattern": "ADVISE TOOL HELP LFM",
+      "expert_ref": "micronaut:CHAT-u",
+      "phase_ref": "phase:Wo",
+      "next_phase_ref": "phase:Sek",
+      "projection_prefix": "chat-u op=tool_selection_help event=lfm_tool_help_trigger cue=tool_uncertain",
+      "precedence": {
+        "rank": 14,
+        "literal_token_count": 4,
+        "wildcard_count": 0,
+        "token_count": 4,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:005": {
+      "source_pattern": "ADVISE RESEARCH FACT MISS *",
+      "normalized_pattern": "ADVISE RESEARCH FACT MISS *",
+      "expert_ref": "micronaut:WEB-RESEARCH-µ",
+      "phase_ref": "phase:Yax",
+      "next_phase_ref": "phase:Ch'en",
+      "projection_prefix": "search: event=advisor_web_research_trigger cue=miss_low_confidence",
+      "precedence": {
+        "rank": 15,
+        "literal_token_count": 4,
+        "wildcard_count": 1,
+        "token_count": 5,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:014": {
+      "source_pattern": "ADVISE TOOL HELP LFM *",
+      "normalized_pattern": "ADVISE TOOL HELP LFM *",
+      "expert_ref": "micronaut:CHAT-u",
+      "phase_ref": "phase:Wo",
+      "next_phase_ref": "phase:Sek",
+      "projection_prefix": "chat-u op=tool_selection_help event=lfm_tool_help_trigger cue=tool_uncertain",
+      "precedence": {
+        "rank": 16,
+        "literal_token_count": 4,
+        "wildcard_count": 1,
+        "token_count": 5,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:023": {
+      "source_pattern": "I NEED HELP WITH *",
+      "normalized_pattern": "I NEED HELP WITH *",
+      "expert_ref": "micronaut:Coordinator",
+      "phase_ref": "phase:Wo",
+      "next_phase_ref": "phase:Ch'en",
+      "projection_prefix": "plan:",
+      "precedence": {
+        "rank": 17,
+        "literal_token_count": 4,
+        "wildcard_count": 1,
+        "token_count": 5,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:025": {
+      "source_pattern": "WHO CAN HELP WITH *",
+      "normalized_pattern": "WHO CAN HELP WITH *",
+      "expert_ref": "micronaut:Coordinator",
+      "phase_ref": "phase:Wo",
+      "next_phase_ref": "phase:Ch'en",
+      "projection_prefix": "plan:",
+      "precedence": {
+        "rank": 18,
+        "literal_token_count": 4,
+        "wildcard_count": 1,
+        "token_count": 5,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:024": {
+      "source_pattern": "HELP ME WITH *",
+      "normalized_pattern": "HELP ME WITH *",
+      "expert_ref": "micronaut:Coordinator",
+      "phase_ref": "phase:Wo",
+      "next_phase_ref": "phase:Ch'en",
+      "projection_prefix": "plan:",
+      "precedence": {
+        "rank": 19,
+        "literal_token_count": 3,
+        "wildcard_count": 1,
+        "token_count": 4,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:001": {
+      "source_pattern": "ADVISE MATH *",
+      "normalized_pattern": "ADVISE MATH *",
+      "expert_ref": "micronaut:MATH-µ",
+      "phase_ref": "phase:Yax",
+      "next_phase_ref": "phase:Sek",
+      "projection_prefix": "math:",
+      "precedence": {
+        "rank": 20,
+        "literal_token_count": 2,
+        "wildcard_count": 1,
+        "token_count": 3,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:002": {
+      "source_pattern": "ADVISE CODE *",
+      "normalized_pattern": "ADVISE CODE *",
+      "expert_ref": "micronaut:coder",
+      "phase_ref": "phase:Yax",
+      "next_phase_ref": "phase:Sek",
+      "projection_prefix": "code:",
+      "precedence": {
+        "rank": 21,
+        "literal_token_count": 2,
+        "wildcard_count": 1,
+        "token_count": 3,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:003": {
+      "source_pattern": "ADVISE RESEARCH *",
+      "normalized_pattern": "ADVISE RESEARCH *",
+      "expert_ref": "micronaut:WEB-RESEARCH-µ",
+      "phase_ref": "phase:Yax",
+      "next_phase_ref": "phase:Ch'en",
+      "projection_prefix": "search:",
+      "precedence": {
+        "rank": 22,
+        "literal_token_count": 2,
+        "wildcard_count": 1,
+        "token_count": 3,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:012": {
+      "source_pattern": "ADVISE EXPLAIN *",
+      "normalized_pattern": "ADVISE EXPLAIN *",
+      "expert_ref": "micronaut:reasoner",
+      "phase_ref": "phase:Yax",
+      "next_phase_ref": "phase:Sek",
+      "projection_prefix": "explain:",
+      "precedence": {
+        "rank": 23,
+        "literal_token_count": 2,
+        "wildcard_count": 1,
+        "token_count": 3,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:021": {
+      "source_pattern": "ADVISE PLAN *",
+      "normalized_pattern": "ADVISE PLAN *",
+      "expert_ref": "micronaut:Coordinator",
+      "phase_ref": "phase:Wo",
+      "next_phase_ref": "phase:Ch'en",
+      "projection_prefix": "plan:",
+      "precedence": {
+        "rank": 24,
+        "literal_token_count": 2,
+        "wildcard_count": 1,
+        "token_count": 3,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    },
+    "advisor:route:022": {
+      "source_pattern": "ADVISE *",
+      "normalized_pattern": "ADVISE *",
+      "expert_ref": "micronaut:Coordinator",
+      "phase_ref": "phase:Wo",
+      "next_phase_ref": "phase:Ch'en",
+      "projection_prefix": "plan:",
+      "precedence": {
+        "rank": 25,
+        "literal_token_count": 1,
+        "wildcard_count": 1,
+        "token_count": 2,
+        "tie_break": "bootstrap_source_order"
+      },
+      "route_authority_claim": "proposal_only",
+      "registration_status": "proposal_only_not_route_contract_registration",
+      "dispatch_authority": "host_controlled"
+    }
+  },
+  "xcfe": {
+    "admission_requirement": "required_before_dispatch",
+    "dispatch_claim": "host_controlled",
+    "route_authority_claim": "proposal_only",
+    "registration_check_requirement": "required",
+    "eligibility_check_requirement": "required",
+    "phase_authorization_requirement": "required"
+  },
+  "content_digest": "sha256:54dce8d497074f084cd185b324d5df2ac88d73bfa1d995981ecd01b781608bff"
+}

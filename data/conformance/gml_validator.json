@@ -1,0 +1,973 @@
+[
+  {
+    "id": "lexer_comment_hides_edge_like_text",
+    "gml": "graph [ node [ id 1 label \"a\" ] (* edge [ source 99 target 100 ] *) ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "lexer_comment_with_star_arithmetic",
+    "gml": "(* id = b*6 + theta  000->REASON-u  vertex id = b*6 + theta_idx *) graph [ node [ id 1 label \"ok\" ] (* 120 edges = 8*6 + 6*12 *) edge [ source 1 target 1 verb \"@related_to\" ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "lexer_comment_nested_blocks",
+    "gml": "graph [ (* outer (* inner (* deepest *) *) *) node [ id 1 label \"n\" ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "minimal_valid",
+    "gml": "graph [ node [ id 0 label \"A\" ] node [ id 1 label \"B\" ] edge [ source 0 target 1 verb \"@related_to\" ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "wcr_fields_valid",
+    "gml": "graph [ node [ id 0 confidence 0.0 static_weight 1.0 health 0.5 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "geometry_complete",
+    "gml": "graph [ node [ id 0 x 0.5 y 0.25 z 0.75 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "no_verb_no_relation",
+    "gml": "graph [ node [ id 0 ] node [ id 1 ] edge [ source 0 target 1 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "all_canonical_verbs",
+    "gml": "graph [ node [ id 0 ] node [ id 1 ] node [ id 2 ] edge [ source 0 target 1 verb \"@is_a\" ] edge [ source 1 target 2 verb \"@causes\" ] edge [ source 0 target 2 verb \"@requires\" ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "directed_graph",
+    "gml": "graph [ directed 1 node [ id 0 ] node [ id 1 ] edge [ source 0 target 1 verb \"@delegates_to\" ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "both_verb_and_relation",
+    "gml": "graph [ node [ id 0 ] node [ id 1 ] edge [ source 0 target 1 verb \"@related_to\" relation \"@is_a\" ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": [
+      "BOTH_VERB_AND_RELATION_PRESENT"
+    ]
+  },
+  {
+    "id": "relation_only",
+    "gml": "graph [ node [ id 0 ] node [ id 1 ] edge [ source 0 target 1 relation \"@related_to\" ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": [
+      "RELATION_ALIAS_USED"
+    ]
+  },
+  {
+    "id": "non_canonical_verb",
+    "gml": "graph [ node [ id 0 ] node [ id 1 ] edge [ source 0 target 1 verb \"associates_with\" ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": [
+      "INFER_CANDIDATE_USED"
+    ]
+  },
+  {
+    "id": "near_miss_verb",
+    "gml": "graph [ node [ id 0 ] node [ id 1 ] edge [ source 0 target 1 verb \"@relateed_to\" ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": [
+      "INFER_CANDIDATE_USED",
+      "NEAR_MISS_VERB"
+    ]
+  },
+  {
+    "id": "partial_coordinate_vector",
+    "gml": "graph [ node [ id 0 x 1.0 y 2.0 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": [
+      "PARTIAL_COORDINATE_VECTOR"
+    ]
+  },
+  {
+    "id": "missing_node_id",
+    "gml": "graph [ node [ label \"A\" ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "MISSING_NODE_ID"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "duplicate_node_id",
+    "gml": "graph [ node [ id 0 ] node [ id 0 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "DUPLICATE_NODE_ID"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "missing_source",
+    "gml": "graph [ node [ id 0 ] edge [ target 0 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "MISSING_EDGE_ENDPOINT"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "missing_target",
+    "gml": "graph [ node [ id 0 ] edge [ source 0 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "MISSING_EDGE_ENDPOINT"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "invalid_source_id",
+    "gml": "graph [ node [ id 0 ] edge [ source 99 target 0 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "INVALID_EDGE_ENDPOINT"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "invalid_target_id",
+    "gml": "graph [ node [ id 0 ] edge [ source 0 target 99 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "INVALID_EDGE_ENDPOINT"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "confidence_over_1",
+    "gml": "graph [ node [ id 0 confidence 1.5 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "CONFIDENCE_OUT_OF_RANGE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "confidence_negative",
+    "gml": "graph [ node [ id 0 confidence -0.1 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "CONFIDENCE_OUT_OF_RANGE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "static_weight_over_1",
+    "gml": "graph [ node [ id 0 static_weight 2.0 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "STATIC_WEIGHT_OUT_OF_RANGE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "health_negative",
+    "gml": "graph [ node [ id 0 health -1.0 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "HEALTH_OUT_OF_RANGE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "edge_weight_over_1",
+    "gml": "graph [ node [ id 0 ] node [ id 1 ] edge [ source 0 target 1 weight 3.0 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "EDGE_WEIGHT_OUT_OF_RANGE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "stem_digit",
+    "gml": "graph [ node [ id 0 ] ]",
+    "stem": "123_topology",
+    "grade": "PARSED",
+    "errors": [
+      "STEM_STARTS_WITH_DIGIT"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "decision_dual_valid",
+    "gml": "graph [ directed 1 node [ id 10 label \"hot\" prior_mass 0.65 risk_bound 1.0 mutation \"modify\" base_version 1 ] node [ id 20 label \"cold\" prior_mass 0.35 risk_bound 1.0 mutation \"modify\" base_version 1 ] edge [ id 101 source 10 target 20 verb \"@contradicts\" weight 1.0 dual_twin 102 loss_cost 0.95 mutation \"modify\" ] edge [ id 102 source 20 target 10 verb \"@contradicts\" weight 1.0 dual_twin 101 loss_cost 0.95 mutation \"modify\" ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "differential_comparison_valid",
+    "gml": "graph [ directed 1 node [ id 1 label \"baseline\" mutation \"unchanged\" base_version 1 ] node [ id 2 label \"modified\" mutation \"modify\" base_version 1 ] node [ id 3 label \"inserted\" mutation \"insert\" base_version 2 ] edge [ id 201 source 1 target 2 verb \"@delegates_to\" weight 0.85 mutation \"modify\" ] edge [ id 202 source 3 target 2 verb \"@requires\" weight 1.0 mutation \"insert\" ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "prior_mass_out_of_range",
+    "gml": "graph [ node [ id 0 prior_mass 1.2 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "PRIOR_MASS_OUT_OF_RANGE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "risk_bound_out_of_range",
+    "gml": "graph [ node [ id 0 risk_bound -0.1 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "RISK_BOUND_OUT_OF_RANGE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "loss_cost_out_of_range",
+    "gml": "graph [ node [ id 0 ] node [ id 1 ] edge [ source 0 target 1 loss_cost 1.5 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "LOSS_COST_OUT_OF_RANGE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "inadmissible_vector_rule",
+    "gml": "graph [ node [ id 0 risk_bound 0.1 ] node [ id 1 risk_bound 0.2 ] edge [ source 0 target 1 verb \"@related_to\" loss_cost 0.9 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "INADMISSIBLE_VECTOR_RULE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "invalid_mutation_op",
+    "gml": "graph [ node [ id 0 mutation \"warp\" ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "INVALID_MUTATION_OP"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "base_version_negative",
+    "gml": "graph [ node [ id 0 base_version -1 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "BASE_VERSION_NEGATIVE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "dual_twin_unresolved",
+    "gml": "graph [ node [ id 0 ] node [ id 1 ] edge [ id 1 source 0 target 1 dual_twin 99 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "DUAL_TWIN_UNRESOLVED"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "dual_twin_not_reciprocal",
+    "gml": "graph [ node [ id 0 ] node [ id 1 ] edge [ id 1 source 0 target 1 dual_twin 2 ] edge [ id 2 source 1 target 0 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": [
+      "DUAL_TWIN_NOT_RECIPROCAL"
+    ]
+  },
+  {
+    "id": "quantum_graph_valid",
+    "gml": "graph [ directed 0 node [ id 1 label \"Statement_A\" boundary_type \"kirchhoff\" vertex_pot 0.0 ] node [ id 2 label \"Statement_B\" boundary_type \"kirchhoff\" vertex_pot 0.0 ] edge [ source 1 target 2 verb \"@contradicts\" weight 1.0 length 4.5 potential 15.0 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "plane_wave_valid",
+    "gml": "graph [ directed 1 node [ id 1 label \"Query_Origin\" phase_shift 0.0 ] node [ id 2 label \"Context_Filter\" phase_shift 0.7853 ] edge [ source 1 target 2 verb \"@requires\" weight 1.0 length 3.0 refractive 1.0 wave_number 2.1 frequency 0.75 amplitude_re 1.0 amplitude_im 0.0 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "flow_field_valid",
+    "gml": "graph [ directed 1 node [ id 100 label \"Root_Context_Invariance\" divergence -2.45 singularity \"sink\" ] node [ id 101 label \"Peripheral_Evidence_A\" divergence 0.0 singularity \"ordinary\" ] edge [ source 101 target 100 verb \"@requires\" weight 1.0 vx 0.75 vy -0.50 vz -0.10 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "structural_boundary_valid",
+    "gml": "graph [ directed 1 node [ id 1 label \"SentenceEnd\" text_boundary \"sentence\" boundary_token \"◄/s►\" divergence -1.0 singularity \"sink\" ] node [ id 2 label \"ParagraphStart\" text_boundary \"paragraph\" boundary_token \"◄par►\" divergence 1.0 singularity \"source\" ] edge [ source 1 target 2 verb \"@requires\" weight 1.0 length 1.0 refractive 1.0 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "invalid_boundary_type",
+    "gml": "graph [ node [ id 0 boundary_type \"absorbing\" ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "INVALID_BOUNDARY_TYPE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "edge_length_nonpositive",
+    "gml": "graph [ node [ id 0 ] node [ id 1 ] edge [ source 0 target 1 length 0.0 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "EDGE_LENGTH_NONPOSITIVE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "refractive_nonpositive",
+    "gml": "graph [ node [ id 0 ] node [ id 1 ] edge [ source 0 target 1 refractive -1.0 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "REFRACTIVE_NONPOSITIVE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "invalid_singularity_type",
+    "gml": "graph [ node [ id 0 singularity \"vortex\" ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "INVALID_SINGULARITY_TYPE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "invalid_text_boundary",
+    "gml": "graph [ node [ id 0 text_boundary \"chapter\" ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "INVALID_TEXT_BOUNDARY"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "partial_velocity_vector",
+    "gml": "graph [ node [ id 0 ] node [ id 1 ] edge [ source 0 target 1 vx 1.0 vy 0.0 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": [
+      "PARTIAL_VELOCITY_VECTOR"
+    ]
+  },
+  {
+    "id": "frequency_nonpositive",
+    "gml": "graph [ node [ id 0 ] node [ id 1 ] edge [ source 0 target 1 frequency 0.0 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "FREQUENCY_NONPOSITIVE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "differentiable_curve_valid",
+    "gml": "graph [ directed 1 node [ id 1 label \"Token_A\" curve_id \"gamma_sentence_1\" parameter_t 0.0 arc_length 0.0 curvature 0.0 scalar_potential 0.20 ] node [ id 2 label \"Token_B\" curve_id \"gamma_sentence_1\" parameter_t 1.0 arc_length 1.4142 curvature 0.1 scalar_potential 0.95 ] edge [ source 1 target 2 verb \"@requires\" weight 1.0 curve_id \"gamma_sentence_1\" t0 0.0 t1 1.0 field_kind \"trajectory\" vx 1.0 vy 1.0 vz 0.0 potential_delta 0.75 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "euclidean_gradient_valid",
+    "gml": "graph [ directed 1 node [ id 1 label \"Base_Premise\" x -1.0 y -1.0 z 0.0 scalar_potential 0.20 ] node [ id 2 label \"Derived_Inference\" x 1.0 y 1.0 z 0.0 scalar_potential 0.95 ] edge [ source 1 target 2 label \"steepest_ascent_line\" verb \"@requires\" weight 1.0 field_kind \"euclidean_gradient\" vx 2.0 vy 2.0 vz 0.0 curl_x 0.0 curl_y 0.0 curl_z 0.0 loss_cost 0.0 potential_delta 0.75 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "curvature_negative",
+    "gml": "graph [ node [ id 0 curvature -0.1 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "CURVATURE_NEGATIVE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "curve_interval_invalid",
+    "gml": "graph [ node [ id 0 ] node [ id 1 ] edge [ source 0 target 1 t0 1.0 t1 1.0 field_kind \"trajectory\" ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "CURVE_INTERVAL_INVALID"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "euclidean_curl_nonzero",
+    "gml": "graph [ node [ id 0 ] node [ id 1 ] edge [ source 0 target 1 field_kind \"euclidean_gradient\" curl_x 0.0 curl_y 0.2 curl_z 0.0 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "EUCLIDEAN_CURL_NONZERO"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "invalid_field_kind",
+    "gml": "graph [ node [ id 0 ] node [ id 1 ] edge [ source 0 target 1 field_kind \"spiral\" ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "INVALID_FIELD_KIND"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "training_gradient_valid",
+    "gml": "graph [ directed 1 node [ id 1 label \"metric_provider_phi\" provider_id \"METRIC-µ\" parameter_id \"phi.metric.edge_cost\" parameter_generation 3 training_step 42 loss_value 0.125 grad_norm 0.031 learning_rate 0.001 gradient_clip 1.0 ] node [ id 2 label \"vector_provider_phi\" provider_id \"VECTOR-µ\" parameter_id \"phi.vector.chart\" parameter_generation 3 training_step 42 loss_value 0.100 grad_norm 0.025 learning_rate 0.001 gradient_clip 1.0 ] edge [ source 1 target 2 verb \"@related_to\" weight 1.0 provider_id \"METRIC-µ\" parameter_id \"phi.metric.edge_cost\" training_step 42 loss_value 0.125 grad_norm 0.031 learning_rate 0.001 gradient_clip 1.0 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "learning_rate_nonpositive",
+    "gml": "graph [ node [ id 0 learning_rate 0.0 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "LEARNING_RATE_NONPOSITIVE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "gradient_norm_negative",
+    "gml": "graph [ node [ id 0 grad_norm -0.1 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "GRADIENT_NORM_NEGATIVE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "loss_value_negative",
+    "gml": "graph [ node [ id 0 loss_value -1.0 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "LOSS_VALUE_NEGATIVE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "training_step_negative",
+    "gml": "graph [ node [ id 0 training_step -1 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "TRAINING_STEP_NEGATIVE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "gradient_clip_nonpositive",
+    "gml": "graph [ node [ id 0 gradient_clip 0.0 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "GRADIENT_CLIP_NONPOSITIVE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "entropy_gradient_valid",
+    "gml": "graph [ directed 1 node [ id 10 label \"Verified anchor\" x -1.0 y 0.5 z 0.0 local_entropy 0.15 entropy_spike 0.0 entropy_bound 4.0 diffusion_beta_inv 0.25 ] node [ id 20 label \"Branching pathway\" x 1.5 y -0.5 z 0.5 local_entropy 3.82 entropy_spike 3.67 entropy_bound 4.0 diffusion_beta_inv 0.25 ] edge [ source 10 target 20 label \"divergent_trajectory_line\" verb \"@delegates_to\" weight 0.75 field_kind \"entropy_gradient\" eh_x 2.50 eh_y -1.00 eh_z 0.50 entropy_delta 3.67 diffusion_beta_inv 0.25 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "free_energy_flow_valid",
+    "gml": "graph [ directed 1 node [ id 1 local_entropy 0.20 entropy_bound 5.0 scalar_potential 0.80 ] node [ id 2 local_entropy 0.50 entropy_bound 5.0 scalar_potential 0.95 ] edge [ source 1 target 2 verb \"@requires\" field_kind \"free_energy\" vx 0.10 vy 0.00 vz 0.00 eh_x 0.20 eh_y 0.10 eh_z 0.00 diffusion_beta_inv 0.50 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "local_entropy_negative",
+    "gml": "graph [ node [ id 0 local_entropy -0.1 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "LOCAL_ENTROPY_NEGATIVE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "entropy_bound_exceeded",
+    "gml": "graph [ node [ id 0 local_entropy 5.0 entropy_bound 4.0 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "ENTROPY_BOUND_EXCEEDED"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "partial_entropy_gradient",
+    "gml": "graph [ node [ id 0 ] node [ id 1 ] edge [ source 0 target 1 eh_x 1.0 eh_y 0.0 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": [
+      "PARTIAL_ENTROPY_GRADIENT"
+    ]
+  },
+  {
+    "id": "diffusion_beta_inv_negative",
+    "gml": "graph [ node [ id 0 diffusion_beta_inv -0.1 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "DIFFUSION_BETA_INV_NEGATIVE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "tensor_field_valid",
+    "gml": "graph [ directed 1 node [ id 1 label \"Tensor_Source\" x 0.0 y 0.0 z 0.0 tensor_rank_p 1 tensor_rank_q 1 is_smooth_section 1 jacobian_determinant 1.0834 riemann_curvature_scalar -0.412 ] node [ id 2 label \"Tensor_Target\" x 1.0 y 0.0 z 0.0 tensor_rank_p 1 tensor_rank_q 1 is_smooth_section 1 ] edge [ source 1 target 2 verb \"@requires\" field_kind \"tensor_field\" weight 1.0 g_00 -0.8524 g_01 0.0125 g_10 0.0125 g_11 1.1486 jacobian_w 1.0834 vx 0.1 vy 0.0 vz 0.0 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "tensor_rank_incomplete",
+    "gml": "graph [ node [ id 1 tensor_rank_p 1 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "TENSOR_RANK_INCOMPLETE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "metric_tensor_degenerate",
+    "gml": "graph [ node [ id 1 ] node [ id 2 ] edge [ source 1 target 2 g_00 1.0 g_01 0.0 g_10 0.0 g_11 0.0 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "METRIC_TENSOR_DEGENERATE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "metric_tensor_asymmetric",
+    "gml": "graph [ node [ id 1 ] node [ id 2 ] edge [ source 1 target 2 g_00 1.0 g_01 0.1 g_10 0.2 g_11 1.0 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "METRIC_TENSOR_ASYMMETRIC"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "jacobian_weight_nonpositive",
+    "gml": "graph [ node [ id 1 ] node [ id 2 ] edge [ source 1 target 2 jacobian_w 0.0 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "JACOBIAN_WEIGHT_NONPOSITIVE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "mesh_radii_valid",
+    "gml": "graph [ node [ id 0 circumradius_R 2.5 inradius_r 1.0 local_entropy 0.2 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "mesh_radii_negative",
+    "gml": "graph [ node [ id 0 circumradius_R -1.0 inradius_r -0.1 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "CIRCUMRADIUS_NEGATIVE",
+      "INRADIUS_NEGATIVE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "euler_triangle_inequality_breach",
+    "gml": "graph [ node [ id 0 circumradius_R 1.0 inradius_r 0.75 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "EULER_TRIANGLE_INEQUALITY_BREACH"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "cdata_cso_valid",
+    "gml": "graph [ node [ id 0 label \"kernel\" kernel_source \"<![CDATA[StructuredBuffer<float> A : register(t0);\nRWStructuredBuffer<float> C : register(u0);\n[numthreads(64,1,1)] void main(uint3 id : SV_DispatchThreadID) { C[id.x] = A[id.x]; }\n]]>\" cso_id \"cso://4556b30db0bfac6c1d7bc8f09f3edb091b5e5c17e78d82d5b0499ff7681db2c7\" ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "cdata_cso_missing_identity",
+    "gml": "graph [ node [ id 0 label \"kernel\" kernel_source \"<![CDATA[StructuredBuffer<float> A : register(t0);\nRWStructuredBuffer<float> C : register(u0);\n[numthreads(64,1,1)] void main(uint3 id : SV_DispatchThreadID) { C[id.x] = A[id.x]; }\n]]>\" ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "CSO_INTEGRITY_MISMATCH"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "cdata_cso_mismatch",
+    "gml": "graph [ node [ id 0 label \"kernel\" kernel_source \"<![CDATA[StructuredBuffer<float> A : register(t0);\nRWStructuredBuffer<float> C : register(u0);\n[numthreads(64,1,1)] void main(uint3 id : SV_DispatchThreadID) { C[id.x] = A[id.x]; }\n]]>\" cso_id \"cso://bad\" ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "CSO_INTEGRITY_MISMATCH"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "profile_projection_valid",
+    "gml": "graph [ node [ id 0 brain_profile [ template \"analyst\" ] personality [ archetype \"analyst\" ] capability_grams [ cognitive 0.8 operational 0.9 ] progression [ level 5 ] semantic_authority 0 topology_authority 0 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "profile_authority_forbidden",
+    "gml": "graph [ node [ id 0 personality [ archetype \"bold\" ] semantic_authority 1 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "PROFILE_AUTHORITY_FORBIDDEN"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "profile_metric_out_of_range",
+    "gml": "graph [ node [ id 0 capability_grams [ cognitive 1.2 ] ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "PROFILE_METRIC_OUT_OF_RANGE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "profile_progression_negative",
+    "gml": "graph [ node [ id 0 progression [ level -1 ] ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "PROFILE_METRIC_OUT_OF_RANGE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "deductive_system_valid",
+    "gml": "graph [ logical_consequence 1 deductive_proof 1 node [ id 0 label \"sigma_entails_phi\" epistemic_state \"SUPPORTED\" ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "deductive_proof_required",
+    "gml": "graph [ logical_consequence 1 node [ id 0 label \"phi_without_proof\" ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "DEDUCTIVE_PROOF_REQUIRED"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "axiom_extension_contradicts_law",
+    "gml": "graph [ axiom_extension \"new_sigma_fact\" contradicts_law 1 node [ id 0 label \"law_breaking_extension\" ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "AXIOM_EXTENSION_CONTRADICTS_LAW"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "miss_not_contradicted",
+    "gml": "graph [ node [ id 0 label \"unresolved_observation\" epistemic_state \"MISS\" truth_verdict \"CONTRADICTED\" ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "MISS_COLLAPSED_TO_CONTRADICTION"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "tensor_connection_valid",
+    "gml": "graph [ node [ id 0 christoffel [ gamma_1_0_1 0.5 gamma_1_1_0 0.5 ] covariant_derivative [ input_rank_p 1 input_rank_q 1 output_rank_p 1 output_rank_q 2 residual 0.0 ] ricci_identity_residual 0.0 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "christoffel_not_numeric",
+    "gml": "graph [ node [ id 0 christoffel [ gamma_1_01 \"warp\" ] ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "CHRISTOFFEL_NOT_NUMERIC"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "christoffel_torsion_nonzero",
+    "gml": "graph [ node [ id 0 christoffel [ gamma_1_0_1 0.5 gamma_1_1_0 0.7 ] ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "CHRISTOFFEL_TORSION_NONZERO"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "covariant_rank_drift",
+    "gml": "graph [ node [ id 0 covariant_derivative [ input_rank_p 1 input_rank_q 1 output_rank_p 2 output_rank_q 2 ] ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "COVARIANT_RANK_DRIFT"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "ricci_identity_violation",
+    "gml": "graph [ node [ id 0 ricci_identity_residual 0.5 ricci_tolerance 0.01 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "RICCI_IDENTITY_VIOLATION"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "hyperbolic_event_valid",
+    "gml": "graph [ node [ id 0 label \"Event_A\" field_kind \"hyperbolic_event\" space_signature \"Minkowski_Minus_Plus_Plus_Plus\" event_role \"candidate_continuation\" rapidity_rho 0.73 minkowski_t 1.2 minkowski_x 0.5 minkowski_y 0.0 minkowski_z 0.0 minkowski_interval -1.19 interval_class \"timelike_candidate\" direction_x 0.82 direction_y 0.31 direction_z -0.12 epistemic_state \"UNKNOWN\" semantic_authority 0 hyperbolic_distance 0.73 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "hyperbolic_interval_mismatch",
+    "gml": "graph [ node [ id 0 field_kind \"hyperbolic_event\" space_signature \"Minkowski_Minus_Plus_Plus_Plus\" rapidity_rho 0.73 minkowski_t 1.2 minkowski_x 0.5 minkowski_y 0.0 minkowski_z 0.0 minkowski_interval -1.0 interval_class \"timelike_candidate\" direction_x 0.82 direction_y 0.31 direction_z -0.12 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "MINKOWSKI_INTERVAL_MISMATCH"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "hyperbolic_interval_class_mismatch",
+    "gml": "graph [ node [ id 0 field_kind \"hyperbolic_event\" rapidity_rho 0.73 minkowski_interval -1.19 interval_class \"spacelike_candidate\" direction_x 0.82 direction_y 0.31 direction_z -0.12 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "MINKOWSKI_INTERVAL_CLASS_MISMATCH"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "hyperbolic_rapidity_negative",
+    "gml": "graph [ node [ id 0 field_kind \"hyperbolic_event\" rapidity_rho -0.1 minkowski_interval -1.19 interval_class \"timelike_candidate\" direction_x 0.82 direction_y 0.31 direction_z -0.12 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "RAPIDITY_RHO_NEGATIVE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "hyperbolic_event_authority_forbidden",
+    "gml": "graph [ node [ id 0 field_kind \"hyperbolic_event\" rapidity_rho 0.1 minkowski_interval -1.0 interval_class \"timelike_candidate\" direction_x 1.0 direction_y 0.0 direction_z 0.0 semantic_authority 1 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "HYPERBOLIC_EVENT_AUTHORITY_FORBIDDEN"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "lorentz_disabled_identity_valid",
+    "gml": "graph [ node [ id 0 lorentz_boost [ enabled 0 row0 [ c0 1.0 c1 0.0 c2 0.0 c3 0.0 ] row1 [ c0 0.0 c1 1.0 c2 0.0 c3 0.0 ] row2 [ c0 0.0 c1 0.0 c2 1.0 c3 0.0 ] row3 [ c0 0.0 c1 0.0 c2 0.0 c3 1.0 ] ] ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "lorentz_enabled_rows_valid",
+    "gml": "graph [ node [ id 0 lorentz_boost [ enabled 1 alignment_mix 0.5 mass_scale 1.0 row0 [ c0 1.08107237 c1 0.41075233 c2 0.0 c3 0.0 ] row1 [ c0 0.41075233 c1 1.08107237 c2 0.0 c3 0.0 ] row2 [ c0 0.0 c1 0.0 c2 1.0 c3 0.0 ] row3 [ c0 0.0 c1 0.0 c2 0.0 c3 1.0 ] ] ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "lorentz_enabled_metric_not_preserved",
+    "gml": "graph [ node [ id 0 lorentz_boost [ enabled 1 alignment_mix 0.5 mass_scale 1.0 row0 [ c0 1.1 c1 0.1 c2 0.0 c3 0.0 ] row1 [ c0 0.1 c1 1.1 c2 0.0 c3 0.0 ] row2 [ c0 0.0 c1 0.0 c2 1.0 c3 0.0 ] row3 [ c0 0.0 c1 0.0 c2 0.0 c3 1.0 ] ] ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "LORENTZ_METRIC_NOT_PRESERVED"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "lorentz_enabled_missing_row",
+    "gml": "graph [ node [ id 0 lorentz_boost [ enabled 1 row0 [ c0 1.0 c1 0.0 c2 0.0 c3 0.0 ] ] ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "LORENTZ_ROW_INCOMPLETE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "lorentz_row_not_numeric",
+    "gml": "graph [ node [ id 0 lorentz_boost [ enabled 1 row0 [ c0 \"nan\" c1 0.0 c2 0.0 c3 0.0 ] ] ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "LORENTZ_ROW_NOT_NUMERIC",
+      "LORENTZ_ROW_INCOMPLETE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "lorentz_enabled_not_bool",
+    "gml": "graph [ node [ id 0 lorentz_boost [ enabled 2 ] ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "LORENTZ_ENABLED_NOT_BOOL"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "lorentz_alignment_out_of_range",
+    "gml": "graph [ node [ id 0 lorentz_boost [ enabled 1 alignment_mix 1.5 ] ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "LORENTZ_ALIGNMENT_OUT_OF_RANGE",
+      "LORENTZ_ROW_INCOMPLETE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "lorentz_mass_scale_negative",
+    "gml": "graph [ node [ id 0 lorentz_boost [ enabled 1 mass_scale -0.1 ] ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "LORENTZ_MASS_SCALE_NEGATIVE",
+      "LORENTZ_ROW_INCOMPLETE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "lorentz_not_identity_when_disabled",
+    "gml": "graph [ node [ id 0 lorentz_boost [ enabled 0 row0 [ c0 1.2 c1 0.0 c2 0.0 c3 0.0 ] ] ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "LORENTZ_NOT_IDENTITY_WHEN_DISABLED"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "algebraic_catamorphism_valid",
+    "gml": "graph [ signature_id \"F:demo\" algebra_id \"alpha:route\" phase_theta 1.047197551 matrix_rank_substrate 3 matrix_rank_transformed 3 signature_isomorphism_preserved 1 node [ id 0 label \"k\" ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "algebraic_signature_rank_drift",
+    "gml": "graph [ signature_id \"F:demo\" algebra_id \"alpha:bad\" phase_theta 1.047197551 matrix_rank_substrate 3 matrix_rank_transformed 2 signature_isomorphism_preserved 1 node [ id 0 label \"k\" ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "SIGNATURE_FUNCTOR_FRACTION"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "hyperbolic_dispatch_valid",
+    "gml": "graph [ node [ id 0 label \"Event_Dispatch\" field_kind \"hyperbolic_event\" space_signature \"Minkowski_Minus_Plus_Plus_Plus\" event_role \"candidate_continuation\" rapidity_rho 0.4 minkowski_t 1.2 minkowski_x 0.5 minkowski_y 0.0 minkowski_z 0.0 minkowski_interval -1.19 interval_class \"timelike_candidate\" direction_x 1.0 direction_y 0.0 direction_z 0.0 epistemic_state \"UNKNOWN\" semantic_authority 0 hyperbolic_distance 0.4 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "id": "hyperbolic_dispatch_missing_interval",
+    "gml": "graph [ node [ id 0 field_kind \"hyperbolic_event\" event_role \"candidate_continuation\" rapidity_rho 0.4 minkowski_t 1.2 minkowski_x 0.5 minkowski_y 0.0 minkowski_z 0.0 direction_x 1.0 direction_y 0.0 direction_z 0.0 epistemic_state \"UNKNOWN\" ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "HYPERBOLIC_EVENT_INCOMPLETE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "hyperbolic_dispatch_partial_coords",
+    "gml": "graph [ node [ id 0 field_kind \"hyperbolic_event\" event_role \"candidate_continuation\" rapidity_rho 0.4 minkowski_t 1.2 minkowski_x 0.5 direction_x 1.0 direction_y 0.0 direction_z 0.0 minkowski_interval -1.19 interval_class \"timelike_candidate\" epistemic_state \"UNKNOWN\" ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "HYPERBOLIC_EVENT_INCOMPLETE"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "hyperbolic_dispatch_zero_direction",
+    "gml": "graph [ node [ id 0 field_kind \"hyperbolic_event\" event_role \"candidate_continuation\" rapidity_rho 0.4 minkowski_t 1.2 minkowski_x 0.5 minkowski_y 0.0 minkowski_z 0.0 minkowski_interval -1.19 interval_class \"timelike_candidate\" direction_x 0.0 direction_y 0.0 direction_z 0.0 epistemic_state \"UNKNOWN\" ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "HYPERBOLIC_DIRECTION_ZERO"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "hyperbolic_dispatch_nonfinite_coordinate",
+    "gml": "graph [ node [ id 0 field_kind \"hyperbolic_event\" event_role \"candidate_continuation\" rapidity_rho 0.4 minkowski_t \"nan\" minkowski_x 0.5 minkowski_y 0.0 minkowski_z 0.0 minkowski_interval -1.19 interval_class \"timelike_candidate\" direction_x 1.0 direction_y 0.0 direction_z 0.0 epistemic_state \"UNKNOWN\" ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "MINKOWSKI_EVENT_VECTOR_NOT_NUMERIC"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "hyperbolic_dispatch_missing_epistemic_state",
+    "gml": "graph [ node [ id 0 field_kind \"hyperbolic_event\" event_role \"candidate_continuation\" rapidity_rho 0.4 minkowski_t 1.2 minkowski_x 0.5 minkowski_y 0.0 minkowski_z 0.0 minkowski_interval -1.19 interval_class \"timelike_candidate\" direction_x 1.0 direction_y 0.0 direction_z 0.0 ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "EPISTEMIC_STATE_MISSING"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "hyperbolic_dispatch_invalid_epistemic_state",
+    "gml": "graph [ node [ id 0 field_kind \"hyperbolic_event\" event_role \"candidate_continuation\" rapidity_rho 0.4 minkowski_t 1.2 minkowski_x 0.5 minkowski_y 0.0 minkowski_z 0.0 minkowski_interval -1.19 interval_class \"timelike_candidate\" direction_x 1.0 direction_y 0.0 direction_z 0.0 epistemic_state \"PROBABLY\" ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "EPISTEMIC_STATE_INVALID"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "hyperbolic_dispatch_interval_class_mismatch",
+    "gml": "graph [ node [ id 0 field_kind \"hyperbolic_event\" event_role \"candidate_continuation\" rapidity_rho 0.4 minkowski_t 1.2 minkowski_x 0.5 minkowski_y 0.0 minkowski_z 0.0 minkowski_interval -1.19 interval_class \"spacelike_candidate\" direction_x 1.0 direction_y 0.0 direction_z 0.0 epistemic_state \"UNKNOWN\" ] ]",
+    "grade": "PARSED",
+    "errors": [
+      "MINKOWSKI_INTERVAL_CLASS_MISMATCH"
+    ],
+    "warnings": []
+  },
+  {
+    "id": "hyperbolic_observation_partial_allowed",
+    "gml": "graph [ node [ id 0 field_kind \"hyperbolic_event\" minkowski_t 1.2 minkowski_x 0.5 direction_x 0.3 ] ]",
+    "grade": "VALID",
+    "errors": [],
+    "warnings": [
+      "PARTIAL_MINKOWSKI_EVENT_VECTOR",
+      "PARTIAL_HYPERBOLIC_DIRECTION"
+    ]
+  }
+]

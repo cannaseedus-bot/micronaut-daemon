@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0" xmlns:xcfe="urn:kuhul:xcfe:aiml:1.0">
+  <category>
+    <pattern>HOW IS * RELATED TO *</pattern>
+    <xcfe:fold phase="Yax" operator="RELATE" mode="expand">
+      <xcfe:capture index="1" name="source" type="entity" confidence-min="0.65" on-unresolved="defer"/>
+      <xcfe:capture index="2" name="target" type="entity" confidence-min="0.65" on-unresolved="defer"/>
+      <xcfe:bind name="source" resolver="WildcardEntityMu"/>
+      <xcfe:bind name="target" resolver="WildcardEntityMu"/>
+      <xcfe:guard test="bindings_resolved"/>
+      <xcfe:invoke micronaut="INFER-µ" input="source,target" output="candidate_edges"/>
+      <xcfe:emit kind="question" family="relationship" target="candidate_edges" phase="Yax"/>
+    </xcfe:fold>
+    <template>What semantic relationship connects <star index="1"/> and <star index="2"/>?</template>
+  </category>
+</aiml>

@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "cfpc-function.schema.json",
+  "title": "CfpcFunctionContract",
+  "description": "K'UHUL semantic function contract. @kind must be semantic.function.v1. Pattern Induction Guard: promote_generated_facts MUST be false under @policy — any other value is a schema violation. owner_micronaut (ownership) and @backend.capability (execution) are separate and may reference different Micronauts.",
+  "type": "object",
+  "required": ["@kind", "@id", "@owner", "@governs", "@capabilities", "@bindings", "@policy"],
+  "additionalProperties": false,
+  "properties": {
+    "@kind": {
+      "type": "string",
+      "const": "semantic.function.v1"
+    },
+    "@id": {
+      "type": "string",
+      "description": "Unique function identifier.",
+      "pattern": "^[A-Za-z0-9_-]+"
+    },
+    "@intent": {
+      "type": "string",
+      "enum": ["define", "explain", "verify", "resolve", "generate"],
+      "description": "Optional semantic intent; defaults to 'resolve' when absent."
+    },
+    "@owner": {
+      "type": "string",
+      "description": "Owner Micronaut identifier. Declares ownership; distinct from the execution backend."
+    },
+    "@governs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "description": "Semantic vocabulary terms this function governs. Used for FunctionRegistry indexing."
+    },
+    "@capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "description": "Capability labels this function can provide."
+    },
+    "@bindings": {
+      "type": "object",
+      "description": "Typed wildcard bindings. Keys are binding names; values are typed binding specs. Caller must satisfy required bindings in query captures at invoke time.",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["type", "required", "wildcard"],
+        "additionalProperties": false,
+        "properties": {
+          "type":     { "type": "string", "description": "json | code | text | schema | ..." },
+          "required": { "type": "boolean" },
+          "wildcard": { "type": "string",  "description": "Capture pattern, e.g. {artifact}" }
+        }
+      }
+    },
+    "@backend": {
+      "type": "object",
+      "description": "Execution backend declaration. Absent @backend means no explicit provider — dispatch returns Unresolved (no-exec) unless allow_dynamic_resolution=true.",
+      "required": ["type", "capability"],
+      "additionalProperties": false,
+      "properties": {
+        "type":       { "type": "string", "description": "micronaut | tool | class" },
+        "capability": { "type": "string", "description": "Capability label for dispatch_blend filtering." }
+      }
+    },
+    "@policy": {
+      "type": "object",
+      "required": ["max_depth", "cycle_detection", "allow_dynamic_resolution", "promote_generated_facts"],
+      "additionalProperties": false,
+      "properties": {
+        "max_depth": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Dispatch depth budget. 0 yields ExecutionFailed immediately."
+        },
+        "cycle_detection": { "type": "boolean" },
+        "allow_dynamic_resolution": {
+          "type": "boolean",
+          "description": "If false and @backend is absent, dispatch returns Unresolved without execution."
+        },
+        "promote_generated_facts": {
+          "const": false,
+          "description": "Pattern Induction Guard — MUST be false. Grammar-level invariant, not a runtime policy. No parser may accept true."
+        }
+      }
+    },
+    "@result": {
+      "type": "object",
+      "required": ["retain_provenance", "retain_gaps", "allow_pattern_candidates"],
+      "additionalProperties": false,
+      "properties": {
+        "retain_provenance":        { "type": "boolean" },
+        "retain_gaps":              { "type": "boolean" },
+        "allow_pattern_candidates": { "type": "boolean" }
+      }
+    }
+  }
+}

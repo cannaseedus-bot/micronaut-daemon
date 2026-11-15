@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "asx://schema/objective-lane-v1",
+  "title": "ASXG ObjectiveLane v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "@id", "@type", "@phase", "@objective_ref", "@micronaut_ref",
+    "@field_ref", "@metric_refs", "@constraint_refs",
+    "@evaluation_policy_ref", "@learning_policy_ref", "@requires_admission"
+  ],
+  "properties": {
+    "@id": { "type": "string", "pattern": "^lane\\.[a-z0-9_.-]+$" },
+    "@type": { "const": "ObjectiveLane" },
+    "@phase": { "const": "Sek" },
+    "@objective_ref": { "type": "string", "pattern": "^objective\\.[a-z0-9_.-]+$" },
+    "@micronaut_ref": { "type": "string", "pattern": "^micronaut\\.[a-z0-9_-]+$" },
+    "@field_ref": { "type": "string", "minLength": 1 },
+    "@metric_refs": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^metric:[a-z0-9_.-]+$" }
+    },
+    "@constraint_refs": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^constraint:[a-z0-9_.-]+$" }
+    },
+    "@evaluation_policy_ref": { "type": "string", "minLength": 1 },
+    "@learning_policy_ref": { "type": "string", "minLength": 1 },
+    "@requires_admission": { "const": true }
+  }
+}

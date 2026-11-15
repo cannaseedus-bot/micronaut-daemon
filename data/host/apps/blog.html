@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Personal Blog · KHANARY</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class' };</script>
+  <style>
+    :root { --accent: #6366f1; --bg: #0f172a; --surface: #1e1b4b; --text: #e2e8f0; }
+    body { background: var(--bg); color: var(--text); font-family: "Segoe UI", system-ui, sans-serif; }
+  </style>
+</head>
+<body class="dark">
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const { useState } = React;
+
+    const INITIAL = {
+      recent: ["Getting Started", "My Workflow", "Year in Review"],
+      tags: ["writing", "code", "life", "tutorials"],
+      posts: [
+        { id: "sp1", title: "Getting Started with KHANARY", slug: "getting-started", badge: "Featured", excerpt: "A walkthrough of the core concepts — manifests, ghost shells, and the AIML pattern layer." },
+        { id: "sp2", title: "My 2025 Dev Workflow", slug: "dev-workflow-2025", badge: "Popular", excerpt: "The tools and habits that changed how I work: local models, pattern grammars, and fast iteration." },
+        { id: "sp3", title: "Year in Review", slug: "year-review", badge: "Latest", excerpt: "Lessons from the past 12 months building the KHANARY host stack." }
+      ]
+    };
+
+    const BADGE = {
+      Featured: "bg-indigo-900/60 text-indigo-300 border-indigo-700",
+      Popular:  "bg-purple-900/60 text-purple-300 border-purple-700",
+      Latest:   "bg-teal-900/60  text-teal-300  border-teal-700",
+      Draft:    "bg-slate-800    text-slate-400  border-slate-600"
+    };
+
+    function Badge({ text }) {
+      return (
+        <span className={`text-[10px] px-2 py-0.5 rounded border font-semibold tracking-wide ${BADGE[text] || BADGE.Draft}`}>
+          {text}
+        </span>
+      );
+    }
+
+    function PostCard({ post, onRead }) {
+      return (
+        <article
+          onClick={() => onRead(post)}
+          className="bg-slate-800/50 border border-slate-700 rounded-xl p-4 cursor-pointer hover:border-indigo-500 transition-colors group"
+          data-asx-key={"⟁APP:BLOG/⟁WIDGET:POST_CARD"}
+        >
+          <div className="flex items-start justify-between gap-2 mb-2">
+            <h2 className="text-sm font-bold text-slate-100 leading-snug group-hover:text-indigo-200 transition-colors">
+              {post.title}
+            </h2>
+            <Badge text={post.badge || "Draft"} />
+          </div>
+          <p className="text-xs text-slate-400 leading-relaxed">{post.excerpt}</p>
+          <div className="mt-3 text-xs text-indigo-400 group-hover:text-indigo-300">Read →</div>
+        </article>
+      );
+    }
+
+    function ComposeModal({ onClose, onSave }) {
+      const [title, setTitle] = useState('');
+      const [body, setBody] = useState('');
+      const save = () => {
+        if (!title.trim()) return;
+        onSave({ id: Date.now().toString(), title, slug: title.toLowerCase().replace(/\s+/g, '-'), badge: 'Draft', excerpt: body.slice(0, 120), body });
+      };
+      return (
+        <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 p-4" onClick={e => e.target === e.currentTarget && onClose()}>
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 w-full max-w-lg shadow-2xl">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-bold text-slate-100">New Post</h2>
+              <button onClick={onClose} className="text-slate-500 hover:text-slate-200 text-2xl leading-none">×</button>
+            </div>
+            <input
+              autoFocus
+              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 mb-3 outline-none focus:border-indigo-500"
+              placeholder="Post title…"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+            />
+            <textarea
+              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 min-h-[120px] outline-none focus:border-indigo-500 resize-none"
+              placeholder="Write your post…"
+              value={body}
+              onChange={e => setBody(e.target.value)}
+            />
+            <div className="flex gap-2 mt-4 justify-end">
+              <button onClick={onClose} className="text-xs px-3 py-2 rounded-lg border border-slate-600 text-slate-300 hover:border-slate-400">Cancel</button>
+              <button
+                onClick={save}
+                disabled={!title.trim()}
+                className="text-xs px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Save Draft
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function ReadModal({ post, onClose }) {
+      return (
+        <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 p-4" onClick={e => e.target === e.currentTarget && onClose()}>
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 w-full max-w-lg max-h-[80vh] overflow-auto shadow-2xl">
+            <div className="flex items-start justify-between gap-3 mb-1">
+              <Badge text={post.badge || "Draft"} />
+              <button onClick={onClose} className="text-slate-500 hover:text-slate-200 text-2xl leading-none flex-shrink-0">×</button>
+            </div>
+            <h1 className="text-lg font-bold text-slate-100 mt-3 mb-4 leading-snug">{post.title}</h1>
+            <p className="text-sm text-slate-400 leading-relaxed whitespace-pre-wrap">{post.body || post.excerpt}</p>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      const [posts, setPosts] = useState(INITIAL.posts);
+      const [search, setSearch] = useState('');
+      const [modal, setModal] = useState(null);
+      const [selected, setSelected] = useState(null);
+      const [nav, setNav] = useState('posts');
+
+      const filtered = posts.filter(p => {
+        if (nav === 'drafts') return p.badge === 'Draft';
+        const q = search.toLowerCase();
+        return !q || p.title.toLowerCase().includes(q) || p.excerpt.toLowerCase().includes(q);
+      });
+
+      return (
+        <div className="min-h-screen flex flex-col" data-asx-key="⟁APP:BLOG/⟁ROOT:BLOG">
+
+          {/* ── Header ───────────────────────────────────────────────── */}
+          <header className="flex items-center gap-3 px-5 py-2.5 border-b border-slate-800 flex-shrink-0"
+                  style={{ background: '#0a0f1e' }}
+                  data-asx-key="⟁APP:BLOG/⟁WIDGET:HEADER">
+            <a href="/apps" className="text-slate-500 text-xs hover:text-slate-300 mr-1">← Hub</a>
+            <span className="font-bold text-indigo-400 mr-1">✦ Blog</span>
+            <div className="relative flex-1 max-w-xs" data-asx-key="⟁APP:BLOG/⟁INPUT:SEARCH">
+              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs select-none">⌕</span>
+              <input
+                className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-7 pr-3 py-1.5 text-xs text-slate-200 outline-none focus:border-indigo-500 transition-colors"
+                placeholder="Search posts…"
+                value={search}
+                onChange={e => { setSearch(e.target.value); setNav('posts'); }}
+                data-asx-event="search.input"
+              />
+            </div>
+            <button
+              onClick={() => setModal('compose')}
+              className="ml-auto text-xs px-3 py-1.5 rounded-lg font-semibold"
+              style={{ background: 'var(--accent)', color: '#0d0f1e' }}
+              data-asx-key="⟁APP:BLOG/⟁ACTION:COMPOSE"
+              data-asx-event="compose.open"
+            >
+              + New Post
+            </button>
+          </header>
+
+          {/* ── Layout ───────────────────────────────────────────────── */}
+          <div className="flex flex-1 overflow-hidden" data-asx-key="⟁APP:BLOG/⟁WIDGET:PANELS">
+
+            {/* Left nav */}
+            <nav className="w-44 border-r border-slate-800 p-3 flex-shrink-0 hidden sm:block"
+                 data-asx-key="⟁APP:BLOG/⟁WIDGET:NAV">
+              {[['posts', '◧ Posts'], ['drafts', '✎ Drafts'], ['tags', '⌗ Tags']].map(([key, label]) => (
+                <button key={key} onClick={() => { setNav(key); setSearch(''); }}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium mb-1 transition-colors
+                    ${nav === key ? 'text-white bg-slate-800' : 'text-slate-400 hover:text-slate-200'}`}>
+                  {label}
+                </button>
+              ))}
+              <div className="mt-5 pt-4 border-t border-slate-800">
+                <div className="text-[10px] text-slate-600 uppercase tracking-widest mb-2 px-3">Recent</div>
+                {INITIAL.recent.map(t => (
+                  <div key={t} className="text-xs text-slate-500 px-3 py-1.5">{t}</div>
+                ))}
+              </div>
+            </nav>
+
+            {/* Feed */}
+            <main className="flex-1 p-4 overflow-auto" data-asx-key="⟁APP:BLOG/⟁WIDGET:FEED">
+              {nav === 'tags' ? (
+                <div className="flex flex-wrap gap-2 p-2">
+                  {INITIAL.tags.map(tag => (
+                    <button key={tag} onClick={() => { setSearch(tag); setNav('posts'); }}
+                      className="text-xs px-3 py-1.5 rounded-full border border-slate-700 text-slate-300 hover:border-indigo-500 transition-colors">
+                      #{tag}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid gap-3 max-w-2xl">
+                  {filtered.length ? filtered.map(post => (
+                    <PostCard key={post.id} post={post} onRead={p => { setSelected(p); setModal('read'); }} />
+                  )) : (
+                    <div className="text-slate-500 text-sm py-10 text-center">
+                      {nav === 'drafts' ? 'No drafts yet. Use + New Post to write one.' : 'No posts match your search.'}
+                    </div>
+                  )}
+                </div>
+              )}
+            </main>
+
+            {/* Sidebar */}
+            <aside className="w-52 border-l border-slate-800 p-4 flex-shrink-0 hidden lg:block"
+                   data-asx-key="⟁APP:BLOG/⟁WIDGET:SIDEBAR">
+              <div className="mb-5" data-asx-key="⟁APP:BLOG/⟁WIDGET:RECENT">
+                <div className="text-[10px] text-slate-600 uppercase tracking-widest mb-2">Recent</div>
+                {INITIAL.recent.map(t => (
+                  <div key={t} className="text-xs text-slate-400 py-1.5 border-b border-slate-800/60">{t}</div>
+                ))}
+              </div>
+              <div data-asx-key="⟁APP:BLOG/⟁WIDGET:TAGS">
+                <div className="text-[10px] text-slate-600 uppercase tracking-widest mb-2">Tags</div>
+                <div className="flex flex-wrap gap-1.5">
+                  {INITIAL.tags.map(tag => (
+                    <button key={tag} onClick={() => { setSearch(tag); setNav('posts'); }}
+                      className="text-[11px] px-2 py-0.5 rounded border border-slate-700 text-slate-400 hover:border-indigo-500 transition-colors">
+                      #{tag}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </aside>
+          </div>
+
+          {modal === 'compose' && (
+            <ComposeModal
+              onClose={() => setModal(null)}
+              onSave={post => { setPosts(prev => [post, ...prev]); setModal(null); }}
+            />
+          )}
+          {modal === 'read' && selected && (
+            <ReadModal post={selected} onClose={() => setModal(null)} />
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

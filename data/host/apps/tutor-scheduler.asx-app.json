@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "tutor-scheduler",
+  "@key": "⟁APP:TUTOR_SCHEDULER",
+  "@mount": "⟁ROOT:TUTOR_SCHEDULER",
+  "@theme": { "accent": "#a3e635", "bg": "#030800", "surface": "#081200", "text": "#ecfccb", "hero_phase": "Sek", "tagline": "Book sessions. Track progress." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "sessions", "component": "⟁WIDGET:SESSIONS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "sessions": [], "tutors": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:TUTOR_SCHEDULER": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:BOOK", "⟁ACTION:MY_TUTORS"] },
+    "⟁ACTION:BOOK": { "@type": "button", "@text": "Book Session", "@on": { "click": "ts.open_booking" } },
+    "⟁ACTION:MY_TUTORS": { "@type": "button", "@text": "My Tutors", "@on": { "click": "ts.open_tutors" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:SESSIONS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:SESSIONS": { "@type": "feed", "@bind": "state.sessions", "@children": ["⟁WIDGET:SESSION_CARD"] },
+    "⟁WIDGET:SESSION_CARD": { "@type": "content-card", "@bind": "session", "@on": { "view": "ts.view", "cancel": "ts.cancel" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:UPCOMING", "⟁WIDGET:HOURS"] },
+    "⟁WIDGET:UPCOMING": { "@type": "calendar", "@bind": "data.upcoming" },
+    "⟁WIDGET:HOURS": { "@type": "stat", "@bind": "data.hours" }
+  },
+  "@programs": {
+    "ts.open_booking": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "ts.open_tutors": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "ts.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "ts.cancel": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_cancelled", "@out": "status" }] }
+  },
+  "@events": { "session.book": "ts.open_booking", "tutors.open": "ts.open_tutors", "session.view": "ts.view", "session.cancel": "ts.cancel" },
+  "@imports": [{ "ref": "session", "mode": "schema_table" }, { "ref": "tutor", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "notes-per-session", "name": "Session Notes", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Attach notes and homework to each session." },
+      { "id": "recurring", "name": "Recurring Bookings", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Book a recurring weekly slot with your tutor automatically." },
+      { "id": "video-prep", "name": "Video Prep Notes", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Share a pre-session agenda with your tutor before each meeting." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "ts.book", "pattern": "BOOK SESSION|SCHEDULE TUTOR|TUTOR FOR *", "intent": "open_booking" },
+      { "id": "ts.upcoming", "pattern": "UPCOMING SESSIONS|MY SCHEDULE|WHEN IS MY TUTOR", "intent": "view_upcoming" }
+    ]
+  },
+  "@data": {
+    "hours": { "total_hr": 24, "this_month_hr": 6, "subjects": 3 },
+    "upcoming": [],
+    "spotlight": [
+      { "id": "sp1", "title": "Math Tutoring — Wed 18:00", "tutor": "Dr. Chen", "subject": "Calculus", "badge": "Next Session", "excerpt": "Continuing integration by parts. Prepare problems 8–14." },
+      { "id": "sp2", "title": "CS Theory — Fri 17:00", "tutor": "Alice K.", "subject": "Algorithms", "badge": "This Week", "excerpt": "Graph traversal review. Bring your fold-graph example." },
+      { "id": "sp3", "title": "Japanese — Last Session", "tutor": "Tanaka-san", "subject": "Language", "badge": "Completed", "excerpt": "Covered N3 grammar chapter 12. Homework: 30 new cards." }
+    ],
+    "schema": {
+      "session": { "primaryKey": "session_id", "fields": { "session_id": { "type": "string" }, "tutor_id": { "type": "string", "required": true }, "subject": { "type": "string" }, "scheduled_at": { "type": "datetime", "required": true }, "duration_min": { "type": "integer" }, "status": { "type": "string" }, "notes": { "type": "text" } } },
+      "tutor": { "primaryKey": "tutor_id", "fields": { "tutor_id": { "type": "string" }, "name": { "type": "string", "required": true }, "subjects": { "type": "json" }, "rate_usd": { "type": "float" }, "contact": { "type": "string" } } }
+    }
+  }
+}

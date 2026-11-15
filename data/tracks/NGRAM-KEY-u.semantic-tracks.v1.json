@@ -1,0 +1,499 @@
+{
+  "@no-eval": true,
+  "id": "NGRAM-KEY-µ",
+
+  "schemes": ["ngram-key"],
+  "description": "N-gram key grammar + Aho-Corasick key admission + §69 Node Field Graph + §71 Attributed Semantic Grammar — §66: n-gram=address into semantic book; AC=key-addressing automaton; Bag-of-Keys=exhaustive overlapping matches; failure_link=structural fallback; key_book=N_M∪N_I; S(k)=W_k+sym_sum+geo_sum; two-graph distinction: AC-graph(recognition) vs K'UHUL-graph(semantic); §69: V={recognized keys}, E=E_ngram∪E_manifest∪E_inferred∪E_phase, v_i=(k_i,θ,g,W,C,R), n-gram=address≠field, pipeline: KeyGrammar→[unfold]→NodeFieldGraph→[project]→GeometricNodeField; §71: @transpile production=recognition+canonicalization+projection; Canonical Key Law: 'fold graph'⟹k_FOLD_GRAPH not ['fold','graph']; AC Subordination: AC answers WHERE, grammar declares WHAT; Separation: b∈FQ_n, theta∈C_6, g∈R^m never collapsed; Harvest Derivation: @transpile is source, harvest scripts are transitional compiler passes.",
+  "phase": "Wo",
+  "category": "structural",
+  "confidence": 0.89,
+  "static_weight": 0.91,
+  "health": 1.0,
+  "vector": { "x": 0.91, "y": 0.34, "z": 0.24 },
+  "governs": [
+    "ngram",
+    "n-gram",
+    "n-gram key",
+    "ngram key",
+    "key grammar",
+    "n-gram key grammar",
+    "kuhul key grammar",
+    "aho corasick",
+    "aho-corasick",
+    "aho corasick algorithm",
+    "dictionary matching",
+    "multi-pattern matching",
+    "trie",
+    "goto function",
+    "failure link",
+    "failure function",
+    "bag of keys",
+    "bag of key words",
+    "overlapping match",
+    "key book",
+    "key-book",
+    "semantic book",
+    "book address",
+    "N_M",
+    "manifest neighbors",
+    "symbolic neighbors",
+    "N_I",
+    "geometric neighbors",
+    "vector neighbors",
+    "key score",
+    "W_k",
+    "R_sym",
+    "R_geo",
+    "recognition graph",
+    "semantic graph",
+    "two graphs",
+    "ac boundary",
+    "ac kuhul boundary",
+    "token stream",
+    "key admission",
+    "key addressing",
+    "premature collapse",
+    "exhaustive recognition",
+    "phase-bound collapse",
+    "phase-bound arbitration",
+    "word book",
+    "ngram address",
+    "semantic address",
+    "@ngram-key",
+    "ngram-key:",
+    "node field graph",
+    "NodeFieldGraph",
+    "G_NodeField",
+    "E_ngram",
+    "E_manifest",
+    "E_inferred",
+    "E_phase",
+    "n-gram address",
+    "key node law",
+    "address not field",
+    "bag of keys subgraph",
+    "local semantic subgraph",
+    "ngram resolution",
+    "semantic resolution",
+    "node field pipeline",
+    "unfold project",
+    "composition law",
+    "keys create nodes",
+    "books create edges",
+    "attributed semantic grammar",
+    "attributed grammar",
+    "transpile production",
+    "@transpile",
+    "recognition phase",
+    "canonicalization phase",
+    "projection phase",
+    "canonical key law",
+    "ac subordination",
+    "ac subordination law",
+    "separation law",
+    "harvest derivation",
+    "harvest derivation law",
+    "grammar compiler pass",
+    "surface patterns",
+    "surface form",
+    "b theta g independent",
+    "three independent spaces",
+    "gram ref manifest",
+    "grammar is source of truth",
+    "SNOBOL inheritance",
+    "pattern participates in computation",
+    "neural network",
+    "neural networks",
+    "neural network architecture",
+    "neural network architecture layers",
+    "network architecture",
+    "architecture layers",
+    "deep learning",
+    "deep learning model",
+    "machine learning",
+    "machine learning model",
+    "artificial intelligence",
+    "artificial neural network",
+    "architecture",
+    "layers",
+    "hidden layers",
+    "input layer",
+    "output layer",
+    "transformer",
+    "transformer model",
+    "attention mechanism",
+    "self-attention",
+    "convolutional",
+    "convolutional neural network",
+    "recurrent",
+    "recurrent neural network",
+    "lstm",
+    "training",
+    "model training",
+    "backpropagation",
+    "gradient descent",
+    "activation function",
+    "hidden layer",
+    "loss function",
+    "natural language processing",
+    "NLP",
+    "large language model",
+    "LLM",
+    "what are neural",
+    "how do neural",
+    "explain neural",
+    "how does a neural",
+    "what is a neural"
+  ],
+  "capabilities": [
+    "NGRAM_ADDRESS",
+    "KEY_BOOK_EXPAND",
+    "AC_RECOGNIZE",
+    "BAG_OF_KEYS_BUILD",
+    "FAILURE_LINK_FALLBACK",
+    "KEY_SCORE_COMPUTE",
+    "TWO_GRAPH_DISTINGUISH",
+    "PIPELINE_ROUTE",
+    "NODE_FIELD_GRAPH_BUILD",
+    "KEY_NODE_MAP",
+    "EDGE_CLASS_EXPAND",
+    "NGRAM_RESOLUTION_LAW",
+    "BAG_SUBGRAPH_BUILD",
+    "TRANSPILE_PRODUCTION_DECLARE",
+    "CANONICAL_KEY_COLLAPSE",
+    "AC_SUBORDINATION_ENFORCE",
+    "PROJECTION_SEPARATE",
+    "HARVEST_COMPILE"
+  ],
+  "conformance": {
+    "questions": [
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is an n-gram key in K'UHUL?",
+        "expected_key": "address into a semantic book not a probability higher arity stronger address pitch two-gram the_pitch three-gram deliver_the_pitch each opens different book",
+        "delta_r": 0.11
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What does Aho-Corasick provide in the K'UHUL pipeline?",
+        "expected_key": "key-addressing automaton recognition layer dictionary matching emits all matching patterns overlapping O n plus m plus z bag of keys not semantic engine",
+        "delta_r": 0.12
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is the Aho-Corasick failure link and what does it provide K'UHUL?",
+        "expected_key": "longest useful suffix fallback structural fallback candidates timed joke setup fails joke setup succeeds setup succeeds structural not semantic semantic layer scores afterward",
+        "delta_r": 0.1
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is the two-graph distinction between AC and K'UHUL?",
+        "expected_key": "AC graph recognition how to recognize the key trie transitions K_UHUL graph semantic what neighborhood key opens N_M N_I word bank recognized by AC finance river_bank opened by K_UHUL",
+        "relation_confirmed": "FOLDGRAPH-µ",
+        "delta_w": 0.14
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is the key score formula?",
+        "expected_key": "S k equals W_k plus sum over N_M W_u times R_sym k u plus sum over N_I W_u times R_geo k u manifest symbolic geometric continuous two neighbor types",
+        "relation_confirmed": "SEMANTIC-FOLD-µ",
+        "delta_w": 0.13
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is the recognition/collapse separation law?",
+        "expected_key": "recognition exhaustive AC emits all overlapping matches collapse phase-bound Wo Yax Sek Ch_en Xul arbitrates AC does not force premature tokenization choice semantic layer decides which key carries authority",
+        "relation_confirmed": "MICRONAUT-PROGRAM-µ",
+        "delta_w": 0.12
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "What is a key book and what does it contain?",
+        "expected_key": "N_M manifest symbolic declared relations N_I geometric continuous vector proximity NOT AC trie transitions K_UHUL semantic graph edges word bank opens finance money institution river_bank slope edge",
+        "delta_c": 0.1
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "What is the full K'UHUL key grammar pipeline?",
+        "expected_key": "token stream Aho-Corasick bag of ngram keys manifest N_M geometry N_I Wo Yax active semantic neighborhood Sek frontier candidates Ch_en verification Xul collapse commit",
+        "delta_c": 0.09
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is the Key-Node Law in K'UHUL §69?",
+        "expected_key": "each recognized n-gram key k_i becomes exactly one vertex v_i equals tuple k_i theta g W C R n-gram is the node address the n-gram does NOT equal the field n-gram supplies address field is the graph built from all vertices plus edges",
+        "relation_confirmed": "FOLDGRAPH-µ",
+        "delta_r": 0.13
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What are the four edge classes in the K'UHUL Node Field Graph?",
+        "expected_key": "E_ngram internal overlap constituent sharing k1 k2 k3 share token subsequences E_manifest k to N_M k key-book semantic neighborhood E_inferred k to N_I k geometric neighborhood E_phase k theta_i to k theta_i+1 phase transitions all four coexist G_NodeField equals G_ngram plus G_manifest plus G_inferred plus G_phase",
+        "delta_r": 0.14
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is the n-gram resolution law?",
+        "expected_key": "n-gram order equals semantic resolution unigram broad field bank opens finance river tilt bigram constrained river_bank opens waterway trigram more specific NOT universal some long phrases remain ambiguous higher arity narrows N_k because more n-gram structure required to match tendency not guarantee",
+        "relation_confirmed": "SEMANTIC-FOLD-µ",
+        "delta_w": 0.12
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is the three-stage Node Field Graph pipeline?",
+        "expected_key": "Stage 1 Key Grammar §66 Aho-Corasick recognition V equals recognized keys Stage 2 Node Field Graph §69 V plus E_ngram plus E_manifest plus E_inferred plus E_phase equals symbolic G_NodeField Stage 3 Geometric Node Field G_NodeField projected to R^m SVG-3D tensors GML symbolic field exists first then projected symbolic primary geometric secondary",
+        "delta_w": 0.13
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "What is the Composition Law in K'UHUL §69?",
+        "expected_key": "keys create addressable nodes books key-books create semantic edges E_manifest phases create alternate semantic states E_phase geometry gives node field coordinates g in R^m four roles non-overlapping keys equals identity books equals edges phases equals states geometry equals coordinates together define full Node Field Graph",
+        "delta_c": 0.11
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does the Aho-Corasick failure link support efficient key matching in the K'UHUL pipeline?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What role does the Bag-of-Keys approach play in resolving overlapping n-gram matches within the semantic book?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "Can you explain the significance of the two-graph distinction between AC-graph and K'UHUL-graph in the recognition process?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is the meaning of the Key-Node Law in the context of the K'UHUL Node Field Graph?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What are the three separable responsibilities of a K'UHUL @transpile production?",
+        "expected_key": "recognition identifies surface forms and feeds them to AC canonicalization collapses many spellings to one stable canonical key projection maps key to b in FQ_n theta in C_6 and g via gram manifest reference three phases separable independently composable",
+        "delta_r": 0.13,
+        "relation_confirmed": "SNOBOL-µ"
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What does the Canonical Key Law say about 'fold graph'?",
+        "expected_key": "fold graph implies k_FOLD_GRAPH not the two separate tokens fold and graph the n-gram key is a compressed semantic address into a neighborhood not a tokenizer result many surface forms collapse to one canonical key that key is one node address in the Node Field Graph",
+        "delta_r": 0.14
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is the AC Subordination Law and why does it matter architecturally?",
+        "expected_key": "AC answers WHERE in the input a surface form matched it does not determine WHAT the match means meaning is declared in the grammar @transpile production AC is seeded from surface_patterns at compile time it is an accelerator not a source of semantic truth grammar overrides AC resolves the debt of verb-keys.jsonl and harvest scripts co-authoring semantics",
+        "delta_w": 0.15,
+        "relation_confirmed": "FOLDGRAPH-µ"
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "Why must b, theta, and g never be collapsed into a single coordinate in a @transpile production?",
+        "expected_key": "b lives in FQ_n binary topology discrete n-bit theta lives in C_6 discrete 6 states g lives in R^m continuous geometry three independent spaces three independent axes of the product topology FQ_n x C_6 x R^m collapsing them would destroy the independence of semantic program identity phase and learned geometry gram ref is a pointer into manifest g retrieved at runtime",
+        "delta_w": 0.14,
+        "relation_confirmed": "GRAPH-THEORY-µ"
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "What is the Harvest Derivation Law and what does it say about harvest scripts?",
+        "expected_key": "n-gram keys AIML patterns and Node Field Graph vertices are all derived from @transpile productions not hand-authored per section harvest scripts are a transitional compiler pass over the grammar target architecture is a grammar compiler that emits all three directly from @transpile grammar is single source of truth harvest scripts are temporary bridge",
+        "delta_c": 0.12
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is the difference between Aho-Corasick and the harvest compiler pass — are they the same operation?",
+        "expected_key": "No. AC is a runtime recognition backend: it scans input text at query time answers WHERE a surface form matched O(n+m+z). Harvest scripts are a compile-time compiler pass: they read @transpile productions from the grammar and emit n-gram keys AIML patterns NFG vertices before any query runs. AC consumes what harvest produced. They are at opposite ends of the pipeline: harvest is source-time grammar-to-artifacts, AC is query-time text-to-key. Conflating them is the MISS: AC does NOT perform harvest derivation.",
+        "delta_w": 0.17,
+        "relation_confirmed": "SNOBOL-µ",
+        "miss_source": "Gemma1B conflated AC with harvest derivation because both appear in the §71 AC Subordination and Harvest Derivation laws in the same context block"
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "Does Aho-Corasick perform canonicalization, or does it trigger it?",
+        "expected_key": "AC triggers canonicalization but does not perform it. AC returns position and surface_form to the grammar runtime. The grammar runtime then applies the canonicalization attribute declared in @transpile. They are separate pipeline phases even if run back-to-back in a single pass. AC is a replaceable recognition backend. Canonicalization is a grammar-defined rule. AC is the trigger; grammar runtime is the actor.",
+        "delta_w": 0.15,
+        "miss_source": "LFM said 'AC performs canonicalization during the recognition phase' — blurring the phase boundary between recognition and canonicalization"
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "What three projection attributes must every @transpile production declare, and what space does each live in?",
+        "expected_key": "b(addr) positions the key in FQ_n binary topology (discrete n-bit). theta(face) assigns a C_6 phase Pop/Wo/Yax/Sek/Ch_en/Xul (discrete 6-state cyclic). gram(ref) points to the manifest book for continuous geometry g in R^m. All three are required. Omitting b means no binary address in the folded hypercube. Listing only theta and g as geometric descriptors is a MISS — b is not optional.",
+        "delta_c": 0.13,
+        "miss_source": "LFM enumerated @transpile as surface_forms + canonical_key + 'theta and g' — dropped b from the projection triple"
+      }
+    ],
+    "jokes": [
+      {
+        "pattern": "WHY DOES KUHUL USE AHO CORASICK INSTEAD OF TRYING ONE PATTERN AT A TIME",
+        "punchline": "Because trying one pattern at a time is backtracking over the token stream, and we already have a whole section in the grammar about why backtracking is O(2^n). Aho-Corasick builds the dictionary into a trie, scans once, and hands you all the matches. Then K'UHUL decides which ones matter. Fast recognition first, slow reasoning later — not the other way around.",
+        "frame": "delivery_frame",
+        "semantic_key": "ac_vs_backtracking_fast_recognition_then_reasoning"
+      },
+      {
+        "pattern": "WHAT DOES THE FAILURE LINK DO IN PLAIN LANGUAGE",
+        "punchline": "It says: you were hoping to match the long key but you failed partway through. Here is the longest shorter key that still makes sense given what you have already seen. It is the algorithm's version of SC-37: when the ambitious match fails, do not restart from zero — retain the most informative suffix you managed to recognize.",
+        "frame": "pun_bridge",
+        "semantic_key": "failure_link_as_sc37_retained_suffix"
+      },
+      {
+        "pattern": "WHY IS AN NGRAM AN ADDRESS AND NOT A PROBABILITY",
+        "punchline": "Because probabilities tell you how often. Addresses tell you where. You do not look up 'deliver the pitch' in a probability table and get back a neighborhood. You look it up in a key grammar and get back a book — a semantic neighborhood full of setup, performance, context, and payoff. The n-gram is the key. The book is what it opens.",
+        "frame": "humor_frame",
+        "semantic_key": "ngram_address_not_probability_key_opens_book"
+      },
+      {
+        "pattern": "IS AN NGRAM THE SAME AS THE FIELD IN KUHUL",
+        "punchline": "No. The n-gram is the address. The field is the neighborhood you get when you look it up. Saying the n-gram is the field is like saying a street address is the building. The address tells you where to find the building. The building is everything you encounter once you arrive — all the rooms, the neighbors, the connections, the history. Recognize the key first. Then unfold the field. Do not confuse the postal code with the city.",
+        "frame": "delivery_frame",
+        "semantic_key": "ngram_address_not_field_street_address_vs_building"
+      },
+      {
+        "pattern": "WHAT IS THE DIFFERENCE BETWEEN A TRIE EDGE AND A KEY BOOK EDGE",
+        "punchline": "A trie edge says: after seeing this prefix, transition to this state. A key book edge says: this key is semantically adjacent to this other concept. One is recognition machinery. The other is meaning. You need both: the trie to find the key, the book to know what the key means. Aho-Corasick builds the trie. K'UHUL maintains the books.",
+        "frame": "delivery_frame",
+        "semantic_key": "trie_edge_vs_key_book_edge_recognition_vs_meaning"
+      },
+      {
+        "pattern": "WHY DOES AHO-CORASICK CHOOSE THE AC AUTOMATON OVER A SIMPLE PATTERN MATCH",
+        "punchline": "Because it avoids the tedious backtracking of one pattern at a time.",
+        "frame": "humor_frame",
+        "semantic_key": "why_does_aho_corasick_choose_the_ac_automaton_over"
+      },
+      {
+        "pattern": "WHEN THE N-GRAM KEY IS TREATED AS AN ADDRESS, IT TRANSFORMS THE SEARCH SPACE INT",
+        "punchline": "It turns structural fallback into a well-organized database of meanings.",
+        "frame": "humor_frame",
+        "semantic_key": "when_the_n_gram_key_is_treated_as_an_address_it_tr"
+      },
+      {
+        "pattern": "IN THE NODE FIELD GRAPH, EVERY ADDRESS MAPS TO A SEMANTIC NODE—NO MORE GUESSING",
+        "punchline": "So the failure link becomes a clever structural fallback, not a dead end.",
+        "frame": "humor_frame",
+        "semantic_key": "in_the_node_field_graph_every_address_maps_to_a_se"
+      },
+      {
+        "pattern": "THE BAG-OF-KEYS ALGORITHM CAPTURES OVERLAPPING MATCHES, ENRICHING THE SEMANTIC B",
+        "punchline": "Thus, n-grams become addresses in the semantic book, not just random strings.",
+        "frame": "humor_frame",
+        "semantic_key": "the_bag_of_keys_algorithm_captures_overlapping_mat"
+      }
+    ]
+  },
+  "relations": [
+    {
+      "target": "SEMANTIC-FOLD-µ",
+      "verb": "@extends",
+      "directed": true
+    },
+    {
+      "target": "FOLDGRAPH-µ",
+      "verb": "@depends_on",
+      "directed": true
+    },
+    {
+      "target": "SNOBOL-µ",
+      "verb": "@related_to",
+      "directed": false
+    },
+    {
+      "target": "MICRONAUT-PROGRAM-µ",
+      "verb": "@supports",
+      "directed": true
+    },
+    {
+      "target": "ANAMORPHISM-µ",
+      "verb": "@informs",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "gramRead",
+      "key": "ngram_key_query",
+      "weight": 1.0
+    },
+    {
+      "phase": "Wo",
+      "op": "ac_admit_keys",
+      "note": "AC scan -> bag of keys",
+      "weight": 1.0
+    },
+    {
+      "phase": "Yax",
+      "op": "expand_key_books",
+      "note": "R N_M union N_I expansion",
+      "weight": 1.0
+    },
+    {
+      "phase": "Sek",
+      "op": "resolve_key_authority",
+      "note": "W WCR key score ranking",
+      "weight": 1.0
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_semantic_boundary",
+      "note": "C AC vs K_UHUL graph check",
+      "weight": 1.0
+    },
+    {
+      "phase": "Xul",
+      "op": "emit_answer",
+      "scope": "local",
+      "weight": 1.0
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "NGRAM-KEY-µ",
+    "manifest_access": [
+      "words",
+      "micronaut",
+      "kuhul",
+      "fold_graph",
+      "gram"
+    ],
+    "effects": [
+      "gramRead",
+      "gramWrite",
+      "fold:key_admit",
+      "fold:book_expand",
+      "fold:key_score"
+    ],
+    "ports": [],
+    "coordinator": false
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "@program": "css-gemm.webgl2-trainer",
+  "@schema": "kuhul.css-gemm.trainer.v1",
+  "@version": "1.0.0",
+  "@javascript_runtime": "browser_ecmascript_module",
+  "@windows_script_host": "not_used_for_webgl2; cscript/wscript provide no WebGL2 context",
+  "@entrypoint": ".CSS-C/css-ml-runtime/src/runner/webgl2-model-trainer.js",
+  "@host": {
+    "shell": "Micronaut.ps1",
+    "bus": "shell/Server.psm1",
+    "origin": "http://127.0.0.1:9880",
+    "webview2_origin": "https://cssml.local",
+    "webview2_virtual_host_root": ".CSS-C",
+    "demo_route": "/css-gemm/demo",
+    "trainer_route": "/css-gemm/runtime/trainer.js",
+    "graph_route": "/css-gemm/graph/mnist.json"
+  },
+  "@graph": ".CSS-C/css-ml-runtime/build/mnist/graph.json",
+  "@backend": {
+    "preference": ["webgl2", "cpu_reference"],
+    "webgl2_context": "WebGL2RenderingContext",
+    "required_extension": "EXT_color_buffer_float",
+    "forward_kernels": ["gemm", "linear_forward", "activation_relu"],
+    "cpu_fallback_kernels": ["softmax", "cross_entropy_loss"]
+  },
+  "@training_authority": {
+    "backpropagation": "cpu_reference",
+    "optimizer": "adamw_update_cpu_reference",
+    "webgl2_optimizer": false,
+    "statement": "WebGL2 accelerates forward kernels; gradients and AdamW updates remain CPU-authoritative."
+  },
+  "@demo_data": {
+    "kind": "deterministic_synthetic_28x28",
+    "samples_default": 32,
+    "is_mnist_corpus": false
+  }
+}

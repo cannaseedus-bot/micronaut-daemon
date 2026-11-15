@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "art-gallery",
+  "@key": "⟁APP:ART_GALLERY",
+  "@mount": "⟁ROOT:ART_GALLERY",
+  "@theme": { "accent": "#c084fc", "bg": "#08030d", "surface": "#12051a", "text": "#f3e8ff", "hero_phase": "Pop", "tagline": "Gallery quality. Personal scale." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "gallery", "component": "⟁WIDGET:GALLERY", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "artworks": [], "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:ART_GALLERY": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:UPLOAD"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:UPLOAD": { "@type": "button", "@text": "Upload Work", "@on": { "click": "art.open_upload" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:GALLERY", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:GALLERY": { "@type": "grid", "@bind": "state.artworks", "@children": ["⟁WIDGET:ART_CARD"] },
+    "⟁WIDGET:ART_CARD": { "@type": "media-card", "@bind": "artwork", "@on": { "view": "art.view", "buy": "art.open_purchase" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:COLLECTIONS", "⟁WIDGET:MEDIUM_TAGS"] },
+    "⟁WIDGET:COLLECTIONS": { "@type": "list", "@bind": "data.collections" },
+    "⟁WIDGET:MEDIUM_TAGS": { "@type": "tag-cloud", "@bind": "data.mediums" }
+  },
+  "@programs": {
+    "art.open_upload": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "art.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "art.open_purchase": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "art.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "artwork.view": "art.view", "artwork.buy": "art.open_purchase", "upload.open": "art.open_upload", "search.input": "art.search" },
+  "@imports": [{ "ref": "artwork", "mode": "schema_table" }, { "ref": "sale", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "print-shop", "name": "Print Shop", "category": "commerce", "price": "free", "status": "setup_required", "description": "Sell high-quality prints via an integrated print-on-demand partner." },
+      { "id": "virtual-exhibit", "name": "Virtual Exhibit Mode", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "3D gallery room for immersive online exhibitions." },
+      { "id": "collection-bot", "name": "Curation Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Auto-organise artworks into thematic collections." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "art.upload", "pattern": "UPLOAD ART|ADD ARTWORK|NEW PIECE", "intent": "open_upload" },
+      { "id": "art.search", "pattern": "FIND ART *|SEARCH GALLERY *", "intent": "filter_gallery" }
+    ]
+  },
+  "@data": {
+    "collections": ["Abstracts", "Portraits", "Landscapes"],
+    "mediums": ["Oil", "Watercolour", "Digital", "Charcoal", "Mixed Media"],
+    "spotlight": [
+      { "id": "sp1", "title": "Fold No. 7 — Oil on Canvas", "medium": "Oil", "badge": "For Sale", "price": 850, "excerpt": "60×90cm. The geometry of memory, layered in warm greys." },
+      { "id": "sp2", "title": "The Listener", "medium": "Digital", "badge": "Series", "price": 0, "excerpt": "Part 3 of the Attention series. Print editions available." },
+      { "id": "sp3", "title": "Kyoto Morning Haze", "medium": "Watercolour", "badge": "Sold", "price": 420, "excerpt": "A4. Painted on-site during cherry blossom week." }
+    ],
+    "schema": {
+      "artwork": { "primaryKey": "artwork_id", "fields": { "artwork_id": { "type": "string" }, "title": { "type": "string", "required": true }, "medium": { "type": "string", "required": true }, "description": { "type": "textarea" }, "price": { "type": "float" }, "for_sale": { "type": "bool" }, "image_url": { "type": "uri", "required": true }, "collection": { "type": "string" }, "year": { "type": "integer" }, "sold": { "type": "bool" } } },
+      "sale": { "primaryKey": "sale_id", "fields": { "sale_id": { "type": "string" }, "artwork_id": { "type": "string", "required": true }, "buyer_name": { "type": "string" }, "amount": { "type": "float", "required": true }, "sold_at": { "type": "datetime" } } }
+    }
+  }
+}

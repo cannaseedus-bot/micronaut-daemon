@@ -1,0 +1,203 @@
+{
+  "@type": "khanary.app_tables_contracts.v1",
+  "semantic_authority": false,
+  "topology_mutation": false,
+  "commit_authorized": false,
+  "description": "Machine-readable contract for the @tables block declared inside an asx.mini-app.v1 manifest. Each (username, app_id, table_id) triple is a fully isolated storage unit — no manifest or table row is ever shared between users, even when two users publish the same app_id.",
+  "authority": {
+    "apps_doc":          "APPS.md",
+    "host_contracts":    "data/grammar/app-host.contracts.json",
+    "server_impl":       "src/host/server.cpp",
+    "storage_root":      "data/host/storage/tables/",
+    "conformance_cases": "data/conformance/app_tables.json",
+    "checker":           "tools/check_app_tables.py"
+  },
+
+  "isolation_law": {
+    "identity_unit": "(username, app_id, table_id)",
+    "index_key": "{username}/{app_id}",
+    "url": "/apps/{username}/{app_id}",
+    "manifest_url": "/api/apps/{username}/{app_id}/manifest",
+    "table_api":    "/api/apps/{username}/{app_id}/tables/{table_id}",
+    "description":  "The ghost shell stamps {{APP_OWNER}} and {{APP_ID}} separately at serve time. The manifest URL is baked in — the shell is incapable of fetching another user's manifest or table rows."
+  },
+
+  "scope_model": {
+    "description": "Three exclusive scope values. @scope controls which user_id is used as the storage path segment.",
+    "values": {
+      "owner": {
+        "storage_key": "{owner_user_id}",
+        "storage_path": "data/host/storage/tables/{owner_user_id}/{app_id}/{table_id}.jsonl",
+        "read_auth":  "public (respects app visibility)",
+        "write_auth": "owner session only",
+        "meaning":    "Data belongs to the app publisher. Blog posts, portfolio items, product catalog. Visitors read; only the owner writes."
+      },
+      "visitor": {
+        "storage_key": "{visitor_user_id}",
+        "storage_path": "data/host/storage/tables/{visitor_user_id}/{app_id}/{table_id}.jsonl",
+        "read_auth":  "session required (own rows only)",
+        "write_auth": "any authenticated visitor (own rows only)",
+        "meaning":    "Data belongs to the current session user. Preferences, private notes, reading history. No visitor sees another visitor's rows."
+      },
+      "shared": {
+        "storage_key": "_shared",
+        "storage_path": "data/host/storage/tables/_shared/{app_id}/{table_id}.jsonl",
+        "read_auth":  "public (respects app visibility)",
+        "write_auth": "any authenticated visitor",
+        "meaning":    "One copy; all visitors read and write. Public guestbooks, aggregate counters, shared feeds."
+      }
+    }
+  },
+
+  "kind_taxonomy": {
+    "content-rows": {
+      "description": "Ordered list of rich content objects. Posts, items, entries.",
+      "typical_scope": "owner",
+      "singleton": false
+    },
+    "relation-rows": {
+      "description": "Rows that reference keys in another table. Comments (reference post slug), likes, votes.",
+      "typical_scope": "visitor",
+      "singleton": false
+    },
+    "settings": {
+      "description": "Key/value configuration for a user or the app. Use @singleton:true for one row per scope.",
+      "typical_scope": "visitor",
+      "singleton": "optional"
+    },
+    "counter": {
+      "description": "Numeric aggregate rows. View counts, reaction tallies.",
+      "typical_scope": "shared",
+      "singleton": false
+    },
+    "feed": {
+      "description": "Append-only event log. Activity stream, audit trail.",
+      "typical_scope": "owner",
+      "singleton": false
+    }
+  },
+
+  "schema_field_types": [
+    "string",
+    "text",
+    "int",
+    "float",
+    "bool",
+    "epoch",
+    "json"
+  ],
+
+  "required_table_keys": [
+    "@kind",
+    "@scope"
+  ],
+
+  "optional_table_keys": [
+    "@schema",
+    "@index",
+    "@singleton",
+    "@title",
+    "@description"
+  ],
+
+  "row_stamping": {
+    "description": "Server stamps these fields on every appended row. Manifests and clients must not supply them.",
+    "server_fields": [
+      "_written_by",
+      "_written_at"
+    ],
+    "_written_by": "user_id of the authenticated session that issued the POST",
+    "_written_at": "Unix epoch seconds at time of append"
+  },
+
+  "storage_model": {
+    "format": "JSONL — one JSON object per line",
+    "append_only": true,
+    "mutation": "not supported — rows are immutable after append; deletion requires DELETE /api/projects/{app_id} or a full table purge",
+    "singleton_resolution": "When @singleton:true, the GET route returns only the last row in the file as current state. All rows are retained for audit.",
+    "path_creation": "Server creates parent directories on first append via std::filesystem::create_directories"
+  },
+
+  "write_preconditions": {
+    "all_writes": [
+      "session_required",
+      "table_declared_in_manifest",
+      "app_exists_in_index",
+      "row_body_valid_json"
+    ],
+    "owner_scope_additional": [
+      "visitor_user_id == owner_user_id"
+    ],
+    "visitor_scope_additional": [],
+    "shared_scope_additional": []
+  },
+
+  "invariants": {
+    "AT1": "Each (username, app_id, table_id) triple has exactly one storage path. No row is shared between users.",
+    "AT2": "@scope:owner tables may only be written by the app publisher. Any other authenticated user receives 403 OWNER_ONLY.",
+    "AT3": "GET /api/apps/{username}/{app_id}/tables/{table_id} for @scope:visitor returns only the requesting session's rows — it never mixes rows from different visitors.",
+    "AT4": "@scope:shared GET is public (respects app visibility). All authenticated visitors may POST.",
+    "AT5": "A table_id must be declared in the manifest @tables block before rows can be written. Undeclared tables return 404 TABLE_NOT_DECLARED.",
+    "AT6": "Rows are append-only. The server provides no PATCH or DELETE route for individual rows.",
+    "AT7": "Server always stamps _written_by and _written_at. Client-supplied values for these fields are ignored (overwritten).",
+    "AT8": "Table writes carry semantic_authority:false, topology_mutation:false, commit_authorized:false.",
+    "AT9": "Table data is projection evidence in the App Host lane. It is not semantic truth and requires Ch'en/XCFE/Xul to become authoritative.",
+    "AT10": "@singleton:true resolves to the last row in the file. Older rows are retained; resolution is not a delete.",
+    "AT11": "Deleting a project via DELETE /api/projects/{app_id} does NOT automatically purge table data. Table purge is a separate explicit operation (future: DELETE /api/apps/{username}/{app_id}/tables/{table_id}).",
+    "AT12": "The ghost shell's KHANARY_TABLE(table_id) helper always calls the owner-scoped path /api/apps/{APP_OWNER}/{APP_ID}/tables/{table_id}. APP_OWNER is baked in at serve time and cannot be altered by client-side code."
+  },
+
+  "error_codes": {
+    "TABLE_NOT_DECLARED": "table_id not found in manifest @tables",
+    "TABLE_WRITE_FAILED": "server could not append to the JSONL file",
+    "ROW_BODY_INVALID":   "request body is not valid JSON",
+    "OWNER_ONLY":         "write to @scope:owner table attempted by non-owner session",
+    "SESSION_REQUIRED":   "visitor-scope GET or any POST without a valid session cookie",
+    "SESSION_EXPIRED":    "session token found but expired",
+    "APP_NOT_FOUND":      "app_id not in app_index or project doc missing"
+  },
+
+  "example_manifest_tables": {
+    "@tables": {
+      "posts": {
+        "@kind":   "content-rows",
+        "@scope":  "owner",
+        "@title":  "Blog Posts",
+        "@schema": {
+          "title":        "string",
+          "body":         "text",
+          "slug":         "string",
+          "published_at": "epoch"
+        },
+        "@index": ["slug", "published_at"]
+      },
+      "comments": {
+        "@kind":   "relation-rows",
+        "@scope":  "visitor",
+        "@title":  "Reader Comments",
+        "@schema": {
+          "post_slug": "string",
+          "author":    "string",
+          "body":      "text"
+        }
+      },
+      "prefs": {
+        "@kind":      "settings",
+        "@scope":     "visitor",
+        "@singleton": true,
+        "@schema": {
+          "theme":         "string",
+          "notifications": "bool"
+        }
+      },
+      "view_count": {
+        "@kind":   "counter",
+        "@scope":  "shared",
+        "@schema": {
+          "post_slug": "string",
+          "count":     "int"
+        }
+      }
+    }
+  }
+}

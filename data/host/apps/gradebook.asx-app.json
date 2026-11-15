@@ -1,0 +1,56 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "gradebook",
+  "@key": "⟁APP:GRADEBOOK",
+  "@mount": "⟁ROOT:GRADEBOOK",
+  "@theme": { "accent": "#60a5fa", "bg": "#000614", "surface": "#000e24", "text": "#dbeafe", "hero_phase": "Ch'en", "tagline": "Grades tracked. Progress clear." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "grades", "component": "⟁WIDGET:GRADES", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "courses": [], "grades": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:GRADEBOOK": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:ADD_GRADE", "⟁ACTION:ADD_COURSE"] },
+    "⟁ACTION:ADD_GRADE": { "@type": "button", "@text": "Log Grade", "@on": { "click": "gb.open_grade" } },
+    "⟁ACTION:ADD_COURSE": { "@type": "button", "@text": "Add Course", "@on": { "click": "gb.open_course" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:GRADES", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:GRADES": { "@type": "feed", "@bind": "state.grades", "@children": ["⟁WIDGET:GRADE_CARD"] },
+    "⟁WIDGET:GRADE_CARD": { "@type": "content-card", "@bind": "grade", "@on": { "view": "gb.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:GPA", "⟁WIDGET:COURSE_LIST"] },
+    "⟁WIDGET:GPA": { "@type": "stat", "@bind": "data.gpa" },
+    "⟁WIDGET:COURSE_LIST": { "@type": "list", "@bind": "state.courses" }
+  },
+  "@programs": {
+    "gb.open_grade": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "gb.open_course": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "gb.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "grade.add": "gb.open_grade", "course.add": "gb.open_course", "grade.view": "gb.view" },
+  "@imports": [{ "ref": "grade", "mode": "schema_table" }, { "ref": "course", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "gpa-calculator", "name": "GPA Calculator", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Compute weighted GPA across all courses automatically." },
+      { "id": "target-grade", "name": "Target Grade Planner", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Calculate minimum scores needed on remaining assignments." },
+      { "id": "transcript-export", "name": "Transcript Export", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Export a formatted transcript summary to PDF." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "gb.log", "pattern": "LOG GRADE|ADD GRADE|GOT * IN *", "intent": "open_grade" },
+      { "id": "gb.gpa", "pattern": "MY GPA|CURRENT GPA|AVERAGE GRADE", "intent": "view_gpa" }
+    ]
+  },
+  "@data": {
+    "gpa": { "current": 3.72, "target": 3.8, "credits_completed": 64 },
+    "spotlight": [
+      { "id": "sp1", "title": "CS Theory — A (94%)", "course": "CS Theory", "badge": "Best Grade", "credits": 4, "excerpt": "Highest grade this semester. Phase engine research paper helped." },
+      { "id": "sp2", "title": "Calculus II — B+ (88%)", "course": "Mathematics", "badge": "Strong", "credits": 4, "excerpt": "Recovered from a rough midterm. Final was solid." },
+      { "id": "sp3", "title": "History — B (82%)", "course": "History", "badge": "Average", "credits": 3, "excerpt": "Essay grade pulled down by late penalty. Resubmission pending." }
+    ],
+    "schema": {
+      "grade": { "primaryKey": "grade_id", "fields": { "grade_id": { "type": "string" }, "course_id": { "type": "string", "required": true }, "assignment": { "type": "string", "required": true }, "score": { "type": "float", "required": true }, "max_score": { "type": "float", "required": true }, "weight_pct": { "type": "float" }, "graded_at": { "type": "datetime" } } },
+      "course": { "primaryKey": "course_id", "fields": { "course_id": { "type": "string" }, "name": { "type": "string", "required": true }, "credits": { "type": "integer" }, "instructor": { "type": "string" }, "grade_scale": { "type": "string" } } }
+    }
+  }
+}

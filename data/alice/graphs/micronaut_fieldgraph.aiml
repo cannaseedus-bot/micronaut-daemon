@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from micronaut_fieldgraph.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH </pattern>
+    <template>source micronaut_fieldgraph.gml; label MICRONAUT_FOLD_FIELDGRAPH; identity 2701; authority projection_only; directed 1; nodes 7; edges 8. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 0</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; node 0; fibonacci_weight: 1; fold_phase: Pop; id: 0; label: Pop; resident_selector: fold=Pop; role: observe_read_context; x: 0.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE POP</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; node 0; fibonacci_weight: 1; fold_phase: Pop; id: 0; label: Pop; resident_selector: fold=Pop; role: observe_read_context; x: 0.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 1</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; node 1; fibonacci_weight: 1; fold_phase: Wo; id: 1; label: Wo; resident_selector: fold=Wo; role: schedule_plan; x: 1.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE WO</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; node 1; fibonacci_weight: 1; fold_phase: Wo; id: 1; label: Wo; resident_selector: fold=Wo; role: schedule_plan; x: 1.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 2</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; node 2; fibonacci_weight: 2; fold_phase: Yax; id: 2; label: Yax; resident_selector: fold=Yax; role: branch_explore; x: 2.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE YAX</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; node 2; fibonacci_weight: 2; fold_phase: Yax; id: 2; label: Yax; resident_selector: fold=Yax; role: branch_explore; x: 2.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 3</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; node 3; fibonacci_weight: 3; fold_phase: Sek; id: 3; label: Sek; resident_selector: fold=Sek; role: dispatch_execute; x: 3.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE SEK</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; node 3; fibonacci_weight: 3; fold_phase: Sek; id: 3; label: Sek; resident_selector: fold=Sek; role: dispatch_execute; x: 3.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 4</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; node 4; fibonacci_weight: 5; fold_phase: Ch'en; id: 4; label: Ch'en; resident_selector: fold=Ch'en|fold=Chen; role: verify; x: 4.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE CH'EN</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; node 4; fibonacci_weight: 5; fold_phase: Ch'en; id: 4; label: Ch'en; resident_selector: fold=Ch'en|fold=Chen; role: verify; x: 4.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 5</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; node 5; fibonacci_weight: 8; fold_phase: Xul; id: 5; label: Xul; resident_selector: fold=Xul; role: emit_persist; x: 5.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE XUL</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; node 5; fibonacci_weight: 8; fold_phase: Xul; id: 5; label: Xul; resident_selector: fold=Xul; role: emit_persist; x: 5.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 6</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; node 6; fibonacci_weight: 1; fold_phase: null; id: 6; label: System; resident_selector: fold=null|fold=missing; role: entry_meta; x: 0.0; y: 1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE SYSTEM</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; node 6; fibonacci_weight: 1; fold_phase: null; id: 6; label: System; resident_selector: fold=null|fold=missing; role: entry_meta; x: 0.0; y: 1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 0  1</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; edge 0 to 1; arc_weight: 1; id: 101; label: Pop_to_Wo; source: 0; target: 1; verb: @phase_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1  2</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; edge 1 to 2; arc_weight: 2; id: 102; label: Wo_to_Yax; source: 1; target: 2; verb: @phase_step; weight: 2.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 2  3</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; edge 2 to 3; arc_weight: 3; id: 103; label: Yax_to_Sek; source: 2; target: 3; verb: @phase_step; weight: 3.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 3  4</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; edge 3 to 4; arc_weight: 5; id: 104; label: Sek_to_Chen; source: 3; target: 4; verb: @phase_step; weight: 5.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 4  5</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; edge 4 to 5; arc_weight: 8; id: 105; label: Chen_to_Xul; source: 4; target: 5; verb: @phase_step; weight: 8.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 5  0</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; edge 5 to 0; arc_weight: 1; id: 106; label: Xul_to_Pop; source: 5; target: 0; verb: @phase_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1  3</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; edge 1 to 3; arc_weight: 3; id: 107; label: Wo_to_Sek_shortcut; source: 1; target: 3; verb: @delegates_to; weight: 3.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 6  0</pattern>
+    <template>Graph MICRONAUT_FOLD_FIELDGRAPH; edge 6 to 0; arc_weight: 1; id: 108; label: System_to_Pop_entry; source: 6; target: 0; verb: @produces; weight: 1.0. Data-only graph record.</template>
+  </category>
+</aiml>

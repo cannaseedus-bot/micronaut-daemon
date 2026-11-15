@@ -1,0 +1,54 @@
+{
+  "@kind": "kuhul.environment-qa-engine.v1",
+  "@id": "gemma-environment-qa",
+  "@namespace": "https://kuhul.dev/",
+  "model": {
+    "id": "gemma-3-1b-it-q8",
+    "role": "environmental_qa_and_next_best_option_engine",
+    "endpoint": "http://127.0.0.1:25501/v1/chat/completions",
+    "server_lane": "mm-gemma-env",
+    "chat_with_user": false,
+    "tool_calls": false
+  },
+  "purpose": [
+    "observe runtime and UI semantics",
+    "answer internal environment questions",
+    "suggest the next three best options",
+    "explain why an option is available, missing, or commonly used elsewhere"
+  ],
+  "inputs": {
+    "forms": ["field_values", "validation_state", "submission_intent"],
+    "suggestion_engine": ["current_route", "recent_actions", "candidate_routes"],
+    "tooltips": ["focused_control", "available_capabilities", "missing_prerequisites"],
+    "runtime": ["phase", "active_model", "ports", "backend_health", "errors"],
+    "workspace": ["approved_folders", "selected_files", "pending_tasks", "git_state"]
+  },
+  "output": {
+    "schema": "environment.next-best-options.v1",
+    "required_option_count": 3,
+    "fields": ["id", "label", "kind", "reason", "route", "action", "confidence"],
+    "kinds": ["recommended", "forgotten", "common_alternative"],
+    "emit_to": ["form_suggestion", "tooltip", "route_picker", "diagnostic_panel", "planner_context"],
+    "never_emit_to": ["assistant_chat_message", "tool_execution", "file_write"],
+    "no_direct_execution": true
+  },
+  "contract": {
+    "include_three_options": true,
+    "include_forgotten_option": true,
+    "include_common_system_pattern": true,
+    "explain_missing_or_unavailable": true,
+    "host_must_select_and_execute": true,
+    "preserve_user_control": true
+  },
+  "examples": {
+    "environment_question": "The selected model has no tool schema. What are the next best routes?",
+    "response_shape": {
+      "question": "next_best_route",
+      "options": [
+        {"id": "native_coder", "label": "Use Micronaut Coder", "kind": "recommended", "reason": "Native parser/compiler route is available", "route": "tool://coder", "action": "suggest", "confidence": 0.92},
+        {"id": "lmstudio_tools", "label": "Use LM Studio tools", "kind": "forgotten", "reason": "Tool-capable LFM route is available when LM Studio is running", "route": "lmstudio://tools", "action": "suggest", "confidence": 0.78},
+        {"id": "openai_completion", "label": "Ask GPT-OSS to plan", "kind": "common_alternative", "reason": "OpenAI-compatible completion is the normal planner path", "route": "openai://completions", "action": "suggest", "confidence": 0.86}
+      ]
+    }
+  }
+}

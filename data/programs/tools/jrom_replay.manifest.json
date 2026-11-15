@@ -1,0 +1,24 @@
+{
+  "@kind": "kuhul.jrom.tool-replay.v1",
+  "@format": "JROM+CBOR",
+  "@version": 1,
+  "stream": "programs/tools/replay/tool-events.jsonl",
+  "binary": "programs/tools/replay/tool-events.jrom",
+  "hash": "sha256",
+  "chain": "previous_event_hash",
+  "event_required": ["replay_id", "sequence", "timestamp", "tool_id", "verb", "target", "args", "phase", "lane", "status"],
+  "event_optional": ["result", "error", "approval", "model", "micronaut", "jrom_program"],
+  "rules": {
+    "append_only": true,
+    "deterministic_args": true,
+    "no_credentials": true,
+    "no_unregistered_tools": true,
+    "mutations_require_prior_validation": true,
+    "replay_does_not_execute_shell": true
+  },
+  "folds": {
+    "record": "Chen",
+    "commit": "Xul",
+    "replay": "Pop"
+  }
+}

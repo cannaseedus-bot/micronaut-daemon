@@ -1,0 +1,65 @@
+@language cpp
+@version 1.0
+@auto_edges false
+
+(* ── Lexical layer ─────────────────────────────────────────────────────────
+   Tokenization lives here, inside the grammar. tools/ebnf_to_code_grammar.py
+   compiles the @lex/@profile declarations into the "lexicon" block of
+   cpp.code-grammar.json; src/util/lexicon.cpp is the runtime scanner for
+   that contract.
+
+   Class actions: skip  discards the match (separator run)
+                  text  records it, lowercased under the profile
+                  atom  records it verbatim (one UTF-8 glyph per match)
+                  punct records it verbatim, one token per match
+   Profile keep order is match priority: at each byte position the kept
+   classes are tried in order and the first match wins; bytes matched by no
+   kept class are separators.
+
+   Lane mapping (consumers pass the profile name):
+     word_key   -> "ngram"           Micronaut gram lane (apostrophe kept)
+     word_full  -> "distributional"  io AST-adapter / grounding lane
+     word_plain -> "alnum_plain"     request-router query lane
+     word_core  -> "governs"         gyroscope scoring lane (min_len 3)
+     glyph/punct -> "glyph_lm"       declared target shape for the LM lane
+   The glyph class matches exactly one UTF-8 code point (lead byte per its
+   length plus continuation bytes; stray high bytes fall back to single
+   atoms), mirroring the historical per-code-point atomization.
+   *)
+@lex space      /\s+/                                                                                          action=skip   role=separator
+@lex glyph      /(?:[\xC2-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF4][\x80-\xBF]{3}|[\x80-\xFF])/    action=atom   role=glyph
+@lex word_core  /[A-Za-z]+/                 action=text   role=word
+@lex word_plain /[A-Za-z0-9]+/              action=text   role=word
+@lex word_full  /[A-Za-z0-9_]+/             action=text   role=word
+@lex word_key   /[A-Za-z0-9_']+/            action=text   role=word
+@lex punct      /[^\sA-Za-z0-9_'\x80-\xFF]/ action=punct  role=punct
+
+@profile default         lower=on keep=word_full
+@profile ngram           lower=on keep=word_key
+@profile distributional  lower=on keep=word_full
+@profile alnum_plain     lower=on keep=word_plain
+@profile governs         lower=on min_len=3 keep=word_core
+@profile glyph_lm        lower=on keep=word_key,glyph,punct
+
+@token include edge_kind=@imports
+@token namespace_decl edge_kind=@defines
+@token class_decl edge_kind=@defines
+@token function_def edge_kind=@defines
+@token function_call edge_kind=@calls
+@token member_access edge_kind=@accesses
+@token template_inst edge_kind=@uses
+
+@edge namespace_decl class_decl @contains sequence
+@edge namespace_decl function_def @contains sequence
+@edge class_decl function_def @declares sequence
+@edge function_def function_call @calls sequence
+@edge function_def member_access @accesses sequence
+@edge include template_inst @enables file
+
+include[path] ::= /#include\s*[<"]([^>"]+)[>"]/ ;
+namespace_decl[name] ::= /namespace\s+([\w:]+)\s*\{/ ;
+class_decl[name,base] ::= /(?:class|struct)\s+(\w+)(?:\s*:\s*(?:public|protected|private)\s+([\w:]+))?/ ;
+function_def[name] ::= /(?:[\w:*&<>]+\s+)+([\w:~]+)\s*\([^;{]*\)\s*(?:const\s*)?(?:override\s*)?(?:noexcept\s*)?\{/ ;
+function_call[callee] ::= /([\w:]+)\s*\(/ ;
+member_access[object] ::= /(\w+)_\s*\./ ;
+template_inst[container] ::= /std::(vector|unordered_map|optional|shared_ptr|string|array|variant)</ ;

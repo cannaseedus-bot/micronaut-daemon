@@ -1,0 +1,21 @@
+{
+  "@type": "khanary.xcfe_program.v1",
+  "@no-eval": true,
+  "id": "xcfe.return",
+  "program_class": "RETURN",
+  "phase": "Xul",
+  "input_role": "verified_value",
+  "output_role": "return_value",
+  "admission": "explicit",
+  "description": "Collapses a verified value to a return result at Xul — the terminal step in a program pipeline. RETURN is a program-descriptor class only — it does not appear in the 14-class XCFE node ISA.",
+  "steps": [
+    { "phase": "Pop",   "op": "gramRead",   "id": "xcfe_return_value" },
+    { "phase": "Ch'en", "op": "verify",     "id": "verified_value" },
+    { "phase": "Xul",   "op": "gramWrite",  "id": "return_value" }
+  ],
+  "authority": {
+    "semantic_authority": false,
+    "topology_mutation": false,
+    "commit_authorized": false
+  }
+}

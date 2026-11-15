@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- ================================================================
+     slerp-graph-fold-field.aiml
+     Source: slerp_merged model (port 17886) + KHANARY synthesis
+     Topics: Graph Theory | Semantic Folds | Fold Functions | Field Theory
+     Sections: routing patterns · conformance Q&A · direct jokes · JOKE-µ routing
+     ================================================================ -->
+
+<!-- ================================================================
+     §1  GRAPH THEORY
+     ================================================================ -->
+
+<topic name="GRAPH_THEORY">
+
+  <!-- Routing patterns -->
+  <category><pattern>WHAT IS A VERTEX</pattern>
+    <template>A vertex is an atomic node in a graph — it carries a label and no intrinsic geometry. Geometry is a property of the embedding, not the node itself.</template>
+  </category>
+
+  <category><pattern>WHAT IS A HYPERCUBE</pattern>
+    <template>Q_n is an n-dimensional graph with 2^n vertices. Each vertex b is a bit-string in {0,1}^n. Two vertices are adjacent if and only if they differ in exactly one bit (d_H=1). Every vertex has degree n.</template>
+  </category>
+
+  <category><pattern>WHAT IS THE CARTESIAN PRODUCT OF GRAPHS</pattern>
+    <template>G□H: vertices are V(G)×V(H). (u1,v) and (u2,v) are adjacent when u1-u2 is an edge in G. (u,v1) and (u,v2) are adjacent when v1-v2 is an edge in H. Degree of (u,v) = deg_G(u) + deg_H(v). G_runtime = Q_n □ C_6 uses this construction.</template>
+  </category>
+
+  <category><pattern>WHAT IS HAMMING DISTANCE</pattern>
+    <template>d_H(u,v) counts the bit positions where u and v differ. In Q_n, d_H(u,v)=1 means u and v are adjacent. d_H > 1 means that step is illegal in a single G_runtime transition.</template>
+  </category>
+
+  <category><pattern>GRAPH THEORY *</pattern>
+    <template><srai>WHAT IS <star/></srai></template>
+  </category>
+
+  <category><pattern>WHY IS Q N NOT A MANIFOLD</pattern>
+    <template>Q_n is a discrete regular graph — no curvature, no smooth charts, no differential structure. The word "manifold" misleads implementors into expecting continuous geodesics. Legal steps are strictly d_H=1 edges, not smooth paths.</template>
+  </category>
+
+  <category><pattern>WHAT IS THE DIFFERENCE BETWEEN CARTESIAN AND TENSOR PRODUCT GRAPHS</pattern>
+    <template>G□H (Cartesian) preserves degrees: deg(u,v) = deg_G(u)+deg_H(v). G⊗H (tensor) adds diagonal edges and gives higher connectivity. G_runtime uses □ because diagonal shortcuts would violate the d_H=1 legal-step rule.</template>
+  </category>
+
+  <!-- Conformance Q&A — ΔR/ΔW/ΔC phase checks -->
+  <category><pattern>WHAT MAKES A STEP LEGAL IN G RUNTIME</pattern>
+    <template>A legal step is either a one-bit semantic flip (d_H=1 in Q_n) or a one-step phase move (|Δθ|=1 in C_6). Two-bit flips, diagonal tensor-product edges, and phase jumps of more than one step are all illegal.</template>
+  </category>
+
+  <category><pattern>WHY DOES G RUNTIME USE CARTESIAN PRODUCT NOT TENSOR</pattern>
+    <template>Because □ preserves the d_H=1 adjacency rule from Q_n. If we used tensor product ⊗, diagonal edges would appear and make two-bit semantic jumps legal — breaking the discrete gradient ascent invariant.</template>
+  </category>
+
+  <!-- Direct jokes -->
+  <category><pattern>WHY DID THE GRAPH ALGORITHM CROSS THE FIREWALL</pattern>
+    <template>To prove it was topologically equivalent to a hypercube. The path was Hamiltonian — it only needed to visit each node once.</template>
+  </category>
+
+  <category><pattern>WHY DID THE GRAPH THEORIST BREAK UP WITH THE ADJACENCY MATRIX</pattern>
+    <template>It just wasn't working. No matter how many times they met, the connection was always non-symmetric.</template>
+  </category>
+
+  <category><pattern>WHAT IS A GRAPH THEORISTS FAVORITE PIZZA</pattern>
+    <template>A hypercube — lots of vertices, every slice adjacent to exactly n others, and no diagonal shortcuts to the cheese.</template>
+  </category>
+
+  <category><pattern>WHY WAS THE GRAPH THEORY PROOF TOO RECURSIVE</pattern>
+    <template>It kept reducing to a smaller graph. By induction, the proof never terminated — much like a depth-first search with no visited set.</template>
+  </category>
+
+  <!-- JOKE-µ routing -->
+  <category><pattern>JOKE GRAPH THEORY</pattern>
+    <template><srai>WHY DID THE GRAPH ALGORITHM CROSS THE FIREWALL</srai></template>
+  </category>
+  <category><pattern>JOKE HYPERCUBE</pattern>
+    <template><srai>WHAT IS A GRAPH THEORISTS FAVORITE PIZZA</srai></template>
+  </category>
+  <category><pattern>JOKE ADJACENCY</pattern>
+    <template><srai>WHY DID THE GRAPH THEORIST BREAK UP WITH THE ADJACENCY MATRIX</srai></template>
+  </category>
+
+</topic>
+
+<!-- ================================================================
+     §2  SEMANTIC FOLDS
+     ================================================================ -->
+
+<topic name="SEMANTIC_FOLDS">
+
+  <!-- Routing patterns -->
+  <category><pattern>WHAT IS A CATAMORPHISM</pattern>
+    <template>A catamorphism (cata) is a fold: an F-algebra morphism cata(f): Fix(F)→A that consumes a recursive structure into a value. It is the unique homomorphism from the initial algebra. In K'UHUL: the Fold step that collapses an unfolded query back to a scored candidate.</template>
+  </category>
+
+  <category><pattern>WHAT IS AN ANAMORPHISM</pattern>
+    <template>An anamorphism (ana) is an unfold: an F-coalgebra morphism ana(g): A→Fix(F) that generates a recursive structure from a seed. It is the dual of catamorphism. In K'UHUL: Unfold expands the query h into the semantic fold graph.</template>
+  </category>
+
+  <category><pattern>WHAT IS A HYLOMORPHISM</pattern>
+    <template>A hylomorphism = cata(f) ∘ ana(g) — unfold then fold. By the deforestation theorem, the intermediate Fix(F) need not materialize at runtime. SC-29: identity invariant (Fold∘Unfold)(h)≡h must hold when Δφ=0 and n&gt;0.</template>
+  </category>
+
+  <category><pattern>WHAT IS SC 29</pattern>
+    <template>SC-29 identity invariant: in any HylomorphismRecord where n&gt;0 and Δφ=0, the identity field MUST be true. False means fold-field coordinate drift — the anamorphism changed phase mid-unfold, so catamorphism cannot reconstruct the original h. Remedy: reset σ to unbound.</template>
+  </category>
+
+  <category><pattern>SEMANTIC FOLD *</pattern>
+    <template><srai>WHAT IS <star/></srai></template>
+  </category>
+
+  <category><pattern>WHY DOES FOLD IDENTITY FAIL</pattern>
+    <template>Identity (Fold∘Unfold)(h)≡h fails when θ shifts during the anamorphism — the coalgebra seed changes phase mid-expansion, making the cata reconstruction diverge from h. This is SC-29 coordinate drift.</template>
+  </category>
+
+  <category><pattern>WHAT IS THE DIFFERENCE BETWEEN HYLOMORPHISM AND FMAP COMPOSITION</pattern>
+    <template>Hylomorphism fuses ana and cata into a single pass — no intermediate Fix(F) structure persists. fmap composes functors step-by-step, preserving intermediaries. For fold-field navigation, hylomorphism is preferred because it avoids materializing the full unfold-graph at each iteration.</template>
+  </category>
+
+  <!-- Conformance Q&A -->
+  <category><pattern>WHAT CAUSES FOLD COORDINATE DRIFT</pattern>
+    <template>Δφ≠0 during the anamorphism: a theta shift mid-unfold corrupts the catamorphism reconstruction. Also triggered by topology mutation (adding/removing nodes to the semantic graph while ana is running). SC-29 fires when identity=false.</template>
+  </category>
+
+  <!-- Direct jokes -->
+  <category><pattern>WHY DID THE CAT FOLD ITS PAWS</pattern>
+    <template>It needed a more comfortable anamorphic view. Unfortunately the identity invariant was false — so when it unfolded, it wasn't the same cat anymore.</template>
+  </category>
+
+  <category><pattern>WHY DID MY COMPUTER CRASH DURING A CATAMORPHIC FOLD</pattern>
+    <template>It entered a truly baffling undecidable state. The fold reduced the stack to bottom, but the error handler was defined in terms of the fold. SC-29: the identity was false all along.</template>
+  </category>
+
+  <category><pattern>WHY DID THE CAT REFUSE TO CONVERT TO ANAMORPHIC CODE</pattern>
+    <template>The fundamental identity invariant is a terrible thing to violate. When (Fold∘Unfold)(cat) ≠ cat, you just have a different cat — and that cat is not amused.</template>
+  </category>
+
+  <category><pattern>WHY DID THE FRACTAL FAIL ITS PHYSICS EXAM</pattern>
+    <template>It kept folding in on itself, resulting in a recursive singularity. The catamorphism had no base case — it collapsed all the way to bottom before the exam started.</template>
+  </category>
+
+  <!-- JOKE-µ routing -->
+  <category><pattern>JOKE CATAMORPHISM</pattern>
+    <template><srai>WHY DID MY COMPUTER CRASH DURING A CATAMORPHIC FOLD</srai></template>
+  </category>
+  <category><pattern>JOKE ANAMORPHISM</pattern>
+    <template><srai>WHY DID THE CAT FOLD ITS PAWS</srai></template>
+  </category>
+  <category><pattern>JOKE HYLOMORPHISM</pattern>
+    <template><srai>WHY DID THE CAT REFUSE TO CONVERT TO ANAMORPHIC CODE</srai></template>
+  </category>
+  <category><pattern>JOKE FOLD IDENTITY</pattern>
+    <template><srai>WHY DID THE FRACTAL FAIL ITS PHYSICS EXAM</srai></template>
+  </category>
+
+</topic>
+
+<!-- ================================================================
+     §3  FOLD FUNCTIONS / CONVERGENCE
+     ================================================================ -->
+
+<topic name="FOLD_FUNCTIONS">
+
+  <!-- Routing patterns -->
+  <category><pattern>WHAT IS A KLEENE FIXED POINT</pattern>
+    <template>Kleene's fixpoint theorem: start with x_0=⊥ (bottom), iterate x_{n+1}=F(x_n). If F is Scott-continuous on a CPO, the sequence converges to the least fixed point lfp(F). In K'UHUL: the fold distance sequence is the Kleene chain; convergence_status tracks it.</template>
+  </category>
+
+  <category><pattern>WHAT IS A CONTRACTION MAPPING</pattern>
+    <template>F is a contraction if d(F(x),F(y)) ≤ k·d(x,y) for some k &lt; 1. Banach's theorem: a contraction on a complete metric space has a unique fixed point. In K'UHUL: convergence_record.contraction=k; k≥1 triggers DIVERGING status.</template>
+  </category>
+
+  <category><pattern>WHAT IS THE DIFFERENCE BETWEEN MAX ITER AND DIVERGING</pattern>
+    <template>MAX_ITER: iteration limit reached without convergence — may be slow convergence or plateau. DIVERGING: contraction k≥1, distance actively growing. Diagnostics differ: MAX_ITER → inspect fold_distance trajectory for stalling; DIVERGING → reset sigma immediately.</template>
+  </category>
+
+  <category><pattern>FOLD FUNCTION *</pattern>
+    <template><srai>WHAT IS <star/></srai></template>
+  </category>
+
+  <category><pattern>WHAT IS THE DIFFERENCE BETWEEN A FOLD FUNCTION AND A HIGHER ORDER FUNCTION</pattern>
+    <template>A fold higher-order function maps an F-algebra over recursive types — the domain is Fix(F), not []. A list fold is a special case where F(A) = 1 + X×A. The distinction matters for K'UHUL because fold_functions operate on the recursive query graph Fix(F), not a flat list of tokens.</template>
+  </category>
+
+  <category><pattern>WHAT IS THE DIFFERENCE BETWEEN KLEENE FIXED POINT AND Y COMBINATOR</pattern>
+    <template>Kleene fixed point produces a fixed VALUE under iteration of F (x s.t. F(x)=x). Y combinator produces a fixed FUNCTION — a lambda that applies itself. Different domains, different theorems; confusing them breaks the convergence_record semantics.</template>
+  </category>
+
+  <!-- Conformance Q&A -->
+  <category><pattern>WHEN DOES CONVERGENCE STATUS BECOME CONVERGED</pattern>
+    <template>When fold_distance &lt; epsilon: d(f^n, f^{n+1}) has fallen below threshold. The contraction factor k &lt; 1 has been sustained across iterations. Only at CONVERGED is the Xul commit gate valid.</template>
+  </category>
+
+  <category><pattern>WHAT DOES CONTRACTION FACTOR K MEAN</pattern>
+    <template>k = d_n / d_{n-1}: ratio of successive fold distances. k &lt; 1 = contracting (Banach condition met, continue). k = 1 = plateau (not improving, may stall). k &gt; 1 = expanding (DIVERGING, stop immediately and reset).</template>
+  </category>
+
+  <!-- Direct jokes -->
+  <category><pattern>WHY DID THE FIXED POINT ITERATION FAIL AT CONVERGENCE</pattern>
+    <template>Because it kept looping in a Hilbert space — the contraction factor was exactly 1.0, which technically isn't a contraction. It was a Platonic ideal of convergence, always approaching but never arriving.</template>
+  </category>
+
+  <category><pattern>WHY DID THE KLEENE ITERATION KEEP GETTING SMALLER</pattern>
+    <template>Someone set k = 0.5 and forgot to add a stopping condition. Technically it converged — to zero. The fold distance was epsilon-small after 200 iterations, and the system declared CONVERGED at the bottom of the CPO.</template>
+  </category>
+
+  <category><pattern>WHAT IS A FIXED POINT ITERATIONS FAVORITE SPORT</pattern>
+    <template>Contracting — it always converges, eventually. The Banach fixed-point theorem guarantees a winner, as long as k stays strictly less than 1. No draws, no overtime, just monotone descent to the fixed point.</template>
+  </category>
+
+  <category><pattern>WHY DID THE COMPILER REFUSE TO FOLD A FUNCTION THAT SUBTRACTED ITSELF</pattern>
+    <template>It kept yelling "you're nested in a loop!" — the F-algebra had a negative recursive position, violating covariance, and the least fixed point was undefined. The compiler was technically correct, which is the best kind of correct.</template>
+  </category>
+
+  <!-- JOKE-µ routing -->
+  <category><pattern>JOKE KLEENE</pattern>
+    <template><srai>WHY DID THE FIXED POINT ITERATION FAIL AT CONVERGENCE</srai></template>
+  </category>
+  <category><pattern>JOKE CONVERGENCE</pattern>
+    <template><srai>WHAT IS A FIXED POINT ITERATIONS FAVORITE SPORT</srai></template>
+  </category>
+  <category><pattern>JOKE CONTRACTION MAPPING</pattern>
+    <template><srai>WHY DID THE KLEENE ITERATION KEEP GETTING SMALLER</srai></template>
+  </category>
+  <category><pattern>JOKE FOLD FUNCTION</pattern>
+    <template><srai>WHY DID THE COMPILER REFUSE TO FOLD A FUNCTION THAT SUBTRACTED ITSELF</srai></template>
+  </category>
+
+</topic>
+
+<!-- ================================================================
+     §4  FIELD THEORY / WCR NAVIGATION
+     ================================================================ -->
+
+<topic name="FIELD_THEORY">
+
+  <!-- Routing patterns -->
+  <category><pattern>WHAT IS A SEMANTIC FIELD</pattern>
+    <template>A semantic field F_Q is the score landscape over G_runtime shaped by query Q. Each vertex v receives score S(v|Q)=W·C·R. Navigation follows discrete gradient ascent — v_next = argmax over N(v). The field shifts when Q changes.</template>
+  </category>
+
+  <category><pattern>WHAT IS WCR SCORE</pattern>
+    <template>S = W · C · R where W=arc weight [0,1] (topology-derived, stable), C=evidence confidence [0,1] (query-derived, dynamic), R=cosine relevance to Q [0,1]. All three factors are required; zero in any factor zeroes the score. S is navigation pressure, not authority.</template>
+  </category>
+
+  <category><pattern>WHAT IS GRADIENT ASCENT IN A SEMANTIC FIELD</pattern>
+    <template>v_{t+1} = argmax_{u∈N(v_t)} S(u|Q): pick the highest-scoring legal neighbour at each step. N(v) is the neighbourhood in G_runtime (semantic bit-flips + C6 phase steps). This is discrete, topology-constrained — NOT global softmax over all vertices.</template>
+  </category>
+
+  <category><pattern>WHAT IS A LOCAL MAXIMUM IN WCR</pattern>
+    <template>A local maximum occurs when no neighbour u∈N(v) has S(u|Q)&gt;S(v|Q). Gradient ascent stalls. The system is stuck at a locally optimal but globally suboptimal vertex. Remedy: reset σ to unbound to allow exploration beyond the immediate neighbourhood.</template>
+  </category>
+
+  <category><pattern>FIELD THEORY *</pattern>
+    <template><srai>WHAT IS <star/></srai></template>
+  </category>
+
+  <category><pattern>WHY IS WCR SCORE NOT A PROBABILITY</pattern>
+    <template>WCR score S∈[0,1] is a dimensionless similarity signal. Probabilities must sum to 1 across a sample space. WCR scores over all vertices in G_runtime do NOT sum to 1 — high-scoring vertices can coexist. Treating S as a probability causes normalization errors that destroy the W·C·R factor decomposition.</template>
+  </category>
+
+  <category><pattern>WHAT IS THE DIFFERENCE BETWEEN W AND C IN WCR</pattern>
+    <template>W = structural arc weight: topology-derived from the fold graph, stable per edge, independent of Q. C = evidence confidence: query-derived, dynamic — changes when Q changes. Both are required factors of WCR; neither alone encodes field similarity. Conflating them causes W to drift with Q when it shouldn't.</template>
+  </category>
+
+  <!-- Conformance Q&A -->
+  <category><pattern>WHY IS WCR NAVIGATION PRESSURE NOT AUTHORITY</pattern>
+    <template>High WCR score attracts the next step but does not force it. Topology (d_H=1 adjacency in G_runtime) gates every candidate. If a high-scoring vertex is not a legal neighbour, it cannot be reached in one step regardless of score. Score ranks within legal moves; it does not override legality.</template>
+  </category>
+
+  <category><pattern>HOW DOES WCR NAVIGATION DIFFER FROM TRANSFORMER ATTENTION</pattern>
+    <template>WCR is sequential argmax over topology-constrained neighbours — one step at a time, F_Q updates per step. Transformer QKV is a simultaneous weighted sum over all tokens — no topology constraint, no sequential stepping, no field update. WCR is a walk on G_runtime; attention is a soft lookup table over the full context window.</template>
+  </category>
+
+  <!-- Direct jokes -->
+  <category><pattern>WHY DID THE SEMANTIC FIELD CROSS THE ROAD</pattern>
+    <template>Because its WCR score just kept climbing! Every vertex on the other side had higher C — the evidence was overwhelmingly in favour of jaywalking. Topology permitted it: d_H=1 across the centre line.</template>
+  </category>
+
+  <category><pattern>WHY DID THE NEURAL NET REFUSE TO FOLD A FRACTAL</pattern>
+    <template>It kept trying to create a more complex formula — and the contraction factor was never below 1. The fold field vertex glowed ominously. Status: DIVERGING. The neural net declared a local maximum and went home.</template>
+  </category>
+
+  <category><pattern>WHY DID THE GRADIENT ASCENT GET STUCK AT A FOLD FIELD VERTEX</pattern>
+    <template>It optimized its way into a local maximum. Every neighbour had lower WCR score. It looked around, saw no improvement, and reset σ to unbound — only to find the global maximum was two bit flips away, which is one step too many.</template>
+  </category>
+
+  <category><pattern>WHY DID THE WCR SCORE KEEP LOOPING IN A FOLD FIELD VERTEX</pattern>
+    <template>It kept trying to optimize the gradient ascent — each argmax step returned to the same vertex in a 2-cycle. Two adjacent vertices with equal scores, each pointing at the other. Topology was correct; math was correct; outcome was frustrating. Status: local attractor, not convergence.</template>
+  </category>
+
+  <!-- JOKE-µ routing -->
+  <category><pattern>JOKE WCR</pattern>
+    <template><srai>WHY DID THE SEMANTIC FIELD CROSS THE ROAD</srai></template>
+  </category>
+  <category><pattern>JOKE GRADIENT ASCENT</pattern>
+    <template><srai>WHY DID THE GRADIENT ASCENT GET STUCK AT A FOLD FIELD VERTEX</srai></template>
+  </category>
+  <category><pattern>JOKE LOCAL MAXIMUM</pattern>
+    <template><srai>WHY DID THE WCR SCORE KEEP LOOPING IN A FOLD FIELD VERTEX</srai></template>
+  </category>
+  <category><pattern>JOKE SEMANTIC FIELD</pattern>
+    <template><srai>WHY DID THE NEURAL NET REFUSE TO FOLD A FRACTAL</srai></template>
+  </category>
+
+</topic>
+
+<!-- ================================================================
+     §5  CROSS-DOMAIN ROUTING
+     ================================================================ -->
+
+<category><pattern>EXPLAIN GRAPH THEORY IN KHANARY</pattern>
+  <template>In K'UHUL, graph theory underpins the address space. G_runtime = Q_n □ C_6 is the Cartesian product of an n-dimensional hypercube with a 6-cycle. Vertices are fold field records F_i=(node_id, θ, W, C, R). Legal steps are d_H=1 (one semantic bit flip) or |Δθ|=1 (one C6 phase step).</template>
+</category>
+
+<category><pattern>EXPLAIN SEMANTIC FOLDS IN KHANARY</pattern>
+  <template>Semantic folds in K'UHUL are hylomorphisms: ana (unfold) expands the query h into the fold graph, cata (fold) collapses it back to a scored result. SC-29: identity invariant (Fold∘Unfold)(h)≡h must hold when Δφ=0. Failure signals coordinate drift — reset σ.</template>
+</category>
+
+<category><pattern>EXPLAIN FOLD FUNCTIONS IN KHANARY</pattern>
+  <template>Fold functions in K'UHUL are tracked as Kleene fixed-point iterations. The fold_distance sequence must be contracting (k&lt;1). States: ITERATING → CONVERGED (commit gate opens) or DIVERGING (reset immediately). MAX_ITER ≠ DIVERGING — diagnose before resetting.</template>
+</category>
+
+<category><pattern>EXPLAIN FIELD THEORY IN KHANARY</pattern>
+  <template>Field theory in K'UHUL is the WCR score landscape S=W·C·R over G_runtime. Navigation is discrete gradient ascent: v_next = argmax over legal neighbours N(v). WCR is navigation pressure, not authority — topology always gates the candidates. Local maxima require σ reset.</template>
+</category>
+
+<!-- Wildcard catch-all for any topic in these four domains -->
+<category><pattern>WHAT IS SC 30</pattern>
+  <template>SC-30: all hypercube addresses in one G_runtime share the same n. Mixing Q3 and Q4 addresses in one topology is an error — |V|=6·2^n requires fixed n across all vertices.</template>
+</category>
+
+<category><pattern>WHAT IS SC 31</pattern>
+  <template>SC-31: continuous metrics (fold_weight, relation_weight, phase_weight ∈ ℝ) must not be quantized to hypercube bits. θ∈Z_6 must not collapse to K_2. Quantization destroys arc_weight distinctions (adjacent=+0.5, two-hop=-0.5, opposing=-1.0 collapse to ±1).</template>
+</category>
+
+</aiml>

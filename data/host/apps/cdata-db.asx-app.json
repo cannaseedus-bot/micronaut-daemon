@@ -1,0 +1,32 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@version": "1.0.0",
+  "@id": "cdata-db",
+  "@key": "⟁APP:CDATA_DB",
+  "@mount": "⟁ROOT:CDATA_DB",
+  "@state": { "db_status": "uninitialized", "selected_table": "user_post", "rows": [] },
+  "@components": {
+    "⟁ROOT:CDATA_DB": { "@type": "local-data-store", "@children": ["⟁WIDGET:CDATA_STATUS", "⟁WIDGET:CDATA_TABLES", "⟁WIDGET:CDATA_ROWS"] },
+    "⟁WIDGET:CDATA_STATUS": { "@type": "store-status", "@bind": "state.db_status" },
+    "⟁WIDGET:CDATA_TABLES": { "@type": "table-picker", "@source": "stores", "@bind": "state.selected_table" },
+    "⟁WIDGET:CDATA_ROWS": { "@type": "row-list", "@bind": "state.rows", "@on": { "refresh": "cdata.get_all", "put": "cdata.put" } }
+  },
+  "@programs": {
+    "cdata.init": { "@kind": "semantic.json-program.v1", "@executor": "mx.run", "@route": "cdata.store", "@verb": "POST", "@operation": "init", "@authority": "observation_only", "@key": "cdata.init", "@table_id": "$state.selected_table" },
+    "cdata.put": { "@kind": "semantic.json-program.v1", "@executor": "mx.run", "@route": "cdata.store", "@verb": "POST", "@operation": "put", "@authority": "observation_only", "@key": "cdata.put", "@table_id": "$state.selected_table", "@record": "$event.record" },
+    "cdata.get_all": { "@kind": "semantic.json-program.v1", "@executor": "mx.run", "@route": "cdata.store", "@verb": "POST", "@operation": "get_all", "@authority": "observation_only", "@key": "cdata.get_all", "@table_id": "$state.selected_table", "@query": "$event.query" }
+  },
+  "@events": { "store.init": "cdata.init", "row.put": "cdata.put", "rows.refresh": "cdata.get_all" },
+  "@imports": ["cdata.local-store.v1"],
+  "@permissions": { "network": "none", "tools": false, "semantic_commit": false, "state_scope": "request_scoped" },
+  "@lifecycle": { "mount": "projection_only", "unmount": "discard_state" },
+  "@database": {
+    "name": "CannabisForumDB",
+    "version": 1,
+    "stores": [
+      { "id": "user_profile", "key_path": "user_id" },
+      { "id": "user_post", "key_path": "post_id" },
+      { "id": "post_reply", "key_path": "reply_id" }
+    ]
+  }
+}

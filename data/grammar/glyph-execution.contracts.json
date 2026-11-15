@@ -1,0 +1,86 @@
+{
+  "@type": "khanary.glyph_execution.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "token_ids_execute_display_strings_never_do_the_container_grants_nothing",
+  "lane": "KHANARY_GLYPH_EXECUTION_TEST",
+  "owner": "src/kuhul/glyph_tokens.cpp",
+  "why": "`data/programs/glyph.tokens.json` declares kuhul.glyph-token-contract.v1 — a 1024-slot vocabulary in which a glyph is an executable token carrying an id, an opcode, a phase or fold marker, and the micronaut that runs it — and `data/host/manifests/atomic-exec-glyph-lane.json` declares the frozen container those tokens travel in. Nothing in the repository read or validated either file, so the phase ladder could be renumbered, a fold token could point at the wrong phase, a dual glyph could lose a pole, or the display string could quietly become the authority, all without a single test failing.",
+  "artifacts": {
+    "tokens": "data/programs/glyph.tokens.json",
+    "container": "data/host/manifests/atomic-exec-glyph-lane.json",
+    "glyph_track": "data/tracks/KUHUL-GLYPH-u.semantic-tracks.v1.json"
+  },
+  "vocabulary": {
+    "vocab_size": 1024,
+    "ranges": {
+      "control": [0, 15],
+      "compute_phase": [16, 21],
+      "compute_fold_marker": [22, 27],
+      "compute_reserved": [28, 47],
+      "tools_agents_micronauts": [48, 111],
+      "commands_intent": [112, 127],
+      "language_slots": [128, 1021],
+      "agent_pool": [1022, 1023]
+    },
+    "law": "the ranges partition the vocabulary exactly: no overlap, no gap, and every token id lies inside the range that names it"
+  },
+  "phase_ladder": {
+    "order": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"],
+    "ids": [16, 17, 18, 19, 20, 21],
+    "opcodes": ["0x01", "0x02", "0x03", "0x04", "0x05", "0x06"],
+    "angles_deg": [0, 60, 120, 180, 240, 300],
+    "law": "phase k sits at id 16+k and angle 60k degrees; the ladder is the executable form of the C6 order"
+  },
+  "fold_ladder": {
+    "glyphs": ["⟁POP_FOLD⟁", "⟁WO_FOLD⟁", "⟁YAX_FOLD⟁", "⟁SEK_FOLD⟁", "⟁CHEN_FOLD⟁", "⟁XUL_FOLD⟁"],
+    "ids": [22, 23, 24, 25, 26, 27],
+    "opcodes": ["0x07", "0x08", "0x09", "0x0A", "0x0B", "0x0C"],
+    "law": "one fold token per phase, in ladder order, and each token's declared phase must match its name"
+  },
+  "dual_glyph": {
+    "glyph": "⟁DUAL_SHEO_JYGG⟁",
+    "poles": {
+      "chaos": { "id": "SHEOG-1", "orientation": "upright", "rotation_deg": 0 },
+      "order": { "id": "JYGG-1", "orientation": "inverted", "rotation_deg": 180 }
+    },
+    "boundary": 0.85,
+    "law": "a dual glyph has exactly two distinct poles, opposed in orientation, and a boundary strictly inside (0, 1)"
+  },
+  "glyph_chars": {
+    "law": "the character table and the fold table must agree; a character that disagrees with its fold token is refused",
+    "chars": {
+      "CHATML": "⟁", "REASON": "⊛", "CODE": "⊞", "AST": "⟜", "TOOL": "⊕",
+      "MEMORY": "⊗", "THINK": "⊙"
+    }
+  },
+  "runtime_contract": {
+    "model_output": "token_ids_are_authoritative",
+    "display_output": "reverse_lookup_is_best_effort",
+    "law": "execution reads token ids; the rendered glyph is a best-effort reverse lookup, so no consumer may decide behaviour from the display string",
+    "unknown_language_token": "<sNNN>"
+  },
+  "language_encoding": {
+    "default_legacy": "crc32 over the utf8 word, masked, modulo 894, offset 128",
+    "utf8_glyph": "raw utf8 bytes offset by 128; declared reversible and training-required",
+    "law": "the legacy mapping is a best-effort frequency map and is not reversible; only the utf8_glyph encoding may be called reversible"
+  },
+  "container": {
+    "id": "asx://atomic_exec/|⚛|.v1",
+    "status": "FROZEN",
+    "role": "binary-glyph-container",
+    "invariant": "single-face container; semantic consumers are downstream and hold no parallel authority",
+    "law": "unpacking a container grants nothing: it carries glyphs, it does not authorize their execution"
+  },
+  "invariants": {
+    "GS1": "the declared ranges partition the vocabulary exactly — no overlap, no gap, full coverage of [0, vocab_size), and every token id inside the range that names it",
+    "GS2": "there are exactly six phase tokens, in C6 order, with ids 16..21, opcodes 0x01..0x06, angles 60k degrees, and a named micronaut each",
+    "GS3": "there are exactly six fold tokens, ids 22..27, opcodes 0x07..0x0C, and each token's phase matches the phase its glyph names",
+    "GS4": "a dual glyph carries exactly two distinct poles, opposed in orientation (upright/inverted, 0/180 degrees), with a boundary strictly inside (0, 1)",
+    "GS5": "the glyph_chars table agrees with the fold token table; a character that disagrees is refused",
+    "GS6": "token ids and opcodes are unique across the whole contract, including dual poles",
+    "GS7": "token ids are authoritative and display strings are best-effort; a contract claiming display authority is refused",
+    "GS8": "an unknown language token has the declared placeholder shape (<sNNN>), so an unidentified word is never silently mapped to a glyph",
+    "GS9": "the atomic exec container is frozen, single-face, ASXG/1, and confers no authority: semantic consumers are downstream and unpacking grants nothing"
+  }
+}

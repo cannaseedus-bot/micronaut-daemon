@@ -1,0 +1,24 @@
+{
+  "@kind": "semantic.learn.v1",
+  "@id": "learn_001",
+  "@owner": "REASON-µ",
+  "@targets": ["fact"],
+  "@candidates": [
+    {
+      "@id": "LF001",
+      "@destination": "fact",
+      "@subject": "verify_contract",
+      "@subject_type": "function",
+      "@predicate": "requires",
+      "@object": "schema_ref",
+      "@object_type": "binding",
+      "@proposed_epistemic_status": "Asserted",
+      "@provenance": ["pattern_induction"],
+      "@authority": "learn_executor"
+    }
+  ],
+  "@policy": {
+    "max_depth": 3,
+    "verify_before_promote": true
+  }
+}

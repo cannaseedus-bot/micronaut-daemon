@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kuhul:khanary:schema:burner-observation:v1",
+  "title": "KHANARY Burner observation tau = (F_h, phi, T, s, Q, input, operation, output, evidence)",
+  "description": "A Burner observation is proposal evidence: it records what a Burner run observed at a fold/phase/track coordinate. It is never a coordinate mutation and never commit authority — only Ch'en may assert it and only Xul may commit (GAP-092).",
+  "$ref": "#/$defs/BurnerObservation",
+  "$defs": {
+    "BurnerObservation": {
+      "type": "object",
+      "required": [
+        "@kind",
+        "@fold",
+        "@phase",
+        "@track",
+        "@state",
+        "@query",
+        "@input",
+        "@operation",
+        "@output",
+        "@evidence",
+        "@authority"
+      ],
+      "properties": {
+        "@kind": { "type": "string", "const": "khanary.burner.observation.v1" },
+        "@fold": {
+          "type": "object",
+          "required": ["@handle", "@hash"],
+          "properties": {
+            "@handle": { "type": "string", "minLength": 1 },
+            "@hash": { "type": "string", "minLength": 8 }
+          },
+          "additionalProperties": false
+        },
+        "@phase": {
+          "type": "object",
+          "required": ["@name"],
+          "properties": {
+            "@name": { "type": "string", "enum": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Ch_en", "Xul"] }
+          },
+          "additionalProperties": false
+        },
+        "@track": {
+          "type": "object",
+          "required": ["@id"],
+          "properties": { "@id": { "type": "string", "minLength": 1 } },
+          "additionalProperties": false
+        },
+        "@state": {
+          "type": "object",
+          "required": ["@folded", "@extent"],
+          "properties": {
+            "@folded": { "type": "boolean" },
+            "@extent": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": false
+        },
+        "@query": { "type": "string" },
+        "@input": { "type": "object" },
+        "@operation": { "type": "string", "minLength": 1 },
+        "@output": { "type": "object" },
+        "@evidence": {
+          "type": "object",
+          "required": ["@source", "@proposal_id"],
+          "properties": {
+            "@source": { "type": "string", "minLength": 1 },
+            "@proposal_id": { "type": "string", "minLength": 8 },
+            "@epistemic_state": { "type": "string", "enum": ["SUPPORTED", "MISS", "UNKNOWN", "CONTRADICTED"] }
+          },
+          "additionalProperties": true
+        },
+        "@authority": {
+          "type": "object",
+          "required": ["semantic_authority", "commit_authorized", "verified"],
+          "properties": {
+            "semantic_authority": { "type": "boolean", "const": false },
+            "commit_authorized": { "type": "boolean", "const": false },
+            "verified": { "type": "boolean", "const": false }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

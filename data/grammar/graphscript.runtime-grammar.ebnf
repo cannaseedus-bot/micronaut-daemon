@@ -1,0 +1,614 @@
+# ==============================================================================
+# EBNF GRAMMAR — GRAPH-REWRITING SCRIPTING LANGUAGE
+# ==============================================================================
+# A unified language for:
+#   - English-like program statements (create/set/if/print)
+#   - Binary-tree cons-lists (the simplest host shape)
+#   - Typed graph nodes with labeled, arity-annotated ports
+#   - Patterns, templates, wildcards, and rewrite rules
+#   - 2D-embedded hosts with explicit compliance axes
+#   - Semantic compression levels: unigram -> bigram -> trigram -> n-gram
+#   - REST/API surface derived from node declarations
+#   - Codegen to OpenAPI, GraphQL, SQL, TypeScript, JSON Schema, handlers
+#
+# Design invariants:
+#   1. Every construct reduces to a node with at most two children.
+#   2. Every program is a right-leaning cons-list of top-level forms.
+#   3. Every match is a homomorphism from a pattern into a host graph.
+#   4. Every rewrite is an anchored subgraph replacement.
+#   5. Every compression level compresses the level below into units.
+#   6. Every API surface is a total function of (ports, constraints).
+#   7. Codegen is itself a rewrite pass over the same host graph.
+# ==============================================================================
+
+
+# ==============================================================================
+# 0. TOP-LEVEL STRUCTURE
+# ==============================================================================
+
+program           = { top_form , [ newline ] } , EOF ;
+
+top_form          = node_decl
+                  | unigram_decl
+                  | bigram_decl
+                  | trigram_decl
+                  | ngram_decl
+                  | pattern_decl
+                  | template_decl
+                  | rule_decl
+                  | route_decl
+                  | endpoint_decl
+                  | codegen_decl
+                  | program_statement
+                  | block ;
+
+# ------------------------------------------------------------------------------
+# 0.1 Syntactic sugar
+# Filler words that make the language read like English. They never change
+# semantics; the parser may drop them after recognition.
+# ------------------------------------------------------------------------------
+
+sugar_a           = "a" | "an" | "the" ;
+sugar_to          = "to" | "into" ;
+sugar_named       = "named" | "called" ;
+sugar_is          = "is" | "equals" ;
+sugar_then        = "then" | "do" ;
+sugar_with        = "with" | "having" ;
+sugar_where       = "where" | "such that" ;
+sugar_matches     = "matches" | "binds" ;
+
+
+# ==============================================================================
+# 1. NODE DECLARATIONS
+# A node is a typed vertex with labeled, optionally ordered, ports.
+# Port arity controls how many edges a port may carry.
+# ==============================================================================
+
+node_decl         = "node" , identifier ,
+                    [ sugar_with ] , [ port_list ] ,
+                    [ sugar_where ] , [ constraint_list ] ;
+
+port_list         = "[" , [ port , { "," , port } ] , "]" ;
+port              = [ identifier , ":" ] , port_type , [ port_arity ] ;
+port_type         = "any" | "ident" | "string" | "number" | "node" | "region" ;
+port_arity        = "?" | "*" | "+" | "!" ;
+                    # ? = zero or one   * = zero or more
+                    # + = one or more   ! = exactly one (binary default)
+
+constraint_list   = constraint , { "," , constraint } ;
+constraint        = "adjacent" , port , port
+                  | "equal"    , port , port
+                  | "in"       , port , identifier
+                  | "shape"    , port , shape_spec ;
+
+
+# ==============================================================================
+# 2. SEMANTIC COMPRESSION LEVELS
+# Each level compresses the level below into reusable units.
+#   Level 1  Unigram  : typed atom
+#   Level 2  Bigram   : adjacency relation
+#   Level 3  Trigram  : word-level unit
+#   Level N  N-gram   : phrase / region unit
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 2.1 Unigrams (atoms) — the compression base
+# ------------------------------------------------------------------------------
+
+unigram_decl      = "unigram" , identifier ,
+                    [ sugar_with ] , "{" , [ newline ] ,
+                    unigram_body ,
+                    "}" ;
+
+unigram_body      = "cell" , ":" , port_type ,
+                    [ "," , "position" , ":" , shape_spec ] ,
+                    [ "," , "value" , ":" , literal ] ;
+
+# ------------------------------------------------------------------------------
+# 2.2 Bigrams (adjacency relations) — 2D compliance
+# ------------------------------------------------------------------------------
+
+bigram_decl       = "bigram" , identifier ,
+                    [ sugar_with ] , "{" , [ newline ] ,
+                    bigram_body ,
+                    "}" ;
+
+bigram_body       = "pair" , "(" , variable , "," , variable , ")" ,
+                    [ sugar_where ] , "adjacent" , adjacency ,
+                    variable , variable ;
+
+# ------------------------------------------------------------------------------
+# 2.3 Trigrams (word units) — the first semantic level
+# ------------------------------------------------------------------------------
+
+trigram_decl      = "trigram" , identifier ,
+                    [ sugar_with ] , "{" , [ newline ] ,
+                    trigram_body ,
+                    "}" ;
+
+trigram_body      = "triple" , "(" , variable , "," , variable , "," , variable , ")" ,
+                    [ sugar_where ] , trigram_constraint ;
+
+trigram_constraint = "in"    , identifier
+                   | "shape" , shape_spec
+                   | "line"  , direction
+                   | "L"     , direction , direction ;
+
+direction         = "N" | "S" | "E" | "W" | "NE" | "NW" | "SE" | "SW" ;
+
+# ------------------------------------------------------------------------------
+# 2.4 N-grams (phrase / region units) — global 2D compliance
+# ------------------------------------------------------------------------------
+
+ngram_decl        = "ngram" , identifier ,
+                    [ sugar_with ] , "{" , [ newline ] ,
+                    ngram_body ,
+                    "}" ;
+
+ngram_body        = "region" , "(" , variable , { "," , variable } , ")" ,
+                    [ sugar_where ] , region_constraint ;
+
+region_constraint = "in"        , identifier
+                  | "shape"     , shape_spec
+                  | "size"      , number_literal
+                  | "connected" , adjacency_spec ;
+
+
+# ==============================================================================
+# 3. PATTERN DECLARATIONS
+# A pattern is a graph with wildcards. It describes what to MATCH.
+# ==============================================================================
+
+pattern_decl      = "pattern" , identifier ,
+                    [ sugar_with ] , "{" , [ newline ] ,
+                    pattern_body ,
+                    "}" ;
+
+pattern_body      = { pattern_node , [ newline ] } ,
+                    [ guard_clause ] ;
+
+pattern_node      = node_ref , [ port_bindings ] , [ position_spec ] ;
+
+node_ref          = identifier
+                  | unigram_ref
+                  | bigram_ref
+                  | trigram_ref
+                  | ngram_ref
+                  | wildcard_node ;
+
+unigram_ref       = "U" , "(" , identifier , ")" ;
+bigram_ref        = "B" , "(" , variable , "," , variable , ")" ;
+trigram_ref       = "T" , "(" , variable , "," , variable , "," , variable , ")" ;
+ngram_ref         = "R" , "(" , variable , { "," , variable } , ")" ;
+
+wildcard_node     = "_" | "_" , ":" , identifier ;
+
+port_bindings     = "(" , [ binding , { "," , binding } ] , ")" ;
+binding           = port , "=" , bind_target ;
+bind_target       = variable | wildcard | literal ;
+
+variable          = "?" , identifier ;
+wildcard          = "_"
+                  | "_*"
+                  | "_?"
+                  | "_:" , identifier ;
+
+position_spec     = "@" , "(" , expr , "," , expr , ")" ;
+
+guard_clause      = sugar_where , guard , { "," , guard } ;
+guard             = expr , rel_op , expr
+                  | "in"       , variable , identifier
+                  | "adjacent" , variable , variable ;
+
+rel_op            = "==" | "!=" | "<" | ">" | "<=" | ">=" ;
+
+
+# ==============================================================================
+# 4. TEMPLATE DECLARATIONS
+# A template is a graph with holes. It describes what to EMIT.
+# ==============================================================================
+
+template_decl     = "template" , identifier ,
+                    [ sugar_with ] , "{" , [ newline ] ,
+                    template_body ,
+                    "}" ;
+
+template_body     = { template_node , [ newline ] } ,
+                    [ anchor_clause ] ;
+
+template_node     = node_ref , [ port_bindings ] , [ position_spec ] ;
+
+anchor_clause     = "anchor" , variable , "at" , port ;
+
+
+# ==============================================================================
+# 5. RULE DECLARATIONS
+# A rule binds a pattern to a template with strategy and 2D options.
+# ==============================================================================
+
+rule_decl         = "rule" , identifier , ":" , newline ,
+                    pattern_decl ,
+                    "->" , newline ,
+                    template_decl ,
+                    [ rule_options ] ;
+
+rule_options      = "options" , "{" , [ newline ] ,
+                    { rule_option , [ newline ] } ,
+                    "}" ;
+
+rule_option       = "strategy"    , "=" , strategy
+                  | "footprint"   , "=" , footprint
+                  | "adjacency"   , "=" , adjacency
+                  | "orientation" , "=" , orientation
+                  | "termination" , "=" , termination ;
+
+strategy          = "innermost" | "outermost" | "leftmost" | "priority" ;
+footprint         = "cell" | "row" | "column" | "rect" | "region" | "graph" ;
+adjacency         = "4" | "8" | "diag"
+                  | "offset" , "(" , expr , "," , expr , ")" ;
+orientation       = "fixed" | "rotate" | "flip" | "all" ;
+termination       = "fixpoint"
+                  | "fuel" , "(" , number_literal , ")"
+                  | "confluent" ;
+
+
+# ==============================================================================
+# 6. PROGRAM-LEVEL STATEMENTS
+# The original English-like language, now node-based.
+# Every statement is a binary node: (left, right) or a right-leaning chain.
+# ==============================================================================
+
+program_statement = creation_statement
+                  | assignment_statement
+                  | conditional_statement
+                  | action_statement ;
+
+creation_statement = "create" , [ sugar_a ] , [ "new" ] , identifier ,
+                     [ sugar_named ] , string_literal ;
+
+assignment_statement = ( "set" | "assign" ) , identifier ,
+                       [ sugar_to | sugar_is ] , expression ;
+
+conditional_statement = "if" , expression , [ sugar_is ] , expression ,
+                        [ sugar_then ] , [ newline ] ,
+                        block ,
+                        [ "else" , [ newline ] , block ] ;
+
+action_statement  = ( "print" | "delete" | "show" ) ,
+                    ( identifier | string_literal | number_literal ) ;
+
+block             = "begin" , { program_statement , [ newline ] } , "end" ;
+
+
+# ==============================================================================
+# 7. EXPRESSIONS
+# ==============================================================================
+
+expression        = binary_expr ;
+binary_expr       = atom , { bin_op , atom } ;
+atom              = identifier | literal | "(" , expression , ")" ;
+
+bin_op            = "+" | "-" | "*" | "/" | "==" | "!=" | "<" | ">" ;
+literal           = string_literal | number_literal ;
+
+
+# ==============================================================================
+# 8. SHAPES AND ADJACENCY (for 2D compliance)
+# ==============================================================================
+
+shape_spec        = "cell"
+                  | "row"
+                  | "col"
+                  | "rect" , "(" , number_literal , "," , number_literal , ")"
+                  | "region" , "(" , adjacency_spec , ")" ;
+
+adjacency_spec    = "4" | "8" | "diag"
+                  | "offset" , "(" , number_literal , "," , number_literal , ")" ;
+
+
+# ==============================================================================
+# 9. REST / API LAYER
+# Node declarations become resources. Ports become fields and sub-resources.
+# Rules become handlers. Endpoints bind verb + path + request + response.
+# ==============================================================================
+
+method            = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" ;
+
+route_decl        = method , path , "->" , node_ref , [ handler ] ;
+path              = "/" , segment , { "/" , segment } ;
+segment           = identifier
+                  | ":" , identifier
+                  | "{" , identifier , "}" ;
+
+handler           = "handle" , identifier ;
+
+request_decl      = "request" , "{" , [ newline ] ,
+                    { field_decl , [ newline ] } ,
+                    "}" ;
+
+response_decl     = "response" , "{" , [ newline ] ,
+                    { field_decl , [ newline ] } ,
+                    "}" ;
+
+field_decl        = identifier , ":" , port_type , [ port_arity ] ;
+
+endpoint_decl     = method , path , ":" , newline ,
+                    [ request_decl ] ,
+                    "->" , newline ,
+                    [ response_decl ] ,
+                    [ endpoint_options ] ;
+
+endpoint_options  = "options" , "{" , [ newline ] ,
+                    { endpoint_option , [ newline ] } ,
+                    "}" ;
+
+endpoint_option   = "auth"       , "=" , auth_spec
+                  | "cache"      , "=" , cache_spec
+                  | "rate_limit" , "=" , number_literal
+                  | "paginate"   , "=" , paginate_spec
+                  | "status"     , "=" , number_literal ;
+
+auth_spec         = "none" | "bearer" | "basic" | "api_key" ;
+cache_spec        = "none" | "ttl" , "(" , number_literal , ")" ;
+paginate_spec     = "none" | "offset" | "cursor" | "page" ;
+
+
+# ==============================================================================
+# 10. CODEGEN LAYER
+# One node declaration emits OpenAPI, GraphQL SDL, SQL DDL, TypeScript,
+# JSON Schema, and route handlers. Codegen is a rewrite pass over the AST.
+# ==============================================================================
+
+codegen_decl      = "codegen" , identifier ,
+                    [ sugar_with ] , "{" , [ newline ] ,
+                    { codegen_target , [ newline ] } ,
+                    "}" ;
+
+codegen_target    = "target"    , "=" , target_kind
+                  | "dialect"   , "=" , dialect
+                  | "namespace" , "=" , identifier
+                  | "output"    , "=" , string_literal
+                  | "option"    , "=" , codegen_option ;
+
+target_kind       = "openapi"
+                  | "graphql"
+                  | "sql"
+                  | "typescript"
+                  | "json_schema"
+                  | "validators"
+                  | "handlers" ;
+
+dialect           = "postgres" | "mysql" | "sqlite" | "mssql" ;
+
+codegen_option    = "nullable"     , "=" , "true" | "false"
+                  | "pagination"   , "=" , paginate_spec
+                  | "soft_delete"  , "=" , "true" | "false"
+                  | "timestamps"   , "=" , "true" | "false"
+                  | "pluralize"    , "=" , "true" | "false" ;
+
+# ------------------------------------------------------------------------------
+# 10.1 Emission targets (derived forms)
+# The following are not parsed; they are emitted. Included here to document
+# the shape of generated artifacts.
+# ------------------------------------------------------------------------------
+
+openapi_emission  = "openapi" , ":" , newline ,
+                    "components:" , newline ,
+                    "  schemas:" , newline ,
+                    { "    " , identifier , ":" , newline ,
+                      "      type: object" , newline ,
+                      "      required: [" , required_fields , "]" , newline ,
+                      "      properties:" , newline ,
+                      { "        " , identifier , ":" , openapi_type , newline } } ,
+                    "paths:" , newline ,
+                    { openapi_path , newline } ;
+
+openapi_path      = "  " , path , ":" , newline ,
+                    { "    " , method_lower , ":" , newline ,
+                      "      summary:" , string_literal , newline ,
+                      "      operationId:" , identifier , newline ,
+                      "      responses:" , newline ,
+                      "        '200':" , newline ,
+                      "          description: OK" , newline } ;
+
+openapi_type      = "type: " , scalar_type
+                  | "type: array" , newline ,
+                    "          items: { type: " , scalar_type , " }" ;
+
+scalar_type       = "integer" | "number" | "string" | "boolean" | "object" ;
+required_fields   = identifier , { "," , identifier } ;
+method_lower      = "get" | "post" | "put" | "patch" | "delete" ;
+
+graphql_emission  = "graphql" , ":" , newline ,
+                    { "type " , identifier , " {" , newline ,
+                      { "  " , identifier , ":" , graphql_type , newline } ,
+                      "}" , newline } ;
+
+graphql_type      = scalar_gql
+                  | scalar_gql , "!"
+                  | "[" , scalar_gql , "!]" , "!"
+                  | "[" , scalar_gql , "]" ;
+
+scalar_gql        = "Int" | "Float" | "String" | "Boolean" | "ID" ;
+
+sql_emission      = "sql" , ":" , newline ,
+                    { sql_table , newline } ,
+                    { sql_join_table , newline } ;
+
+sql_table         = "CREATE TABLE " , identifier , " (" , newline ,
+                    "  id SERIAL PRIMARY KEY," , newline ,
+                    { "  " , identifier , " " , sql_type ,
+                      " " , sql_nullability , "," , newline } ,
+                    { "  " , sql_constraint , "," , newline } ,
+                    ");" ;
+
+sql_join_table    = "CREATE TABLE " , identifier , "_" , identifier , " (" , newline ,
+                    "  " , identifier , "_id INTEGER REFERENCES " , identifier , "(id)," , newline ,
+                    "  " , identifier , "_id INTEGER REFERENCES " , identifier , "(id)," , newline ,
+                    "  PRIMARY KEY (" , identifier , "_id, " , identifier , "_id)" , newline ,
+                    ");" ;
+
+sql_type          = "INTEGER" | "REAL" | "TEXT" | "BOOLEAN" | "JSONB" ;
+sql_nullability   = "NOT NULL" | "NULL" ;
+sql_constraint    = "CHECK (" , identifier , " IN (" , literal_list , "))"
+                  | "UNIQUE (" , identifier , "," , identifier , ")"
+                  | "FOREIGN KEY (" , identifier , ") REFERENCES " , identifier , "(id)"
+                  | "CHECK (shape_ok(" , identifier , ", " , shape_spec , "))" ;
+
+literal_list      = literal , { "," , literal } ;
+
+ts_emission       = "typescript" , ":" , newline ,
+                    { "export interface " , identifier , " {" , newline ,
+                      "  id: number;" , newline ,
+                      { "  " , identifier , ":" , ts_type , ";" , newline } ,
+                      "}" , newline } ;
+
+ts_type           = scalar_ts
+                  | scalar_ts , " | null"
+                  | "Array<" , scalar_ts , ">"
+                  | "Array<" , scalar_ts , ">" , " | null" ;
+
+scalar_ts         = "number" | "string" | "boolean" | "Record<string, unknown>" ;
+
+jsonschema_emission = "json_schema" , ":" , newline ,
+                      { "{" , newline ,
+                        "  \"$schema\": \"https://json-schema.org/draft/2020-12/schema\"," , newline ,
+                        "  \"title\": \"" , identifier , "\"," , newline ,
+                        "  \"type\": \"object\"," , newline ,
+                        "  \"required\": [" , required_fields , "]," , newline ,
+                        "  \"properties\": {" , newline ,
+                        { "    \"" , identifier , "\": " , json_schema_type , "," , newline } ,
+                        "  }" , newline ,
+                        "}" , newline } ;
+
+json_schema_type  = "{ \"type\": \"" , scalar_type , "\" }"
+                  | "{ \"type\": \"array\", \"items\": " , json_schema_type , " }" ;
+
+handlers_emission = "handlers" , ":" , newline ,
+                    { "export async function " , handler_name ,
+                      "(req, res) {" , newline ,
+                      "  // TODO: implement" , newline ,
+                      "}" , newline } ;
+
+handler_name      = "list" , identifier
+                  | "get" , identifier
+                  | "create" , identifier
+                  | "update" , identifier
+                  | "delete" , identifier
+                  | "get" , identifier , "_" , identifier
+                  | "set" , identifier , "_" , identifier ;
+
+
+# ==============================================================================
+# 11. TRANSFORMATION RULES (normative)
+# ==============================================================================
+# These rules define the canonical mapping from node declarations to every
+# target. They are stated as rewrite rules in the graph-rewriting core, so
+# codegen is just another rewriting pass.
+
+# ------------------------------------------------------------------------------
+# 11.1 Arity semantics (the universal knob)
+# ------------------------------------------------------------------------------
+#
+#   !  exactly one   -> scalar, required, NOT NULL
+#   ?  zero or one   -> scalar, optional, NULL allowed
+#   *  zero or more  -> collection, array, join table or 1-N
+#   +  one or more   -> collection, non-empty, 1-N with CHECK
+#
+#   Port arity is the single source of truth for cardinality across all targets.
+#   It also decides the HTTP shape of auto-generated routes.
+
+# ------------------------------------------------------------------------------
+# 11.2 Type mapping
+# ------------------------------------------------------------------------------
+#
+#   T \ a     !               ?               *               +
+#   -----------------------------------------------------------------------
+#   any       any!            any?            any[]           any+
+#   ident     ID!             ID              [ID!]!          [ID!]!
+#   string    String!         String          [String!]!      [String!]!
+#   number    Int!            Int             [Int!]!         [Int!]!
+#   node      N!              N               [N!]!           [N!]!
+#   region    Region!         Region          [Region!]!      [Region!]!
+
+# ------------------------------------------------------------------------------
+# 11.3 Constraint mapping
+# ------------------------------------------------------------------------------
+#
+#   C                       OpenAPI           GraphQL        SQL              TS
+#   ---------------------------------------------------------------------------
+#   in(p, set)              enum              enum           CHECK IN         union
+#   equal(a, b)             -                 -              UNIQUE           -
+#   adjacent(a, b)          $ref              relation       FOREIGN KEY      -
+#   shape(a, spec)          schema            -              CHECK            -
+#   port_arity(!)           required          T!             NOT NULL         non-optional
+#   port_arity(?)           nullable          T              NULL             T | null
+#   port_arity(*)           array             [T!]!          join table       Array<T>
+#   port_arity(+)           minItems: 1       [T!]!          join + CHECK     Array<T>
+
+# ------------------------------------------------------------------------------
+# 11.4 Route mapping
+# ------------------------------------------------------------------------------
+#
+#   GET    /N           -> listN        (if any port has arity * or +)
+#   POST   /N           -> createN
+#   GET    /N/:id       -> getN
+#   PUT    /N/:id       -> replaceN
+#   PATCH  /N/:id       -> updateN
+#   DELETE /N/:id       -> deleteN
+#
+#   GET    /N/:id/p     -> getN_p       (if arity in {!, ?})
+#   GET    /N/:id/p     -> listN_p      (if arity in {*, +})
+#   PATCH  /N/:id/p     -> setN_p       (if arity in {!, ?})
+#   POST   /N/:id/p     -> addN_p       (if arity in {*, +})
+#   DELETE /N/:id/p     -> clearN_p     (if arity in {*, +})
+
+# ------------------------------------------------------------------------------
+# 11.5 Compression-level mapping
+# ------------------------------------------------------------------------------
+#
+#   unigram U(cell: T, value: L)        -> table U(id, cell T, value L)
+#   bigram  B(pair(?a, ?b) adjacent D)  -> edge table B(a_id, b_id, direction)
+#   trigram T(triple(?a,?b,?c) in dict) -> table T(a_id, b_id, c_id, in_dict)
+#   ngram   R(region(?a..) shape S)     -> table R(id, shape S, members JSONB)
+
+# ------------------------------------------------------------------------------
+# 11.6 Emission rules (node -> target)
+# ------------------------------------------------------------------------------
+#
+#   openapi(N)  = f_openapi(P, C)
+#   graphql(N)  = f_graphql(P, C)
+#   sql(N)      = f_sql(P, C)
+#   ts(N)       = f_ts(P, C)
+#   json(N)     = f_json(P, C)
+#   handlers(N) = f_handlers(P, C)
+#
+#   where every f_* is a total function of (P, C).
+#
+#   Therefore: changing one port changes every target consistently.
+#   There is no drift between schema, API, database, and client types.
+#   This is the property that schema-first frameworks chase; here it falls
+#   out of the graph-rewriting core. Codegen is just another rewrite rule
+#   applied to the same host graph.
+
+
+# ==============================================================================
+# 12. LEXICAL TERMINALS
+# ==============================================================================
+
+identifier        = letter , { letter | digit | "_" } ;
+string_literal    = '"' , { letter | digit | space | punctuation } , '"' ;
+number_literal    = digit , { digit } ;
+
+letter            = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j"
+                  | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t"
+                  | "u" | "v" | "w" | "x" | "y" | "z"
+                  | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J"
+                  | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T"
+                  | "U" | "V" | "W" | "X" | "Y" | "Z" ;
+
+digit             = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+punctuation       = "," | "." | "!" | "?" | "'" | "-" | "_" ;
+space             = " " ;
+newline           = "\n" | "\r\n" ;
+EOF               = ? end of input ? ;

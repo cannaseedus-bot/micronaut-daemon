@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0">
+
+<!-- Sek phase bank: word-problem computation templates.
+     K'UHUL Sek ops: compute_over_admitted_structure, execute_tool_chain.
+     These templates apply governing equations to the bound knowns from Pop.
+     Reached via <srai> from Pop patterns after candidate admission at Yax. -->
+
+<category>
+<pattern>WORD PROBLEM RATE DISTANCE *</pattern>
+<template>
+<mx2lm>
+Relative approach rate: sum of individual speeds.
+Time to meet = initial gap ÷ relative rate.
+Evidence state: SUPPORTED — derivable from stated givens.
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>COMPUTE PERCENT * OF *</pattern>
+<template>
+<mx2lm>
+<star/> percent of <star index="2"/>: multiply <star index="2"/> by <star/> then divide by 100.
+Evidence state: SUPPORTED.
+</mx2lm>
+</template>
+</category>
+
+</aiml>

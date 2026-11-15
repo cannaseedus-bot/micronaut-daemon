@@ -1,0 +1,15 @@
+<div id="buy-your-own-bot" data-asx-key="⟁APP:BUY_YOUR_OWN_BOT/⟁ROOT:BUY_YOUR_OWN_BOT">
+  <header data-asx-key="⟁APP:BUY_YOUR_OWN_BOT/⟁WIDGET:BOT_HERO"><h1>Buy your own bot. Trained on your content.</h1><button data-asx-key="⟁APP:BUY_YOUR_OWN_BOT/⟁ACTION:BOT_CONFIGURE" data-event="configure.click">Configure Your Bot</button></header>
+  <section data-asx-key="⟁APP:BUY_YOUR_OWN_BOT/⟁WIDGET:BOT_HOW" data-source="how_it_works"></section>
+  <section data-asx-key="⟁APP:BUY_YOUR_OWN_BOT/⟁WIDGET:BOT_CONFIG">
+    <select data-asx-key="⟁APP:BUY_YOUR_OWN_BOT/⟁SELECT:BOT_TYPE" data-source="bot_types" data-bind="state.bot_type" data-event="bot_type.change"></select>
+    <select data-asx-key="⟁APP:BUY_YOUR_OWN_BOT/⟁SELECT:BOT_SPEED" data-source="delivery_speeds" data-bind="state.delivery_speed" data-event="delivery_speed.change"></select>
+    <output data-asx-key="⟁APP:BUY_YOUR_OWN_BOT/⟁WIDGET:BOT_SUMMARY" data-bind="state.bot_type,state.delivery_speed"></output>
+  </section>
+  <section data-asx-key="⟁APP:BUY_YOUR_OWN_BOT/⟁WIDGET:BOT_COMPARE" data-source="comparison"></section>
+  <section data-asx-key="⟁APP:BUY_YOUR_OWN_BOT/⟁WIDGET:BOT_FAQ" data-source="faq"></section>
+  <form data-asx-key="⟁APP:BUY_YOUR_OWN_BOT/⟁WIDGET:BOT_CHECKOUT" data-bind="state.checkout_open" data-event="checkout.submit"><input name="name" required placeholder="Full name" /><input name="email" type="email" required placeholder="Email" /><input name="website" type="url" required placeholder="Website URL" /><textarea name="content_sources" placeholder="Content sources"></textarea><textarea name="notes" placeholder="Requirements"></textarea><button type="submit">Submit Bot Order</button></form>
+</div>
+<script type="application/json" id="asx-json-runtime">
+{"@kind":"asx.key-runtime.binding.v1","@app":"⟁APP:BUY_YOUR_OWN_BOT","@manifest":"data/host/apps/buy-your-own-bot.asx-app.json","@executor":"mx.run","@authority":"projection_only","@state":"request_scoped","@semantic_commit":false,"@events":{"bot_type.change":"bot.select_type","delivery_speed.change":"bot.select_speed","configure.click":"bot.open_config","checkout.submit":"bot.submit_order"}}
+</script>

@@ -1,0 +1,118 @@
+{
+  "@program": "klsl.targets",
+  "@schema": "kuhul.klsl.targets.v1",
+  "@version": "1.0.0",
+  "@description": "KLSL compiler and backend opcode routing. KLSLC emits HLSL/XVM; WebGL2 and OpenCL 1.2 are runtime dispatch targets.",
+  "compiler": {
+    "name": "klslc",
+    "executable": "drivers/klsl/bin/klslc.exe",
+    "source": "drivers/klsl",
+    "native_targets": ["hlsl", "xvm"],
+    "commands": {
+      "hlsl": "klslc input.klsl output.hlsl",
+      "xvm": "klslc input.klsl output.hlsl --xvm output.bin"
+    },
+    "note": "The current native compiler does not directly emit GLSL ES 3.00 or OpenCL C. Those targets are selected through the semantic opcode registry and host dispatchers."
+  },
+  "targets": {
+    "opencl_1_2": {
+      "language": "OpenCL C 1.2",
+      "registry": "programs/opencl.kernel.json",
+      "source_root": "drivers/opencl_1_2",
+      "build_options": ["-cl-std=CL1.2"],
+      "host_dispatch": "programs/opencl.kernel.json#program",
+      "forbidden": ["OpenCL 2.0 pipes", "device-side enqueue", "generic address space"]
+    },
+    "webgl2": {
+      "language": "GLSL ES 3.00",
+      "registry": "programs/webgl2.kernel.json",
+      "source_root": "drivers/webgl2",
+      "host_dispatch": "trainer/dashboard/webgl2-glyph-dispatcher.mjs",
+      "shader_stages": ["vertex", "fragment"],
+      "forbidden": ["WGSL compute", "WebGPU", "SSBO-only OpenGL 4.3 syntax"]
+    },
+    "d3d11_cs5": {
+      "language": "HLSL cs_5_0",
+      "registry": "programs/shader.registry.json",
+      "source_root": "drivers/cs5_shaders",
+      "host_dispatch": "trainer/build/Release/gpt2_trainer.exe"
+    },
+    "xvm": {
+      "language": "KLSL XVM bytecode",
+      "registry": "drivers/klsl/klsl_opcodes.h",
+      "host_dispatch": "K'UHUL XVM runtime"
+    },
+    "xvm_d3d12": {
+      "language": "HLSL/DXIL plus XVM D3D12 runtime",
+      "shader_root": "drivers/klsl/xvm_d3d12/shaders",
+      "compiler": "drivers/klsl/bin/kxc.exe",
+      "runtime": "drivers/klsl/bin/xvm_d12.exe",
+      "smoke_tests": [
+        "drivers/klsl/bin/scx2_runtime_smoke.exe",
+        "drivers/klsl/bin/xvm_thread_cluster_smoke.exe"
+      ],
+      "source_registry": "dist/xvm-d3d12/asx_manifest.json",
+      "status": "d3d12_only",
+      "hardware_note": "Not available on the Intel HD 4600 FL11.x path; use OpenCL 1.2, D3D11 CS5, or CPU fallback there."
+    }
+  },
+  "opcode_routes": {
+    "G_TENSOR_MATMUL": {
+      "opcode": "0x40",
+      "opencl_1_2": { "kernel": "matmul", "status": "contracted" },
+      "webgl2": { "fragment": "drivers/webgl2/matmul.frag", "status": "implemented" }
+    },
+    "G_TENSOR_ADD": {
+      "opcode": "0x41",
+      "opencl_1_2": { "kernel": "add", "status": "validated" },
+      "webgl2": { "fragment": "drivers/webgl2/add.frag", "status": "implemented" }
+    },
+    "G_TENSOR_CONV2D": {
+      "opcode": "0x42",
+      "opencl_1_2": { "kernel": "conv2d", "status": "contracted" },
+      "webgl2": { "fragment": "drivers/webgl2/conv2d.frag", "status": "implemented" }
+    },
+    "G_RELU": {
+      "opcode": "0x50",
+      "opencl_1_2": { "kernel": "relu_forward", "status": "contracted" },
+      "webgl2": { "fragment": "drivers/webgl2/relu.frag", "status": "implemented" }
+    },
+    "G_GELU": {
+      "opcode": "0x51",
+      "opencl_1_2": { "kernel": "gelu_forward", "status": "implemented" },
+      "webgl2": { "fragment": "drivers/webgl2/gelu.frag", "status": "implemented" }
+    },
+    "G_SOFTMAX": {
+      "opcode": "0x52",
+      "opencl_1_2": { "kernel": "softmax_forward", "status": "implemented" },
+      "webgl2": { "fragment": "drivers/webgl2/softmax.frag", "status": "implemented" }
+    },
+    "G_SWIGLU": {
+      "opcode": "0x110",
+      "opencl_1_2": { "kernel": "swiglu_forward", "status": "implemented" },
+      "webgl2": { "status": "host_only", "note": "Use multi-pass dispatcher when implemented." }
+    },
+    "G_RMS_NORM": {
+      "opcode": "0x118",
+      "opencl_1_2": { "kernel": "rms_norm_forward", "status": "implemented" },
+      "webgl2": { "status": "host_only", "note": "Use multi-pass dispatcher when implemented." }
+    },
+    "G_ADAMW": {
+      "opcode": "0x116",
+      "opencl_1_2": { "kernel": "adamw_step", "status": "implemented" },
+      "webgl2": { "status": "host_only" }
+    },
+    "G_HF_LOAD": {
+      "opcode": "0x200",
+      "opencl_1_2": { "status": "host_only", "loader": "SafeTensors/STB host loader" },
+      "webgl2": { "host": "trainer/dashboard/webgl2-hf-loader.mjs", "status": "implemented" }
+    }
+  },
+  "authority": {
+    "semantic_opcodes": "programs/opcode.table.json",
+    "opencl_routes": "programs/opencl.kernel.json",
+    "webgl2_routes": "programs/webgl2.kernel.json",
+    "storage": "tools/stb.py",
+    "opencl_version": "1.2"
+  }
+}

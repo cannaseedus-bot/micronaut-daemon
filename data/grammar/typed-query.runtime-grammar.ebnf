@@ -1,0 +1,116 @@
+(* K'UHUL Typed Semantic Query Protocol v1.
+   Grammar defines request syntax and static type contracts only.
+   Static typing, name resolution, retrieval, ranking, XCFE admission,
+   and mutation are separate pipeline stages; grammar recognition
+   confers no authority over any of them. *)
+
+
+(* ================================================================
+   Query Request Syntax
+   A typed_query is the top-level form; each variant maps to exactly
+   one output type (see Static Signatures below).
+   ================================================================ *)
+
+typed_query       = key_query | text_query | relation_query
+                  | pattern_query | capability_query ;
+
+key_query         = "KEY", "(", semantic_key, ")" ;
+text_query        = "TEXT", "(", string, ")" ;
+relation_query    = "RELATION", "(", semantic_key, ",", semantic_key, ")" ;
+pattern_query     = "PATTERN", "(", pattern_literal, ")" ;
+capability_query  = "CAPABILITY", "(", capability_id, ")" ;
+
+semantic_key      = qname | glyph_key ;
+capability_id     = qname ;
+pattern_literal   = string ;
+qname             = identifier, { ":", identifier } ;
+glyph_key         = "⟁", identifier ;
+identifier        = letter, { letter | digit | "_" | "-" | "." } ;
+string            = '"', { string_character }, '"' ;
+letter            = "A".."Z" | "a".."z" | "µ" ;
+digit             = "0".."9" ;
+(* string_character: any Unicode scalar except unescaped double-quote or backslash. *)
+
+
+(* ================================================================
+   Static Signatures  (declarative type contracts; no execution authority)
+   ================================================================
+
+   Query type         Input                           Output
+   ─────────────────────────────────────────────────────────────────
+   KeyQuery         : SemanticKey                  -> SemanticField
+   TextQuery        : String                       -> SearchResults
+   RelationQuery    : SemanticKey × SemanticKey    -> RelationshipCandidates
+   PatternQuery     : Pattern                      -> PatternMatches
+   CapabilityQuery  : CapabilityID                 -> CapabilityDescriptors
+
+   Output type definitions:
+     SemanticField
+       A snapshot of a single semantic key and its associated values,
+       relations, and WCR scores as they exist in the gram store at
+       retrieval time.  SemanticField is immutable; a re-query produces
+       a new result_id and may cite supersedes.
+
+     SearchResults
+       A ranked list of zero or more items matching the input string.
+       Items carry evidence references and WCR scores; ranking is
+       determined by the retrieval stage, not by this grammar.
+       An empty list is a valid SearchResults value (not an error).
+
+     RelationshipCandidates
+       The set of directed and undirected relations observed between
+       the two input SemanticKey values in the gram store.
+       The result is a list of (left, verb, right, weight) tuples.
+       An empty list means no relations were found; it does not mean
+       the keys are unrelated outside the current store.
+
+     PatternMatches
+       All spans within the semantic field that match the input Pattern.
+       Each match carries the matched span, its source key, position, and
+       a confidence score.  Pattern is interpreted by the host's declared
+       pattern engine; this grammar does not define pattern semantics.
+
+     CapabilityDescriptors
+       Descriptions of one or more capabilities registered under the
+       input CapabilityID.  Each descriptor names the micronaut,
+       phase authority, parameter schema, and XCFE admission status.
+
+   Phase assignments (retrieval pipeline):
+     Pop    — ingest_query_request; validate query_id uniqueness
+     Wo     — bind_semantic_key; resolve_capability_id
+     Yax    — evaluate_candidates; rank_evidence; assemble_field
+     Sek    — select_result_type; propose_retrieval_result
+     Ch'en  — verify_retrieval_result; certify_immutability
+     Xul    — close_verified_fold; emit_commit_record (mutation path only)
+
+   Immutability invariant:
+     A RetrievalResult is immutable once emitted.  Corrections or
+     updates are expressed as a new result_id citing supersedes.
+     The original result is never overwritten.
+
+   FOUND / UNRESOLVED / REJECTED invariants:
+     FOUND       requires at least one evidence-backed item in the result.
+     UNRESOLVED  means no adequate evidence was retrieved; it does NOT
+                 mean the queried entity is false or absent.
+     REJECTED    means the query failed a structural or policy check;
+                 a diagnostic is required.
+
+   WCR invariant:
+     WCR (Weight × Confidence × Relativity) scores rank candidates
+     within a result but do NOT change evidence, verification status,
+     or XCFE admission state.  A high WCR score does not authorize
+     any action.
+
+   Action-proposal separation:
+     Parsing this grammar produces a QueryRequest only.
+     An ActionProposal is a separate artifact that references a
+     RetrievalResult; it does not inherit the retrieval's authority.
+     An ActionResult records a host decision; it does not self-authorize.
+     A CommitRecord is emitted only after independent XCFE authorization
+     and Ch'en verification; the record references but does not grant either.
+
+   Authority:
+     Grammar recognition and type-rule satisfaction produce a parse
+     tree and a diagnostic list only.  No retrieval, no routing, no
+     mutation, and no write authorization are granted.
+   ================================================================ *)

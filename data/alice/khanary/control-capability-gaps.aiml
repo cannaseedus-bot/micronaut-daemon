@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Generated key lookup bank from control-capability-gaps.jsonl; entries are data, not execution authority.-->
+  <category>
+    <pattern>LOOK UP KEY IF</pattern>
+    <template>Key if. role: conditional-branch; class: CONDITION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ELSE</pattern>
+    <template>Key else. role: branch-alternative; class: SELECTION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY THEN</pattern>
+    <template>Key then. role: ordered-transition; class: CONSEQUENCE</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY WHEN</pattern>
+    <template>Key when. role: temporal-condition; class: CONSEQUENCE</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY HOW</pattern>
+    <template>Key how. role: method-execution; class: EXECUTION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY WHO</pattern>
+    <template>Key who. role: entity-binding; class: STRUCTURE</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY WHY</pattern>
+    <template>Key why. role: causal-link; class: CAUSAL</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY FOR</pattern>
+    <template>Key for. role: iteration-or-scope; class: CONSEQUENCE</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY FROM</pattern>
+    <template>Key from. role: origin-extraction; class: STRUCTURE</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY AS</pattern>
+    <template>Key as. role: role-cast-alias; class: TRANSFORM</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY EQUALS</pattern>
+    <template>Key equals. role: comparison-equivalence; class: TRANSFORM</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY WHERE</pattern>
+    <template>Key where. role: location-binding; class: STRUCTURE</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY IS</pattern>
+    <template>Key is. role: state-assertion; class: MEMORY</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ARE</pattern>
+    <template>Key are. role: state-assertion; class: MEMORY</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY EQUAL</pattern>
+    <template>Key equal. role: comparison-equivalence; class: TRANSFORM</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY AND</pattern>
+    <template>Key and. role: conjunctive-join; class: STRUCTURE</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY OR</pattern>
+    <template>Key or. role: disjunctive-branch; class: SELECTION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY NOT</pattern>
+    <template>Key not. role: negation-constraint; class: NEGATION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY BECAUSE</pattern>
+    <template>Key because. role: causal-link; class: CAUSAL</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY REQUIRES</pattern>
+    <template>Key requires. role: precondition-binding; class: CONDITION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY DEPENDS</pattern>
+    <template>Key depends. role: precondition-binding; class: CONDITION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY EVIDENCE</pattern>
+    <template>Key evidence. role: evidence-binding; class: VERIFICATION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY SHOWS</pattern>
+    <template>Key shows. role: evidence-binding; class: VERIFICATION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY PROVES</pattern>
+    <template>Key proves. role: evidence-binding; class: VERIFICATION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY VERIFY</pattern>
+    <template>Key verify. role: verification-gate; class: VERIFICATION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY CHECK</pattern>
+    <template>Key check. role: test-gate; class: VERIFICATION</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY ASSERT</pattern>
+    <template>Key assert. role: test-gate; class: VERIFICATION</template>
+  </category>
+</aiml>

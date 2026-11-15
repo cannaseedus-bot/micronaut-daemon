@@ -1,0 +1,179 @@
+(* ================================================================ *)
+(* CODEX-µ — Code Review and Expert Code Operation Grammar          *)
+(* Individual Micronaut domain language                             *)
+(* Role: review                                                     *)
+(* Owns: bigram tool selection, code review proposals, validation   *)
+(* Does NOT own: code execution, file commits, test invocation,     *)
+(*               direct user delivery, shard write operations       *)
+(*                                                                  *)
+(* CODEX-µ produces CodeReviewProposals. A proposal is not an       *)
+(* invocation. Tool selection via bigram score does not grant tool  *)
+(* execution authority; XCFE admission is required before dispatch. *)
+(* The dual-validator loop (s7_mini_gguf + desp_v1) is a gate       *)
+(* requirement declared here; it does not grant XCFE admission.     *)
+(* ================================================================ *)
+
+
+(* ---- Part I: Program Surface Syntax ---- *)
+
+program = { tool_decl | review_rule | validate_decl | type_decl
+          | operation_contract_decl | comment } ;
+
+(* TOOL — declare a named code operation tool with its shard sources *)
+(* Shards are pre-trained read-only references; declaring a tool does
+   not load a shard or invoke the expert model. *)
+tool_decl = "TOOL" tool_id "{"
+              "DOMAIN" string
+              "SHARDS" "[" string { "," string } "]"
+              "THRESHOLD" float_lit
+            "}" ;
+
+(* REVIEW — select and propose a code operation based on bigram scoring *)
+(* WHEN names the condition applied to the code token space.
+   USE names a declared tool_id; it does not invoke the tool.
+   SCORE specifies the minimum WCR score for the bigram match.
+   EMIT names the output type; CodeReviewProposal is a candidate,
+        not an invocation. XCFE admission is required before dispatch. *)
+review_rule = "REVIEW" identifier "{"
+                "WHEN" review_condition
+                "USE" tool_id
+                "SCORE" float_lit
+                "EMIT" review_output_type
+              "}" ;
+
+review_condition  = "BIGRAM" string
+                  | "INTENT" identifier
+                  | "LANGUAGE" language_id ;
+
+review_output_type = "CodeReviewProposal"
+                   | "RefactorProposal"
+                   | "TestProposal"
+                   | "DocProposal"
+                   | "OptimizationProposal" ;
+
+(* VALIDATE — declare dual-validator requirement for expert model output *)
+(* Declaring VALIDATE does not invoke the validators; it records the
+   constraint that candidates from this rule may not be emitted until
+   the dual-validator loop passes. *)
+validate_decl = "VALIDATE" identifier "{"
+                  "VALIDATORS" "[" validator_id { "," validator_id } "]"
+                  "REQUIRED" "true"
+                "}" ;
+
+validator_id = "s7_mini_gguf" | "desp_v1" | identifier ;
+tool_id      = identifier ;
+language_id  = identifier ;
+float_lit    = digit { digit } [ "." digit { digit } ] ;
+
+(* TYPE declarations make the type inventory machine-readable. *)
+type_decl = "TYPE" type_id ":" string
+            [ "requires_xcfe" ":" bool_lit ] ;
+type_id   = identifier ;
+bool_lit  = true_lit | false_lit ;
+true_lit  = "true" ;
+false_lit = "false" ;
+
+(* CONTRACT declarations make operation signatures machine-readable. *)
+operation_contract_decl = "CONTRACT" identifier
+                          "INPUT" type_id
+                          "OUTPUT" type_id
+                          "PHASE" phase_name
+                          [ "xcfe" ":" "required" ] ;
+
+(* ---- Shared terminals ---- *)
+phase_name  = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Chen" | "Ch_en" | "Xul" ;
+identifier  = letter { letter | digit | "_" | "-" | "." } ;
+string      = '"' { string_char } '"' ;
+string_char = ? any character except unescaped '"' or newline ? ;
+digit       = "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9" ;
+letter      = ? Unicode letter or underscore ? ;
+whitespace  = ? space, tab, CR, LF ? ;
+comment     = "#" { ? any character except newline ? } newline ;
+
+
+(* ================================================================ *)
+(* Part II: Static Signatures for CODEX-µ                           *)
+(* ================================================================ *)
+
+(*
+  Operation contracts
+  ┌──────────────────┬──────────────────────────────────┬──────────────────────┬────────┐
+  │ Operation        │ Input                            │ Output               │ Phase  │
+  ├──────────────────┼──────────────────────────────────┼──────────────────────┼────────┤
+  │ TOOL declare     │ shard_refs × float threshold     │ ToolDescriptor       │ Wo     │
+  │ REVIEW/BIGRAM    │ CodeTokenSpace × BigramScore     │ ToolSelection        │ Yax    │
+  │ REVIEW/INTENT    │ IntentResolution                 │ ToolSelection        │ Yax    │
+  │ REVIEW/USE       │ ToolSelection × ExpertModel      │ CodeReviewCandidate  │ Sek    │
+  │ REVIEW/EMIT      │ CodeReviewCandidate              │ CodeReviewProposal   │ Sek    │
+  │ VALIDATE         │ CodeReviewCandidate              │ ValidatedCandidate   │ Ch'en  │
+  └──────────────────┴──────────────────────────────────┴──────────────────────┴────────┘
+
+  Output type definitions
+  ─────────────────────────────────────────────────────────────────────
+  ToolDescriptor       — declared tool with shard references and threshold;
+                         read-only; no execution on declaration
+  CodeTokenSpace       — tokenized source code input; read-only
+  BigramScore          — WCR bigram score from personality.json model;
+                         score >= SCORE threshold required to trigger REVIEW rule
+  IntentResolution     — classified intent from CFPC-µ or equivalent; read-only
+  ToolSelection        — resolved tool_id with bigram or intent evidence;
+                         not yet admitted; no execution authority
+  CodeReviewCandidate  — expert model output from tool × ExpertModel;
+                         requires dual-validator loop before promotion
+  ValidatedCandidate   — CodeReviewCandidate that passed s7_mini_gguf + desp_v1;
+                         still requires XCFE admission before dispatch
+  CodeReviewProposal   — admitted candidate; NOT an invocation;
+                         file edits require separate authorized commit phase
+  RefactorProposal     — CodeReviewProposal in the refactoring domain
+  TestProposal         — CodeReviewProposal in the test generation domain
+  DocProposal          — CodeReviewProposal in the documentation domain
+  OptimizationProposal — CodeReviewProposal in the optimization domain
+
+  Bigram scoring invariants
+  ─────────────────────────────────────────────────────────────────────
+  REVIEW/BIGRAM triggers when BigramScore(input, pattern) >= SCORE
+  SCORE must be in [0.0, 1.0]; default threshold from tools.json is 0.7
+  Multiple REVIEW rules may match; Sek selection resolves ties by
+       highest BigramScore, then declaration order
+  Declaring REVIEW does not invoke the expert model
+
+  Dual-validator invariants
+  ─────────────────────────────────────────────────────────────────────
+  VALIDATE declares s7_mini_gguf (port 7734) and desp_v1 (port 5003)
+       as required gates; both must pass before ValidatedCandidate promotion
+  Declaring VALIDATE REQUIRED true does not start the validators
+  Expert model output that fails either validator is not promoted
+  Validator state is external; CODEX-µ grammar records the requirement only
+
+  Phase legality
+  ─────────────────────────────────────────────────────────────────────
+  TOOL declare:    Wo    (declarative binding; no execution; no XCFE)
+  REVIEW/BIGRAM:   Yax   (expansion over code token space; no XCFE)
+  REVIEW/INTENT:   Yax   (expansion from intent input; no XCFE)
+  REVIEW/USE:      Sek   (tool selection by score; no execution; no XCFE)
+  REVIEW/EMIT:     Sek   (candidate emission; XCFE admission required
+                           before downstream dispatch)
+  VALIDATE:        Ch'en (gate constraint declaration; validators run externally)
+
+  Static errors
+  ─────────────────────────────────────────────────────────────────────
+  - tool_duplicate_id
+  - review_duplicate_id
+  - use_references_undeclared_tool
+  - validate_references_unknown_validator
+  - score_out_of_range (SCORE not in [0.0, 1.0])
+  - emit_without_prior_validate_decl
+  - review_missing_emit
+  - shard_list_empty
+
+  Authority
+  ─────────────────────────────────────────────────────────────────────
+  grammar_grants_execution: false
+  bigram_match_grants_tool_invocation: false
+  emit_grants_file_edit: false
+  validate_pass_grants_xcfe_admission: false
+  route_requires_xcfe_admission: true
+  persistence_requires_verified_authorized_fold: true
+  semantic_authority: false
+  commit_authority: false
+*)

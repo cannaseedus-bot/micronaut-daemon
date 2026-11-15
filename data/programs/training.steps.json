@@ -1,0 +1,50 @@
+{
+  "@program": "training.steps",
+  "@fold": "Pop",
+  "@node": "training-steps-root",
+  "@state": {
+    "model": "E:/models/GPT2/coder_micronaut/ultrachat_coder_slerp_0p35.webgl2.dashboard.safetensors",
+    "token_bin": "E:/models/GPT2/coder_micronaut/coder_ast_json_seq256_tokens.bin",
+    "output": "E:/models/GPT2/micronaut_four_lanes_v2",
+    "backend": "xvm_fiber",
+    "model_format": "safetensors",
+    "steps": 300,
+    "batch": 16,
+    "learning_rate": 0.00035,
+    "bias_log_reference": "field/distilled/compare.bias.jsonl",
+    "bias_evidence": null,
+    "step_state": null,
+    "result": null,
+    "verified": false
+  },
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "training-steps-prepare" },
+    { "@op": "CALL", "@fn": "validate_safetensors", "@args": ["$model"], "@out": "model_valid" },
+    { "@op": "CALL", "@fn": "validate_token_bin", "@args": ["$token_bin"], "@out": "dataset_valid" },
+    { "@op": "CALL", "@fn": "initialize_training_fabric", "@args": ["$backend", "$model", "$token_bin"], "@out": "step_state" },
+    { "@op": "LOG", "@args": ["[training.steps] full-tensor training fabric initialized"] },
+    { "@op": "FOLD_EXIT", "@fold": "Wo", "@node": "training-steps-prepare", "@args": ["$step_state"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Wo", "@node": "training-steps-execute" },
+    { "@op": "CALL", "@fn": "execute_training_steps", "@args": ["$step_state", "$steps", "$batch", "$learning_rate"], "@out": "step_result" },
+    { "@op": "LOG", "@args": ["[training.steps] training steps executed steps=$steps batch=$batch"] },
+    { "@op": "FOLD_EXIT", "@fold": "Yax", "@node": "training-steps-execute", "@args": ["$step_result"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Yax", "@node": "training-steps-sync" },
+    { "@op": "CALL", "@fn": "load_bias_evidence", "@args": ["$bias_log_reference"], "@out": "bias_evidence" },
+    { "@op": "CALL", "@fn": "synchronize_training_steps", "@args": ["$step_result", "$backend", "$bias_evidence"], "@out": "synced" },
+    { "@op": "CALL", "@fn": "write_safetensors_output", "@args": ["$synced", "$output"], "@out": "result" },
+    { "@op": "LOG", "@args": ["[training.steps] training result synchronized and written with bias_evidence"] },
+    { "@op": "FOLD_EXIT", "@fold": "Sek", "@node": "training-steps-sync", "@args": ["$result", "$bias_evidence"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Sek", "@node": "training-steps-verify" },
+    { "@op": "CALL", "@fn": "verify_safetensors_output", "@args": ["$result", "$output"], "@out": "verified" },
+    { "@op": "LOG", "@args": ["[training.steps] output verified=$verified"] },
+    { "@op": "FOLD_EXIT", "@fold": "Chen", "@node": "training-steps-verify", "@args": ["$result", "$verified"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Chen", "@node": "training-steps-emit" },
+    { "@op": "SET", "@key": "result", "@args": ["$result"] },
+    { "@op": "LOG", "@args": ["[training.steps] emitted verified training result"] },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "training-steps-emit", "@args": ["$result", "$verified"] }
+  ]
+}

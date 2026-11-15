@@ -1,0 +1,1229 @@
+{
+  "description": "Numerical backend boundary: which execution paths this repository ships, which device each requires, what each was measured to be good for, and the dispatch geometry of the kernels it actually dispatches. The evidence table is transcribed from drivers/shaders/gemm_bench/RESULT.md and is checked against the shader sources on disk.",
+  "authority": {
+    "gemm_bench_note": "drivers/shaders/gemm_bench/RESULT.md",
+    "gemm_bench_source": "drivers/shaders/gemm_bench/gemm_bench.cpp",
+    "shipped_shaders": "drivers/hlsl/",
+    "compiled_shaders": "drivers/cs5_shaders/",
+    "opencl_kernels": "drivers/shaders/opencl_1_2/",
+    "webgl2_surface": "drivers/shaders/webgl2/",
+    "driver_manifest": "drivers/manifest.json",
+    "cpp_types": "src/graphscript/numerical_backend.h"
+  },
+  "backends": [
+    {
+      "id": "cpu_kernel",
+      "requires_device": "cpu",
+      "role": "reference",
+      "note": "The C++ kernels. Accumulation order is the reference, which is why this is the bit-comparable baseline rather than merely a fallback."
+    },
+    {
+      "id": "d3d11_compute",
+      "requires_device": "d3d11.1",
+      "role": "primary",
+      "note": "drivers/hlsl cs_5_0 compute. The measured winner at matched optimisation."
+    },
+    {
+      "id": "opencl_1_2",
+      "requires_device": "opencl_1.2",
+      "role": "alternative",
+      "note": "OpenCL C 1.2 only. Measured and kept; the directive was to commit only if it won the fair comparison, and it did not."
+    },
+    {
+      "id": "webgl2",
+      "requires_device": "webgl2",
+      "role": "optional",
+      "note": "GLSL ES 3.00 fragment surface (drivers/shaders/webgl2). NOT the WGSL assets, which the KLSL XVM target carries separately: two surfaces with two different histories."
+    },
+    {
+      "id": "d3d12_compute",
+      "requires_device": "d3d12",
+      "role": "optional",
+      "note": "drivers/klsl/xvm_d3d12 — a real native D3D12 compute path (xvm_d12), not Microsoft's DirectML. D3D12-only, and not selected on the HD 4600 because the D3D12 feature level is unavailable there."
+    },
+    {
+      "id": "directml",
+      "requires_device": "d3d12",
+      "role": "optional",
+      "note": "Microsoft's Direct3D 12-backed ML API: a further, separate decision from the native XVM/D3D12 path. It cannot execute through a d3d11.1 device as though the two were interchangeable."
+    },
+    {
+      "id": "numpy_reference",
+      "requires_device": "cpu",
+      "role": "reference",
+      "note": "The CPU oracle used for parity, never for execution."
+    }
+  ],
+  "device_rules": [
+    {
+      "backend": "cpu_kernel",
+      "device": "cpu",
+      "expect": "ADMITTED"
+    },
+    {
+      "backend": "cpu_kernel",
+      "device": "d3d11.1",
+      "expect": "BACKEND_IS_CPU_ONLY"
+    },
+    {
+      "backend": "cpu_kernel",
+      "device": "d3d12",
+      "expect": "BACKEND_IS_CPU_ONLY"
+    },
+    {
+      "backend": "numpy_reference",
+      "device": "cpu",
+      "expect": "ADMITTED"
+    },
+    {
+      "backend": "numpy_reference",
+      "device": "d3d11.1",
+      "expect": "BACKEND_IS_CPU_ONLY"
+    },
+    {
+      "backend": "d3d11_compute",
+      "device": "d3d11.1",
+      "expect": "ADMITTED"
+    },
+    {
+      "backend": "d3d11_compute",
+      "device": "d3d12",
+      "expect": "BACKEND_REQUIRES_D3D11_1"
+    },
+    {
+      "backend": "opencl_1_2",
+      "device": "opencl_1.2",
+      "expect": "ADMITTED"
+    },
+    {
+      "backend": "opencl_1_2",
+      "device": "d3d11.1",
+      "expect": "BACKEND_REQUIRES_OPENCL_1_2"
+    },
+    {
+      "backend": "webgl2",
+      "device": "webgl2",
+      "expect": "ADMITTED"
+    },
+    {
+      "backend": "webgl2",
+      "device": "d3d11.1",
+      "expect": "BACKEND_REQUIRES_WEBGL2"
+    },
+    {
+      "backend": "directml",
+      "device": "d3d12",
+      "expect": "ADMITTED"
+    },
+    {
+      "backend": "directml",
+      "device": "d3d11.1",
+      "expect": "BACKEND_REQUIRES_D3D12"
+    },
+    {
+      "backend": "d3d12_compute",
+      "device": "d3d12",
+      "expect": "ADMITTED"
+    },
+    {
+      "backend": "d3d12_compute",
+      "device": "d3d11.1",
+      "expect": "BACKEND_REQUIRES_D3D12"
+    }
+  ],
+  "kernels": [
+    {
+      "name": "kuhul_gemm_tiled",
+      "source": "drivers/hlsl/kuhul_gemm_tiled.hlsl",
+      "entry": "main",
+      "threads": [
+        8,
+        8,
+        1
+      ],
+      "tiled": true,
+      "groupshared_tile": 8,
+      "note": "Shipped tiled kernel. KUHUL_TILE is 8 in the source, so the dispatch is 8x8x1 with 8x8 groupshared tiles.",
+      "source_kind": "hlsl",
+      "status": "shipped",
+      "requires_d3d12": false
+    },
+    {
+      "name": "kuhul_gemm",
+      "source": "drivers/hlsl/kuhul_gemm.hlsl",
+      "entry": "main",
+      "threads": [
+        8,
+        8,
+        1
+      ],
+      "tiled": false,
+      "note": "Shipped naive kernel; its own header states that DirectML is D3D12-only and cannot bind to a D3D11_1 device.",
+      "source_kind": "hlsl",
+      "status": "shipped",
+      "requires_d3d12": false
+    },
+    {
+      "name": "gemm_bench_embedded_tiled",
+      "source": "drivers/shaders/gemm_bench/gemm_bench.cpp",
+      "entry": "main",
+      "threads": [
+        16,
+        16,
+        1
+      ],
+      "tiled": true,
+      "groupshared_tile": 16,
+      "note": "The benchmark embeds its own 16x16 kernels; these are the kernels the GFLOPS numbers below were measured on, NOT the 8x8 shipped HLSL.",
+      "source_kind": "embedded",
+      "status": "embedded",
+      "requires_d3d12": false
+    },
+    {
+      "name": "gpt2_matmul_fwd",
+      "source": "drivers/cs5_shaders/gpt2_matmul_fwd.cso",
+      "entry": "CSMain",
+      "threads": [
+        16,
+        16,
+        1
+      ],
+      "tiled": true,
+      "groupshared_tile": 16,
+      "note": "Cited by the benchmark as the 16x16 algorithm the trainer ships. Only the compiled .cso is in the tree; the matching HLSL source is absent, so its dispatch geometry is recorded from the citation and cannot be verified against a source file. Recorded as a provenance gap, not as a shipped source.",
+      "source_kind": "compiled",
+      "hlsl_source_present": false,
+      "status": "compiled_only",
+      "requires_d3d12": false
+    }
+  ],
+  "evidence": {
+    "measured_on": "Intel HD 4600 (D3D11 FL 11_1) + Intel Core i7-4790S (OpenCL CPU 1.2)",
+    "units": "GFLOPS, f32",
+    "harness": "KHANARY_GEMM_PROVIDERS_BENCH (drivers/shaders/gemm_bench/gemm_bench.cpp)",
+    "kernels": {
+      "d3d11": "cs_5_0 cooperative tiled GEMM, 16x16 groupshared tiles (no SM 6.10 instructions)",
+      "opencl": "OpenCL C 1.2 tiled GEMM, 16x16 local tiles"
+    },
+    "shapes": [
+      {
+        "shape": "1024x1024x1024",
+        "iterations": 10,
+        "naive": {
+          "d3d11": 6.3,
+          "opencl_gpu": 13.1,
+          "opencl_cpu": 7.7
+        },
+        "tiled": {
+          "d3d11": 25.7,
+          "opencl_gpu": 22.6,
+          "opencl_cpu": 41.3
+        }
+      },
+      {
+        "shape": "512x512x512",
+        "iterations": 30,
+        "naive": {
+          "d3d11": 14.3,
+          "opencl_gpu": 18.0,
+          "opencl_cpu": 39.3
+        },
+        "tiled": {
+          "d3d11": 32.2,
+          "opencl_gpu": 26.1,
+          "opencl_cpu": 54.1
+        }
+      }
+    ],
+    "correctness": {
+      "d3d11_max_abs_err": 6.68e-06,
+      "opencl_gpu_max_abs_err": 0.0,
+      "opencl_cpu_max_abs_err": 6.68e-06,
+      "note": "All three providers are correct. The OpenCL GPU leg is bit-exact against the CPU reference because its accumulation order matches; the D3D11 and OpenCL CPU legs differ by ~6.7e-06 through mad/reassociation, which is correct f32 on values of magnitude ~16."
+    },
+    "verdict": "Ordinary cooperative tiled GEMM on D3D11 works and needs no SM 6.10. Measured against BOTH OpenCL devices, the OpenCL CPU device (i7-4790S, 8 compute units) wins tiled GEMM at both shapes: 41.3 vs 25.7 GFLOPS at 1024^3 and 54.1 vs 32.2 at 512^3, i.e. roughly 1.6-1.7x the iGPU. The earlier 2-provider comparison concluded 'OpenCL does not win' because it only bound the OpenCL GPU device.",
+    "consequence": "Role is per PROVIDER (backend + device), not per API. OpenCL-CPU is primary for GEMM at these shapes; D3D11 stays the GPU-resident path and is the primary where the data already lives in a D3D11 buffer; OpenCL-GPU is an alternative. One API is two providers and must be measured as two."
+  },
+  "invariants": [
+    "B1 capability and preference are separate axes: check_backend answers 'can this pair exist', performance_role answers 'what is it for'",
+    "B2 a refusal names the requirement and never proposes a substitute, because substituting would change where the work runs without the caller's knowledge",
+    "B3 directml and the native XVM/D3D12 target require d3d12; neither can execute through a d3d11.1 device as though the two were interchangeable",
+    "B4 d3d11_compute is refused on a d3d12 device because this project uses no compatibility layer",
+    "B5 numpy_reference is a CPU oracle, never an execution provider",
+    "B7 GEMM executes C = alpha*A*B + beta*C over numbers and does not implement any algebraic product; using it for one requires building the lowered matrix explicitly",
+    "B8 a kernel recorded with hlsl_source_present false must have no matching .hlsl in the tree, so a provenance gap cannot be mistaken for a shipped source",
+    "B9 an API mismatch (BACKEND_REQUIRES_*) is permanent; a capability gap (DEVICE_UNAVAILABLE) is a property of this machine and must not read as the same refusal",
+    "B10 WGSL and WebGL2 are different surfaces; OpenCL is 1.2 only; D3D11 cs_5_0 and D3D12 compute are different targets",
+    "B11 every kernel carries a status: shipped, experimental, compiled_only or embedded; a dispatch table that mixes them silently promotes a candidate",
+    "B12 no experimental kernel may be the preferred path for any operation",
+    "B13 a kernel that requires D3D12 cannot appear on a path selected on a rig without D3D12, whatever its status",
+    "B14 the model file format is a serialization concern: consuming safetensors natively is not the same decision as adopting a tensor stack",
+    "B15 a capability claim carried in prose is a hypothesis: the probe is the authority, and where they disagree the prose is corrected, not the measurement",
+    "B6 a measured loss does not remove a backend from the taxonomy; it removes the commitment to it",
+    "B16 one API can be two providers with two different rankings: an OpenCL platform that exposes a GPU and a CPU device must be measured as two providers, or the number is a blend",
+    "B17 role is per provider (backend + device), not per API",
+    "B18 provider authority is workload-conditional: a primary or alternative role is valid only for the measured operation, tensor shape, data type, residency and execution conditions supporting that designation",
+    "B19 a tiled algorithm is not a specialized instruction: cooperative tiled GEMM runs on cs_5_0 and needs no SM 6.10 support",
+    "B20 measured compute rank and execution role are different rankings: compute rank is compared only within one (operation, shape, residency) domain, never across domains",
+    "B21 every recorded throughput carries its kernel variant, methodology and provider identity, so numbers from different conditions cannot be compared by accident",
+    "B22 measurement scope must match selection scope: a compute-throughput ranking cannot be reused as an end-to-end graph-latency ranking unless the benchmark includes the required transfers, dispatches and synchronisation",
+    "B23 an unmeasured domain may still have eligible providers: classified=false means no evidence-backed performance winner, never no legal execution path",
+    "B24 numerical validity precedes performance admission: a measurement is admissible for ranking only when the exact measured kernel, provider, shape, dtype and execution strategy pass numerical parity AND completion validation. A fused path is a different execution path and must establish its own correctness",
+    "B25 completion and duration are different measurements: an event query establishes that preceding GPU work finished, while GPU kernel duration needs timestamp queries; host-observed latency and device-side duration are recorded separately so T_sync cannot double-count execution",
+    "B26 two timing boundaries are two domains: resident-execution (transfer outside the interval) and host-input-to-host-output (transfer inside) may not be merged into one ranking, and a provider measured in only one of them is unclassified in the other",
+    "B27 a workload-shape argument is not a measurement: 'this work is embarrassingly parallel, so the GPU should win it' is a prediction, and it must be measured before a division of labour is built on it",
+    "B28 worst-case selection must state its error metric: choosing the offending element by relative error surfaces near-zero references and can reject a correct kernel, so geometric aggregates are gated on absolute error with relative error reported alongside",
+    "B29 an optimisation is a hypothesis until measured: tiling and local-memory reuse are standard GPU techniques and still lost to the naive kernel here, so the technique is not evidence",
+    "B30 numerical and presentation classifications are separate domains: a provider's rank for computing a metric matrix says nothing about its rank for rendering that graph, and neither may be inferred from the other",
+    "B31 a hardcoded preference that measurement contradicts is a defect: preferred_gemm_backend() was removed rather than left in the API as a default the evidence disproves",
+    "B32 a policy result is not an execution decision: when classified=false and work must proceed, the choice among eligible providers is made under an explicit fallback policy and its basis is recorded, so no silent default can reintroduce a hardcoded preference",
+    "B33 a presentation benchmark domain includes its edge-selection rule: drawing every pairwise relationship and drawing a subset are different workloads and may not share a ranking",
+    "B34 exactness gates compare identities, not measurements: a selection optimisation is accepted only when the resulting edge set is identical neighbour-by-neighbour, with the tie rule exercised, because equal distances or equal rendered output do not prove equal graph topology",
+    "B35 resource reuse is not semantic agreement: a cache hit means the resident buffers match the key, never that the graph or its selection is correct; selection correctness stays with the identity gate (B34)",
+    "B36 a measured win for one implementation does not transfer to another that happens to share its hardware class; Intel OpenCL CPU and ggml-cpu are different implementations",
+    "B37 kernel-level evidence does not become end-to-end evidence: a measured kernel supports an end-to-end claim only when the same kernel runs under matching operation, shape, dtype, residency and timing conditions, and the unmeasured stages are excluded from the claim"
+  ],
+  "validation": {
+    "checker": "tools/check_numerical_backend.py",
+    "cpp_test": "KHANARY_NUMERICAL_BACKEND_TEST"
+  },
+  "capabilities": {
+    "machine": "Intel HD Graphics 4600 + Intel Core i7-4790S (driver 20.19.15.4835)",
+    "available": {
+      "cpu": true,
+      "d3d11.1": true,
+      "opencl_1.2": true,
+      "webgl2": true,
+      "d3d12": true
+    },
+    "shader_model_6_10": false,
+    "probed": {
+      "source": "KHANARY_BACKEND_PROBE_TEST (runtime enumeration)",
+      "opencl_platform": "Intel(R) OpenCL",
+      "opencl_devices": [
+        {
+          "type": "gpu",
+          "name": "Intel(R) HD Graphics 4600",
+          "version": "OpenCL 1.2",
+          "compute_units": 20,
+          "provider": "opencl_gpu"
+        },
+        {
+          "type": "cpu",
+          "name": "Intel(R) Core(TM) i7-4790S CPU @ 3.20GHz",
+          "version": "OpenCL 1.2 (Build 10094)",
+          "compute_units": 8,
+          "provider": "opencl_cpu"
+        }
+      ],
+      "d3d11": {
+        "feature_level": "11_1",
+        "compute": true,
+        "downlevel_compute": true,
+        "adapter": "Intel(R) HD Graphics 4600"
+      },
+      "d3d12": {
+        "device_created": true,
+        "max_feature_level": "11_1"
+      },
+      "d2d1": {
+        "factory_created": true
+      }
+    },
+    "note": "drivers/klsl/xvm_d3d12/README.md states that the D3D12 target 'is not selected because D3D12 feature level is unavailable' on the HD 4600. Measurement on driver 20.19.15.4835 contradicts that: a D3D12 device is created at feature level 11_1. The D3D12 path is therefore reachable; what is NOT reachable is SM 6.10, so the cooperative-matrix candidate stays unavailable for a different reason than the note gives."
+  },
+  "surface_disambiguation": {
+    "webgl2": "GLSL ES 3.00 fragment shaders in drivers/shaders/webgl2",
+    "wgsl": "WebGPU-side assets carried by the KLSL XVM target; NOT the WebGL2 backend and not interchangeable with it",
+    "opencl": "OpenCL C 1.2 only",
+    "hlsl_cs5": "D3D11.1 cs_5_0 compute in drivers/hlsl",
+    "hlsl_d3d12": "D3D12-only compute in drivers/klsl/xvm_d3d12/shaders"
+  },
+  "experimental_surface": {
+    "path": "drivers/hlsl/experimental",
+    "file_count": 27,
+    "note": "A separate surface from the shipped kernels in drivers/hlsl. Nothing here may be the preferred GEMM path: an experimental shader is a candidate, not a commitment, and the two must not be confused in a dispatch table.",
+    "entries": [
+      {
+        "name": "huggingface_dequantizer",
+        "source": "drivers/hlsl/experimental/huggingface.hlsl",
+        "entry": "main",
+        "threads": [
+          256,
+          1,
+          1
+        ],
+        "status": "experimental",
+        "requires_d3d12": false,
+        "note": "SafeTensors streaming dequantizer: CPU maps a tensor slice into a D3D11 ByteAddressBuffer, the shader writes float32 into the persistent working tensor, and the CPU advances the chunk. BF16 is f32 = bf16_word << 16. The Hugging Face SERIALIZATION format is already handled natively here, which is why adopting the HF tensor stack is not required for data ingestion."
+      },
+      {
+        "name": "kuhul_cooperative_matrix",
+        "source": "drivers/hlsl/experimental/kuhul_cooperative_matrix.hlsl",
+        "entry": "main",
+        "threads": [
+          0,
+          0,
+          1
+        ],
+        "status": "experimental",
+        "requires_d3d12": true,
+        "note": "SM 6.10 cooperative matrix. D3D12 itself IS available on this machine (FL 11_1, measured), but SM 6.10 is not, so the candidate stays out of the dispatch table for the shader-model reason rather than the API reason.",
+        "requires_shader_model_6_10": true
+      },
+      {
+        "name": "int4_matmul",
+        "source": "drivers/hlsl/experimental/int4_matmul.hlsl",
+        "entry": "main",
+        "threads": [
+          0,
+          0,
+          1
+        ],
+        "status": "experimental",
+        "requires_d3d12": false
+      },
+      {
+        "name": "matmul_int4",
+        "source": "drivers/hlsl/experimental/matmul_int4.hlsl",
+        "entry": "main",
+        "threads": [
+          0,
+          0,
+          1
+        ],
+        "status": "experimental",
+        "requires_d3d12": false
+      }
+    ]
+  },
+  "serialization": {
+    "formats_handled_natively": [
+      "safetensors",
+      "bf16",
+      "f16"
+    ],
+    "shader": "drivers/hlsl/experimental/huggingface.hlsl",
+    "note": "The ecosystem's serialization is a dequantizer, not an execution engine. K'UHUL reads safetensors and dequantizes BF16/F16 into its own persistent working tensor, so the numerical stack stays native and the symbolic layer stays untouched by the choice of model file format.",
+    "consequence": "adopting the Hugging Face tensor STACK would replace the execution path; consuming its FILE FORMAT replaces nothing"
+  },
+  "providers": [
+    {
+      "id": "opencl_cpu",
+      "api": "opencl_1_2",
+      "device_class": "cpu",
+      "device_id": "Intel(R) Core(TM) i7-4790S CPU @ 3.20GHz",
+      "compute_units": 8,
+      "backend": "opencl_1_2"
+    },
+    {
+      "id": "d3d11_gpu",
+      "api": "d3d11",
+      "device_class": "integrated_gpu",
+      "device_id": "Intel(R) HD Graphics 4600",
+      "backend": "d3d11_compute"
+    },
+    {
+      "id": "opencl_gpu",
+      "api": "opencl_1_2",
+      "device_class": "integrated_gpu",
+      "device_id": "Intel(R) HD Graphics 4600",
+      "compute_units": 20,
+      "backend": "opencl_1_2"
+    },
+    {
+      "id": "d3d12_gpu",
+      "api": "d3d12",
+      "device_class": "integrated_gpu",
+      "device_id": "Intel(R) HD Graphics 4600",
+      "note": "reachable at FL 11_1; unmeasured for GEMM",
+      "backend": "d3d12_compute"
+    },
+    {
+      "id": "cpu_kernel",
+      "api": "cpu_kernel",
+      "device_class": "cpu",
+      "device_id": "host",
+      "backend": "cpu_kernel"
+    },
+    {
+      "id": "numpy_reference",
+      "api": "numpy",
+      "device_class": "cpu",
+      "device_id": "python",
+      "backend": "numpy_reference"
+    },
+    {
+      "id": "webgl2_surface",
+      "api": "webgl2",
+      "backend": "webgl2",
+      "device_class": "integrated_gpu",
+      "device_id": "browser",
+      "note": "GLSL ES 3.00 fragment surface; not a GEMM leg"
+    },
+    {
+      "id": "directml_d3d12",
+      "api": "directml",
+      "backend": "directml",
+      "device_class": "integrated_gpu",
+      "device_id": "Intel(R) HD Graphics 4600",
+      "note": "separate D3D12 API decision; unmeasured"
+    }
+  ],
+  "rankings": [
+    {
+      "operation": "gemm",
+      "shape": "1024x1024x1024",
+      "kernel_variant": "tiled16",
+      "residency": "host",
+      "methodology": "3 warmup dispatches, 10 timed dispatches, one synchronisation",
+      "rank": [
+        {
+          "provider": "opencl_cpu",
+          "gflops": 41.3
+        },
+        {
+          "provider": "d3d11_gpu",
+          "gflops": 25.7
+        },
+        {
+          "provider": "opencl_gpu",
+          "gflops": 22.6
+        }
+      ]
+    },
+    {
+      "operation": "gemm",
+      "shape": "512x512x512",
+      "kernel_variant": "tiled16",
+      "residency": "host",
+      "methodology": "3 warmup dispatches, 30 timed dispatches, one synchronisation",
+      "rank": [
+        {
+          "provider": "opencl_cpu",
+          "gflops": 54.1
+        },
+        {
+          "provider": "d3d11_gpu",
+          "gflops": 32.2
+        },
+        {
+          "provider": "opencl_gpu",
+          "gflops": 26.1
+        }
+      ]
+    },
+    {
+      "operation": "gemm",
+      "shape": "1024x1024x1024",
+      "kernel_variant": "tiled16",
+      "residency": "d3d11_buffer",
+      "methodology": "not measured: operands assumed already resident, so T_transfer is zero",
+      "rank": [
+        {
+          "provider": "d3d11_gpu",
+          "gflops": null,
+          "note": "the only provider that pays no transfer in this class"
+        }
+      ]
+    }
+  ],
+  "roles": [
+    {
+      "provider": "opencl_cpu",
+      "role": "primary",
+      "scope": "gemm, host residency, both measured shapes",
+      "basis": "fastest measured; 41.3 / 54.1 GFLOPS tiled"
+    },
+    {
+      "provider": "d3d11_gpu",
+      "role": "primary",
+      "scope": "gemm, d3d11_buffer residency",
+      "basis": "the only provider that does not pay a transfer in its own residency class; second by raw compute"
+    },
+    {
+      "provider": "opencl_gpu",
+      "role": "alternative",
+      "scope": "gemm, host residency",
+      "basis": "22.6 / 26.1 GFLOPS tiled; bit-exact against the CPU reference"
+    },
+    {
+      "provider": "d3d12_gpu",
+      "role": "unclassified",
+      "scope": "gemm",
+      "basis": "reachable at FL 11_1, no measurement"
+    },
+    {
+      "provider": "cpu_kernel",
+      "role": "reference",
+      "scope": "correctness",
+      "basis": "the oracle"
+    },
+    {
+      "provider": "numpy_reference",
+      "role": "reference",
+      "scope": "correctness",
+      "basis": "the Python-side oracle"
+    },
+    {
+      "provider": "webgl2_surface",
+      "role": "optional",
+      "scope": "browser presentation",
+      "basis": "not a compute leg for the native runtime"
+    },
+    {
+      "provider": "directml_d3d12",
+      "role": "optional",
+      "scope": "d3d12 ml api",
+      "basis": "separate backend decision; unmeasured"
+    }
+  ],
+  "selection": {
+    "cost_model": "T_P = T_transfer + T_dispatch + T_compute + T_sync",
+    "measured": [
+      "T_compute"
+    ],
+    "unmeasured": [
+      "T_transfer",
+      "T_dispatch",
+      "T_sync"
+    ],
+    "rule": "P* = argmin over ADMITTED providers of T_P(operation, shape, residency); because only T_compute is measured, selection ranks within a residency class and reports anything else as unclassified rather than guessing across classes"
+  },
+  "graph_benchmark": {
+    "status": "validated on all three providers",
+    "operation": "gemm+bias+relu",
+    "shape": "512x512x512",
+    "inputs": "identical A, B and bias vectors for every provider and strategy",
+    "defects_found_by_the_gate_ladder": [
+      "structured buffers created without D3D11_RESOURCE_MISC_BUFFER_STRUCTURED, so StructuredBuffer views failed and the dispatch wrote nowhere (the empty tensor)",
+      "timed region ended at Dispatch with only Flush(), so it measured submission (0.010 ms and a 25 TFLOP-equivalent result)",
+      "the OpenCL epilogue kernels take M and N as scalar arguments; leaving them unset made ReLU never run (gate2 err 1.00, gate5 all 262144 entries nonzero)",
+      "gate admissibility was a score (>=4 of 6) instead of a conjunction; a numerical failure could be offset by unrelated passing checks"
+    ],
+    "domains": [
+      {
+        "residency": "resident-execution",
+        "timing_boundary": "first enqueue through completion; upload and readback outside",
+        "latency_ms": {
+          "d3d11_gpu": {
+            "unfused": 9.742,
+            "partial": 9.555,
+            "full": 9.163
+          },
+          "opencl_gpu": {
+            "unfused": 10.921,
+            "partial": 10.665,
+            "full": 10.464
+          },
+          "opencl_cpu": {
+            "unfused": 5.293,
+            "partial": 5.24,
+            "full": 4.95
+          }
+        },
+        "rank_full": [
+          {
+            "provider": "opencl_cpu",
+            "ms": 4.95
+          },
+          {
+            "provider": "d3d11_gpu",
+            "ms": 9.163
+          },
+          {
+            "provider": "opencl_gpu",
+            "ms": 10.464
+          }
+        ],
+        "note": "OpenCL CPU is 1.85x faster than the best D3D11 strategy"
+      },
+      {
+        "residency": "host-input-to-host-output",
+        "timing_boundary": "upload + dispatch + clFinish + readback, all inside the interval",
+        "latency_ms": {
+          "opencl_gpu": {
+            "unfused": 14.244,
+            "partial": 14.45,
+            "full": 14.458
+          },
+          "opencl_cpu": {
+            "unfused": 6.228,
+            "partial": 6.688,
+            "full": 6.511
+          }
+        },
+        "rank_full": [
+          {
+            "provider": "opencl_cpu",
+            "ms": 6.511
+          },
+          {
+            "provider": "opencl_gpu",
+            "ms": 14.458
+          }
+        ],
+        "note": "D3D11 not measured end-to-end: its resident figure excludes upload/readback and a D3D11 end-to-end boundary was not implemented"
+      }
+    ],
+    "fusion_benefit": {
+      "d3d11_gpu": "5.9% (resident)",
+      "opencl_gpu": "4.2% (resident)",
+      "opencl_cpu": "6.5% resident, 13.7% at full-vs-partial in the second run"
+    },
+    "transfer_overhead_ms": {
+      "opencl_gpu": {
+        "unfused": 3.324,
+        "partial": 3.785,
+        "full": 3.994
+      },
+      "opencl_cpu": {
+        "unfused": 0.424,
+        "partial": 1.47,
+        "full": 1.505
+      }
+    },
+    "consequence": "a cross-provider graph ranking is now admissible for the resident-execution domain, where OpenCL CPU wins by 1.85x. The host-input-to-host-output domain has two providers measured, not three, so its rank is partial and D3D11 is unclassified there"
+  },
+  "metric_graph_benchmark": {
+    "status": "measured on all four variants; the GPU-for-geometry hypothesis is refuted on this hardware, including with local-memory tiling",
+    "operation": "vector metric graph: pairwise distance + cosine similarity, then per-node aggregation",
+    "shape": "n=2048 nodes, 4194304 pairs, 10 iters",
+    "timing_boundary": "resident execution: upload outside, dispatches and completion inside; the cosim matrix stays device-resident between the passes",
+    "reference": "single-threaded double-precision CPU reference, ~50 ms once",
+    "results": {
+      "opencl_cpu_naive": {
+        "ms": 8.46,
+        "worst_abs_err": 7.629e-05,
+        "worst_rel_err": 2.137e-06,
+        "mpairs_per_s": 495.8,
+        "gate": "pass"
+      },
+      "opencl_cpu_tiled": {
+        "ms": 13.845,
+        "worst_abs_err": 7.629e-05,
+        "worst_rel_err": 2.137e-06,
+        "gate": "pass"
+      },
+      "opencl_gpu_naive": {
+        "ms": 154.184,
+        "worst_abs_err": 9.537e-05,
+        "worst_rel_err": 2.872e-06,
+        "mpairs_per_s": 27.2,
+        "gate": "pass"
+      },
+      "opencl_gpu_tiled": {
+        "ms": 179.481,
+        "worst_abs_err": 9.537e-05,
+        "worst_rel_err": 2.872e-06,
+        "gate": "pass"
+      }
+    },
+    "corrected_finding": "The earlier verdict 'OpenCL GPU parity FAILED (1.19e-03 > 1e-03)' was an artifact of my own metric, not of the kernel. Selecting the worst case by RELATIVE error picks out a node whose aggregate is near zero, which inflates the ratio. Ranking by ABSOLUTE error and reporting both shows the GPU at abs 9.537e-05 / rel 2.872e-06, which passes comfortably on both providers. A combined absolute-or-relative criterion is the correct test for geometric aggregates.",
+    "tiling_experiment": "The tiled float4 kernel with 16x16 work-groups and local-memory coordinate reuse is SLOWER on both devices: GPU 179.481 vs 154.184 ms (+16.4%), CPU 13.845 vs 8.460 ms (+63.7%). Reuse did not pay for the barrier, the local-memory round-trip and the float4 padding cost at this size. The naive kernel is memory-friendly enough that the coordinate re-reads it saves are cheaper than the synchronisation it adds.",
+    "ratio": {
+      "cpu_over_gpu_naive": 18.2,
+      "cpu_over_gpu_tiled": 13.0,
+      "kind": "observed ratio between validated measurements in the same domain"
+    },
+    "consequence": "OpenCL CPU is 18.2x faster on this workload with both providers passing parity, so this is an admissible ranking, not a diagnostic one. The GPU has no measured domain in which it wins on this machine, and a straightforward optimisation (local-memory tiling) did not change that."
+  },
+  "provider_classification": {
+    "opencl_cpu_dense_numerics": "measured primary (GEMM, gemm+bias+relu, both boundaries)",
+    "opencl_cpu_pairwise_metrics": "measured, 18.2x faster than GPU on the tested workload",
+    "opencl_gpu_naive_pairwise": "measured, parity passing, slower",
+    "opencl_gpu_tiled_pairwise": "measured, parity passing, slower than its own naive variant",
+    "d3d11_cooperative_tiled_gemm": "measured and validated; slower than OpenCL CPU in every measured domain",
+    "d3d11_end_to_end": "unmeasured (no upload/readback boundary implemented)",
+    "d3d12_compute": "reachable at FL 11_1; unmeasured",
+    "authority": "XCFE / FoldGraph, independent of whichever provider computed the numbers",
+    "d3d11_presentation": "measured in three presentation domains: 0.680 ms render for 2048 edges, 2343.696 ms for 2096128 undirected edges, and 3585.952 ms for 4192256 directed edges at 1280x720. No alternative presentation provider has been measured, so this is a validated implementation rather than a comparative win."
+  },
+  "scheduling_policy": {
+    "rule": [
+      "if the (operation, shape, residency) domain has a validated ranking: return its fastest admissible provider",
+      "otherwise: classified = false with the eligible providers populated"
+    ],
+    "removed": "preferred_gemm_backend() returned a hardcoded D3D11 and has been deleted; the measurements contradict it (OpenCL CPU is 1.85x faster on the fused graph and 18.2x on pairwise metrics)",
+    "no_predetermined_compute_provider": "the GPU keeps eligibility wherever its capabilities satisfy the kernel contract, and earns no preference without matching evidence",
+    "work_classes": {
+      "numerical": "measured providers: OpenCL CPU leads every measured domain",
+      "presentation": "a separate classification; D3D11/D2D1 rendering has NOT been measured and inherits nothing from the numerical results"
+    }
+  },
+  "presentation_domain": {
+    "status": "unmeasured",
+    "candidate": "D3D11 + D2D1",
+    "proposed_workload": "compute the vector metric graph on the CPU, upload only the visualization data, and measure graph presentation latency (nodes, edges, transforms, effects)",
+    "why_separate": "rendering a graph efficiently is a different operation from computing its metric matrix; the numerical results say nothing about it",
+    "costs_still_unmeasured": [
+      "CPU-to-GPU upload of visualization data",
+      "D2D1 effect chain",
+      "presentation and vsync behaviour"
+    ],
+    "eligible": true,
+    "classified": false
+  },
+  "execution_resolution": {
+    "problem": "classified=false is a valid policy result but not a complete execution decision; something must still choose among the eligible providers when work has to proceed",
+    "rule": "the choice is explicit, never a silent default: the caller states a FallbackPolicy and the decision records its basis",
+    "policies": {
+      "refuse": "do not execute; the refusal names the missing measurement",
+      "calibrate": "decline now and require a measurement before executing",
+      "caller_supplied": "execute on the named provider, which must be in the eligible set",
+      "first_eligible": "documented deterministic fallback: lowest provider identity name, recorded with that basis"
+    },
+    "guarantees": [
+      "a classified domain is decided by the ranking; no fallback policy can override it",
+      "every execution decision carries a non-empty basis",
+      "every refusal carries a non-empty reason",
+      "first_eligible is deterministic across runs and builds"
+    ]
+  },
+  "presentation_benchmark": {
+    "status": "measured in all three edge-selection domains; the earlier all-pairs timeout was a measurement-budget failure, not a latency estimate",
+    "harness": "KHANARY_PRESENTATION_BENCH (tools/presentation_bench.cpp)",
+    "graph": "2048 nodes, CPU-prepared positions projected to NDC",
+    "viewport": "1280x720 offscreen render target (no swap chain)",
+    "rendering_method": "D3D11 linelist for edges then trianglelist for node quads, pass-through VS, solid-colour PS",
+    "completion_boundary": "D3D11_QUERY_EVENT after the last Draw, spin until signalled",
+    "not_claimed": "display presentation. A completion query proves the submitted commands retired; it says nothing about when a monitor showed a frame.",
+    "stages": [
+      "cpu_preparation (split into allocate / expand)",
+      "upload",
+      "render",
+      "completed_frame"
+    ],
+    "not_measured": [
+      "D2D1 composition"
+    ],
+    "preparation_breakdown": {
+      "node_allocate_ms": 0.018,
+      "node_expand_ms": 0.068,
+      "node_total_ms": 0.087,
+      "finding": "node preparation is ~0.09 ms: vertex expansion for 2048 nodes is not the cost. The 5.8 ms previously reported as 'CPU preparation' is the O(n^2) nearest-neighbour SEARCH inside edge selection, now measured at 12.094 ms in isolation on a tie-heavy workload and reduced to 0.837 ms cold by an exact k-d tree that produces an identical edge set."
+    },
+    "domains": {
+      "selected_subset": {
+        "edge_selection": "each node to its nearest neighbour (O(n^2) search)",
+        "edge_count": 2048,
+        "iterations": 20,
+        "warmup": true,
+        "cpu_prep_ms": 5.879,
+        "upload_ms": 0.22,
+        "render_ms": 0.68,
+        "completed_frame_ms": 6.779,
+        "classified": true
+      },
+      "all_pairs_undirected": {
+        "edge_selection": "each unique unordered pair, drawn once",
+        "edge_semantics": "2048*(2048-1)/2",
+        "edge_count": 2096128,
+        "vertex_count": 4192256,
+        "iterations": 1,
+        "warmup": false,
+        "cpu_prep_ms": 10.515,
+        "upload_ms": 13.831,
+        "render_ms": 2343.696,
+        "completed_frame_ms": 2368.041,
+        "classified": true
+      },
+      "all_pairs_directed": {
+        "edge_selection": "every ordered pair",
+        "edge_semantics": "2048*(2048-1)",
+        "edge_count": 4192256,
+        "vertex_count": 8384512,
+        "iterations": 1,
+        "warmup": false,
+        "cpu_prep_ms": 22.105,
+        "upload_ms": 25.443,
+        "render_ms": 3585.952,
+        "completed_frame_ms": 3633.501,
+        "classified": true
+      }
+    },
+    "corrected_finding": "the earlier 'all_pairs exceeded 600 s' was a measurement-budget failure caused by running several dispatches of a multi-second frame with no stage instrumentation, not evidence that one frame takes 600 s. With stage markers and one measured dispatch, the directed domain completes a frame in 3586 ms and the undirected domain in 2344 ms.",
+    "semantics_note": "directed and undirected all-pairs are different domains under B33. The directed form draws both directions of each relationship; whether that is correct is a property of the graph's semantics, so both are recorded rather than one being assumed.",
+    "cost_shape": "rendering scales from 0.680 ms (2048 edges) to 2344 ms (2096128 edges): about 3450x the time for 1023x the edges, so the relationship is superlinear and the subset result cannot be extrapolated to the all-pairs workload.",
+    "projected_not_measured": {
+      "warning": "the following are COMPONENT SUMS from separately measured runs, not end-to-end measurements, and they must never be reported as a measured completed frame",
+      "inputs_from_different_observations": {
+        "selection_bruteforce_earlier": 5.7,
+        "selection_bruteforce_isolated": 12.094,
+        "note": "the earlier ~5.7 ms and the isolated 12.094 ms come from different benchmarks with different tie densities; they are not interchangeable baselines"
+      },
+      "first_frame_with_index_built": {
+        "sum_ms": 2.278,
+        "components": "index build 0.541 + cold selection 0.837 + upload 0.220 + render 0.680",
+        "excluded": "node preparation (0.087) and any other pipeline overhead"
+      },
+      "steady_state_reusing_index": {
+        "sum_ms": 1.684,
+        "components": "repeat selection 0.784 + upload 0.220 + render 0.680",
+        "excluded": "node preparation and overhead; also assumes the upload is still performed"
+      },
+      "status": "projection"
+    }
+  },
+  "selection_benchmark": {
+    "status": "exact spatial selection measured; brute force retained as the reference",
+    "harness": "KHANARY_SELECTION_BENCH (tools/selection_bench.cpp)",
+    "workload": "2048 nodes, quantised 2D positions so exact distance ties occur",
+    "tie_rule": "among equidistant candidates the lowest node id wins; identical in both selectors, and exercised (697 nodes had an equidistant alternative)",
+    "correctness_gate": "edge sets compared by NEIGHBOUR IDENTITY, not by distance or by rendered appearance. 2048/2048 identical.",
+    "rendering": "untouched, so any speedup is attributable to selection alone",
+    "results_ms": {
+      "brute_force_reference": 12.094,
+      "kd_tree_build": 0.541,
+      "kd_tree_cold_one_pass": 0.837,
+      "kd_tree_repeat_per_pass": 0.784
+    },
+    "speedups": {
+      "cold_selection_only": 14.45,
+      "repeated_selection": 15.42,
+      "cold_plus_build_one_shot": 8.77
+    },
+    "qualification": "O(n log n) is not guaranteed: a k-d tree has favourable average query cost in 2D but linear worst case per query. These are measured numbers for this workload, not a complexity guarantee.",
+    "not_established": [
+      "behaviour with a non-Euclidean graph score (the index preserves the Euclidean rule only; a different score would need its own index or an explicit approximate classification)",
+      "uniform grid alternative (not implemented)",
+      "persistent visualization buffers (separate experiment)"
+    ],
+    "consequence": "the ~5.7 ms nearest-neighbour selection is reducible by about 14x with an exact index that provably produces the same graph. Selection is no longer the dominant cost in the completed pipeline."
+  },
+  "memory_governance_gap": {
+    "path": "database/asx-ram-database.js",
+    "status": "resolved as an ownership question, not a blocker",
+    "clarification": "ASX-RAM is a ROLE (memory and graph state), not a JavaScript requirement. The .js file is an example implementation; nothing in the native runtime depends on JavaScript.",
+    "owners": {
+      "semantic_state": "ASX-RAM / graph state — what the graph contains",
+      "resource_residency": "native C++ PresentationResourceCache — which GPU buffers exist and remain valid",
+      "execution_authority": "K'UHUL / XCFE — whether an existing operation may be replayed"
+    },
+    "boundary": "ASX-RAM may expose graph revisions or content identifiers. It does not own ID3D11Buffer, device lifetimes, or GPU synchronisation. The resource cache is a performance mechanism, never a second source of semantic truth.",
+    "frozen": true
+  },
+  "llama_backend_mapping": {
+    "headers_present": [
+      "ggml-backend.h",
+      "ggml-cpu.h",
+      "ggml-opencl.h",
+      "ggml-cuda.h",
+      "ggml-metal.h",
+      "ggml-blas.h"
+    ],
+    "path": "vendor/llama/include",
+    "mapping": {
+      "opencl_cpu_winner": "ggml has no CPU-via-OpenCL backend; the measured OpenCL CPU provider is the Intel runtime, not a ggml backend. The CPU route for llama.cpp is ggml-cpu, which is where the measured CPU advantage would actually be realised.",
+      "opencl_gpu": "ggml-opencl targets the GPU device; it is the losing provider here.",
+      "webgl2": "browser-only. WebGL2 is not reachable from the native runtime, and llama.cpp's TypeScript UI relies on the browser for chat input, so WebGL2 belongs to a browser-side presentation path rather than a native provider."
+    },
+    "consequence": "the measurements do not create a new llama.cpp backend requirement: they support keeping numerical work on the CPU path (ggml-cpu) unless a ggml backend is measured to win, and they keep WebGL2 out of the native provider set.",
+    "correction": "a measured win for Intel OpenCL CPU kernels does NOT establish a measured win for ggml-cpu. Both run on the CPU but are different implementations with different kernels, threading, memory layouts and dispatch overhead. Recorded as three separate claims: Intel OpenCL CPU is the measured winner for KHANARY's tested workloads; ggml-cpu is an existing CPU backend and a plausible candidate for corresponding llama.cpp workloads; ggml-opencl is a distinct implementation requiring its own measurements.",
+    "inference_claims": {
+      "established": "native kernels are measured in the registered domains",
+      "architecturally_supported": "native inference can use those measured kernels",
+      "not_established": "complete native inference is faster than llama.cpp",
+      "qualification": "inheritance requires the same measured kernels under matching operation, shape, dtype, residency and timing conditions. A complete inference pipeline includes tokenisation, graph traversal, memory access and generation stages that the numerical benchmarks have not measured.",
+      "decision_order": "the implementation decision (native or backup) precedes the implementation-specific backend decision; once the backup is chosen its ggml backend choice stays separate from this registry and never feeds policy_select()"
+    }
+  },
+  "presentation_resource_cache": {
+    "path": "src/graphscript/presentation_cache.{h,cpp}",
+    "test": "KHANARY_PRESENTATION_CACHE_TEST (30 assertions)",
+    "key_fields": [
+      "graph_revision",
+      "positions",
+      "selection_rule",
+      "tie_rule",
+      "render_attributes",
+      "layout"
+    ],
+    "device_scope": "device_id + generation; a resource from another device or a previous generation is refused",
+    "digest_policy": "SHA-256 over a canonical encoding with explicit field tags and length prefixes; compared in full and never truncated, so a hit requires all six digests and the device generation to match",
+    "why_not_a_revision_counter": "two different graphs, or one graph under two selection configurations, can share a revision number",
+    "decisions": {
+      "hit": "identical key and device; resident buffers reusable",
+      "rebuild": "the key changed; the reason names which fields changed",
+      "refuse": "device scope differs; resident handles are stale, and the entry is dropped so a later request cannot hit it"
+    },
+    "invalidation_granularity": {
+      "render_attributes_or_layout_changed": "rebuild with topology NOT recomputed",
+      "positions_selection_or_tie_rule_changed": "rebuild and recompute topology",
+      "device_reset": "refuse, invalidate, recreate"
+    },
+    "not_implemented": [
+      "changed-position case that alters at least one selected neighbour and revalidates identities against brute force (B34) after invalidation",
+      "measured cold / unchanged / changed-position completed-frame timings from the cache-backed path",
+      "cpu-side cache lookup and SHA-256 key-construction cost measured separately",
+      "topology_recomputations counter wired into the benchmark (the residency test does not run selection)"
+    ],
+    "resource_state": {
+      "enum": [
+        "missing",
+        "resident",
+        "invalid"
+      ],
+      "hit_rule": "Hit = KeyMatch AND ValidResidentResources",
+      "reason": "a matching key is necessary but not sufficient: a stored key whose native handles are absent or stale must rebuild, not hit",
+      "tests": [
+        "state/key-match-without-resources-rebuilds",
+        "state/invalid-resources-never-hit",
+        "state/resident-with-matching-key-hits"
+      ]
+    },
+    "lifecycle_note": "invalidating a cache entry is not proof that the GPU has finished using the underlying resource; resource lifetime and cache entry lifetime are separate questions",
+    "pending_benchmark_contract": {
+      "owner": "ResidentPresentationBuffers holding COM references, outliving frames; run_mode becomes a consumer of that owner and the cache decides only whether the resident representation matches the requested graph",
+      "counters_required": {
+        "buffer_creations": "successful ID3D11Device::CreateBuffer calls",
+        "initial_data_uploads": "buffers initialised by supplying data to CreateBuffer",
+        "update_subresource_calls": "explicit UpdateSubresource calls",
+        "mapped_writes": "successful CPU-write Map/Unmap pairs",
+        "topology_recomputations": "actual neighbour-selection executions"
+      },
+      "why_five": "D3D11 has several transfer paths; counting only CreateSubresource would let a hit report zero uploads because the implementation used a different route",
+      "residency_publication": "the cache must not mark an entry Resident until resource creation and required uploads have succeeded",
+      "hit_proof": "the same COM objects remain valid: keep the original references alive during comparison, because an allocator can reuse a released address. Handle identity is paired with explicit creation counters and a device generation check.",
+      "cases": {
+        "cold": "real creation, upload, exact selection, measured completion",
+        "unchanged": "same native buffers, all creation and transfer counters zero, measured completion",
+        "changed_positions": "at least one changed neighbour identity, full B34 agreement, refreshed valid resources, measured completion"
+      },
+      "implementation_order": "cold and unchanged first, to isolate residency correctness before introducing topology change",
+      "status": "not implemented"
+    },
+    "residency_proof": {
+      "test": "KHANARY_PRESENTATION_RESIDENCY_TEST (13 assertions)",
+      "device": "real D3D11 device, feature level 11_1",
+      "established": [
+        "a cold frame performs real CreateBuffer calls (2 creations) with initial-data uploads (2), counted separately",
+        "an unchanged frame returns Hit and reuses the SAME ID3D11Buffer objects",
+        "the unchanged frame performs zero creations and zero transfers of any kind",
+        "(initial_data_uploads + update_subresource_calls + mapped_writes) is unchanged",
+        "the reused handle is still usable: GetDesc reports the expected ByteWidth",
+        "a device generation advance forces a rebuild and drops the entry"
+      ],
+      "identity_method": "the cold COM references are retained with AddRef and kept alive across the comparison, because an allocator can hand back a released address. Pointer identity is paired with explicit counters and a device-generation check.",
+      "counter_split": "buffer_creations, initial_data_uploads, update_subresource_calls, mapped_writes are tracked separately so a hit cannot report zero uploads while still copying bytes through another D3D11 path",
+      "note": "Resident is now truthful for this benchmark's own resource owner. It remains a claim about this component, not a general guarantee about every D3D11 resource the runtime may hold."
+    }
+  },
+  "model_formats": {
+    "distinction": "GGUF is a model/container format; ggml is a tensor computation framework. They are associated through llama.cpp but are not the same thing.",
+    "enums": {
+      "ModelFormat": [
+        "Safetensors",
+        "SDDS",
+        "GGUF"
+      ],
+      "InferenceImplementation": [
+        "KhanaryNative",
+        "LlamaCpp"
+      ]
+    },
+    "independence": [
+      "GGUF does not imply LlamaCpp",
+      "Safetensors does not imply native execution until the required operations are supported"
+    ],
+    "primary_path": "Safetensors -> SDDS streaming -> K'UHUL/XCFE + native kernels, with JSON/XJSON describing structure",
+    "gguf_ingestion_vs_inference": "a native GGUF loader could decode supported metadata and weights into KHANARY's tensor representation; that is ingestion, not inference. Reading a GGUF tensor is much easier than executing every architecture and quantisation scheme stored in GGUF.",
+    "conversion_requirement": "Safetensors -> SDDS must preserve tensor identities, shapes, dtypes, values and quantisation metadata; streaming correctness and numerical equivalence are validated separately",
+    "preserved": [
+      "both formats remain available",
+      "model loading independent of inference implementation",
+      "llama.cpp is an optional compatibility executor, not a required dependency"
+    ]
+  },
+  "prompt_rendering": {
+    "status": "contract identified, not implemented",
+    "doc": "docs/PROMPT-RENDERING.md",
+    "role": "language adapter, not language engine: serialises KHANARY structured context into one model's token conventions",
+    "purity": "must not decide meaning (XCFE) or permission (resolve_execution)",
+    "signature": "PromptRenderResult render_prompt(const AdmittedConversation&, const ModelPromptContract&)",
+    "gates": [
+      "rendered-text equivalence against the reference chat template",
+      "token-sequence equivalence, which is decisive: two renderers can produce similar text and different token IDs"
+    ],
+    "contract_detail": [
+      "the contract must state WHO inserts BOS/EOS, or control tokens appear twice",
+      "token equivalence requires the same tokenizer revision, template revision and rendering options"
+    ],
+    "independence": [
+      "the renderer does not know whether weights came from Safetensors, SDDS or GGUF",
+      "SDDS does not need to understand Jinja, AIML or role markers"
+    ],
+    "feedback_safeguard": "a model-generated statement is evidence of what the model said, not a verified fact and not an authorised memory update; it enters context under the same admission and epistemic rules as any other input",
+    "smallest_implementation": "one model family, one reference chat template, fixtures for system/user/assistant turns, generation prefix, special-token boundaries, and a case where text-equal rendering yields different token IDs",
+    "milestone": "token-identical prompt rendering, not full-model inference",
+    "not_implemented": true
+  },
+  "attention_reference_model": {
+    "status": "headers read for all three files; no tensors dequantised, no inference run",
+    "architecture": {
+      "name": "Qwen3 1.7B",
+      "arch": "qwen3",
+      "block_count": 28,
+      "context_length": 32768,
+      "embedding_length": 2048,
+      "feed_forward_length": 6144,
+      "head_count": 16,
+      "head_count_kv": 8,
+      "key_length": 128,
+      "value_length": 128,
+      "rope_freq_base": 1000000.0,
+      "rms_epsilon": 9.999999974752427e-07,
+      "tensors": 311,
+      "gguf_version": 3
+    },
+    "gqa": "16 query heads, 8 KV heads (2:1). Heads must be mapped, never assumed equal.",
+    "files": {
+      "Qwen3-1.7B-Q4_K_M": {
+        "size_gb": 1.28,
+        "tensor_types": {
+          "Q4_K": 169,
+          "F32": 113,
+          "Q6_K": 29
+        },
+        "usable_by_existing_loader": false,
+        "note": "Q4_K and Q6_K are outside load_q8_0_to_f32 coverage"
+      },
+      "Qwen3-1.7B-Q8_0": {
+        "size_gb": 2.17,
+        "tensor_types": {
+          "Q8_0": 198,
+          "F32": 113
+        },
+        "usable_by_existing_loader": true,
+        "note": "Q8_0 is in coverage; Q/K/V at layer 0 read as Q8_0"
+      },
+      "Qwen3-4B-Q8_0": {
+        "size_gb": 4.28,
+        "tensor_types": {
+          "Q8_0": 253,
+          "F32": 145
+        },
+        "usable_by_existing_loader": true,
+        "note": "same architecture family at a larger scale; Q/K/V at layer 0 read as Q8_0"
+      }
+    },
+    "layer0_attention": {
+      "attn_q": {
+        "shape": [
+          2048,
+          2048
+        ],
+        "Q8_0": "Q8_0",
+        "Q4_K_M": "Q4_K"
+      },
+      "attn_k": {
+        "shape": [
+          2048,
+          1024
+        ],
+        "Q8_0": "Q8_0",
+        "Q4_K_M": "Q4_K"
+      },
+      "attn_v": {
+        "shape": [
+          2048,
+          1024
+        ],
+        "Q8_0": "Q8_0",
+        "Q4_K_M": "Q6_K"
+      },
+      "attn_norm": {
+        "shape": [
+          2048
+        ],
+        "both": "F32"
+      },
+      "attn_q_norm": {
+        "shape": [
+          128
+        ],
+        "both": "F32"
+      },
+      "attn_k_norm": {
+        "shape": [
+          128
+        ],
+        "both": "F32"
+      }
+    },
+    "per_head_norm": "attn_q_norm and attn_k_norm of length key_length exist in every layer of both architectures; Qwen3 applies a per-head RMS norm to q and k. Omitting them yields plausible but wrong attention.",
+    "recommendation": "Option A parity validation should use Qwen3-1.7B-Q8_0: the smallest file the existing dequant path already covers, and a single layer is enough to validate projections, per-head norms, RoPE and attention against llama.cpp.",
+    "note": "read directly from the GGUF headers; nothing was dequantised and no inference was run.",
+    "architectures": {
+      "1.7B": {
+        "block_count": 28,
+        "embedding_length": 2048,
+        "feed_forward_length": 6144,
+        "head_count": 16,
+        "head_count_kv": 8,
+        "key_length": 128,
+        "value_length": 128,
+        "attn_q": [
+          2048,
+          2048
+        ],
+        "attn_k": [
+          2048,
+          1024
+        ],
+        "attn_v": [
+          2048,
+          1024
+        ],
+        "attn_output": [
+          2048,
+          2048
+        ]
+      },
+      "4B": {
+        "block_count": 36,
+        "embedding_length": 2560,
+        "feed_forward_length": 9728,
+        "head_count": 32,
+        "head_count_kv": 8,
+        "key_length": 128,
+        "value_length": 128,
+        "attn_q": [
+          2560,
+          4096
+        ],
+        "attn_k": [
+          2560,
+          1024
+        ],
+        "attn_v": [
+          2560,
+          1024
+        ],
+        "attn_output": [
+          4096,
+          2560
+        ]
+      }
+    },
+    "shape_finding": "the 4B model has 32 query heads but still 8 KV heads (4:1), with attn_q [2560,4096] = 32x128 and attn_output [4096,2560]. Head mapping is model-specific and cannot be hardcoded for one variant.",
+    "reference_capture_contract": {
+      "status": "specified, not implemented",
+      "precondition_satisfied": "vendor/llama/include/llama.h:366 exposes ggml_backend_sched_eval_callback cb_eval, and llama.dll / ggml.dll are declared artifacts, so the reference is reachable in-process rather than being authored by KHANARY",
+      "rules": {
+        "callback_is_not_a_dump": "a ggml_tensor* gives metadata; its data pointer, timing and lifetime depend on the backend and scheduler, and a GPU-backed tensor may not be CPU-readable. The dumper must verify host accessibility, copy while valid, and retain shape, strides, type and operation metadata.",
+        "must_fail_loudly_on_a_missing_tensor": "a renamed intermediate (for example Qcur-0) must produce a CAPTURE failure, never a numerical parity failure. Conflating them makes a harness defect look like model drift.",
+        "layout_fields_required": "ne[4] and nb[4] are retained, not inferred: ggml's ne[0] is the innermost dimension, so assuming contiguous row-major geometry silently transposes data without erroring",
+        "rope_convention_source": "the rotation convention is taken from the actual Qwen3 graph built by the vendored llama.cpp revision plus the captured post-RoPE tensors, not from the model family name"
+      },
+      "what_each_test_establishes": {
+        "scalar_rmsnorm_reference": "the per-head normalisation formula is correct",
+        "independent_rope_vectors": "rotation arithmetic is correct for a specified convention",
+        "llama_intermediate_comparison": "agreement with the selected Qwen3 implementation",
+        "complete_attention_comparison": "agreement across projections, normalisation, positional encoding, GQA, softmax and aggregation",
+        "nuance": "hand-computed primitive vectors are useful independent checks but do not establish that KHANARY selected the correct model-specific convention; only the llama.cpp comparison does"
+      },
+      "first_milestone": "a harness that captures and identifies the correct reference tensors reliably, before any capture is used to make a parity claim"
+    }
+  }
+}

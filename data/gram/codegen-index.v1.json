@@ -1,0 +1,121 @@
+{
+  "@kind": "khanary.codegen.index.v1",
+  "generated": "2026-11-01T08:34:50Z",
+  "source_root": "E:\\models\\_khanary_inspect\\KHANARY.CPP",
+  "local_source_root": "C:\\Users\\canna\\.KHANARY.CPP",
+  "source_keying": "(source, key) — key is not unique within a domain",
+  "validation": {
+    "malformed_lines": 0,
+    "missing_required_fields": 0
+  },
+  "phase_distribution": {
+    "Wo": 155763
+  },
+  "domains": {
+    "h": 25003,
+    "hlsl": 1347,
+    "html": 11417,
+    "js": 3691,
+    "json": 14929,
+    "kxml": 974,
+    "py": 42105,
+    "ts": 48,
+    "cpp": 56176,
+    "css": 73
+  },
+  "per_file": {
+    "codegen-h.jsonl": {
+      "records": 25003,
+      "unique_keys": 22876,
+      "duplicate_keys": 2127,
+      "phase_distribution": {
+        "Wo": 25003
+      },
+      "domain": "h"
+    },
+    "codegen-hlsl.jsonl": {
+      "records": 1347,
+      "unique_keys": 1269,
+      "duplicate_keys": 78,
+      "phase_distribution": {
+        "Wo": 1347
+      },
+      "domain": "hlsl"
+    },
+    "codegen-html.jsonl": {
+      "records": 11417,
+      "unique_keys": 7619,
+      "duplicate_keys": 3798,
+      "phase_distribution": {
+        "Wo": 11417
+      },
+      "domain": "html"
+    },
+    "codegen-js.jsonl": {
+      "records": 3691,
+      "unique_keys": 3444,
+      "duplicate_keys": 247,
+      "phase_distribution": {
+        "Wo": 3691
+      },
+      "domain": "js"
+    },
+    "codegen-json.jsonl": {
+      "records": 14929,
+      "unique_keys": 9834,
+      "duplicate_keys": 5095,
+      "phase_distribution": {
+        "Wo": 14929
+      },
+      "domain": "json"
+    },
+    "codegen-kxml.jsonl": {
+      "records": 974,
+      "unique_keys": 974,
+      "duplicate_keys": 0,
+      "phase_distribution": {
+        "Wo": 974
+      },
+      "domain": "kxml"
+    },
+    "codegen-py.jsonl": {
+      "records": 42105,
+      "unique_keys": 35453,
+      "duplicate_keys": 6652,
+      "phase_distribution": {
+        "Wo": 42105
+      },
+      "domain": "py"
+    },
+    "codegen-ts.jsonl": {
+      "records": 48,
+      "unique_keys": 47,
+      "duplicate_keys": 1,
+      "phase_distribution": {
+        "Wo": 48
+      },
+      "domain": "ts"
+    },
+    "codegen-cpp.jsonl": {
+      "records": 56176,
+      "unique_keys": 48604,
+      "duplicate_keys": 7572,
+      "phase_distribution": {
+        "Wo": 56176
+      },
+      "domain": "cpp"
+    },
+    "codegen-css.jsonl": {
+      "records": 73,
+      "unique_keys": 73,
+      "duplicate_keys": 0,
+      "phase_distribution": {
+        "Wo": 73
+      },
+      "domain": "css"
+    }
+  },
+  "totals": {
+    "records": 155763
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "fact.schema.json",
+  "title": "FactDef",
+  "description": "K'UHUL semantic fact contract. @kind must be semantic.fact.v1. @epistemic_status 'Verified' cannot be self-declared at ingestion — Verified is earned through the validation policy. JSON schema validates structure; predicate declaration is validated by RelationRegistry.validate_usage() at parse time (live registry check, not JSON schema).",
+  "type": "object",
+  "required": ["@kind", "@id", "@subject", "@predicate", "@object"],
+  "additionalProperties": false,
+  "properties": {
+    "@kind": {
+      "type": "string",
+      "const": "semantic.fact.v1"
+    },
+    "@id": {
+      "type": "string",
+      "description": "Unique fact identifier.",
+      "pattern": "^[A-Za-z0-9_-]+"
+    },
+    "@subject": {
+      "type": "string",
+      "description": "Subject entity identifier or name."
+    },
+    "@subject_type": {
+      "type": "string",
+      "description": "Subject entity type, validated against the relation's declared domain. Absent = wildcard (type check skipped at parse time). This bridge behavior is temporary pending entity-type resolution from the graph."
+    },
+    "@predicate": {
+      "type": "string",
+      "description": "Relation id. Must be declared in RelationRegistry. JSON schema validates that this is a string; RelationRegistry.validate_usage() validates that it is declared."
+    },
+    "@object": {
+      "type": "string",
+      "description": "Object entity identifier, value, or name."
+    },
+    "@object_type": {
+      "type": "string",
+      "description": "Object entity type, validated against the relation's declared range. Absent = wildcard."
+    },
+    "@epistemic_status": {
+      "type": "string",
+      "enum": ["Asserted", "Unresolved"],
+      "description": "Entry-state epistemic status accepted at ingestion. Verified, Inferred, and Disputed are earned by the engine and cannot be self-declared in a fact contract. Pattern Induction Guard: parse() rejects 'Verified' with std::runtime_error."
+    },
+    "@provenance": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Evidence sources: micronaut ids, document references, capability names."
+    },
+    "@authority": {
+      "type": "string",
+      "description": "Fact evidence authority. This is NOT the relation schema authority; it describes who vouches for this specific proposition.",
+      "enum": ["source_declaration", "inferred", "observed", "reported"]
+    },
+    "@validity_start": {
+      "type": "string",
+      "description": "ISO 8601 timestamp. Absent = unbounded start."
+    },
+    "@validity_end": {
+      "type": "string",
+      "description": "ISO 8601 timestamp. Absent = unbounded end."
+    }
+  }
+}

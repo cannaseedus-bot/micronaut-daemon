@@ -1,0 +1,237 @@
+<aiml version="1.0.1">
+  <category>
+    <pattern>MX2LM *</pattern>
+    <template><mx2lm><star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>@MX2LM *</pattern>
+    <template><mx2lm><star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>MX2LM NGRAMS *</pattern>
+    <template><mx2lm><star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>SYNONYMIZE *</pattern>
+    <template><mx2lm>synonymize: <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>SYNONYM *</pattern>
+    <template><mx2lm>synonym: <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>@SYN *</pattern>
+    <template><mx2lm>@syn <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>WORD SIMILARITY *</pattern>
+    <template><mx2lm>synonym: <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>REWRITE WITH SYNONYMS *</pattern>
+    <template><mx2lm>synonymize: <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>LEXICON *</pattern>
+    <template><mx2lm>lexicon dictionary lemma definition similarity <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>LEX *</pattern>
+    <template><mx2lm>lexicon dictionary lemma definition similarity <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>LEMMA *</pattern>
+    <template><mx2lm>lexicon lemma canonical definition <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>UNIGRAM *</pattern>
+    <template><mx2lm>lexicon unigram word entry <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>GRAPH *</pattern>
+    <template><mx2lm>graph cognition <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>BRAIN GRAPH *</pattern>
+    <template><mx2lm>brain graph thinking patterns <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>INCIDENCE MATRIX *</pattern>
+    <template><mx2lm>incidence matrix participation topology <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>HYPERCUBE GRAPH *</pattern>
+    <template><mx2lm>hypercube graph cognition folding dimensions <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>DISTRIBUTIONAL SEMANTICS *</pattern>
+    <template><mx2lm>distributional semantics context similarity <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>SEMANTIC FOLDING *</pattern>
+    <template><mx2lm>semantic folding sparse distributed representation book unfold <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>SEMANTIC FINGERPRINT *</pattern>
+    <template><mx2lm>semantic fingerprint context overlap hamming jaccard cosine <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>FGP *</pattern>
+    <template><mx2lm>fold graph parse atoms relations books candidates provenance <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>@FGP *</pattern>
+    <template><mx2lm>fold graph parse atoms relations books candidates provenance <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>FOLD GRAPH PARSE *</pattern>
+    <template><mx2lm>fold graph parse atoms relations books candidates provenance <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>PARSE FOLD GRAPH *</pattern>
+    <template><mx2lm>fold graph parse atoms relations books candidates provenance <star/></mx2lm></template>
+  </category>
+
+  <!-- Tool key/value map for AIML-side tool reasoning -->
+  <category>
+    <pattern>TOOL KEYS</pattern>
+    <template><mx2lm>tool keys rpc_key_query rpc_resolve_manifest rpc_fold_query rpc_micronaut_dispatch rpc_list_keys rpc_record_key rpc_infer rpc_cycle_identity rpc_fold_graph_parse rpc_key_encode rpc_key_decode rpc_keyspace_status mcp_kuhul_forge mcp_manifest_resolve mcp_fold_execute mcp_micronaut_run mcp_grammar_check mcp_phase_query mcp_gram_read mcp_gram_write mcp_confidence_get mcp_jrom_replay mcp_sandbox_query mcp_sandbox_list mcp_sandbox_violations mcp_world_state mcp_field_dag mcp_field_dag_svg mcp_relational_graph mcp_incidence_matrix mcp_semantic_fold mcp_code_parse</mx2lm></template>
+  </category>
+
+  <!-- RPC keys -->
+  <category>
+    <pattern>TOOL KEY RPC KEY QUERY</pattern>
+    <template><mx2lm>tool_key rpc_key_query surface rpc method key_query key_value k_rpc_key_query</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY RPC RESOLVE MANIFEST</pattern>
+    <template><mx2lm>tool_key rpc_resolve_manifest surface rpc method resolve_manifest key_value k_rpc_resolve_manifest</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY RPC FOLD QUERY</pattern>
+    <template><mx2lm>tool_key rpc_fold_query surface rpc method fold_query key_value k_rpc_fold_query</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY RPC MICRONAUT DISPATCH</pattern>
+    <template><mx2lm>tool_key rpc_micronaut_dispatch surface rpc method micronaut_dispatch key_value k_rpc_micronaut_dispatch</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY RPC LIST KEYS</pattern>
+    <template><mx2lm>tool_key rpc_list_keys surface rpc method list_keys key_value k_rpc_list_keys</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY RPC RECORD KEY</pattern>
+    <template><mx2lm>tool_key rpc_record_key surface rpc method record_key key_value k_rpc_record_key</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY RPC INFER</pattern>
+    <template><mx2lm>tool_key rpc_infer surface rpc method infer key_value k_rpc_infer</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY RPC CYCLE IDENTITY</pattern>
+    <template><mx2lm>tool_key rpc_cycle_identity surface rpc method cycle_identity key_value k_rpc_cycle_identity</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY RPC FOLD GRAPH PARSE</pattern>
+    <template><mx2lm>tool_key rpc_fold_graph_parse surface rpc method fold_graph_parse key_value k_rpc_fold_graph_parse</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY RPC KEY ENCODE</pattern>
+    <template><mx2lm>tool_key rpc_key_encode surface rpc method key_encode key_value k_rpc_key_encode</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY RPC KEY DECODE</pattern>
+    <template><mx2lm>tool_key rpc_key_decode surface rpc method key_decode key_value k_rpc_key_decode</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY RPC KEYSPACE STATUS</pattern>
+    <template><mx2lm>tool_key rpc_keyspace_status surface rpc method keyspace_status key_value k_rpc_keyspace_status</mx2lm></template>
+  </category>
+
+  <!-- MCP keys -->
+  <category>
+    <pattern>TOOL KEY MCP KUHUL FORGE</pattern>
+    <template><mx2lm>tool_key mcp_kuhul_forge surface mcp method kuhul_forge key_value k_mcp_kuhul_forge</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY MCP MANIFEST RESOLVE</pattern>
+    <template><mx2lm>tool_key mcp_manifest_resolve surface mcp method manifest_resolve key_value k_mcp_manifest_resolve</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY MCP FOLD EXECUTE</pattern>
+    <template><mx2lm>tool_key mcp_fold_execute surface mcp method fold_execute key_value k_mcp_fold_execute</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY MCP MICRONAUT RUN</pattern>
+    <template><mx2lm>tool_key mcp_micronaut_run surface mcp method micronaut_run key_value k_mcp_micronaut_run</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY MCP GRAMMAR CHECK</pattern>
+    <template><mx2lm>tool_key mcp_grammar_check surface mcp method grammar_check key_value k_mcp_grammar_check</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY MCP PHASE QUERY</pattern>
+    <template><mx2lm>tool_key mcp_phase_query surface mcp method phase_query key_value k_mcp_phase_query</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY MCP GRAM READ</pattern>
+    <template><mx2lm>tool_key mcp_gram_read surface mcp method gram_read key_value k_mcp_gram_read</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY MCP GRAM WRITE</pattern>
+    <template><mx2lm>tool_key mcp_gram_write surface mcp method gram_write key_value k_mcp_gram_write</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY MCP CONFIDENCE GET</pattern>
+    <template><mx2lm>tool_key mcp_confidence_get surface mcp method confidence_get key_value k_mcp_confidence_get</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY MCP JROM REPLAY</pattern>
+    <template><mx2lm>tool_key mcp_jrom_replay surface mcp method jrom_replay key_value k_mcp_jrom_replay</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY MCP SANDBOX QUERY</pattern>
+    <template><mx2lm>tool_key mcp_sandbox_query surface mcp method sandbox_query key_value k_mcp_sandbox_query</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY MCP SANDBOX LIST</pattern>
+    <template><mx2lm>tool_key mcp_sandbox_list surface mcp method sandbox_list key_value k_mcp_sandbox_list</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY MCP SANDBOX VIOLATIONS</pattern>
+    <template><mx2lm>tool_key mcp_sandbox_violations surface mcp method sandbox_violations key_value k_mcp_sandbox_violations</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY MCP WORLD STATE</pattern>
+    <template><mx2lm>tool_key mcp_world_state surface mcp method world_state key_value k_mcp_world_state</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY MCP FIELD DAG</pattern>
+    <template><mx2lm>tool_key mcp_field_dag surface mcp method field_dag key_value k_mcp_field_dag</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY MCP FIELD DAG SVG</pattern>
+    <template><mx2lm>tool_key mcp_field_dag_svg surface mcp method field_dag_svg key_value k_mcp_field_dag_svg</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY MCP RELATIONAL GRAPH</pattern>
+    <template><mx2lm>tool_key mcp_relational_graph surface mcp method relational_graph key_value k_mcp_relational_graph</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY MCP INCIDENCE MATRIX</pattern>
+    <template><mx2lm>tool_key mcp_incidence_matrix surface mcp method incidence_matrix key_value k_mcp_incidence_matrix</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY MCP SEMANTIC FOLD</pattern>
+    <template><mx2lm>tool_key mcp_semantic_fold surface mcp method semantic_fold key_value k_mcp_semantic_fold</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TOOL KEY MCP CODE PARSE</pattern>
+    <template><mx2lm>tool_key mcp_code_parse surface mcp method code_parse key_value k_mcp_code_parse</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>TOOL KEY *</pattern>
+    <template><mx2lm>tool_key unresolved <star/> hint use TOOL KEYS</mx2lm></template>
+  </category>
+</aiml>

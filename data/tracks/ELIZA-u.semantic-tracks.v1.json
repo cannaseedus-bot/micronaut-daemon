@@ -1,0 +1,103 @@
+{
+  "@no-eval": true,
+  "id": "ELIZA-µ",
+
+  "schemes": ["eliza"],
+  "description": "Reasoning Question generator — produces Socratic and probing questions from the semantic field to drive reasoning depth. Pop detects reasoning gap, Ch'en formulates targeted questions, Xul emits question set.",
+  "phase": "Ch'en",
+  "category": "advisory",
+  "confidence": 0.88,
+  "governs": [
+    "reasoning question",
+    "socratic question",
+    "probing question",
+    "reasoning probe",
+    "eliza reasoning",
+    "reasoning gap",
+    "why probe",
+    "how probe",
+    "guided reasoning",
+    "question generation",
+    "reasoning depth",
+    "clarifying question",
+    "diagnostic question",
+    "depth question"
+  ],
+  "capabilities": [
+    "REASONING_QUESTION_GENERATE",
+    "SOCRATIC_PROBE",
+    "GAP_QUESTION_EMIT",
+    "REASONING_DEPTH_EXPAND"
+  ],
+  "relations": [
+    {
+      "target": "ELIZA",
+      "verb": "@extends",
+      "directed": true
+    },
+    {
+      "target": "REASON-µ",
+      "verb": "@supports",
+      "directed": true
+    },
+    {
+      "target": "ADVISOR-µ",
+      "verb": "@supports",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "gramRead",
+      "key": "reasoning_question_query"
+    },
+    {
+      "phase": "Wo",
+      "op": "detect_reasoning_gap",
+      "note": "identify where reasoning is shallow"
+    },
+    {
+      "phase": "Yax",
+      "op": "expand_question_candidates",
+      "note": "R generate candidate questions"
+    },
+    {
+      "phase": "Sek",
+      "op": "score_question_relevance",
+      "note": "W score against semantic field"
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_reasoning_depth",
+      "note": "C validate reasoning coverage"
+    },
+    {
+      "phase": "Xul",
+      "op": "emit_questions",
+      "scope": "local"
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "ELIZA-µ",
+    "manifest_access": [
+      "words",
+      "micronaut",
+      "kuhul"
+    ],
+    "effects": [
+      "gramRead",
+      "gramWrite",
+      "reasoning:question_emit"
+    ],
+    "ports": [],
+    "coordinator": false
+  },
+  "model": {
+    "gguf": "C:/Users/canna/.lmstudio/models/lmstudio-community/LFM2.5-1.2B-Instruct-GGUF/LFM2.5-1.2B-Instruct-Q8_0.gguf",
+    "template": "chatml",
+    "role": "instruction",
+    "pattern_source": "eliza",
+    "pattern_mode": "system_context"
+  }
+}

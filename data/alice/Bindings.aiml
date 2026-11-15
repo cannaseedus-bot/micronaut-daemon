@@ -1,0 +1,488 @@
+<aiml version="1.0.1">
+  <!-- Bindings.aiml — KUHUL binding module patterns.
+       Execution authority: K'UHUL via dispatch_call.
+       All templates route through <mx2lm>bindings ...</mx2lm>.
+       Schema: data/schema/Bindings.xsd, namespace urn:kuhul:bindings:1.0
+       Active modules: CM-1-µ | GEMMA-µ | GRAPH-THEORY-µ | USER-µ |
+                       XJSON-ML-µ | CODER-µ | TENSOR-µ -->
+
+  <!-- ── Canonical entry point ───────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING BANK</pattern>
+    <template><mx2lm>bindings op=list phase=Pop bank=binding_registry</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>LIST BINDINGS</pattern>
+    <template><mx2lm>bindings op=list phase=Pop bank=binding_registry</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>SHOW BINDINGS</pattern>
+    <template><mx2lm>bindings op=list phase=Pop bank=binding_registry</mx2lm></template>
+  </category>
+
+  <!-- ── Lifecycle: register / health / identity ──────────────────────────── -->
+
+  <category>
+    <pattern>REGISTER BINDING *</pattern>
+    <template><mx2lm>bindings op=register id=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>BINDING * REGISTER</pattern>
+    <template><mx2lm>bindings op=register id=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>BINDING * HEALTH</pattern>
+    <template><mx2lm>bindings op=health id=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>BINDING HEALTH *</pattern>
+    <template><mx2lm>bindings op=health id=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>BINDING * IDENTITY</pattern>
+    <template><mx2lm>bindings op=identity id=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>BINDING IDENTITY *</pattern>
+    <template><mx2lm>bindings op=identity id=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Driver management ────────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * DRIVERS</pattern>
+    <template><mx2lm>bindings op=load_drivers id=<star/> phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>LOAD BINDING DRIVERS *</pattern>
+    <template><mx2lm>bindings op=load_drivers id=<star/> phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>IMPORT BINDING DRIVER * *</pattern>
+    <template><mx2lm>bindings op=import_driver id=<star index="1"/> driver=<star index="2"/> phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>BINDING * LIST DRIVERS</pattern>
+    <template><mx2lm>bindings op=list_drivers id=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Verb surface: match ──────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * MATCH *</pattern>
+    <template><mx2lm>bindings op=match id=<star index="1"/> text=<star index="2"/> phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Verb surface: agent ──────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * AGENT *</pattern>
+    <template><mx2lm>bindings op=agent id=<star index="1"/> text=<star index="2"/> phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Verb surface: call ───────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * CALL * TO *</pattern>
+    <template><mx2lm>bindings op=call from=<star index="1"/> text=<star index="2"/> to=<star index="3"/> phase=Sek</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>BINDING * CALL *</pattern>
+    <template><mx2lm>bindings op=call id=<star index="1"/> text=<star index="2"/> phase=Sek</mx2lm></template>
+  </category>
+
+  <!-- ── Verb surface: topic ──────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * TOPIC *</pattern>
+    <template><mx2lm>bindings op=topic id=<star index="1"/> topic=<star index="2"/> phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>SET BINDING TOPIC * *</pattern>
+    <template><mx2lm>bindings op=topic id=<star index="1"/> topic=<star index="2"/> phase=Wo</mx2lm></template>
+  </category>
+
+  <!-- ── Verb surface: condition ──────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * CONDITION *</pattern>
+    <template><mx2lm>bindings op=condition id=<star index="1"/> that=<star index="2"/> phase=Yax</mx2lm></template>
+  </category>
+
+  <!-- ── Verb surface: think ──────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * THINK *</pattern>
+    <template><mx2lm>bindings op=think id=<star index="1"/> text=<star index="2"/> phase=Yax</mx2lm></template>
+  </category>
+
+  <!-- ── Verb surface: remember / recall ─────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * REMEMBER * *</pattern>
+    <template><mx2lm>bindings op=remember id=<star index="1"/> key=<star index="2"/> value=<star index="3"/> phase=Xul</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>BINDING * RECALL *</pattern>
+    <template><mx2lm>bindings op=recall id=<star index="1"/> key=<star index="2"/> phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Verb surface: learn ──────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * LEARN * *</pattern>
+    <template><mx2lm>bindings op=learn id=<star index="1"/> pattern=<star index="2"/> response=<star index="3"/> phase=Xul</mx2lm></template>
+  </category>
+
+  <!-- ── Verb surface: decide ─────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * DECIDE *</pattern>
+    <template><mx2lm>bindings op=decide id=<star index="1"/> options=<star index="2"/> phase=Sek</mx2lm></template>
+  </category>
+
+  <!-- ── Verb surface: eval ───────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * EVAL *</pattern>
+    <template><mx2lm>bindings op=eval id=<star index="1"/> text=<star index="2"/> phase=Sek</mx2lm></template>
+  </category>
+
+  <!-- ── Delta surface: read ──────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * READ *</pattern>
+    <template><mx2lm>bindings op=read id=<star index="1"/> resource=<star index="2"/> phase=Pop method=GET</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>BINDING * READ</pattern>
+    <template><mx2lm>bindings op=read id=<star/> phase=Pop method=GET</mx2lm></template>
+  </category>
+
+  <!-- ── Delta surface: get ───────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * GET *</pattern>
+    <template><mx2lm>bindings op=get id=<star index="1"/> resource=<star index="2"/> phase=Pop method=GET</mx2lm></template>
+  </category>
+
+  <!-- ── Delta surface: list ──────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * LIST *</pattern>
+    <template><mx2lm>bindings op=list_resource id=<star index="1"/> scope=<star index="2"/> phase=Pop method=GET</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>BINDING * LIST</pattern>
+    <template><mx2lm>bindings op=list_resource id=<star/> phase=Pop method=GET</mx2lm></template>
+  </category>
+
+  <!-- ── Delta surface: write ─────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * WRITE * *</pattern>
+    <template><mx2lm>bindings op=write id=<star index="1"/> resource=<star index="2"/> body=<star index="3"/> phase=Xul method=POST</mx2lm></template>
+  </category>
+
+  <!-- ── Delta surface: patch ─────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * PATCH * *</pattern>
+    <template><mx2lm>bindings op=patch id=<star index="1"/> resource=<star index="2"/> delta=<star index="3"/> phase=Sek method=PATCH</mx2lm></template>
+  </category>
+
+  <!-- ── Delta surface: post ──────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * POST * *</pattern>
+    <template><mx2lm>bindings op=post id=<star index="1"/> action=<star index="2"/> body=<star index="3"/> phase=Sek method=POST</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>BINDING * POST *</pattern>
+    <template><mx2lm>bindings op=post id=<star index="1"/> action=<star index="2"/> phase=Sek method=POST</mx2lm></template>
+  </category>
+
+  <!-- ── Delta surface: delete ────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * DELETE *</pattern>
+    <template><mx2lm>bindings op=delete id=<star index="1"/> resource=<star index="2"/> phase=Sek method=DELETE</mx2lm></template>
+  </category>
+
+  <!-- ── Delta surface: save ──────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * SAVE *</pattern>
+    <template><mx2lm>bindings op=save id=<star index="1"/> scope=<star index="2"/> phase=Xul</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>BINDING * SAVE</pattern>
+    <template><mx2lm>bindings op=save id=<star/> phase=Xul</mx2lm></template>
+  </category>
+
+  <!-- ── Atomic key dispatch ──────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * KEY * *</pattern>
+    <template><mx2lm>bindings op=atomic_key id=<star index="1"/> key=<star index="2"/> payload=<star index="3"/> phase=Sek</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>BINDING * KEY *</pattern>
+    <template><mx2lm>bindings op=atomic_key id=<star index="1"/> key=<star index="2"/> phase=Sek</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>INVOKE BINDING KEY * *</pattern>
+    <template><mx2lm>bindings op=atomic_key key=<star index="1"/> payload=<star index="2"/> phase=Sek</mx2lm></template>
+  </category>
+
+  <!-- ── Phase-explicit surface ───────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING * POP *</pattern>
+    <template><mx2lm>bindings op=receive id=<star index="1"/> phase=Pop input=<star index="2"/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>BINDING * WO *</pattern>
+    <template><mx2lm>bindings op=bind id=<star index="1"/> phase=Wo contract=<star index="2"/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>BINDING * YAX *</pattern>
+    <template><mx2lm>bindings op=prepare id=<star index="1"/> phase=Yax candidates=<star index="2"/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>BINDING * SEK *</pattern>
+    <template><mx2lm>bindings op=dispatch id=<star index="1"/> phase=Sek op_target=<star index="2"/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>BINDING * CHEN *</pattern>
+    <template><mx2lm>bindings op=verify id=<star index="1"/> phase=Ch'en result=<star index="2"/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>BINDING * XUL *</pattern>
+    <template><mx2lm>bindings op=commit id=<star index="1"/> phase=Xul accumulator=<star index="2"/></mx2lm></template>
+  </category>
+
+  <!-- ── Bus config ────────────────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING BUS CONFIG</pattern>
+    <template><mx2lm>bindings op=bus_config phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>SET BINDING ENDPOINT * *</pattern>
+    <template><mx2lm>bindings op=set_endpoint name=<star index="1"/> base=<star index="2"/> phase=Wo</mx2lm></template>
+  </category>
+
+  <!-- ── Named shortcuts: CM-1-µ ──────────────────────────────────────────── -->
+
+  <category>
+    <pattern>CM1 HEALTH</pattern>
+    <template><mx2lm>bindings op=health id=CM-1-µ phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CM1 MATCH *</pattern>
+    <template><mx2lm>bindings op=match id=CM-1-µ text=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CM1 AGENT *</pattern>
+    <template><mx2lm>bindings op=agent id=CM-1-µ text=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CM1 THINK *</pattern>
+    <template><mx2lm>bindings op=think id=CM-1-µ text=<star/> phase=Yax</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CM1 *</pattern>
+    <template><mx2lm>bindings op=match id=CM-1-µ text=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Named shortcuts: GEMMA-µ ─────────────────────────────────────────── -->
+
+  <category>
+    <pattern>GEMMA HEALTH</pattern>
+    <template><mx2lm>bindings op=health id=GEMMA-µ phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>GEMMA START</pattern>
+    <template><mx2lm>bindings op=load_drivers id=GEMMA-µ phase=Wo auto_start=true</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>GEMMA MATCH *</pattern>
+    <template><mx2lm>bindings op=match id=GEMMA-µ text=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>GEMMA AGENT *</pattern>
+    <template><mx2lm>bindings op=agent id=GEMMA-µ text=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>GEMMA THINK *</pattern>
+    <template><mx2lm>bindings op=think id=GEMMA-µ text=<star/> phase=Yax</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>GEMMA *</pattern>
+    <template><mx2lm>bindings op=match id=GEMMA-µ text=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Named shortcuts: GRAPH-THEORY-µ ──────────────────────────────────── -->
+
+  <category>
+    <pattern>GRAPH THEORY HEALTH</pattern>
+    <template><mx2lm>bindings op=health id=micronaut:GRAPH-THEORY phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>GRAPH THEORY MATCH *</pattern>
+    <template><mx2lm>bindings op=match id=micronaut:GRAPH-THEORY text=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>GRAPH THEORY QUERY *</pattern>
+    <template><mx2lm>bindings op=atomic_key id=micronaut:GRAPH-THEORY key=graph-theory.query payload=<star/> phase=Sek</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>GRAPH NEIGHBORHOOD * *</pattern>
+    <template><mx2lm>bindings op=atomic_key id=micronaut:GRAPH-THEORY key=graph-theory.query query_type=neighborhood graph=<star index="1"/> node=<star index="2"/> phase=Sek</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>GRAPH PATH * TO *</pattern>
+    <template><mx2lm>bindings op=atomic_key id=micronaut:GRAPH-THEORY key=graph-theory.query query_type=path from=<star index="1"/> to=<star index="2"/> phase=Sek</mx2lm></template>
+  </category>
+
+  <!-- ── Named shortcuts: USER-µ ──────────────────────────────────────────── -->
+
+  <category>
+    <pattern>USER BINDING HEALTH</pattern>
+    <template><mx2lm>bindings op=health id=USER-µ phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>USER BINDING MATCH *</pattern>
+    <template><mx2lm>bindings op=match id=USER-µ text=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>USER BINDING READ *</pattern>
+    <template><mx2lm>bindings op=read id=USER-µ resource=<star/> phase=Pop method=GET</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>USER BINDING WRITE * *</pattern>
+    <template><mx2lm>bindings op=write id=USER-µ resource=<star index="1"/> body=<star index="2"/> phase=Xul method=POST</mx2lm></template>
+  </category>
+
+  <!-- ── Named shortcuts: XJSON-ML-µ ─────────────────────────────────────── -->
+
+  <category>
+    <pattern>XJSON ML HEALTH</pattern>
+    <template><mx2lm>bindings op=health id=XJSON-ML-µ phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>XJSON ML MATCH *</pattern>
+    <template><mx2lm>bindings op=match id=XJSON-ML-µ text=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>XJSON ML OP *</pattern>
+    <template><mx2lm>bindings op=atomic_key id=XJSON-ML-µ key=xjson-ml.op payload=<star/> phase=Sek</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>XJSON ML TENSOR *</pattern>
+    <template><mx2lm>bindings op=atomic_key id=XJSON-ML-µ key=xjson-ml.tensor payload=<star/> phase=Sek</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>XJSON ML INFER *</pattern>
+    <template><mx2lm>bindings op=atomic_key id=XJSON-ML-µ key=xjson-ml.infer payload=<star/> phase=Sek</mx2lm></template>
+  </category>
+
+  <!-- ── Named shortcuts: CODER-µ ─────────────────────────────────────────── -->
+
+  <category>
+    <pattern>CODER HEALTH</pattern>
+    <template><mx2lm>bindings op=health id=CODER-µ phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CODER MATCH *</pattern>
+    <template><mx2lm>bindings op=match id=CODER-µ text=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CODER AGENT *</pattern>
+    <template><mx2lm>bindings op=agent id=CODER-µ text=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CODER THINK *</pattern>
+    <template><mx2lm>bindings op=think id=CODER-µ text=<star/> phase=Yax</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CODER *</pattern>
+    <template><mx2lm>bindings op=match id=CODER-µ text=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Named shortcuts: TENSOR-µ ────────────────────────────────────────── -->
+
+  <category>
+    <pattern>TENSOR BINDING HEALTH</pattern>
+    <template><mx2lm>bindings op=health id=TENSOR-µ phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>TENSOR BINDING MATCH *</pattern>
+    <template><mx2lm>bindings op=match id=TENSOR-µ text=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>TENSOR BINDING OP *</pattern>
+    <template><mx2lm>bindings op=atomic_key id=TENSOR-µ key=tensor.op payload=<star/> phase=Sek</mx2lm></template>
+  </category>
+
+  <!-- ── Fallback ──────────────────────────────────────────────────────────── -->
+
+  <category>
+    <pattern>BINDING *</pattern>
+    <template><mx2lm>bindings hint BINDING BANK for op=register|health|identity|match|agent|read|write|list|key <star/></mx2lm></template>
+  </category>
+
+</aiml>

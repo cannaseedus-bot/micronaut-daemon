@@ -1,0 +1,53 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "guestbook",
+  "@key": "⟁APP:GUESTBOOK",
+  "@mount": "⟁ROOT:GUESTBOOK",
+  "@theme": { "accent": "#a78bfa", "bg": "#06050f", "surface": "#100e1e", "text": "#ede9fe", "hero_phase": "Xul", "tagline": "Leave your mark" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "entries_feed", "component": "⟁WIDGET:ENTRIES", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "entries": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:GUESTBOOK": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:SIGN"] },
+    "⟁ACTION:SIGN": { "@type": "button", "@text": "Sign Guestbook", "@on": { "click": "guestbook.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:ENTRIES", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:ENTRIES": { "@type": "feed", "@bind": "state.entries", "@children": ["⟁WIDGET:ENTRY_CARD"] },
+    "⟁WIDGET:ENTRY_CARD": { "@type": "content-card", "@bind": "entry" },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:VIEW_COUNT", "⟁WIDGET:RECENT_VISITORS"] },
+    "⟁WIDGET:VIEW_COUNT": { "@type": "stat", "@bind": "data.view_count" },
+    "⟁WIDGET:RECENT_VISITORS": { "@type": "list", "@bind": "data.recent_visitors" }
+  },
+  "@programs": {
+    "guestbook.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "guestbook.sign": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "APPEND", "@in": "event_entry", "@out": "entries" }] }
+  },
+  "@events": { "compose.open": "guestbook.open_compose", "entry.sign": "guestbook.sign" },
+  "@imports": [{ "ref": "entry", "mode": "schema_table" }, { "ref": "view_count", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "visitor-map", "name": "Visitor World Map", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Show a world map of where your visitors come from." },
+      { "id": "moderation", "name": "Entry Moderation", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Approve entries before they appear publicly." },
+      { "id": "greeting-bot", "name": "Greeting Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Auto-respond to new guestbook entries with a personalised thank-you." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "guestbook.sign", "pattern": "SIGN GUESTBOOK|LEAVE MESSAGE|ADD ENTRY", "intent": "open_compose" }
+    ]
+  },
+  "@data": {
+    "view_count": 1482,
+    "recent_visitors": ["Zara from London", "Marco from Rome", "Yuki from Tokyo"],
+    "spotlight": [
+      { "id": "sp1", "title": "Most Recent Entry", "author": "Zara M.", "badge": "New", "excerpt": "Loved the portfolio. The case studies are incredibly detailed." },
+      { "id": "sp2", "title": "Guest of the Week", "author": "Marco V.", "badge": "Highlight", "excerpt": "Found you through the KHANARY community. This is inspiring." },
+      { "id": "sp3", "title": "First Ever Entry", "author": "Anonymous", "badge": "First", "excerpt": "Entry #1. Here we go." }
+    ],
+    "schema": {
+      "entry": { "primaryKey": "entry_id", "fields": { "entry_id": { "type": "string" }, "name": { "type": "string", "required": true }, "location": { "type": "string" }, "message": { "type": "textarea", "required": true }, "website": { "type": "uri" }, "signed_at": { "type": "datetime" } } },
+      "view_count": { "primaryKey": "view_id", "singleton": true, "fields": { "view_id": { "type": "string" }, "total": { "type": "integer" }, "last_updated": { "type": "datetime" } } }
+    }
+  }
+}

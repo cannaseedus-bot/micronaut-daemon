@@ -1,0 +1,211 @@
+{
+  "@type": "khanary.conformance_registry.v1",
+  "version": "1.0.0",
+  "note": "Every fixture in this directory is listed here. executed_by is null where no script runs the cases yet.",
+  "fixtures": {
+    "advisor-submission.json": {
+      "domain": "advisor-submission",
+      "contract": null,
+      "case_key": null,
+      "cases": 0,
+      "executed_by": null
+    },
+    "algebra_isa.json": {
+      "domain": "algebra_isa",
+      "contract": "data/grammar/algebra-isa.contracts.json",
+      "case_key": "positive",
+      "cases": 12,
+      "executed_by": null
+    },
+    "api_gateway.json": {
+      "domain": "api_gateway",
+      "contract": "data/grammar/api-gateway.contracts.json",
+      "case_key": "cases",
+      "cases": 18,
+      "executed_by": null
+    },
+    "app_host.json": {
+      "domain": "app_host",
+      "contract": "data/grammar/app-host.contracts.json",
+      "case_key": "cases",
+      "cases": 14,
+      "executed_by": null
+    },
+    "app_tables.json": {
+      "domain": "app_tables",
+      "contract": "data/grammar/app-tables.contracts.json",
+      "case_key": "cases",
+      "cases": 19,
+      "executed_by": null
+    },
+    "canonical.json": {
+      "domain": "canonical",
+      "contract": null,
+      "case_key": "list",
+      "cases": 6,
+      "executed_by": null
+    },
+    "contracts.json": {
+      "domain": "contracts",
+      "contract": null,
+      "case_key": "list",
+      "cases": 38,
+      "executed_by": null
+    },
+    "fold_algebra.json": {
+      "domain": "fold_algebra",
+      "contract": "data/grammar/kuhul-fold-algebra.contracts.json",
+      "case_key": "legal",
+      "cases": 8,
+      "executed_by": null
+    },
+    "fold_event.json": {
+      "domain": "fold_event",
+      "contract": "data/grammar/fold-event.contracts.json",
+      "case_key": "cases",
+      "cases": 26,
+      "executed_by": null
+    },
+    "fold_graph.json": {
+      "domain": "fold_graph",
+      "contract": "data/grammar/fold-graph.contracts.json",
+      "case_key": "cases",
+      "cases": 15,
+      "executed_by": null
+    },
+    "fold_kernel.json": {
+      "domain": "fold_kernel",
+      "contract": "data/grammar/fold-kernel.contracts.json",
+      "case_key": "cases",
+      "cases": 26,
+      "executed_by": null
+    },
+    "fold_lattice.json": {
+      "domain": "fold_lattice",
+      "contract": "data/grammar/fold-lattice.contracts.json",
+      "case_key": "cases",
+      "cases": 18,
+      "executed_by": null
+    },
+    "fold_space.json": {
+      "domain": "fold_space",
+      "contract": "data/grammar/fold-space.contracts.json",
+      "case_key": "cases",
+      "cases": 21,
+      "executed_by": null
+    },
+    "gml_validator.json": {
+      "domain": "gml_validator",
+      "contract": "data/grammar/gml.validator.json",
+      "case_key": "list",
+      "cases": 114,
+      "executed_by": "tools/check_document_contract.py"
+    },
+    "hlsl_lane.json": {
+      "domain": "hlsl_lane",
+      "contract": null,
+      "case_key": null,
+      "cases": 0,
+      "executed_by": null
+    },
+    "internal_schema_graph.json": {
+      "domain": "internal_schema_graph",
+      "contract": null,
+      "case_key": "cases",
+      "cases": 24,
+      "executed_by": null
+    },
+    "micronaut_program.json": {
+      "domain": "micronaut_program",
+      "contract": "data/grammar/micronaut-profile.contracts.json",
+      "case_key": null,
+      "cases": 0,
+      "executed_by": null
+    },
+    "ngram_key_grammar.json": {
+      "domain": "ngram_key_grammar",
+      "contract": "data/grammar/ngram-key-grammar.contracts.json",
+      "case_key": null,
+      "cases": 0,
+      "executed_by": null
+    },
+    "numerical_backend.json": {
+      "domain": "numerical_backend",
+      "contract": null,
+      "case_key": "backends",
+      "cases": 7,
+      "executed_by": null
+    },
+    "runtime_stack.json": {
+      "domain": "runtime_stack",
+      "contract": null,
+      "case_key": "cases",
+      "cases": 19,
+      "executed_by": null
+    },
+    "scxq2.json": {
+      "domain": "scxq2",
+      "contract": "data/grammar/scxq2.contracts.json",
+      "case_key": "containers",
+      "cases": 16,
+      "executed_by": null
+    },
+    "srai_operators.json": {
+      "domain": "srai_operators",
+      "contract": "data/grammar/srai-operators.contracts.json",
+      "case_key": "positive",
+      "cases": 11,
+      "executed_by": null
+    },
+    "uri_address.json": {
+      "domain": "uri_address",
+      "contract": "data/grammar/uri-address.contracts.json",
+      "case_key": "cases",
+      "cases": 47,
+      "executed_by": null
+    },
+    "wildcard_control_flow.json": {
+      "domain": "wildcard_control_flow",
+      "contract": "data/grammar/wildcard-control-flow.contracts.json",
+      "case_key": "parse_ok",
+      "cases": 8,
+      "executed_by": null
+    },
+    "xcfe_kxml_lowering.json": {
+      "domain": "xcfe_kxml_lowering",
+      "contract": "data/grammar/xcfe-kxml-lowering.contracts.json",
+      "case_key": "cases",
+      "cases": 23,
+      "executed_by": null
+    },
+    "xcfe_policy.json": {
+      "domain": "xcfe_policy",
+      "contract": "data/grammar/xcfe-policy.contracts.json",
+      "case_key": "cases",
+      "cases": 24,
+      "executed_by": null
+    },
+    "float_type_manifest.json": {
+      "domain": "float_type_manifest",
+      "contract": null,
+      "case_key": "cases",
+      "cases": 8,
+      "executed_by": "tools/check_float_type_manifest.py"
+    },
+    "domain_word_tree.json": {
+      "domain": "domain_word_tree",
+      "contract": "data/schema/word-domain-tree.v1.schema.json",
+      "contracts": ["data/schema/aiml-relation-grams.v1.schema.json"],
+      "case_key": "cases",
+      "cases": 4,
+      "executed_by": "tools/check_domain_word_tree.py"
+    },
+    "aiml_srai_router.json": {
+      "domain": "aiml_srai_router",
+      "contract": "data/schema/aiml-route.v1.schema.json",
+      "case_key": "cases",
+      "cases": 6,
+      "executed_by": "test_aiml_semantic_router.py"
+    }
+  }
+}

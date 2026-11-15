@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from hypercube_Q3.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH Q3</pattern>
+    <template>source hypercube_Q3.gml; label Q3; identity 3; directed 0; nodes 8; edges 16. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 NODE 0</pattern>
+    <template>Graph Q3; node 0; id: 0; label: 000; x: -1.0; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 NODE 000</pattern>
+    <template>Graph Q3; node 0; id: 0; label: 000; x: -1.0; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 NODE 1</pattern>
+    <template>Graph Q3; node 1; id: 1; label: 001; x: 1.0; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 NODE 001</pattern>
+    <template>Graph Q3; node 1; id: 1; label: 001; x: 1.0; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 NODE 2</pattern>
+    <template>Graph Q3; node 2; id: 2; label: 010; x: -1.0; y: 1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 NODE 010</pattern>
+    <template>Graph Q3; node 2; id: 2; label: 010; x: -1.0; y: 1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 NODE 3</pattern>
+    <template>Graph Q3; node 3; id: 3; label: 011; x: 1.0; y: 1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 NODE 011</pattern>
+    <template>Graph Q3; node 3; id: 3; label: 011; x: 1.0; y: 1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 NODE 4</pattern>
+    <template>Graph Q3; node 4; id: 4; label: 100; x: -1.0; y: -1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 NODE 100</pattern>
+    <template>Graph Q3; node 4; id: 4; label: 100; x: -1.0; y: -1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 NODE 5</pattern>
+    <template>Graph Q3; node 5; id: 5; label: 101; x: 1.0; y: -1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 NODE 101</pattern>
+    <template>Graph Q3; node 5; id: 5; label: 101; x: 1.0; y: -1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 NODE 6</pattern>
+    <template>Graph Q3; node 6; id: 6; label: 110; x: -1.0; y: 1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 NODE 110</pattern>
+    <template>Graph Q3; node 6; id: 6; label: 110; x: -1.0; y: 1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 NODE 7</pattern>
+    <template>Graph Q3; node 7; id: 7; label: 111; x: 1.0; y: 1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 NODE 111</pattern>
+    <template>Graph Q3; node 7; id: 7; label: 111; x: 1.0; y: 1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 EDGE 0 BIT0 1</pattern>
+    <template>Graph Q3; edge 0 to 1; label: bit0; source: 0; target: 1; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 EDGE 0 BIT1 2</pattern>
+    <template>Graph Q3; edge 0 to 2; label: bit1; source: 0; target: 2; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 EDGE 0 BIT2 4</pattern>
+    <template>Graph Q3; edge 0 to 4; label: bit2; source: 0; target: 4; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 EDGE 1 BIT1 3</pattern>
+    <template>Graph Q3; edge 1 to 3; label: bit1; source: 1; target: 3; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 EDGE 1 BIT2 5</pattern>
+    <template>Graph Q3; edge 1 to 5; label: bit2; source: 1; target: 5; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 EDGE 2 BIT0 3</pattern>
+    <template>Graph Q3; edge 2 to 3; label: bit0; source: 2; target: 3; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 EDGE 2 BIT2 6</pattern>
+    <template>Graph Q3; edge 2 to 6; label: bit2; source: 2; target: 6; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 EDGE 3 BIT2 7</pattern>
+    <template>Graph Q3; edge 3 to 7; label: bit2; source: 3; target: 7; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 EDGE 4 BIT0 5</pattern>
+    <template>Graph Q3; edge 4 to 5; label: bit0; source: 4; target: 5; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 EDGE 4 BIT1 6</pattern>
+    <template>Graph Q3; edge 4 to 6; label: bit1; source: 4; target: 6; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 EDGE 5 BIT1 7</pattern>
+    <template>Graph Q3; edge 5 to 7; label: bit1; source: 5; target: 7; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 EDGE 6 BIT0 7</pattern>
+    <template>Graph Q3; edge 6 to 7; label: bit0; source: 6; target: 7; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 EDGE 0 FOLD 7</pattern>
+    <template>Graph Q3; edge 0 to 7; label: fold; source: 0; target: 7; verb: @fold_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 EDGE 1 FOLD 6</pattern>
+    <template>Graph Q3; edge 1 to 6; label: fold; source: 1; target: 6; verb: @fold_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 EDGE 2 FOLD 5</pattern>
+    <template>Graph Q3; edge 2 to 5; label: fold; source: 2; target: 5; verb: @fold_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH Q3 EDGE 3 FOLD 4</pattern>
+    <template>Graph Q3; edge 3 to 4; label: fold; source: 3; target: 4; verb: @fold_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+</aiml>

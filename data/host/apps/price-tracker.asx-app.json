@@ -1,0 +1,57 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "price-tracker",
+  "@key": "⟁APP:PRICE_TRACKER",
+  "@mount": "⟁ROOT:PRICE_TRACKER",
+  "@theme": { "accent": "#4ade80", "bg": "#010c02", "surface": "#02180a", "text": "#dcfce7", "hero_phase": "Yax", "tagline": "Watch prices. Buy at the right time." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "products", "component": "⟁WIDGET:PRODUCTS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "products": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:PRICE_TRACKER": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:TRACK", "⟁INPUT:SEARCH"] },
+    "⟁ACTION:TRACK": { "@type": "button", "@text": "Track Product", "@on": { "click": "pt.open_compose" } },
+    "⟁INPUT:SEARCH": { "@type": "input", "@placeholder": "Search tracked products...", "@on": { "input": "pt.search" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:PRODUCTS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:PRODUCTS": { "@type": "grid", "@bind": "state.products", "@children": ["⟁WIDGET:PRODUCT_CARD"] },
+    "⟁WIDGET:PRODUCT_CARD": { "@type": "content-card", "@bind": "product", "@on": { "view": "pt.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:SAVINGS", "⟁WIDGET:ALERTS"] },
+    "⟁WIDGET:SAVINGS": { "@type": "stat", "@bind": "data.savings" },
+    "⟁WIDGET:ALERTS": { "@type": "list", "@bind": "data.alerts" }
+  },
+  "@programs": {
+    "pt.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "pt.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] },
+    "pt.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "product.track": "pt.open_compose", "search.input": "pt.search", "product.view": "pt.view" },
+  "@imports": [{ "ref": "tracked_product", "mode": "schema_table" }, { "ref": "price_snapshot", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "price-chart", "name": "Price History Chart", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "View the full price history chart for any tracked item." },
+      { "id": "drop-alerts", "name": "Price Drop Alerts", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Get notified when a tracked price drops below your target." },
+      { "id": "bulk-import", "name": "Bulk URL Import", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Paste a list of product URLs to track them all at once." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "pt.track", "pattern": "TRACK PRICE *|WATCH PRODUCT *|ADD TO WATCHLIST", "intent": "open_compose" },
+      { "id": "pt.drops", "pattern": "PRICE DROPS|WHAT DROPPED *|ANY DEALS", "intent": "view_alerts" }
+    ]
+  },
+  "@data": {
+    "savings": { "products_tracked": 18, "saved_usd": 124, "best_drop_pct": 34 },
+    "alerts": [{ "name": "MX2LM Pro License", "drop_pct": 34, "alert_at_usd": 49 }, { "name": "KHANARY Dev Bundle", "drop_pct": 12, "alert_at_usd": 79 }],
+    "spotlight": [
+      { "id": "sp1", "title": "GPU Dev Kit — 34% Drop", "badge": "Big Drop", "current_usd": 129, "was_usd": 196, "excerpt": "Biggest tracked drop. Was sitting at $196 for 3 months." },
+      { "id": "sp2", "title": "SSD 2TB — Trending Down", "badge": "Falling", "current_usd": 78, "was_usd": 92, "excerpt": "Down $14 over 6 weeks. More drops expected." },
+      { "id": "sp3", "title": "Standing Desk — All-Time Low", "badge": "Historic Low", "current_usd": 189, "excerpt": "Lowest recorded price. Buy signal is strong." }
+    ],
+    "schema": {
+      "tracked_product": { "primaryKey": "product_id", "fields": { "product_id": { "type": "string" }, "name": { "type": "string", "required": true }, "url": { "type": "string", "required": true }, "target_price_usd": { "type": "float" }, "category": { "type": "string" }, "added_at": { "type": "datetime" } } },
+      "price_snapshot": { "primaryKey": "snap_id", "fields": { "snap_id": { "type": "string" }, "product_id": { "type": "string", "required": true }, "price_usd": { "type": "float", "required": true }, "in_stock": { "type": "boolean" }, "snapped_at": { "type": "datetime", "required": true } } }
+    }
+  }
+}

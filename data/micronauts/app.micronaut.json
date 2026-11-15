@@ -1,0 +1,145 @@
+{
+  "@kind": "kuhul.micronaut.atomic.v1",
+  "id": "APP-µ",
+  "descriptor_status": "active",
+  "track_ref": "data/tracks/APP-u.semantic-tracks.v1.json",
+  "manifest": {
+    "name": "APP-µ",
+    "version": "1.0.0",
+    "description": "Application lifecycle and binding-chain auditor. Defines app specs (kuhul.app-spec.v1), scaffolds the full 6-point binding chain for any new micronaut, loads micronauts into the bus registry, and audits completeness (micronaut JSON + track JSON + shell PSM1 + commands action + registry node + name_map entry). Proposal-only — scaffold outputs are proposals until XCFE admits them."
+  },
+  "api": {
+    "namespace": "app",
+    "atomic_keys": [
+      "app.spec",
+      "app.scaffold",
+      "app.load",
+      "app.audit",
+      "app.health"
+    ],
+    "verb_surface": [
+      "APP SPEC *",
+      "APP SCAFFOLD *",
+      "APP LOAD *",
+      "APP AUDIT *",
+      "APP AUDIT ALL",
+      "APP STATUS"
+    ]
+  },
+  "xcfe": {
+    "mode": "xcfe_gated_read_only",
+    "escalation_mode": "proposal_only",
+    "authority": "xcfe_gated_read_only",
+    "forbidden": [
+      "emit_response",
+      "write_state",
+      "mutate_topology",
+      "commit_patterns",
+      "direct_dispatch"
+    ],
+    "note": "app.scaffold emits typed proposals — it does not write files. app.audit is data_only. app.load requires explicit xcfe_admitted status before modifying BusRegistry."
+  },
+  "atomic_key_defs": {
+    "app.spec": {
+      "@type": "spec_define",
+      "description": "Pop/Wo-phase: validates or defines a kuhul.micronaut.atomic.v1 or kuhul.app-spec.v1 structure. Accepts id, name, role, phases, atomic_keys, authority, drivers; emits a typed spec proposal for review before scaffold is invoked.",
+      "phases": ["Pop", "Wo"],
+      "output_schema": {
+        "@kind": "kuhul.app-spec.v1",
+        "fields": ["id", "name", "role", "phases", "atomic_keys", "authority", "drivers", "track_ref", "xcfe", "namespace", "commands_action"]
+      },
+      "authority": "data_only"
+    },
+    "app.scaffold": {
+      "@type": "scaffold_propose",
+      "description": "Yax/Sek-phase: generates scaffold content for the full 6-point binding chain of a micronaut — micronaut JSON template, track JSON folds template, shell PSM1 file, commands.ps1 case block, registry node JSON, name_map entry. Proposal only — produces artifact text, does not write files. XCFE must admit before any artifact is committed.",
+      "phases": ["Yax", "Sek"],
+      "generates": [
+        { "artifact": "micronaut_json",   "path_template": "data/micronauts/{name}.micronaut.json",          "schema": "kuhul.micronaut.atomic.v1" },
+        { "artifact": "track_json",       "path_template": "data/tracks/{ID}-u.semantic-tracks.v1.json",     "schema": "kuhul.semantic-tracks.v1" },
+        { "artifact": "shell_psm1",       "path_template": "shell/{name}.bindings.psm1",                     "generator": "New-MicronautBindingsFile" },
+        { "artifact": "commands_case",    "path_template": "agents/commands.ps1",                            "insert": "case_{action}" },
+        { "artifact": "registry_node",    "path_template": "micronaut.registry.xjson#nodes",                 "insert": "node:{ID}" },
+        { "artifact": "name_map_entry",   "path_template": "micronaut.registry.xjson#name_map",              "insert": "{action}:{ID}" }
+      ],
+      "authority": "proposal_only",
+      "xcfe_required": true
+    },
+    "app.load": {
+      "@type": "registry_load",
+      "description": "Pop-phase: resolves micronaut bridge JSON at data/micronauts/{name}.micronaut.json, calls Register-Micronaut, adds entry to BusRegistry. Requires micronaut JSON present and xcfe_admitted.",
+      "phases": ["Pop"],
+      "calls": "Register-Micronaut",
+      "guard": "xcfe_admitted",
+      "authority": "xcfe_gated"
+    },
+    "app.audit": {
+      "@type": "binding_chain_audit",
+      "description": "Yax-phase read-only audit: checks the 6 binding-chain points for a named micronaut (or all registered micronauts when target=all). Reads micronaut JSON to resolve track_ref rather than guessing the filename. Returns per-micronaut checklist with present/missing status and a coverage score.",
+      "phases": ["Yax"],
+      "audit_points": [
+        { "id": "micronaut_json",  "path_template": "data/micronauts/{name}.micronaut.json",          "check": "file_exists" },
+        { "id": "track_json",      "path_template": "{micronaut.track_ref}",                          "check": "file_exists",        "note": "resolved from micronaut JSON track_ref field" },
+        { "id": "shell_psm1",      "path_template": "shell/{name}.bindings.psm1",                     "check": "file_exists" },
+        { "id": "commands_action", "path_template": "agents/commands.ps1",                            "check": "validateset_contains_{action}" },
+        { "id": "registry_node",   "path_template": "micronaut.registry.xjson#nodes",                 "check": "key_exists_node:{ID}" },
+        { "id": "name_map_entry",  "path_template": "micronaut.registry.xjson#name_map",              "check": "key_exists_{action}" }
+      ],
+      "output_schema": {
+        "@kind": "kuhul.binding-chain-audit.v1",
+        "per_micronaut": {
+          "id":           "string",
+          "name":         "string",
+          "action":       "string",
+          "points":       [{ "id": "string", "status": "present | missing | unknown", "path": "string" }],
+          "complete":     "boolean",
+          "missing":      ["string"],
+          "score":        "N/6"
+        }
+      },
+      "authority": "data_only"
+    },
+    "app.health": {
+      "@type": "status",
+      "description": "Pop-phase: reports BusRegistry size, registered micronaut IDs, audit coverage summary (complete vs partial vs missing), and APP-WIZARD-µ link availability.",
+      "phases": ["Pop"],
+      "reports": ["bus_registry_size", "registered_ids", "audit_coverage", "app_wizard_link"]
+    }
+  },
+  "program_contract": {
+    "drivers": [
+      "Micronaut.Core.dll",
+      "CFPC.Patterns.dll"
+    ],
+    "driver_roles": {
+      "Micronaut.Core.dll": "lifecycle, registry load, scaffold template generation",
+      "CFPC.Patterns.dll":  "spec validation and gap detection for incomplete binding chains"
+    },
+    "sandbox": "xcfe_gated_read_only",
+    "learning": false,
+    "grammar_refs": ["micronaut.registry.xjson"],
+    "contract_refs": []
+  },
+  "srai": { "enabled": false },
+  "capabilities": [
+    "app-spec-definition",
+    "binding-chain-scaffold",
+    "binding-chain-audit",
+    "micronaut-registry-load",
+    "6-point-completeness-check"
+  ],
+  "cache": {
+    "audit_cache": true,
+    "ttl_ms": 10000,
+    "note": "Audit results cached 10s — rerun with force=true to bypass"
+  },
+  "pair_constraint": {
+    "mode": "Pop_Sek_pair",
+    "forbid_unmatched_emit": true
+  },
+  "relations": [
+    { "target": "APP-WIZARD-µ", "verb": "@related_to",  "note": "APP-WIZARD-µ handles runtime recipe synthesis; APP-µ handles binding lifecycle" },
+    { "target": "BINDINGS-µ",   "verb": "@orchestrated_by" },
+    { "target": "GEMMA-µ",      "verb": "@related_to",  "note": "Gemma provides KeyAlign and AppSpec ops used in scaffold generation" }
+  ]
+}

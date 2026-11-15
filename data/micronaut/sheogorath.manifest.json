@@ -1,0 +1,43 @@
+{
+  "@kind": "asx.micronaut.manifest.v1",
+  "@id": "SHEOGORATH-µ",
+  "@role": "problem_generator",
+  "@status": "callable_when_registered",
+  "@implementation": "src/micronaut/sheogorath.cpp",
+  "@capabilities": [
+    {
+      "@key": "micronaut.sheogorath.generate_challenges",
+      "@call": {
+        "target": "SHEOGORATH-µ",
+        "verb": "@generate_challenges",
+        "phase": "Yax"
+      },
+      "input": {
+        "required": [
+          "hypothesis_ref",
+          "evidence_field_ref",
+          "objective_ref",
+          "event",
+          "exploration_budget"
+        ],
+        "exploration_budget": { "type": "integer", "minimum": 1, "maximum": 64 }
+      },
+      "output": "semantic.sheogorath.challenge-candidates.v1"
+    }
+  ],
+  "@authority": {
+    "generates_candidates_only": true,
+    "validated": false,
+    "dispatchable": false,
+    "writes_memory": false,
+    "writes_training_data": false,
+    "promotes_facts": false,
+    "cheese_is_truth_probability": false
+  },
+  "@dependencies": {
+    "question_engine": "host_injected_shared_instance",
+    "cheese_field": "existing_cheese_contract",
+    "references": "hypothesis, evidence field, and objective refs are carried as provenance labels; host must bind them to the injected engine context"
+  },
+  "@registration": "Explicit; call register_sheogorath_micronaut(shared_question_engine) after constructing the host QuestionEngine."
+}

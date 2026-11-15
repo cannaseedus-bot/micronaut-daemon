@@ -1,0 +1,271 @@
+{
+  "@no-eval": true,
+  "id": "PI-PHASE-µ",
+
+  "schemes": ["pi-phase"],
+  "description": "Pi phase domain — phase angles, Euler's formula, complex rotation, Fourier analysis, phase synchronization, manifold geometry, quantum phase.",
+  "phase": "Yax",
+  "category": "perceptual",
+  "confidence": 0.82,
+  "static_weight": 0.87,
+  "health": 1.0,
+  "governs": [
+    "pi phase",
+    "phase shift",
+    "phase angle",
+    "phase rotation",
+    "euler formula",
+    "euler's formula",
+    "e to the i pi",
+    "e^(ipi)",
+    "complex exponential",
+    "unit circle",
+    "complex plane",
+    "phase synchronization",
+    "phase coherence",
+    "phase locking",
+    "fourier",
+    "fourier transform",
+    "frequency component",
+    "manifold phase",
+    "fiber bundle",
+    "winding number",
+    "quantum phase",
+    "quantum coherence",
+    "spin half",
+    "sign inversion",
+    "destructive interference",
+    "argument",
+    "complex argument",
+    "atan2",
+    "@pi_phase",
+    "pi_phase:",
+    "phase:"
+  ],
+  "capabilities": [
+    "PHASE_DEFINE",
+    "PHASE_EULER",
+    "PHASE_ROTATION",
+    "PHASE_FOURIER",
+    "PHASE_SYNCHRONIZATION",
+    "PHASE_COHERENCE",
+    "PHASE_QUANTUM",
+    "PHASE_MANIFOLD",
+    "PHASE_CROSS_DOMAIN"
+  ],
+  "conformance": {
+    "questions": [
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is a pi phase in mathematics or signal theory?",
+        "expected_key": "pi radians 180 degrees sign inversion e^(ipi)=-1",
+        "gemma_answer": "A phase shift resulting in logarithmic or exponential decay of the signal.",
+        "gemma_epistemic": "MISS",
+        "canonical_answer": "A phase shift of exactly π radians (180°); in complex analysis e^(iπ)=−1, making a π-phase shift equivalent to sign inversion.",
+        "delta_r": 0.09,
+        "delta_c_correction": -0.06
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does e^(i*pi*theta) encode a phase rotation?",
+        "expected_key": "unit circle angle pi*theta at theta=1 reaches -1 Euler",
+        "gemma_answer": "Phase rotation of complex number z by pi radians — shifts imaginary part to the right.",
+        "gemma_epistemic": "PARTIAL",
+        "canonical_answer": "e^(iπθ) traces a point on the unit circle at angle πθ from real axis; at θ=1 it equals −1 — Euler's formula.",
+        "delta_r": 0.07
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is the argument (phase angle) of a complex number?",
+        "expected_key": "atan2(b,a) angle real imaginary z=|z|e^(i*phi)",
+        "gemma_answer": "Angle between positive real axis and imaginary axis; calculated by taking arctangent of real and imaginary parts.",
+        "gemma_epistemic": "SUPPORTED",
+        "delta_r": 0.06
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "How do pi phases relate to Fourier transforms?",
+        "expected_key": "frequency component magnitude phase pi-shift destructive interference",
+        "gemma_answer": "Pi phases are crucial for Fourier analysis — identifying and characterizing frequency content through phase analysis.",
+        "gemma_epistemic": "SUPPORTED",
+        "relation_confirmed": "FOLD-HOF-µ",
+        "delta_w": 0.11
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "How does phase synchronization relate to manifold geometry?",
+        "expected_key": "torus winding number rational phase locking topological invariant",
+        "gemma_answer": "Phase synchronization between oscillators in a manifold/fiber bundle relates to topology and emergent geometric properties.",
+        "gemma_epistemic": "SUPPORTED",
+        "relation_confirmed": "ANAMORPHISM-µ",
+        "delta_w": 0.1
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "Is a pi phase shift always equivalent to a sign inversion?",
+        "expected_key": "e^(ipi)=-1 real sinusoid yes complex number yes negates both parts",
+        "gemma_answer": "No — pi phase shift represents shift in phase while sign inversion changes polarity.",
+        "gemma_epistemic": "MISS",
+        "canonical_answer": "Yes for real and complex signals: e^(iπ)·z = −z negates both real and imaginary parts — a true sign inversion.",
+        "delta_c": -0.07,
+        "requires_authority": true
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does the complex rotation described in PI-PHASE-µ connect to quantum phase phenomena?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "Can phase synchronization be modeled using manifold geometry in the context of this domain?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What role does Euler's formula play in transforming phase angles within the pi phase framework?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does the argument of a complex number in PI-PHASE-µ differ from its standard definition?",
+        "expected_key": "",
+        "delta_r": 0.08
+      }
+    ],
+    "jokes": [
+      {
+        "pattern": "WHY DID PI GO TO THERAPY",
+        "gemma_punchline": "Too many problems with irrational numbers!",
+        "canonical_punchline": "Too many irrational digits — never reached a conclusion and the therapist ran out of paper.",
+        "frame": "humor_frame",
+        "semantic_key": "pi_irrational_therapy"
+      },
+      {
+        "pattern": "WHAT DID THE PI PHASE SHIFT SAY TO THE SIGNAL",
+        "gemma_punchline": "You're a little bit of a reversal!",
+        "canonical_punchline": "We are completely opposite — together we achieve perfect cancellation. That is not a breakup. That is destructive interference.",
+        "frame": "delivery_frame",
+        "semantic_key": "pi_phase_destructive_interference"
+      },
+      {
+        "pattern": "TELL ME A JOKE ABOUT EULER S FORMULA",
+        "canonical_punchline": "e^(iπ)+1=0 walks into a bar. Bartender: 'We don't serve transcendentals.' Response: 'That's irrational. I'm complex.'",
+        "frame": "pun_bridge",
+        "semantic_key": "euler_transcendental_complex"
+      },
+      {
+        "pattern": "WHY DID THE PHASE ANGLE REFUSE TO ALIGN WITH EULER’S FORMULA",
+        "punchline": "Because it kept insisting on being a complex rotation, not just a simple angle.",
+        "frame": "humor_frame",
+        "semantic_key": "why_did_the_phase_angle_refuse_to_align_with_euler"
+      },
+      {
+        "pattern": "WHAT DID THE QUANTUM PHASE TELL THE FOURIER TRANSFORM TO DO",
+        "punchline": "It asked for a clearer explanation of how it rotated through the spectrum.",
+        "frame": "humor_frame",
+        "semantic_key": "what_did_the_quantum_phase_tell_the_fourier_transf"
+      },
+      {
+        "pattern": "HOW DOES THE PI PHASE DOMAIN EXPLAIN ITS OWN SYMMETRY IN MANIFOLD GEOMETRY",
+        "punchline": "It simply says it’s a perfect example of phase synchronization in action.",
+        "frame": "humor_frame",
+        "semantic_key": "how_does_the_pi_phase_domain_explain_its_own_symme"
+      },
+      {
+        "pattern": "WHY DID THE FOURIER ANALYSIS GET CONFUSED WITH THE QUANTUM PHASE",
+        "punchline": "It thought it was just a signal, not a wavefunction in disguise.",
+        "frame": "humor_frame",
+        "semantic_key": "why_did_the_fourier_analysis_get_confused_with_the"
+      }
+    ]
+  },
+  "relations": [
+    {
+      "target": "ANAMORPHISM-µ",
+      "verb": "@supports",
+      "directed": true
+    },
+    {
+      "target": "FOLD-HOF-µ",
+      "verb": "@supports",
+      "directed": true
+    },
+    {
+      "target": "MATH-µ",
+      "verb": "@delegates_to",
+      "directed": true
+    },
+    {
+      "target": "FIELD-GEOMETRY-µ",
+      "verb": "@informs",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "gramRead",
+      "key": "phase_query",
+      "weight": 1.0
+    },
+    {
+      "phase": "Wo",
+      "op": "lower_phase_aiml",
+      "note": "L_A phase ISA",
+      "weight": 1.0
+    },
+    {
+      "phase": "Yax",
+      "op": "derive_phase_pattern",
+      "note": "R euler align",
+      "weight": 1.0
+    },
+    {
+      "phase": "Sek",
+      "op": "resolve_phase_relation",
+      "note": "W fourier arc",
+      "weight": 1.0
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_phase_confidence",
+      "note": "C equivalence gate",
+      "weight": 1.0
+    },
+    {
+      "phase": "Xul",
+      "op": "emit_answer",
+      "scope": "local",
+      "weight": 1.0
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "PI-PHASE-µ",
+    "manifest_access": [
+      "words",
+      "micronaut",
+      "kuhul"
+    ],
+    "effects": [
+      "gramRead",
+      "gramWrite",
+      "phase:query",
+      "phase:rotation"
+    ],
+    "ports": [],
+    "coordinator": false
+  }
+}

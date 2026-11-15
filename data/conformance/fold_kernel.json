@@ -1,0 +1,835 @@
+{
+  "@type": "khanary.fold_kernel.conformance.v1",
+  "cases": [
+    {
+      "id": "minimal_unbound_valid",
+      "expect": "PASS",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Pop",
+        "@semantic": "XCFE:PERCEIVE",
+        "@state": "unbound"
+      }
+    },
+    {
+      "id": "observed_valid_with_ui_projection",
+      "expect": "PASS",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Wo",
+        "@semantic": "XCFE:GUARD",
+        "@state": "observed",
+        "@ui": {
+          "@display": "Reasoning guard observed",
+          "@color": "#4a90e2",
+          "@icon": "guard"
+        }
+      }
+    },
+    {
+      "id": "learned_valid",
+      "expect": "PASS",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Yax",
+        "@semantic": "XCFE:BRANCH",
+        "@state": "learned",
+        "@learned": {
+          "@pattern": "why_should_i",
+          "@ngrams": [
+            "why",
+            "why should",
+            "should i"
+          ],
+          "@signature": "sha256:7b412ea1"
+        }
+      }
+    },
+    {
+      "id": "bound_valid_fold_binding_match",
+      "expect": "PASS",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Sek",
+        "@semantic": "XCFE:INFER",
+        "@state": "bound",
+        "@learned": {
+          "@pattern": "because_counterexample",
+          "@ngrams": [
+            "because",
+            "counterexample"
+          ],
+          "@signature": "sha256:2f0a173c"
+        },
+        "@binding": {
+          "@backend": "hlsl",
+          "@entry": "OperationKernel",
+          "@dispatch": [
+            64,
+            1,
+            1
+          ],
+          "@contract": {
+            "pre": "input is B_Y and policy Pi",
+            "post": "output is B_S = Pi_op(B_Y)"
+          }
+        }
+      }
+    },
+    {
+      "id": "validated_valid",
+      "expect": "PASS",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Ch'en",
+        "@semantic": "XCFE:OBSERVE",
+        "@state": "validated",
+        "@learned": {
+          "@pattern": "observe_candidate",
+          "@ngrams": [
+            "observe",
+            "candidate"
+          ],
+          "@signature": "sha256:910f2a6b"
+        },
+        "@binding": {
+          "@backend": "hlsl",
+          "@entry": "ObservationKernel",
+          "@dispatch": [
+            64,
+            1,
+            1
+          ],
+          "@contract": {
+            "pre": "input is B_S",
+            "post": "output is observable B_C"
+          }
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 8,
+          "@exceptions": 2,
+          "@validated": 5,
+          "@failures": 1
+        },
+        "@route": {
+          "@authority": "XCFE",
+          "@target": "local-test",
+          "@executor": "ObservationKernel",
+          "@reason": "validated observation requires local test route"
+        }
+      }
+    },
+    {
+      "id": "autonomous_valid",
+      "expect": "PASS",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Xul",
+        "@semantic": "XCFE:COLLAPSE",
+        "@state": "autonomous",
+        "@learned": {
+          "@pattern": "collapse_verified",
+          "@ngrams": [
+            "collapse",
+            "verified"
+          ],
+          "@signature": "sha256:c01d5eed"
+        },
+        "@binding": {
+          "@backend": "hlsl",
+          "@entry": "CollapseKernel",
+          "@dispatch": [
+            64,
+            1,
+            1
+          ],
+          "@contract": {
+            "pre": "input is B_C and policy Pi",
+            "post": "output is k_prime = Pi(B_C)"
+          }
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 8,
+          "@exceptions": 2,
+          "@validated": 5,
+          "@failures": 1,
+          "@confidence": 0.8166665561111307
+        },
+        "@policy": {
+          "@ref": "xcfe://fold-kernel/autonomy@1.0.0",
+          "@evidence": {
+            "@inputs": [
+              "observations",
+              "support",
+              "exceptions",
+              "validated",
+              "failures"
+            ]
+          },
+          "@weights": {
+            "@alpha": 0.5,
+            "@beta": 0.5,
+            "@gamma": 0.0,
+            "@delta": 0.0,
+            "@epsilon": 1e-06
+          },
+          "@thresholds": {
+            "@autonomy": 0.75,
+            "@fallback": 0.45,
+            "@failure_limit": 2,
+            "@hysteresis": 0.02
+          },
+          "@routes": {
+            "@autonomous": "local",
+            "@validated": "local-test",
+            "@default": "fallback"
+          }
+        },
+        "@route": {
+          "@authority": "XCFE",
+          "@target": "local",
+          "@executor": "CollapseKernel",
+          "@reason": "confidence meets autonomy threshold"
+        }
+      }
+    },
+    {
+      "id": "missing_core_phase",
+      "expect": "FAIL",
+      "error": "MISSING_CORE_KEY",
+      "record": {
+        "@fold": "reasoning",
+        "@semantic": "XCFE:PERCEIVE",
+        "@state": "unbound"
+      }
+    },
+    {
+      "id": "invalid_phase",
+      "expect": "FAIL",
+      "error": "INVALID_PHASE",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Chen",
+        "@semantic": "XCFE:OBSERVE",
+        "@state": "unbound"
+      }
+    },
+    {
+      "id": "invalid_state",
+      "expect": "FAIL",
+      "error": "INVALID_STATE",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Pop",
+        "@semantic": "XCFE:PERCEIVE",
+        "@state": "ready"
+      }
+    },
+    {
+      "id": "learned_missing_payload",
+      "expect": "FAIL",
+      "error": "STATE_REQUIRES_LEARNED",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Yax",
+        "@semantic": "XCFE:BRANCH",
+        "@state": "learned"
+      }
+    },
+    {
+      "id": "bound_missing_binding",
+      "expect": "FAIL",
+      "error": "STATE_REQUIRES_BINDING",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Sek",
+        "@semantic": "XCFE:INFER",
+        "@state": "bound",
+        "@learned": {
+          "@pattern": "because",
+          "@ngrams": [
+            "because"
+          ],
+          "@signature": "sha256:abc"
+        }
+      }
+    },
+    {
+      "id": "validated_missing_evidence",
+      "expect": "FAIL",
+      "error": "STATE_REQUIRES_EVIDENCE",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Ch'en",
+        "@semantic": "XCFE:OBSERVE",
+        "@state": "validated",
+        "@learned": {
+          "@pattern": "observe",
+          "@ngrams": [
+            "observe"
+          ],
+          "@signature": "sha256:def"
+        },
+        "@binding": {
+          "@backend": "hlsl",
+          "@entry": "ObservationKernel",
+          "@contract": {
+            "pre": "input is B_S",
+            "post": "output is observable B_C"
+          }
+        },
+        "@route": {
+          "@authority": "XCFE",
+          "@target": "local-test"
+        }
+      }
+    },
+    {
+      "id": "validated_missing_route",
+      "expect": "FAIL",
+      "error": "STATE_REQUIRES_ROUTE",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Ch'en",
+        "@semantic": "XCFE:OBSERVE",
+        "@state": "validated",
+        "@learned": {
+          "@pattern": "observe",
+          "@ngrams": [
+            "observe"
+          ],
+          "@signature": "sha256:def"
+        },
+        "@binding": {
+          "@backend": "hlsl",
+          "@entry": "ObservationKernel",
+          "@contract": {
+            "pre": "input is B_S",
+            "post": "output is observable B_C"
+          }
+        },
+        "@evidence": {
+          "@observations": 1,
+          "@support": 1,
+          "@exceptions": 0,
+          "@validated": 1,
+          "@failures": 0
+        }
+      }
+    },
+    {
+      "id": "autonomous_missing_policy",
+      "expect": "FAIL",
+      "error": "STATE_REQUIRES_POLICY",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Xul",
+        "@semantic": "XCFE:COLLAPSE",
+        "@state": "autonomous",
+        "@learned": {
+          "@pattern": "collapse",
+          "@ngrams": [
+            "collapse"
+          ],
+          "@signature": "sha256:ghi"
+        },
+        "@binding": {
+          "@backend": "hlsl",
+          "@entry": "CollapseKernel",
+          "@contract": {
+            "pre": "input is B_C and policy Pi",
+            "post": "output is k_prime = Pi(B_C)"
+          }
+        },
+        "@evidence": {
+          "@observations": 1,
+          "@support": 1,
+          "@exceptions": 0,
+          "@validated": 1,
+          "@failures": 0
+        },
+        "@route": {
+          "@authority": "XCFE",
+          "@target": "local"
+        }
+      }
+    },
+    {
+      "id": "evidence_observations_mismatch",
+      "expect": "FAIL",
+      "error": "EVIDENCE_OBSERVATIONS_MISMATCH",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Ch'en",
+        "@semantic": "XCFE:OBSERVE",
+        "@state": "validated",
+        "@learned": {
+          "@pattern": "observe",
+          "@ngrams": [
+            "observe"
+          ],
+          "@signature": "sha256:jkl"
+        },
+        "@binding": {
+          "@backend": "hlsl",
+          "@entry": "ObservationKernel",
+          "@contract": {
+            "pre": "input is B_S",
+            "post": "output is observable B_C"
+          }
+        },
+        "@evidence": {
+          "@observations": 3,
+          "@support": 1,
+          "@exceptions": 1,
+          "@validated": 1,
+          "@failures": 0
+        },
+        "@route": {
+          "@authority": "XCFE",
+          "@target": "local-test"
+        }
+      }
+    },
+    {
+      "id": "evidence_validated_less_than_failures",
+      "expect": "FAIL",
+      "error": "EVIDENCE_VALIDATION_MISMATCH",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Ch'en",
+        "@semantic": "XCFE:OBSERVE",
+        "@state": "validated",
+        "@learned": {
+          "@pattern": "observe",
+          "@ngrams": [
+            "observe"
+          ],
+          "@signature": "sha256:mno"
+        },
+        "@binding": {
+          "@backend": "hlsl",
+          "@entry": "ObservationKernel",
+          "@contract": {
+            "pre": "input is B_S",
+            "post": "output is observable B_C"
+          }
+        },
+        "@evidence": {
+          "@observations": 1,
+          "@support": 1,
+          "@exceptions": 0,
+          "@validated": 1,
+          "@failures": 2
+        },
+        "@route": {
+          "@authority": "XCFE",
+          "@target": "local-test"
+        }
+      }
+    },
+    {
+      "id": "confidence_out_of_range",
+      "expect": "FAIL",
+      "error": "CONFIDENCE_OUT_OF_RANGE",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Ch'en",
+        "@semantic": "XCFE:OBSERVE",
+        "@state": "validated",
+        "@learned": {
+          "@pattern": "observe",
+          "@ngrams": [
+            "observe"
+          ],
+          "@signature": "sha256:pqr"
+        },
+        "@binding": {
+          "@backend": "hlsl",
+          "@entry": "ObservationKernel",
+          "@contract": {
+            "pre": "input is B_S",
+            "post": "output is observable B_C"
+          }
+        },
+        "@evidence": {
+          "@observations": 1,
+          "@support": 1,
+          "@exceptions": 0,
+          "@validated": 1,
+          "@failures": 0,
+          "@confidence": 1.5
+        },
+        "@route": {
+          "@authority": "XCFE",
+          "@target": "local-test"
+        }
+      }
+    },
+    {
+      "id": "confidence_requires_policy",
+      "expect": "FAIL",
+      "error": "CONFIDENCE_REQUIRES_POLICY",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Ch'en",
+        "@semantic": "XCFE:OBSERVE",
+        "@state": "validated",
+        "@learned": {
+          "@pattern": "observe",
+          "@ngrams": [
+            "observe"
+          ],
+          "@signature": "sha256:stu"
+        },
+        "@binding": {
+          "@backend": "hlsl",
+          "@entry": "ObservationKernel",
+          "@contract": {
+            "pre": "input is B_S",
+            "post": "output is observable B_C"
+          }
+        },
+        "@evidence": {
+          "@observations": 1,
+          "@support": 1,
+          "@exceptions": 0,
+          "@validated": 1,
+          "@failures": 0,
+          "@confidence": 1.0
+        },
+        "@route": {
+          "@authority": "XCFE",
+          "@target": "local-test"
+        }
+      }
+    },
+    {
+      "id": "confidence_derive_mismatch",
+      "expect": "FAIL",
+      "error": "CONFIDENCE_DERIVATION_MISMATCH",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Xul",
+        "@semantic": "XCFE:COLLAPSE",
+        "@state": "autonomous",
+        "@learned": {
+          "@pattern": "collapse",
+          "@ngrams": [
+            "collapse"
+          ],
+          "@signature": "sha256:vwx"
+        },
+        "@binding": {
+          "@backend": "hlsl",
+          "@entry": "CollapseKernel",
+          "@contract": {
+            "pre": "input is B_C and policy Pi",
+            "post": "output is k_prime = Pi(B_C)"
+          }
+        },
+        "@evidence": {
+          "@observations": 10,
+          "@support": 8,
+          "@exceptions": 2,
+          "@validated": 5,
+          "@failures": 1,
+          "@confidence": 0.5
+        },
+        "@policy": {
+          "@ref": "xcfe://fold-kernel/autonomy@1.0.0",
+          "@evidence": {
+            "@inputs": [
+              "observations",
+              "support",
+              "exceptions",
+              "validated",
+              "failures"
+            ]
+          },
+          "@weights": {
+            "@alpha": 0.5,
+            "@beta": 0.5,
+            "@gamma": 0.0,
+            "@delta": 0.0,
+            "@epsilon": 1e-06
+          },
+          "@thresholds": {
+            "@autonomy": 0.75,
+            "@fallback": 0.45,
+            "@failure_limit": 2,
+            "@hysteresis": 0.02
+          },
+          "@routes": {
+            "@autonomous": "local",
+            "@validated": "local-test",
+            "@default": "fallback"
+          }
+        },
+        "@route": {
+          "@authority": "XCFE",
+          "@target": "local"
+        }
+      }
+    },
+    {
+      "id": "policy_weights_not_normalized",
+      "expect": "FAIL",
+      "error": "WEIGHTS_NOT_NORMALIZED",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Xul",
+        "@semantic": "XCFE:COLLAPSE",
+        "@state": "autonomous",
+        "@learned": {
+          "@pattern": "collapse",
+          "@ngrams": [
+            "collapse"
+          ],
+          "@signature": "sha256:yza"
+        },
+        "@binding": {
+          "@backend": "hlsl",
+          "@entry": "CollapseKernel",
+          "@contract": {
+            "pre": "input is B_C and policy Pi",
+            "post": "output is k_prime = Pi(B_C)"
+          }
+        },
+        "@evidence": {
+          "@observations": 1,
+          "@support": 1,
+          "@exceptions": 0,
+          "@validated": 1,
+          "@failures": 0
+        },
+        "@policy": {
+          "@ref": "xcfe://fold-kernel/autonomy@1.0.0",
+          "@evidence": {
+            "@inputs": [
+              "observations",
+              "support",
+              "exceptions",
+              "validated",
+              "failures"
+            ]
+          },
+          "@weights": {
+            "@alpha": 0.7,
+            "@beta": 0.3,
+            "@gamma": 0.2,
+            "@delta": 0.1,
+            "@epsilon": 1e-06
+          },
+          "@thresholds": {
+            "@autonomy": 0.75,
+            "@fallback": 0.45,
+            "@failure_limit": 2,
+            "@hysteresis": 0.02
+          },
+          "@routes": {
+            "@autonomous": "local",
+            "@validated": "local-test",
+            "@default": "fallback"
+          }
+        },
+        "@route": {
+          "@authority": "XCFE",
+          "@target": "local"
+        }
+      }
+    },
+    {
+      "id": "policy_threshold_order_invalid",
+      "expect": "FAIL",
+      "error": "THRESHOLD_ORDER",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Xul",
+        "@semantic": "XCFE:COLLAPSE",
+        "@state": "autonomous",
+        "@learned": {
+          "@pattern": "collapse",
+          "@ngrams": [
+            "collapse"
+          ],
+          "@signature": "sha256:bcd"
+        },
+        "@binding": {
+          "@backend": "hlsl",
+          "@entry": "CollapseKernel",
+          "@contract": {
+            "pre": "input is B_C and policy Pi",
+            "post": "output is k_prime = Pi(B_C)"
+          }
+        },
+        "@evidence": {
+          "@observations": 1,
+          "@support": 1,
+          "@exceptions": 0,
+          "@validated": 1,
+          "@failures": 0
+        },
+        "@policy": {
+          "@ref": "xcfe://fold-kernel/autonomy@1.0.0",
+          "@evidence": {
+            "@inputs": [
+              "observations",
+              "support",
+              "exceptions",
+              "validated",
+              "failures"
+            ]
+          },
+          "@weights": {
+            "@alpha": 0.5,
+            "@beta": 0.5,
+            "@gamma": 0.0,
+            "@delta": 0.0,
+            "@epsilon": 1e-06
+          },
+          "@thresholds": {
+            "@autonomy": 0.4,
+            "@fallback": 0.5,
+            "@failure_limit": 2,
+            "@hysteresis": 0.02
+          },
+          "@routes": {
+            "@autonomous": "local",
+            "@validated": "local-test",
+            "@default": "fallback"
+          }
+        },
+        "@route": {
+          "@authority": "XCFE",
+          "@target": "local"
+        }
+      }
+    },
+    {
+      "id": "route_authority_not_xcfe",
+      "expect": "FAIL",
+      "error": "ROUTE_AUTHORITY_NOT_XCFE",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Ch'en",
+        "@semantic": "XCFE:OBSERVE",
+        "@state": "validated",
+        "@learned": {
+          "@pattern": "observe",
+          "@ngrams": [
+            "observe"
+          ],
+          "@signature": "sha256:efg"
+        },
+        "@binding": {
+          "@backend": "hlsl",
+          "@entry": "ObservationKernel",
+          "@contract": {
+            "pre": "input is B_S",
+            "post": "output is observable B_C"
+          }
+        },
+        "@evidence": {
+          "@observations": 1,
+          "@support": 1,
+          "@exceptions": 0,
+          "@validated": 1,
+          "@failures": 0
+        },
+        "@route": {
+          "@authority": "HLSL",
+          "@target": "local-test"
+        }
+      }
+    },
+    {
+      "id": "route_target_invalid",
+      "expect": "FAIL",
+      "error": "INVALID_ROUTE_TARGET",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Ch'en",
+        "@semantic": "XCFE:OBSERVE",
+        "@state": "validated",
+        "@learned": {
+          "@pattern": "observe",
+          "@ngrams": [
+            "observe"
+          ],
+          "@signature": "sha256:hij"
+        },
+        "@binding": {
+          "@backend": "hlsl",
+          "@entry": "ObservationKernel",
+          "@contract": {
+            "pre": "input is B_S",
+            "post": "output is observable B_C"
+          }
+        },
+        "@evidence": {
+          "@observations": 1,
+          "@support": 1,
+          "@exceptions": 0,
+          "@validated": 1,
+          "@failures": 0
+        },
+        "@route": {
+          "@authority": "XCFE",
+          "@target": "remote"
+        }
+      }
+    },
+    {
+      "id": "binding_registry_mismatch",
+      "expect": "FAIL",
+      "error": "BINDING_REGISTRY_MISMATCH",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Sek",
+        "@semantic": "XCFE:INFER",
+        "@state": "bound",
+        "@learned": {
+          "@pattern": "because",
+          "@ngrams": [
+            "because"
+          ],
+          "@signature": "sha256:klm"
+        },
+        "@binding": {
+          "@backend": "hlsl",
+          "@entry": "ObservationKernel",
+          "@contract": {
+            "pre": "input is B_S",
+            "post": "output is observable B_C"
+          }
+        }
+      }
+    },
+    {
+      "id": "semantic_phase_mismatch",
+      "expect": "FAIL",
+      "error": "SEMANTIC_PHASE_MISMATCH",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Pop",
+        "@semantic": "XCFE:COLLAPSE",
+        "@state": "unbound"
+      }
+    },
+    {
+      "id": "non_at_key_invalid",
+      "expect": "FAIL",
+      "error": "INVALID_MEMBER_KEY",
+      "record": {
+        "@fold": "reasoning",
+        "@phase": "Pop",
+        "@semantic": "XCFE:PERCEIVE",
+        "@state": "unbound",
+        "fold": "reasoning"
+      }
+    }
+  ]
+}

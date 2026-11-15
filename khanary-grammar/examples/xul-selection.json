@@ -1,0 +1,39 @@
+{
+  "@kind": "semantic.xul.v1",
+  "@operation": "select",
+  "@candidates": [
+    {
+      "id": "c1",
+      "semantic_address": {
+        "semantic_bits": 3,
+        "phase": "Xul",
+        "local_id": 1
+      },
+      "provenance_ref": "event:123",
+      "legal": true,
+      "wcr": 0.8,
+      "cheese": 1
+    },
+    {
+      "id": "c2",
+      "semantic_address": {
+        "semantic_bits": 2,
+        "phase": "Xul",
+        "local_id": 2
+      },
+      "provenance_ref": "model:456",
+      "legal": false,
+      "wcr": 0.99,
+      "cheese": 0
+    }
+  ],
+  "@selection": {
+    "method": "WCR*(1-cheese/10)",
+    "admissible_only": true,
+    "tie_break": "stable_id",
+    "on_empty": "Bottom"
+  },
+  "@policy": {
+    "no_automatic_fact_promotion": true
+  }
+}

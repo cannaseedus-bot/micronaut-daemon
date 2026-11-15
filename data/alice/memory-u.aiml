@@ -1,0 +1,227 @@
+<aiml version="1.0.1">
+  <!-- MEMORY-µ AIML patterns.
+       Pattern engine: ELIZA/AIML.  Execution authority: K'UHUL via Xul gramWrite.
+       All templates wrap into <mx2lm>memory-u ...</mx2lm> so the micronaut
+       router picks them up before the pattern response is emitted. -->
+
+  <!-- ── Canonical entry point ───────────────────────────────────────────── -->
+  <category>
+    <pattern>MEMORY BANK</pattern>
+    <template><mx2lm>memory-u phase=Pop op=list category=all bank=memory_bank</mx2lm></template>
+  </category>
+
+  <!-- ── Save / remember ────────────────────────────────────────────────── -->
+  <category>
+    <pattern>MEMORY SAVE PREFERENCE * IS *</pattern>
+    <template><mx2lm>memory-u op=save category=preference key=<star index="1"/> value=<star index="2"/> phase=Xul</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>MEMORY SAVE SESSION * IS *</pattern>
+    <template><mx2lm>memory-u op=save category=session key=<star index="1"/> value=<star index="2"/> phase=Xul</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>MEMORY SAVE *</pattern>
+    <template><mx2lm>memory-u op=save category=note key=note value=<star/> phase=Xul</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>REMEMBER THAT *</pattern>
+    <template><mx2lm>memory-u op=save category=session key=note value=<star/> phase=Xul</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>REMEMBER *</pattern>
+    <template><mx2lm>memory-u op=save category=session key=note value=<star/> phase=Xul</mx2lm></template>
+  </category>
+
+  <!-- ── User preference shortcuts ─────────────────────────────────────── -->
+  <category>
+    <pattern>PREFER *</pattern>
+    <template><mx2lm>memory-u op=save category=preference key=user_style value=<star/> phase=Xul channel=user_preference</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>MY PREFERENCE IS *</pattern>
+    <template><mx2lm>memory-u op=save category=preference key=user_preference value=<star/> phase=Xul channel=user_preference</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>I PREFER *</pattern>
+    <template><mx2lm>memory-u op=save category=preference key=user_style value=<star/> phase=Xul channel=user_preference</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>SET PREFERENCE * TO *</pattern>
+    <template><mx2lm>memory-u op=save category=preference key=<star index="1"/> value=<star index="2"/> phase=Xul channel=user_preference</mx2lm></template>
+  </category>
+
+  <!-- ── Recall ─────────────────────────────────────────────────────────── -->
+  <category>
+    <pattern>MEMORY RECALL *</pattern>
+    <template><mx2lm>memory-u op=recall key=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>DO YOU REMEMBER *</pattern>
+    <template><mx2lm>memory-u op=recall key=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>WHAT DO YOU REMEMBER</pattern>
+    <template><mx2lm>memory-u op=list category=all phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>WHAT DO YOU REMEMBER ABOUT *</pattern>
+    <template><mx2lm>memory-u op=recall key=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>RECALL *</pattern>
+    <template><mx2lm>memory-u op=recall key=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>SHOW MY PREFERENCES</pattern>
+    <template><mx2lm>memory-u op=list category=preference phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>SHOW MY CARDS</pattern>
+    <template><mx2lm>memory-u op=list category=all phase=Pop card_view=true</mx2lm></template>
+  </category>
+
+  <!-- ── UI card display ────────────────────────────────────────────────── -->
+  <category>
+    <pattern>MEMORY CARD *</pattern>
+    <template><mx2lm>memory-u op=card_display key=<star/> phase=Pop card_view=true</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>MEMORY CARDS</pattern>
+    <template><mx2lm>memory-u op=list category=all phase=Pop card_view=true</mx2lm></template>
+  </category>
+
+  <!-- ── Forget / clear ─────────────────────────────────────────────────── -->
+  <category>
+    <pattern>FORGET *</pattern>
+    <template><mx2lm>memory-u op=forget key=<star/> phase=Xul</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CLEAR PREFERENCE *</pattern>
+    <template><mx2lm>memory-u op=forget category=preference key=<star/> phase=Xul</mx2lm></template>
+  </category>
+
+  <!-- ── Phase-explicit surface ─────────────────────────────────────────── -->
+  <category>
+    <pattern>MEMORY POP *</pattern>
+    <template><mx2lm>memory-u op=recall phase=Pop key=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>MEMORY WO *</pattern>
+    <template><mx2lm>memory-u op=classify phase=Wo input=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>MEMORY YAX *</pattern>
+    <template><mx2lm>memory-u op=resolve_category phase=Yax input=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>MEMORY SEK *</pattern>
+    <template><mx2lm>memory-u op=score_recall phase=Sek key=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>MEMORY CHEN *</pattern>
+    <template><mx2lm>memory-u op=verify phase=Ch'en key=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>MEMORY XUL *</pattern>
+    <template><mx2lm>memory-u op=save phase=Xul value=<star/></mx2lm></template>
+  </category>
+
+  <!-- ── Key-grammar memory events ─────────────────────────────────────── -->
+  <category>
+    <pattern>MEMORY EVENTS</pattern>
+    <template><mx2lm>memory-u op=list category=event_journal key=memory:event:* phase=Pop event_kind=all fact_authority=false</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>MEMORY EVENT *</pattern>
+    <template><mx2lm>memory-u op=recall category=event_journal key=<star/> phase=Pop memory_scope=event_journal</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>PROMPT EVENTS</pattern>
+    <template><mx2lm>memory-u op=list category=event_journal key=memory:event:prompt:* phase=Pop event_kind=prompt</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>MODEL RESPONSE EVENTS</pattern>
+    <template><mx2lm>memory-u op=list category=event_journal key=memory:event:model_response:* phase=Pop event_kind=model_response</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>PLAN EVENTS</pattern>
+    <template><mx2lm>memory-u op=list category=event_journal key=memory:event:plan:* phase=Pop event_kind=plan</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>REUSE EVENT * AS PATTERN</pattern>
+    <template><mx2lm>memory-u op=promote_event category=event_journal key=<star/> target=aiml_pattern phase=Ch'en requires=SUPPORTED_or_user_verified fact_authority=false</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CREATE AIML PATTERN FROM EVENT *</pattern>
+    <template><mx2lm>memory-u op=promote_event category=event_journal key=<star/> target=aiml_pattern_template phase=Ch'en requires=SUPPORTED_or_user_verified fact_authority=false</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CREATE KEY GRAMMAR FROM EVENT *</pattern>
+    <template><mx2lm>memory-u op=promote_event category=event_journal key=<star/> target=key_grammar_candidate phase=Ch'en requires=SUPPORTED_or_user_verified fact_authority=false</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>SEMANTIC BRANCH *</pattern>
+    <template><mx2lm>memory-u op=recall category=semantic_branch key=<star/> phase=Yax law=else_not_not unknown=preserve</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>NORMALIZE SEMANTIC BRANCH *</pattern>
+    <template><mx2lm>memory-u op=normalize_branch_surface category=semantic_branch input=<star/> phase=Wo canonical_order=if_then_else_unknown law=UNKNOWN_not_else</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CREATE SEMANTIC BRANCH FROM EVENT *</pattern>
+    <template><mx2lm>memory-u op=promote_event category=event_journal key=<star/> target=semantic_branch_candidate phase=Ch'en requires=SUPPORTED_or_user_verified law=UNKNOWN_not_else fact_authority=false</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CREATE BRANCH PATTERN FROM EVENT *</pattern>
+    <template><mx2lm>memory-u op=promote_event category=event_journal key=<star/> target=semantic_branch_pattern_candidate phase=Ch'en requires=SUPPORTED_or_user_verified source=aiml.semantic_branch law=else_not_not fact_authority=false</mx2lm></template>
+  </category>
+
+
+
+  <category>
+    <pattern>SCFML *</pattern>
+    <template><mx2lm>memory-u op=normalize_branch_surface category=scfml input=<star/> phase=Wo grammar=scfml.runtime-grammar law=UNKNOWN_not_else</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>PATTERN LEARNING FROM EVENT *</pattern>
+    <template><mx2lm>memory-u op=promote_event category=event_journal key=<star/> target=scfml.pattern_learning phase=Ch'en requires=SUPPORTED_or_user_verified fact_authority=false</mx2lm></template>
+  </category>
+
+  <!-- ── Fallback ───────────────────────────────────────────────────────── -->
+  <category>
+    <pattern>MEMORY *</pattern>
+    <template><mx2lm>memory-u hint MEMORY BANK for op=save|recall|list|forget <star/></mx2lm></template>
+  </category>
+</aiml>

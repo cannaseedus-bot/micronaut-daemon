@@ -1,0 +1,101 @@
+{
+  "⟁PROMPT": [
+    "⟁PROMPT:EXPERT",
+    "⟁PROMPT:DEBUG",
+    "⟁PROMPT:SIMPLIFY",
+    "⟁PROMPT:REFLECT",
+    "⟁PROMPT:QUIZ",
+    "⟁PROMPT:CRITIQUE",
+    "prompt:role",
+    "prompt:goal",
+    "prompt:input",
+    "prompt:constraint",
+    "prompt:method",
+    "prompt:output",
+    "⟁MICRONAUT:CORE_REASONING",
+    "⟁POP:FIELD_CONTEXT"
+  ],
+  "⟁PROMPT:EXPERT": [
+    "prompt:role",
+    "prompt:goal",
+    "prompt:constraint",
+    "prompt:output",
+    "⟁MICRONAUT:CORE_REASONING",
+    "⟁POP:FIELD_CONTEXT",
+    "authority:proposal_only"
+  ],
+  "⟁PROMPT:DEBUG": [
+    "⟁PROMPT:EXPERT",
+    "prompt:role:debugger",
+    "prompt:input:code",
+    "prompt:input:error",
+    "prompt:method:root_cause_analysis",
+    "prompt:require:explanation+rewrite+diff"
+  ],
+  "⟁PROMPT:SIMPLIFY": [
+    "⟁PROMPT:EXPERT",
+    "prompt:role:explainer",
+    "prompt:audience:general",
+    "prompt:method:analogy",
+    "prompt:avoid:jargon"
+  ],
+  "⟁PROMPT:REFLECT": [
+    "⟁PROMPT:EXPERT",
+    "prompt:role:reflector",
+    "prompt:input:messages",
+    "prompt:method:reflection"
+  ],
+  "⟁PROMPT:QUIZ": [
+    "⟁PROMPT:EXPERT",
+    "prompt:format:mcq",
+    "prompt:behavior:one_at_a_time",
+    "prompt:feedback:correct_and_explain"
+  ],
+  "⟁PROMPT:CRITIQUE": [
+    "⟁PROMPT:EXPERT",
+    "prompt:role:critic",
+    "prompt:method:critique",
+    "prompt:output:blind_spots+assumptions+missing_risks"
+  ],
+  "⟁MICRONAUT:CORE_REASONING": [
+    "micronaut:MATH-µ",
+    "micronaut:REASON-µ",
+    "micronaut:requested_wildcard",
+    "micronaut:optional_companions",
+    "authority:proposal_only"
+  ],
+  "⟁POP:FIELD_CONTEXT": [
+    "phase:Pop",
+    "model_profile:embeddings",
+    "model:embeddinggemma:latest",
+    "graph:vendor/key-grammar-kit/data/intent-graph.gml",
+    "graph:vendor/key-grammar-kit/data/wildcard.gml",
+    "graph:vendor/key-grammar-kit/data/cfpc-wildcards.gml",
+    "graph:vendor/key-grammar-kit/data/cfpc-questions.gml",
+    "aiml:vendor/key-grammar-kit/data/alice/question-seeds/yax.aiml",
+    "operation:embed_query_and_rank_field_keys",
+    "authority:candidate_only"
+  ],
+  "prompt:role": ["prompt:role:*"],
+  "prompt:goal": ["prompt:goal:*"],
+  "prompt:input": ["prompt:input:*"],
+  "prompt:constraint": ["prompt:constraint:*"],
+  "prompt:method": ["prompt:method:*"],
+  "prompt:output": ["prompt:output:*"],
+  "prompt:require": ["prompt:require:*"],
+  "micronaut:requested_wildcard": ["type:MicronautID", "cardinality:zero_or_one"],
+  "micronaut:optional_companions": ["type:Array<MicronautID>", "cardinality:zero_or_more"],
+  "micronaut:MATH-µ": ["role:required_collaborator", "authority:proposal_only"],
+  "micronaut:REASON-µ": ["role:required_collaborator", "authority:proposal_only"],
+  "micronaut:DECISION-µ": ["role:required_collaborator", "authority:proposal_only"],
+  "micronaut:CFPC-µ": ["role:required_collaborator", "authority:proposal_only"],
+  "micronaut:ELIZA": ["role:required_collaborator", "version:base", "authority:proposal_only"],
+  "micronaut:ELIZA-1": ["role:required_collaborator", "version:1", "authority:proposal_only"],
+  "micronaut:ELIZA-µ": ["role:required_collaborator", "version:mu", "authority:proposal_only"],
+  "field:KUHUL": ["kind:semantic_field", "source:kuhul-field.json#⟁KUHUL", "graph:vendor/key-grammar-kit/data/intent-graph.gml#56", "patterns:vendor/key-grammar-kit/data/apps/kuhul-field.xaiml", "authority:data_only", "phase:Pop"],
+  "lane:key-µ": ["kind:typed_lane", "role:key_vectors_and_edges", "source:vendor/key-grammar-kit/data/intent-graph.gml+keyed_manifests", "synchronizes:SemanticKey+TypedEdge", "phase:Pop", "authority:retrieval_only"],
+  "lane:MX2LM-µ": ["kind:typed_lane", "role:sequence_context", "carries:unigram+bigram+trigram", "source:vendor/key-grammar-kit/data/tracks/NGRAM-u.semantic-tracks.v1.json", "phase:Pop", "authority:candidate_ranking_only"],
+  "lane:KUHUL-PI": ["kind:typed_lane", "role:ephemeral_semantic_geometry", "carries:pairwise+triangle+cosine+angular_separation+normalized_radius+peer_arcs+hub_cost+pi_routing_weight+routing_entropy", "source:vendor/key-grammar-kit/kuhul-pi.ebnf", "phase:Pop/Wo/Yax/Sek/Ch'en/Xul", "authority:candidate_only", "bridge:provisional_medoid_like_retrieval_signal", "field_modes:gravity+neutral+levity", "bias_log:Sek_proposal_Ch'en_verification", "persistence:separate_host_xcfe_authorization"],
+  "lane:CODE-µ": ["kind:typed_lane", "role:coding_capability_group", "implementation_alias:CODEGEN-µ", "carries:code_tools+CodeWASM+key_app_creation+key_css_management", "phase:Pop", "authority:XCFE_required"],
+  "authority:proposal_only": ["dispatch:false", "mutation:false", "admission:XCFE"]
+}

@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "online-course",
+  "@key": "⟁APP:ONLINE_COURSE",
+  "@mount": "⟁ROOT:ONLINE_COURSE",
+  "@theme": { "accent": "#38bdf8", "bg": "#000c14", "surface": "#001a28", "text": "#e0f2fe", "hero_phase": "Sek", "tagline": "Teach what you know" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "courses", "component": "⟁WIDGET:COURSES", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "courses": [], "enrollments": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:ONLINE_COURSE": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:NEW_COURSE", "⟁ACTION:STUDENTS"] },
+    "⟁ACTION:NEW_COURSE": { "@type": "button", "@text": "New Course", "@on": { "click": "oc.open_compose" } },
+    "⟁ACTION:STUDENTS": { "@type": "button", "@text": "Students", "@on": { "click": "oc.open_students" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:COURSES", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:COURSES": { "@type": "grid", "@bind": "state.courses", "@children": ["⟁WIDGET:COURSE_CARD"] },
+    "⟁WIDGET:COURSE_CARD": { "@type": "media-card", "@bind": "course", "@on": { "view": "oc.view", "edit": "oc.edit" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:COURSE_STATS", "⟁WIDGET:CATEGORIES"] },
+    "⟁WIDGET:COURSE_STATS": { "@type": "stat", "@bind": "data.stats" },
+    "⟁WIDGET:CATEGORIES": { "@type": "tag-cloud", "@bind": "data.categories" }
+  },
+  "@programs": {
+    "oc.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "oc.open_students": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "oc.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "oc.edit": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "course.new": "oc.open_compose", "students.open": "oc.open_students", "course.view": "oc.view", "course.edit": "oc.edit" },
+  "@imports": [{ "ref": "course", "mode": "schema_table" }, { "ref": "enrollment", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "quiz-module", "name": "Quiz Module", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Add graded quizzes to any lesson." },
+      { "id": "certificates", "name": "Completion Certificates", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Auto-generate certificates when students complete a course." },
+      { "id": "community-tab", "name": "Student Community Tab", "category": "community", "price": "optional", "status": "available_unconfigured", "description": "Discussion board per course for student Q&A." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "oc.new", "pattern": "NEW COURSE|CREATE COURSE|BUILD COURSE", "intent": "open_compose" },
+      { "id": "oc.students", "pattern": "VIEW STUDENTS|STUDENT LIST|ENROLLMENT COUNT", "intent": "open_students" }
+    ]
+  },
+  "@data": {
+    "stats": { "courses": 5, "students": 312, "avg_completion_pct": 68 },
+    "categories": ["Programming", "Design", "Business", "Language", "K'UHUL"],
+    "spotlight": [
+      { "id": "sp1", "title": "K'UHUL Phase Engine — Complete", "students": 148, "badge": "Best Seller", "lessons": 24, "duration_hr": 12, "excerpt": "24-lesson course covering all six phases. 68% completion rate." },
+      { "id": "sp2", "title": "ASX Mini-App Crash Course", "students": 94, "badge": "Popular", "lessons": 10, "duration_hr": 4, "excerpt": "Build your first mini-app in a weekend. Practical-first." },
+      { "id": "sp3", "title": "Fold Space Navigation", "students": 70, "badge": "Advanced", "lessons": 18, "duration_hr": 9, "excerpt": "For developers who already know the basics. Deep theory + code." }
+    ],
+    "schema": {
+      "course": { "primaryKey": "course_id", "fields": { "course_id": { "type": "string" }, "title": { "type": "string", "required": true }, "description": { "type": "text" }, "sections": { "type": "json" }, "price_usd": { "type": "float" }, "published": { "type": "boolean" }, "created_at": { "type": "datetime" } } },
+      "enrollment": { "primaryKey": "enroll_id", "fields": { "enroll_id": { "type": "string" }, "course_id": { "type": "string", "required": true }, "user_id": { "type": "string", "required": true }, "progress_pct": { "type": "float" }, "enrolled_at": { "type": "datetime" }, "completed_at": { "type": "datetime" } } }
+    }
+  }
+}

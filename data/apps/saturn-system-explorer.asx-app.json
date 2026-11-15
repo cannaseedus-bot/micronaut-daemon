@@ -1,0 +1,26 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@version": "1.0.0",
+  "@id": "saturn-system-explorer",
+  "@key": "⟁APP:SATURN_SYSTEM_EXPLORER",
+  "@mount": "⟁ROOT:SATURN_SYSTEM_EXPLORER",
+  "@state": {"selected_object":"saturn","atmosphere_filter":"all"},
+  "@components": {
+    "⟁ROOT:SATURN_SYSTEM_EXPLORER": {"@type":"astronomy-infographic","@children":["⟁WIDGET:BRAND_MARK","⟁WIDGET:SYSTEM_MAP","⟁WIDGET:MOON_DETAILS","⟁WIDGET:ATMOSPHERE_KEY","⟁WIDGET:SOURCES"]},
+    "⟁WIDGET:BRAND_MARK": {"@type":"svg-logo","@source":"data/apps/saturn-system-mark.svg"},
+    "⟁WIDGET:SYSTEM_MAP": {"@type":"svg-system-map","@source":"data/apps/saturn-system-infographic.svg","@png":"data/apps/saturn-system-infographic.png","@converter":"tools/svg-to-png.ps1","@data":"data/apps/saturn-system-explorer.data.json","@binding":"system.objects"},
+    "⟁WIDGET:MOON_DETAILS": {"@type":"object-inspector","@binding":"state.selected_object"},
+    "⟁WIDGET:ATMOSPHERE_KEY": {"@type":"filter-legend","@binding":"state.atmosphere_filter","@source":"content.atmosphere_classes"},
+    "⟁WIDGET:SOURCES": {"@type":"source-list","@source":"content.sources"}
+  },
+  "@programs": {
+    "saturn.select_object":{"@kind":"asx.state-program.v1","@executor":"mx.run","@authority":"observation_only","@operations":["SET"]},
+    "saturn.filter_atmosphere":{"@kind":"asx.state-program.v1","@executor":"mx.run","@authority":"observation_only","@operations":["SET"]}
+  },
+  "@events":{"object.select":"saturn.select_object","atmosphere.filter":"saturn.filter_atmosphere"},
+  "@imports":["astronomy.saturn-system.v1"],
+  "@data":"data/apps/saturn-system-explorer.data.json",
+  "@permissions":{"network":"source-links-only","tools":false,"semantic_commit":false},
+  "@lifecycle":{"mount":"projection_only","unmount":"discard_state"},
+  "@epistemic":{"source_attributed":true,"repository_fact_admission":false,"visual_scale":"diagrammatic"}
+}

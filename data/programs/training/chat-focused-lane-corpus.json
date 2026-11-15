@@ -1,0 +1,31 @@
+{
+  "schema": "kuhul.response-lanes.training.v1",
+  "name": "pi-kuhul-chat-utf8-focused",
+  "purpose": "Separate µ-chat corpus; source lane files remain immutable.",
+  "sources": [
+    {
+      "path": "E:/models/GPT2/from_zero/lanes/chatml.jsonl",
+      "family": "mixed",
+      "split": "train",
+      "role": "primary_chat_copy"
+    },
+    {
+      "path": "E:/models/GPT2/from_zero/rlhf_words.jsonl",
+      "family": "mixed",
+      "split": "train",
+      "role": "rlhf_chat_words"
+    },
+    {
+      "path": "E:/models/GPT2/from_zero/rlhf_clean.jsonl",
+      "family": "mixed",
+      "split": "train",
+      "role": "rlhf_clean_chat"
+    }
+  ],
+  "outputs": {
+    "directory": "E:/models/GPT2/from_zero/lanes-chat-focused",
+    "deduplicate": true,
+    "max_chars": 131072,
+    "primary_lane": "CHATML"
+  }
+}

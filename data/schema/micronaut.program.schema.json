@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "khanary:micronaut.program.schema",
+  "title": "MicronautProgram",
+  "description": "Global FoldGraph orchestration grammar governing all micronauts. §61 formal law: MicronautRuntime(B,Q)=Cata_φ(WCR(Match(Ana_ψQ(B)))).",
+  "type": "object",
+  "required": ["version", "topology", "runtime", "registry", "learning", "routing"],
+  "properties": {
+    "version": { "type": "string" },
+    "topology": {
+      "type": "object",
+      "required": ["type", "space"],
+      "properties": {
+        "type":  { "type": "string", "enum": ["hypercube"] },
+        "space": { "type": "string", "enum": ["QnxC6"] }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "required": ["foldgraph"],
+      "properties": {
+        "foldgraph": {
+          "type": "object",
+          "required": ["anamorphism", "attention", "catamorphism"],
+          "properties": {
+            "anamorphism":   { "type": "string", "description": "Ana step: expand candidate micronauts" },
+            "attention":     { "type": "string", "enum": ["WCR"], "description": "WCR rank step" },
+            "catamorphism":  { "type": "string", "description": "Cata step: select canonical execution set" }
+          }
+        }
+      }
+    },
+    "registry": {
+      "type": "object",
+      "required": ["micronauts"],
+      "properties": {
+        "micronauts": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^µ://.+" },
+          "description": "Registered micronaut keys (µ:// addresses)"
+        }
+      }
+    },
+    "learning": {
+      "type": "object",
+      "required": ["promotionThreshold", "wildcardRetention", "fixedPointIterations"],
+      "properties": {
+        "promotionThreshold":   { "type": "number", "minimum": 0, "maximum": 1, "default": 0.85 },
+        "wildcardRetention":    { "type": "boolean", "default": true, "description": "SC-37: retain wildcards as first-class" },
+        "fixedPointIterations": { "type": "integer", "minimum": 1, "default": 32 }
+      }
+    },
+    "routing": {
+      "type": "object",
+      "required": ["semanticEdges", "callableEdges", "requirePromotion"],
+      "properties": {
+        "semanticEdges":    { "type": "boolean", "description": "Allow semantic (relates_to) edges in graph" },
+        "callableEdges":    { "type": "boolean", "description": "Allow callable (invokes) edges between micronauts" },
+        "requirePromotion": { "type": "boolean", "default": true, "description": "Semantic edges must be Xul-promoted before becoming callable" }
+      }
+    }
+  },
+  "x-khanary-law": "MicronautRuntime(B,Q)=Cata_φ(WCR(Match(Ana_ψQ(B))))",
+  "x-khanary-section": "§61"
+}

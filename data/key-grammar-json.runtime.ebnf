@@ -1,0 +1,497 @@
+(* KHANARY key-grammar JSON Runtime EBNF v3 *)
+(* Typed gram channels are structured, phase-bound, provenance-carrying
+   records — never a bag of words. Every channel declares ordered width,
+   first-occurrence position, a semantic role, a K'UHUL phase binding,
+   a gram-store unit, a key-address form, and a consumption rule. *)
+
+document = lexicon_row | relation_row | greeting_bank_row | greeting_learning_row
+         | control_flow_row | control_plan_row | scfml_branch_row | semantic_branch_row
+         | memory_event_row | hyperbolic_event_row ;
+
+(* ── Row forms ───────────────────────────────────────────────────────── *)
+lexicon_row =
+    "{",
+      q_word, ",", q_key, ",", q_unit, ",", q_class, ",", q_book, ",",
+      q_definition, ",", q_lexicon_source,
+      [ ",", q_synonyms ],
+      [ ",", q_definition_ngrams ],
+      [ ",", q_definition_keys ],
+      [ ",", q_gram_channels ],
+      [ ",", q_hyperbolic_event ],
+    "}" ;
+
+q_word           = "\"word\":", string ;
+q_key            = "\"key\":", string ;
+q_unit           = "\"unit\":", "\"unigram\"" ;
+q_class          = "\"class\":", string ;
+q_book           = "\"book\":", string ;
+q_definition     = "\"definition\":", string ;
+q_lexicon_source = "\"lexicon_source\":", string ;
+q_synonyms            = "\"synonyms\":", string_array ;
+q_definition_ngrams   = "\"definition_ngrams\":", string_array ;
+q_definition_keys     = "\"definition_keys\":", string_array ;
+q_gram_channels       = "\"gram_channels\":", "{", gram_channel, { ",", gram_channel }, "}" ;
+q_hyperbolic_event    = "\"hyperbolic_event\":", hyperbolic_event_object ;
+
+(* Hyperbolic key-grammar event projection: the key addresses a future-directed
+   candidate continuation from a current origin. Rapidity/direction/interval are
+   routing geometry only; semantic_authority must remain false.
+
+   Preferred v1 shape uses nested hyperbolic_metrics + bounds. Legacy flat
+   rapidity/direction/interval fields are still accepted for existing rows. *)
+hyperbolic_event_row =
+    "{",
+      "\"$schema\":", "\"urn:kuhul:khanary:schema:key-grammar-event:v1\"", ",",
+      "\"generation_id\":", integer, ",",
+      "\"topology_target\":", "\"B\"", ",",
+      "\"space_signature\":", "\"Minkowski_Minus_Plus_Plus_Plus\"", ",",
+      "\"event_record\":", hyperbolic_event_object,
+    "}" ;
+
+hyperbolic_event_object =
+    "{",
+      q_he_type, ",", q_he_origin,
+      [ ",", q_he_track ],
+      [ ",", q_he_phase ],
+      [ ",", q_he_key ],
+      [ ",", q_he_gram ],
+      [ ",", q_he_event_role ],
+      [ ",", q_he_hyperbolic_metrics ],
+      [ ",", q_he_bounds ],
+      (* Legacy flat event metric fields. *)
+      [ ",", q_he_rapidity ],
+      [ ",", q_he_direction ],
+      [ ",", q_he_minkowski_interval ],
+      [ ",", q_he_interval_class ],
+      [ ",", q_he_epistemic_state ],
+      ",", q_he_semantic_authority,
+    "}" ;
+
+q_he_type = "\"@type\":", "\"key_grammar.hyperbolic_event.v1\"" ;
+q_he_origin = "\"origin\":", string ;
+q_he_track = "\"track\":", string ;
+q_he_phase = "\"phase\":", "\"", phase_name, "\"" ;
+q_he_key = "\"key\":", string ;
+q_he_gram = "\"gram\":", string ;
+q_he_event_role = "\"event_role\":", string ;
+q_he_rapidity = "\"rapidity\":", number ;
+q_he_direction = "\"direction\":", number_array ;
+q_he_minkowski_interval = "\"minkowski_interval\":", number ;
+q_he_interval_class = "\"interval_class\":", "\"", interval_class, "\"" ;
+q_he_epistemic_state = "\"epistemic_state\":", "\"", epistemic_state, "\"" ;
+q_he_semantic_authority = "\"semantic_authority\":", "false" ;
+q_he_hyperbolic_metrics = "\"hyperbolic_metrics\":", "{",
+      "\"rapidity_rho\":", number, ",",
+      "\"direction_vector\":", number_array, ",",
+      "\"minkowski_interval\":", number,
+    "}" ;
+q_he_bounds = "\"bounds\":", "{",
+      "\"interval_class\":", "\"", interval_class, "\"", ",",
+      "\"epistemic_state\":", "\"", epistemic_state, "\"", ",",
+      "\"semantic_authority\":", "false",
+    "}" ;
+
+interval_class =
+    "timelike_candidate" | "spacelike_candidate" | "lightlike_boundary" | "unclassified" ;
+
+gram_channel = "\"", gram_class, "\":", "[", [ typed_gram, { ",", typed_gram } ], "]" ;
+
+(* A typed gram: ordered gram text, frequency, ordered slot width, semantic
+   role, first-occurrence position (order evidence), K'UHUL phase binding,
+   and provenance of the evidence that produced it. Width counts ordered
+   slots: for coarse_gram each structural symbol (c, f:x, ctrl:x, t:x) is
+   ONE slot; position is omitted for coarse_gram because structural
+   skeletons carry shape, not lexical position. *)
+typed_gram =
+    "{",
+      "\"gram\":", string, ",",
+      "\"count\":", number, ",",
+      "\"width\":", number, ",",
+      "\"role\":", "\"", gram_role, "\"",
+      [ ",", "\"position\":", integer ],
+      [ ",", "\"phase\":", "\"", phase_name, "\"" ],
+      [ ",", "\"provenance\":", string ],
+    "}" ;
+
+relation_row =
+    "{",
+      "\"from\":", string, ",",
+      "\"relation\":", string, ",",
+      "\"to\":", string, ",",
+      "\"source_word\":", string, ",",
+      "\"evidence\":", string, ",",
+      "\"weight_kind\":", string, ",",
+      "\"weight\":", number,
+    "}" ;
+
+(* Supplied greeting bank: phase-indexed greeting templates operators can
+   extend. The runtime rotates greetings through the C6 phases, mirrors
+   greetings the user repeats (reactionary), adapts to learned lingo, and
+   synthesizes its own associative words in the same mannerisms. *)
+greeting_bank_row =
+    "{",
+      "\"schema\":", "\"key.grammar.greeting_bank.v1\"", ",",
+      [ "\"description\":", string, "," ],
+      "\"greetings\":", "[", greeting_phase_entry, { ",", greeting_phase_entry }, "]",
+    "}" ;
+
+greeting_phase_entry =
+    "{",
+      "\"phase\":", "\"", greeting_phase, "\"", ",",
+      "\"kind\":", "\"", greeting_kind, "\"", ",",
+      "\"templates\":", "[", template_text, { ",", template_text }, "]",
+    "}" ;
+
+greeting_phase = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul"
+               | "Pop.reactive_mirror" | "Yax.synthesized_greeting" ;
+greeting_kind  = "canonical" | "learned" | "associative" | "reactionary"
+               | "synthesized" | "status" | "confirmatory" | "recall" ;
+template_text  = ? greeting text with placeholders {cue} {Cue} {greeting}
+                  {Greeting} {last} {turns} {lingo_count} {blend} {Blend} ? ;
+
+(* Adaptive greeting learning profile (persisted key + gram record). *)
+greeting_learning_row =
+    "{",
+      "\"language\":", string, ",",
+      "\"random_chat_mode\":", boolean, ",",
+      "\"salutation_turns\":", number, ",",
+      "\"associative_variant_hits\":", number, ",",
+      "\"reactive_mirror_hits\":", number, ",",
+      "\"synthesized_word_hits\":", number, ",",
+      "\"last_user_greeting\":", string, ",",
+      "\"learned_lingo\":", "[", lingo_row, { ",", lingo_row }, "]", ",",
+      "\"observed_greetings\":", "[", observed_greeting_row, { ",", observed_greeting_row }, "]",
+    "}" ;
+
+lingo_row             = "{", "\"token\":", string, ",", "\"hits\":", number, "}" ;
+observed_greeting_row = "{", "\"form\":", string, ",", "\"hits\":", number, "}" ;
+
+(* ── Gram channel contract ───────────────────────────────────────────── *)
+(* How each channel is USED — order, role, phase, unit, address, consumption.
+   Unigrams address meaning; bigrams/trigrams/quadgrams bind ordered context;
+   coarse grams match structural shape when exact words miss; function grams
+   carry operator/control structure; tool grams carry dispatch intent. *)
+
+gram_class = "unigram" | "bigram" | "trigram" | "quadgram"
+           | "coarse_gram" | "function_gram" | "tool_gram" ;
+gram_role  = "semantic_address" | "context_association" | "structural_shape"
+           | "function_word_structure" | "tool_dispatch_intent" ;
+phase_name = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul" ;
+
+channel_contract =
+    unigram_contract | bigram_contract | trigram_contract | quadgram_contract
+  | coarse_gram_contract | function_gram_contract | tool_gram_contract ;
+
+unigram_contract =
+    "channel=unigram", "width=1", "role=semantic_address", "phase=Pop",
+    "unit=semantic_address_layer",
+    "address=unigram:<lemma>",
+    "consumption=single-token semantic address: lemma resolves to key, word_to_atom:<cue>, atom:<name>, atom_phase_contract:<name>" ;
+
+bigram_contract =
+    "channel=bigram", "width=2", "role=context_association", "phase=Wo",
+    "unit=context_association_evidence",
+    "address=bigram:<left> <right>",
+    "consumption=ordered adjacent pair; direction carries meaning — (left,right) is not (right,left)" ;
+
+trigram_contract =
+    "channel=trigram", "width=3", "role=context_association", "phase=Wo",
+    "unit=context_association_evidence",
+    "address=trigram:<t1> <t2> <t3>",
+    "consumption=three-token phrase template; wider ordered context than bigram, sparser evidence" ;
+
+quadgram_contract =
+    "channel=quadgram", "width=4", "role=context_association", "phase=Wo",
+    "unit=context_association_evidence",
+    "address=quadgram:<t1> <t2> <t3> <t4>",
+    "consumption=four-token phrase template; highest specificity, lowest recall" ;
+
+coarse_gram_contract =
+    "channel=coarse_gram", "role=structural_shape", "phase=Yax",
+    "unit=coarse_ngram_structure",
+    "address=coarse_gram:<c|f:word|ctrl:word> ...",
+    "consumption=token-class skeleton (c=content word, f:x=function word, ctrl:x=control word); matches word-order structure when exact grams miss" ;
+
+function_gram_contract =
+    "channel=function_gram", "role=function_word_structure", "phase=Yax",
+    "unit=function_word_channel",
+    "address=function_gram:<glue-token> ...",
+    "consumption=grammar-glue and control pivots resolve to XCFE operator authority (CAUSE, VERIFY, ...)" ;
+
+tool_gram_contract =
+    "channel=tool_gram", "role=tool_dispatch_intent", "phase=Sek",
+    "unit=tool_dispatch_channel",
+    "address=tool_gram:<verb> ...",
+    "consumption=dispatch intent routes to tool keys k_rpc_<method> / k_mcp_<method> via route_hint:tool_gram:<gram>" ;
+
+(* ── Key-store addressing (runtime memory) ────────────────────────────── *)
+key_store_key =
+    gram_scope_key | assoc_key | route_hint_key | prompt_key | prompt_ngram_key
+  | word_assoc_key | lexicon_key | similarity_key | synonym_key | atom_key
+  | greeting_key | lingo_key | style_profile_key | scfml_branch_key | semantic_branch_key | memory_event_key ;
+
+gram_scope_key   = "gram:", gram_class, ":", gram_text ;
+assoc_key       = "assoc:", gram_class, ":", gram_text ;
+route_hint_key  = "route_hint:tool_gram:", gram_text | "route_hint:track:", gram_text ;
+prompt_key      = "prompt:", epoch_ms, "-", sequence ;
+prompt_ngram_key = "prompt_ngram:", gram_text ;
+word_assoc_key  = "word_assoc:", token, "|", relation, "|", token ;
+lexicon_key     = "lexicon:", lemma | "unigram:", lemma | "key:", lemma | "book:", lemma ;
+similarity_key  = "word_similarity:", lemma ;
+synonym_key     = "synonym:", lemma ;
+atom_key        = "word_to_atom:", cue | "atom:", atom | "atom_phase_contract:", atom ;
+greeting_key    = "greeting:observed:", greeting_form
+                | "greeting:last_user"
+                | "greeting:variant:", synthesized_word ;
+lingo_key       = "mx2lm:lingo:", lingo_token | "mx2lm:lingo_blend:", synthesized_word ;
+style_profile_key = "mx2lm:style_profile:v1" ;
+scfml_branch_key = "scfml:branch:", epoch_ms, "-", sequence
+                 | "scfml:branch:", gram_text ;
+semantic_branch_key = "semantic_branch:", epoch_ms, "-", sequence
+                    | "semantic_branch:", gram_text ;
+memory_event_key = "memory:event:", memory_event_kind, ":", epoch_ms, "-", sequence ;
+
+(* ── Shared memory-event envelope ────────────────────────────────────── *)
+(* Prompts, model responses, and plans are key-grammar events. They are
+   event-journal evidence, not automatic fact commits. *)
+memory_event_row =
+    "{",
+      q_me_schema, ",", q_me_key, ",", q_me_event_kind, ",", q_me_source, ",",
+      q_me_track, ",", q_me_phase, ",", q_me_memory_scope, ",",
+      q_me_fact_authority, ",", q_me_commit_state,
+      [ ",", q_me_epistemic_state ],
+      [ ",", q_me_observation_authority ],
+      [ ",", q_me_epistemic_causes ],
+      [ ",", q_me_prompt_key ],
+      [ ",", q_me_parent_key ],
+      [ ",", q_me_content ],
+      [ ",", q_me_hyperbolic_event ],
+      [ ",", q_me_payload_json ],
+    "}" ;
+
+q_me_schema = "\"schema\":", "\"key.grammar.memory_event.v1\"" ;
+q_me_key = "\"key\":", memory_event_key ;
+q_me_event_kind = "\"event_kind\":", "\"", memory_event_kind, "\"" ;
+q_me_source = "\"source\":", string ;
+q_me_track = "\"track\":", string ;
+q_me_phase = "\"phase\":", "\"", phase_name, "\"" ;
+q_me_memory_scope = "\"memory_scope\":", "\"event_journal\"" ;
+q_me_fact_authority = "\"fact_authority\":", boolean ;
+q_me_commit_state = "\"commit_state\":", memory_event_commit_state ;
+q_me_epistemic_state = "\"epistemic_state\":", "\"", epistemic_state, "\"" ;
+q_me_observation_authority = "\"observation_authority\":", boolean ;
+q_me_epistemic_causes = "\"epistemic_causes\":", string_array ;
+q_me_prompt_key = "\"prompt_key\":", prompt_key ;
+q_me_parent_key = "\"parent_key\":", memory_event_key | prompt_key | string ;
+q_me_content = "\"content\":", string ;
+q_me_hyperbolic_event = "\"hyperbolic_event\":", hyperbolic_event_object ;
+q_me_payload_json = "\"payload_json\":", string ;
+
+memory_event_kind = "prompt" | "model_response" | "plan" ;
+epistemic_state = "SUPPORTED" | "MISS" | "UNKNOWN" | "CONTRADICTED" ;
+memory_event_commit_state =
+    "\"journaled_not_fact\"" | "\"candidate\"" | "\"Ch'en_pending\"" | "\"Xul_committed\"" ;
+
+(* ── Prompt archive record (gram-store layout per submitted prompt) ──── *)
+(* Every submitted prompt is broken into typed gram channels and archived:
+   prompt:<epoch>-<seq> scopes one archive; each channel row keeps class,
+   count and gram text with its phase and unit. *)
+prompt_archive_record =
+    prompt_scope_key, ":", gram_class, ":", ordinal,
+    " -> ", gram_class, "|", count, "|", gram_text,
+    " @ ", phase_name, " unit=", gram_unit, " corpus=", corpus_name ;
+
+prompt_scope_key = prompt_key ;
+gram_unit = "semantic_address_layer" | "context_association_evidence"
+          | "coarse_ngram_structure" | "function_word_channel" | "tool_dispatch_channel"
+          | "predication_sequence" | "style_adaptation_profile" ;
+corpus_name = "definitions_and_relations" | "xcfe_control_program" ;
+
+(* ── Semantic branch grammar + control flow projection ──────────────── *)
+(* @if/@then/@else are semantic branch declarations, not XCFE itself.
+   Branching resolves in three layers:
+       Semantic Branch Grammar -> Epistemic Resolution -> XCFE Execution.
+   @else is a complement branch, not @not(P). MISS is not CONTRADICTED.
+   UNKNOWN(P) preserves/spawns/retrieves/defers unless an explicit @unknown
+   handler exists; it must not silently select @else. *)
+
+control_flow_row =
+    "{",
+      q_cf_word, ",", q_cf_key, ",", q_cf_operator, ",", q_cf_book, ",",
+      q_cf_role, ",", q_cf_class, ",", q_cf_requires, ",", q_cf_xcfe, ",", q_cf_phase, ",",
+      q_cf_authority_phase, ",", q_cf_emit_phase, ",",
+      q_cf_block, ",", q_cf_arity, ",", q_cf_sugar,
+    "}" ;
+
+q_cf_word       = "\"word\":", control_word ;
+q_cf_key        = "\"key\":", string ;
+q_cf_operator   = "\"operator\":", string ;
+q_cf_book       = "\"book\":", string ;
+q_cf_role       = "\"role\":", string ;
+q_cf_class      = "\"class\":", xcfe_node_class ;
+q_cf_requires   = "\"requires\":", string_array ;
+q_cf_xcfe       = "\"xcfe_op\":", control_xcfe_op ;
+q_cf_phase      = "\"phase\":", control_phase ;
+q_cf_authority_phase = "\"authority_phase\":", control_phase ;
+q_cf_emit_phase = "\"emit_phase\":", control_phase ;
+q_cf_block      = "\"block_role\":", control_block_role ;
+q_cf_arity      = "\"arity\":", control_arity ;
+q_cf_sugar      = "\"sugar\":", string ;
+
+control_plan_row =
+    "{",
+      q_cp_schema, ",", q_cp_form, ",", q_cp_structured, ",", q_cp_condition, ",",
+      q_cp_steps,
+    "}" ;
+q_cp_schema     = "\"schema\":", "\"key.grammar.control_flow_plan.v1\"" ;
+q_cp_form       = "\"form\":", control_form ;
+q_cp_structured = "\"structured\":", boolean ;
+q_cp_condition  = "\"condition\":", string ;
+q_cp_steps      = "\"steps\":", "[", [ control_step, { ",", control_step } ], "]" ;
+
+(* AIML/XML surface normalization:
+     if/pattern -> condition; then/template -> branch action; then/pattern ->
+     pattern candidate; else/if/then -> nested else-if branch. *)
+scfml_branch_row = semantic_branch_row ;
+semantic_branch_row =
+    "{",
+      "\"schema\":", ( "\"scfml.branch.v1\"" | "\"key.grammar.semantic_branch.v1\"" ), ",",
+      "\"key\":", ( scfml_branch_key | semantic_branch_key ), ",",
+      "\"condition\":", string, ",",
+      "\"then\":", semantic_branch_target, ",",
+      "\"else\":", semantic_branch_target,
+      [ ",", "\"track\":", string ],
+      [ ",", "\"epistemic_state\":", "\"", epistemic_state, "\"" ],
+      [ ",", "\"unknown\":", semantic_branch_target ],
+    "}" ;
+semantic_branch_target = string | "null" ;
+
+control_step =
+    "{",
+      q_cs_word, ",", q_cs_operator, ",", q_cs_xcfe, ",", q_cs_role, ",",
+      q_cs_class, ",", q_cs_requires, ",", q_cs_phase, ",", q_cs_emit, ",",
+      q_cs_authority, ",", q_cs_block, ",", q_cs_position, ",",
+      q_cs_arity, ",", q_cs_operand, ",", q_cs_operand_lhs,
+    "}" ;
+q_cs_word        = "\"word\":", control_word ;
+q_cs_operator    = "\"operator\":", string ;
+q_cs_xcfe        = "\"xcfe_op\":", control_xcfe_op ;
+q_cs_role        = "\"role\":", string ;
+q_cs_class       = "\"class\":", xcfe_node_class ;
+q_cs_requires    = "\"requires\":", string_array ;
+q_cs_phase       = "\"phase\":", control_phase ;
+q_cs_emit        = "\"emit_phase\":", control_phase ;
+q_cs_authority   = "\"authority_phase\":", control_phase ;
+q_cs_block       = "\"block_role\":", control_block_role ;
+q_cs_position    = "\"position\":", integer ;
+q_cs_arity       = "\"arity\":", control_arity ;
+q_cs_operand     = "\"operand\":", string ;
+q_cs_operand_lhs = "\"operand_lhs\":", string ;
+
+control_form =
+    "if/then" | "if/then/else" | "when/then" | "when/then/else"
+  | "compare" | "flat" | "none" ;
+
+(* ── Control-flow sugar: clauses read like English ────────────────────── *)
+control_clause =
+    conditional_clause | temporal_clause | iteration_clause
+  | origin_clause | comparison_clause | query_clause ;
+
+conditional_clause = "if", condition, "then", consequence, [ "else", alternative ] ;
+temporal_clause    = "when", condition, "then", consequence, [ "else", alternative ] ;
+iteration_clause   = "for", "each", item, "in", collection ;
+origin_clause      = "from", source, [ "as", role ] ;
+comparison_clause  = expression, comparison_word, expression ;
+query_clause       = ( "who" | "why" | "how" ), expression ;
+
+comparison_word = "equals" | "equal" | "is" | "are" ;
+condition   = expression ;
+consequence = expression ;
+alternative = expression ;
+expression  = token, { token } ;
+item        = token ;
+collection  = token, { token } ;
+source      = token, { token } ;
+role        = token, { token } ;
+
+(* Lowering: a structured control clause becomes an XCFE control node. *)
+xcfe_control_node =
+    "{", "\"@if\":", string, ",", "\"@then\":", xcfe_branch,
+    [ ",", "\"@else\":", xcfe_branch ], "}" ;
+xcfe_branch  = string | xcfe_op_node | "null" ;
+xcfe_op_node = "{", "\"@fn\":", string, ",", "\"@args\":", string_object, "}" ;
+string_object = ? JSON object of string fields ? ;
+
+(* Operator vocabulary + contract bounds. *)
+control_word =
+    "if" | "else" | "then" | "when" | "how" | "who" | "why" | "for"
+  | "from" | "as" | "equals" | "where" | "is" | "are" | "equal"
+  | "and" | "or" | "not" | "because" | "requires" | "depends"
+  | "evidence" | "shows" | "proves" | "verify" | "check" | "assert" ;
+control_phase = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul" ;
+control_xcfe_op =
+    "@if" | "@then" | "@else" | "@fn" | "@node" | "@op"
+  | "@for" | "@from" | "@as" | "@where" | "@and" | "@or" | "@not"
+  | "@direct" | "@cause" ;
+control_block_role = "open" | "mid" | "close" | "none" ;
+control_arity = "1" | "2" ;
+
+(* Semantic branch epistemic law:
+     SUPPORTED(P) may select @then.
+     CONTRADICTED(P) may select @else as complement, not as @not(P).
+     MISS(P) is not CONTRADICTED(P).
+     UNKNOWN(P) must not silently select @else.
+     Contradicting one candidate sense only eliminates that sense; it does not
+     prove a different candidate sense. *)
+
+(* ── XCFE Node ISA ────────────────────────────────────────────────────── *)
+(* Class, operator, flow phase and authority phase are independent
+   coordinates. The invariants are:
+     class(op) != none                       — every op resolves to a class
+     CanonicalPhase(class) != none           — every class has an authority phase
+     authority_phase(op) = CanonicalPhase(class(op))   — always
+     flow_phase(op) in C6                    — where the construct appears
+     flow_phase(op) = authority_phase(op) is LEGAL BUT NEVER REQUIRED
+   XcfeNodeClass is deliberately not the Relation ISA family set, and there is
+   deliberately no Policy class: operation authority is XCFE's own gate
+   (authorize_phase_transition + xcfe_required edges), not a node class.
+   The canonical class -> phase mapping is defined once in
+   src/kuhul/xcfe_node_class.h; this grammar declares the vocabulary. *)
+
+xcfe_node_class =
+    "CONDITION" | "ROUTING" | "CAUSAL" | "STRUCTURE"
+  | "SELECTION"
+  | "EXECUTION" | "CAPABILITY" | "TRANSFORM"
+  | "VERIFICATION" | "CONSEQUENCE"
+  | "COMMIT"
+  | "MEMORY" | "NEGATION" | "KUHUL_RUNTIME" ;
+
+(* CanonicalPhase(class): the phase where the class's semantics are governed. *)
+xcfe_class_authority =
+    "CONDITION=>Wo" | "ROUTING=>Wo" | "CAUSAL=>Wo" | "STRUCTURE=>Wo"
+  | "SELECTION=>Yax"
+  | "EXECUTION=>Sek" | "CAPABILITY=>Sek" | "TRANSFORM=>Sek"
+  | "VERIFICATION=>Ch'en" | "CONSEQUENCE=>Ch'en"
+  | "COMMIT=>Xul"
+  | "MEMORY=>Pop" | "NEGATION=>Pop" | "KUHUL_RUNTIME=>Pop" ;
+
+(* ── Terminals ────────────────────────────────────────────────────────── *)
+string_array = "[", [ string, { ",", string } ], "]" ;
+number_array = "[", [ number, { ",", number } ], "]" ;
+boolean = "true" | "false" ;
+string = ? JSON string ? ;
+number = ? JSON number ? ;
+integer = digit, { digit } ;
+digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+gram_text = ? ordered gram text; token order is semantic ? ;
+lemma = ? lowercase dictionary lemma ? ;
+token = ? single lexical token ? ;
+cue = ? atom cue token ? ;
+atom = ? semantic atom name ? ;
+relation = ? relation verb, e.g. @related_to ? ;
+epoch_ms = ? milliseconds since UNIX epoch ? ;
+sequence = ? per-process prompt sequence number ? ;
+ordinal = ? 1-based channel row ordinal ? ;
+greeting_form = ? sanitized user greeting form ? ;
+lingo_token = ? sanitized learned lingo token (underscores for spaces) ? ;
+synthesized_word = ? runtime-blended associative word ? ;\n

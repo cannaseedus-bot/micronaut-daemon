@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from wildcard.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH WILDCARDPATTERNGRAPH</pattern>
+    <template>source wildcard.gml; label WildcardPatternGraph; identity 1701; directed 1; nodes 4; edges 3. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH WILDCARDPATTERNGRAPH NODE 1</pattern>
+    <template>Graph WildcardPatternGraph; node 1; arity: variable; id: 1; kind: wildcard_pattern; label: HOW TO *; order: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH WILDCARDPATTERNGRAPH NODE </pattern>
+    <template>Graph WildcardPatternGraph; node 1; arity: variable; id: 1; kind: wildcard_pattern; label: HOW TO *; order: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH WILDCARDPATTERNGRAPH NODE 4</pattern>
+    <template>Graph WildcardPatternGraph; node 4; arity: variable; id: 4; kind: wildcard_pattern; label: GROW *; order: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH WILDCARDPATTERNGRAPH NODE </pattern>
+    <template>Graph WildcardPatternGraph; node 4; arity: variable; id: 4; kind: wildcard_pattern; label: GROW *; order: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH WILDCARDPATTERNGRAPH NODE 2</pattern>
+    <template>Graph WildcardPatternGraph; node 2; id: 2; kind: ngram; label: HOW TO GROW TOMATOES; order: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH WILDCARDPATTERNGRAPH NODE HOW TO GROW TOMATOES</pattern>
+    <template>Graph WildcardPatternGraph; node 2; id: 2; kind: ngram; label: HOW TO GROW TOMATOES; order: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH WILDCARDPATTERNGRAPH NODE 3</pattern>
+    <template>Graph WildcardPatternGraph; node 3; id: 3; kind: ngram; label: GROW TOMATOES; order: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH WILDCARDPATTERNGRAPH NODE GROW TOMATOES</pattern>
+    <template>Graph WildcardPatternGraph; node 3; id: 3; kind: ngram; label: GROW TOMATOES; order: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH WILDCARDPATTERNGRAPH EDGE 1 MATCHES 2</pattern>
+    <template>Graph WildcardPatternGraph; edge 1 to 2; capture: GROW TOMATOES; relation: matches; source: 1; target: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH WILDCARDPATTERNGRAPH EDGE 2 SUFFIX 3</pattern>
+    <template>Graph WildcardPatternGraph; edge 2 to 3; relation: suffix; source: 2; target: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH WILDCARDPATTERNGRAPH EDGE 3 GENERALIZES 4</pattern>
+    <template>Graph WildcardPatternGraph; edge 3 to 4; relation: generalizes; source: 3; target: 4. Data-only graph record.</template>
+  </category>
+</aiml>

@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Generated key lookup bank from asx-mini-app.key-grammar.jsonl; entries are data, not execution authority.-->
+  <category>
+    <pattern>LOOK UP KEY ⟁APP:QUEST</pattern>
+    <template>Key ⟁APP:QUEST. executor: mx.run; authority: projection_only</template>
+  </category>
+</aiml>

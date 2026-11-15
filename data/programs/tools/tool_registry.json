@@ -1,0 +1,1766 @@
+{
+  "@kind": "kuhul.tool-registry.v1",
+  "@version": "1.0.0",
+  "@description": "Small explicit allowlist. Add commands here before a model can request them.",
+  "tools": [
+    {
+      "id": "micronaut.v4.confidence",
+      "verb": "confidence.update",
+      "target": "http://127.0.0.1:17889/confidence",
+      "route": "micronaut://v4/confidence",
+      "lane": "MEMORY",
+      "phase": "Sek",
+      "effect": "write",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "target",
+          "value"
+        ],
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "Semantic variable to update (e.g., \"attention_confidence\")"
+          },
+          "value": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Confidence value in [0,1]"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          }
+        }
+      },
+      "replay": true,
+      "requires": []
+    },
+    {
+      "id": "mcp.tools.list",
+      "verb": "tools/list",
+      "target": "http://127.0.0.1:8766",
+      "route": "mcp://tools/list",
+      "lane": "TOOL",
+      "phase": "Wo",
+      "effect": "read_only",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object"
+      },
+      "replay": true
+    },
+    {
+      "id": "mcp.tools.call",
+      "verb": "tools/call",
+      "target": "http://127.0.0.1:8766",
+      "route": "mcp://tools/call",
+      "lane": "TOOL",
+      "phase": "Sek",
+      "effect": "declared_external",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "name",
+          "arguments"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "arguments": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object"
+      },
+      "replay": true,
+      "requires": [
+        "registered_tool",
+        "Chen_validation"
+      ]
+    },
+    {
+      "id": "micronaut.factory",
+      "verb": "factory.create",
+      "target": "http://127.0.0.1:8764",
+      "route": "micronaut://factory",
+      "lane": "TOOL",
+      "phase": "Yax",
+      "effect": "write",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "request"
+        ],
+        "properties": {
+          "request": {
+            "type": "object"
+          }
+        }
+      },
+      "replay": true,
+      "requires": [
+        "explicit_create_intent",
+        "allow_edits",
+        "approved_folder",
+        "Chen_validation"
+      ]
+    },
+    {
+      "id": "micronaut.evolution",
+      "verb": "evolution.replay",
+      "target": "http://127.0.0.1:8764",
+      "route": "micronaut://evolution",
+      "lane": "MEMORY",
+      "phase": "Chen",
+      "effect": "write",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "replay_id"
+        ],
+        "properties": {
+          "replay_id": {
+            "type": "string"
+          }
+        }
+      },
+      "replay": true,
+      "requires": [
+        "replayable_evidence",
+        "Chen_validation"
+      ]
+    },
+    {
+      "id": "coder.invoke",
+      "verb": "coder.invoke",
+      "target": "tool://coder",
+      "route": "tool://coder",
+      "lane": "CODE",
+      "phase": "Sek",
+      "effect": "write_if_approved",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "request"
+        ],
+        "properties": {
+          "request": {
+            "type": "string"
+          },
+          "folder": {
+            "type": "string"
+          }
+        }
+      },
+      "replay": true,
+      "requires": [
+        "approved_folder",
+        "allow_edits",
+        "Chen_validation"
+      ]
+    },
+    {
+      "id": "jrom.record",
+      "verb": "jrom.record",
+      "target": "jrom://replay",
+      "route": "jrom://replay",
+      "lane": "MEMORY",
+      "phase": "Chen",
+      "effect": "write",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "tool_id",
+          "verb",
+          "target",
+          "args",
+          "phase",
+          "lane",
+          "status"
+        ],
+        "properties": {
+          "replay_id": {
+            "type": "string",
+            "description": "Optional explicit replay id; auto-generated if omitted"
+          },
+          "tool_id": {
+            "type": "string",
+            "description": "Tool or model identity that emitted this event"
+          },
+          "verb": {
+            "type": "string",
+            "description": "Action verb"
+          },
+          "target": {
+            "type": "string",
+            "description": "Target route/endpoint/executable"
+          },
+          "args": {
+            "type": "object",
+            "description": "Arguments or payload"
+          },
+          "phase": {
+            "type": "string",
+            "enum": [
+              "Pop",
+              "Wo",
+              "Yax",
+              "Sek",
+              "Chen",
+              "Xul"
+            ],
+            "description": "Fold phase"
+          },
+          "lane": {
+            "type": "string",
+            "enum": [
+              "TOOL",
+              "VERB",
+              "CODE",
+              "AST",
+              "KSON",
+              "REASON",
+              "MEMORY",
+              "CHATML"
+            ],
+            "description": "Glyph lane"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "error",
+              "pending",
+              "refused"
+            ],
+            "description": "Event status"
+          },
+          "result": {
+            "type": "object",
+            "description": "Tool/model result payload"
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message if status=error"
+          },
+          "model": {
+            "type": "string",
+            "description": "Model or micronaut name that produced the output"
+          },
+          "micronaut": {
+            "type": "string",
+            "description": "Resolved micronaut glyph"
+          },
+          "jrom_program": {
+            "type": "string",
+            "description": "JROM program tag"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "events": {
+            "type": "integer"
+          },
+          "last_hash": {
+            "type": "string"
+          },
+          "event": {
+            "type": "object"
+          }
+        }
+      },
+      "replay": true,
+      "requires": [
+        "Chen_validation"
+      ]
+    },
+    {
+      "id": "jrom.replay",
+      "verb": "replay.execute",
+      "target": "jrom://replay",
+      "route": "jrom://replay",
+      "lane": "MEMORY",
+      "phase": "Xul",
+      "effect": "read_only",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "replay_id"
+        ],
+        "properties": {
+          "replay_id": {
+            "type": "string"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object"
+      },
+      "replay": false,
+      "requires": [
+        "replay_manifest_valid"
+      ]
+    },
+    {
+      "id": "micronaut.factory.native",
+      "verb": "factory.metadata",
+      "target": "tool://micronaut-factory/native",
+      "route": "tool://micronaut-factory/native",
+      "library": "dist/micronaut-factory/build-local/bin/micronaut_factory_core.dll",
+      "lane": "TOOL",
+      "phase": "Yax",
+      "effect": "read_only",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "list",
+              "scan",
+              "metadata"
+            ],
+            "default": "metadata",
+            "description": "Factory action to surface"
+          },
+          "domain": {
+            "type": "string",
+            "description": "Domain for create action (not yet wired to DLL)"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "files": {
+            "type": "object"
+          },
+          "factory_registry": {
+            "type": "object"
+          },
+          "factory_dlls": {
+            "type": "array"
+          }
+        }
+      },
+      "replay": true,
+      "requires": [
+        "approved_folder"
+      ]
+    },
+    {
+      "id": "micronaut.evolution.native",
+      "verb": "evolution.metadata",
+      "target": "tool://micronaut-evolution/native",
+      "route": "tool://micronaut-evolution/native",
+      "library": "dist/micronaut-factory/build-local/bin/micronaut_evolution.dll",
+      "lane": "MEMORY",
+      "phase": "Chen",
+      "effect": "read_only",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "metadata",
+              "mutations"
+            ],
+            "default": "metadata",
+            "description": "Evolution action to surface"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "files": {
+            "type": "object"
+          },
+          "factory_registry": {
+            "type": "object"
+          },
+          "factory_dlls": {
+            "type": "array"
+          }
+        }
+      },
+      "replay": true,
+      "requires": [
+        "approved_folder"
+      ]
+    },
+    {
+      "id": "micronaut.coder.review-cli",
+      "verb": "coder.review",
+      "target": "tool://micronaut-coder/review",
+      "route": "tool://micronaut-coder/review",
+      "executable": "dist/code-micronaut/micronaut-coder.exe",
+      "lane": "CODE",
+      "phase": "Sek",
+      "effect": "read_only",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "command"
+        ],
+        "properties": {
+          "command": {
+            "type": "string",
+            "enum": [
+              "review",
+              "review-dir",
+              "diff",
+              "refactor",
+              "optimize",
+              "todos",
+              "document",
+              "test",
+              "explain",
+              "github-review"
+            ],
+            "description": "Subcommand passed to micronaut_code_reviewer.exe"
+          },
+          "file": {
+            "type": "string",
+            "description": "Target file for single-file commands"
+          },
+          "dir": {
+            "type": "string",
+            "description": "Target directory for review-dir"
+          },
+          "old": {
+            "type": "string",
+            "description": "Old file path for diff"
+          },
+          "new": {
+            "type": "string",
+            "description": "New file path for diff"
+          },
+          "goal": {
+            "type": "string",
+            "description": "Refactoring goal"
+          },
+          "metric": {
+            "type": "string",
+            "description": "Optimization metric (speed/memory)"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "exitCode": {
+            "type": "integer"
+          },
+          "stdout": {
+            "type": "string"
+          },
+          "stderr": {
+            "type": "string"
+          },
+          "report": {
+            "type": "object"
+          }
+        }
+      },
+      "replay": true,
+      "requires": [
+        "approved_folder"
+      ]
+    },
+    {
+      "id": "micronaut.coder.todos-universal",
+      "verb": "coder.scan-todos",
+      "target": "tool://micronaut-coder/todos-universal",
+      "route": "tool://micronaut-coder/todos-universal",
+      "script": "dist/micronaut-coder/scripts/extract-todos-universal.js",
+      "runtime": "node",
+      "lane": "CODE",
+      "phase": "Sek",
+      "effect": "read_only",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "dir"
+        ],
+        "properties": {
+          "dir": {
+            "type": "string",
+            "description": "Source directory to scan"
+          },
+          "out": {
+            "type": "string",
+            "description": "Optional report path (default: ./todos.json)"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "string"
+          },
+          "sourceDir": {
+            "type": "string"
+          },
+          "fileCount": {
+            "type": "integer"
+          },
+          "totalTodos": {
+            "type": "integer"
+          },
+          "byType": {
+            "type": "object"
+          },
+          "todos": {
+            "type": "array"
+          }
+        }
+      },
+      "replay": true,
+      "requires": [
+        "approved_folder"
+      ]
+    },
+    {
+      "id": "micronaut.coder.v6-hashes",
+      "verb": "coder.v6-hashes",
+      "target": "tool://micronaut-coder/v6-hashes",
+      "route": "tool://micronaut-coder/v6-hashes",
+      "script": "dist/micronaut-coder/scripts/compute-v6-hashes.js",
+      "runtime": "node",
+      "lane": "CODE",
+      "phase": "Sek",
+      "effect": "read_only",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "dir"
+        ],
+        "properties": {
+          "dir": {
+            "type": "string",
+            "description": "Binary/artifact directory to hash"
+          },
+          "out": {
+            "type": "string",
+            "description": "Optional report path (default: ./v6-hashes.json)"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "@schema": {
+            "type": "string"
+          },
+          "@timestamp": {
+            "type": "string"
+          },
+          "binDirectory": {
+            "type": "string"
+          },
+          "fileCount": {
+            "type": "integer"
+          },
+          "masterHash": {
+            "type": "string"
+          },
+          "files": {
+            "type": "array"
+          }
+        }
+      },
+      "replay": true,
+      "requires": [
+        "approved_folder"
+      ]
+    },
+    {
+      "id": "micronaut.coder.pipeline",
+      "verb": "coder.pipeline",
+      "target": "tool://micronaut-coder/pipeline",
+      "route": "tool://micronaut-coder/pipeline",
+      "executable": "dist/micronaut-coder/micronaut_coder_pipeline.exe",
+      "lane": "CODE",
+      "phase": "Sek",
+      "effect": "read_only",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "grammar": {
+            "type": "string",
+            "default": "c",
+            "description": "Target grammar (c, python, javascript, ...)"
+          },
+          "fn_name": {
+            "type": "string",
+            "default": "compute",
+            "description": "Function name to generate"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "exitCode": {
+            "type": "integer"
+          },
+          "stdout": {
+            "type": "string"
+          },
+          "stderr": {
+            "type": "string"
+          }
+        }
+      },
+      "replay": true,
+      "requires": []
+    },
+    {
+      "id": "micronaut.coder.codegen",
+      "verb": "coder.codegen",
+      "target": "tool://micronaut-coder/codegen",
+      "route": "tool://micronaut-coder/codegen",
+      "executable": "dist/micronaut-coder/codegen_cpp/codegen_cpp.exe",
+      "lane": "CODE",
+      "phase": "Sek",
+      "effect": "read_only",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "exitCode": {
+            "type": "integer"
+          },
+          "stdout": {
+            "type": "string"
+          },
+          "stderr": {
+            "type": "string"
+          }
+        }
+      },
+      "replay": true,
+      "requires": []
+    },
+    {
+      "id": "code-micronaut.native",
+      "verb": "code-micronaut.native",
+      "target": "http://127.0.0.1:3167",
+      "route": "micronaut://code-micronaut-native",
+      "lane": "CODE",
+      "phase": "Sek",
+      "effect": "declared_external",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "endpoint"
+        ],
+        "properties": {
+          "endpoint": {
+            "type": "string",
+            "enum": [
+              "generate",
+              "review"
+            ],
+            "description": "Native code-micronaut HTTP endpoint"
+          },
+          "prompt": {
+            "type": "string",
+            "description": "Generation prompt (for /generate)"
+          },
+          "code": {
+            "type": "string",
+            "description": "Code to review (for /review)"
+          },
+          "language": {
+            "type": "string",
+            "default": "python",
+            "description": "Target language (for /generate)"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number"
+          },
+          "issues": {
+            "type": "array"
+          },
+          "suggestions": {
+            "type": "array"
+          }
+        }
+      },
+      "replay": true,
+      "requires": []
+    },
+    {
+      "id": "wwa.host",
+      "verb": "wwa.host",
+      "target": "tool://wwa/host",
+      "route": "tool://wwa/host",
+      "executable": "dist/v3.5.0-WebX/bin/WWAHost.exe",
+      "lane": "TOOL",
+      "phase": "Sek",
+      "effect": "declared_external",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "app"
+        ],
+        "properties": {
+          "app": {
+            "type": "string",
+            "description": "App manifest path or name to launch"
+          },
+          "args": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Additional WWAHost args"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "app": {
+            "type": "string"
+          },
+          "backend": {
+            "type": "string"
+          }
+        }
+      },
+      "replay": false,
+      "requires": [
+        "approved_folder"
+      ]
+    },
+    {
+      "id": "wwa.launch",
+      "verb": "wwa.launch",
+      "target": "tool://wwa/launch",
+      "route": "tool://wwa/launch",
+      "executable": "dist/v3.5.0-WebX/bin/WWAHost.exe",
+      "lane": "TOOL",
+      "phase": "Sek",
+      "effect": "declared_external",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "app": {
+            "type": "string",
+            "description": "Path to .wwa file or app folder"
+          },
+          "path": {
+            "type": "string",
+            "description": "Alias for app"
+          },
+          "args": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Extra WWAHost args"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "app": {
+            "type": "string"
+          },
+          "backend": {
+            "type": "string"
+          }
+        }
+      },
+      "replay": false,
+      "requires": [
+        "approved_folder"
+      ]
+    },
+    {
+      "id": "wwa.package",
+      "verb": "wwa.package",
+      "target": "tool://wwa/package",
+      "route": "tool://wwa/package",
+      "lane": "TOOL",
+      "phase": "Sek",
+      "effect": "write",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "app_root",
+          "out_wwa_path"
+        ],
+        "properties": {
+          "app_root": {
+            "type": "string",
+            "description": "Folder containing app (index.html, manifest.json, assets)"
+          },
+          "out_wwa_path": {
+            "type": "string",
+            "description": "Output .wwa file path"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "out": {
+            "type": "string"
+          },
+          "backend": {
+            "type": "string"
+          }
+        }
+      },
+      "replay": true,
+      "requires": [
+        "approved_folder",
+        "allow_edits",
+        "Chen_validation"
+      ]
+    },
+    {
+      "id": "micronaut.v4.runtime",
+      "verb": "micronaut.v4.runtime",
+      "target": "script://micronaut-v4/Micronaut.ps1",
+      "route": "micronaut://v4/runtime",
+      "lane": "TOOL",
+      "phase": "Sek",
+      "effect": "write",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "start",
+              "stop",
+              "health",
+              "pwa",
+              "jrom/read",
+              "folds/cycle"
+            ],
+            "description": "Runtime action to perform"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "Headless",
+              "Serve"
+            ],
+            "default": "Headless",
+            "description": "Startup mode for start action"
+          },
+          "restPort": {
+            "type": "integer",
+            "default": 17889,
+            "description": "REST gateway port"
+          },
+          "pwaPort": {
+            "type": "integer",
+            "default": 17888,
+            "description": "PWA landing-page port"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "pid": {
+            "type": "integer"
+          },
+          "restPort": {
+            "type": "integer"
+          },
+          "pwaPort": {
+            "type": "integer"
+          },
+          "result": {
+            "type": "object"
+          }
+        }
+      },
+      "replay": true,
+      "requires": [
+        "allow_edits",
+        "approved_folder",
+        "Chen_validation"
+      ]
+    },
+    {
+      "id": "micronaut.v4.pwa",
+      "verb": "micronaut.v4.pwa",
+      "target": "http://127.0.0.1:17888/index.html",
+      "route": "micronaut://v4/pwa",
+      "lane": "TOOL",
+      "phase": "Wo",
+      "effect": "read_only",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object"
+      },
+      "replay": false,
+      "requires": []
+    },
+    {
+      "id": "micronaut.v4.nnc",
+      "verb": "micronaut.v4.nnc",
+      "target": "http://127.0.0.1:17889/nnc/search",
+      "route": "micronaut://v4/nnc",
+      "lane": "MEMORY",
+      "phase": "Wo",
+      "effect": "read_only",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "search",
+              "add",
+              "get",
+              "reward",
+              "confidence",
+              "stats"
+            ],
+            "description": "NNC-K memory operation"
+          },
+          "query": {
+            "type": "string",
+            "description": "Search or confidence query"
+          },
+          "content": {
+            "type": "string",
+            "description": "Memory content for add"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "fact",
+              "preference",
+              "context",
+              "code",
+              "reward",
+              "person"
+            ],
+            "description": "Memory type"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "source": {
+            "type": "string",
+            "default": "chat"
+          },
+          "confidence": {
+            "type": "number",
+            "default": 0.7
+          },
+          "id": {
+            "type": "string",
+            "description": "Memory id for get/reward"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Reward amount"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "topK": {
+            "type": "integer",
+            "default": 5
+          },
+          "context": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object"
+      },
+      "replay": true,
+      "requires": [
+        "approved_folder"
+      ]
+    },
+    {
+      "id": "micronaut.v4.user",
+      "verb": "micronaut.v4.user",
+      "target": "http://127.0.0.1:17889/user/profile",
+      "route": "micronaut://v4/user",
+      "lane": "MEMORY",
+      "phase": "Wo",
+      "effect": "read_only",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "profile",
+              "settings",
+              "signout"
+            ],
+            "default": "profile"
+          },
+          "settings": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object"
+      },
+      "replay": false,
+      "requires": []
+    },
+    {
+      "id": "micronaut.v4.oauth",
+      "verb": "micronaut.v4.oauth",
+      "target": "http://127.0.0.1:17889/oauth/exchange",
+      "route": "micronaut://v4/oauth",
+      "lane": "TOOL",
+      "phase": "Wo",
+      "effect": "read_only",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "code",
+          "redirectPort",
+          "verifier"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "redirectPort": {
+            "type": "integer"
+          },
+          "verifier": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object"
+      },
+      "replay": false,
+      "requires": []
+    },
+    {
+      "id": "micronaut.v4.drivers",
+      "verb": "micronaut.v4.drivers",
+      "target": "http://127.0.0.1:17889/drivers/list",
+      "route": "micronaut://v4/drivers",
+      "lane": "AST",
+      "phase": "Sek",
+      "effect": "read_only",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "list",
+              "webgl2-shaders",
+              "webgl2-eval",
+              "opencl-kernels",
+              "klsl-list"
+            ],
+            "default": "list"
+          },
+          "shader": {
+            "type": "string"
+          },
+          "inputs": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object"
+      },
+      "replay": true,
+      "requires": []
+    },
+    {
+      "id": "micronaut.v4.kxc",
+      "verb": "micronaut.v4.kxc",
+      "target": "http://127.0.0.1:17889/drivers/kxc/status",
+      "route": "micronaut://v4/kxc",
+      "lane": "AST",
+      "phase": "Yax",
+      "effect": "read_only",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "status",
+              "registry",
+              "resolve",
+              "compile"
+            ],
+            "default": "status"
+          },
+          "source": {
+            "type": "string"
+          },
+          "smca": {
+            "type": "string"
+          },
+          "kuhulPath": {
+            "type": "string"
+          },
+          "kxcExe": {
+            "type": "string"
+          },
+          "outDir": {
+            "type": "string"
+          },
+          "emitIr": {
+            "type": "boolean"
+          },
+          "target": {
+            "type": "string",
+            "enum": [
+              "dx12",
+              "webgpu",
+              "cpu",
+              "all"
+            ],
+            "default": "all"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object"
+      },
+      "replay": false,
+      "requires": []
+    },
+    {
+      "id": "kxc.compile",
+      "verb": "kxc.compile",
+      "target": "tool://kxc/compile",
+      "route": "tool://kxc/compile",
+      "script": "programs/tools/kxc_compile.ps1",
+      "runtime": "pwsh",
+      "lane": "AST",
+      "phase": "Yax",
+      "effect": "write",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "kuhulPath"
+        ],
+        "properties": {
+          "kuhulPath": {
+            "type": "string",
+            "description": "Path to .kuhul source file"
+          },
+          "kxcExe": {
+            "type": "string",
+            "description": "Path to kxc.exe (default: drivers/compiler-kxc/kxc.exe)"
+          },
+          "outDir": {
+            "type": "string",
+            "description": "Output directory (default: same as source)"
+          },
+          "emitIr": {
+            "type": "boolean",
+            "default": false
+          },
+          "target": {
+            "type": "string",
+            "enum": [
+              "dx12",
+              "webgpu",
+              "cpu",
+              "all"
+            ],
+            "default": "all"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "exitCode": {
+            "type": "integer"
+          },
+          "stdout": {
+            "type": "string"
+          },
+          "stderr": {
+            "type": "string"
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "registryMatched": {
+            "type": "boolean"
+          },
+          "resolved": {
+            "type": "object"
+          }
+        }
+      },
+      "replay": true,
+      "requires": [
+        "approved_folder"
+      ]
+    },
+    {
+      "id": "dag.build",
+      "verb": "dag.build",
+      "target": "tool://dag/build",
+      "route": "tool://dag/build",
+      "script": "drivers/build_dag_dll.bat",
+      "runtime": "cmd",
+      "lane": "AST",
+      "phase": "Yax",
+      "effect": "write",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "clean": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "dll": {
+            "type": "string"
+          },
+          "lib": {
+            "type": "string"
+          },
+          "exp": {
+            "type": "string"
+          }
+        }
+      },
+      "replay": true,
+      "requires": [
+        "approved_folder"
+      ]
+    },
+    {
+      "id": "micronaut.v4.node",
+      "verb": "micronaut.v4.node",
+      "target": "http://127.0.0.1:17889/node/pricing",
+      "route": "micronaut://v4/node",
+      "lane": "MEMORY",
+      "phase": "Sek",
+      "effect": "read",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "pricing",
+              "models",
+              "usage",
+              "tunnel",
+              "wallet",
+              "ledger",
+              "gpu",
+              "market"
+            ]
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object"
+      },
+      "replay": false,
+      "requires": []
+    },
+    {
+      "id": "micronaut.v4.stripe",
+      "verb": "micronaut.v4.stripe",
+      "target": "http://127.0.0.1:17889/stripe/config",
+      "route": "micronaut://v4/stripe",
+      "lane": "TOOL",
+      "phase": "Wo",
+      "effect": "read_only",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "config",
+              "products",
+              "payment-intent",
+              "webhook"
+            ]
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object"
+      },
+      "replay": false,
+      "requires": []
+    },
+    {
+      "id": "kxc.compile",
+      "verb": "kxc.compile",
+      "target": "tool://kxc/compile",
+      "route": "tool://kxc/compile",
+      "lane": "TOOL",
+      "phase": "Sek",
+      "effect": "write",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "sourcePath",
+          "outDir"
+        ],
+        "properties": {
+          "sourcePath": {
+            "type": "string"
+          },
+          "outDir": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object"
+      },
+      "replay": true,
+      "requires": []
+    },
+    {
+      "id": "micronauts.memory.compile",
+      "verb": "memory.compile",
+      "target": "tool://kxc/compile",
+      "route": "tool://kxc/compile",
+      "lane": "AST",
+      "phase": "Yax",
+      "effect": "write",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "sourcePath"
+        ],
+        "properties": {
+          "sourcePath": {
+            "type": "string",
+            "description": "Path to the .kuhul memory program (e.g., micronauts-memory.kuhul)"
+          },
+          "outDir": {
+            "type": "string",
+            "description": "Output directory (defaults to source folder)"
+          },
+          "emitIr": {
+            "type": "boolean",
+            "default": false
+          },
+          "target": {
+            "type": "string",
+            "enum": [
+              "dx12",
+              "webgpu",
+              "cpu",
+              "all"
+            ],
+            "default": "all"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          }
+        }
+      },
+      "replay": true,
+      "requires": [
+        "approved_folder"
+      ]
+    },
+    {
+      "id": "micronaut.v4.agents",
+      "verb": "agents.dispatch",
+      "target": "script://micronaut-v4/AGENTS.ps1",
+      "route": "micronaut://v4/agents",
+      "lane": "TOOL",
+      "phase": "Sek",
+      "effect": "write_if_approved",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "list",
+              "refresh",
+              "verify"
+            ],
+            "default": "list",
+            "description": "What AGENTS.ps1 should do."
+          },
+          "args": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Optional key/value arguments passed to the script."
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "stdout": {
+            "type": "string"
+          },
+          "stderr": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string",
+            "description": "JROM event ID if the script logged one."
+          }
+        }
+      },
+      "replay": true,
+      "requires": [
+        "approved_folder",
+        "allow_edits",
+        "Chen_validation"
+      ]
+    },
+    {
+      "id": "micronaut.v4.supernaut",
+      "verb": "supernaut.invoke",
+      "target": "script://micronaut-v4/Supernaut/SUPERNAUT.ps1",
+      "route": "micronaut://v4/supernaut",
+      "lane": "SKILLS",
+      "phase": "Sek",
+      "effect": "write_if_approved",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "list",
+              "run",
+              "health",
+              "debug"
+            ],
+            "description": "Which Supernaut operation you want."
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Optional arguments passed to the native binary."
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "stdout": {
+            "type": "string"
+          },
+          "stderr": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string",
+            "description": "JROM event ID if logged."
+          }
+        }
+      },
+      "replay": true,
+      "requires": [
+        "approved_folder",
+        "allow_edits",
+        "Chen_validation"
+      ]
+    },
+    {
+      "id": "micronaut.v4.adam_m.agent",
+      "verb": "adam_m.agent",
+      "target": "script://micronaut-v4/Agents/AdamMAgent.ps1",
+      "route": "micronaut://v4/adam-m",
+      "lane": "TOOL",
+      "phase": "Sek",
+      "effect": "write_if_approved",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "start",
+              "stop",
+              "status"
+            ],
+            "description": "Control the Adam-M agent"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "replay": true,
+      "requires": [
+        "allow_edits",
+        "approved_folder",
+        "Chen_validation"
+      ]
+    },
+    {
+      "id": "micronaut.graph.query",
+      "verb": "graph.query",
+      "target": "tool://micronaut-graph/query",
+      "route": "micronaut://graph/query",
+      "lane": "GRAPH",
+      "phase": "Sek",
+      "effect": "read_only",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "graph_id",
+          "operation"
+        ],
+        "properties": {
+          "graph_id": {
+            "type": "string",
+            "enum": [
+              "hypercube_q3",
+              "hypercube_q4",
+              "khanary_topology",
+              "unfold_graph",
+              "micronaut_fieldgraph",
+              "code_wildcard",
+              "intent_graph",
+              "cfpc_questions",
+              "cfpc_wildcards",
+              "metric_graph",
+              "vectors",
+              "kuhul_pi",
+              "pi_radius_bias",
+              "daemon_behavior_modes",
+              "english_dictionary_definition_relations",
+              "ccc_n3",
+              "ccc_n4",
+              "autocomplete_wildcard",
+              "wildcard",
+              "syllable",
+              "eliza_bias",
+              "continuation_bias",
+              "bias",
+              "entropy_gradient_field",
+              "euclidean_gradient_field",
+              "tensor_field",
+              "quantum_field_boundaries"
+            ]
+          },
+          "operation": {
+            "type": "string",
+            "enum": [
+              "inventory",
+              "neighborhood",
+              "path"
+            ]
+          },
+          "node": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "target": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 512
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "schema",
+          "authority",
+          "graph_id",
+          "operation"
+        ],
+        "properties": {
+          "schema": {
+            "const": "kuhul.micronaut.graph-query-result.v1"
+          },
+          "authority": {
+            "const": "DATA_ONLY"
+          },
+          "graph_id": {
+            "type": "string"
+          },
+          "operation": {
+            "type": "string"
+          },
+          "semantic_authority": {
+            "const": false
+          },
+          "topology_mutation": {
+            "const": false
+          }
+        }
+      },
+      "replay": true,
+      "requires": [
+        "registered_tool",
+        "XCFE_admission",
+        "Chen_validation",
+        "graph_id_allowlisted"
+      ]
+    }
+  ]
+}

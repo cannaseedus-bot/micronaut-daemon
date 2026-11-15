@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>NexusChat</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --panel: #111111;
+    --border: #1e1e1e;
+    --accent: #00ff88;
+    --accent-dim: #00cc6a;
+    --text: #e0e0e0;
+    --muted: #555;
+    --sidebar-w: 260px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, sans-serif; font-size: 14px; overflow: hidden; }
+
+  /* ── layout ── */
+  .app { display: flex; flex-direction: column; height: 100vh; }
+  .topbar { display: flex; align-items: center; gap: 12px; padding: 0 16px; height: 48px; background: var(--panel); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .topbar-title { font-weight: 700; font-size: 16px; color: var(--accent); letter-spacing: 0.04em; }
+  .topbar-model-select { margin-left: auto; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 4px 10px; border-radius: 6px; font-size: 13px; cursor: pointer; outline: none; }
+  .topbar-model-select:hover { border-color: var(--accent); }
+  .hub-link { font-size: 12px; color: var(--muted); text-decoration: none; padding: 4px 8px; border: 1px solid var(--border); border-radius: 4px; }
+  .hub-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  .body { display: flex; flex: 1; overflow: hidden; }
+
+  /* ── sidebar ── */
+  .sidebar { width: var(--sidebar-w); min-width: var(--sidebar-w); background: var(--panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+  .sidebar-tabs { display: flex; border-bottom: 1px solid var(--border); }
+  .sidebar-tab { flex: 1; padding: 10px 0; text-align: center; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; user-select: none; }
+  .sidebar-tab.active { color: var(--accent); border-color: var(--accent); }
+  .sidebar-panel { display: none; flex: 1; flex-direction: column; overflow-y: auto; padding: 8px; gap: 6px; }
+  .sidebar-panel.active { display: flex; }
+  .sidebar-actions { padding: 8px; display: flex; flex-direction: column; gap: 6px; border-top: 1px solid var(--border); }
+
+  /* model cards */
+  .model-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; cursor: pointer; transition: border-color .15s, background .15s; }
+  .model-card:hover, .model-card.selected { border-color: var(--accent); background: #0d1a13; }
+  .model-card-name { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+  .model-card-meta { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .status-dot.online { background: var(--accent); box-shadow: 0 0 4px var(--accent); }
+  .status-dot.offline { background: #ff4444; }
+  .status-dot.loading { background: #ffaa00; animation: blink .9s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  /* file cards */
+  .file-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; gap: 8px; }
+  .file-icon { font-size: 18px; }
+  .file-info { flex: 1; overflow: hidden; }
+  .file-name { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .file-size { font-size: 11px; color: var(--muted); }
+  .file-remove { color: var(--muted); cursor: pointer; font-size: 16px; line-height: 1; }
+  .file-remove:hover { color: #ff4444; }
+  .no-files { color: var(--muted); font-size: 12px; text-align: center; padding: 20px 0; }
+
+  /* ── chat area ── */
+  .chat { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .messages { flex: 1; overflow-y: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; scroll-behavior: smooth; }
+  .messages::-webkit-scrollbar { width: 6px; } .messages::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+  .msg { display: flex; gap: 10px; align-items: flex-start; max-width: 820px; }
+  .msg.user { flex-direction: row-reverse; margin-left: auto; }
+  .msg-avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
+  .msg.user .msg-avatar { background: var(--accent); color: #000; }
+  .msg.assistant .msg-avatar { background: #1a2a20; color: var(--accent); border: 1px solid var(--border); }
+  .msg-bubble { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; font-size: 14px; line-height: 1.6; max-width: 640px; }
+  .msg.user .msg-bubble { background: #0d1a13; border-color: var(--accent-dim); border-radius: 12px 4px 12px 12px; }
+  .msg.assistant .msg-bubble { border-radius: 4px 12px 12px 12px; }
+  .msg-bubble pre { background: #0a0a0a; border: 1px solid var(--border); border-radius: 6px; padding: 10px; margin: 8px 0; overflow-x: auto; font-size: 12px; }
+  .msg-bubble code { font-family: 'Consolas', 'Courier New', monospace; font-size: 12px; background: #1a1a1a; padding: 1px 4px; border-radius: 3px; }
+
+  .typing-indicator { display: flex; gap: 4px; align-items: center; padding: 4px 2px; }
+  .typing-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: typing 1.2s infinite; }
+  .typing-dot:nth-child(2) { animation-delay: .2s; }
+  .typing-dot:nth-child(3) { animation-delay: .4s; }
+  @keyframes typing { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+
+  .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--muted); gap: 8px; }
+  .empty-logo { font-size: 48px; color: var(--accent); opacity: .6; }
+  .empty-label { font-size: 15px; font-weight: 600; }
+  .empty-sub { font-size: 13px; }
+
+  /* input area */
+  .input-area { border-top: 1px solid var(--border); padding: 14px 20px; display: flex; gap: 10px; align-items: flex-end; background: var(--panel); }
+  .attach-btn { background: none; border: 1px solid var(--border); color: var(--muted); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; font-size: 16px; flex-shrink: 0; transition: border-color .15s, color .15s; display: flex; align-items: center; justify-content: center; }
+  .attach-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .msg-input { flex: 1; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 9px 14px; font-size: 14px; font-family: inherit; resize: none; min-height: 38px; max-height: 160px; outline: none; line-height: 1.5; transition: border-color .15s; overflow-y: auto; }
+  .msg-input:focus { border-color: var(--accent); }
+  .send-btn { background: var(--accent); border: none; color: #000; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: 700; flex-shrink: 0; transition: background .15s; display: flex; align-items: center; justify-content: center; }
+  .send-btn:hover { background: var(--accent-dim); }
+  .send-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  /* ── buttons ── */
+  .btn-sm { padding: 7px 12px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; transition: background .15s, color .15s; width: 100%; text-align: left; display: flex; align-items: center; gap: 7px; }
+  .btn-ghost { background: none; border: 1px solid var(--border); color: var(--muted); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); background: #0d1a13; }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-primary:hover { background: var(--accent-dim); }
+
+  /* ── modals ── */
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: none; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(3px); }
+  .modal-backdrop.open { display: flex; }
+  .modal { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; width: 420px; max-width: 95vw; padding: 24px; }
+  .modal h2 { font-size: 16px; margin-bottom: 16px; color: var(--accent); }
+  .modal-field { margin-bottom: 14px; }
+  .modal-field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+  .modal-field input, .modal-field select { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 7px; padding: 8px 12px; font-size: 13px; outline: none; font-family: inherit; }
+  .modal-field input:focus, .modal-field select:focus { border-color: var(--accent); }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+  .modal-actions button { padding: 8px 18px; border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; }
+  .btn-cancel { background: none; border: 1px solid var(--border) !important; color: var(--muted); }
+  .btn-cancel:hover { border-color: var(--muted) !important; }
+  .btn-confirm { background: var(--accent); color: #000; }
+  .btn-confirm:hover { background: var(--accent-dim); }
+  .modal-error { color: #ff6666; font-size: 12px; margin-top: 8px; display: none; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- topbar -->
+  <div class="topbar">
+    <span class="topbar-title">⬡ NexusChat</span>
+    <select class="topbar-model-select" id="model-selector">
+      <option value="khanary">KHANARY Runtime</option>
+    </select>
+    <a href="/" class="hub-link">← Hub</a>
+  </div>
+
+  <div class="body">
+    <!-- sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-tabs">
+        <div class="sidebar-tab active" data-tab="models">Models</div>
+        <div class="sidebar-tab" data-tab="files">Files</div>
+      </div>
+
+      <div class="sidebar-panel active" id="tab-models">
+        <!-- model cards injected by JS -->
+      </div>
+      <div class="sidebar-actions" id="models-actions">
+        <button class="btn-sm btn-ghost" id="btn-add-model">⊕ Add Model</button>
+        <button class="btn-sm btn-ghost" id="btn-gh-import">↓ Import from GitHub</button>
+      </div>
+
+      <div class="sidebar-panel" id="tab-files">
+        <div class="no-files" id="no-files-msg">No files attached</div>
+      </div>
+      <div class="sidebar-actions" id="files-actions" style="display:none">
+        <label class="btn-sm btn-ghost" style="cursor:pointer">
+          ⊕ Attach File
+          <input type="file" id="file-input" style="display:none" multiple />
+        </label>
+      </div>
+    </div>
+
+    <!-- chat -->
+    <div class="chat">
+      <div class="messages" id="messages">
+        <div class="empty-state" id="empty-state">
+          <div class="empty-logo">⬡</div>
+          <div class="empty-label">NexusChat</div>
+          <div class="empty-sub">Select a model and start a conversation</div>
+        </div>
+      </div>
+
+      <div class="input-area">
+        <button class="attach-btn" title="Attach file" id="attach-trigger">⊕</button>
+        <textarea class="msg-input" id="msg-input" rows="1" placeholder="Message KHANARY…"></textarea>
+        <button class="send-btn" id="send-btn" title="Send">↑</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GitHub import modal -->
+<div class="modal-backdrop" id="modal-gh">
+  <div class="modal">
+    <h2>Import from GitHub</h2>
+    <div class="modal-field">
+      <label>Repository URL</label>
+      <input type="text" id="gh-url" placeholder="https://github.com/user/repo" />
+    </div>
+    <div class="modal-field">
+      <label>Branch (optional)</label>
+      <input type="text" id="gh-branch" placeholder="main" />
+    </div>
+    <div class="modal-field">
+      <label>File path</label>
+      <input type="text" id="gh-path" placeholder="src/index.js" />
+    </div>
+    <div class="modal-error" id="gh-error"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="gh-cancel">Cancel</button>
+      <button class="btn-confirm" id="gh-confirm">Import</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Model modal -->
+<div class="modal-backdrop" id="modal-add-model">
+  <div class="modal">
+    <h2>Add Model</h2>
+    <div class="modal-field">
+      <label>Model name</label>
+      <input type="text" id="am-name" placeholder="e.g. my-llama-3" />
+    </div>
+    <div class="modal-field">
+      <label>Endpoint URL</label>
+      <input type="text" id="am-url" placeholder="http://localhost:11434/v1/chat/completions" />
+    </div>
+    <div class="modal-field">
+      <label>API key (leave blank if none)</label>
+      <input type="password" id="am-key" placeholder="sk-…" />
+    </div>
+    <div class="modal-error" id="am-error"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="am-cancel">Cancel</button>
+      <button class="btn-confirm" id="am-confirm">Add</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Model store ────────────────────────────────────────────────────────────
+const KHANARY_MODEL = {
+  id: 'khanary', name: 'KHANARY Runtime', type: 'local',
+  url: '/v1/chat/completions', key: null, status: 'loading',
+};
+let models = [KHANARY_MODEL];
+let activeModelId = 'khanary';
+let files = [];           // {name, size, content}
+let conversation = [];    // {role, content}[]
+let generating = false;
+
+// ── Health check ────────────────────────────────────────────────────────────
+async function probeKhanary() {
+  try {
+    const r = await fetch('/api/health', { signal: AbortSignal.timeout(3000) });
+    KHANARY_MODEL.status = r.ok ? 'online' : 'offline';
+  } catch { KHANARY_MODEL.status = 'offline'; }
+  renderModels();
+}
+
+// ── Sidebar tabs ────────────────────────────────────────────────────────────
+document.querySelectorAll('.sidebar-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const name = tab.dataset.tab;
+    document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.sidebar-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + name).classList.add('active');
+    document.getElementById('models-actions').style.display = name === 'models' ? '' : 'none';
+    document.getElementById('files-actions').style.display = name === 'files' ? '' : 'none';
+  });
+});
+document.getElementById('files-actions').style.display = 'none'; // only models tab visible at start
+
+// ── Model rendering ─────────────────────────────────────────────────────────
+function renderModels() {
+  const panel = document.getElementById('tab-models');
+  const selector = document.getElementById('model-selector');
+  panel.innerHTML = '';
+  selector.innerHTML = '';
+  models.forEach(m => {
+    // sidebar card
+    const card = document.createElement('div');
+    card.className = 'model-card' + (m.id === activeModelId ? ' selected' : '');
+    card.innerHTML = `
+      <div class="model-card-name">${escHtml(m.name)}</div>
+      <div class="model-card-meta">
+        <div class="status-dot ${m.status}"></div>
+        <span>${m.status === 'online' ? 'Online' : m.status === 'loading' ? 'Checking…' : 'Offline'}</span>
+        <span>·</span><span style="color:#444">${m.type}</span>
+      </div>`;
+    card.addEventListener('click', () => { activeModelId = m.id; renderModels(); });
+    panel.appendChild(card);
+    // selector option
+    const opt = document.createElement('option');
+    opt.value = m.id; opt.textContent = m.name;
+    if (m.id === activeModelId) opt.selected = true;
+    selector.appendChild(opt);
+  });
+}
+
+document.getElementById('model-selector').addEventListener('change', e => {
+  activeModelId = e.target.value; renderModels();
+});
+
+// ── Files ───────────────────────────────────────────────────────────────────
+function renderFiles() {
+  const panel = document.getElementById('tab-files');
+  const noMsg = document.getElementById('no-files-msg');
+  // remove old cards
+  panel.querySelectorAll('.file-card').forEach(c => c.remove());
+  if (!files.length) { noMsg.style.display = ''; return; }
+  noMsg.style.display = 'none';
+  files.forEach((f, i) => {
+    const card = document.createElement('div');
+    card.className = 'file-card';
+    card.innerHTML = `<div class="file-icon">📄</div>
+      <div class="file-info">
+        <div class="file-name">${escHtml(f.name)}</div>
+        <div class="file-size">${fmtSize(f.size)}</div>
+      </div>
+      <div class="file-remove" data-idx="${i}" title="Remove">✕</div>`;
+    panel.appendChild(card);
+  });
+  panel.querySelectorAll('.file-remove').forEach(btn => {
+    btn.addEventListener('click', () => {
+      files.splice(+btn.dataset.idx, 1); renderFiles();
+    });
+  });
+}
+
+function fmtSize(n) {
+  if (n < 1024) return n + ' B';
+  if (n < 1048576) return (n/1024).toFixed(1) + ' KB';
+  return (n/1048576).toFixed(1) + ' MB';
+}
+
+document.getElementById('attach-trigger').addEventListener('click', () =>
+  document.getElementById('file-input').click());
+
+document.getElementById('file-input').addEventListener('change', e => {
+  [...e.target.files].forEach(f => {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      files.push({ name: f.name, size: f.size, content: ev.target.result });
+      renderFiles();
+      // switch to files tab
+      document.querySelectorAll('.sidebar-tab').forEach(t => {
+        t.classList.toggle('active', t.dataset.tab === 'files');
+      });
+      document.querySelectorAll('.sidebar-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-files').classList.add('active');
+      document.getElementById('models-actions').style.display = 'none';
+      document.getElementById('files-actions').style.display = '';
+    };
+    reader.readAsText(f);
+  });
+  e.target.value = '';
+});
+
+// ── Chat rendering ──────────────────────────────────────────────────────────
+function renderMessage(role, content, isTyping) {
+  const msgs = document.getElementById('messages');
+  const empty = document.getElementById('empty-state');
+  if (empty) empty.remove();
+
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  const avatar = role === 'user' ? 'U' : '⬡';
+  if (isTyping) {
+    div.innerHTML = `
+      <div class="msg-avatar">${avatar}</div>
+      <div class="msg-bubble"><div class="typing-indicator">
+        <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+      </div></div>`;
+    div.id = 'typing-bubble';
+  } else {
+    div.innerHTML = `<div class="msg-avatar">${avatar}</div>
+      <div class="msg-bubble">${formatContent(content)}</div>`;
+  }
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+function updateTypingBubble(content) {
+  const bubble = document.querySelector('#typing-bubble .msg-bubble');
+  if (bubble) bubble.innerHTML = formatContent(content);
+  const msgs = document.getElementById('messages');
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function finaliseTypingBubble(content) {
+  const div = document.getElementById('typing-bubble');
+  if (div) {
+    div.removeAttribute('id');
+    div.querySelector('.msg-bubble').innerHTML = formatContent(content);
+  }
+}
+
+function formatContent(text) {
+  // basic markdown: code blocks, inline code, newlines
+  let html = escHtml(text);
+  html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+  html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+  html = html.replace(/\n/g, '<br>');
+  return html;
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Send ─────────────────────────────────────────────────────────────────────
+const input = document.getElementById('msg-input');
+const sendBtn = document.getElementById('send-btn');
+
+input.addEventListener('input', () => {
+  input.style.height = 'auto';
+  input.style.height = Math.min(input.scrollHeight, 160) + 'px';
+});
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+sendBtn.addEventListener('click', sendMessage);
+
+async function sendMessage() {
+  if (generating) return;
+  const text = input.value.trim();
+  if (!text) return;
+
+  const model = models.find(m => m.id === activeModelId);
+  if (!model) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+
+  // build user content (attach file text if any)
+  let content = text;
+  if (files.length) {
+    const fileText = files.map(f => `\`\`\`${f.name}\n${f.content}\n\`\`\``).join('\n\n');
+    content = text + '\n\nAttached files:\n' + fileText;
+  }
+  conversation.push({ role: 'user', content });
+  renderMessage('user', text);
+
+  generating = true;
+  sendBtn.disabled = true;
+  const typingEl = renderMessage('assistant', '', true);
+
+  try {
+    const payload = {
+      model: model.id === 'khanary' ? 'khanary-runtime' : model.id,
+      messages: conversation.map(m => ({ role: m.role, content: m.content })),
+      stream: true,
+    };
+
+    const url = model.url || '/v1/chat/completions';
+    const headers = { 'Content-Type': 'application/json' };
+    if (model.key) headers['Authorization'] = 'Bearer ' + model.key;
+
+    const res = await fetch(url, { method: 'POST', headers, body: JSON.stringify(payload) });
+
+    if (!res.ok) {
+      const err = await res.text().catch(() => res.status);
+      throw new Error(err || ('HTTP ' + res.status));
+    }
+
+    const ct = res.headers.get('content-type') || '';
+    let assistantText = '';
+
+    if (ct.includes('text/event-stream')) {
+      // streaming SSE
+      const reader = res.body.getReader();
+      const dec = new TextDecoder();
+      let buf = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += dec.decode(value, { stream: true });
+        const lines = buf.split('\n');
+        buf = lines.pop();
+        for (const line of lines) {
+          if (!line.startsWith('data:')) continue;
+          const data = line.slice(5).trim();
+          if (data === '[DONE]') break;
+          try {
+            const chunk = JSON.parse(data);
+            const delta = chunk.choices?.[0]?.delta?.content || '';
+            assistantText += delta;
+            updateTypingBubble(assistantText);
+          } catch { /* ignore parse errors */ }
+        }
+      }
+    } else {
+      // non-streaming JSON
+      const data = await res.json();
+      assistantText = data.choices?.[0]?.message?.content
+        || data.response
+        || data.content
+        || JSON.stringify(data);
+    }
+
+    finaliseTypingBubble(assistantText);
+    conversation.push({ role: 'assistant', content: assistantText });
+
+  } catch (err) {
+    finaliseTypingBubble('⚠ ' + err.message);
+    conversation.push({ role: 'assistant', content: '⚠ ' + err.message });
+  } finally {
+    generating = false;
+    sendBtn.disabled = false;
+    input.focus();
+  }
+}
+
+// ── GitHub import modal ─────────────────────────────────────────────────────
+document.getElementById('btn-gh-import').addEventListener('click', () =>
+  document.getElementById('modal-gh').classList.add('open'));
+document.getElementById('gh-cancel').addEventListener('click', () =>
+  document.getElementById('modal-gh').classList.remove('open'));
+document.getElementById('gh-confirm').addEventListener('click', async () => {
+  const url = document.getElementById('gh-url').value.trim();
+  const branch = document.getElementById('gh-branch').value.trim() || 'main';
+  const path = document.getElementById('gh-path').value.trim();
+  const err = document.getElementById('gh-error');
+  err.style.display = 'none';
+  if (!url || !path) { err.textContent = 'URL and file path are required'; err.style.display = 'block'; return; }
+  // Derive raw GitHub URL
+  try {
+    const match = url.match(/github\.com\/([^/]+)\/([^/]+)/);
+    if (!match) throw new Error('Not a valid GitHub repo URL');
+    const rawUrl = `https://raw.githubusercontent.com/${match[1]}/${match[2]}/${branch}/${path}`;
+    const r = await fetch(rawUrl);
+    if (!r.ok) throw new Error(`HTTP ${r.status} — check URL, branch, and path`);
+    const content = await r.text();
+    const name = path.split('/').pop();
+    files.push({ name, size: content.length, content });
+    renderFiles();
+    document.getElementById('modal-gh').classList.remove('open');
+    // switch to files tab
+    document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === 'files'));
+    document.querySelectorAll('.sidebar-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('tab-files').classList.add('active');
+    document.getElementById('models-actions').style.display = 'none';
+    document.getElementById('files-actions').style.display = '';
+  } catch (e) {
+    err.textContent = e.message; err.style.display = 'block';
+  }
+});
+
+// ── Add Model modal ─────────────────────────────────────────────────────────
+document.getElementById('btn-add-model').addEventListener('click', () =>
+  document.getElementById('modal-add-model').classList.add('open'));
+document.getElementById('am-cancel').addEventListener('click', () =>
+  document.getElementById('modal-add-model').classList.remove('open'));
+document.getElementById('am-confirm').addEventListener('click', () => {
+  const name = document.getElementById('am-name').value.trim();
+  const url = document.getElementById('am-url').value.trim();
+  const key = document.getElementById('am-key').value.trim();
+  const err = document.getElementById('am-error');
+  err.style.display = 'none';
+  if (!name || !url) { err.textContent = 'Name and endpoint URL are required'; err.style.display = 'block'; return; }
+  const id = 'custom-' + Date.now();
+  models.push({ id, name, type: 'api', url, key: key || null, status: 'online' });
+  activeModelId = id;
+  renderModels();
+  document.getElementById('am-name').value = '';
+  document.getElementById('am-url').value = '';
+  document.getElementById('am-key').value = '';
+  document.getElementById('modal-add-model').classList.remove('open');
+});
+
+// close modals on backdrop click
+['modal-gh','modal-add-model'].forEach(id => {
+  document.getElementById(id).addEventListener('click', e => {
+    if (e.target === e.currentTarget) e.currentTarget.classList.remove('open');
+  });
+});
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+renderModels();
+renderFiles();
+probeKhanary();
+</script>
+</body>
+</html>

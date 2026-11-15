@@ -1,0 +1,44 @@
+keygraph "key-app-builder" version "1.0";
+namespace app:core domain custom;
+namespace css:core domain custom;
+namespace tool:core domain custom;
+namespace fold:core domain fold;
+namespace gram:core domain gram;
+namespace track:core domain track;
+namespace micro:core domain micro;
+namespace xcfe:core domain xcfe;
+
+key app:BUILD kind program;
+key app:EDIT_CANDIDATE kind program;
+key app:VALIDATE kind program;
+key app:INSPECT kind program;
+key micro:APP_WIZARD kind program;
+key xcfe:APP_HOST_ADMISSION kind contract;
+
+template fold:APP_REQUEST domain fold { operator READ; input request; output spec; }
+template fold:APP_COMPOSE domain fold { operator COMPOSE; input spec; output app_candidate; }
+template fold:APP_STYLE domain fold { operator MAP; input css_keys; output css_projection; }
+template fold:APP_VALIDATE domain fold { operator VERIFY; input app_candidate; output validation; }
+template fold:APP_EMIT domain fold { operator EMIT; input validation; output proposal; }
+
+trigram gram:APP_CREATE_POP ("create","key","app") phase Pop fold fold:APP_REQUEST bindings [request:capture];
+trigram gram:APP_BUILD_YAX ("build","key","app") phase Yax fold fold:APP_COMPOSE bindings [spec:capture];
+trigram gram:APP_STYLE_WO ("style","key","app") phase Wo fold fold:APP_STYLE bindings [css_keys:capture];
+trigram gram:APP_VALIDATE_CHEN ("validate","key","app") phase Ch'en fold fold:APP_VALIDATE bindings [app_candidate:capture];
+trigram gram:APP_EMIT_XUL ("emit","key","app") phase Xul fold fold:APP_EMIT bindings [validation:capture];
+
+track track:KEY_APP_BUILDER {
+  include micro:APP_WIZARD;
+  include gram:APP_CREATE_POP;
+  include gram:APP_BUILD_YAX;
+  include gram:APP_STYLE_WO;
+  include gram:APP_VALIDATE_CHEN;
+  include gram:APP_EMIT_XUL;
+};
+policy xcfe:APP_POLICY { admission xcfe:APP_HOST_ADMISSION; max_depth 2; allow_cycle false; commit_phase Xul; candidate_only true; semantic_commit false; }
+resolver micro:APP_PROPOSAL domain micro mode project policy xcfe:APP_POLICY;
+micronaut micro:APP_WIZARD track track:KEY_APP_BUILDER resolver micro:APP_PROPOSAL;
+program app:BUILD track track:KEY_APP_BUILDER entry fold:APP_COMPOSE phase Yax micronaut micro:APP_WIZARD;
+program app:EDIT_CANDIDATE track track:KEY_APP_BUILDER entry fold:APP_COMPOSE phase Yax micronaut micro:APP_WIZARD;
+program app:VALIDATE track track:KEY_APP_BUILDER entry fold:APP_VALIDATE phase Ch'en micronaut micro:APP_WIZARD;
+program app:INSPECT track track:KEY_APP_BUILDER entry fold:APP_REQUEST phase Pop micronaut micro:APP_WIZARD;

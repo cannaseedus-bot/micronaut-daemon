@@ -1,0 +1,146 @@
+{
+  "@type": "khanary.memory_taxonomy.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "replay_field_is_the_coordinate_system_type_and_scope_only_say_how_to_read_it",
+  "lane": "KHANARY_MEMORY_TAXONOMY_TEST",
+  "owner": "src/kuhul/memory_taxonomy.cpp",
+  "why": "Replay and Field are a coordinate system, not a memory type — which means many kinds of memory can share one substrate instead of each getting its own architecture. But typing is only useful if it changes the rules: a procedural memory must not be reinforced by the same evidence rule as a factual one, and an encountered claim must not become established knowledge just because it was recorded. So a record carries a type and a scope, Ch'en validates a delta against its type, and consolidation has gates.",
+  "coordinates": {
+    "law": "M = (R, F, tau, sigma): replay reference, field reference, memory type, and scope/permissions",
+    "rule": "type and scope determine how a record is interpreted and accessed; they do not change where it lives"
+  },
+  "types": {
+    "episodic": {
+      "preserves": "what happened",
+      "replay": "events and sequences",
+      "field": "context and associations",
+      "learning": "provenance_preservation"
+    },
+    "semantic": {
+      "preserves": "what is known",
+      "replay": "evidence history",
+      "field": "concepts and relationships",
+      "learning": "evidence_corroboration"
+    },
+    "procedural": {
+      "preserves": "how to perform tasks",
+      "replay": "execution traces",
+      "field": "programs and capabilities",
+      "learning": "execution_outcome"
+    },
+    "working": {
+      "preserves": "what is active now",
+      "replay": "current fold",
+      "field": "active vector neighbourhood",
+      "learning": "provenance_preservation"
+    },
+    "autobiographical": {
+      "preserves": "user-specific history",
+      "replay": "personal timeline",
+      "field": "personal knowledge graph",
+      "learning": "user_feedback"
+    },
+    "associative": {
+      "preserves": "what connects to what",
+      "replay": "co-activation history",
+      "field": "weighted GML edges",
+      "learning": "cooccurrence"
+    },
+    "behavioral": {
+      "preserves": "how an agent responds",
+      "replay": "mode outcomes",
+      "field": "AIML bias vectors",
+      "learning": "user_feedback"
+    },
+    "skill": {
+      "preserves": "learned task performance",
+      "replay": "practice and feedback",
+      "field": "capability weights",
+      "learning": "execution_outcome"
+    },
+    "spatial": {
+      "preserves": "where things are",
+      "replay": "movement or changes",
+      "field": "geometry and topology",
+      "learning": "cooccurrence"
+    },
+    "temporal": {
+      "preserves": "when things happen",
+      "replay": "event ordering",
+      "field": "time-dependent relations",
+      "learning": "provenance_preservation"
+    },
+    "prospective": {
+      "preserves": "what needs doing later",
+      "replay": "commitments and triggers",
+      "field": "goals and dependencies",
+      "learning": "execution_outcome"
+    },
+    "metacognitive": {
+      "preserves": "how reasoning performed",
+      "replay": "reasoning traces",
+      "field": "strategy effectiveness",
+      "learning": "verified_yield"
+    },
+    "research": {
+      "preserves": "how knowledge was found",
+      "replay": "search trajectories",
+      "field": "source and query affinities",
+      "learning": "verified_yield"
+    },
+    "ingress": {
+      "preserves": "how inputs were parsed",
+      "replay": "parsing outcomes",
+      "field": "schema and extractor affinities",
+      "learning": "parsing_fidelity"
+    },
+    "social": {
+      "preserves": "interaction context",
+      "replay": "conversations",
+      "field": "authorized relationship context",
+      "learning": "user_feedback"
+    }
+  },
+  "typed_validation": {
+    "law": "every Micronaut may propose a LearningDelta, and Ch'en validates it according to the memory type it targets",
+    "rule_mismatch": "a delta whose substrate does not match its type's learning rule is refused rather than reinterpreted",
+    "examples": [
+      "a semantic record is reinforced by corroboration and contradiction, not by execution success",
+      "a procedural record is reinforced by execution outcomes",
+      "a research record is reinforced by verified yield and retrieval efficiency",
+      "an ingress record is reinforced by parsing fidelity"
+    ]
+  },
+  "consolidation": {
+    "ladder": [
+      "observation",
+      "working",
+      "episodic",
+      "consolidated"
+    ],
+    "law": "not every observation becomes a permanent semantic fact",
+    "gates": {
+      "observation_to_working": "provenance required",
+      "working_to_episodic": "provenance plus a phase trace: an episode records what happened",
+      "episodic_to_consolidated": "verified corroboration above the declared threshold, and the type's own rule satisfied"
+    },
+    "example": "a claim encountered on a website may be preserved as an episode ('this was encountered') while semantic knowledge waits for verification"
+  },
+  "views": {
+    "law": "each Micronaut may hold a specialized memory view over the same substrate",
+    "rule": "a view filters what it reads by type; it never widens scope and never bypasses the read check"
+  },
+  "invariants": {
+    "MT1": "memory is addressed by (R, F, tau, sigma): the substrate is unchanged by typing and a type is an interpretation, not a separate store",
+    "MT2": "the fifteen types are declared with what each preserves and its replay/field dimensions",
+    "MT3": "every type names a learning rule, and Ch'en validates a delta against its target type",
+    "MT4": "a delta whose substrate does not match its type's rule is refused as a mismatch rather than reinterpreted",
+    "MT5": "consolidation is gated: observation to working needs provenance, working to episodic needs provenance and a phase trace, and episodic to consolidated needs verified corroboration above the threshold",
+    "MT6": "an encountered claim is preserved as an episode without becoming established knowledge, and only verification moves it",
+    "MT7": "a Micronaut's memory view filters by type and never widens scope or bypasses the read check",
+    "MT8": "the same fold serves every memory type: no memory type introduces a second phase cycle",
+    "MT9": "promotion is deterministic and reports the gate that refused it",
+    "MT10": "typing does not launder provenance: a consolidated record still names the episodes it was consolidated from"
+  }
+}

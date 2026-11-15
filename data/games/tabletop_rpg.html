@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Ashen Vale — Phase RPG</title>
+  <style>
+    :root{color-scheme:dark;font-family:"Segoe UI",system-ui,sans-serif;background:#10141c;color:#e9f0f7}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:radial-gradient(ellipse at 16% 10%,#55326c 0,transparent 35%),radial-gradient(ellipse at 86% 88%,#174659 0,transparent 38%),linear-gradient(145deg,#111622,#0b1018 70%)}
+    main{width:min(100vw,1060px);padding:18px;border:1px solid #ffffff24;border-radius:20px;background:linear-gradient(135deg,#ffffff12,#ffffff04 48%,#8ecae610);box-shadow:0 30px 100px #0009,inset 0 1px #ffffff20;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+    header{display:flex;justify-content:space-between;align-items:center;margin:0 2px 10px;color:#a9bacd;font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+    header strong{color:#d7a9ff;text-shadow:0 0 14px #b278ff88}
+    .stage{position:relative;width:100%;aspect-ratio:1000/680;border:1px solid #e1efff55;border-radius:14px;overflow:hidden;box-shadow:0 18px 55px #0008,inset 0 1px #ffffff40;background:linear-gradient(145deg,#171e2b,#121722)}
+    .stage canvas{position:absolute;inset:0;display:block;width:100%;height:100%;touch-action:manipulation}
+    #game{z-index:0}#models{z-index:1;pointer-events:none}
+    #hero-name{position:absolute;z-index:3;left:6.5%;top:23.1%;width:24%;height:5.4%;padding:0 12px;border:1px solid #c6e4ff66;border-radius:9px;background:#121c2bd9;color:#fff3d8;font:700 clamp(12px,1.4vw,17px) "Segoe UI",sans-serif;outline:none;box-shadow:inset 0 1px #ffffff22,0 0 20px #6ecbff12}
+    #hero-name:focus{border-color:#89dcff;box-shadow:0 0 0 2px #64cfff33,0 0 24px #64cfff33}
+    footer{margin:10px 2px 0;color:#b8c9df;font-size:11px;display:flex;justify-content:space-between;gap:12px;text-shadow:0 1px 8px #86c9ff44}
+    @media(max-width:650px){main{padding:8px}header,footer{font-size:10px}}
+  </style>
+</head>
+<body>
+<main>
+  <header><strong>THE ASHEN VALE</strong><span>Pop → Wo → Yax → Sek → Ch'en → Xul</span></header>
+  <div class="stage"><canvas id="game" width="1000" height="680" aria-label="The Ashen Vale tabletop role-playing game"></canvas><canvas id="models" aria-hidden="true"></canvas><input id="hero-name" maxlength="18" value="Aria" aria-label="Hero name"></div>
+    <footer><span>← ↑ ↓ → travel · 1 attack · 2 guard · 3 stealth · 4 salve · 5 flee · E store · I bag · C craft · Q spell · P poison · H food</span><span>F full · R hero</span></footer>
+</main>
+<script>
+(() => {
+  "use strict";
+  const canvas=document.getElementById("game"),ctx=canvas.getContext("2d",{alpha:false});
+  const W=canvas.width,H=canvas.height,PHASES=["Pop","Wo","Yax","Sek","Ch'en","Xul"];
+  const buttons=[
+    {id:"attack",label:"ATTACK",sub:"d20 + DEX vs AC",x:28,color:"#e1b55c"},
+    {id:"defend",label:"DEFEND",sub:"+2 AC this round",x:221,color:"#72b9d8"},
+    {id:"stealth",label:"STEALTH",sub:"DEX check · DC 14",x:414,color:"#c58bea"},
+    {id:"potion",label:"SALVE",sub:"restore up to 6 HP",x:607,color:"#6bd39b"},
+    {id:"flee",label:"FLEE",sub:"DEX check · DC 12",x:800,color:"#ed8b83"}
+  ];
+  let seed=0x41a5e77;
+  const state={
+    mode:"builder",phase:"Pop",phaseIndex:0,phaseElapsed:0,pending:null,turn:1,maxTurns:20,
+    builder:{name:"Aria",heroClass:"Rogue",birthsign:"Veil",region:"CANYON",points:12,abilities:{str:2,dex:4,con:2,int:2,wis:1,cha:1},specialties:["Stealth","Lockpicking"],extras:["Healing Draught"]},
+    player:{name:"Aria",class:"Rogue",level:3,hp:10,hpMax:10,ac:14,dex:16,str:12,con:14,int:10,wis:12,cha:15,potions:1,lives:3,xp:0,gold:0,score:0,inventory:[],defendBonus:0,alive:true,pos:{c:0,r:0}},
+    enemy:{name:"Canyon Creep",hp:7,hpMax:7,ac:12,alive:true,pos:{c:0,r:0}},
+    log:["A goblin guard blocks the corridor.","Choose an action to begin the turn cycle."],
+    history:[],lastResolution:null,outcome:null,frame:0,effectTime:0,manualClock:false,map:null,mapSerial:0,loot:[],npc:null,npcTalked:false,inventoryOpen:false,overlay:""
+  };
+  const sceneSpecks=Array.from({length:54},(_,i)=>({x:(i*173+29)%W,y:170+(i*79)%280,r:1+(i%3)*.45}));
+  const MAP={cols:64,rows:36,viewCols:18,viewRows:6,tile:44,left:104,top:207};
+  const terrains={
+    CANYON:{path:"sand trail",alt:"loose scree",wall:"cliff",obstacle:"boulder",props:["boulder","dead-tree","debris","wagon","ruin"]},
+    FOREST:{path:"moss path",alt:"clearing",wall:"thicket",obstacle:"fallen log",props:["pine","pine","boulder","debris","wayfarer"]},
+    RUINS:{path:"old road",alt:"rubble",wall:"stone wall",obstacle:"collapsed wall",props:["ruin","debris","cart","car","boulder","npc"]}
+  };
+  function buildMap(region,serial=0){
+    let rs=0x7a31c4d9^(region==="FOREST"?0x3211:region==="RUINS"?0xa719:0x5103)^Math.imul(serial+1,0x45d9f3b);
+    const rnd=n=>{rs^=rs<<13;rs^=rs>>>17;rs^=rs<<5;return (rs>>>0)%n;};
+    const theme=terrains[region]||terrains.CANYON;
+    const cells=Array.from({length:MAP.rows},()=>Array.from({length:MAP.cols},()=>({terrain:theme.wall,walkable:false,cost:99,prop:null})));
+    const carved=[];let row=Math.floor(MAP.rows/2);
+    const open=(c,r,alt=false)=>{if(c<0||c>=MAP.cols||r<0||r>=MAP.rows)return;const cell=cells[r][c];cell.terrain=alt?theme.alt:theme.path;cell.walkable=true;cell.cost=alt?1.35:1;cell.prop=null;carved.push({c,r});};
+    open(0,row);
+    for(let c=1;c<MAP.cols;c++){
+      const shift= c===MAP.cols-1?0:(rnd(3)-1);let next=Math.max(1,Math.min(MAP.rows-2,row+shift));
+      open(c-1,row);open(c,row);
+      while(row!==next){row+=Math.sign(next-row);open(c,row);}
+      // Side clearings create route choices. The terrain remains the constraint.
+      for(const side of [-1,1])if(rnd(100)<34)open(c,row+side,true);
+    }
+    open(MAP.cols-1,row);
+    // Scatter terrain blockers and named static scenery in cells that remain closed.
+    const props=[];
+    for(let r=0;r<MAP.rows;r++)for(let c=0;c<MAP.cols;c++){
+      const cell=cells[r][c];
+      if(!cell.walkable&&rnd(100)<7){cell.terrain=theme.obstacle;cell.prop=theme.props[rnd(theme.props.length)];props.push({c,r,type:cell.prop});}
+    }
+    const start={c:0,r:Math.floor(MAP.rows/2)},goal={c:MAP.cols-1,r:cells.findIndex(row=>row[MAP.cols-1].walkable)};
+    function findPath(from,to){
+      const q=[{...from}],key=p=>p.c+","+p.r,prev=new Map([[key(from),null]]),cost=new Map([[key(from),0]]);
+      while(q.length){q.sort((a,b)=>cost.get(key(a))-cost.get(key(b)));const p=q.shift();if(key(p)===key(to))break;
+        for(const d of [{c:1,r:0},{c:-1,r:0},{c:0,r:1},{c:0,r:-1}]){const n={c:p.c+d.c,r:p.r+d.r};if(n.c<0||n.c>=MAP.cols||n.r<0||n.r>=MAP.rows||!cells[n.r][n.c].walkable)continue;const nk=key(n),nc=cost.get(key(p))+cells[n.r][n.c].cost;if(nc<(cost.get(nk)??Infinity)){cost.set(nk,nc);prev.set(nk,key(p));q.push(n);}}
+      }
+      if(!prev.has(key(to)))return[];const out=[];let k=key(to);while(k){const [c,r]=k.split(",").map(Number);out.unshift({c,r});k=prev.get(k);}return out;
+    }
+    const route=findPath(start,goal);
+    const npcAnchor=route[Math.min(4,route.length-2)]||start,npcOptions=[{c:npcAnchor.c+1,r:npcAnchor.r},{c:npcAnchor.c-1,r:npcAnchor.r},{c:npcAnchor.c,r:npcAnchor.r+1},{c:npcAnchor.c,r:npcAnchor.r-1}];
+    let npcPos=npcOptions.find(p=>p.c>=0&&p.c<MAP.cols&&p.r>=0&&p.r<MAP.rows&&!cells[p.r][p.c].walkable);
+    if(!npcPos){npcPos=npcOptions.find(p=>p.c>=0&&p.c<MAP.cols&&p.r>=0&&p.r<MAP.rows);}
+    if(npcPos){cells[npcPos.r][npcPos.c].walkable=true;cells[npcPos.r][npcPos.c].terrain=theme.alt;cells[npcPos.r][npcPos.c].prop=null;for(let i=props.length-1;i>=0;i--)if(props[i].c===npcPos.c&&props[i].r===npcPos.r)props.splice(i,1);}
+    const updatedRoute=findPath(start,goal);
+    const materials=region==="FOREST"?["wood","wood","bitter_herb","bitter_herb","meat","creep_slime"]:region==="RUINS"?["iron_ore","iron_ore","ember_shard","scrap","bitter_herb","ancient_coin"]:["iron_ore","bitter_herb","meat","creep_slime","wood","desert_sage"];
+    // Scatter a fresh, biome-specific set of harvestable drops through both the main route
+    // and its open side clearings. Sampling without replacement prevents stacked drops.
+    const dropCells=[];for(let r=0;r<MAP.rows;r++)for(let c=0;c<MAP.cols;c++)if(cells[r][c].walkable&&!(c===start.c&&r===start.r)&&!(c===goal.c&&r===goal.r)&&!(npcPos&&c===npcPos.c&&r===npcPos.r))dropCells.push({c,r});
+    const caches=[],dropCount=9+rnd(7);for(let i=0;i<dropCount&&dropCells.length;i++){const pick=rnd(dropCells.length),pos=dropCells.splice(pick,1)[0];const item=rnd(100)<22?"copper_cache":materials[rnd(materials.length)];cells[pos.r][pos.c].cache=item;caches.push({pos:{...pos},item});}
+    return {region,seed:rs,theme,cells,start,goal,route:updatedRoute,props,caches,npc:{name:"Wayfarer",pos:npcPos||npcAnchor,talked:false},builtOptions:carved.length};
+  }
+  function mapViewport(){const p=state.player.pos||state.map?.start||{c:0,r:Math.floor(MAP.rows/2)};return{c:Math.max(0,Math.min(MAP.cols-MAP.viewCols,p.c-Math.floor(MAP.viewCols/2))),r:Math.max(0,Math.min(MAP.rows-MAP.viewRows,p.r-Math.floor(MAP.viewRows/2)))};}
+  function cellCenter(p){const cam=mapViewport();return{x:MAP.left+(p.c-cam.c)*MAP.tile+MAP.tile/2,y:MAP.top+(p.r-cam.r)*MAP.tile+MAP.tile/2};}
+  function findMapPath(from,to){
+    const key=p=>p.c+","+p.r,q=[{...from}],prev=new Map([[key(from),null]]),cost=new Map([[key(from),0]]);
+    while(q.length){q.sort((a,b)=>cost.get(key(a))-cost.get(key(b)));const p=q.shift();if(key(p)===key(to))break;
+      for(const d of [{c:1,r:0},{c:-1,r:0},{c:0,r:1},{c:0,r:-1}]){const n={c:p.c+d.c,r:p.r+d.r};if(n.c<0||n.c>=MAP.cols||n.r<0||n.r>=MAP.rows||!state.map.cells[n.r][n.c].walkable)continue;const nk=key(n),nc=cost.get(key(p))+state.map.cells[n.r][n.c].cost;if(nc<(cost.get(nk)??Infinity)){cost.set(nk,nc);prev.set(nk,key(p));q.push(n);}}
+    }
+    if(!prev.has(key(to)))return[];const path=[];let k=key(to);while(k){const [c,r]=k.split(",").map(Number);path.unshift({c,r});k=prev.get(k);}return path;
+  }
+  function refreshInventory(){
+    const p=state.player;p.inventory=[...(p.ownedItems||[]).map(id=>itemDefs[id]?.name||id),...state.builder.extras,"Health salve × "+p.potions,"Weapon poison × "+(p.poisonCharges||0),"Ember Bolt × "+(p.spells||0),"Trail stew × "+(p.food||0),"Lives × "+p.lives,"Copper × "+p.gold,...Object.entries(p.materials||{}).filter(([,n])=>n>0).map(([id,n])=>id.replaceAll("_"," ")+" × "+n)];
+  }
+  function buyItem(id){
+    const p=state.player,d=itemDefs[id];if(!d||p.gold<d.price)return false;p.gold-=d.price;p.ownedItems.push(id);
+    if(d.kind==="weapon"){p.weaponId=id;p.weaponBuffer=d.damage||0;p.weaponRange=d.range||1;if(d.buffer)p.magicBuffer=d.buffer;}if(d.kind==="armor"){p.armorId=id;p.armorBuffer=d.armor||0;}if(d.kind==="magic"){p.magicId=id;p.magicBuffer=d.buffer||0;}
+    if(d.kind==="salve")p.potions++;if(d.kind==="poison")p.poisonCharges++;
+    refreshInventory();say("Purchased "+d.name+" for "+d.price+" copper.");return true;
+  }
+  function sellItem(id){
+    const p=state.player,d=itemDefs[id];if(!d||id===p.weaponId||id===p.armorId||id===p.magicId)return false;const at=p.ownedItems.indexOf(id);if(at<0)return false;p.ownedItems.splice(at,1);const value=Math.floor(d.price/2);p.gold+=value;refreshInventory();say("Sold "+d.name+" for "+value+" copper.");return true;
+  }
+  function craftItem(recipe){
+    const p=state.player;if(!recipe||Object.entries(recipe.cost).some(([id,n])=>(p.materials[id]||0)<n))return false;
+    for(const [id,n] of Object.entries(recipe.cost))p.materials[id]-=n;
+    const result=recipe.result;
+    if(result.weapon){p.ownedItems.push(result.weapon);const d=itemDefs[result.weapon];p.weaponId=result.weapon;p.weaponBuffer=d.damage||0;p.weaponRange=d.range||1;}
+    if(result.salve)p.potions+=result.salve;if(result.poison)p.poisonCharges+=result.poison;if(result.spell)p.spells=(p.spells||0)+1;if(result.food)p.food=(p.food||0)+result.food;
+    refreshInventory();say("Crafted: "+recipe.name+".");return true;
+  }
+  function equipItem(id){const p=state.player,d=itemDefs[id];if(!d||!p.ownedItems.includes(id))return;if(d.kind==="weapon"){p.weaponId=id;p.weaponBuffer=d.damage||0;p.weaponRange=d.range||1;if(d.buffer)p.magicBuffer=d.buffer;}if(d.kind==="armor"){p.armorId=id;p.armorBuffer=d.armor||0;}if(d.kind==="magic"){p.magicId=id;p.magicBuffer=d.buffer||0;}refreshInventory();}
+  const classes=[{name:"ROGUE",stat:"dex",role:"Shadow · precision"},{name:"WARRIOR",stat:"str",role:"Steel · endurance"},{name:"MAGE",stat:"int",role:"Arcana · control"},{name:"RANGER",stat:"wis",role:"Trail · perception"}];
+  const birthsigns=["DAWN","HEARTH","VEIL","FORGE"];
+  const specialties=["Stealth","Lockpicking","Athletics","Arcana","Perception"];
+  const extras=["Healing Draught","Smoke Bomb","Lucky Token","Torch"];
+  const itemDefs={
+    iron_dagger:{name:"Iron Dagger",kind:"weapon",damage:0,price:18},ash_blade:{name:"Forged Ashblade",kind:"weapon",damage:2,price:52},
+    wayfinder_staff:{name:"Wayfinder Staff",kind:"weapon",damage:0,buffer:1,price:40},recurve_bow:{name:"Recurve Bow",kind:"weapon",damage:1,range:4,price:38},
+    leather_vest:{name:"Leather Vest",kind:"armor",armor:1,price:24},stoneguard:{name:"Stoneguard Coat",kind:"armor",armor:2,price:48},
+    waystone_charm:{name:"Waystone Charm",kind:"magic",buffer:1,price:45},health_salve:{name:"Health Salve",kind:"salve",price:10},weapon_poison:{name:"Weapon Poison",kind:"poison",price:14}
+  };
+  const recipes=[
+    {name:"Forge Ashblade",cost:{iron_ore:2,wood:1},result:{weapon:"ash_blade"},detail:"+2 weapon damage"},
+    {name:"Brew Health Salve ×2",cost:{bitter_herb:2,creep_slime:1},result:{salve:2},detail:"Restore up to 6 HP"},
+    {name:"Mix Weapon Poison ×2",cost:{bitter_herb:1,creep_slime:1},result:{poison:2},detail:"+3 damage to next hit"},
+    {name:"Scribe Ember Bolt",cost:{ember_shard:2,bitter_herb:1},result:{spell:"ember_bolt"},detail:"Ranged magical attack"},
+    {name:"Cook Trail Stew",cost:{meat:1,bitter_herb:1},result:{food:1},detail:"Eat to restore 5 HP"}
+  ];
+  const shopItems=["ash_blade","stoneguard","waystone_charm"];
+  const heroInput=document.getElementById("hero-name");
+  heroInput.addEventListener("input",()=>{state.builder.name=heroInput.value.trim().slice(0,18)||"Aria";syncHero();});
+  function syncHero(){
+    const b=state.builder,profile=classes.find(c=>c.name===b.heroClass)||classes[0],bonus={str:0,dex:0,con:0,int:0,wis:0,cha:0};bonus[profile.stat]+=2;
+    if(b.birthsign==="HEARTH")bonus.cha+=2;if(b.birthsign==="VEIL")bonus.dex+=2;if(b.birthsign==="FORGE")bonus.str+=2;if(b.birthsign==="DAWN")bonus.con+=2;
+    state.player.name=b.name||"Aria";state.player.class=profile.name[0]+profile.name.slice(1).toLowerCase();
+    for(const k of Object.keys(b.abilities))state.player[k]=8+b.abilities[k]+bonus[k];
+    state.player.hpMax=10+(b.birthsign==="DAWN"?2:0);state.player.hp=state.player.hpMax;
+    state.player.ac=14+((b.birthsign==="VEIL")?1:0);state.player.potions=1+(b.extras.includes("Healing Draught")?1:0);
+    state.player.specialties=[...b.specialties];state.player.luckyToken=b.extras.includes("Lucky Token");state.player.smokeBomb=b.extras.includes("Smoke Bomb");
+  }
+  function randInt(n){seed^=seed<<13;seed^=seed>>>17;seed^=seed<<5;return ((seed>>>0)%n)+1}
+  function mod(score){return Math.floor((score-10)/2)}
+  function say(line){state.log.push(line);if(state.log.length>5)state.log.shift()}
+  function reset(){
+    syncHero();seed=0x41a5e77;state.mode="playing";heroInput.style.display="none";state.phase="Pop";state.phaseIndex=0;state.phaseElapsed=0;state.pending=null;state.turn=1;
+    state.map=buildMap(state.builder.region,++state.mapSerial);state.loot=[];state.npc=state.map.npc;state.npcTalked=false;
+    Object.assign(state.player,{hp:state.player.hpMax,potions:1+(state.builder.extras.includes("Healing Draught")?1:0),lives:3,xp:0,score:0,defendBonus:0,alive:true,luckyUsed:false,smokeBomb:state.builder.extras.includes("Smoke Bomb"),luckyToken:state.builder.extras.includes("Lucky Token"),specialties:[...state.builder.specialties],pos:{...state.map.start}});
+    const enemyName=state.builder.region==="FOREST"?"Moss Stalker":state.builder.region==="RUINS"?"Ruin Creep":"Canyon Creep";
+    Object.assign(state.enemy,{name:enemyName,hp:7,hpMax:7,ac:12,alive:true,pos:{...(state.map.route[Math.min(12,state.map.route.length-2)]||state.map.goal)}});
+    const starter={ROGUE:"iron_dagger",WARRIOR:"ash_blade",MAGE:"wayfinder_staff",RANGER:"recurve_bow"}[state.builder.heroClass]||"iron_dagger";
+    Object.assign(state.player,{gold:0,inventory:[],ownedItems:[starter,"leather_vest"],weaponId:starter,armorId:"leather_vest",magicId:null,weaponBuffer:itemDefs[starter].damage||0,weaponRange:itemDefs[starter].range||1,armorBuffer:1,magicBuffer:itemDefs[starter].buffer||0,poisonCharges:0,poisonArmed:false,spells:0,food:0,materials:{},inventoryOpen:false,overlay:""});
+    state.log=[state.player.name+" enters the "+state.builder.region.toLowerCase()+" trail.",state.enemy.name+" prowls the narrow route. Talk to the wayfarer with E."];
+    state.history=[];state.lastResolution=null;state.outcome=null;refreshInventory();render();
+  }
+  function queueAction(action){
+    if(state.mode==="builder"){return}
+    if(state.mode==="over"){if(action==="attack")reset();return}
+    if(state.mode!=="playing"||state.pending||state.overlay)return;
+    if(action==="potion"&&state.player.potions<1){say("No health salve remains.");render();return}
+    const move=action.startsWith("move:");const type=move?"move":action;
+    state.pending={action:action,intent:{type:type,target:type==="talk"?state.npc?.name:state.enemy.name,direction:move?action.slice(5):null},snapshot:null,rolls:{},result:{},narrative:""};
+    state.phaseIndex=0;state.phaseElapsed=0;state.phase=PHASES[0];
+  }
+  function phasePop(t){t.snapshot={playerHp:state.player.hp,enemyHp:state.enemy.hp,turn:state.turn};}
+  function phaseWo(t){say("Aria chooses: "+t.intent.type.toUpperCase()+".");}
+  function phaseYax(t){
+    const d=t.rolls;
+    if(t.intent.type==="attack"){
+      t.result.inRange=state.enemy.alive&&Math.abs(state.player.pos.c-state.enemy.pos.c)+Math.abs(state.player.pos.r-state.enemy.pos.r)<=(state.player.weaponRange||1);
+      d.attack=randInt(20);t.result.modifier=mod(state.player.dex)+(state.player.magicBuffer||0);t.result.total=d.attack+t.result.modifier;
+      if(state.player.luckyToken&&!state.player.luckyUsed&&d.attack!==20&&t.result.total<state.enemy.ac){d.firstAttack=d.attack;const retry=randInt(20);if(retry>d.attack){d.attack=retry;t.result.total=retry+t.result.modifier;t.result.rerolled=true;}state.player.luckyUsed=true;}
+      t.result.critical=d.attack===20;t.result.fumble=d.attack===1;t.result.hit=t.result.inRange&&!t.result.fumble&&(t.result.total>=state.enemy.ac||t.result.critical);
+      if(t.result.hit){d.damage=randInt(6);t.result.damage=Math.max(1,d.damage+mod(state.player.str)+(state.player.weaponBuffer||0))*(t.result.critical?2:1)+(state.player.poisonArmed?3:0);}
+    }else if(t.intent.type==="stealth"||t.intent.type==="flee"){
+      d.check=randInt(20);t.result.modifier=mod(state.player.dex)+(state.player.magicBuffer||0);
+      const specialty=t.intent.type==="stealth"&&state.player.specialties.includes("Stealth")?2:t.intent.type==="flee"&&state.player.specialties.includes("Athletics")?2:0;
+      const smoke=t.intent.type==="stealth"&&state.player.smokeBomb?4:0;
+      t.result.specialtyBonus=specialty;t.result.smokeBonus=smoke;t.result.modifier+=specialty+smoke;t.result.total=d.check+t.result.modifier;
+      t.result.success=t.result.total>=(t.intent.type==="flee"?12:14);
+      if(!t.result.success&&state.player.luckyToken&&!state.player.luckyUsed){d.firstCheck=d.check;const retry=randInt(20);if(retry>d.check){d.check=retry;t.result.total=retry+t.result.modifier;t.result.success=t.result.total>=(t.intent.type==="flee"?12:14);t.result.rerolled=true;}state.player.luckyUsed=true;}
+      if(smoke)state.player.smokeBomb=false;
+    }else if(t.intent.type==="move"){
+      const dirs={up:{c:0,r:-1},down:{c:0,r:1},left:{c:-1,r:0},right:{c:1,r:0}},v=dirs[t.intent.direction];
+      if(v){const target={c:state.player.pos.c+v.c,r:state.player.pos.r+v.r};if(target.c>=0&&target.c<MAP.cols&&target.r>=0&&target.r<MAP.rows&&state.map.cells[target.r][target.c].walkable){t.result.target=target;t.result.validMove=true;t.result.blockedByEnemy=state.enemy.alive&&target.c===state.enemy.pos.c&&target.r===state.enemy.pos.r;}}
+    }else if(t.intent.type==="talk"){
+      const npc=state.npc?.pos;t.result.nearNpc=!!npc&&Math.abs(npc.c-state.player.pos.c)+Math.abs(npc.r-state.player.pos.r)<=1;
+    }else if(t.intent.type==="cast"){
+      t.result.inRange=state.enemy.alive&&Math.abs(state.player.pos.c-state.enemy.pos.c)+Math.abs(state.player.pos.r-state.enemy.pos.r)<=4;
+      t.result.hit=t.result.inRange&&state.player.spells>0; t.result.damage=4+(state.player.magicBuffer||0);
+    }else if(t.intent.type==="poison"){
+      t.result.available=state.player.poisonCharges>0;
+    }else if(t.intent.type==="eat"){
+      t.result.available=state.player.food>0;
+    }
+  }
+  function phaseSek(t){
+    const p=state.player,e=state.enemy,r=t.result;
+    if(t.intent.type==="attack"){
+      if(!r.inRange)t.narrative="The creature is out of reach. Move next to it to attack.";
+      else if(r.hit){e.hp=Math.max(0,e.hp-r.damage);e.alive=e.hp>0;t.narrative=r.critical?"Critical hit for "+r.damage+" damage.":"Attack hits for "+r.damage+" damage.";if(p.poisonArmed){p.poisonArmed=false;p.poisonCharges--;t.narrative+=" Weapon poison burns through the creature.";}if(!e.alive){p.xp+=20;p.score+=100;const drop=randInt(3)===1?{item:"Copper coins",amount:12+randInt(8)}:randInt(2)===1?{item:"Health salve",amount:1}:{item:"Creep slime",amount:1};state.loot.push({item:drop.item,pos:{...e.pos},amount:drop.amount||1,owner:null});t.narrative+=" The creep drops "+drop.amount+" "+drop.item+".";}}
+      else{t.narrative=r.fumble?"A fumble. "+p.name+" loses their footing.":"The attack misses.";}
+    }else if(t.intent.type==="move"){
+      if(!r.validMove)t.narrative="The terrain blocks that way. Choose an open neighboring tile.";
+      else if(r.blockedByEnemy)t.narrative=e.name+" blocks the trail. Strike to engage it.";
+      else{p.pos={...r.target};p.score+=5;t.narrative="You cross the "+state.map.cells[p.pos.r][p.pos.c].terrain+".";const cell=state.map.cells[p.pos.r][p.pos.c];if(cell.cache){const id=cell.cache;cell.cache=null;p.score+=10;if(id==="copper_cache"){const coins=8+randInt(18);p.gold+=coins;t.narrative+=" Found a buried cache with "+coins+" copper.";}else{p.materials[id]=(p.materials[id]||0)+1;t.narrative+=" Found "+id.replaceAll("_"," ")+".";}}const found=state.loot.find(x=>!x.owner&&x.pos.c===p.pos.c&&x.pos.r===p.pos.r);if(found){found.owner=p.name;if(found.item==="Copper coins")p.gold+=found.amount;else if(found.item==="Health salve")p.potions+=found.amount;else p.materials.creep_slime=(p.materials.creep_slime||0)+found.amount;p.score+=25;t.narrative+=" Collected "+found.amount+" "+found.item+".";}if(p.pos.c===state.map.goal.c&&p.pos.r===state.map.goal.r){p.score+=50;p.gold+=35;state.outcome="victory";state.mode="over";t.narrative+=" Goal reached; quest reward: 35 copper.";}}
+    }else if(t.intent.type==="talk"){
+      if(!r.nearNpc)t.narrative="No one is close enough to hear you.";else if(state.npcTalked)t.narrative="The wayfarer has already shared the safe route.";else{state.npcTalked=true;state.npc.talked=true;p.potions++;t.narrative="The wayfarer marks a safe trail and gives you a health salve.";}
+    }else if(t.intent.type==="cast"){
+      if(!r.inRange)t.narrative="The target is beyond spell range.";else if(r.hit){e.hp=Math.max(0,e.hp-r.damage);e.alive=e.hp>0;p.spells--;t.narrative="Ember Bolt deals "+r.damage+" damage.";if(!e.alive){p.xp+=20;p.score+=100;state.loot.push({item:"Creep slime",pos:{...e.pos},amount:1,owner:null});t.narrative+=" The creep drops slime.";}}
+    }else if(t.intent.type==="poison"){
+      if(r.available){p.poisonArmed=true;t.narrative="You coat your weapon with poison; the next strike deals +3 damage.";}else t.narrative="No weapon poison remains.";
+    }else if(t.intent.type==="eat"){
+      if(r.available){p.food--;r.healing=Math.min(5,p.hpMax-p.hp);p.hp+=r.healing;t.narrative="Trail stew restores "+r.healing+" health.";}else t.narrative="No prepared food remains.";
+    }else if(t.intent.type==="defend"){
+      p.defendBonus=2;t.narrative=p.name+" braces behind their guard. AC rises by 2 for this round.";
+    }else if(t.intent.type==="stealth"){
+      r.avoidCounter=r.success;t.narrative=r.success?p.name+" slips through unseen; the creep loses its opening.":"The creep spots "+p.name+".";
+    }else if(t.intent.type==="potion"){
+      p.potions--;r.healing=Math.min(6,p.hpMax-p.hp);p.hp+=r.healing;t.narrative=p.name+" uses a health salve and restores "+r.healing+" HP.";
+    }else if(t.intent.type==="flee"){
+      r.escaped=r.success;t.narrative=r.success?p.name+" escapes the encounter.":"The creep blocks the trail.";
+    }
+    if(e.alive&&!r.escaped&&!r.avoidCounter){
+      const before=Math.abs(p.pos.c-e.pos.c)+Math.abs(p.pos.r-e.pos.r);if(before>1){const chase=findMapPath(e.pos,p.pos);if(chase.length>1)e.pos={...chase[1]};}
+      if(Math.abs(p.pos.c-e.pos.c)+Math.abs(p.pos.r-e.pos.r)>1){p.defendBonus=0;return {player:p,world:state.map,effects:t.narrative};}
+      const enemyRoll=randInt(20),targetAc=p.ac+(p.armorBuffer||0)+p.defendBonus;
+      r.enemyRoll=enemyRoll;r.enemyTargetAc=targetAc;
+      if(enemyRoll===20||enemyRoll>=targetAc){
+        const enemyDamage=randInt(4);r.enemyDamage=enemyDamage;p.hp=Math.max(0,p.hp-enemyDamage);p.alive=p.hp>0;
+        t.narrative+=" "+e.name+" strikes for "+enemyDamage+" damage.";
+      }else{t.narrative+=" "+e.name+" misses.";}
+    }
+    p.defendBonus=0;
+    refreshInventory();
+  }
+  function phaseChen(t){
+    if(!state.player.alive){pLives();}
+    else if(state.player.pos.c===state.map.goal.c&&state.player.pos.r===state.map.goal.r){state.outcome="victory";state.mode="over";}
+    else if(t.result.escaped){state.outcome="escaped";state.mode="over";}
+    else if(state.turn>=state.maxTurns){state.outcome="timeout";state.mode="over";}
+    t.result.verified=state.player.hp>=0&&state.enemy.hp>=0&&state.player.hp<=state.player.hpMax;
+  }
+  function pLives(){state.player.lives=Math.max(0,state.player.lives-1);if(state.player.lives>0){state.player.hp=state.player.hpMax;state.player.alive=true;state.player.pos={...state.map.start};say("A life is spent. You respawn at the trailhead with full health.");}else{state.outcome="defeat";state.mode="over";}refreshInventory();}
+  function phaseXul(t){
+    const row={turn:state.turn,action:t.intent.type,rolls:t.rolls,result:t.result,narrative:t.narrative};
+    state.history.push(row);state.lastResolution=row;say(t.narrative);
+    if(state.outcome){say("Outcome: "+state.outcome.toUpperCase()+".");}
+    try{localStorage.setItem("ashen-vale-save",JSON.stringify({turn:state.turn,player:state.player,enemy:state.enemy,history:state.history,outcome:state.outcome}));}catch{}
+    if(state.mode==="playing")state.turn++;
+  }
+  const handlers=[phasePop,phaseWo,phaseYax,phaseSek,phaseChen,phaseXul];
+  function advanceStage(){
+    const t=state.pending;if(!t)return;
+    const handler=handlers[state.phaseIndex];handler(t);
+    state.phase=PHASES[state.phaseIndex];state.phaseIndex++;
+    if(state.phaseIndex>=PHASES.length){state.pending=null;state.phaseIndex=PHASES.length-1;}
+  }
+  function update(dt){
+    state.effectTime+=dt;
+    if(!state.pending)return;
+    state.phaseElapsed+=dt;
+    while(state.phaseElapsed>=.10&&state.pending){state.phaseElapsed-=.10;advanceStage();}
+  }
+  function box(x,y,w,h,r,fill,stroke){
+    ctx.beginPath();ctx.roundRect(x,y,w,h,r);
+    const grad=ctx.createLinearGradient(x,y,x+w,y+h);grad.addColorStop(0,"rgba(255,255,255,.13)");grad.addColorStop(.42,fill);grad.addColorStop(1,"rgba(4,9,18,.62)");ctx.fillStyle=grad;ctx.fill();
+    if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1;ctx.stroke();}
+    ctx.save();ctx.beginPath();ctx.roundRect(x+1,y+1,w-2,Math.min(h*.34,20),[r,r,0,0]);ctx.clip();const shine=ctx.createLinearGradient(0,y,0,y+Math.min(h*.34,20));shine.addColorStop(0,"rgba(255,255,255,.14)");shine.addColorStop(1,"rgba(255,255,255,0)");ctx.fillStyle=shine;ctx.fillRect(x,y,w,Math.min(h*.34,20));ctx.restore();
+  }
+  function text(str,x,y,size,color,weight,align){
+    ctx.font=(weight||"500")+" "+size+"px Segoe UI,system-ui,sans-serif";ctx.fillStyle=color;ctx.textAlign=align||"left";ctx.fillText(str,x,y);
+  }
+  function drawBackground(){
+    ctx.save();ctx.beginPath();ctx.rect(34,198,932,286);ctx.clip();
+    const grad=ctx.createLinearGradient(0,198,0,484);grad.addColorStop(0,"#303a45");grad.addColorStop(.55,"#252a2d");grad.addColorStop(1,"#151a20");ctx.fillStyle=grad;ctx.fillRect(34,198,932,286);
+    if(state.map){
+      const cam=mapViewport();
+      const terrainColor=state.builder.region==="FOREST"?{open:"#465346",path:"#857e58",alt:"#62654a",block:"#27382e",obstacle:"#485044"}:state.builder.region==="RUINS"?{open:"#45464a",path:"#817d70",alt:"#69645c",block:"#2a3038",obstacle:"#555459"}:{open:"#56504a",path:"#a18a65",alt:"#766b56",block:"#292f35",obstacle:"#5a5046"};
+      for(let vr=0;vr<MAP.viewRows;vr++)for(let vc=0;vc<MAP.viewCols;vc++){
+        const c=cam.c+vc,r=cam.r+vr,cell=state.map.cells[r]?.[c];if(!cell)continue;const x=MAP.left+vc*MAP.tile,y=MAP.top+vr*MAP.tile;
+        ctx.fillStyle=cell.walkable?(cell.terrain===state.map.theme.alt?terrainColor.alt:terrainColor.path):cell.prop?terrainColor.obstacle:terrainColor.block;
+        ctx.fillRect(x+1,y+1,MAP.tile-2,MAP.tile-2);ctx.strokeStyle=cell.walkable?"#cdbb8b44":"#0d121a99";ctx.lineWidth=1;ctx.strokeRect(x+2,y+2,MAP.tile-4,MAP.tile-4);
+        if(!cell.walkable&&cell.prop){ctx.fillStyle="#ffffff16";ctx.beginPath();ctx.arc(x+22,y+23,9+(c*r)%6,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#aeb9bf55";ctx.stroke();}
+        if(cell.cache){ctx.fillStyle="#ffe494";ctx.shadowColor="#ffca62";ctx.shadowBlur=9;ctx.beginPath();ctx.arc(x+22,y+22,7,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;text("✦",x+22,y+26,9,"#6e5026","800","center");}
+      }
+      const goal=cellCenter(state.map.goal);text("GOAL",goal.x,goal.y-10,9,"#fff0ac","800","center");
+      const npc=cellCenter(state.npc.pos);if(!window.ashenThreeReady){ctx.fillStyle="#f0d29a";ctx.beginPath();ctx.arc(npc.x,npc.y,8,0,Math.PI*2);ctx.fill();text("N",npc.x,npc.y+3,8,"#263244","800","center");}
+      for(const s of sceneSpecks){ctx.fillStyle="rgba(255,239,208,.14)";ctx.fillRect(s.x,s.y,s.r,s.r);}
+      const movesToGoal=Math.max(0,findMapPath(state.player.pos,state.map.goal).length-1);text("MAP "+MAP.cols+"×"+MAP.rows+"   ·   "+movesToGoal+" STEPS TO WAYSTONE",500,478,8,"#a7c5cb","600","center");
+    }
+    ctx.restore();
+  }
+  function drawCharacter(){
+    if(window.ashenThreeReady||!state.map||!state.player.pos)return;
+    const dot=(pos,color,label)=>{const p=cellCenter(pos);ctx.save();ctx.shadowColor=color;ctx.shadowBlur=16;ctx.fillStyle=color;ctx.beginPath();ctx.arc(p.x,p.y,12,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle="#111720";ctx.beginPath();ctx.arc(p.x,p.y,5,0,Math.PI*2);ctx.fill();text(label,p.x,p.y+25,8,"#f0f4fa","700","center");ctx.restore();};
+    dot(state.player.pos,"#c68bff","YOU");if(state.enemy.alive)dot(state.enemy.pos,"#ff8263","CREEP");
+  }
+  function renderHeroBuilder(){
+    box(34,112,932,536,14,"#101827d9","#d3e7ff70");
+    ctx.save();ctx.shadowColor="#82cfff66";ctx.shadowBlur=22;
+    const title=ctx.createLinearGradient(200,112,800,180);title.addColorStop(0,"#f0c8ff");title.addColorStop(.48,"#ffffff");title.addColorStop(1,"#88dfff");
+    ctx.font="900 48px 'Arial Black',Impact,sans-serif";ctx.textAlign="center";ctx.lineWidth=1.5;ctx.strokeStyle="#d7baff66";ctx.strokeText("ASHEN VALE",500,164);ctx.fillStyle=title;ctx.fillText("ASHEN VALE",500,164);ctx.restore();
+    text("NEW ADVENTURE  /  HERO FORGE",500,188,11,"#a9c9e7","700","center");
+    text("HERO NAME",64,148,10,"#a6bdd7","700");
+    text("CHOOSE CLASS",64,218,11,"#a6bdd7","700");
+    classes.forEach((c,i)=>{const x=64+i*222,selected=state.builder.heroClass===c.name;box(x,226,210,48,9,selected?"#52416fe0":"#202b3ae0",selected?"#d2a4ff":"#90a7c055");text(c.name,x+14,247,14,selected?"#f4d8ff":"#d8e5f2","800");text(c.role,x+14,265,10,"#abbdd0","500");});
+    text("BIRTHSIGN",64,296,11,"#a6bdd7","700");
+    birthsigns.forEach((s,i)=>{const x=64+i*222,selected=state.builder.birthsign===s;box(x,304,210,37,8,selected?"#26455ae0":"#202b3ae0",selected?"#77d7ff":"#90a7c055");text(s,x+105,328,12,selected?"#bdeeff":"#d8e5f2","800","center");});
+    text("MAP TERRAIN · ROUTE IS GENERATED FROM OPEN TILES",64,358,10,"#a6bdd7","700");
+    ["CANYON","FOREST","RUINS"].forEach((s,i)=>{const x=64+i*294,selected=state.builder.region===s;box(x,365,280,34,8,selected?"#4b5744e8":"#202b3ae0",selected?"#cae28d":"#90a7c055");text(s,x+140,387,11,selected?"#edffc2":"#d8e5f2","800","center");});
+    text("ABILITY POINT SPREAD",64,421,10,"#a6bdd7","700");
+    const names=[['str','STRENGTH'],['dex','DEXTERITY'],['con','CONSTITUTION'],['int','INTELLIGENCE'],['wis','WISDOM'],['cha','CHARISMA']];
+    const profile=classes.find(c=>c.name===state.builder.heroClass)||classes[0];
+    names.forEach(([key,label],i)=>{const y=440+i*21,score=8+state.builder.abilities[key]+(profile.stat===key?2:0)+(state.builder.birthsign==='VEIL'&&key==='dex'?2:state.builder.birthsign==='FORGE'&&key==='str'?2:state.builder.birthsign==='DAWN'&&key==='con'?2:state.builder.birthsign==='HEARTH'&&key==='cha'?2:0);text(label,68,y,10,"#d4e0ed","600");text(String(score),322,y,11,"#fff0ca","800","center");box(375,y-14,32,20,6,"#283244d9","#9cb6d355");text("−",391,y,13,"#b7c9da","800","center");box(417,y-14,32,20,6,"#303350d9","#bca8ed88");text("+",433,y,13,"#e2cbff","800","center");});
+    const spent=Object.values(state.builder.abilities).reduce((a,b)=>a+b,0);text("POINTS LEFT "+(12-spent)+" · BASE 8 · CLASS BONUS +2",64,575,9,"#8ea6bf","600");
+    text("SPECIALTIES · PICK 2",548,421,10,"#a6bdd7","700");
+    specialties.forEach((s,i)=>{const x=548+(i%2)*193,y=429+Math.floor(i/2)*27,selected=state.builder.specialties.includes(s);box(x,y,182,23,7,selected?"#3f3653e8":"#202b3ae0",selected?"#d0a5ff":"#90a7c055");text((selected?"◆  ":"◇  ")+s,x+12,y+16,10,selected?"#e8cbff":"#cfdae6","700");});
+    text("EXTRAS · PICK 2",548,518,10,"#a6bdd7","700");
+    extras.forEach((s,i)=>{const x=548+(i%2)*193,y=526+Math.floor(i/2)*27,selected=state.builder.extras.includes(s);box(x,y,182,23,7,selected?"#254b4aeb":"#202b3ae0",selected?"#73deb8":"#90a7c055");text((selected?"◆  ":"◇  ")+s,x+12,y+16,9,selected?"#c4ffe6":"#cfdae6","700");});
+    box(64,591,520,44,9,"#132333c9","#79cbeb66");text("Select terrain, then travel through its generated open routes.",82,618,10,"#a9cae6","600");
+    box(622,591,314,44,10,"#584173ed","#e6c1ff");text("BEGIN ADVENTURE  ▶",779,619,14,"#fff1d8","900","center");
+    heroInput.style.display="block";
+  }
+  function renderOverlay(){
+    if(!state.overlay)return;
+    box(120,146,760,472,16,"#101927ef","#c5e3ff99");
+    text(state.overlay==="bag"?"HERO INVENTORY":state.overlay==="store"?"WAYFARER’S STORE":state.overlay==="sell"?"SELL GEAR":"FIELD CRAFTING",500,183,24,"#e8d3ff","900","center");
+    text("COPPER  "+state.player.gold+"     ·     MATERIALS  "+Object.entries(state.player.materials||{}).filter(([,n])=>n>0).map(([k,n])=>k.replaceAll("_"," ")+" "+n).join(" / "),500,204,10,"#a9c6de","600","center");
+    const tabs=[{id:"bag",label:"BAG",x:153},{id:"store",label:"STORE",x:324},{id:"craft",label:"CRAFT",x:495},{id:"sell",label:"SELL",x:666}];
+    tabs.forEach(t=>{const on=state.overlay===t.id;box(t.x,218,151,33,8,on?"#44385be8":"#202a38e8",on?"#d6b7ff":"#8196ad55");text(t.label,t.x+75,240,11,on?"#eedbff":"#ccdae8","800","center");});
+    if(state.overlay==="bag"){
+      text("EQUIPPED WEAPON",160,279,10,"#91aac1","700");text(itemDefs[state.player.weaponId]?.name||"—",160,300,13,"#f1dfbd","700");text("EQUIPPED ARMOR",470,279,10,"#91aac1","700");text(itemDefs[state.player.armorId]?.name||"—",470,300,13,"#f1dfbd","700");text("MAGIC BUFFER  +"+(state.player.magicBuffer||0)+"   ·   LIVES  "+state.player.lives+"   ·   XP  "+state.player.xp+"   ·   SCORE  "+state.player.score,160,326,10,"#a9d4e3","600");
+      text("ITEMS · CLICK EQUIPMENT TO EQUIP",160,355,10,"#91aac1","700");
+      (state.player.ownedItems||[]).forEach((id,i)=>{const d=itemDefs[id];if(!d)return;const y=375+i*34,tag=id===state.player.weaponId?"WEAPON EQUIPPED":id===state.player.armorId?"ARMOR EQUIPPED":id===state.player.magicId?"RELIC EQUIPPED":d.kind.toUpperCase();box(153,y-18,694,29,7,"#202a38e6","#8ba1b54a");text(d.name,170,y+2,11,"#e2edf7","700");text(tag,825,y+2,9,"#bad5e9","600","right");});
+      text("SALVES "+state.player.potions+"   ·   POISON "+state.player.poisonCharges+"   ·   SPELL SCROLLS "+state.player.spells+"   ·   FOOD "+state.player.food,160,545,11,"#bef1d5","700");
+      const mats=Object.entries(state.player.materials||{}).filter(([,n])=>n>0).map(([k,n])=>k.replaceAll("_"," ")+" × "+n).join("   ·   ")||"Explore marked caches to find ingredients.";text(mats.slice(0,100),160,570,10,"#d0bd91","600");
+      text("I close · C craft · Q cast spell · P coat weapon · H eat",500,596,10,"#a4bbd2","500","center");
+    }else if(state.overlay==="store"){
+      text("BUY · WEAPONS, ARMOR, RELICS, SALVES & POISON",500,271,10,"#a8c5dc","700","center");
+      const ids=[...shopItems,"health_salve","weapon_poison"];
+      ids.forEach((id,i)=>{const d=itemDefs[id],y=298+i*52;box(153,y-22,694,43,8,"#202a38e6","#8ba1b54a");text(d.name,174,y-2,12,"#e3edf6","700");text(d.kind==="weapon"?"Weapon buffer +"+d.damage:d.kind==="armor"?"Armor buffer +"+d.armor:d.kind==="magic"?"Check buffer +"+d.buffer:d.kind==="salve"?"Restore health":"Next strike +3 damage",174,y+15,9,"#9fb4c7","500");box(735,y-15,95,29,7,"#3e644e","#a7efc0");text("BUY · "+d.price,782,y+4,10,"#d4ffe2","800","center");});
+      text("E interact near the wayfarer to return.",500,584,10,"#a4bbd2","500","center");
+    }else if(state.overlay==="sell"){
+      text("SELL UNEQUIPPED ITEMS FOR HALF THEIR LIST PRICE",500,271,10,"#a8c5dc","700","center");
+      (state.player.ownedItems||[]).forEach((id,i)=>{const d=itemDefs[id],y=304+i*48,locked=id===state.player.weaponId||id===state.player.armorId||id===state.player.magicId;box(153,y-20,694,40,8,"#202a38e6","#8ba1b54a");text(d.name+(locked?" · equipped":""),174,y+4,12,locked?"#8595a4":"#e3edf6","700");box(735,y-14,95,28,7,locked?"#303740":"#62454a",locked?"#56616a":"#ef9a98");text(locked?"KEEP":"SELL · "+Math.floor(d.price/2),782,y+4,9,locked?"#89939b":"#ffd3ca","800","center");});
+      text("Found ingredients are used in the Craft tab.",500,584,10,"#a4bbd2","500","center");
+    }else{
+      text("RECIPES · COLLECT MATERIALS FROM MAP CACHES & CREEPS",500,271,10,"#a8c5dc","700","center");
+      recipes.forEach((r,i)=>{const y=301+i*51,have=Object.entries(r.cost).every(([k,n])=>(state.player.materials[k]||0)>=n);box(153,y-20,694,42,8,have?"#223c3ae8":"#202a38e6",have?"#8be0b5":"#8ba1b54a");text(r.name,172,y-2,11,have?"#d5ffe6":"#e3edf6","700");text(Object.entries(r.cost).map(([k,n])=>k.replaceAll("_"," ")+" × "+n).join("   ·   ")+"   /   "+r.detail,172,y+14,9,"#9fb4c7","500");box(750,y-13,80,27,7,have?"#31634d":"#303640",have?"#a2efc4":"#697480");text("CRAFT",790,y+5,9,have?"#dcffe8":"#929eab","800","center");});
+      text("C opens crafting anywhere · recipes consume ingredients.",500,584,10,"#a4bbd2","500","center");
+    }
+    box(833,157,29,27,7,"#394453","#c9d5e0");text("×",847,176,16,"#edf4fa","800","center");
+  }
+  function handleOverlayClick(p){
+    if(p.x>=830&&p.y>=150&&p.y<=190){state.overlay="";render();return true;}
+    if(p.y>=218&&p.y<=253){if(p.x<305)state.overlay="bag";else if(p.x<476)state.overlay="store";else if(p.x<647)state.overlay="craft";else state.overlay="sell";render();return true;}
+    if(state.overlay==="store"&&p.y>=276&&p.y<=547&&p.x>=720){const i=Math.floor((p.y-276)/52),id=[...shopItems,"health_salve","weapon_poison"][i];if(id){if(!buyItem(id))say("Not enough copper.");render();}return true;}
+    if(state.overlay==="sell"&&p.y>=284&&p.y<=550&&p.x>=720){const i=Math.floor((p.y-284)/48),id=state.player.ownedItems[i];if(id&&!sellItem(id))say("Keep equipped gear; sell the spare items.");render();return true;}
+    if(state.overlay==="craft"&&p.y>=281&&p.y<=555&&p.x>=735){const i=Math.floor((p.y-281)/51);if(!craftItem(recipes[i]))say("Not enough ingredients for that recipe.");render();return true;}
+    if(state.overlay==="bag"&&p.y>=355&&p.y<530&&p.x<=845){const i=Math.floor((p.y-357)/34),id=state.player.ownedItems[i];if(id)equipItem(id);render();return true;}
+    return true;
+  }
+  function handleBuilderClick(p){
+    if(p.y>=226&&p.y<=274&&p.x>=64&&p.x<952){const i=Math.min(3,Math.floor((p.x-64)/222));state.builder.heroClass=classes[i].name;syncHero();}
+    else if(p.y>=304&&p.y<=341&&p.x>=64&&p.x<952){const i=Math.min(3,Math.floor((p.x-64)/222));state.builder.birthsign=birthsigns[i];syncHero();}
+    else if(p.y>=365&&p.y<=399&&p.x>=64&&p.x<952){state.builder.region=["CANYON","FOREST","RUINS"][Math.min(2,Math.floor((p.x-64)/294))];}
+    else if(p.y>=426&&p.y<=557&&p.x>=64&&p.x<470){const i=Math.round((p.y-440)/21);if(i>=0&&i<6){const key=["str","dex","con","int","wis","cha"][i],spent=Object.values(state.builder.abilities).reduce((a,b)=>a+b,0);if(p.x>=417){if(spent<12&&state.builder.abilities[key]<8)state.builder.abilities[key]++;}else if(p.x>=375&&state.builder.abilities[key]>0)state.builder.abilities[key]--;syncHero();}}
+    else if(p.y>=429&&p.y<=483&&p.x>=548&&p.x<=923){const col=p.x>=741?1:0,row=Math.round((p.y-440)/27),i=row*2+col;if(i>=0&&i<specialties.length){const s=specialties[i],at=state.builder.specialties.indexOf(s);if(at>=0)state.builder.specialties.splice(at,1);else if(state.builder.specialties.length<2)state.builder.specialties.push(s);syncHero();}}
+    else if(p.y>=526&&p.y<=572&&p.x>=548&&p.x<=923){const col=p.x>=741?1:0,row=Math.round((p.y-537)/27),i=row*2+col;if(i>=0&&i<extras.length){const s=extras[i],at=state.builder.extras.indexOf(s);if(at>=0)state.builder.extras.splice(at,1);else if(state.builder.extras.length<2)state.builder.extras.push(s);syncHero();}}
+    else if(p.x>=622&&p.x<=936&&p.y>=591&&p.y<=638){reset();}
+    render();
+  }
+  function drawPanel(){
+    box(24,24,952,72,10,"#181c25","#626b79");
+    text("ASHEN VALE · "+(state.builder.region||"CANYON"),44,55,23,"#e8d4ae","900");
+    text("TURN "+String(state.turn).padStart(2,"0")+" / "+state.maxTurns+"     SCORE "+state.player.score,950,50,12,"#bbcad9","700","right");
+    for(let i=0;i<PHASES.length;i++){
+      const x=586+i*60,active=state.pending?i===state.phaseIndex:i===5;
+      ctx.beginPath();ctx.arc(x,73,5,0,Math.PI*2);ctx.fillStyle=active?"#e0b6ff":"#596372";ctx.fill();
+      text(PHASES[i],x,91,8,active?"#f1d9ff":"#8793a2","600","center");
+    }
+    box(34,112,273,74,8,"#202631","#536577");box(693,112,273,74,8,"#202631","#786052");
+    text((state.player.name+" · "+state.player.class+" · LV 3").toUpperCase(),50,137,13,"#e2c9ff","700");
+    text("HP "+state.player.hp+"/"+state.player.hpMax+"   AC "+(state.player.ac+(state.player.armorBuffer||0)+state.player.defendBonus)+"   LIVES "+state.player.lives,50,161,12,state.player.hp<=3?"#ff9188":"#dce7f1","600");
+    text(state.enemy.name.toUpperCase(),709,137,13,"#ffc39d","700");
+    text("HP "+state.enemy.hp+"/"+state.enemy.hpMax+"   AC "+state.enemy.ac,709,161,12,"#dce7f1","600");
+    box(34,198,932,286,5,"#181c24","#48525e");
+    drawBackground();drawCharacter();
+    box(34,494,932,63,6,"#20242c","#414b58");
+    for(let i=0;i<Math.min(3,state.log.length);i++)text(state.log[state.log.length-3+i]||"",50,516+i*18,12,i===2?"#e6d9bd":"#aeb9c4","500");
+    buttons.forEach((b,i)=>{
+      const enabled=state.mode==="playing"&&!state.pending&&!(b.id==="potion"&&state.player.potions===0);
+      box(b.x,574,172,74,7,enabled?"#262c36":"#1b1f26",enabled?b.color:"#3c424c");
+      text((i+1)+"  "+b.label,b.x+86,602,14,enabled?b.color:"#78818c","700","center");
+      text(b.sub,b.x+86,625,9,enabled?"#bdc8d4":"#707984","500","center");
+    });
+    if(state.mode==="builder"){renderHeroBuilder();}
+    if(state.mode==="over"){
+      ctx.fillStyle="#0c1014c9";ctx.fillRect(34,198,932,450);
+      text(state.mode==="title"?"A TURN IS A PHASE CYCLE":state.outcome==="victory"?"VICTORY":state.outcome==="defeat"?"DEFEAT":state.outcome==="escaped"?"ESCAPED":"TIME LIMIT",500,289,30,state.mode==="title"?"#dfc2ff":state.outcome==="victory"?"#a9e7a4":"#ffae9e","800","center");
+      text(state.mode==="title"?"Aria faces a goblin in a torchlit dungeon.":("Turns played: "+state.history.length+" · goblin HP: "+state.enemy.hp),500,335,15,"#d6e0e9","500","center");
+      text(state.mode==="title"?"Choose Attack, Defend, Stealth, Potion, or Flee.":"Press R or Enter to begin again.",500,365,13,"#c0cad4","500","center");
+      if(state.mode==="title")text("CLICK OR PRESS ENTER",500,414,16,"#ffe09a","700","center");
+    }
+    renderOverlay();
+  }
+  function render(){drawPanel();}
+  function gameText(){
+    return JSON.stringify({mode:state.mode,phase:state.phase,phase_cycle:PHASES,turn:state.turn,turns_played:state.history.length,
+      region:state.builder.region,terrain:state.map?.theme.path||null,terrain_drops_remaining:state.map?.caches.filter(x=>state.map.cells[x.pos.r][x.pos.c].cache).length||0,goal:state.map?.goal||null,nearby_options:state.player.pos?Object.keys({north:1,east:1,south:1,west:1}).filter((_,i)=>{const d=[{c:0,r:-1},{c:1,r:0},{c:0,r:1},{c:-1,r:0}][i],n={c:state.player.pos.c+d.c,r:state.player.pos.r+d.r};return !!state.map?.cells[n.r]?.[n.c]?.walkable;}):[],
+      player:{name:state.player.name,class:state.player.class,hp:state.player.hp,hp_max:state.player.hpMax,ac:state.player.ac+(state.player.armorBuffer||0)+state.player.defendBonus,lives:state.player.lives,xp:state.player.xp,score:state.player.score,gold:state.player.gold,pos:state.player.pos,inventory:state.player.inventory,materials:state.player.materials,alive:state.player.alive},
+      enemy:{name:state.enemy.name,hp:state.enemy.hp,hp_max:state.enemy.hpMax,ac:state.enemy.ac,pos:state.enemy.pos,alive:state.enemy.alive},npc:state.npc?{name:state.npc.name,pos:state.npc.pos}:null,loot:state.loot.filter(x=>!x.owner),overlay:state.overlay,
+      pending_action:state.pending?state.pending.intent.type:null,last_resolution:state.lastResolution,outcome:state.outcome,models:window.ashenModelsStatus||"loading",valid_state:state.player.hp>=0&&state.enemy.hp>=0,
+      controls:"Arrow/WASD travel; 1 attack, 2 defend, 3 stealth, 4 health salve, 5 flee; E store/talk; I bag; C craft; Q spell; P poison; H eat; R rebuild hero"});
+  }
+  window.render_game_to_text=gameText;
+  window.ashenGameView=()=>({time:state.effectTime,mode:state.mode,action:state.pending?.intent.type||null,phase:state.phase,turn:state.turn,player:state.player.pos,enemy:{pos:state.enemy.pos,alive:state.enemy.alive},npc:state.npc?.pos,map:state.map,goal:state.map?.goal,camera:mapViewport(),loot:state.loot.filter(x=>!x.owner)});
+  window.ashenModelsStatus="loading";
+  window.advanceTime=(ms)=>{
+    state.manualClock=true;const steps=Math.max(1,Math.round(ms/(1000/60)));
+    for(let i=0;i<steps;i++){update(1/60);render();}
+    return gameText();
+  };
+  function canvasPoint(e){const r=canvas.getBoundingClientRect();return {x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height};}
+  canvas.addEventListener("pointerdown",e=>{
+    const p=canvasPoint(e);
+    if(state.mode==="builder"){handleBuilderClick(p);return}
+    if(state.overlay){handleOverlayClick(p);return}
+    if(state.mode==="over"){reset();return}
+    const b=buttons.find(x=>p.x>=x.x&&p.x<=x.x+172&&p.y>=574&&p.y<=648);
+    if(b)queueAction(b.id);
+  });
+  const keyActions={Digit1:"attack",Digit2:"defend",Digit3:"stealth",Digit4:"potion",Digit5:"flee",ArrowUp:"move:up",KeyW:"move:up",ArrowDown:"move:down",KeyS:"move:down",ArrowLeft:"move:left",KeyA:"move:left",ArrowRight:"move:right",KeyD:"move:right",KeyQ:"cast",KeyP:"poison",KeyH:"eat"};
+  window.addEventListener("keydown",e=>{
+    if(e.code==="Escape"&&state.overlay){state.overlay="";render();e.preventDefault();return;}
+    if(state.overlay&&(e.code==="KeyI"||e.code==="KeyC")){state.overlay="";render();e.preventDefault();return;}
+    if(state.mode==="playing"&&!state.overlay&&e.code==="KeyI"){state.overlay="bag";render();return;}
+    if(state.mode==="playing"&&!state.overlay&&e.code==="KeyC"){state.overlay="craft";render();return;}
+    if(state.mode==="playing"&&!state.overlay&&e.code==="KeyE"){
+      const n=state.npc?.pos,near=n&&Math.abs(n.c-state.player.pos.c)+Math.abs(n.r-state.player.pos.r)<=1;
+      if(near){if(!state.npcTalked){state.npcTalked=true;state.player.potions++;say("The wayfarer welcomes you with a health salve.");refreshInventory();}state.overlay="store";render();}else queueAction("talk");return;
+    }
+    if(keyActions[e.code]){e.preventDefault();queueAction(keyActions[e.code]);}
+    if(e.code==="KeyR"){state.mode="builder";state.overlay="";heroInput.style.display="block";render();}
+    if(e.code==="Enter"&&state.mode==="builder")reset();
+    if(e.code==="Enter"&&state.mode==="over")reset();
+    if(e.code==="KeyF"){if(!document.fullscreenElement)document.querySelector(".stage").requestFullscreen?.();else document.exitFullscreen?.();}
+    if(e.code==="Escape"&&document.fullscreenElement)document.exitFullscreen?.();
+  });
+  document.addEventListener("fullscreenchange",()=>{const stage=document.querySelector(".stage");stage.style.width=document.fullscreenElement?"100vw":"100%";stage.style.height=document.fullscreenElement?"100vh":"";stage.style.aspectRatio=document.fullscreenElement?"auto":"1000/680";stage.style.borderRadius=document.fullscreenElement?"0":"14px";});
+  let last=performance.now();
+  function loop(now){if(!state.manualClock){const dt=Math.min(.05,(now-last)/1000);update(dt);render();}last=now;requestAnimationFrame(loop);}
+  render();requestAnimationFrame(loop);
+})();
+</script>
+<script type="module">
+  const modelCanvas=document.getElementById("models");
+  try{
+    const THREE=await import("https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js");
+    const renderer=new THREE.WebGLRenderer({canvas:modelCanvas,alpha:true,antialias:true});
+    renderer.setPixelRatio(1);
+    renderer.setSize(1000,680,false);
+    renderer.setClearColor(0x000000,0);
+    const scene=new THREE.Scene();
+    const camera=new THREE.OrthographicCamera(0,1000,680,0,.1,2000);
+    camera.position.set(500,340,1000);camera.lookAt(500,340,0);
+    scene.add(new THREE.AmbientLight(0xffffff,2.2));
+    const key=new THREE.DirectionalLight(0xffe3bd,3.1);key.position.set(-360,650,500);scene.add(key);
+    const fill=new THREE.PointLight(0x9b6dff,120,900);fill.position.set(320,420,200);scene.add(fill);
+    const goblinLight=new THREE.PointLight(0xff805c,100,600);goblinLight.position.set(670,380,180);scene.add(goblinLight);
+    const mat=(color,roughness=.72,metalness=0)=>new THREE.MeshStandardMaterial({color,roughness,metalness});
+    const rogue=new THREE.Group(),goblin=new THREE.Group();scene.add(rogue,goblin);
+    rogue.scale.set(.32,.32,.32);goblin.scale.set(.32,.32,.32);
+    function mesh(group,geometry,material,x,y,z=0){const m=new THREE.Mesh(geometry,material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;group.add(m);return m;}
+    const skin=mat(0xe0c4a0),cloak=mat(0x7845a6),cloakEdge=mat(0xb781ee),steel=mat(0xc9d8e4,.3,.65),leather=mat(0x66452f),
+      green=mat(0x74a56c),goblinArmor=mat(0x455a3f),iron=mat(0x9baab5,.34,.7),gold=mat(0xffe982,.28,.15);
+    // Aria: hooded rogue, layered cloak, arms, boots, and a steel dagger.
+    mesh(rogue,new THREE.ConeGeometry(47,116,7),cloak,0,85,0).rotation.z=Math.PI;
+    mesh(rogue,new THREE.CylinderGeometry(27,35,72,8),leather,0,75,8);
+    mesh(rogue,new THREE.SphereGeometry(25,20,14),skin,0,151,4);
+    mesh(rogue,new THREE.SphereGeometry(28,20,14,0,Math.PI*2,0,Math.PI*.56),cloak,0,164,4);
+    mesh(rogue,new THREE.BoxGeometry(13,57,14),cloak,-37,91,0).rotation.z=-.25;
+    mesh(rogue,new THREE.BoxGeometry(13,57,14),cloak,37,91,0).rotation.z=.25;
+    mesh(rogue,new THREE.CylinderGeometry(7,9,37,8),leather,-15,22,4);
+    mesh(rogue,new THREE.CylinderGeometry(7,9,37,8),leather,15,22,4);
+    const blade=mesh(rogue,new THREE.ConeGeometry(7,54,4),steel,54,73,18);blade.rotation.z=-.34;
+    mesh(rogue,new THREE.CylinderGeometry(3,3,18,8),leather,46,49,18).rotation.z=-.34;
+    // Goblin: broad green head, pointed ears, heavy tunic, iron cap, and club.
+    mesh(goblin,new THREE.CylinderGeometry(35,46,84,8),goblinArmor,0,55,0);
+    mesh(goblin,new THREE.SphereGeometry(29,18,14),green,0,133,0);
+    for(const side of [-1,1]){const ear=mesh(goblin,new THREE.ConeGeometry(12,42,5),green,side*38,143,0);ear.rotation.z=side===-1?Math.PI/2:-Math.PI/2;}
+    mesh(goblin,new THREE.BoxGeometry(58,13,46),iron,0,166,0);
+    mesh(goblin,new THREE.CylinderGeometry(17,19,24,8),iron,0,181,0);
+    for(const x of [-11,11])mesh(goblin,new THREE.SphereGeometry(4,10,8),gold,x,137,25);
+    mesh(goblin,new THREE.BoxGeometry(12,52,12),leather,48,60,2).rotation.z=-.25;
+    mesh(goblin,new THREE.CylinderGeometry(7,12,62,7),leather,62,8,3).rotation.z=-.18;
+    mesh(goblin,new THREE.BoxGeometry(24,16,22),iron,67,43,3).rotation.z=-.18;
+    const playerBase=mesh(rogue,new THREE.CylinderGeometry(17,17,4,24),cloakEdge,0,0,1);playerBase.rotation.x=Math.PI/2;
+    const playerCloak=mesh(rogue,new THREE.CylinderGeometry(13,13,5,20),cloak,0,0,4);playerCloak.rotation.x=Math.PI/2;
+    const playerHead=mesh(rogue,new THREE.SphereGeometry(6,14,10),skin,0,7,7);playerHead.scale.z=.55;
+    const playerHood=mesh(rogue,new THREE.ConeGeometry(8,12,7),cloakEdge,0,12,5);playerHood.rotation.x=Math.PI/2;
+    const dagger=mesh(rogue,new THREE.BoxGeometry(3,17,2),steel,14,2,6);dagger.rotation.z=-.4;
+    const goblinBase=mesh(goblin,new THREE.CylinderGeometry(18,18,5,22),iron,0,0,1);goblinBase.rotation.x=Math.PI/2;
+    const goblinBody=mesh(goblin,new THREE.SphereGeometry(13,16,12),goblinArmor,0,0,5);goblinBody.scale.set(1,1,.45);
+    const goblinHead=mesh(goblin,new THREE.SphereGeometry(8,14,10),green,0,8,7);goblinHead.scale.z=.55;
+    for(const side of [-1,1])mesh(goblin,new THREE.ConeGeometry(3,9,5),green,side*7,14,5).rotation.x=Math.PI/2;
+    for(const x of [-3,3])mesh(goblin,new THREE.SphereGeometry(1.6,8,6),gold,x,9,12);
+    const environment=new THREE.Group(),lootGroup=new THREE.Group();scene.add(environment,lootGroup);
+    function worldAt(pos){return{x:104+pos.c*44+22,y:680-(207+pos.r*44+22)};}
+    function addMapProp(type,pos){
+      const g=new THREE.Group(),at=worldAt(pos);g.position.set(at.x,at.y,0);environment.add(g);
+      const rockMat=type==="pine"?mat(0x315644):type==="dead-tree"?mat(0x614b38):type==="ruin"?mat(0x77756f):type==="wagon"||type==="cart"?mat(0x775135):mat(0x655f57);
+      if(type==="pine"){
+        const trunk=mesh(g,new THREE.CylinderGeometry(3,4,12,7),leather,0,0,2);trunk.rotation.x=Math.PI/2;
+        const crown=mesh(g,new THREE.SphereGeometry(15,12,8),rockMat,0,0,8);crown.scale.set(1,.84,.4);
+        const crown2=mesh(g,new THREE.SphereGeometry(10,10,7),mat(0x456e49),-6,3,10);crown2.scale.z=.45;
+      }else if(type==="dead-tree"){
+        for(const [x,y,rz] of [[0,0,.4],[6,4,-.55],[-5,-4,.65]]){const branch=mesh(g,new THREE.CylinderGeometry(1.7,2.7,18,6),rockMat,x,y,3);branch.rotation.z=rz;branch.rotation.x=Math.PI/2;}
+      }else if(type==="ruin"||type==="npc"){
+        const stone=mat(0x736e67);mesh(g,new THREE.BoxGeometry(34,32,8),stone,0,0,4);
+        for(const [x,y,w,h] of [[-15,-14,30,4],[-15,14,30,4],[-15,-14,4,32],[15,-14,4,32]])mesh(g,new THREE.BoxGeometry(w,h,10),rockMat,x,y,6);
+      }else if(type==="wagon"||type==="cart"||type==="car"){
+        if(type==="car"){
+          mesh(g,new THREE.BoxGeometry(32,20,8),mat(0x536675),0,0,6);mesh(g,new THREE.BoxGeometry(18,14,5),mat(0x9bc1ce),0,0,11);
+          for(const x of [-12,12])for(const y of [-8,8]){const wheel=mesh(g,new THREE.CylinderGeometry(4,4,4,10),mat(0x191d23),x,y,2);wheel.rotation.x=Math.PI/2;}
+        }else{
+        mesh(g,new THREE.BoxGeometry(30,18,7),rockMat,0,0,6);mesh(g,new THREE.BoxGeometry(22,12,3),mat(0x38291f),0,0,11);
+        for(const x of [-12,12])for(const y of [-9,9]){const wheel=mesh(g,new THREE.CylinderGeometry(4,4,3,10),mat(0x211d1b),x,y,2);wheel.rotation.x=Math.PI/2;}
+        }
+      }else if(type==="wayfarer"){
+        const robe=mesh(g,new THREE.CylinderGeometry(8,8,8,12),mat(0x438a9b),0,0,5);robe.rotation.x=Math.PI/2;
+        mesh(g,new THREE.SphereGeometry(5,10,8),skin,0,6,8);
+      }else{
+        const stone=mesh(g,new THREE.DodecahedronGeometry(13,0),rockMat,0,0,6);stone.scale.set(1,.72,.52);stone.rotation.z=.7;
+        if(type==="debris")mesh(g,new THREE.BoxGeometry(20,5,3),mat(0xb49b6d),3,-5,4).rotation.z=.4;
+      }
+    }
+    let mapKey="",lootKey="",currentCamera={c:0,r:0};
+    function syncMap(game){
+      if(!game.map){rogue.visible=false;goblin.visible=false;environment.visible=false;return;}
+      currentCamera=game.camera||{c:0,r:0};const key=game.map.region+":"+game.map.seed;
+      if(key!==mapKey){environment.clear();for(const p of game.map.props)addMapProp(p.type,p);if(game.npc)addMapProp("wayfarer",game.npc);mapKey=key;lootKey="";}
+      const ox=-currentCamera.c*44,oy=currentCamera.r*44;environment.position.set(ox,oy,0);lootGroup.position.set(ox,oy,0);environment.visible=game.mode!=="builder";lootGroup.visible=game.mode!=="builder";
+      const a=worldAt(game.player||{c:0,r:18}),b=worldAt(game.enemy?.pos||{c:12,r:18}),px=ox,py=oy;rogue.visible=game.mode!=="builder";goblin.visible=game.mode!=="builder"&&!!game.enemy?.alive;rogue.position.set(a.x+px,a.y+py,16);goblin.position.set(b.x+px,b.y+py,18);
+      const nextLootKey=(game.loot||[]).map(item=>item.item+":"+item.pos.c+":"+item.pos.r+":"+item.amount).join("|");if(nextLootKey!==lootKey){lootGroup.clear();for(const item of game.loot||[]){const l=worldAt(item.pos),token=new THREE.Mesh(new THREE.OctahedronGeometry(7),mat(0xffd36c));token.position.set(l.x,l.y,15);token.userData.loot=true;lootGroup.add(token);}lootKey=nextLootKey;}
+    }
+    window.ashenThreeReady=true;window.ashenModelsStatus="ready: Three.js overhead models + terrain props";
+    window.addEventListener("resize",()=>{renderer.setPixelRatio(1);renderer.setSize(1000,680,false);});
+    function animate(){
+      const game=window.ashenGameView?.()||{time:0};const t=game.time||0;
+      syncMap(game);rogue.position.z=16+Math.sin(t*3)*.6;goblin.position.z=18+Math.sin(t*2.5+1)*.5;
+      const attacking=game.action==="attack"&&(game.phase==="Sek"||game.phase==="Yax");
+      rogue.rotation.z=attacking?-.5*Math.sin(t*18):Math.sin(t*1.4)*.018;
+      const hit=game.action==="attack"&&game.phase==="Ch'en";
+      goblin.rotation.z=hit?.25*Math.sin(t*14):Math.sin(t)*.02;
+      fill.intensity=105+Math.sin(t*3)*18;goblinLight.intensity=85+Math.sin(t*2.6+1)*14;
+      renderer.render(scene,camera);requestAnimationFrame(animate);
+    }
+    animate();
+  }catch(error){
+    window.ashenModelsStatus="Three.js unavailable; using built-in 2D character art";
+    console.warn("Three.js models could not be loaded",error);
+  }
+</script>
+</body>
+</html>

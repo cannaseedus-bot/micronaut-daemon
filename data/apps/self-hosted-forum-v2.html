@@ -1,0 +1,8 @@
+<div id="self-hosted-forum" data-asx-key="⟁APP:SELF_HOSTED_FORUM_V2/⟁ROOT:SELF_HOSTED_FORUM_V2">
+  <header data-asx-key="⟁APP:SELF_HOSTED_FORUM_V2/⟁WIDGET:SHF_TOOLBAR"><input name="search" type="search" placeholder="Search topics..." data-bind="state.search" data-event="toolbar.search" /><button data-event="toolbar.create">New Topic</button><button data-event="auth.submit">Login</button></header>
+  <main data-asx-key="⟁APP:SELF_HOSTED_FORUM_V2/⟁WIDGET:SHF_TABLE" data-source="cdata.user_post" data-bind="state.rows,state.search" data-event="post.read"></main>
+  <dialog data-asx-key="⟁APP:SELF_HOSTED_FORUM_V2/⟁WIDGET:SHF_AUTH" data-bind="state.user,state.auth_mode" data-event="auth.submit"><input name="username" placeholder="Username" /><input name="email" type="email" required placeholder="Email" /><input name="password" type="password" required placeholder="Password" /><button type="submit">Continue</button></dialog>
+  <dialog data-asx-key="⟁APP:SELF_HOSTED_FORUM_V2/⟁WIDGET:SHF_POST_MODAL" data-bind="state.selected_post"></dialog>
+  <aside data-asx-key="⟁APP:SELF_HOSTED_FORUM_V2/⟁WIDGET:SHF_COOKIE" data-bind="state.cookie_consent" data-event="cookie.accept">Cookie consent <button>Accept</button></aside>
+</div>
+<script type="application/json" id="asx-json-runtime">{"@kind":"asx.key-runtime.binding.v1","@app":"⟁APP:SELF_HOSTED_FORUM_V2","@manifest":"data/host/apps/self-hosted-forum-v2.asx-app.json","@executor":"mx.run","@authority":"projection_only","@state":"request_scoped","@semantic_commit":false}</script>

@@ -1,0 +1,56 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "budget-tracker",
+  "@key": "⟁APP:BUDGET_TRACKER",
+  "@mount": "⟁ROOT:BUDGET_TRACKER",
+  "@theme": { "accent": "#22d3ee", "bg": "#020d10", "surface": "#04181e", "text": "#cffafe", "hero_phase": "Xul", "tagline": "Know where every dollar goes" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "transactions", "component": "⟁WIDGET:TRANSACTIONS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "transactions": [], "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:BUDGET_TRACKER": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:ADD_TRANSACTION"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:ADD_TRANSACTION": { "@type": "button", "@text": "Add Transaction", "@on": { "click": "budget.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:TRANSACTIONS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:TRANSACTIONS": { "@type": "feed", "@bind": "state.transactions", "@children": ["⟁WIDGET:TRANSACTION_ROW"] },
+    "⟁WIDGET:TRANSACTION_ROW": { "@type": "content-card", "@bind": "transaction" },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:BALANCE", "⟁WIDGET:CATEGORY_BREAKDOWN"] },
+    "⟁WIDGET:BALANCE": { "@type": "stat", "@bind": "data.balance" },
+    "⟁WIDGET:CATEGORY_BREAKDOWN": { "@type": "chart", "@bind": "data.categories" }
+  },
+  "@programs": {
+    "budget.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "budget.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "compose.open": "budget.open_compose", "search.input": "budget.search" },
+  "@imports": [{ "ref": "transaction", "mode": "schema_table" }, { "ref": "budget_category", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "export-csv", "name": "CSV Export", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Export transactions as a CSV for spreadsheets." },
+      { "id": "monthly-report", "name": "Monthly Report", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Auto-generate a monthly spending summary." },
+      { "id": "savings-bot", "name": "Savings Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Suggest areas to cut spending based on your patterns." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "budget.add", "pattern": "ADD TRANSACTION|LOG EXPENSE|RECORD PAYMENT", "intent": "open_compose" },
+      { "id": "budget.report", "pattern": "SHOW SPENDING|BUDGET REPORT|THIS MONTH TOTAL", "intent": "view_report" }
+    ]
+  },
+  "@data": {
+    "balance": { "income": 4200, "expenses": 2870, "net": 1330 },
+    "categories": [{ "name": "Housing", "amount": 1200 }, { "name": "Food", "amount": 480 }, { "name": "Transport", "amount": 210 }, { "name": "Other", "amount": 980 }],
+    "spotlight": [
+      { "id": "sp1", "title": "Rent — November", "category": "Housing", "badge": "Largest", "amount": -1200, "excerpt": "Fixed monthly expense. On time." },
+      { "id": "sp2", "title": "Freelance Income — Oct", "category": "Income", "badge": "Income", "amount": 3200, "excerpt": "Design project payout from Craft Studio." },
+      { "id": "sp3", "title": "Grocery run — Whole Foods", "category": "Food", "badge": "This Week", "amount": -87, "excerpt": "Weekly shop. Slightly over budget." }
+    ],
+    "schema": {
+      "transaction": { "primaryKey": "tx_id", "fields": { "tx_id": { "type": "string" }, "amount": { "type": "float", "required": true }, "category": { "type": "string", "required": true }, "description": { "type": "text" }, "date": { "type": "datetime", "required": true }, "type": { "type": "string" } } },
+      "budget_category": { "primaryKey": "cat_id", "fields": { "cat_id": { "type": "string" }, "name": { "type": "string", "required": true }, "monthly_limit": { "type": "float" }, "color": { "type": "string" } } }
+    }
+  }
+}

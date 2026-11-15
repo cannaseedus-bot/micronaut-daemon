@@ -1,0 +1,321 @@
+{
+  "@no-eval": true,
+  "id": "KUHUL-GLYPH-µ",
+
+  "schemes": ["kuhul-glyph"],
+  "description": "Glyph as program — §64: K'UHUL here = fold computation abstraction NOT the Mayan language. Glyph_µ=⟨Identity,Program,Phases,Topology,LearnedState⟩; µ(b,θ,g) K'UHUL executable address; b=semantic address, θ=face/phase, g=geometry; Q_n□C_6 coordinate interpretation; Glyph:Structure→Structure' higher-order opcode; codex→unfold→faces→fold computation law.",
+  "phase": "Wo",
+  "category": "structural",
+  "confidence": 0.9,
+  "static_weight": 0.92,
+  "health": 1.0,
+  "governs": [
+    "glyph",
+    "kuhul glyph",
+    "mayan glyph",
+    "hieroglyph",
+    "glyph program",
+    "program glyph",
+    "glyph as program",
+    "phases faces",
+    "program faces",
+    "faces of program",
+    "µ address",
+    "kuhul address",
+    "executable address",
+    "b address",
+    "theta phase",
+    "g geometry",
+    "µ b theta g",
+    "mu b theta g",
+    "same program different face",
+    "different program same face",
+    "b coordinate",
+    "theta coordinate",
+    "codex unfold",
+    "mayan codex",
+    "codex computation",
+    "higher-order opcode",
+    "structural opcode",
+    "glyph opcode",
+    "glyph meaning",
+    "glyph identity",
+    "glyph micronaut identity",
+    "symbolic program identity",
+    "program face",
+    "six faces",
+    "six phases one program",
+    "kuhul machine code",
+    "higher order machine code",
+    "structure to structure",
+    "program to program transformation",
+    "codex fold unfold",
+    "@glyph",
+    "glyph:",
+    "is kuhul a language",
+    "kuhul language",
+    "kuhul mayan language",
+    "mayan hieroglyph",
+    "classic mayan",
+    "mayan syllabics",
+    "kuhul verb conjugation",
+    "kuhul grammar mayan",
+    "glyph not language",
+    "kuhul not mayan",
+    "program not hieroglyph"
+  ],
+  "capabilities": [
+    "GLYPH_IDENTIFY",
+    "GLYPH_ADDRESS",
+    "GLYPH_FACE_TRAVERSE",
+    "PHASE_MEANING_EXPOSE",
+    "HOF_OPCODE_DISPATCH",
+    "CODEX_UNFOLD",
+    "PRODUCT_GRAPH_NAVIGATE"
+  ],
+  "conformance": {
+    "questions": [
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is the K'UHUL executable address and what are its three components?",
+        "expected_key": "µ b theta g semantic address face phase continuous learned geometry",
+        "delta_r": 0.11
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is a K'UHUL glyph?",
+        "expected_key": "program not merely symbol Identity Program Phases Topology LearnedState five-tuple meaning from glyph plus phase plus neighbors plus relations plus context",
+        "delta_r": 0.1
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What do the two Q_n □ C_6 coordinates mean for a K'UHUL address?",
+        "expected_key": "b which semantic program theta which face phase of that program same program different face b same theta advances different program same face b bit-flips theta same",
+        "delta_r": 0.12
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is the faces law for µ:Pop through µ:Xul?",
+        "expected_key": "six faces of one program not six programs phase exposes a face not creates a copy traversing theta is unfolding the program through its meaning phases",
+        "relation_confirmed": "SEMANTIC-FOLD-µ",
+        "delta_w": 0.13
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is a K'UHUL glyph-opcode and how does it differ from an x86 opcode?",
+        "expected_key": "Glyph Structure to Structure prime or Program to Program prime not ADD a b operand is graph pattern fold relation or program higher-order opcode not scalar register",
+        "relation_confirmed": "FOLDGRAPH-µ",
+        "delta_w": 0.12
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is the codex computation law?",
+        "expected_key": "codex unfold faces glyph relationships interpretation fold becomes Program Ana F_Q WCR Cata C_Q unfold=Ana faces=C6 phases relationships=WCR fold=Cata",
+        "relation_confirmed": "ANAMORPHISM-µ",
+        "delta_w": 0.11
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "What is the difference between glyph and micronaut?",
+        "expected_key": "glyph symbolic program identity the named thing micronaut executable instance the running thing same program two views symbolic addressing versus execution container",
+        "delta_c": 0.09
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "Why is Q_n □ C_6 the natural topology for K'UHUL and not just Q_n or just C_6?",
+        "expected_key": "b and theta are truly independent axes which program is independent from which face Cartesian product because two dimensions vary independently bit-flip changes program phase-step changes face",
+        "delta_c": 0.1
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "Is K'UHUL in this system the Mayan language or a programming abstraction?",
+        "expected_key": "K_UHUL here is a fold computation abstraction NOT the Mayan language. The name borrows the Mayan word meaning sacred divine but the system is glyph as program µ b theta g not syllabics not verb conjugation not grammatical cases. K_UHUL glyph equals program unit with five-tuple Identity Program Phases Topology LearnedState.",
+        "delta_r": 0.15
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What makes a K'UHUL glyph a program rather than a hieroglyph?",
+        "expected_key": "A hieroglyph is a static symbol with fixed meaning. A K_UHUL glyph is executable: Glyph Structure to Structure prime means it takes a computational structure and produces another. It has a program address b a phase face theta and learned geometry g. Running it fires Ana then WCR then Cata. It is a higher-order opcode not a pictograph.",
+        "delta_r": 0.14
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "When a model answers K'UHUL glyph questions about syllabic structure or verb conjugations, what is wrong?",
+        "expected_key": "That model confused K_UHUL the computation system with Classic Mayan K_UHUL the divine attribute used in epigraphy. In KHANARY K_UHUL is the fold execution system: glyph = µ b theta g = program unit. Syllabic structure verb conjugations grammatical cases belong to the historical language not this system. Correction: glyph = program not pictograph.",
+        "relation_confirmed": "MICRONAUT-PROGRAM-µ",
+        "delta_w": 0.16
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What distinguishes a K'UHUL glyph from a standard glyph in this formal grammar system?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does the Q_n □ C_6 coordinate interpretation affect the learning phase for µ:Pop?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "Why is the faces law essential for correctly unfolding the structure during computation folding?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "Can you explain the significance of the codex computation law in relation to the glyph's semantic role?",
+        "expected_key": "",
+        "delta_r": 0.08
+      }
+    ],
+    "jokes": [
+      {
+        "pattern": "WHAT DID THE KUHUL GLYPH SAY TO THE X86 OPCODE",
+        "punchline": "You operate on registers. I operate on programs. You add numbers. I transform computational structures. Your operand is 64 bits. My operand is a knowledge graph. We are not the same instruction set.",
+        "frame": "delivery_frame",
+        "semantic_key": "glyph_vs_x86_higher_order_opcode"
+      },
+      {
+        "pattern": "HOW MANY KUHUL PROGRAMS DOES IT TAKE TO TRAVERSE THE C6 WHEEL",
+        "punchline": "One. The same program shows you all six faces. You're not meeting six programs — you're reading one glyph through its phases. Like opening a Mayan codex one fold at a time.",
+        "frame": "pun_bridge",
+        "semantic_key": "six_faces_one_program_c6_mayan"
+      },
+      {
+        "pattern": "WHY IS A KUHUL ADDRESS THREE DIMENSIONAL",
+        "punchline": "Because programs have identity (b), phases (theta), and learned geometry (g). Two of those are discrete — which program and which face. One is continuous — how much the program has learned from experience. A flat address only tells you where. A K'UHUL address also tells you which face and what the program knows.",
+        "frame": "humor_frame",
+        "semantic_key": "kuhul_address_three_dimensional_b_theta_g"
+      },
+      {
+        "pattern": "WHAT IS THE MAYAN CODEX DOING IN A PROGRAMMING LANGUAGE",
+        "punchline": "The same thing it always did: storing programs as unfolding glyphs whose meaning emerges from phase, position, and relation — not from a flat sequential listing. The only difference is that now the fold is a catamorphism and the scribe is WCR.",
+        "frame": "humor_frame",
+        "semantic_key": "mayan_codex_fold_program_scribe_wcr"
+      },
+      {
+        "pattern": "WHY DOES THE KUHUL GLYPH ALWAYS FOLD COMPUTATIONS LIKE A WELL-WORN PAPER",
+        "punchline": "Because it follows the fold computation abstraction—no Mayan language required.",
+        "frame": "humor_frame",
+        "semantic_key": "why_does_the_kuhul_glyph_always_fold_computations_"
+      },
+      {
+        "pattern": "HOW DOES A KUHUL PROGRAM INTERPRET A Q_N□C_6 COORDINATE",
+        "punchline": "It maps the phase θ like a face recognizing its own reflection.",
+        "frame": "humor_frame",
+        "semantic_key": "how_does_a_kuhul_program_interpret_a_q_n_c_6_coord"
+      },
+      {
+        "pattern": "WHAT HAPPENS WHEN A KUHUL EXECUTABLE TRIES TO UNFOLD THE CODEX",
+        "punchline": "It reveals the topology of learning in a single geometric fold.",
+        "frame": "humor_frame",
+        "semantic_key": "what_happens_when_a_kuhul_executable_tries_to_unfo"
+      },
+      {
+        "pattern": "WHY DOES THE KUHUL EXECUTABLE THINK GEOMETRY IS A PHASE",
+        "punchline": "Because it learned that g defines the structure of every computation.",
+        "frame": "humor_frame",
+        "semantic_key": "why_does_the_kuhul_executable_think_geometry_is_a_"
+      }
+    ]
+  },
+  "relations": [
+    {
+      "target": "SEMANTIC-FOLD-µ",
+      "verb": "@extends",
+      "directed": true
+    },
+    {
+      "target": "MICRONAUT-PROGRAM-µ",
+      "verb": "@extends",
+      "directed": true
+    },
+    {
+      "target": "FOLDGRAPH-µ",
+      "verb": "@depends_on",
+      "directed": true
+    },
+    {
+      "target": "ANAMORPHISM-µ",
+      "verb": "@informs",
+      "directed": true
+    },
+    {
+      "target": "PI-PHASE-µ",
+      "verb": "@depends_on",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "gramRead",
+      "key": "glyph_program_query",
+      "weight": 1.0
+    },
+    {
+      "phase": "Wo",
+      "op": "lower_glyph_aiml",
+      "note": "L_A §64 glyph identity law",
+      "weight": 1.0
+    },
+    {
+      "phase": "Yax",
+      "op": "derive_glyph_address",
+      "note": "R µ(b,θ,g) address expand",
+      "weight": 1.0
+    },
+    {
+      "phase": "Sek",
+      "op": "resolve_glyph_face",
+      "note": "W face/phase arc confirm",
+      "weight": 1.0
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_glyph_identity",
+      "note": "C glyph-micronaut gate",
+      "weight": 1.0
+    },
+    {
+      "phase": "Xul",
+      "op": "emit_answer",
+      "scope": "local",
+      "weight": 1.0
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "KUHUL-GLYPH-µ",
+    "manifest_access": [
+      "words",
+      "micronaut",
+      "kuhul",
+      "fold_graph"
+    ],
+    "effects": [
+      "gramRead",
+      "gramWrite",
+      "fold:glyph_query",
+      "fold:address_navigate"
+    ],
+    "ports": [],
+    "coordinator": false
+  }
+}

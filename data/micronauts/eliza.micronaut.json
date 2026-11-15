@@ -1,0 +1,182 @@
+{
+  "@kind": "kuhul.micronaut.atomic.v1",
+  "id": "ELIZA-µ",
+  "descriptor_status": "active",
+  "track_ref": "data/tracks/ELIZA.semantic-tracks.v1.json",
+  "bindings_ref": "data/eliza-field.sources.json",
+  "manifest": {
+    "name": "ELIZA-µ",
+    "version": "2.0.0",
+    "description": "Conversational pattern engine with field-biased routing via eliza-bias.gml — classifies input to a field (⟁GENERAL_QA, ⟁REFLECTION, ⟁CONVERSATION, ⟁KNOWLEDGE, ⟁REASONING, ⟁FALLBACK) and applies eliza-bias.gml default_bias weights to rank AIML candidates before selection."
+  },
+  "api": {
+    "atomic_keys": [
+      "eliza.bank",
+      "eliza.field",
+      "eliza.rule",
+      "eliza.operator",
+      "eliza.srai",
+      "eliza.reflect",
+      "eliza.health"
+    ],
+    "verb_surface": [
+      "ELIZA",
+      "ELIZA BANK",
+      "ELIZA FIELD *",
+      "ELIZA OPERATOR *",
+      "ELIZA REFLECT *",
+      "ELIZA STATUS"
+    ]
+  },
+  "xcfe": {
+    "mode": "xcfe_gated_read_only",
+    "escalation_mode": "proposal_only",
+    "authority": "xcfe_gated_read_only",
+    "forbidden": [
+      "emit_response",
+      "write_state",
+      "mutate_topology",
+      "commit_patterns",
+      "direct_dispatch"
+    ]
+  },
+  "program_contract": {
+    "drivers": [
+      "Micronaut.Core.dll",
+      "CFPC.Patterns.dll",
+      "Field.Patterns.dll",
+      "ELIZA.Patterns.dll"
+    ],
+    "driver_roles": {
+      "Micronaut.Core.dll": "lifecycle and phase dispatch",
+      "CFPC.Patterns.dll": "gap classification and intent resolution",
+      "Field.Patterns.dll": "field routing via eliza-bias.gml and eliza-field.sources.json",
+      "ELIZA.Patterns.dll": "AIML pattern matching, synonym collapse, and response shaping"
+    },
+    "sandbox": "xcfe_gated_read_only",
+    "learning": false,
+    "grammar_refs": [
+      "data/alice/",
+      "data/eliza-bias.gml",
+      "data/eliza-field.sources.json"
+    ],
+    "contract_refs": [
+      "data/schema/cfpc-intent-resolver.schema.json"
+    ]
+  },
+  "atomic_key_defs": {
+    "eliza.bank": {
+      "@type": "phase_keyed_template",
+      "description": "Pop-phase pattern dispatch: synonym_collapse → manifest_lookup → field-scoped find_best_pattern_match",
+      "phases": ["Pop"],
+      "source": "data/eliza-field.sources.json",
+      "note": "Pattern pool is narrowed to the active field before ranking"
+    },
+    "eliza.field": {
+      "@type": "field_route",
+      "description": "Wo-phase field classifier and bias ranker: routes input to one of 6 fields using eliza-field.sources.json dynamic bindings, then applies eliza-bias.gml default_bias to score AIML candidates within that field",
+      "phases": ["Wo"],
+      "bias_source": "data/eliza-bias.gml",
+      "routing_source": "data/eliza-field.sources.json",
+      "field_order": [
+        "⟁GENERAL_QA",
+        "⟁REFLECTION",
+        "⟁CONVERSATION",
+        "⟁KNOWLEDGE",
+        "⟁REASONING",
+        "⟁FALLBACK"
+      ],
+      "ranking": {
+        "score": "default_bias * pattern_match_score",
+        "tiebreak": "projection_order ascending",
+        "authority": "data_only"
+      }
+    },
+    "eliza.rule": {
+      "@type": "rule_check",
+      "description": "Yax-phase field rule evaluation: checks predicate rules from eliza-field.sources.json#rules (e.g. reflection.feeling bias adjustment when capture contains SAD), applies then/else branch and default_bias multiplier",
+      "phases": ["Yax"],
+      "rules_source": "data/eliza-field.sources.json#rules",
+      "if_contract": {
+        "node": "ELIZA:IF",
+        "then_node": "ELIZA:THEN",
+        "else_node": "ELIZA:ELSE",
+        "contract_node": "ELIZA:THEN_ELSE_CONTRACT"
+      }
+    },
+    "eliza.operator": {
+      "@type": "operator_detect",
+      "description": "Pop/Sek-phase ELIZA-1 reasoning operator detection: 16 operators (CAUSE, CONTRAST, DEPENDENCY, CONSTRAINT, EVIDENCE, SEQUENCE, BOUNDARY, STATE, CONFLICT, ALTERNATIVE, INVARIANT, TEST, RELATION, SUBSTITUTE, VERIFY, DIRECT) detected at Pop, emitted as directive at Sek",
+      "phases": ["Pop", "Sek"],
+      "operator_ref": "data/tracks/ELIZA-1.semantic-tracks.v1.json",
+      "operator_manifest": "data/manifest/eliza.manifest.json"
+    },
+    "eliza.srai": {
+      "@type": "srai_bridge",
+      "description": "Ch'en-phase SRAI bridge: wraps eliza.srai.bridge block — receives Ch'en accumulator from eliza.rule, detects <srai> in candidate template, delegates to aiml.srai.vector for chain resolution if present, emits typed routing proposal for XCFE admission. Turns ELIZA into a reusable semantic operator in K'UHUL Atomic workflows.",
+      "phases": ["Ch'en"],
+      "block_ref": "data/micronauts/eliza-srai-bridge.micronaut.json",
+      "delegate_to": "aiml.srai.vector",
+      "xcfe_required": true,
+      "accumulator_schema": {
+        "@kind": "kuhul.eliza.chen_accumulator",
+        "micronaut": "ELIZA-µ",
+        "contract": "kuhul.micronaut.atomic.v1",
+        "active_field": "string",
+        "candidate": {
+          "pattern_id":          "string",
+          "pattern_match_score": "float",
+          "default_bias":        "float",
+          "field_score":         "float",
+          "projection_order":    "integer",
+          "wildcard_captures":   "object"
+        },
+        "phase":  "Ch'en",
+        "status": "pending_verification"
+      }
+    },
+    "eliza.reflect": {
+      "@type": "emit",
+      "description": "Xul-phase emit: applies field-bias-ranked candidate template, fills wildcard captures, writes response to gram store under ELIZA namespace. MUST NOT execute unless eliza.srai routing_proposal status is xcfe_admitted.",
+      "phases": ["Xul"],
+      "gram_ns": "ELIZA",
+      "keys": ["eliza:last_response", "eliza:active_field", "eliza:match_score"],
+      "guard": "eliza.srai.routing_proposal.status == 'xcfe_admitted'"
+    },
+    "eliza.health": {
+      "@type": "status",
+      "description": "Pop-phase diagnostic: reports active field, top candidate scores, bias weights, operator coverage, pattern_registry size, and synonym_collapse stats",
+      "phases": ["Pop"],
+      "reports": ["active_field", "top_candidate_scores", "bias_weights", "operator_coverage", "pattern_registry_size"]
+    }
+  },
+  "srai": {
+    "enabled": true,
+    "max_redirects": 3,
+    "scope": "local"
+  },
+  "capabilities": [
+    "intent-matching",
+    "pattern-response",
+    "synonym-collapse",
+    "eliza-rule-eval",
+    "xcfe-condition-check",
+    "AIML-1.0",
+    "eliza-field-routing",
+    "bias-ranked-match",
+    "field-aware-response",
+    "operator-graph-detection",
+    "⟁Pop",
+    "⟁Xul"
+  ],
+  "cache": {
+    "field_route_cache": true,
+    "bias_rank_cache": true,
+    "ttl_ms": 5000
+  },
+  "pair_constraint": {
+    "mode": "Pop_Xul_pair",
+    "forbid_unmatched_emit": true,
+    "note": "PROOF_001: template_fill fold MUST NOT emit unless a matched candidate was found in the active field"
+  }
+}

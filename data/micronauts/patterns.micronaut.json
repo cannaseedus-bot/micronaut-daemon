@@ -1,0 +1,128 @@
+{
+  "schema": "kuhul.micronaut.atomic.v1",
+  "identity": {
+    "id": "PATTERNS-µ",
+    "name": "patterns-µ",
+    "version": "1.0.0",
+    "authority_claim": "xcfe_gated_read_only"
+  },
+  "descriptor_status": "declarative_proposal",
+  "registered": false,
+  "registered_status": "unregistered; call register_micronaut() to activate",
+  "track_ref": "data/tracks/CFPC-u.semantic-tracks.v1.json",
+  "bindings_ref": null,
+  "manifest": {
+    "display_name": "patterns-µ",
+    "tagline": "Pattern matching, CFPC intent routing, CHEESE scoring, and Sheogorath entropy generation",
+    "color": "#cc88ff",
+    "icon_svg": "data/micronauts/assets/patterns.svg",
+    "animated_svg": "data/micronauts/assets/patterns.animated.svg",
+    "profile_card": {
+      "widget": "data/host/apps/micronaut-card.asx-app.json",
+      "props": { "id": "PATTERNS-µ", "phase": "Wo", "category": "pattern" }
+    }
+  },
+  "api": {
+    "namespace": "patterns",
+    "note": "No standalone HTTP server — atomic keys route through the native driver layer; Sheogorath daemon available on port 3213 (Sheogorath.Daemon.dll)",
+    "atomic_keys": [
+      { "key": "patterns.match",     "description": "general micronaut pattern match — routes query through Micronaut.Patterns.dll then Field.Patterns.dll field-category layer; returns top candidate with provenance" },
+      { "key": "patterns.cfpc",      "description": "CFPC Context Fluency Pattern Creation match — applies neighborhood_resolve with wildcard captures via CFPC.Patterns.dll; returns context_text, question_templates, and field-routed candidate" },
+      { "key": "patterns.field",     "description": "field-category pattern routing — dispatches to eliza-field categories (⟁GENERAL_QA, ⟁REFLECTION, ⟁CONVERSATION, ⟁KNOWLEDGE, ⟁REASONING, ⟁FALLBACK) via Field.Patterns.dll + eliza-bias.gml" },
+      { "key": "patterns.cheese",    "description": "CHEESE reinforcement score for a candidate — Cheese.Critic.dll computes sqrt(novelty × coherence); returns score, novelty, coherence, verdict; candidates below jyggalag_threshold 0.85 are dropped" },
+      { "key": "patterns.greymarch", "description": "full Sheogorath entropy expansion → Jyggalag collapse pipeline — Sheogorath.Patterns.dll generates greymarch_set at T=0.97 (Xul); CHEESE filters; Jyggalag collapses to collapsed_candidate; Sheogorath and Jyggalag are a matched pair and must appear as a unit" },
+      { "key": "patterns.log",       "description": "query audit log for pattern match decisions — Pattern.Log.dll append-only; returns recent log entries by query pattern, phase, or decision outcome" },
+      { "key": "patterns.health",    "description": "driver load status — reports all seven DLL load states, Sheogorath.Daemon.dll port 3213 availability, and CHEESE balance" }
+    ]
+  },
+  "sheogorath_ref": "data/programs/sheogorath.entropy.json",
+  "pattern_kernel_refs": [
+    "data/grammar/mml/v1/DaemonPatterns.mml",
+    "data/grammar/mml/v1/daemon-sheogorath.mml"
+  ],
+  "field_sources_ref": "data/eliza-field.sources.json",
+  "field_bias_ref": "data/eliza-bias.gml",
+  "cfpc_schema_ref": "data/schema/cfpc-pattern.schema.json",
+  "capabilities": [
+    "micronaut_pattern_match",
+    "cfpc_neighborhood_resolve",
+    "cfpc_wildcard_capture",
+    "field_category_routing",
+    "cheese_reinforcement_scoring",
+    "greymarch_entropy_expansion",
+    "jyggalag_collapse",
+    "pattern_audit_log",
+    "sheogorath_daemon_host"
+  ],
+  "srai": {
+    "mode": "bounded_redirect_only",
+    "cycle_detection": true,
+    "max_depth": 2
+  },
+  "xcfe": {
+    "authority": "xcfe_gated_read_only",
+    "required_for_tool_dispatch": true,
+    "required_for_mutation": true,
+    "forbidden": [
+      "emit_response",
+      "write_state",
+      "mutate_topology",
+      "commit_patterns"
+    ],
+    "note": "PATTERNS-µ matches, scores, and routes; it does not commit topology or emit responses. greymarch_set is evidence passed to Jyggalag; Greymarch record is not a topology commit."
+  },
+  "program_contract": {
+    "format": "kuhul.micronaut-program/1",
+    "phase": "Wo",
+    "role": ["pattern_match", "cfpc_resolution", "field_routing", "cheese_scoring", "greymarch_generation", "pattern_audit"],
+    "grammar_refs": [
+      "data/grammar/cfpc-mu.runtime.ebnf",
+      "data/grammar/mml/v1/DaemonPatterns.mml",
+      "data/grammar/mml/v1/daemon-sheogorath.mml"
+    ],
+    "contract_refs": [
+      "data/tracks/CFPC-u.semantic-tracks.v1.json",
+      "data/schema/cfpc-pattern.schema.json",
+      "data/programs/sheogorath.entropy.json"
+    ],
+    "effects": ["gramRead"],
+    "learning": {
+      "mode": "none",
+      "note": "pattern matching is stateless at this layer; pattern audit log is append-only via Pattern.Log.dll"
+    },
+    "sandbox": {
+      "filesystem": "allowlisted_pattern_assets_read_only",
+      "network": "loopback_sheogorath_daemon_3213_only",
+      "process": "none",
+      "effects": ["gramRead"],
+      "admission": "xcfe_gated"
+    },
+    "drivers": [
+      "Sheogorath.Patterns.dll",
+      "Sheogorath.Daemon.dll",
+      "Cheese.Critic.dll",
+      "CFPC.Patterns.dll",
+      "Field.Patterns.dll",
+      "Micronaut.Patterns.dll",
+      "Pattern.Log.dll"
+    ],
+    "driver_roles": {
+      "Sheogorath.Patterns.dll": "entropy-maximising pattern ops — ENTROPY_EXPAND, TRAJECTORY_DIVERGE, GREYMARCH_GENERATE at T=0.97 Xul phase; produces greymarch_set for Jyggalag COLLAPSE",
+      "Sheogorath.Daemon.dll":   "runtime daemon host for SHEOG-1 on port 3213; boots bots.py; must be running for patterns.greymarch dispatch",
+      "Cheese.Critic.dll":       "CHEESE reinforcement scorer — sqrt(novelty × coherence); filters greymarch_set against jyggalag_threshold 0.85; named in SharedPatternKernelRef of daemon-sheogorath.mml",
+      "CFPC.Patterns.dll":       "Context Fluency Pattern Creation — wildcard captures, neighborhood_resolve (max 1-hop), question_template generation, context_text assembly; phase-anchored per cfpc-pattern.schema.json",
+      "Field.Patterns.dll":      "field-category pattern routing — dispatches through eliza-field categories (⟁GENERAL_QA, ⟁REFLECTION, ⟁CONVERSATION, ⟁KNOWLEDGE, ⟁REASONING, ⟁FALLBACK) using eliza-bias.gml rank weights",
+      "Micronaut.Patterns.dll":  "general micronaut pattern matching substrate — exact-hash then wildcard-specificity lookup; base layer for all other pattern DLLs",
+      "Pattern.Log.dll":         "append-only audit log for pattern match decisions — records query, matched pattern, field category, phase, driver chain, and outcome per turn"
+    }
+  },
+  "pair_constraint": {
+    "note": "Sheogorath (Xul, T=0.97) and Jyggalag (Ch'en, T=0.00) are a matched unit — Sheogorath generates; Jyggalag collapses. patterns.greymarch MUST invoke both. Neither acts alone.",
+    "ref": "data/grammar/mml/v1/daemon-sheogorath.mml"
+  },
+  "cache": {
+    "ttl": 600,
+    "strategy": "pattern_lru",
+    "max_entries": 50000
+  }
+}

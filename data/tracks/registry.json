@@ -1,0 +1,698 @@
+{
+  "@kind": "semantic-tracks.registry.v1",
+  "@version": "1.0.0",
+  "authority": "index_only",
+  "semantic_authority": false,
+  "source": "data/tracks/*.semantic-tracks.v1.json",
+  "track_count": 75,
+  "tracks": [
+    {
+      "filename": "ADAPTIVE-FOLD-u.semantic-tracks.v1.json",
+      "id": "ADAPTIVE-FOLD-µ",
+      "phase": "Ch'en",
+      "category": "executive",
+      "sha256": "sha256:44f7bf3e11350bfa383b8d6b7cdb14fae622879271a715b011a201dbec0f3b2e",
+      "governs_count": 43,
+      "fold_count": 6
+    },
+    {
+      "filename": "ADVISOR-u.semantic-tracks.v1.json",
+      "id": "ADVISOR-µ",
+      "phase": "Yax",
+      "category": "advisory",
+      "sha256": "sha256:89e6620a39c63836ffe65465600ff4b7bb2f216c3db004ba4bf3f68681172a50",
+      "governs_count": 13,
+      "fold_count": 5
+    },
+    {
+      "filename": "AIML-u.semantic-tracks.v1.json",
+      "id": "AIML-µ",
+      "phase": "Yax",
+      "category": "advisory",
+      "sha256": "sha256:c77eb638de3821f220d88427959c71060e18a66c463bf10bed4b592b8ef98e5f",
+      "governs_count": 14,
+      "fold_count": 6
+    },
+    {
+      "filename": "ANAMORPHISM-u.semantic-tracks.v1.json",
+      "id": "ANAMORPHISM-µ",
+      "phase": "Sek",
+      "category": "structural",
+      "sha256": "sha256:ea6e3d4dc3e6f7c6fea0b3647cdf4a556a3ab619bcde741257f910ec96ba040c",
+      "governs_count": 29,
+      "fold_count": 6
+    },
+    {
+      "filename": "APP-WIZARD-u.semantic-tracks.v1.json",
+      "id": "APP-WIZARD-µ",
+      "phase": "Wo",
+      "category": "application-factory",
+      "sha256": "sha256:453d881317b4ec6c2ee88bbeec734e96351e896622c7a6bed15812439358f575",
+      "governs_count": 23,
+      "fold_count": 8
+    },
+    {
+      "filename": "ARTIFICIAL-CONSCIOUSNESS-u.semantic-tracks.v1.json",
+      "id": "ARTIFICIAL-CONSCIOUSNESS-µ",
+      "phase": "Wo",
+      "category": "theory",
+      "sha256": "sha256:ef9f0ede53ea2b9648e3ede06cb389a681b9011a8a7f9785fc295611749f446f",
+      "governs_count": 23,
+      "fold_count": 6
+    },
+    {
+      "filename": "BLOG-u.semantic-tracks.v1.json",
+      "id": "BLOG-µ",
+      "phase": "Yax",
+      "category": "application",
+      "sha256": "sha256:426235c5f3748038c3a9a1da2870a64507003170a0032650b283f76bc37618e9",
+      "governs_count": 11,
+      "fold_count": 6
+    },
+    {
+      "filename": "CFPC-u.semantic-tracks.v1.json",
+      "id": "CFPC-µ",
+      "phase": "Pop",
+      "category": "native",
+      "sha256": "sha256:09a3a6bb4fd8d14bae7d785b56ffce4b41be67f98ce5ece80969c0f5798909e8",
+      "governs_count": 19,
+      "fold_count": 7
+    },
+    {
+      "filename": "CHAT-u.semantic-tracks.v1.json",
+      "id": "CHAT-µ",
+      "phase": "Pop",
+      "category": "conversational",
+      "sha256": "sha256:4e5ef4450edce80bab71b695cb720eefb08cf32629202ef1dcbdd57460b89eb5",
+      "governs_count": 17,
+      "fold_count": 9
+    },
+    {
+      "filename": "CODEGEN-u.semantic-tracks.v1.json",
+      "id": "CODEGEN-µ",
+      "phase": "Wo",
+      "category": "code",
+      "sha256": "sha256:a4b55e4cd38a448847d716b7f792badbb5271ead4aa169bbbd9e403783659bb1",
+      "governs_count": 21,
+      "fold_count": 6,
+      "role": [
+        "compile",
+        "generate"
+      ]
+    },
+    {
+      "filename": "coder.semantic-tracks.v1.json",
+      "id": "coder",
+      "phase": "Sek",
+      "category": null,
+      "sha256": "sha256:e50ea3b87a04918c2face9c19e0809a996eaeef216c69337bb01ac21f7a14567",
+      "governs_count": 20,
+      "fold_count": 6
+    },
+    {
+      "filename": "COMP-THEORY-OF-MIND-u.semantic-tracks.v1.json",
+      "id": "COMP-THEORY-OF-MIND-µ",
+      "phase": "Wo",
+      "category": "theory",
+      "sha256": "sha256:2b100d603afdab3bc54e0a0358e519f2ac5ab7ec0068b3b8dc2d04366c108586",
+      "governs_count": 24,
+      "fold_count": 6
+    },
+    {
+      "filename": "CONCEPT-u.semantic-tracks.v1.json",
+      "id": "CONCEPT-µ",
+      "phase": "Yax",
+      "category": "cognitive",
+      "sha256": "sha256:8124d11587d28178d59f675c14534a3adf271598042acb9c13326703ce5c99e4",
+      "governs_count": 25,
+      "fold_count": 6
+    },
+    {
+      "filename": "CONTROL-u.semantic-tracks.v1.json",
+      "id": "CONTROL-µ",
+      "phase": "Pop",
+      "category": "control",
+      "sha256": "sha256:e8001c647477378a54c9de5fb4d1a02da2e48f6c1bac9d233db88cc06fd30478",
+      "governs_count": 21,
+      "fold_count": 7
+    },
+    {
+      "filename": "Coordinator.semantic-tracks.v1.json",
+      "id": "Coordinator",
+      "phase": "Ch'en",
+      "category": null,
+      "sha256": "sha256:eec8afac991249cca4886f55685a7e4da110b2d741cd3bba21a54d949aeeebfc",
+      "governs_count": 46,
+      "fold_count": 8
+    },
+    {
+      "filename": "CREATE-u.semantic-tracks.v1.json",
+      "id": "CREATE-µ",
+      "phase": "Yax",
+      "category": "creative",
+      "sha256": "sha256:0a346b933ccc775f508029c7f22e3b0fde2c0b737424ecd58fc6928caaa4cf9a",
+      "governs_count": 15,
+      "fold_count": 4
+    },
+    {
+      "filename": "DECISION-u.semantic-tracks.v1.json",
+      "id": "DECISION-µ",
+      "phase": "Sek",
+      "category": "cognitive",
+      "sha256": "sha256:a42530eef73c08be09a0e267e87bf69c26c6d7a80d60a9c520b4657a9e237fbd",
+      "governs_count": 15,
+      "fold_count": 6
+    },
+    {
+      "filename": "ELIZA-1.semantic-tracks.v1.json",
+      "id": "ELIZA-1",
+      "phase": "Pop",
+      "category": null,
+      "sha256": "sha256:c4ca0947aa2944d91c808f9b0964b57b6ab250c21121b7631f2036b82abbea54",
+      "governs_count": 21,
+      "fold_count": 2
+    },
+    {
+      "filename": "ELIZA-u.semantic-tracks.v1.json",
+      "id": "ELIZA-µ",
+      "phase": "Ch'en",
+      "category": "advisory",
+      "sha256": "sha256:edc424571d8a064e30db502c5b0e19be7c5ab37ce61ede82e1847a08c7e9fe8c",
+      "governs_count": 14,
+      "fold_count": 6
+    },
+    {
+      "filename": "ELIZA.semantic-tracks.v1.json",
+      "id": "ELIZA",
+      "phase": "Pop",
+      "category": null,
+      "sha256": "sha256:dfc5b212857f9dd16b97716590a8eb6959048a7c2935ae23133ea469641da01a",
+      "governs_count": 11,
+      "fold_count": 7
+    },
+    {
+      "filename": "EMAIL-u.semantic-tracks.v1.json",
+      "id": "EMAIL-µ",
+      "phase": "Wo",
+      "category": "communication",
+      "sha256": "sha256:9ca5ffa79622f2de22978c50412a9c8fa74a2d52ea215ba90dae5b0bcf260ead",
+      "governs_count": 17,
+      "fold_count": 8
+    },
+    {
+      "filename": "FACTORY-u.semantic-tracks.v1.json",
+      "id": "FACTORY-µ",
+      "phase": "Wo",
+      "category": "structural",
+      "sha256": "sha256:89747e12c68934811f5fad2ecab9ec09c306c6c49f66785230ed54ab374cf2b5",
+      "governs_count": 24,
+      "fold_count": 10
+    },
+    {
+      "filename": "Factory.semantic-tracks.v1.json",
+      "id": "Factory",
+      "phase": "Wo",
+      "category": null,
+      "sha256": "sha256:1e519078c86bcf04a7bf6d3372a5fa9d76d36669621a59c1619d95a7ec8ad098",
+      "governs_count": 10,
+      "fold_count": 7
+    },
+    {
+      "filename": "FIELD-GEOMETRY-u.semantic-tracks.v1.json",
+      "id": "FIELD-GEOMETRY-µ",
+      "phase": "Yax",
+      "category": "perceptual",
+      "sha256": "sha256:61e137144d2a8122510d239cd79cc07b7c098c290eab6a5b5e9e0e72eb0d2073",
+      "governs_count": 34,
+      "fold_count": 6
+    },
+    {
+      "filename": "FIXEDPOINT-u.semantic-tracks.v1.json",
+      "id": "FIXED-POINT-µ",
+      "phase": "Sek",
+      "category": "structural",
+      "sha256": "sha256:539d3fd718aa26e05bde27beba2aff41844d94d68d9a669c05c69c3a01f78d06",
+      "governs_count": 41,
+      "fold_count": 6
+    },
+    {
+      "filename": "FOLD-FIELD-u.semantic-tracks.v1.json",
+      "id": "FOLD-FIELD-µ",
+      "phase": "Sek",
+      "category": "structural",
+      "sha256": "sha256:20874503e5e6cb1095d817d6cdd8de3f4d3b01cb911c85a81bcec93dfd5274d7",
+      "governs_count": 72,
+      "fold_count": 0
+    },
+    {
+      "filename": "FOLD-HOF-u.semantic-tracks.v1.json",
+      "id": "FOLD-HOF-µ",
+      "phase": "Sek",
+      "category": "structural",
+      "sha256": "sha256:6ddbf6c846cc1c971cce7f3e072f1e4544ef37f49e742ca6b0c97220262658eb",
+      "governs_count": 28,
+      "fold_count": 6
+    },
+    {
+      "filename": "FOLDGRAPH-u.semantic-tracks.v1.json",
+      "id": "FOLDGRAPH-µ",
+      "phase": "Sek",
+      "category": "structural",
+      "sha256": "sha256:cfd96bdbe2ddb510f3dc99eb81fa49b76a74f2603429ba1a883def51b6169725",
+      "governs_count": 76,
+      "fold_count": 6
+    },
+    {
+      "filename": "frame-argument.semantic-tracks.v1.json",
+      "id": "frame:argument",
+      "phase": "Yax",
+      "category": "abstract-frame",
+      "sha256": "sha256:4478aa4dd3045c49376057b463a5da79f8e702782266abde646b855d5d05f005",
+      "governs_count": 8,
+      "fold_count": 3
+    },
+    {
+      "filename": "frame-ideology.semantic-tracks.v1.json",
+      "id": "frame:ideology",
+      "phase": "Yax",
+      "category": "abstract-frame",
+      "sha256": "sha256:c2b9be16f15e055c07a2d1dd2b61a6f4ea4dc942bb1506afecafa84ffb46f33e",
+      "governs_count": 6,
+      "fold_count": 3
+    },
+    {
+      "filename": "FREE-WILL-u.semantic-tracks.v1.json",
+      "id": "FREE-WILL-µ",
+      "phase": "Wo",
+      "category": "theory",
+      "sha256": "sha256:ae2ba6fa0399499b8bd6b8b9efede04a71f47d6a256ab3a81163f3650df0b6f5",
+      "governs_count": 24,
+      "fold_count": 6
+    },
+    {
+      "filename": "GAP-ROUTER-u.semantic-tracks.v1.json",
+      "id": "GAP-ROUTER-µ",
+      "phase": "Sek",
+      "category": "cognitive",
+      "sha256": "sha256:6eca329e0366968dd439736aeda39a896c50cbd34323a56240ec10af73069374",
+      "governs_count": 4,
+      "fold_count": 0
+    },
+    {
+      "filename": "GRAPH-THEORY-u.semantic-tracks.v1.json",
+      "id": "GRAPH-THEORY-µ",
+      "phase": "Sek",
+      "category": "structural",
+      "sha256": "sha256:4c176ce1b8805604329f9ddaef9c35c253e71cd54d320b2f50f78c6bcc1e0a80",
+      "governs_count": 33,
+      "fold_count": 6
+    },
+    {
+      "filename": "gravity.semantic-tracks.v1.json",
+      "id": "gravity",
+      "phase": "Pop",
+      "category": null,
+      "sha256": "sha256:3c3d6bee27730ff0168cf4790f380d1ed121e09231a292794b20d190753f9c32",
+      "governs_count": 6,
+      "fold_count": 4
+    },
+    {
+      "filename": "GREETING-u.semantic-tracks.v1.json",
+      "id": "GREETING-µ",
+      "phase": "Pop",
+      "category": "social",
+      "sha256": "sha256:628ee070d1bfbd376b482c85734a9c133e76338d8e6b39c5f11712a5ec896c7d",
+      "governs_count": 16,
+      "fold_count": 7
+    },
+    {
+      "filename": "INFER-u.semantic-tracks.v1.json",
+      "id": "INFER-µ",
+      "phase": "Ch'en",
+      "category": "cognitive",
+      "sha256": "sha256:25185df6ca4f714d5f4050172039bf862e5f1df5d72dde400ae8ddcc3dd8db4b",
+      "governs_count": 15,
+      "fold_count": 5
+    },
+    {
+      "filename": "intent-unresolved.semantic-tracks.v1.json",
+      "id": "intent-unresolved",
+      "phase": "Pop",
+      "category": null,
+      "sha256": "sha256:4dd5a54029abffe376728b626737ff6c3200d2f72f49e39d79181d18dbe573be",
+      "governs_count": 0,
+      "fold_count": 3
+    },
+    {
+      "filename": "JOKE-u.semantic-tracks.v1.json",
+      "id": "JOKE-µ",
+      "phase": "Yax",
+      "category": "humor-frame-routing",
+      "sha256": "sha256:12b1f794442952cdfe50458930e808f00bf52c07a4b89e99237f2229120251a4",
+      "governs_count": 14,
+      "fold_count": 8
+    },
+    {
+      "filename": "KNOWLED-1.semantic-tracks.v1.json",
+      "id": "KNOWLED-1",
+      "phase": "Sek",
+      "category": null,
+      "sha256": "sha256:b9bda59133e12d0ba77bc9aa85e43316b5cf245bc616fe3ed6a4d38a6fd5f4b0",
+      "governs_count": 15,
+      "fold_count": 5
+    },
+    {
+      "filename": "KUHUL-GLYPH-u.semantic-tracks.v1.json",
+      "id": "KUHUL-GLYPH-µ",
+      "phase": "Wo",
+      "category": "structural",
+      "sha256": "sha256:d88e424854858f2ff597aee981e8c2969cff686a18a6e77f738686b26acc6569",
+      "governs_count": 53,
+      "fold_count": 6
+    },
+    {
+      "filename": "Librarian.semantic-tracks.v1.json",
+      "id": "Librarian",
+      "phase": "Yax",
+      "category": null,
+      "sha256": "sha256:81f71550644351737514f71a4c1da12148db6ae61e15227d4d10131aea5083b1",
+      "governs_count": 77,
+      "fold_count": 6
+    },
+    {
+      "filename": "MATH-u.semantic-tracks.v1.json",
+      "id": "MATH-µ",
+      "phase": "Sek",
+      "category": "cognitive",
+      "sha256": "sha256:7c56467d47f7b85db3c88a3ad755b63f1e20516d0f4fe252cde157200ff2d279",
+      "governs_count": 31,
+      "fold_count": 7
+    },
+    {
+      "filename": "MEM-u.semantic-tracks.v1.json",
+      "id": "MEM-µ",
+      "phase": "Pop",
+      "category": "storage",
+      "sha256": "sha256:f50e8ecced5c479647f944a93fe8ee308a11e3d20ee3eaef3f9d801a0aac3516",
+      "governs_count": 8,
+      "fold_count": 3
+    },
+    {
+      "filename": "memory-agent.semantic-tracks.v1.json",
+      "id": "memory-agent",
+      "phase": "Xul",
+      "category": null,
+      "sha256": "sha256:9cc4feddae10de0b46df7d07b0e0e5431b00df270c99c0107d55b3b45804781e",
+      "governs_count": 13,
+      "fold_count": 7
+    },
+    {
+      "filename": "MEMORY-u.semantic-tracks.v1.json",
+      "id": "MEMORY-µ",
+      "phase": "Xul",
+      "category": "memory",
+      "sha256": "sha256:cd638523a9d85d8780bdfefc6fedde387c0d46fb46e51adaef66fc0123e2511d",
+      "governs_count": 25,
+      "fold_count": 9
+    },
+    {
+      "filename": "MICRONAUT-PROGRAM-u.semantic-tracks.v1.json",
+      "id": "MICRONAUT-PROGRAM-µ",
+      "phase": "Sek",
+      "category": "executive",
+      "sha256": "sha256:4943ce1ee9f6ea710c3669482e7e9a86f7dff9316cb7fc92c453e9448770adef",
+      "governs_count": 32,
+      "fold_count": 6,
+      "role": "execute"
+    },
+    {
+      "filename": "MORPHISM-u.semantic-tracks.v1.json",
+      "id": "MORPHISM-µ",
+      "phase": "Sek",
+      "category": "structural",
+      "sha256": "sha256:303a0c291d47c71b84cd8149bc2d6b7f07f17d1bc1ccdd780948f0d458457bd6",
+      "governs_count": 36,
+      "fold_count": 6
+    },
+    {
+      "filename": "Mx2LM.semantic-tracks.v1.json",
+      "id": "Mx2LM",
+      "phase": "Sek",
+      "category": "cognitive",
+      "sha256": "sha256:8cc8a5d68fd41c4e17932437aa3f2571e2c5b83144772a54bf1c24805cb0b4a8",
+      "governs_count": 27,
+      "fold_count": 7
+    },
+    {
+      "filename": "NGRAM-KEY-u.semantic-tracks.v1.json",
+      "id": "NGRAM-KEY-µ",
+      "phase": "Wo",
+      "category": "structural",
+      "sha256": "sha256:c7f13bf4288f332ec6f200c76c4c7bc378db1dee9c81d798d7171bb82671b84a",
+      "governs_count": 133,
+      "fold_count": 6
+    },
+    {
+      "filename": "NGRAM-u.semantic-tracks.v1.json",
+      "id": "NGRAM-µ",
+      "phase": "Wo",
+      "category": "structural",
+      "sha256": "sha256:18e82b1aa884895ec436f9b648a3879639076c56cf4b661b57549e7147b974e1",
+      "governs_count": 32,
+      "fold_count": 7
+    },
+    {
+      "filename": "ORCH-u.semantic-tracks.v1.json",
+      "id": "ORCH-µ",
+      "phase": "Ch'en",
+      "category": "executive",
+      "sha256": "sha256:a91481b7a7fbcbc08285b4acd5ed5891304c55fa733a45699c7e44e57be23092",
+      "governs_count": 48,
+      "fold_count": 6
+    },
+    {
+      "filename": "PHIL-AI-u.semantic-tracks.v1.json",
+      "id": "PHIL-AI-µ",
+      "phase": "Wo",
+      "category": "theory",
+      "sha256": "sha256:cc2ed7c5d9ab7a5b74a371dfc83b0c175aa32979e7c11d37f995024e46c3f7f4",
+      "governs_count": 24,
+      "fold_count": 6
+    },
+    {
+      "filename": "PHIL-SELF-u.semantic-tracks.v1.json",
+      "id": "PHIL-SELF-µ",
+      "phase": "Wo",
+      "category": "theory",
+      "sha256": "sha256:e225fefbadcdcd498ef4bf7151877f2bcc1559ada88caccc45a9ca37701593bb",
+      "governs_count": 23,
+      "fold_count": 5
+    },
+    {
+      "filename": "PI-PHASE-u.semantic-tracks.v1.json",
+      "id": "PI-PHASE-µ",
+      "phase": "Yax",
+      "category": "perceptual",
+      "sha256": "sha256:1c888a8667726bafade90ad35f6e40e353e03a20a27112c12a15d8a9b9f7a8c4",
+      "governs_count": 31,
+      "fold_count": 6
+    },
+    {
+      "filename": "PLAN-u.semantic-tracks.v1.json",
+      "id": "PLAN-µ",
+      "phase": "Wo",
+      "category": "planning",
+      "sha256": "sha256:958f6ad510494dd91edeeef48433e7983391e1b47299074247ac2db0870d0806",
+      "governs_count": 30,
+      "fold_count": 12
+    },
+    {
+      "filename": "POLITICS-u.semantic-tracks.v1.json",
+      "id": "POLITICS-µ",
+      "phase": "Yax",
+      "category": "political-reasoning-frame",
+      "sha256": "sha256:4a98a4e2058cf0ff8cf61f8003daf2ab0d57ff4f564eb000778ba8f39fe9c652",
+      "governs_count": 17,
+      "fold_count": 6
+    },
+    {
+      "filename": "REASON-u.semantic-tracks.v1.json",
+      "id": "REASON-µ",
+      "phase": "Sek",
+      "category": "cognitive",
+      "sha256": "sha256:c5a22fe76efb407881408831ada43dad05321602cdeb9911f2d6b29b172a8a2c",
+      "governs_count": 12,
+      "fold_count": 4
+    },
+    {
+      "filename": "reasoner.semantic-tracks.v1.json",
+      "id": "reasoner",
+      "phase": "Yax",
+      "category": null,
+      "sha256": "sha256:7e47f1f536622fce47103553ad8ae80f9e16fbe517848317ae2d9b40e462736e",
+      "governs_count": 20,
+      "fold_count": 8
+    },
+    {
+      "filename": "RESEARCH-u.semantic-tracks.v1.json",
+      "id": "RESEARCH-µ",
+      "phase": "Sek",
+      "category": "structural",
+      "sha256": "sha256:d7aa4700bde2cda73629d6bc0753a0797cd7f7639ae7452b13aa51011323076d",
+      "governs_count": 15,
+      "fold_count": 6
+    },
+    {
+      "filename": "RICK-u.semantic-tracks.v1.json",
+      "id": "RICK-µ",
+      "phase": "Wo",
+      "category": "entertainment",
+      "sha256": "sha256:b25f6e6cfdade0a78d8d33e221b66c72f84c6da64af86ebc0c37c5261686f936",
+      "governs_count": 13,
+      "fold_count": 8
+    },
+    {
+      "filename": "SCFML-u.semantic-tracks.v1.json",
+      "id": "SCFML-µ",
+      "phase": "Wo",
+      "category": "control",
+      "sha256": "sha256:332bed6ff93929b37070b2de2a1f810aea63fe7f67dca1de2079314da45d3279",
+      "governs_count": 20,
+      "fold_count": 6
+    },
+    {
+      "filename": "SEMANTIC-FOLD-u.semantic-tracks.v1.json",
+      "id": "SEMANTIC-FOLD-µ",
+      "phase": "Sek",
+      "category": "structural",
+      "sha256": "sha256:310c12136c02a59cd4e17dfb83b52807d0b615a0eba3a4976f68efdd833f833e",
+      "governs_count": 26,
+      "fold_count": 6
+    },
+    {
+      "filename": "SNOBOL-u.semantic-tracks.v1.json",
+      "id": "SNOBOL-µ",
+      "phase": "Wo",
+      "category": "structural",
+      "sha256": "sha256:7a6b9583d75166591df073ab8a3b9b4c4bf629d897779b3b9e9fb647867d30d9",
+      "governs_count": 38,
+      "fold_count": 6,
+      "role": "parse"
+    },
+    {
+      "filename": "TEMPLATE-u.semantic-tracks.v1.json",
+      "id": "TEMPLATE-µ",
+      "phase": "Yax",
+      "category": "scaffold",
+      "sha256": "sha256:96a5296dd89a3c5d0b9a2d835bb709adb44f9e0e0c96c01314d6e695288b01c3",
+      "governs_count": 10,
+      "fold_count": 1
+    },
+    {
+      "filename": "TENSOR-u.semantic-tracks.v1.json",
+      "id": "TENSOR-µ",
+      "phase": "Wo",
+      "category": "geometry",
+      "sha256": "sha256:77658f64499c3976cb14a2036949b470dfd74d6e913c20e093db287923673011",
+      "governs_count": 22,
+      "fold_count": 9
+    },
+    {
+      "filename": "THEORY-OF-MIND-u.semantic-tracks.v1.json",
+      "id": "THEORY-OF-MIND-µ",
+      "phase": "Wo",
+      "category": "theory",
+      "sha256": "sha256:fd5c93af6b0e677573166917523ca78990989eda2783344eb07bebe25bec45c4",
+      "governs_count": 24,
+      "fold_count": 6
+    },
+    {
+      "filename": "THOUGHT-OUTLINE-u.semantic-tracks.v1.json",
+      "id": "THOUGHT-OUTLINE-µ",
+      "phase": "Wo",
+      "category": "theory",
+      "sha256": "sha256:52bb58eb59caf448ff009d1450a8097afdb41766a684cd6d0250bbbb0f44973d",
+      "governs_count": 24,
+      "fold_count": 5
+    },
+    {
+      "filename": "TOOL-u.semantic-tracks.v1.json",
+      "id": "TOOL-µ",
+      "phase": "Sek",
+      "category": "execution",
+      "sha256": "sha256:1fa1c6d679383c6a64f3954140e9af78f699729c483db13656010a7a9008482e",
+      "governs_count": 35,
+      "fold_count": 6,
+      "role": "dispatch"
+    },
+    {
+      "filename": "TYPED-QUERY-u.semantic-tracks.v1.json",
+      "id": "TYPED-QUERY-µ",
+      "phase": "Yax",
+      "category": "retrieval",
+      "sha256": "sha256:6d425bf9dc33e7fe4f91dcc880dc8c89090bdf6eb5abd146f3fb57f36511b40e",
+      "governs_count": 25,
+      "fold_count": 6,
+      "role": "query"
+    },
+    {
+      "filename": "TRAIN-u.semantic-tracks.v1.json",
+      "id": "TRAIN-µ",
+      "phase": "Sek",
+      "category": "execution",
+      "sha256": "sha256:642c072253e18e00cbc9717ab926a0eaaefbaa8b6f0ac43a40aae32e626ae0fe",
+      "governs_count": 39,
+      "fold_count": 6
+    },
+    {
+      "filename": "USER-u.semantic-tracks.v1.json",
+      "id": "USER-µ",
+      "phase": "Pop",
+      "category": "identity",
+      "sha256": "sha256:897cba42e2286fca42ed398472ceaa88024d5ee9f50792bec2c3e51a30ad589d",
+      "governs_count": 8,
+      "fold_count": 7
+    },
+    {
+      "filename": "VECTOR-u.semantic-tracks.v1.json",
+      "id": "VECTOR-µ",
+      "phase": "Wo",
+      "category": "geometry",
+      "sha256": "sha256:8e56267741d06f8f96be0de5143be6c5d2f9cecfdb7103796e474a0993401db2",
+      "governs_count": 44,
+      "fold_count": 13
+    },
+    {
+      "filename": "WEB-RESEARCH-u.semantic-tracks.v1.json",
+      "id": "WEB-RESEARCH-µ",
+      "phase": "Yax",
+      "category": "retrieval",
+      "sha256": "sha256:ee5d794c381bf7c871758973a092c52f51c76d36fe1e490adb2195e5fc063823",
+      "governs_count": 37,
+      "fold_count": 8
+    },
+    {
+      "filename": "WILDCARD-u.semantic-tracks.v1.json",
+      "id": "WILDCARD-µ",
+      "phase": "Yax",
+      "category": "structural",
+      "sha256": "sha256:fbea1dab95bca27f64e1d74420de336067d9fda995ed686bac168f2bd7b5e297",
+      "governs_count": 12,
+      "fold_count": 6,
+      "role": [
+        "compile",
+        "resolve"
+      ]
+    },
+    {
+      "filename": "XCFE-u.semantic-tracks.v1.json",
+      "id": "XCFE-µ",
+      "phase": "Wo",
+      "category": "native",
+      "sha256": "sha256:41ffd9fc4b9ecea29b04e49465a5dbd3afe068e86968e8ac0d519837e2ed44fd",
+      "governs_count": 32,
+      "fold_count": 7
+    }
+  ],
+  "role_source": "source_track.grammar_contract.role"
+}

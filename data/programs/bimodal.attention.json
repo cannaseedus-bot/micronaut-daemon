@@ -1,0 +1,192 @@
+{
+  "@kind": "kuhul.bimodal-attention.v1",
+  "@id": "model://micronaut-bimodal-ultrachat-coder",
+  "@version": "1.0.0",
+  "description": "Two-lane Micronaut model: conversational Ultrachat plus coder-slerp AST/tool lane.",
+  "architecture": {
+    "type": "bimodal",
+    "modalities": ["chat", "code"],
+    "routing": "deterministic-intent-gate",
+    "fusion": "slerp-after-independent-decoding",
+    "shared": ["tokenizer-contract", "KXML-folds", "AtomicDOM-context", "event-log"]
+  },
+  "model_catalog": {
+    "root": "models/",
+    "selection_policy": "manifest-first",
+    "entries": [
+      { "id": "gpt-oss", "path": "models/gpt-oss", "class": "general-reasoning" },
+      { "id": "khanary-geometry-v0.3.0", "path": "models/khanary-geometry-v0.3.0", "class": "geometry" },
+      { "id": "khanary-gpt2-v0.4.0", "path": "models/khanary-gpt2-v0.4.0", "class": "gpt2-carrier" },
+      { "id": "khanary-gpu-resident-v0.1.0", "path": "models/khanary-gpu-resident-v0.1.0", "class": "resident-runtime" },
+      { "id": "khanary-kxml-v0.5.0", "path": "models/khanary-kxml-v0.5.0", "class": "kxml-semantic" },
+      { "id": "khanary-qwen1_8b-v0.1.0", "path": "models/khanary-qwen1_8b-v0.1.0", "class": "qwen-carrier" },
+      { "id": "khanary-semantic-runtime-v0.1.0", "path": "models/khanary-semantic-runtime-v0.1.0", "class": "semantic-runtime" },
+      { "id": "lfm2-1b", "path": "models/lfm2-1b", "class": "general-chat" },
+      { "id": "mgguf-gpt2-2expert", "path": "models/mgguf-gpt2-2expert", "class": "gpt2-moe" },
+      { "id": "mgguf-qwen-1expert", "path": "models/mgguf-qwen-1expert", "class": "qwen-expert" },
+      { "id": "phi3-mini-4k", "path": "models/phi3-mini-4k", "class": "chatml-chat" },
+      { "id": "qwen-1b8-chat", "path": "models/qwen-1b8-chat", "class": "chat" },
+      { "id": "qwen25-05b-story", "path": "models/qwen25-05b-story", "class": "story-chat" },
+      { "id": "gemma-3-1b-it-f16", "path": "models/gemma-3-1b-it.f16.gguf", "class": "chatml-chat", "format": "gguf" },
+      { "id": "gemma-3-1b-it-q8", "path": "models/gemma-3-1b-it-q8.gguf", "class": "chatml-chat", "format": "gguf" },
+      { "id": "gemma-3-1b-it-tq1_0", "path": "models/gemma-3-1b-it-tq1_0.gguf", "class": "chatml-chat", "format": "gguf" },
+      { "id": "dolphin-phi2", "path": "models/dolphin-phi2", "class": "chatml-tool-planner" },
+      { "id": "from_zero", "path": "models/from_zero", "class": "kuhul-micronaut", "manifest": "models/from_zero/atomic.manifest.json" },
+      { "id": "gemma-3-1b", "path": "models/gemma-3-1b", "class": "chat" },
+      { "id": "gemma-3-1b-q8", "path": "models/gemma-3-1b-q8", "class": "chat", "quantization": "q8" },
+      { "id": "gemma-3-4b", "path": "models/gemma-3-4b", "class": "chat" },
+      { "id": "gemma-4-e2b", "path": "models/gemma-4-e2b", "class": "chat-mixture" },
+      { "id": "gpt2-xl", "path": "models/gpt2-xl", "class": "gpt2-carrier" }
+      ,{ "id": "kube-semantic-cube", "path": "dist/GPU-TRAINER/models/kube.model.json", "class": "semantic-cube-engine", "runtime": "dist/GPU-TRAINER/kuhul_trainer.exe" }
+    ]
+  },
+  "models": {
+    "chat": {
+      "id": "ultrachat",
+      "role": "conversation-and-intent",
+      "format": "gguf",
+      "weights": "models/from_zero/from_zero_v0.6_kuhul.gguf",
+      "fallback_weights": "E:/models/GPT2/coder_micronaut/ultrachat_coder_skeleton_slerp_0p40.gguf",
+      "template": "chatml",
+      "endpoint": "http://127.0.0.1:9010/v1/chat/completions",
+      "output": ["natural_language", "intent", "clarification"]
+    },
+    "code": {
+      "id": "coder-slerp",
+      "role": "code-generation-ast-and-tool-planning",
+      "format": "gguf",
+      "weights": "E:/models/GPT2/coder_micronaut/coder_ast_json_fp16.safetensors",
+      "serving_gguf": "E:/models/GPT2/coder_micronaut/ultrachat_coder_skeleton_slerp_0p40.gguf",
+      "trained_checkpoint": "E:/models/GPT2/coder_micronaut/coder_ast_json_fp16_step4800.safetensors",
+      "candidate_gguf": [
+        {
+          "id": "gpt2-small-tool-g003",
+          "path": "E:/models/GPT2/mini-GPT/gpt2_small_lite_tool_g003_q8.gguf",
+          "role": "tool-call-runtime",
+          "status": "llama.cpp load PASS; structured tool-call output PASS"
+        },
+        {
+          "id": "gpt2-small-q8-base",
+          "path": "E:/models/GPT2/mini-GPT/gpt2_small_q8.gguf",
+          "role": "research-baseline",
+          "adapter": "programs/micronauts/jrom-research-gpt2-q8.json",
+          "status": "loads; baseline and JROM context both echo ChatML/control tokens"
+        },
+        {
+          "id": "gpt2-layered-instruct",
+          "path": "E:/models/GPT2/layered_ckpts/layered_instruct.gguf",
+          "source": "E:/models/GPT2/layered_ckpts/layered_instruct.safetensors",
+          "role": "instruction-research-candidate",
+          "status": "converted and loads; natural-language response but malformed training/template text"
+        },
+        {
+          "id": "gpt2-layered-code",
+          "path": "E:/models/GPT2/layered_ckpts/layered_code.gguf",
+          "source": "E:/models/GPT2/layered_ckpts/layered_code.safetensors",
+          "role": "coder-candidate",
+          "status": "converted and loads; repeated ChatML start-token output"
+        },
+        {
+          "id": "gpt2-large-converted",
+          "path": "E:/models/GPT2/lg-GPT2/model.gguf",
+          "source": "E:/models/GPT2/lg-GPT2/model.safetensors",
+          "role": "large-language-baseline",
+          "status": "converted and loads; short probe still shows template/prompt drift"
+        },
+        {
+          "id": "gpt2-medium-toolcall-s0500",
+          "path": "E:/models/GPT2/med-GPT/gpt2_medium_toolcall_s0500_q8.gguf",
+          "role": "tool-call-probe",
+          "status": "loads; control-token echo observed"
+        },
+        {
+          "id": "gpt2-medium-ft-toolcall",
+          "path": "E:/models/GPT2/med-GPT/gpt2_medium_ft_toolcall_q8.gguf",
+          "role": "tool-call-finetune",
+          "status": "candidate; validate tensor orientation before promotion"
+        },
+        {
+          "id": "gpt2-medium-baseline",
+          "path": "E:/models/GPT2/med-GPT/gpt2_medium_q8.gguf",
+          "role": "baseline-chat",
+          "status": "llama.cpp load did not bind after extended wait; investigate GGUF metadata/loader compatibility"
+        },
+        {
+          "id": "gpt2-medium-ft",
+          "path": "E:/models/GPT2/med-GPT/gpt2_medium_ft_q8.gguf",
+          "role": "conversation-finetune",
+          "status": "load failed: blk.0.attn_qkv.weight expected 1024x3072, got 3072x1024"
+        },
+        {
+          "id": "gpt2-medium-merged-slerp",
+          "path": "E:/models/GPT2/med-GPT/gpt2_medium_merged_a035_q8.gguf",
+          "role": "merged-slerp",
+          "status": "candidate"
+        }
+      ],
+      "adapter_checkpoint": "models/from_zero/coder_skeleton.safetensors",
+      "adapter_lora": null,
+      "adapter_lora_status": "not-present; use coder_skeleton.safetensors or generate with prep_ast_corpus.py",
+      "template": "chatml-with-kxml-folds",
+      "endpoint": "http://127.0.0.1:9010/v1/chat/completions",
+      "inference_boundary": "native SafeTensors coder or explicitly exported GGUF; Khanary/WebGL2 consumes GGUF",
+      "output": ["kson_ast", "kxml_program", "single_tool_command", "patch_plan"]
+    }
+  },
+  "attention": {
+    "phase": "Wo",
+    "steps": [
+      "classify_request",
+      "select_chat_or_code_lane",
+      "decode_lane_independently",
+      "validate_against_ebnf_and_atomicdom",
+      "slerp_semantic_state",
+      "emit_one_command_or_response"
+    ],
+    "signals": {
+      "chat": ["question", "explanation", "conversation", "summarize"],
+      "code": ["edit", "implement", "refactor", "compile", "parse", "AST", "tool", "file"]
+    },
+    "threshold": 0.65,
+    "tie_break": "chat",
+    "max_tool_commands": 1
+  },
+  "slerp": {
+    "enabled": true,
+    "mode": "semantic-state-only",
+    "alpha": 0.4,
+    "formula": "normalize((1-alpha)*chat_state + alpha*code_state)",
+    "constraint": "never interpolate raw logits, tensor shapes, or tool arguments"
+  },
+  "contracts": {
+    "chat_output": "plain response or structured intent",
+    "code_output": "KSON/KXML proposal requiring host validation",
+    "tool_output": "one AtomicDOM-approved command",
+    "write_policy": "Allow edits plus approved folder required",
+    "failure_policy": "return clarification; do not execute guessed code",
+    "continuation": {
+      "enabled": true,
+      "trigger": "ui_continue_or_client_continue",
+      "max_rounds": 4,
+      "preserve_messages": true,
+      "token_budget": "increase_per_segment",
+      "prompt": "Continue exactly from the last character. Do not repeat prior text."
+    }
+  },
+  "folds": {
+    "Pop": "load context and conversation",
+    "Wo": "route attention between chat and code lanes",
+    "Yax": "select candidate lane and tool plan",
+    "Sek": "decode or execute approved operation",
+    "Chen": "validate syntax, paths, permissions, and result",
+    "Xul": "emit response, patch, or event"
+  },
+  "registry": {
+    "program": "programs/micronauts/micronaut-coder.native.json",
+    "ast_corpus": "tools/coder_ast.jsonl",
+    "residency": "XSHARD/DDS/SCXQ2",
+    "adapter_metadata": "JROM",
+    "kube_engine": "dist/GPU-TRAINER/models/kube.model.json",
+    "runtime": "native micronaut-coder or configured llama.cpp endpoint"
+  }
+}

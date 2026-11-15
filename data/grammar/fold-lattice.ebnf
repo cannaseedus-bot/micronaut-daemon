@@ -1,0 +1,167 @@
+(* ============================================================ *)
+(* Fold Lattice Grammar                                         *)
+(* Product graph over semantic phase theta and competence sigma. *)
+(* ============================================================ *)
+
+(* A Fold Lattice is not a fold, not a policy, and not an executor.
+   It is the product coordinate system for Fold Kernel lifecycle state:
+
+       K_t = (F_h, phi, T, s, sigma, X_t)
+       (theta, sigma) is the phase/competence slice of that coordinate
+       F_h = Fold/hypergraph structure
+       phi/theta ∈ {Pop, Wo, Yax, Sek, Ch'en, Xul}
+       T = active semantic track
+       s ∈ {folded, unfolded}
+       sigma ∈ {unbound, observed, learned, bound, validated, autonomous}
+       X_t = mutable runtime state
+
+   Fold Lattice is a projection of Fold Space F_K, which uses runtime
+   positions p_t = (h, phi, T, s, sigma, X_t).
+
+   Fold Lattice != Fold Kernel != XCFE Policy != Execution remains true
+   for the lattice projection boundary.
+
+   Fold Lattice != Fold Space != Fold Kernel != XCFE Policy != Execution.
+   Fold != Xul: fold_state changes bounded/expanded navigation state; Xul is
+   the commit/collapse phase. The lattice records where a phase-specific kernel
+   stands and which callback or substrate should be used when sigma has not
+   reached autonomous authority. *)
+
+(* ============================================================ *)
+(* 1. CONCRETE GRAMMAR — JSON SHAPE                              *)
+(* ============================================================ *)
+
+FoldLattice     ::= "{" LatticeMember ( "," LatticeMember )* "}" ;
+LatticeMember   ::= TypeKey
+                  | FoldKey
+                  | GenerationKey
+                  | TrackKey
+                  | FoldStateKey
+                  | RuntimeStateKey
+                  | AxisKey
+                  | CellsKey
+                  | MetricsKey
+                  | PolicyRefKey
+                  | ExtensionKey ;
+
+TypeKey         ::= '"@type"' ":" '"khanary.fold_lattice.v1"' ;
+FoldKey         ::= '"@fold"' ":" String ;
+GenerationKey   ::= '"@generation"' ":" Integer ;
+TrackKey        ::= '"@track"' ":" String ;
+FoldStateKey    ::= '"@fold_state"' ":" FoldState ;
+RuntimeStateKey ::= '"@runtime_state"' ":" RuntimeState ;
+AxisKey         ::= '"@axes"' ":" AxisDecl ;
+CellsKey        ::= '"@cells"' ":" CellList ;
+MetricsKey      ::= '"@metrics"' ":" MetricsDecl ;
+PolicyRefKey    ::= '"@policy_ref"' ":" String ;
+ExtensionKey    ::= '"@"' Identifier ":" Value ;
+
+AxisDecl        ::= "{" '"@theta"' ":" PhaseList "," '"@sigma"' ":" CompetenceList "}" ;
+PhaseList       ::= "[" Phase ( "," Phase )* "]" ;
+CompetenceList  ::= "[" Competence ( "," Competence )* "]" ;
+
+CellList        ::= "[" Cell ( "," Cell )* "]" ;
+Cell            ::= "{" CellMember ( "," CellMember )* "}" ;
+CellMember      ::= PhaseKey
+                  | CompetenceKey
+                  | SubstrateKey
+                  | CallbackKey
+                  | RouteHintKey
+                  | PolicyGateKey
+                  | CellExtKey ;
+PhaseKey        ::= '"@phase"' ":" Phase ;
+CompetenceKey   ::= '"@competence"' ":" Competence ;
+SubstrateKey    ::= '"@substrate"' ":" Substrate ;
+CallbackKey     ::= '"@callback"' ":" Callback ;
+RouteHintKey    ::= '"@route_hint"' ":" RouteHint ;
+PolicyGateKey   ::= '"@policy_gate"' ":" Boolean ;
+CellExtKey      ::= '"@"' Identifier ":" Value ;
+
+Phase           ::= '"Pop"' | '"Wo"' | '"Yax"' | '"Sek"' | '"Ch\'en"' | '"Xul"' ;
+Competence      ::= '"unbound"' | '"observed"' | '"learned"' | '"bound"' | '"validated"' | '"autonomous"' ;
+FoldState       ::= '"folded"' | '"unfolded"' ;
+RuntimeState    ::= "{" RuntimeStateMember ( "," RuntimeStateMember )* "}" ;
+RuntimeStateMember ::= '"@mutable"' ":" Boolean
+                     | '"@state_id"' ":" String
+                     | '"@digest"' ":" String
+                     | '"@"' Identifier ":" Value ;
+Substrate       ::= '"local"' | '"local-test"' | '"in-studio"' | '"teacher"' | '"fallback"' ;
+Callback        ::= '"none"' | '"record_observation"' | '"teacher_pairing"' | '"dual_run"' | '"contract_probe"' ;
+RouteHint       ::= '"local"' | '"local-test"' | '"fallback"' | '"teacher"' | '"in-studio"' ;
+
+MetricsDecl     ::= "{" MetricMember ( "," MetricMember )* "}" ;
+MetricMember    ::= ObservationsKey
+                  | SupportRateKey
+                  | ExceptionRateKey
+                  | ContractPassRateKey
+                  | TeacherDistanceKey
+                  | PolicyAgreementKey
+                  | MetricExtKey ;
+ObservationsKey ::= '"@observations"' ":" Integer ;
+SupportRateKey  ::= '"@support_rate"' ":" Number ;
+ExceptionRateKey ::= '"@exception_rate"' ":" Number ;
+ContractPassRateKey ::= '"@contract_pass_rate"' ":" Number ;
+TeacherDistanceKey ::= '"@teacher_distance"' ":" Number ;
+PolicyAgreementKey ::= '"@policy_agreement"' ":" Number ;
+MetricExtKey    ::= '"@"' Identifier ":" Value ;
+
+String          ::= JSON_String ;
+Number          ::= JSON_Number ;
+Integer         ::= JSON_Integer ;
+Boolean         ::= JSON_Boolean ;
+Value           ::= JSON_Value ;
+Identifier      ::= JSON_String_Match([A-Za-z][A-Za-z0-9_]*) ;
+
+
+(* ============================================================ *)
+(* 2. ABSTRACT GRAMMAR — PRODUCT GRAPH                           *)
+(* ============================================================ *)
+
+FoldLatticeADT  ::= "<" "fold" ":" FoldId ","
+                         "track" ":" TrackId ","
+                         "fold_state" ":" FoldState ","
+                         "runtime_state" ":" RuntimeState ","
+                         "axes" ":" ProductAxis ","
+                         "cells" ":" "[" CellADT* "]" ","
+                         "metrics" ":" PhaseMetrics ">" ;
+
+ProductAxis     ::= ThetaAxis "□" SigmaAxis ;
+ThetaAxis       ::= Pop | Wo | Yax | Sek | Ch'en | Xul ;
+SigmaAxis       ::= Unbound | Observed | Learned | Bound | Validated | Autonomous ;
+
+CellADT         ::= "<" "K_t" ":" "(" FoldId "," ThetaAxis "," TrackId "," FoldState "," SigmaAxis "," RuntimeState ")" ","
+                         "substrate" ":" Substrate ","
+                         "callback" ":" Callback ","
+                         "policy_gate" ":" Bool ">" ;
+
+Coordinate      ::= "K_t" "=" "(" "F_h" "," "phi" "," "T" "," "s" "," "sigma" "," "X_t" ")" ;
+(* K_t = (F_h, phi, T, s, sigma, X_t) *)
+SliceCoordinate ::= "K" "=" "(" "theta" "," "sigma" ")" ;
+FoldUnfoldAxis  ::= "s" "=" "folded" | "unfolded" ;
+ProductGraph    ::= "G_fold_lattice" "=" "G_phase" "□" "G_competence" ;
+(* G_fold_lattice = G_phase □ G_competence *)
+
+
+(* ============================================================ *)
+(* 3. SEMANTIC INVARIANTS                                        *)
+(* ============================================================ *)
+
+L1 ::= theta in phase_cycle ;
+L2 ::= sigma in competence_axis ;
+L3 ::= each cell has a unique (theta, sigma) coordinate ;
+L4 ::= full execution lattice has exactly one active cell per theta ;
+L5 ::= sigma < autonomous implies callback != none ;
+L6 ::= sigma = autonomous implies callback = none ;
+L7 ::= theta = Xul and sigma = autonomous implies policy_gate = true ;
+L8 ::= metrics are bounded: rates in [0,1], observations >= 0, teacher_distance >= 0 ;
+L9 ::= evolutionary transition recommendation never bypasses XCFE Policy ;
+L10 ::= route_hint is advisory; XCFE remains route authority ;
+L11 ::= fold_state is independent of phase; Fold != Xul ;
+L12 ::= Sek proposes, Ch'en proves, XCFE authorizes, Xul commits ;
+L13 ::= K = (theta, sigma) is a slice of K_t = (F_h, phi, T, s, sigma, X_t) ;
+L14 ::= Fold Lattice K = (theta, sigma) is a projection of Fold Space p_t = (h, phi, T, s, sigma, X_t) ;
+L15 ::= G_fold_lattice = G_phase □ G_competence is distinct from G_runtime = G_semantic □ G_phase ;
+L16 ::= FoldField vertex score S = W·C·R provides selection pressure; G_runtime edge weight = W_arc·cos(Δθ) ;
+
+TransitionMetric ::= "recommend" "(" SigmaAxis "->" SigmaAxis ")" "iff" MetricPredicate ;
+TypeJudgment     ::= "⊢" FoldLatticeADT ":" "FoldLattice" ;

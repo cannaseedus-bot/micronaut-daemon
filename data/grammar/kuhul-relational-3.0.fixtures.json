@@ -1,0 +1,39 @@
+{
+  "schema": "kuhul.relational_xsl_3_fixtures.v1",
+  "engine": "Saxon XSLT 3.0",
+  "stylesheet": "kuhul-relational-3.0.xsl",
+  "cases": [
+    {
+      "id": "E1-eligible-evaluated-not-admitted",
+      "input": "<graph id=\"capabilities\"><capability micronaut=\"CODEGEN-CPP-µ\" phaseScope=\"Yax..Xul\" provenance=\"map:cpp\"><domain>cpp</domain><domain>h</domain><domain>hlsl</domain><op>@call</op><op>@relate</op><op>@fold</op></capability><corpus domain=\"cpp\" keyPrefix=\"cpp\" corpusPath=\"data/gram/codegen-cpp.jsonl\" micronaut=\"CODEGEN-CPP-µ\" entryCount=\"500000\" phase=\"Wo\"/><requirement op=\"@call\" domain=\"cpp\" minPhase=\"Pop\"/></graph>",
+      "assertions": [
+        "/sdm/evaluation-contract[@admission='not-evaluated']",
+        "/sdm/graph/record[@kind='Requirement'][@eligible-evaluated='true'][@eligible-set-evaluated='CODEGEN-CPP-µ'][@admission='not-evaluated']",
+        "/sdm/graph/record[@kind='Capability']/eligible-ops-evaluated/op[text()='@call']"
+      ]
+    },
+    {
+      "id": "E2-empty-set-miss-capability",
+      "input": "<graph id=\"caps\"><capability micronaut=\"CODEGEN-PY-µ\" phaseScope=\"Pop..Sek\"><domain>py</domain><op>@call</op></capability><requirement op=\"@call\" domain=\"cpp\" minPhase=\"Pop\"/></graph>",
+      "assertions": [
+        "/sdm/graph/record[@kind='Requirement'][@eligible-evaluated='false'][@dispatch_block_reason='MISS_capability'][@admission='not-evaluated']"
+      ]
+    },
+    {
+      "id": "E3-cross-domain-requires-bridge",
+      "input": "<graph id=\"caps\"><capability micronaut=\"CODEGEN-CPP-µ\" phaseScope=\"Pop..Xul\"><domain>cpp</domain><domain>h</domain><op>@call</op></capability><requirement op=\"@call\" domain=\"h\" minPhase=\"Pop\"/></graph>",
+      "assertions": [
+        "/sdm/graph/record[@kind='Requirement'][@eligible-evaluated='true'][@eligible-set-evaluated='CODEGEN-CPP-µ']",
+        "/sdm/graph/record[@kind='Requirement']/bridge-missing-evaluated[@micronaut='CODEGEN-CPP-µ'][@reason='MISS_bridge']"
+      ]
+    },
+    {
+      "id": "E4-matching-bridge-clears-diagnostic-only",
+      "input": "<graph id=\"caps\"><capability micronaut=\"CODEGEN-CPP-µ\" phaseScope=\"Pop..Xul\"><domain>cpp</domain><domain>h</domain><op>@call</op></capability><requirement op=\"@call\" domain=\"h\" minPhase=\"Pop\"/><bridge sourceDomain=\"h\" targetDomain=\"cpp\" admissionRef=\"bridge:h-to-cpp:1\"/></graph>",
+      "assertions": [
+        "/sdm/graph/record[@kind='Requirement'][@eligible-evaluated='true'][@admission='not-evaluated']",
+        "not(/sdm/graph/record[@kind='Requirement']/bridge-missing-evaluated)"
+      ]
+    }
+  ]
+}

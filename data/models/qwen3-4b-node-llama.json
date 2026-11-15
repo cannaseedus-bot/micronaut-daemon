@@ -1,0 +1,13 @@
+{
+  "schema": "khanary.model-bootstrap.v1",
+  "id": "qwen3-4b-q8-node-llama",
+  "backend": "node-llama-cpp",
+  "package": "node-llama-cpp@3.21.1",
+  "model_path": "E:/models/lmstudio/Qwen3-4B-GGUF/Qwen3-4B-Q8_0.gguf",
+  "actions": ["read", "write", "patch", "advise", "plan", "submit"],
+  "advisor_submission": "data/schema/advisor-submission.schema.json",
+  "distillation_targets": ["keys", "tracks", "ngrams", "micronauts"],
+  "proposal_authority": "none",
+  "write_policy": "apply=true required",
+  "runtime_policy": "bootstrap-declarative; no implicit model-generated filesystem mutation"
+}

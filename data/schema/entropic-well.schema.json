@@ -1,0 +1,304 @@
+{
+  "$id": "urn:kuhul:khanary:schema:entropic-well:v4",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EntropicWellsConfig",
+  "description": "Configuration schema for KHANARY entropic-gravity semantic wells (v4: tensor-bundle grounding with type-(p,q) sections, local metric tensors, Jacobian transitions, and inscribed mesh curvature). Wells are overlaid onto FoldGraph B via GML anchor_node_id; they are derived geometry and cannot mutate B directly.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "generation_id",
+    "topology_target",
+    "active_wells"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "generation_id": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "topology_target": {
+      "type": "string",
+      "description": "Topology map identifier. 'B' = FoldGraph B (canonical semantic topology)."
+    },
+    "metric_context": {
+      "type": "string",
+      "enum": [
+        "Lorentzian_Manifold",
+        "Pseudo_Riemannian",
+        "Riemannian_Manifold",
+        "Riemannian_Simplicial_Manifold",
+        "Tensor_Bundle_Manifold"
+      ]
+    },
+    "laws": {
+      "type": "object",
+      "properties": {
+        "entropic_emergence": {
+          "type": "string"
+        },
+        "horizon_area_bound": {
+          "type": "string"
+        },
+        "equipartition_prior": {
+          "type": "string"
+        },
+        "euler_triangle_bound": {
+          "type": "string",
+          "description": "Euler triangle inequality: circumradius_R >= 2 * inradius_r for any nondegenerate triangle."
+        },
+        "tensor_coordinate_transform": {
+          "type": "string",
+          "description": "Tensor coordinate law: upper indices transform by the Jacobian and lower indices by the inverse Jacobian."
+        }
+      }
+    },
+    "global_constants": {
+      "type": "object",
+      "properties": {
+        "boltzmann_proxy_kb": {
+          "type": "number",
+          "description": "k_B proxy; 1.0 in natural units."
+        },
+        "planck_length_lp_sq": {
+          "type": "number",
+          "description": "l_P² proxy; 0.25 in natural units (Bekenstein-Hawking N = A/4l_P²)."
+        },
+        "system_clock_omega": {
+          "type": "number",
+          "description": "System clock rate Ω (Hz); used for Unruh temperature scaling."
+        }
+      }
+    },
+    "active_wells": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/EntropicWell"
+      }
+    }
+  },
+  "$defs": {
+    "EntropicWell": {
+      "type": "object",
+      "required": [
+        "well_id",
+        "anchor_node_id",
+        "holographic_boundary",
+        "thermodynamic_state",
+        "field_warp"
+      ],
+      "properties": {
+        "well_id": {
+          "type": "string",
+          "pattern": "^well:gml:[a-z0-9_]+$",
+          "description": "Unique well identifier. Convention: well:gml:{slug}."
+        },
+        "anchor_node_id": {
+          "type": "string",
+          "pattern": "^@node:gml:",
+          "description": "GML overlay node ID this well is anchored to. Must match a node in FoldGraph B's GML layer."
+        },
+        "label": {
+          "type": "string"
+        },
+        "structural_entropy_metrics": {
+          "type": "object",
+          "description": "Geodesic and simplicial entropy characterization for this well (v2).",
+          "properties": {
+            "geodesic_entropy_hg": {
+              "type": "number",
+              "minimum": 0,
+              "description": "H_G: Shannon entropy of shortest-path distance distribution from this anchor. Low = central hub; High = scattered region."
+            },
+            "triangular_entropy_h_delta": {
+              "type": "number",
+              "minimum": 0,
+              "description": "H_Δ: 3-node simplicial complex error metric. Low = stable equilateral mesh; High = warped/mismatched relations."
+            },
+            "mesh_density_triangles": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Count of verified 2-simplices (closed 3-node triangles) incident on this well's anchor node."
+            }
+          }
+        },
+        "holographic_boundary": {
+          "type": "object",
+          "required": [
+            "radius_r",
+            "surface_area_a",
+            "max_bits_n",
+            "temperature_unruh"
+          ],
+          "properties": {
+            "radius_r": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Holographic sphere radius r."
+            },
+            "surface_area_a": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "A = 4πr² — holographic boundary area."
+            },
+            "max_bits_n": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "N = A/(4l_P²) — maximum information bits (Bekenstein-Hawking bound)."
+            },
+            "temperature_unruh": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "T_U = ℏa/(2πck_B) proxy — Unruh surface temperature."
+            }
+          }
+        },
+        "thermodynamic_state": {
+          "type": "object",
+          "required": [
+            "internal_energy_e",
+            "baseline_entropy_s",
+            "potential_barrier_u"
+          ],
+          "properties": {
+            "internal_energy_e": {
+              "type": "number",
+              "description": "E: internal energy of the semantic well (equipartition: E = ½NkT)."
+            },
+            "baseline_entropy_s": {
+              "type": "number",
+              "description": "S: baseline information entropy at the well boundary."
+            },
+            "potential_barrier_u": {
+              "type": "number",
+              "minimum": 0,
+              "description": "U: potential barrier height; high U = high resistance to streamline entry."
+            }
+          }
+        },
+        "field_warp": {
+          "type": "object",
+          "required": [
+            "metric_tensor_g00",
+            "metric_tensor_g11",
+            "divergence_sink_mass",
+            "admissible_risk_bound",
+            "jacobian_determinant"
+          ],
+          "properties": {
+            "metric_tensor_g00": {
+              "type": "number",
+              "description": "g_00: time-like metric component; negative = gravitational redshift proxy."
+            },
+            "metric_tensor_g11": {
+              "type": "number",
+              "description": "g_11: space-like metric component; >1 = stretched semantic distance."
+            },
+            "divergence_sink_mass": {
+              "type": "number",
+              "description": "Effective divergence mass for pathline_compute.hlsl sink detection. Negative = gravity well; positive = repulsion well."
+            },
+            "admissible_risk_bound": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "R_minimax upper bound on loss_cost for paths admitted through this well."
+            },
+            "jacobian_determinant": {
+              "type": "number",
+              "description": "det(J): nonzero local coordinate-transition determinant for tensor transformation."
+            }
+          }
+        },
+        "inscribed_mesh_geometry": {
+          "type": "object",
+          "description": "Dual-circle projection geometry for local 3-node simplicial loops. This is derived mesh geometry over B, not Fold authority.",
+          "required": [
+            "circumradius_R",
+            "inradius_r",
+            "circumcenter_coord",
+            "triangular_entropy_h_delta"
+          ],
+          "properties": {
+            "circumradius_R": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "R: radius of the circumscribed circle/holographic horizon around the local semantic triangle."
+            },
+            "inradius_r": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "r: radius of the incircle/compression core inside the semantic triangle."
+            },
+            "circumcenter_coord": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "type": "number"
+              },
+              "description": "O=(x,y,z), the projection-space circumcenter used for balance/stress diagnostics."
+            },
+            "triangular_entropy_h_delta": {
+              "type": "number",
+              "minimum": 0,
+              "description": "H_Δ copied or specialized for this inscribed mesh horizon."
+            },
+            "riemann_curvature_scalar": {
+              "type": "number",
+              "description": "Local scalar curvature diagnostic for the inscribed mesh region."
+            }
+          }
+        },
+        "tensor_field_type": {
+          "type": "object",
+          "description": "Tensor bundle section type for this well. Geometry only; does not confer semantic authority.",
+          "required": [
+            "contravariant_rank_p",
+            "covariant_rank_q",
+            "is_smooth_section"
+          ],
+          "properties": {
+            "contravariant_rank_p": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "covariant_rank_q": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "is_smooth_section": {
+              "type": "boolean"
+            }
+          }
+        },
+        "local_metric_tensor_g_ij": {
+          "type": "object",
+          "description": "Symmetric local Riemannian/pseudo-Riemannian metric tensor components for tensor-bundle projection.",
+          "required": [
+            "g00",
+            "g01",
+            "g10",
+            "g11"
+          ],
+          "properties": {
+            "g00": {
+              "type": "number"
+            },
+            "g01": {
+              "type": "number"
+            },
+            "g10": {
+              "type": "number"
+            },
+            "g11": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  }
+}

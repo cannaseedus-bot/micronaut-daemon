@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from euclidean_gradient_field.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH </pattern>
+    <template>source euclidean_gradient_field.gml; label Euclidean_Gradient_Space; identity 1301; directed 1; nodes 2; edges 1. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 1</pattern>
+    <template>Graph Euclidean_Gradient_Space; node 1; arc_length: 0.0; curvature: 0.0; curve_id: gamma_flat_1; id: 1; label: Base_Premise; parameter_t: 0.0; scalar_potential: 0.20; static_weight: 0.20; x: -1.0; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Euclidean_Gradient_Space; node 1; arc_length: 0.0; curvature: 0.0; curve_id: gamma_flat_1; id: 1; label: Base_Premise; parameter_t: 0.0; scalar_potential: 0.20; static_weight: 0.20; x: -1.0; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 2</pattern>
+    <template>Graph Euclidean_Gradient_Space; node 2; arc_length: 2.8284; curvature: 0.0; curve_id: gamma_flat_1; id: 2; label: Derived_Inference; parameter_t: 1.0; scalar_potential: 0.95; static_weight: 0.95; x: 1.0; y: 1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Euclidean_Gradient_Space; node 2; arc_length: 2.8284; curvature: 0.0; curve_id: gamma_flat_1; id: 2; label: Derived_Inference; parameter_t: 1.0; scalar_potential: 0.95; static_weight: 0.95; x: 1.0; y: 1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1  2</pattern>
+    <template>Graph Euclidean_Gradient_Space; edge 1 to 2; curl_x: 0.0; curl_y: 0.0; curl_z: 0.0; curve_id: gamma_flat_1; field_kind: euclidean_gradient; label: steepest_ascent_line; loss_cost: 0.0; potential_delta: 0.75; source: 1; t0: 0.0; t1: 1.0; target: 2; verb: @requires; vx: 2.0; vy: 2.0; vz: 0.0; weight: 1.0. Data-only graph record.</template>
+  </category>
+</aiml>

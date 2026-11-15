@@ -1,0 +1,53 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "docs-site",
+  "@key": "⟁APP:DOCS_SITE",
+  "@mount": "⟁ROOT:DOCS_SITE",
+  "@theme": { "accent": "#38bdf8", "bg": "#0c1624", "surface": "#162032", "text": "#e0f2fe", "hero_phase": "Yax", "tagline": "Clear docs, happy users" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "sidebar_nav", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "content", "component": "⟁WIDGET:CONTENT", "position": "center" }, { "id": "toc", "component": "⟁WIDGET:TOC", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "articles": [], "search": "", "active_article": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:DOCS_SITE": { "@type": "app", "@children": ["⟁WIDGET:TOPBAR", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:TOPBAR": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:FEEDBACK"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:FEEDBACK": { "@type": "button", "@text": "Give Feedback", "@on": { "click": "docs.open_feedback" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:CONTENT", "⟁WIDGET:TOC"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:CONTENT": { "@type": "markdown", "@bind": "state.active_article" },
+    "⟁WIDGET:TOC": { "@type": "list", "@bind": "data.toc" }
+  },
+  "@programs": {
+    "docs.open_feedback": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "docs.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] },
+    "docs.navigate": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_article", "@out": "active_article" }] }
+  },
+  "@events": { "feedback.open": "docs.open_feedback", "search.input": "docs.search", "nav.click": "docs.navigate" },
+  "@imports": [{ "ref": "article", "mode": "schema_table" }, { "ref": "feedback", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "version-switcher", "name": "Version Switcher", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Show a dropdown to switch between doc versions." },
+      { "id": "algolia-search", "name": "Algolia Search", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Full-text doc search powered by Algolia." },
+      { "id": "translation-bot", "name": "Translation Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Auto-translate docs to additional languages." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "docs.search", "pattern": "SEARCH DOCS *|FIND ARTICLE *", "intent": "filter_articles" },
+      { "id": "docs.feedback", "pattern": "GIVE FEEDBACK|REPORT ISSUE", "intent": "open_feedback" }
+    ]
+  },
+  "@data": {
+    "toc": ["Getting Started", "Configuration", "API Reference", "Troubleshooting"],
+    "spotlight": [
+      { "id": "sp1", "title": "Getting Started Guide", "slug": "getting-started", "badge": "Start Here", "excerpt": "Install, configure, and run your first request in 5 minutes." },
+      { "id": "sp2", "title": "API Reference", "slug": "api-reference", "badge": "Reference", "excerpt": "Complete parameter and endpoint documentation." },
+      { "id": "sp3", "title": "Migration Guide v2→v3", "slug": "migration-v3", "badge": "New", "excerpt": "Step-by-step upgrade path with breaking changes called out." }
+    ],
+    "schema": {
+      "article": { "primaryKey": "article_id", "fields": { "article_id": { "type": "string" }, "slug": { "type": "string", "required": true }, "title": { "type": "string", "required": true }, "body": { "type": "textarea", "required": true }, "version": { "type": "string" }, "category": { "type": "string" }, "updated_at": { "type": "datetime" } } },
+      "feedback": { "primaryKey": "feedback_id", "fields": { "feedback_id": { "type": "string" }, "article_id": { "type": "string", "required": true }, "rating": { "type": "integer" }, "comment": { "type": "text" }, "submitted_at": { "type": "datetime" } } }
+    }
+  }
+}

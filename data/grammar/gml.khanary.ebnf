@@ -1,0 +1,342 @@
+(* KHANARY GML Grammar — gml.khanary.ebnf
+   Dialect: standard GML extended with geodesic vector coordinates,
+   WCR weight fields (confidence, static_weight, health), and KHANARY
+   typed relation verbs on edges.
+   Parser: src/world/gml_parser.cpp
+   Consumer: src/world/field_dag.cpp (overlay node/edge builder)
+   Generated overlay ID convention: @node:gml:{file_stem}:{int_id}
+     where file_stem = filename without extension, lowercased,
+     non-alnum chars replaced with '_'. *)
+
+(* ── Top level ─────────────────────────────────────────────────────────── *)
+
+gml_file    = graph_block ;
+graph_block = "graph", "[", graph_body, "]" ;
+graph_body  = { graph_attr | node_block | edge_block } ;
+
+(* ── Graph-level attributes ─────────────────────────────────────────────── *)
+
+graph_attr =
+    "directed" , integer        (* 0 = undirected (default), 1 = directed *)
+  | "id"       , integer        (* optional graph identity *)
+  | "label"    , string         (* optional display label *)
+  | "comment"  , string         (* free-text annotation; NOT a line-comment syntax *)
+  | "logical_consequence" , integer (* 0/1: Sigma entails phi in the declared context *)
+  | "semantic_entails"    , string  (* named consequence claim; requires proof trace *)
+  | "models_phi"          , integer (* alias: Sigma models phi; requires proof trace *)
+  | "deductive_proof"     , integer (* 0/1: executable proof trace is present *)
+  | "proof_trace"         , string  (* phase-scoped proof trace identifier *)
+  | "phase_proof_trace"   , string  (* K'UHUL phase proof trace identifier *)
+  | "axiom_extension"     , string  (* candidate non-logical axiom extension to Sigma *)
+  | "nonlogical_axiom"    , string  (* domain-specific axiom, never a primary law *)
+  | "sigma_extension"     , string  (* proposed extension to the active base state Sigma *)
+  | "contradicts_law"     , integer (* 0/1: fails if a Sigma extension breaks Lambda *)
+  | "law_contradiction"   , integer (* alias for contradicts_law *)
+  | "breaks_primary_law"  , integer (* alias for contradicts_law *)
+  | "signature_id"        , string  (* immutable semantic signature F identifier for an interpretation algebra *)
+  | "algebra_id"          , string  (* active fold algebra alpha identifier *)
+  | "phase_theta"         , number  (* K'UHUL phase angle theta for interpretation-frame diagnostics *)
+  | "matrix_rank_substrate" , integer (* MatrixRank(T_substrate), nonnegative when supplied *)
+  | "matrix_rank_transformed", integer (* MatrixRank(T_transformed), must equal substrate rank when supplied *)
+  | "signature_isomorphism_preserved", integer (* 0/1: false triggers SIGNATURE_FUNCTOR_FRACTION *)
+  | "space_signature"     , space_signature (* Minkowski event substrate signature for hyperbolic key-grammar projections *)
+  | ident      , value          (* unknown attributes are silently accepted *)
+  ;
+
+(* ── Node block ─────────────────────────────────────────────────────────── *)
+
+node_block = "node", "[", node_body, "]" ;
+node_body  = { node_attr } ;
+
+node_attr  =
+    "id"            , integer   (* required; unique within file *)
+  | "label"         , string    (* display name; used when binding to KHANARY micronaut *)
+  | "x"             , number    (* geodesic vector x-coordinate *)
+  | "y"             , number    (* geodesic vector y-coordinate *)
+  | "z"             , number    (* geodesic vector z-coordinate *)
+  | "confidence"    , number    (* WCR C — epistemic confidence; range [0,1]; default 1.0 *)
+  | "static_weight" , number    (* WCR W — structural weight; range [0,1]; default 1.0 *)
+  | "health"        , number    (* node health; range [0,1]; default 1.0 *)
+  | "epistemic_state" , epistemic_state_value (* SUPPORTED/CONTRADICTED/UNKNOWN/MISS *)
+  | "observation_state" , epistemic_state_value (* observation state; MISS is not CONTRADICTED *)
+  | "chen_state"    , epistemic_state_value (* Ch'en verification state *)
+  | "resolution_state", epistemic_state_value (* branch/result resolution state *)
+  | "miss_kind"     , string    (* observation/retrieval miss subtype *)
+  | "truth_verdict" , truth_verdict_value (* explicit evidence verdict *)
+  | "evidence_verdict", truth_verdict_value (* evidence-only verdict *)
+  | "logical_consequence" , integer (* 0/1: Sigma entails phi here; requires proof trace *)
+  | "semantic_entails"    , string  (* named consequence claim; requires proof trace *)
+  | "models_phi"          , integer (* alias: Sigma models phi; requires proof trace *)
+  | "deductive_proof"     , integer (* 0/1: executable proof trace is present *)
+  | "proof_trace"         , string  (* phase-scoped proof trace identifier *)
+  | "phase_proof_trace"   , string  (* K'UHUL phase proof trace identifier *)
+  | "axiom_extension"     , string  (* candidate non-logical axiom extension to Sigma *)
+  | "nonlogical_axiom"    , string  (* domain-specific axiom, never a primary law *)
+  | "sigma_extension"     , string  (* proposed extension to the active base state Sigma *)
+  | "contradicts_law"     , integer (* 0/1: fails if a Sigma extension breaks Lambda *)
+  | "law_contradiction"   , integer (* alias for contradicts_law *)
+  | "breaks_primary_law"  , integer (* alias for contradicts_law *)
+  | "signature_id"        , string  (* immutable semantic signature F identifier for an interpretation algebra *)
+  | "algebra_id"          , string  (* active fold algebra alpha identifier *)
+  | "phase_theta"         , number  (* K'UHUL phase angle theta for interpretation-frame diagnostics *)
+  | "matrix_rank_substrate" , integer (* MatrixRank(T_substrate), nonnegative when supplied *)
+  | "matrix_rank_transformed", integer (* MatrixRank(T_transformed), must equal substrate rank when supplied *)
+  | "signature_isomorphism_preserved", integer (* 0/1: false triggers SIGNATURE_FUNCTOR_FRACTION *)
+  | "space_signature" , space_signature (* Minkowski substrate signature for hyperbolic event projections *)
+  | "event_role"      , string    (* key-grammar event role, e.g. candidate_continuation *)
+  | "rapidity_rho"    , number    (* ρ: additive rapidity for future-directed event progression; nonnegative *)
+  | "minkowski_interval", number  (* B(u,u) under the declared signature; negative=timelike, zero=lightlike, positive=spacelike *)
+  | "interval_class"  , interval_class (* timelike_candidate/spacelike_candidate/lightlike_boundary/unclassified *)
+  | "minkowski_t"     , number    (* event time coordinate u0 for explicit interval audits *)
+  | "minkowski_x"     , number    (* event spatial coordinate u1 *)
+  | "minkowski_y"     , number    (* event spatial coordinate u2 *)
+  | "minkowski_z"     , number    (* event spatial coordinate u3 *)
+  | "direction_x"     , number    (* spatial direction vector component x *)
+  | "direction_y"     , number    (* spatial direction vector component y *)
+  | "direction_z"     , number    (* spatial direction vector component z *)
+  | "hyperbolic_distance", number (* arcosh(-B(u,v)) projection distance when supplied by a provider *)
+  | "prior_mass"    , number    (* antecedent prior density Λ(θ); range [0,1] *)
+  | "risk_bound"    , number    (* localized expected-risk upper bound; range [0,1] *)
+  | "mutation"      , diff_op   (* differential NLP mutation state *)
+  | "base_version"  , integer   (* generation id from which this node drifted *)
+  | "boundary_type" , vertex_bc (* quantum-graph vertex boundary condition *)
+  | "vertex_pot"    , number    (* localized vertex scattering potential *)
+  | "phase_shift"   , number    (* localized initial phase angle φ *)
+  | "divergence"    , number    (* localized div V: positive source, negative sink *)
+  | "singularity"   , index_type (* isolated zero category for vector-field index *)
+  | "local_entropy" , number    (* H(x): Shannon uncertainty at this node; feeds ∇H entropic force *)
+  | "unruh_temp"    , number    (* T: localized Unruh surface boundary temperature; F = T∇H *)
+  | "bit_density"   , number    (* N: holographic degrees of freedom; N = A/4 (Bekenstein-Hawking) *)
+  | "geodesic_entropy" , number (* H_G: shortest-path distribution entropy; measures structural influence spread *)
+  | "triangular_scale" , number (* H_Δ: 3-node simplicial complex error metric; measures local mesh stability *)
+  | "circumradius_R" , number   (* R: circumcircle horizon radius for local triangular mesh *)
+  | "inradius_r"     , number   (* r: incircle compression radius; requires R >= 2r when both are nonzero *)
+  | "text_boundary" , text_boundary (* sentence/paragraph/article structural boundary *)
+  | "boundary_token", string    (* structural delimiter token such as ◄/s► *)
+  | "curve_id"      , string    (* differentiable trajectory id gamma *)
+  | "parameter_t"   , number    (* curve parameter t for gamma(t) *)
+  | "arc_length"    , number    (* accumulated arclength s along gamma *)
+  | "curvature"     , number    (* local curvature kappa(t), nonnegative *)
+  | "scalar_potential", number  (* projection scalar f(x), distinct from semantic truth *)
+  | "provider_id"   , string    (* VECTOR-µ/METRIC-µ provider identity for training telemetry *)
+  | "parameter_id"  , string    (* projection-provider parameter address phi *)
+  | "parameter_generation", integer (* provider parameter generation, nonnegative *)
+  | "training_step" , integer   (* provider training step, nonnegative *)
+  | "loss_value"    , number    (* projection loss L, nonnegative *)
+  | "grad_norm"     , number    (* ||grad_phi L||, nonnegative *)
+  | "learning_rate" , number    (* eta, positive when present *)
+  | "gradient_clip" , number    (* clip bound for training gradient, positive when present *)
+  | "entropy_spike" , number    (* ΔH: structural uncertainty jump, nonnegative *)
+  | "entropy_bound" , number    (* optional maximum admitted entropy, positive when present *)
+  | "diffusion_beta_inv", number (* beta^-1 entropy diffusion scale, nonnegative *)
+  | "tensor_rank_p" , integer   (* tensor bundle contravariant rank p, nonnegative *)
+  | "tensor_rank_q" , integer   (* tensor bundle covariant rank q, nonnegative *)
+  | "is_smooth_section", integer (* 0/1 flag: node denotes a smooth tensor-bundle section *)
+  | "riemann_curvature_scalar", number (* local scalar curvature R; projection diagnostic *)
+  | "jacobian_determinant", number (* det J for local coordinate transition; nonzero when present *)
+  | "christoffel" , block       (* Gamma^k_ij connection coefficients; finite, lower-index symmetric for Levi-Civita *)
+  | "covariant_derivative", block (* covariant derivative projection: (p,q) -> (p,q+1) *)
+  | "ricci_identity_residual", number (* ||[nabla_mu,nabla_nu]V - R V|| projection residual *)
+  | "ricci_tolerance", number  (* optional absolute tolerance for Ricci/covariant residuals *)
+  | "lorentz_boost" , block     (* LorentzTransitionTensor rows: row0..row3 plus enabled/alignment/mass controls *)
+  | ident           , value     (* unknown node attributes are silently accepted *)
+  ;
+
+(* ── Edge block ─────────────────────────────────────────────────────────── *)
+
+edge_block = "edge", "[", edge_body, "]" ;
+edge_body  = { edge_attr } ;
+
+edge_attr  =
+    "id"       , integer        (* optional edge identity; needed for dual_twin pairing *)
+  | "source"   , integer        (* required; id of origin node *)
+  | "target"   , integer        (* required; id of destination node *)
+  | "label"    , string         (* display label; defaults to verb value if omitted *)
+  | "verb"     , relation_verb  (* KHANARY relation verb; preferred *)
+  | "relation" , relation_verb  (* alias for verb; used only when verb is absent *)
+  | "weight"   , number         (* edge weight; default 1.0 *)
+  | "epistemic_state" , epistemic_state_value (* SUPPORTED/CONTRADICTED/UNKNOWN/MISS *)
+  | "observation_state" , epistemic_state_value (* observation state; MISS is not CONTRADICTED *)
+  | "chen_state"    , epistemic_state_value (* Ch'en verification state *)
+  | "resolution_state", epistemic_state_value (* branch/result resolution state *)
+  | "miss_kind"     , string    (* observation/retrieval miss subtype *)
+  | "truth_verdict" , truth_verdict_value (* explicit evidence verdict *)
+  | "evidence_verdict", truth_verdict_value (* evidence-only verdict *)
+  | "logical_consequence" , integer (* 0/1: Sigma entails phi here; requires proof trace *)
+  | "semantic_entails"    , string  (* named consequence claim; requires proof trace *)
+  | "models_phi"          , integer (* alias: Sigma models phi; requires proof trace *)
+  | "deductive_proof"     , integer (* 0/1: executable proof trace is present *)
+  | "proof_trace"         , string  (* phase-scoped proof trace identifier *)
+  | "phase_proof_trace"   , string  (* K'UHUL phase proof trace identifier *)
+  | "axiom_extension"     , string  (* candidate non-logical axiom extension to Sigma *)
+  | "nonlogical_axiom"    , string  (* domain-specific axiom, never a primary law *)
+  | "sigma_extension"     , string  (* proposed extension to the active base state Sigma *)
+  | "contradicts_law"     , integer (* 0/1: fails if a Sigma extension breaks Lambda *)
+  | "law_contradiction"   , integer (* alias for contradicts_law *)
+  | "breaks_primary_law"  , integer (* alias for contradicts_law *)
+  | "signature_id"        , string  (* immutable semantic signature F identifier for an interpretation algebra *)
+  | "algebra_id"          , string  (* active fold algebra alpha identifier *)
+  | "phase_theta"         , number  (* K'UHUL phase angle theta for interpretation-frame diagnostics *)
+  | "matrix_rank_substrate" , integer (* MatrixRank(T_substrate), nonnegative when supplied *)
+  | "matrix_rank_transformed", integer (* MatrixRank(T_transformed), must equal substrate rank when supplied *)
+  | "signature_isomorphism_preserved", integer (* 0/1: false triggers SIGNATURE_FUNCTOR_FRACTION *)
+  | "space_signature" , space_signature (* Minkowski substrate signature for hyperbolic event projections *)
+  | "event_role"      , string    (* key-grammar event role, e.g. candidate_continuation *)
+  | "rapidity_rho"    , number    (* ρ: additive rapidity for future-directed event progression; nonnegative *)
+  | "minkowski_interval", number  (* B(u,u) under the declared signature; negative=timelike, zero=lightlike, positive=spacelike *)
+  | "interval_class"  , interval_class (* timelike_candidate/spacelike_candidate/lightlike_boundary/unclassified *)
+  | "minkowski_t"     , number    (* event time coordinate u0 for explicit interval audits *)
+  | "minkowski_x"     , number    (* event spatial coordinate u1 *)
+  | "minkowski_y"     , number    (* event spatial coordinate u2 *)
+  | "minkowski_z"     , number    (* event spatial coordinate u3 *)
+  | "direction_x"     , number    (* spatial direction vector component x *)
+  | "direction_y"     , number    (* spatial direction vector component y *)
+  | "direction_z"     , number    (* spatial direction vector component z *)
+  | "hyperbolic_distance", number (* arcosh(-B(u,v)) projection distance when supplied by a provider *)
+  | "dual_twin", integer        (* paired inverse/contrastive edge id *)
+  | "loss_cost", number         (* semantic loss L(θ,a) for this transition; range [0,1] *)
+  | "mutation" , diff_op        (* differential topology mutation state *)
+  | "length"   , number         (* L_e: metric interval length for continuous edge *)
+  | "potential", number         (* U_e: edge potential barrier height *)
+  | "refractive", number        (* channel refractive index / propagation slowdown *)
+  | "vx"       , number         (* localized velocity field vector component x *)
+  | "vy"       , number         (* localized velocity field vector component y *)
+  | "vz"       , number         (* localized velocity field vector component z *)
+  | "eh_x"     , number         (* entropy gradient component x: ∂H/∂x — entropic force direction *)
+  | "eh_y"     , number         (* entropy gradient component y: ∂H/∂y *)
+  | "eh_z"     , number         (* entropy gradient component z: ∂H/∂z *)
+  | "wave_number", number       (* k_e for plane-wave propagation *)
+  | "frequency", number         (* ω for synchronized wave profile *)
+  | "amplitude_re", number      (* real part of edge wave amplitude *)
+  | "amplitude_im", number      (* imaginary part of edge wave amplitude *)
+  | "curve_id" , string         (* trajectory segment id gamma *)
+  | "t0"       , number         (* segment start parameter *)
+  | "t1"       , number         (* segment end parameter; t1 > t0 for forward curve segments *)
+  | "field_kind", field_kind    (* projection field family for vx/vy/vz *)
+  | "curl_x"   , number         (* curl component for zero-curl Euclidean gradient checks *)
+  | "curl_y"   , number
+  | "curl_z"   , number
+  | "potential_delta", number   (* f(gamma(b))-f(gamma(a)) for conservative fields *)
+  | "provider_id" , string      (* provider that owns the learned parameter/update *)
+  | "parameter_id", string      (* parameter address affected by the update *)
+  | "training_step", integer    (* provider training step, nonnegative *)
+  | "loss_value" , number       (* projection loss L, nonnegative *)
+  | "grad_norm"  , number       (* ||grad_phi L||, nonnegative *)
+  | "learning_rate", number     (* eta, positive when present *)
+  | "gradient_clip", number     (* clip bound, positive when present *)
+  | "entropy_delta", number     (* H(target)-H(source), signed *)
+  | "diffusion_beta_inv", number (* beta^-1 entropy diffusion scale, nonnegative *)
+  | "triangle_id"   , integer    (* Maps this edge to a verified 3-node simplicial loop token *)
+  | "simplex_weight", number     (* Local geometric thickness of the triangular face *)
+  | "g_00"      , number         (* local covariant metric tensor component g_00 *)
+  | "g_01"      , number         (* local covariant metric tensor component g_01 *)
+  | "g_10"      , number         (* local covariant metric tensor component g_10 *)
+  | "g_11"      , number         (* local covariant metric tensor component g_11 *)
+  | "jacobian_w", number         (* coordinate-transform density/weight factor; positive *)
+  | "christoffel" , block        (* Gamma^k_ij connection coefficients for edge-local transport *)
+  | "covariant_derivative", block (* covariant derivative projection: (p,q) -> (p,q+1) *)
+  | "ricci_identity_residual", number (* ||[nabla_mu,nabla_nu]V - R V|| projection residual *)
+  | "ricci_tolerance", number   (* optional absolute tolerance for Ricci/covariant residuals *)
+  | "lorentz_boost" , block     (* LorentzTransitionTensor rows: row0..row3 plus enabled/alignment/mass controls *)
+  | ident      , value          (* unknown edge attributes are silently accepted *)
+  ;
+
+(* ── Differential / decision tracking ─────────────────────────────────── *)
+
+diff_op = '"' , ( "insert" | "delete" | "modify" | "unchanged" ) , '"' ;
+
+(* ── Continuous metric, quantum graph, wave, and field tracking ────────── *)
+
+vertex_bc = '"' , ( "kirchhoff" | "dirichlet" | "robin" ) , '"' ;
+index_type = '"' , ( "source" | "sink" | "saddle" | "ordinary" ) , '"' ;
+text_boundary = '"' , ( "sentence" | "paragraph" | "article" | "section" | "none" ) , '"' ;
+field_kind = '"' , ( "flow" | "trajectory" | "euclidean_gradient" | "entropy_gradient" | "free_energy" | "riemannian_flow" | "plane_wave" | "quantum" | "tensor_field" | "hyperbolic_event" ) , '"' ;
+space_signature = '"' , ( "Minkowski_Minus_Plus_Plus_Plus" | "Minkowski_Plus_Minus_Minus_Minus" ) , '"' ;
+interval_class = '"' , ( "timelike_candidate" | "spacelike_candidate" | "lightlike_boundary" | "unclassified" ) , '"' ;
+epistemic_state_value = '"' , ( "SUPPORTED" | "CONTRADICTED" | "UNKNOWN" | "MISS" ) , '"' ;
+truth_verdict_value = '"' , ( "SUPPORTED" | "CONTRADICTED" | "UNKNOWN" | "MISS" | "NEGATIVE_EVIDENCE" ) , '"' ;
+
+(* ── KHANARY relation verbs ─────────────────────────────────────────────── *)
+(* Canonical verbs from src/micronaut/relation_isa.h.
+   Non-canonical strings are resolved via infer_relation_from_lexical(). *)
+
+relation_verb =
+    "@related_to"
+  | "@delegates_to"
+  | "@requires"
+  | "@part_of"
+  | "@defines"
+  | "@is_a"
+  | "@causes"
+  | "@contradicts"
+  | "@has_part"
+  | "@has_property"
+  | "@possesses"
+  | "@value"
+  | "@imports"
+  | "@calls"
+  | "@exposes"
+  | string    (* non-canonical; resolved via infer_relation_from_lexical() *)
+  ;
+
+(* ── Overlay ID convention ──────────────────────────────────────────────── *)
+(* field_dag.cpp generates one overlay FieldNode per GML node.
+   IDs are namespaced by file stem to prevent cross-file collisions.
+   Bug history: bare @node:gml:{int_id} caused ambiguous vector_meta
+   when multiple GML files shared the same integer IDs. Fixed: field_dag.cpp:29. *)
+
+gml_overlay_id = "@node:gml:", file_stem, ":", integer ;
+file_stem      = ident ;   (* derived from filename: lowercase, non-alnum → '_' *)
+
+(* ── Value types ────────────────────────────────────────────────────────── *)
+
+value  = integer | float | string | block ;
+block  = "[", { ident, value }, "]" ;  (* generic nested block; key order is not significant *)
+
+number  = float | integer ;
+float   = [ sign ], digits, ".", { digit }, [ exponent ]
+        | [ sign ], digits, exponent
+        ;
+integer = [ sign ], digits ;
+sign    = "+" | "-" ;
+exponent = ( "e" | "E" ), [ sign ], digits ;
+digits  = digit, { digit } ;
+digit   = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+
+string      = '"', { string_char }, '"' ;
+string_char =
+    ? any UTF-8 character except '"' and '\' ?
+  | '\', escape_seq
+  ;
+escape_seq  = '"' | '\' | "n" | "t" | ? any other char — passed through literally ? ;
+
+ident  = ( letter | "_" ), { letter | digit | "_" } ;
+letter = ? ASCII letter a-z or A-Z ? ;
+
+(* Block comments are lexer-level (insignificant). Nested blocks are legal
+   (ISO 14977 comments nest); an unterminated comment runs to end of file. *)
+block_comment = "(*", { ? any character except "*)" ? }, "*)" ;
+
+(* ── Lexer behaviour ────────────────────────────────────────────────────── *)
+(* Whitespace (space, tab, newline, CR) is insignificant and skipped.
+   Block comments (* ... *) are insignificant and skipped; an unterminated
+   comment runs to end of file (contents never become tokens). Non-comment
+   comments do not exist: there is no line-comment syntax (# or //); the
+   "comment" key is a string attribute, not lexer-level syntax.
+   Unknown characters outside a string are silently skipped.
+   Key-value order within a block is not significant. *)
+
+(* ── Lexer tokens — single source for derived tokenizers ───────────────── *
+   Tokenization is grammar-owned: tools/grammar/ebnf_tokens.py DERIVES the
+   token regexes from the TOKEN_* productions below (production order =
+   match priority). Every TOKEN_* is a thin reference to the notation
+   productions above, so each terminal has exactly one definition; checkers
+   and transpilers must NOT shadow this section with hand-coded regexes; a
+   missing or unresolvable production is a loud failure, never a fallback. *)
+TOKEN_COMMENT   = block_comment ;
+TOKEN_STRING    = string ;
+TOKEN_FLOAT     = float ;
+TOKEN_INTEGER   = integer ;
+TOKEN_IDENT     = ident ;
+TOKEN_LBRACKET  = "[" ;
+TOKEN_RBRACKET  = "]" ;

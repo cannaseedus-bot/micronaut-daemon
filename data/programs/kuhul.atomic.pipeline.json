@@ -1,0 +1,136 @@
+{
+  "@program": "kuhul.atomic.pipeline",
+  "@kind": "kuhul.atomic.pipeline.v1",
+  "@version": "1.0.0",
+  "@authority": "XCFE",
+  "@execution_default": "DATA_ONLY",
+  "@identity_model": "atomic_id",
+  "@role": "Typed data movement, operator sequences, and lane bindings. Pipeline transforms.",
+  "@phase_order": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"],
+
+  "@module_contract": {
+    "schema": "kuhul.atomic.pipeline.v1",
+    "shared_identity": "atomic_id",
+    "note": "Each pipeline stage references a block by atomic_id. The pipeline's own id IS its atomic_id — workflow nodes reference pipelines by this id.",
+    "phase_hooks": {
+      "Pop":   "receive pipeline declaration; resolve pipeline.id as atomic_id",
+      "Wo":    "bind typed input/output ports; wire stage references to block registry",
+      "Yax":   "bind typed ports for each stage; propagate type constraints through the stage chain",
+      "Sek":   "propose stage execution order; apply lane bindings; require XCFE admission",
+      "Ch'en": "verify type compatibility end-to-end; verify rank_effect contract holds across all stages",
+      "Xul":   "emit validated pipeline; return typed port bindings"
+    },
+    "rank_effects": {
+      "preserving":    "output type and rank identical to input",
+      "enriching":     "output carries additional fields but same base rank",
+      "reducing":      "output rank is strictly less than input (fold/reduce operators)",
+      "transforming":  "output type differs from input (map/filter/stack operators)"
+    },
+    "xcfe": {
+      "authority": "xcfe_gated_read_only",
+      "forbidden": ["execute_stage_directly", "write_state", "emit_facts"],
+      "note": "Pipeline proposes stage order. XCFE authorizes execution of each stage individually."
+    }
+  },
+
+  "@types": {
+    "PipelineId":   { "base": "string", "pattern": "^pipeline\\." },
+    "BlockRef":     { "base": "string", "pattern": "^block\\." },
+    "LaneBinding":  { "lane_id": "string", "slot": "int", "direction": "in | out" },
+    "TypedPort":    { "name": "string", "type": "string", "required": "bool" },
+    "PipelineResult": {
+      "pipeline_id":   "PipelineId",
+      "stages":        "BlockRef[]",
+      "port_bindings": "TypedPort[]",
+      "rank_effect":   "string",
+      "phase":         "string"
+    }
+  },
+
+  "@state": {
+    "pipeline_id":   null,
+    "input_type":    null,
+    "output_type":   null,
+    "stages":        [],
+    "rank_effect":   "preserving",
+    "lanes":         [],
+    "port_bindings": null,
+    "phase":         "Pop"
+  },
+
+  "@control": [
+    {
+      "@phase": "Pop",
+      "@op": "FOLD_ENTER",
+      "@fold": "Pop",
+      "@node": "pipeline-receive",
+      "@desc": "receive pipeline declaration; bind pipeline.id as atomic_id"
+    },
+    {
+      "@phase": "Wo",
+      "@op": "SEQUENCE",
+      "@steps": [
+        { "@op": "ASSIGN", "@key": "pipeline_id",  "@from": "$input.pipeline.id" },
+        { "@op": "ASSIGN", "@key": "input_type",   "@from": "$input.pipeline.input" },
+        { "@op": "ASSIGN", "@key": "output_type",  "@from": "$input.pipeline.output" },
+        { "@op": "ASSIGN", "@key": "stages",        "@from": "$input.pipeline.stages" },
+        { "@op": "ASSIGN", "@key": "rank_effect",   "@from": "$input.pipeline.rank_effect" },
+        { "@op": "ASSIGN", "@key": "lanes",         "@from": "$input.pipeline.lanes" },
+        { "@op": "LOG",    "@args": ["Wo: pipeline bindings — id=$pipeline_id stages=$stages.length rank=$rank_effect"] }
+      ]
+    },
+    {
+      "@phase": "Yax",
+      "@op": "CALL",
+      "@fn": "bind_typed_ports",
+      "@in":  ["stages", "input_type", "output_type"],
+      "@out": "port_bindings",
+      "@desc": "resolve TypedPort for each stage boundary; propagate type constraints"
+    },
+    {
+      "@phase": "Sek",
+      "@op": "CALL",
+      "@fn": "propose_stage_order",
+      "@in":  ["stages", "port_bindings", "lanes"],
+      "@out": "ordered_stages",
+      "@desc": "apply lane bindings; resolve parallel stage groups; require XCFE admission per stage"
+    },
+    {
+      "@phase": "Ch'en",
+      "@op": "CALL",
+      "@fn": "verify_types_and_rank",
+      "@in":  ["ordered_stages", "port_bindings", "rank_effect", "input_type", "output_type"],
+      "@out": "verified_pipeline",
+      "@desc": "confirm type compatibility chain; confirm rank_effect contract holds end-to-end"
+    },
+    {
+      "@phase": "Xul",
+      "@op": "FOLD_EXIT",
+      "@fold": "Xul",
+      "@node": "pipeline-emit",
+      "@args": ["verified_pipeline"],
+      "@desc": "emit PipelineResult; return typed port bindings"
+    }
+  ],
+
+  "@example": {
+    "pipeline.id":          "pipeline.echo",
+    "pipeline.input":       "text",
+    "pipeline.output":      "text",
+    "pipeline.stages":      ["block.echo"],
+    "pipeline.rank_effect": "preserving",
+    "expected_result": {
+      "port_bindings": [
+        { "name": "in",  "type": "text", "required": true },
+        { "name": "out", "type": "text", "required": true }
+      ],
+      "rank_effect": "preserving"
+    }
+  },
+
+  "@refs": {
+    "blocks_module":   "data/programs/kuhul.atomic.blocks.json",
+    "workflow_module": "data/programs/kuhul.atomic.workflow.json",
+    "canvas_module":   "data/programs/kuhul.atomic.canvas.json"
+  }
+}

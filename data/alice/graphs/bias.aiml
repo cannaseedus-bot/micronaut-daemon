@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from bias.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH </pattern>
+    <template>source bias.gml; label Bias_Parameter_Graph; identity 1601; directed 1; nodes 9; edges 8. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 1</pattern>
+    <template>Graph Bias_Parameter_Graph; node 1; id: 1; kind: ngram_feature; label: feature:unigram:tomatoes; order: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE FEATURE:UNIGRAM:TOMATOES</pattern>
+    <template>Graph Bias_Parameter_Graph; node 1; id: 1; kind: ngram_feature; label: feature:unigram:tomatoes; order: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 2</pattern>
+    <template>Graph Bias_Parameter_Graph; node 2; id: 2; kind: ngram_feature; label: feature:bigram:grow_tomatoes; order: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Bias_Parameter_Graph; node 2; id: 2; kind: ngram_feature; label: feature:bigram:grow_tomatoes; order: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 3</pattern>
+    <template>Graph Bias_Parameter_Graph; node 3; id: 3; kind: ngram_feature; label: feature:trigram:how_to_grow; order: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Bias_Parameter_Graph; node 3; id: 3; kind: ngram_feature; label: feature:trigram:how_to_grow; order: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 4</pattern>
+    <template>Graph Bias_Parameter_Graph; node 4; id: 4; kind: ngram_feature; label: feature:quadgram:how_to_grow_tomatoes; order: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Bias_Parameter_Graph; node 4; id: 4; kind: ngram_feature; label: feature:quadgram:how_to_grow_tomatoes; order: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 5</pattern>
+    <template>Graph Bias_Parameter_Graph; node 5; id: 5; kind: ngram_feature; label: feature:supagram:how_to_grow_tomatoes_indoors; order: 7. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Bias_Parameter_Graph; node 5; id: 5; kind: ngram_feature; label: feature:supagram:how_to_grow_tomatoes_indoors; order: 7. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 100</pattern>
+    <template>Graph Bias_Parameter_Graph; node 100; family: ngram_weights; id: 100; kind: learned_parameter; label: weight:grow_tomatoes; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Bias_Parameter_Graph; node 100; family: ngram_weights; id: 100; kind: learned_parameter; label: weight:grow_tomatoes; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 101</pattern>
+    <template>Graph Bias_Parameter_Graph; node 101; family: ngram_weights; id: 101; kind: learned_parameter; label: weight:grow_plants; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Bias_Parameter_Graph; node 101; family: ngram_weights; id: 101; kind: learned_parameter; label: weight:grow_plants; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 102</pattern>
+    <template>Graph Bias_Parameter_Graph; node 102; family: ngram_weights; id: 102; kind: learned_parameter; label: weight:how_to_grow; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Bias_Parameter_Graph; node 102; family: ngram_weights; id: 102; kind: learned_parameter; label: weight:how_to_grow; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 900</pattern>
+    <template>Graph Bias_Parameter_Graph; node 900; id: 900; immutable: 1; kind: corpus_prior; label: prior:corpus:grow_tomatoes. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Bias_Parameter_Graph; node 900; id: 900; immutable: 1; kind: corpus_prior; label: prior:corpus:grow_tomatoes. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1 FEATURE 100</pattern>
+    <template>Graph Bias_Parameter_Graph; edge 1 to 100; feature: 0.25; label: feature; source: 1; target: 100. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 2 FEATURE 100</pattern>
+    <template>Graph Bias_Parameter_Graph; edge 2 to 100; feature: 1.0; label: feature; source: 2; target: 100. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 3 FEATURE 102</pattern>
+    <template>Graph Bias_Parameter_Graph; edge 3 to 102; feature: 0.5; label: feature; source: 3; target: 102. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 4 FEATURE 100</pattern>
+    <template>Graph Bias_Parameter_Graph; edge 4 to 100; feature: 0.75; label: feature; source: 4; target: 100. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 4 FEATURE 102</pattern>
+    <template>Graph Bias_Parameter_Graph; edge 4 to 102; feature: 0.25; label: feature; source: 4; target: 102. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 4 FEATURE 101</pattern>
+    <template>Graph Bias_Parameter_Graph; edge 4 to 101; feature: 0.5; label: feature; source: 4; target: 101. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 5 FEATURE 100</pattern>
+    <template>Graph Bias_Parameter_Graph; edge 5 to 100; feature: 1.0; label: feature; source: 5; target: 100. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 5 FEATURE 102</pattern>
+    <template>Graph Bias_Parameter_Graph; edge 5 to 102; feature: 0.5; label: feature; source: 5; target: 102. Data-only graph record.</template>
+  </category>
+</aiml>

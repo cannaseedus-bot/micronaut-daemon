@@ -1,0 +1,23 @@
+{
+  "@type": "khanary.xcfe_program.v1",
+  "@no-eval": true,
+  "id": "xcfe.route",
+  "program_class": "ROUTE",
+  "phase": "Yax",
+  "input_role": "intent",
+  "output_role": "route_decision",
+  "admission": "explicit",
+  "description": "Selects a dispatch route for a resolved intent using W·C·R scoring. XCFE owns route authority; this program expresses the selection surface. ROUTE is a program-descriptor class only — it does not appear in the 14-class XCFE node ISA.",
+  "steps": [
+    { "phase": "Pop",  "op": "gramRead",   "id": "xcfe_intent" },
+    { "phase": "Wo",   "op": "bind",       "id": "intent" },
+    { "phase": "Yax",  "op": "select",     "id": "route_candidates" },
+    { "phase": "Sek",  "op": "dispatch",   "id": "route_selected" },
+    { "phase": "Xul",  "op": "gramWrite",  "id": "route_decision" }
+  ],
+  "authority": {
+    "semantic_authority": false,
+    "topology_mutation": false,
+    "commit_authorized": false
+  }
+}

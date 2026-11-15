@@ -1,0 +1,33 @@
+(* Compile-time authority check records, v1.1. *)
+admission-check = "admission-check{target:", identifier, ",checks:[",
+                  check, { ",", check }, "],verdict:", verdict, "}" ;
+check = authority-check | dataflow-check | guard-check | invariant-check ;
+authority-check = "authority-check{micronaut-type:", micronaut-type,
+                  ",required-mode:", mode, ",flags:", flags,
+                  ",verdict:", verdict, "}" ;
+micronaut-type = "aiml-micronaut" | "srai-micronaut" | "pi-micronaut"
+               | "xcfe-micronaut" | "xul-micronaut" | "learning-micronaut"
+               | "session-guard" | "reason-dispatch" | "closure" ;
+mode = "match_only" | "redirect_only" | "rank_only" | "admit_only"
+     | "close_only" | "propose_only" | "state_only" | "dispatch_only" ;
+flags = "{execute:false,write:false,close:false}"
+      | "{execute:true,write:true,close:true}" ;
+guard-check = "guard-check{field:", guard-field, ",kind:", guard-kind,
+              ",verdict:", verdict, "}" ;
+guard-field = "reasoning.depth" | "reasoning.visited" | "reasoning.guard" ;
+guard-kind = "bounded" | "append-only" | "declared" | "enum-valid" ;
+dataflow-check = "dataflow-check{producer:", identifier,
+                 ",consumer:", identifier, ",edge:", dataflow-edge,
+                 ",verdict:", verdict, "}" ;
+dataflow-edge = "aiml→srai" | "aiml→pi" | "srai→pi" | "pi→xcfe"
+              | "xcfe→xul" | "dispatch→guard" | "guard→xcfe"
+              | "any→learning" ;
+invariant-check = "invariant-check{name:", identifier,
+                  ",verdict:", verdict, "}" ;
+verdict = "pass" | "fail" | "admit" | "reject" ;
+identifier = letter, { letter | digit | "_" | "-" } ;
+letter = "A".."Z" | "a".."z" ;
+digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+
+(* Admission binds each micronaut type to its mode and flags as specified in
+   aiml_srai_authority.ebnf. A failed check rejects the declaration. *)

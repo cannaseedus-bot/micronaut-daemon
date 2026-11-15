@@ -1,0 +1,37 @@
+{
+  "@program": "opencl.memory",
+  "@kind": "kuhul.opencl.memory.v1",
+  "@backend": "opencl_1_2",
+  "@description": "Conservative host allocation budget for the HD 4600 OpenCL workload.",
+  "budget": {
+    "limit_bytes": 134217728,
+    "limit_mb": 128,
+    "accounting": "host_reservation",
+    "note": "OpenCL unified memory and driver residency are not identical to dedicated VRAM; this is an admission budget, not a hardware query."
+  },
+  "allocation": {
+    "reserve_before_clCreateBuffer": true,
+    "release_after_clReleaseMemObject": true,
+    "reject_over_budget": true,
+    "checked_arithmetic": true
+  },
+  "runtime_observation": {
+    "gpu_probe": "scratch/cl_harness.exe --device gpu",
+    "cpu_probe": "scratch/test_opencl_cpu_fallback.ps1",
+    "cpu_probe_timeout_ms": 10000,
+    "current_cpu_status": "known_unstable_intel_cpu_backend",
+    "cpu_failure_modes": [
+      "access_violation_in_clEnqueueWriteBuffer",
+      "non_completion_with_host_backed_probe"
+    ],
+    "scheduler_policy": "do_not_select_intel_opencl_cpu_without_explicit_operator_override",
+    "safe_cpu_fallback": "directxmath_sse",
+    "safe_cpu_probe": "scratch/dxm_cpu_fallback.exe"
+  },
+  "block_types": {
+    "matrix5x4_f32": { "elements": 20, "bytes": 80 },
+    "f32": { "bytes_per_element": 4 },
+    "f16": { "bytes_per_element": 2 },
+    "i32": { "bytes_per_element": 4 }
+  }
+}

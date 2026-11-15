@@ -1,0 +1,187 @@
+{
+  "@no-eval": true,
+  "id": "CODEGEN-µ",
+  "schemes": [
+    "codegen"
+  ],
+  "description": "Parent code-generation micronaut — orchestrates code-related children for generation, debugging, refactoring, and tool execution. Routes to child micronauts based on task type; contributes C_Code to the semantic field at phase Wo.",
+  "phase": "Wo",
+  "category": "code",
+  "confidence": 1.0,
+  "model": {
+    "gguf": "C:/Users/canna/.lmstudio/models/lmstudio-community/gemma-3-1B-it-QAT-GGUF/gemma-3-1B-it-QAT-Q4_0.gguf",
+    "role": "code-generation",
+    "template": "gemma"
+  },
+  "governs": [
+    "code",
+    "generate",
+    "implement",
+    "debug",
+    "refactor",
+    "compile",
+    "syntax",
+    "api",
+    "c++",
+    "cpp",
+    "python",
+    "javascript",
+    "typescript",
+    "html",
+    "css",
+    "function",
+    "class",
+    "module",
+    "test",
+    "build",
+    "emit"
+  ],
+  "sub_micronauts": [
+    "coder",
+    "TOOL-µ",
+    "PLAN-µ",
+    "CREATE-µ",
+    "NGRAM-KEY-µ",
+    "FACTORY-µ",
+    "SNOBOL-µ"
+  ],
+  "grammar_files": [
+    "data/grammar/cpp.code-grammar.json",
+    "data/grammar/cpp.code-grammar.ebnf",
+    "data/grammar/typescript.code-grammar.json",
+    "data/grammar/css.key-grammar.jsonl",
+    "data/grammar/klsl.code-grammar.json",
+    "data/grammar/gml.khanary.ebnf",
+    "data/grammar/key-grammar-json.runtime.ebnf",
+    "data/grammar/kuhul.runtime-grammar.ebnf",
+    "data/grammar/scfml.runtime-grammar.ebnf",
+    "geometric-coder-mu.kgf",
+    "geometric-coder-mu.runtime-grammar.ebnf"
+  ],
+  "grammar_contract": {
+    "package_root": "vendor/key-grammar-kit",
+    "kgf_ref": "geometric-coder-mu.kgf",
+    "ebnf_ref": "geometric-coder-mu.runtime-grammar.ebnf",
+    "version": "1.0",
+    "scope": "full_program_syntax_and_static_type_rules",
+    "role": ["compile", "generate"],
+    "authority": "syntax_and_static_signatures_only",
+    "runtime_implementation": "not_registered"
+  },
+  "capabilities": [
+    "code-generation",
+    "debug-triage",
+    "refactor",
+    "test-generation",
+    "tool-calls",
+    "emit",
+    "⟁Wo",
+    "⟁Sek"
+  ],
+  "tool_registry": {
+    "reference_base": "repository_root",
+    "catalog_ref": "micronaut/micronaut-coder/code-micronaut/tool-catalog.jsonl",
+    "permitted_set_ref": "micronaut/micronaut-coder/code-micronaut/tools-permitted.v1.json",
+    "wasm_parse_task_ref": "micronaut/micronaut-coder/code-micronaut/wasm-parse.task.v1.json",
+    "host_provider_ref": "bus/rpc-api.json#ports.code-micronaut-worker",
+    "dispatch_owner": "TOOL-µ",
+    "xcfe_admission": "external_per_invocation",
+    "tool_catalog_is_authority": false,
+    "wasm_parser_tool_ref": "tool:MCDR-1:wasm-parser",
+    "wasm_parser_route_ref": "bus.code-micronaut-worker.parse-ast"
+  },
+  "pattern_registry": {
+    "insert_key": "CODEGEN:",
+    "invoke_node": "@codegen",
+    "wrapper": "<mx2lm>codegen-u op={op} language={language} task={task} phase={phase}</mx2lm>",
+    "fallback": "<mx2lm>codegen-u {input}</mx2lm>"
+  },
+  "relations": [
+    {
+      "target": "coder",
+      "verb": "@delegates_to",
+      "directed": true
+    },
+    {
+      "target": "TOOL-µ",
+      "verb": "@delegates_to",
+      "directed": true
+    },
+    {
+      "target": "PLAN-µ",
+      "verb": "@delegates_to",
+      "directed": true
+    },
+    {
+      "target": "ADVISOR-µ",
+      "verb": "@supports",
+      "directed": true
+    },
+    {
+      "target": "NGRAM-KEY-µ",
+      "verb": "@related_to",
+      "directed": false
+    },
+    {
+      "target": "NGRAM-µ",
+      "verb": "@uses",
+      "directed": true
+    },
+    {
+      "target": "Mx2LM",
+      "verb": "@related_to",
+      "directed": false
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "gramRead",
+      "key": "code:task:current"
+    },
+    {
+      "phase": "Wo",
+      "op": "classify_language"
+    },
+    {
+      "phase": "Wo",
+      "op": "select_child_micronaut"
+    },
+    {
+      "phase": "Sek",
+      "op": "execute_tool_chain",
+      "max_depth": 7
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_output_shape"
+    },
+    {
+      "phase": "Xul",
+      "op": "gramWrite",
+      "scope": "local"
+    }
+  ],
+  "memory_patterns": [
+    "code:task:current",
+    "code:language:last",
+    "code:output:last",
+    "code:tool:history"
+  ],
+  "sandbox": {
+    "gram_ns": "CODEGEN",
+    "manifest_access": [
+      "words",
+      "kuhul",
+      "micronaut"
+    ],
+    "effects": [
+      "gramRead",
+      "gramWrite",
+      "tool:call",
+      "file:read"
+    ],
+    "ports": [],
+    "coordinator": false
+  }
+}

@@ -1,0 +1,16 @@
+(* KHANARY / CFPC grammar package — proposed syntax contract v0.1. *)
+(* EBNF conventions: { X } repetition, [ X ] optional, | alternation. *)
+(* Quoted XML tags are literal terminals. Character data is parsed by the XML host. *)
+cheese = "<cheese>", { pessimism | doubt | disdain | pros | cons | contradiction | staleness | correction | evidence | result }, "</cheese>" ;
+pessimism = "<pessimism>", { question | objection }, "</pessimism>" ;
+doubt = "<doubt>", { question | objection }, "</doubt>" ;
+disdain = "<disdain>", { objection }, "</disdain>" ;
+pros = "<pros>", { pro | evidence }, "</pros>" ;
+cons = "<cons>", { con | evidence }, "</cons>" ;
+contradiction = "<contradiction/ >" ;
+staleness = "<staleness/ >" ;
+correction = "<correction/ >" ;
+question = "<question>", text_value, "</question>" ;
+objection = "<objection>", text_value, "</objection>" ;
+(* Dynamic cheese chi in [0,10] is contextual rejection pressure, not truth probability. *)
+(* No Xul admission check required for every observation or model submission. *)

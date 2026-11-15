@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:micronaut:aiml-route:1",
+  "title": "AIML/SRAI Semantic Route v1",
+  "type": "object",
+  "required": ["status", "input", "match", "route_chain", "canonical_pattern", "canonical_target", "response", "vector_candidates", "xcfe", "xul", "trace"],
+  "properties": {
+    "status": { "enum": ["closed", "rejected"] },
+    "input": { "type": "string" },
+    "match": { "type": "object", "required": ["hit", "normalized", "captures"], "properties": { "hit": { "type": "boolean" }, "normalized": { "type": "string" }, "captures": { "type": "array", "items": { "type": "string" } } } },
+    "route_chain": { "type": "array", "items": { "type": "object", "required": ["from", "to", "depth", "authority"], "properties": { "from": { "type": "string" }, "to": { "type": "string" }, "depth": { "type": "integer", "minimum": 1 }, "authority": { "const": "routing_only" } } } },
+    "canonical_pattern": { "type": ["string", "null"] },
+    "canonical_target": { "type": ["string", "null"] },
+    "response": { "type": ["string", "null"] },
+    "vector_candidates": { "type": "object", "required": ["available", "candidates"], "properties": { "available": { "type": "boolean" }, "reason": { "type": "string" }, "candidates": { "type": "array" } } },
+    "xcfe": { "type": "object", "required": ["valid", "execution_authorized", "admission", "dispatch_allowed"], "properties": { "valid": { "type": "boolean" }, "execution_authorized": { "const": false }, "admission": { "const": "DATA_ONLY" }, "dispatch_allowed": { "const": false }, "reason": { "type": ["string", "null"] } } },
+    "xul": { "type": "object", "required": ["closed", "committed", "authority", "artifact"], "properties": { "closed": { "type": "boolean" }, "committed": { "const": false }, "authority": { "const": "close_only" }, "artifact": { "const": "data_route" } } },
+    "trace": { "type": "array", "minItems": 6, "items": { "type": "object", "required": ["phase", "stage"], "properties": { "phase": { "enum": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"] }, "stage": { "type": "string" } } } }
+  },
+  "additionalProperties": true
+}

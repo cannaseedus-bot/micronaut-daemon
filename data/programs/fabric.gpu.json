@@ -1,0 +1,48 @@
+{
+  "@program": "fabric.gpu",
+  "@fold": "Pop",
+  "@node": "fabric-gpu-root",
+  "@state": {
+    "model": "E:/models/GPT2/coder_micronaut/ultrachat_coder_slerp_0p35.webgl2.dashboard.safetensors",
+    "token_bin": "E:/models/GPT2/coder_micronaut/coder_ast_json_seq256_tokens.bin",
+    "output": "E:/models/GPT2/micronaut_four_lanes_v2",
+    "backend": "opencl_1_2",
+    "backend_policy": {
+      "preferred": "opencl_1_2_gpu",
+      "cpu_fallback": "opencl_1_2_cpu",
+      "native_fallback": "d3d11_cs5"
+    },
+    "kernel": "fabric_kernels.hlsl",
+    "opencl_program": "programs/opencl.kernel.json",
+    "gpu_result": null,
+    "verified": false
+  },
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "fabric-gpu-prepare" },
+    { "@op": "CALL", "@fn": "validate_safetensors", "@args": ["$model"], "@out": "model_valid" },
+    { "@op": "CALL", "@fn": "validate_token_bin", "@args": ["$token_bin"], "@out": "dataset_valid" },
+    { "@op": "CALL", "@fn": "gpu_capability", "@args": ["$backend"], "@out": "gpu_ready" },
+    { "@op": "LOG", "@args": ["[fabric.gpu] model, token bin, and GPU capability validated"] },
+    { "@op": "FOLD_EXIT", "@fold": "Wo", "@node": "fabric-gpu-prepare", "@args": ["$model_valid", "$dataset_valid", "$gpu_ready"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Wo", "@node": "fabric-gpu-dispatch" },
+    { "@op": "GPU_DISPATCH", "@args": ["$kernel", "$model", "$token_bin", "$output", "$backend"], "@out": "gpu_result" },
+    { "@op": "LOG", "@args": ["[fabric.gpu] dispatched kernel=$kernel backend=$backend"] },
+    { "@op": "FOLD_EXIT", "@fold": "Yax", "@node": "fabric-gpu-dispatch", "@args": ["$gpu_result"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Yax", "@node": "fabric-gpu-sync" },
+    { "@op": "CALL", "@fn": "gpu_synchronize", "@args": ["$gpu_result"], "@out": "sync_result" },
+    { "@op": "LOG", "@args": ["[fabric.gpu] GPU dispatch synchronized"] },
+    { "@op": "FOLD_EXIT", "@fold": "Sek", "@node": "fabric-gpu-sync", "@args": ["$sync_result"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Sek", "@node": "fabric-gpu-verify" },
+    { "@op": "CALL", "@fn": "verify_safetensors_output", "@args": ["$gpu_result", "$output"], "@out": "verified" },
+    { "@op": "LOG", "@args": ["[fabric.gpu] output verified=$verified"] },
+    { "@op": "FOLD_EXIT", "@fold": "Chen", "@node": "fabric-gpu-verify", "@args": ["$gpu_result", "$verified"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Chen", "@node": "fabric-gpu-emit" },
+    { "@op": "SET", "@key": "gpu_result", "@args": ["$gpu_result"] },
+    { "@op": "LOG", "@args": ["[fabric.gpu] emitted GPU result=$gpu_result verified=$verified"] },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "fabric-gpu-emit", "@args": ["$gpu_result", "$verified"] }
+  ]
+}

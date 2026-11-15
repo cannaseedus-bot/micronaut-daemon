@@ -1,0 +1,38 @@
+(* ============================================================ *)
+(* Regex -> K'UHUL Runtime Grammar                              *)
+(* Maps regular-language algebra into semantic fold phases.      *)
+(* ============================================================ *)
+
+RegexKuhulMap ::= LanguageSet RegexOperator PhaseProjection FoldRoute ;
+
+LanguageSet    ::= LiteralSet | UnionSet | ProductSet | ClosureSet | WildcardSet ;
+LiteralSet     ::= "literal" ":" Singleton ;
+UnionSet       ::= LanguageSet "|" LanguageSet ;
+ProductSet     ::= LanguageSet "," LanguageSet ;
+ClosureSet     ::= LanguageSet ( "*" | "+" | Quantifier ) ;
+WildcardSet    ::= "." | ".*" ;
+Singleton      ::= Token ;
+Quantifier     ::= "{" Number [ "," Number ] "}" ;
+
+RegexOperator  ::= LiteralOp | AlternationOp | ConcatenationOp | OptionalOp | RepetitionOp | WildcardOp | AnchorOp | GroupOp ;
+LiteralOp      ::= "literal" ;
+AlternationOp  ::= "alternation" ;
+ConcatenationOp ::= "concatenation" ;
+OptionalOp     ::= "optional" ;
+RepetitionOp   ::= "kleene_star" | "one_or_more" | "bounded_quantifier" ;
+WildcardOp     ::= "wildcard_dot" | "wildcard_sequence" ;
+AnchorOp       ::= "anchor_start" | "anchor_end" ;
+GroupOp        ::= "group" ;
+
+PhaseProjection ::= PopProjection WoProjection YaxProjection SekProjection ChenProjection XulProjection ;
+PopProjection  ::= "Pop" ":" "literal_activation" | "Pop" ":" "root_anchor" ;
+WoProjection   ::= "Wo" ":" "mask_constraint" | "Wo" ":" "sequence_binding" ;
+YaxProjection  ::= "Yax" ":" "candidate_expansion" | "Yax" ":" "possibility_graph" ;
+SekProjection  ::= "Sek" ":" "matcher_execution" | "Sek" ":" "automaton_step" ;
+ChenProjection ::= "Ch'en" ":" "state_set_observation" | "Ch'en" ":" "match_evidence" ;
+XulProjection  ::= "Xul" ":" "accept_collapse" | "Xul" ":" "canonical_language_key" ;
+
+FoldRoute      ::= "Pop" "->" "Wo" "->" "Yax" "->" "Sek" "->" "Ch'en" "->" "Xul" ;
+
+Token          ::= [A-Za-z0-9_:-]+ ;
+Number         ::= [0-9]+ ;

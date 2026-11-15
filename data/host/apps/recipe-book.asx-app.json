@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "recipe-book",
+  "@key": "⟁APP:RECIPE_BOOK",
+  "@mount": "⟁ROOT:RECIPE_BOOK",
+  "@theme": { "accent": "#f59e0b", "bg": "#1a1208", "surface": "#2a1e0a", "text": "#fef3c7", "hero_phase": "Pop", "tagline": "Cook what you love" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "recipe_grid", "component": "⟁WIDGET:RECIPES", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "recipes": [], "search": "", "filter_tag": null, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:RECIPE_BOOK": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:ADD_RECIPE"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:ADD_RECIPE": { "@type": "button", "@text": "Add Recipe", "@on": { "click": "recipe.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:RECIPES", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:RECIPES": { "@type": "grid", "@bind": "state.recipes", "@children": ["⟁WIDGET:RECIPE_CARD"] },
+    "⟁WIDGET:RECIPE_CARD": { "@type": "media-card", "@bind": "recipe", "@on": { "view": "recipe.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:CATEGORIES", "⟁WIDGET:SHOPPING"] },
+    "⟁WIDGET:CATEGORIES": { "@type": "tag-cloud", "@bind": "data.categories" },
+    "⟁WIDGET:SHOPPING": { "@type": "list", "@bind": "data.shopping_list" }
+  },
+  "@programs": {
+    "recipe.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "recipe.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "recipe.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] },
+    "recipe.filter": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_tag", "@out": "filter_tag" }] }
+  },
+  "@events": { "recipe.view": "recipe.view", "compose.open": "recipe.open_compose", "search.input": "recipe.search", "tag.click": "recipe.filter" },
+  "@imports": [{ "ref": "recipe", "mode": "schema_table" }, { "ref": "review", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "meal-planner", "name": "Meal Planner", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Plan a week of meals from your recipe collection." },
+      { "id": "shopping-bot", "name": "Shopping List Bot", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Auto-generate a shopping list from selected recipes." },
+      { "id": "nutrition-calc", "name": "Nutrition Calculator", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Estimate nutritional values per serving." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "recipe.add", "pattern": "ADD RECIPE|NEW RECIPE|SAVE RECIPE", "intent": "open_compose" },
+      { "id": "recipe.search", "pattern": "FIND RECIPE *|SEARCH *", "intent": "filter_recipes" }
+    ]
+  },
+  "@data": {
+    "categories": ["Breakfast", "Dinner", "Dessert", "Vegan", "Quick"],
+    "shopping_list": [],
+    "spotlight": [
+      { "id": "sp1", "title": "Lemon Herb Roast Chicken", "slug": "lemon-herb-roast-chicken", "badge": "Family Favorite", "excerpt": "Crispy skin, juicy inside — a Sunday classic ready in 75 minutes." },
+      { "id": "sp2", "title": "5-Minute Avocado Toast", "slug": "avocado-toast", "badge": "Quick", "excerpt": "The go-to breakfast when you need something fast and filling." },
+      { "id": "sp3", "title": "Chocolate Lava Cake", "slug": "chocolate-lava-cake", "badge": "Dessert", "excerpt": "Warm, gooey center. Ready in 20 minutes." }
+    ],
+    "schema": {
+      "recipe": { "primaryKey": "recipe_id", "fields": { "recipe_id": { "type": "string" }, "title": { "type": "string", "required": true }, "slug": { "type": "string", "required": true }, "ingredients": { "type": "json", "required": true }, "instructions": { "type": "textarea", "required": true }, "prep_time_min": { "type": "integer" }, "cook_time_min": { "type": "integer" }, "servings": { "type": "integer" }, "tags": { "type": "json" }, "image_url": { "type": "uri" } } },
+      "review": { "primaryKey": "review_id", "fields": { "review_id": { "type": "string" }, "recipe_id": { "type": "string", "required": true }, "rating": { "type": "integer", "required": true }, "comment": { "type": "text" }, "submitted_at": { "type": "datetime" } } }
+    }
+  }
+}

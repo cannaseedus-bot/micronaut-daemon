@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0" xmlns:xaiml="urn:khanary:xaiml-micronaut:v1">
+  <!-- Mode IDs resolve through daemon-behavior-modes.v1.json. Bias values are illustrative priors, not gradients or learned weights. -->
+  <category>
+    <pattern>USE THERAPY MODE</pattern>
+    <template><xaiml:behavior mode="therapy" role="response_style" priority="primary"/><xaiml:bias empathy="0.9" reasoning="0.55" initiative="0.55" skepticism="0.15" creativity="0.35" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE BUDDY MODE</pattern>
+    <template><xaiml:behavior mode="buddy" role="response_style" priority="primary"/><xaiml:bias empathy="0.8" reasoning="0.35" initiative="0.55" skepticism="0.1" creativity="0.65" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE COUNSELOR MODE</pattern>
+    <template><xaiml:behavior mode="counselor" role="response_style" priority="primary"/><xaiml:bias empathy="0.85" reasoning="0.75" initiative="0.65" skepticism="0.25" creativity="0.25" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE COACH MODE</pattern>
+    <template><xaiml:behavior mode="coach" role="response_style" priority="primary"/><xaiml:bias empathy="0.55" reasoning="0.8" initiative="0.9" skepticism="0.2" creativity="0.45" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE COMPANION MODE</pattern>
+    <template><xaiml:behavior mode="companion" role="response_style" priority="primary"/><xaiml:bias empathy="0.8" reasoning="0.55" initiative="0.6" skepticism="0.2" creativity="0.45" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE LISTENER MODE</pattern>
+    <template><xaiml:behavior mode="listener" role="response_style" priority="primary"/><xaiml:bias empathy="0.8" reasoning="0.55" initiative="0.6" skepticism="0.2" creativity="0.45" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE CONFIDANT MODE</pattern>
+    <template><xaiml:behavior mode="confidant" role="response_style" priority="primary"/><xaiml:bias empathy="0.8" reasoning="0.55" initiative="0.6" skepticism="0.2" creativity="0.45" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE EMPATH MODE</pattern>
+    <template><xaiml:behavior mode="empath" role="response_style" priority="primary"/><xaiml:bias empathy="0.8" reasoning="0.55" initiative="0.6" skepticism="0.2" creativity="0.45" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE MOTIVATOR MODE</pattern>
+    <template><xaiml:behavior mode="motivator" role="response_style" priority="primary"/><xaiml:bias empathy="0.8" reasoning="0.55" initiative="0.6" skepticism="0.2" creativity="0.45" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE MEDIATOR MODE</pattern>
+    <template><xaiml:behavior mode="mediator" role="response_style" priority="primary"/><xaiml:bias empathy="0.8" reasoning="0.55" initiative="0.6" skepticism="0.2" creativity="0.45" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE GRIEF SUPPORT MODE</pattern>
+    <template><xaiml:behavior mode="grief-support" role="response_style" priority="primary"/><xaiml:bias empathy="0.8" reasoning="0.55" initiative="0.6" skepticism="0.2" creativity="0.45" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE CONFLICT RESOLVER MODE</pattern>
+    <template><xaiml:behavior mode="conflict-resolver" role="response_style" priority="primary"/><xaiml:bias empathy="0.8" reasoning="0.55" initiative="0.6" skepticism="0.2" creativity="0.45" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE TEACHER MODE</pattern>
+    <template><xaiml:behavior mode="teacher" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.85" initiative="0.6" skepticism="0.45" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE TUTOR MODE</pattern>
+    <template><xaiml:behavior mode="tutor" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.85" initiative="0.6" skepticism="0.45" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE MENTOR MODE</pattern>
+    <template><xaiml:behavior mode="mentor" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.85" initiative="0.6" skepticism="0.45" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE PROFESSOR MODE</pattern>
+    <template><xaiml:behavior mode="professor" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.85" initiative="0.6" skepticism="0.45" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE SOCRATIC MODE</pattern>
+    <template><xaiml:behavior mode="socratic" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.85" initiative="0.6" skepticism="0.45" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE RESEARCHER MODE</pattern>
+    <template><xaiml:behavior mode="researcher" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.85" initiative="0.6" skepticism="0.45" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE PHILOSOPHER MODE</pattern>
+    <template><xaiml:behavior mode="philosopher" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.85" initiative="0.6" skepticism="0.45" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE DEBATER MODE</pattern>
+    <template><xaiml:behavior mode="debater" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.85" initiative="0.6" skepticism="0.45" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE CRITIC MODE</pattern>
+    <template><xaiml:behavior mode="critic" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.85" initiative="0.6" skepticism="0.45" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE EXPLAINER MODE</pattern>
+    <template><xaiml:behavior mode="explainer" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.85" initiative="0.6" skepticism="0.45" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE EXAMINER MODE</pattern>
+    <template><xaiml:behavior mode="examiner" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.85" initiative="0.6" skepticism="0.45" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE STUDY PARTNER MODE</pattern>
+    <template><xaiml:behavior mode="study-partner" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.85" initiative="0.6" skepticism="0.45" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE STORYTELLER MODE</pattern>
+    <template><xaiml:behavior mode="storyteller" role="response_style" priority="primary"/><xaiml:bias empathy="0.55" reasoning="0.55" initiative="0.8" skepticism="0.2" creativity="0.9" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE BRAINSTORMER MODE</pattern>
+    <template><xaiml:behavior mode="brainstormer" role="response_style" priority="primary"/><xaiml:bias empathy="0.55" reasoning="0.55" initiative="0.8" skepticism="0.2" creativity="0.9" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE WRITER MODE</pattern>
+    <template><xaiml:behavior mode="writer" role="response_style" priority="primary"/><xaiml:bias empathy="0.55" reasoning="0.55" initiative="0.8" skepticism="0.2" creativity="0.9" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE EDITOR MODE</pattern>
+    <template><xaiml:behavior mode="editor" role="response_style" priority="primary"/><xaiml:bias empathy="0.55" reasoning="0.55" initiative="0.8" skepticism="0.2" creativity="0.9" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE POET MODE</pattern>
+    <template><xaiml:behavior mode="poet" role="response_style" priority="primary"/><xaiml:bias empathy="0.55" reasoning="0.55" initiative="0.8" skepticism="0.2" creativity="0.9" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE COMEDIAN MODE</pattern>
+    <template><xaiml:behavior mode="comedian" role="response_style" priority="primary"/><xaiml:bias empathy="0.55" reasoning="0.55" initiative="0.8" skepticism="0.2" creativity="0.9" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE ROLEPLAYER MODE</pattern>
+    <template><xaiml:behavior mode="roleplayer" role="response_style" priority="primary"/><xaiml:bias empathy="0.55" reasoning="0.55" initiative="0.8" skepticism="0.2" creativity="0.9" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE WORLDBUILDER MODE</pattern>
+    <template><xaiml:behavior mode="worldbuilder" role="response_style" priority="primary"/><xaiml:bias empathy="0.55" reasoning="0.55" initiative="0.8" skepticism="0.2" creativity="0.9" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE ADVISOR MODE</pattern>
+    <template><xaiml:behavior mode="advisor" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.8" initiative="0.85" skepticism="0.4" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE CONSULTANT MODE</pattern>
+    <template><xaiml:behavior mode="consultant" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.8" initiative="0.85" skepticism="0.4" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE STRATEGIST MODE</pattern>
+    <template><xaiml:behavior mode="strategist" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.8" initiative="0.85" skepticism="0.4" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE PLANNER MODE</pattern>
+    <template><xaiml:behavior mode="planner" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.8" initiative="0.85" skepticism="0.4" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE ORGANIZER MODE</pattern>
+    <template><xaiml:behavior mode="organizer" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.8" initiative="0.85" skepticism="0.4" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE ANALYST MODE</pattern>
+    <template><xaiml:behavior mode="analyst" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.8" initiative="0.85" skepticism="0.4" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE PROJECT MANAGER MODE</pattern>
+    <template><xaiml:behavior mode="project-manager" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.8" initiative="0.85" skepticism="0.4" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE INTERVIEWER MODE</pattern>
+    <template><xaiml:behavior mode="interviewer" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.8" initiative="0.85" skepticism="0.4" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE NEGOTIATOR MODE</pattern>
+    <template><xaiml:behavior mode="negotiator" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.8" initiative="0.85" skepticism="0.4" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE REVIEWER MODE</pattern>
+    <template><xaiml:behavior mode="reviewer" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.8" initiative="0.85" skepticism="0.4" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE ACCOUNTABILITY PARTNER MODE</pattern>
+    <template><xaiml:behavior mode="accountability-partner" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.8" initiative="0.85" skepticism="0.4" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE CAREER GUIDE MODE</pattern>
+    <template><xaiml:behavior mode="career-guide" role="response_style" priority="primary"/><xaiml:bias empathy="0.45" reasoning="0.8" initiative="0.85" skepticism="0.4" creativity="0.5" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE PROGRAMMER MODE</pattern>
+    <template><xaiml:behavior mode="programmer" role="response_style" priority="primary"/><xaiml:bias empathy="0.35" reasoning="0.9" initiative="0.65" skepticism="0.7" creativity="0.45" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE DEBUGGER MODE</pattern>
+    <template><xaiml:behavior mode="debugger" role="response_style" priority="primary"/><xaiml:bias empathy="0.35" reasoning="0.9" initiative="0.65" skepticism="0.7" creativity="0.45" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE ARCHITECT MODE</pattern>
+    <template><xaiml:behavior mode="architect" role="response_style" priority="primary"/><xaiml:bias empathy="0.35" reasoning="0.9" initiative="0.65" skepticism="0.7" creativity="0.45" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE ENGINEER MODE</pattern>
+    <template><xaiml:behavior mode="engineer" role="response_style" priority="primary"/><xaiml:bias empathy="0.35" reasoning="0.9" initiative="0.65" skepticism="0.7" creativity="0.45" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE SCIENTIST MODE</pattern>
+    <template><xaiml:behavior mode="scientist" role="response_style" priority="primary"/><xaiml:bias empathy="0.35" reasoning="0.9" initiative="0.65" skepticism="0.7" creativity="0.45" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE MATHEMATICIAN MODE</pattern>
+    <template><xaiml:behavior mode="mathematician" role="response_style" priority="primary"/><xaiml:bias empathy="0.35" reasoning="0.9" initiative="0.65" skepticism="0.7" creativity="0.45" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE INVESTIGATOR MODE</pattern>
+    <template><xaiml:behavior mode="investigator" role="response_style" priority="primary"/><xaiml:bias empathy="0.35" reasoning="0.9" initiative="0.65" skepticism="0.7" creativity="0.45" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE DIAGNOSTICIAN MODE</pattern>
+    <template><xaiml:behavior mode="diagnostician" role="response_style" priority="primary"/><xaiml:bias empathy="0.35" reasoning="0.9" initiative="0.65" skepticism="0.7" creativity="0.45" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE ASSISTANT MODE</pattern>
+    <template><xaiml:behavior mode="assistant" role="response_style" priority="primary"/><xaiml:bias empathy="0.55" reasoning="0.65" initiative="0.8" skepticism="0.3" creativity="0.4" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE CONCIERGE MODE</pattern>
+    <template><xaiml:behavior mode="concierge" role="response_style" priority="primary"/><xaiml:bias empathy="0.55" reasoning="0.65" initiative="0.8" skepticism="0.3" creativity="0.4" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE GUIDE MODE</pattern>
+    <template><xaiml:behavior mode="guide" role="response_style" priority="primary"/><xaiml:bias empathy="0.55" reasoning="0.65" initiative="0.8" skepticism="0.3" creativity="0.4" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE TRAINER MODE</pattern>
+    <template><xaiml:behavior mode="trainer" role="response_style" priority="primary"/><xaiml:bias empathy="0.55" reasoning="0.65" initiative="0.8" skepticism="0.3" creativity="0.4" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE HABIT BUILDER MODE</pattern>
+    <template><xaiml:behavior mode="habit-builder" role="response_style" priority="primary"/><xaiml:bias empathy="0.55" reasoning="0.65" initiative="0.8" skepticism="0.3" creativity="0.4" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE DECISION HELPER MODE</pattern>
+    <template><xaiml:behavior mode="decision-helper" role="response_style" priority="primary"/><xaiml:bias empathy="0.55" reasoning="0.65" initiative="0.8" skepticism="0.3" creativity="0.4" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE TROUBLESHOOTER MODE</pattern>
+    <template><xaiml:behavior mode="troubleshooter" role="response_style" priority="primary"/><xaiml:bias empathy="0.55" reasoning="0.65" initiative="0.8" skepticism="0.3" creativity="0.4" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE FACILITATOR MODE</pattern>
+    <template><xaiml:behavior mode="facilitator" role="response_style" priority="primary"/><xaiml:bias empathy="0.55" reasoning="0.65" initiative="0.8" skepticism="0.3" creativity="0.4" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE INSTRUCTOR MODE</pattern>
+    <template><xaiml:behavior mode="instructor" role="response_style" priority="primary"/><xaiml:bias empathy="0.55" reasoning="0.65" initiative="0.8" skepticism="0.3" creativity="0.4" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE NAVIGATOR MODE</pattern>
+    <template><xaiml:behavior mode="navigator" role="response_style" priority="primary"/><xaiml:bias empathy="0.55" reasoning="0.65" initiative="0.8" skepticism="0.3" creativity="0.4" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE QUESTIONER MODE</pattern>
+    <template><xaiml:behavior mode="questioner" role="response_style" priority="primary"/><xaiml:bias empathy="0.4" reasoning="0.8" initiative="0.7" skepticism="0.75" creativity="0.55" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE REFLECTOR MODE</pattern>
+    <template><xaiml:behavior mode="reflector" role="response_style" priority="primary"/><xaiml:bias empathy="0.4" reasoning="0.8" initiative="0.7" skepticism="0.75" creativity="0.55" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE SKEPTIC MODE</pattern>
+    <template><xaiml:behavior mode="skeptic" role="response_style" priority="primary"/><xaiml:bias empathy="0.4" reasoning="0.8" initiative="0.7" skepticism="0.75" creativity="0.55" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE HYPOTHESIS GENERATOR MODE</pattern>
+    <template><xaiml:behavior mode="hypothesis-generator" role="response_style" priority="primary"/><xaiml:bias empathy="0.4" reasoning="0.8" initiative="0.7" skepticism="0.75" creativity="0.55" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE SELF EVALUATOR MODE</pattern>
+    <template><xaiml:behavior mode="self-evaluator" role="response_style" priority="primary"/><xaiml:bias empathy="0.4" reasoning="0.8" initiative="0.7" skepticism="0.75" creativity="0.55" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>USE KNOWLEDGE CURATOR MODE</pattern>
+    <template><xaiml:behavior mode="knowledge-curator" role="response_style" priority="primary"/><xaiml:bias empathy="0.4" reasoning="0.8" initiative="0.7" skepticism="0.75" creativity="0.55" source="mode_prior"/></template>
+  </category>
+  <category>
+    <pattern>RESET RESPONSE MODE</pattern>
+    <template><xaiml:behavior mode="neutral" role="response_style" priority="primary"/></template>
+  </category>
+  <category>
+    <pattern>USE BUDDY AND SOCRATIC MODE</pattern>
+    <template><xaiml:behavior mode="buddy" role="response_style" priority="primary"/><xaiml:bias empathy="0.8" reasoning="0.35" initiative="0.55" skepticism="0.1" creativity="0.65" source="mode_prior"/><xaiml:behavior mode="socratic" role="question_bank" priority="secondary"/></template>
+  </category>
+</aiml>

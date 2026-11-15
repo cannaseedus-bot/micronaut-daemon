@@ -1,0 +1,921 @@
+{
+  "@type": "khanary.micronaut_tensor_slot_registry.v1",
+  "authority_boundary": "Every Micronaut may own a tensor slot, but tensor slots are projection/fiber state. They cannot verify semantic truth, mutate FoldGraph B, rewrite RelationISA, or commit memory.",
+  "coverage": {
+    "known_micronaut_count": 25,
+    "private_or_provider_stb_backed_count": 8,
+    "shared_virtual_slot_count": 17
+  },
+  "generated_by": "tools/check_micronaut_tensor_slots.py --write",
+  "slot_law": {
+    "every_known_micronaut_has_slot": true,
+    "formula": "MicronautTensor_mu = <base_coord_mu, fiber_mu, rank_contract, backing>",
+    "private_stb_brain_requires_evidence": true,
+    "promotion_rule": "shared_virtual_tensor_slot -> track_local_evidence_backed only after evidence + Ch'en + Xul",
+    "shared_provider_slot_is_valid": true
+  },
+  "slots": [
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "binding_kind": "track_local_gram_tensor_brain",
+        "brain_run": "brain4",
+        "kind": "stb_tensor_brain_binding",
+        "micronaut_id": "ADVISOR-µ",
+        "registry": "data/world/stb_tensor_brains.json",
+        "stb_source": "models/khanary-geometry-v0.3.0/brain4/khanary_brain.stb",
+        "track_artifacts": [
+          "binary_snapshot",
+          "candidate_key_grammar",
+          "gram_container",
+          "ngram_summary",
+          "pattern_container",
+          "vector_projection_container"
+        ]
+      },
+      "category": "manifest",
+      "materialization": "track_local_evidence_backed",
+      "micronaut_id": "ADVISOR-µ",
+      "phase": "Yax",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:ADVISOR-µ",
+        "fiber_owner": "ADVISOR-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "gram_tensor_rank_dynamic"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:ADVISOR-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "brain_run": "brain4",
+        "kind": "shared_tensor_provider",
+        "metric_provider": "METRIC-µ",
+        "promotion_requires": [
+          "track_local_gram_pool_evidence",
+          "validator_PASS",
+          "Ch'en verification",
+          "Xul commit"
+        ],
+        "provider": "TENSOR-µ",
+        "rank1_provider": "VECTOR-µ",
+        "registry": "data/world/stb_tensor_brains.json"
+      },
+      "category": "manifest",
+      "materialization": "shared_virtual_tensor_slot",
+      "micronaut_id": "APP-WIZARD-µ",
+      "phase": "Wo",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:APP-WIZARD-µ",
+        "fiber_owner": "APP-WIZARD-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "type_(p,q)_slot_until_private_evidence"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:APP-WIZARD-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "brain_run": "brain4",
+        "kind": "shared_tensor_provider",
+        "metric_provider": "METRIC-µ",
+        "promotion_requires": [
+          "track_local_gram_pool_evidence",
+          "validator_PASS",
+          "Ch'en verification",
+          "Xul commit"
+        ],
+        "provider": "TENSOR-µ",
+        "rank1_provider": "VECTOR-µ",
+        "registry": "data/world/stb_tensor_brains.json"
+      },
+      "category": "manifest",
+      "materialization": "shared_virtual_tensor_slot",
+      "micronaut_id": "BLOG-µ",
+      "phase": "Yax",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:BLOG-µ",
+        "fiber_owner": "BLOG-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "type_(p,q)_slot_until_private_evidence"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:BLOG-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "brain_run": "brain4",
+        "kind": "shared_tensor_provider",
+        "metric_provider": "METRIC-µ",
+        "promotion_requires": [
+          "track_local_gram_pool_evidence",
+          "validator_PASS",
+          "Ch'en verification",
+          "Xul commit"
+        ],
+        "provider": "TENSOR-µ",
+        "rank1_provider": "VECTOR-µ",
+        "registry": "data/world/stb_tensor_brains.json"
+      },
+      "category": "cognitive",
+      "materialization": "shared_virtual_tensor_slot",
+      "micronaut_id": "CODE-µ",
+      "phase": "Sek",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:CODE-µ",
+        "fiber_owner": "CODE-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "type_(p,q)_slot_until_private_evidence"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:CODE-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "brain_run": "brain4",
+        "kind": "shared_tensor_provider",
+        "metric_provider": "METRIC-µ",
+        "promotion_requires": [
+          "track_local_gram_pool_evidence",
+          "validator_PASS",
+          "Ch'en verification",
+          "Xul commit"
+        ],
+        "provider": "TENSOR-µ",
+        "rank1_provider": "VECTOR-µ",
+        "registry": "data/world/stb_tensor_brains.json"
+      },
+      "category": "manifest",
+      "materialization": "shared_virtual_tensor_slot",
+      "micronaut_id": "CODEGEN-µ",
+      "phase": "Sek",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:CODEGEN-µ",
+        "fiber_owner": "CODEGEN-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "type_(p,q)_slot_until_private_evidence"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:CODEGEN-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "brain_run": "brain4",
+        "kind": "shared_tensor_provider",
+        "metric_provider": "METRIC-µ",
+        "promotion_requires": [
+          "track_local_gram_pool_evidence",
+          "validator_PASS",
+          "Ch'en verification",
+          "Xul commit"
+        ],
+        "provider": "TENSOR-µ",
+        "rank1_provider": "VECTOR-µ",
+        "registry": "data/world/stb_tensor_brains.json"
+      },
+      "category": "manifest",
+      "materialization": "shared_virtual_tensor_slot",
+      "micronaut_id": "CONTROL-µ",
+      "phase": "Pop",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:CONTROL-µ",
+        "fiber_owner": "CONTROL-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "type_(p,q)_slot_until_private_evidence"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:CONTROL-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "brain_run": "brain4",
+        "kind": "shared_tensor_provider",
+        "metric_provider": "METRIC-µ",
+        "promotion_requires": [
+          "track_local_gram_pool_evidence",
+          "validator_PASS",
+          "Ch'en verification",
+          "Xul commit"
+        ],
+        "provider": "TENSOR-µ",
+        "rank1_provider": "VECTOR-µ",
+        "registry": "data/world/stb_tensor_brains.json"
+      },
+      "category": "creative",
+      "materialization": "shared_virtual_tensor_slot",
+      "micronaut_id": "CREATE-µ",
+      "phase": "Yax",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:CREATE-µ",
+        "fiber_owner": "CREATE-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "type_(p,q)_slot_until_private_evidence"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:CREATE-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "brain_run": "brain4",
+        "kind": "shared_tensor_provider",
+        "metric_provider": "METRIC-µ",
+        "promotion_requires": [
+          "track_local_gram_pool_evidence",
+          "validator_PASS",
+          "Ch'en verification",
+          "Xul commit"
+        ],
+        "provider": "TENSOR-µ",
+        "rank1_provider": "VECTOR-µ",
+        "registry": "data/world/stb_tensor_brains.json"
+      },
+      "category": "manifest",
+      "materialization": "shared_virtual_tensor_slot",
+      "micronaut_id": "FGP-µ",
+      "phase": "Wo",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:FGP-µ",
+        "fiber_owner": "FGP-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "type_(p,q)_slot_until_private_evidence"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:FGP-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "brain_run": "brain4",
+        "kind": "shared_tensor_provider",
+        "metric_provider": "METRIC-µ",
+        "promotion_requires": [
+          "track_local_gram_pool_evidence",
+          "validator_PASS",
+          "Ch'en verification",
+          "Xul commit"
+        ],
+        "provider": "TENSOR-µ",
+        "rank1_provider": "VECTOR-µ",
+        "registry": "data/world/stb_tensor_brains.json"
+      },
+      "category": "storage",
+      "materialization": "shared_virtual_tensor_slot",
+      "micronaut_id": "FILE-µ",
+      "phase": "Xul",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:FILE-µ",
+        "fiber_owner": "FILE-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "type_(p,q)_slot_until_private_evidence"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:FILE-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "brain_run": "brain4",
+        "kind": "shared_tensor_provider",
+        "metric_provider": "METRIC-µ",
+        "promotion_requires": [
+          "track_local_gram_pool_evidence",
+          "validator_PASS",
+          "Ch'en verification",
+          "Xul commit"
+        ],
+        "provider": "TENSOR-µ",
+        "rank1_provider": "VECTOR-µ",
+        "registry": "data/world/stb_tensor_brains.json"
+      },
+      "category": "creative",
+      "materialization": "shared_virtual_tensor_slot",
+      "micronaut_id": "GRAPHICS-µ",
+      "phase": "Yax",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:GRAPHICS-µ",
+        "fiber_owner": "GRAPHICS-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "type_(p,q)_slot_until_private_evidence"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:GRAPHICS-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "brain_run": "brain4",
+        "kind": "shared_tensor_provider",
+        "metric_provider": "METRIC-µ",
+        "promotion_requires": [
+          "track_local_gram_pool_evidence",
+          "validator_PASS",
+          "Ch'en verification",
+          "Xul commit"
+        ],
+        "provider": "TENSOR-µ",
+        "rank1_provider": "VECTOR-µ",
+        "registry": "data/world/stb_tensor_brains.json"
+      },
+      "category": "manifest",
+      "materialization": "shared_virtual_tensor_slot",
+      "micronaut_id": "GREETING-µ",
+      "phase": "Pop",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:GREETING-µ",
+        "fiber_owner": "GREETING-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "type_(p,q)_slot_until_private_evidence"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:GREETING-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "brain_run": "brain4",
+        "kind": "shared_tensor_provider",
+        "metric_provider": "METRIC-µ",
+        "promotion_requires": [
+          "track_local_gram_pool_evidence",
+          "validator_PASS",
+          "Ch'en verification",
+          "Xul commit"
+        ],
+        "provider": "TENSOR-µ",
+        "rank1_provider": "VECTOR-µ",
+        "registry": "data/world/stb_tensor_brains.json"
+      },
+      "category": "cognitive",
+      "materialization": "shared_virtual_tensor_slot",
+      "micronaut_id": "INFER-µ",
+      "phase": "Sek",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:INFER-µ",
+        "fiber_owner": "INFER-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "type_(p,q)_slot_until_private_evidence"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:INFER-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "binding_kind": "track_local_gram_tensor_brain",
+        "brain_run": "brain4",
+        "kind": "stb_tensor_brain_binding",
+        "micronaut_id": "JOKE-µ",
+        "registry": "data/world/stb_tensor_brains.json",
+        "stb_source": "models/khanary-geometry-v0.3.0/brain4/khanary_brain.stb",
+        "track_artifacts": [
+          "binary_snapshot",
+          "candidate_key_grammar",
+          "gram_container",
+          "ngram_summary",
+          "pattern_container",
+          "vector_projection_container"
+        ]
+      },
+      "category": "manifest",
+      "materialization": "track_local_evidence_backed",
+      "micronaut_id": "JOKE-µ",
+      "phase": "Yax",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:JOKE-µ",
+        "fiber_owner": "JOKE-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "gram_tensor_rank_dynamic"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:JOKE-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "brain_run": "brain4",
+        "kind": "shared_tensor_provider",
+        "metric_provider": "METRIC-µ",
+        "promotion_requires": [
+          "track_local_gram_pool_evidence",
+          "validator_PASS",
+          "Ch'en verification",
+          "Xul commit"
+        ],
+        "provider": "TENSOR-µ",
+        "rank1_provider": "VECTOR-µ",
+        "registry": "data/world/stb_tensor_brains.json"
+      },
+      "category": "storage",
+      "materialization": "shared_virtual_tensor_slot",
+      "micronaut_id": "MEM-µ",
+      "phase": "Xul",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:MEM-µ",
+        "fiber_owner": "MEM-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "type_(p,q)_slot_until_private_evidence"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:MEM-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "binding_kind": "metric_provider_brain",
+        "brain_run": "brain4",
+        "kind": "stb_tensor_brain_binding",
+        "micronaut_id": "METRIC-µ",
+        "registry": "data/world/stb_tensor_brains.json",
+        "stb_source": "models/khanary-geometry-v0.3.0/brain4/khanary_brain.stb",
+        "track_artifacts": []
+      },
+      "category": "manifest",
+      "materialization": "provider_backed_metric",
+      "micronaut_id": "METRIC-µ",
+      "phase": "Yax",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:METRIC-µ",
+        "fiber_owner": "METRIC-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "rank_(0,2)_metric_provider"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:METRIC-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "binding_kind": "track_local_gram_tensor_brain",
+        "brain_run": "brain4",
+        "kind": "stb_tensor_brain_binding",
+        "micronaut_id": "Mx2LM",
+        "registry": "data/world/stb_tensor_brains.json",
+        "stb_source": "models/khanary-geometry-v0.3.0/brain4/khanary_brain.stb",
+        "track_artifacts": [
+          "binary_snapshot",
+          "candidate_key_grammar",
+          "gram_container",
+          "ngram_summary",
+          "pattern_container",
+          "vector_projection_container"
+        ]
+      },
+      "category": "manifest",
+      "materialization": "track_local_evidence_backed",
+      "micronaut_id": "Mx2LM",
+      "phase": "Sek",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:Mx2LM",
+        "fiber_owner": "Mx2LM",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "gram_tensor_rank_dynamic"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:Mx2LM",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "brain_run": "brain4",
+        "kind": "shared_tensor_provider",
+        "metric_provider": "METRIC-µ",
+        "promotion_requires": [
+          "track_local_gram_pool_evidence",
+          "validator_PASS",
+          "Ch'en verification",
+          "Xul commit"
+        ],
+        "provider": "TENSOR-µ",
+        "rank1_provider": "VECTOR-µ",
+        "registry": "data/world/stb_tensor_brains.json"
+      },
+      "category": "cognitive",
+      "materialization": "shared_virtual_tensor_slot",
+      "micronaut_id": "NET-µ",
+      "phase": "Sek",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:NET-µ",
+        "fiber_owner": "NET-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "type_(p,q)_slot_until_private_evidence"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:NET-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "brain_run": "brain4",
+        "kind": "shared_tensor_provider",
+        "metric_provider": "METRIC-µ",
+        "promotion_requires": [
+          "track_local_gram_pool_evidence",
+          "validator_PASS",
+          "Ch'en verification",
+          "Xul commit"
+        ],
+        "provider": "TENSOR-µ",
+        "rank1_provider": "VECTOR-µ",
+        "registry": "data/world/stb_tensor_brains.json"
+      },
+      "category": "executive",
+      "materialization": "shared_virtual_tensor_slot",
+      "micronaut_id": "ORCH-µ",
+      "phase": "Wo",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:ORCH-µ",
+        "fiber_owner": "ORCH-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "type_(p,q)_slot_until_private_evidence"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:ORCH-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "binding_kind": "track_local_gram_tensor_brain",
+        "brain_run": "brain4",
+        "kind": "stb_tensor_brain_binding",
+        "micronaut_id": "PLAN-µ",
+        "registry": "data/world/stb_tensor_brains.json",
+        "stb_source": "models/khanary-geometry-v0.3.0/brain4/khanary_brain.stb",
+        "track_artifacts": [
+          "binary_snapshot",
+          "candidate_key_grammar",
+          "gram_container",
+          "ngram_summary",
+          "pattern_container",
+          "vector_projection_container"
+        ]
+      },
+      "category": "executive",
+      "materialization": "track_local_evidence_backed",
+      "micronaut_id": "PLAN-µ",
+      "phase": "Wo",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:PLAN-µ",
+        "fiber_owner": "PLAN-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "gram_tensor_rank_dynamic"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:PLAN-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "binding_kind": "track_local_gram_tensor_brain",
+        "brain_run": "brain4",
+        "kind": "stb_tensor_brain_binding",
+        "micronaut_id": "POLITICS-µ",
+        "registry": "data/world/stb_tensor_brains.json",
+        "stb_source": "models/khanary-geometry-v0.3.0/brain4/khanary_brain.stb",
+        "track_artifacts": [
+          "binary_snapshot",
+          "candidate_key_grammar",
+          "gram_container",
+          "ngram_summary",
+          "pattern_container",
+          "vector_projection_container"
+        ]
+      },
+      "category": "manifest",
+      "materialization": "track_local_evidence_backed",
+      "micronaut_id": "POLITICS-µ",
+      "phase": "Yax",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:POLITICS-µ",
+        "fiber_owner": "POLITICS-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "gram_tensor_rank_dynamic"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:POLITICS-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "brain_run": "brain4",
+        "kind": "shared_tensor_provider",
+        "metric_provider": "METRIC-µ",
+        "promotion_requires": [
+          "track_local_gram_pool_evidence",
+          "validator_PASS",
+          "Ch'en verification",
+          "Xul commit"
+        ],
+        "provider": "TENSOR-µ",
+        "rank1_provider": "VECTOR-µ",
+        "registry": "data/world/stb_tensor_brains.json"
+      },
+      "category": "cognitive",
+      "materialization": "shared_virtual_tensor_slot",
+      "micronaut_id": "REASON-µ",
+      "phase": "Sek",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:REASON-µ",
+        "fiber_owner": "REASON-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "type_(p,q)_slot_until_private_evidence"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:REASON-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "binding_kind": "geometry_provider_brain",
+        "brain_run": "brain4",
+        "kind": "stb_tensor_brain_binding",
+        "micronaut_id": "TENSOR-µ",
+        "registry": "data/world/stb_tensor_brains.json",
+        "stb_source": "models/khanary-geometry-v0.3.0/brain4/khanary_brain.stb",
+        "track_artifacts": []
+      },
+      "category": "manifest",
+      "materialization": "provider_backed_tensor",
+      "micronaut_id": "TENSOR-µ",
+      "phase": "Wo",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:TENSOR-µ",
+        "fiber_owner": "TENSOR-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "type_(p,q)_provider"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:TENSOR-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "brain_run": "brain4",
+        "kind": "shared_tensor_provider",
+        "metric_provider": "METRIC-µ",
+        "promotion_requires": [
+          "track_local_gram_pool_evidence",
+          "validator_PASS",
+          "Ch'en verification",
+          "Xul commit"
+        ],
+        "provider": "TENSOR-µ",
+        "rank1_provider": "VECTOR-µ",
+        "registry": "data/world/stb_tensor_brains.json"
+      },
+      "category": "manifest",
+      "materialization": "shared_virtual_tensor_slot",
+      "micronaut_id": "TOOL-µ",
+      "phase": "Pop",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:TOOL-µ",
+        "fiber_owner": "TOOL-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "type_(p,q)_slot_until_private_evidence"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:TOOL-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "binding_kind": "rank1_provider_brain",
+        "brain_run": "brain4",
+        "kind": "stb_tensor_brain_binding",
+        "micronaut_id": "VECTOR-µ",
+        "registry": "data/world/stb_tensor_brains.json",
+        "stb_source": "models/khanary-geometry-v0.3.0/brain4/khanary_brain.stb",
+        "track_artifacts": []
+      },
+      "category": "manifest",
+      "materialization": "provider_backed_rank1",
+      "micronaut_id": "VECTOR-µ",
+      "phase": "Wo",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:VECTOR-µ",
+        "fiber_owner": "VECTOR-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "rank_(1,0)_provider"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:VECTOR-u",
+      "topology_authority": false
+    },
+    {
+      "@type": "khanary.micronaut_tensor_slot.v1",
+      "backing": {
+        "brain_run": "brain4",
+        "kind": "shared_tensor_provider",
+        "metric_provider": "METRIC-µ",
+        "promotion_requires": [
+          "track_local_gram_pool_evidence",
+          "validator_PASS",
+          "Ch'en verification",
+          "Xul commit"
+        ],
+        "provider": "TENSOR-µ",
+        "rank1_provider": "VECTOR-µ",
+        "registry": "data/world/stb_tensor_brains.json"
+      },
+      "category": "manifest",
+      "materialization": "shared_virtual_tensor_slot",
+      "micronaut_id": "WEB-RESEARCH-µ",
+      "phase": "Yax",
+      "projection_only": true,
+      "provider_stack": [
+        "TENSOR-µ",
+        "METRIC-µ",
+        "VECTOR-µ"
+      ],
+      "rank_contract": {
+        "base_coordinate": "@node:WEB-RESEARCH-µ",
+        "fiber_owner": "WEB-RESEARCH-µ",
+        "notation": "TensorBrain_mu = <Track_mu, BaseCoord_mu, Fiber_mu, Rank(p,q), Generation, Backing>",
+        "rank_note": "type_(p,q)_slot_until_private_evidence"
+      },
+      "semantic_authority": false,
+      "slot_id": "tensor_slot:WEB-RESEARCH-u",
+      "topology_authority": false
+    }
+  ],
+  "source_surfaces": {
+    "micronaut_manifest": "data/manifest/micronaut.manifest.json",
+    "relational_graph": "data/grammar/kuhul-relational-graph.xml",
+    "relational_manifest": "data/manifest/relational.manifest.json",
+    "stb_tensor_brains": "data/world/stb_tensor_brains.json"
+  },
+  "version": "1.0.0"
+}

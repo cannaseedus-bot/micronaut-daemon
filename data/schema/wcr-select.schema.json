@@ -1,0 +1,145 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "wcr-select.schema.json",
+  "title": "WCR Branch Selection Contract",
+  "description": "Defines the input/output contract for the WCR branch selector executed at the Yax phase. Scores candidates by W × C × R and routes them into three buckets: selected, rejected, unresolved.",
+  "type": "object",
+  "required": ["@kind", "@context", "@candidates"],
+  "additionalProperties": false,
+  "properties": {
+    "@kind": {
+      "type": "string",
+      "const": "wcr.select"
+    },
+
+    "@formula": {
+      "type": "object",
+      "description": "Symbolic definition of the scoring components.",
+      "additionalProperties": false,
+      "properties": {
+        "score": { "type": "string", "const": "W × C × R" },
+        "W": {
+          "type": "object",
+          "description": "Pattern weight: base_weight normalized across the candidate batch. Source: corpus frequency, memory field entry count, or 1.0 if unknown.",
+          "additionalProperties": false,
+          "properties": {
+            "source": { "type": "string", "enum": ["corpus_frequency", "memory_field", "uniform"] },
+            "normalization": { "type": "string", "const": "divide_by_max_in_batch" },
+            "range": { "type": "string", "const": "[0, 1]" }
+          }
+        },
+        "C": {
+          "type": "object",
+          "description": "Confidence: resolved_deps / required_deps. 1.0 when no deps declared. 0.0 routes to unresolved.",
+          "additionalProperties": false,
+          "properties": {
+            "formula": { "type": "string", "const": "resolved_deps.size / required_deps.size" },
+            "zero_policy": { "type": "string", "const": "route_to_unresolved" },
+            "range": { "type": "string", "const": "[0, 1]" }
+          }
+        },
+        "R": {
+          "type": "object",
+          "description": "Relevance: Jaccard-max overlap between candidate surface ngrams and Wo binding keys. Tokenizer: Mx2LmNGram::build (bigrams + trigrams).",
+          "additionalProperties": false,
+          "properties": {
+            "formula": { "type": "string", "const": "|A ∩ B| / max(|A|, |B|)" },
+            "A": { "type": "string", "const": "context.binding_keys" },
+            "B": { "type": "string", "const": "candidate.surface_keys" },
+            "tokenizer": { "type": "string", "const": "Mx2LmNGram::build (bigrams + trigrams)" },
+            "range": { "type": "string", "const": "[0, 1]" }
+          }
+        }
+      }
+    },
+
+    "@context": {
+      "type": "object",
+      "description": "Calling context produced by the Wo pattern.bind phase.",
+      "required": ["binding_keys", "select_threshold", "allow_multiple"],
+      "additionalProperties": false,
+      "properties": {
+        "binding_keys": {
+          "type": "array",
+          "description": "Ngram keys extracted from the Wo binding text.",
+          "items": { "type": "string" }
+        },
+        "select_threshold": {
+          "type": "number",
+          "description": "Minimum score for a candidate to land in the selected bucket.",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "allow_multiple": {
+          "type": "boolean",
+          "description": "When false, selected is trimmed to the single highest scorer."
+        }
+      }
+    },
+
+    "@candidates": {
+      "type": "array",
+      "description": "Branches eligible at this Yax node, typically the @children[attach=Yax] list.",
+      "items": {
+        "type": "object",
+        "required": ["id", "surface", "base_weight"],
+        "additionalProperties": false,
+        "properties": {
+          "id":            { "type": "string" },
+          "surface":       { "type": "string",  "description": "Pattern surface for R computation." },
+          "base_weight":   { "type": "number",  "description": "W before normalization.", "minimum": 0 },
+          "required_deps": { "type": "array",   "items": { "type": "string" }, "description": "Dep IDs the branch declares." },
+          "resolved_deps": { "type": "array",   "items": { "type": "string" }, "description": "Dep IDs confirmed in scope." }
+        }
+      }
+    },
+
+    "@output": {
+      "type": "object",
+      "description": "Three-bucket result emitted by Yax.",
+      "additionalProperties": false,
+      "properties": {
+        "selected": {
+          "type": "array",
+          "description": "score >= threshold; sorted descending; trimmed to top-1 if allow_multiple=false.",
+          "items": { "$ref": "#/$defs/WCREntry" }
+        },
+        "rejected": {
+          "type": "array",
+          "description": "C > 0 but score < threshold. Stored as alternates; bubble up as parent unresolved if selected fails.",
+          "items": { "$ref": "#/$defs/WCREntry" }
+        },
+        "unresolved": {
+          "type": "array",
+          "description": "C == 0; structural deps missing. Propagated to parent result as gaps.",
+          "items": { "$ref": "#/$defs/WCREntry" }
+        }
+      }
+    },
+
+    "@cycle_detection": {
+      "type": "object",
+      "description": "Cycle detection is per-branch (active ancestor stack), not per-tree.",
+      "additionalProperties": false,
+      "properties": {
+        "scope":  { "type": "string", "const": "branch_ancestor_stack" },
+        "action": { "type": "string", "enum": ["reject", "unresolved"] }
+      }
+    }
+  },
+
+  "$defs": {
+    "WCREntry": {
+      "type": "object",
+      "required": ["id", "w", "c", "r", "score"],
+      "additionalProperties": false,
+      "properties": {
+        "id":    { "type": "string" },
+        "w":     { "type": "number" },
+        "c":     { "type": "number" },
+        "r":     { "type": "number" },
+        "score": { "type": "number" }
+      }
+    }
+  }
+}

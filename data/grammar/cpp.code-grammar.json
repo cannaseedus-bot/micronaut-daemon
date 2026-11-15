@@ -1,0 +1,196 @@
+{
+  "language": "cpp",
+  "version": "1.0",
+  "tokens": [
+    {
+      "type": "include",
+      "pattern": "#include\\s*[<\"]([^>\"]+)[>\"]",
+      "captures": [
+        "path"
+      ],
+      "edge_kind": "@imports"
+    },
+    {
+      "type": "namespace_decl",
+      "pattern": "namespace\\s+([\\w:]+)\\s*\\{",
+      "captures": [
+        "name"
+      ],
+      "edge_kind": "@defines"
+    },
+    {
+      "type": "class_decl",
+      "pattern": "(?:class|struct)\\s+(\\w+)(?:\\s*:\\s*(?:public|protected|private)\\s+([\\w:]+))?",
+      "captures": [
+        "name",
+        "base"
+      ],
+      "edge_kind": "@defines"
+    },
+    {
+      "type": "function_def",
+      "pattern": "(?:[\\w:*&<>]+\\s+)+([\\w:~]+)\\s*\\([^;{]*\\)\\s*(?:const\\s*)?(?:override\\s*)?(?:noexcept\\s*)?\\{",
+      "captures": [
+        "name"
+      ],
+      "edge_kind": "@defines"
+    },
+    {
+      "type": "function_call",
+      "pattern": "([\\w:]+)\\s*\\(",
+      "captures": [
+        "callee"
+      ],
+      "edge_kind": "@calls"
+    },
+    {
+      "type": "member_access",
+      "pattern": "(\\w+)_\\s*\\.",
+      "captures": [
+        "object"
+      ],
+      "edge_kind": "@accesses"
+    },
+    {
+      "type": "template_inst",
+      "pattern": "std::(vector|unordered_map|optional|shared_ptr|string|array|variant)<",
+      "captures": [
+        "container"
+      ],
+      "edge_kind": "@uses"
+    }
+  ],
+  "edges": [
+    {
+      "from_type": "namespace_decl",
+      "to_type": "class_decl",
+      "kind": "@contains",
+      "condition": "sequence"
+    },
+    {
+      "from_type": "namespace_decl",
+      "to_type": "function_def",
+      "kind": "@contains",
+      "condition": "sequence"
+    },
+    {
+      "from_type": "class_decl",
+      "to_type": "function_def",
+      "kind": "@declares",
+      "condition": "sequence"
+    },
+    {
+      "from_type": "function_def",
+      "to_type": "function_call",
+      "kind": "@calls",
+      "condition": "sequence"
+    },
+    {
+      "from_type": "function_def",
+      "to_type": "member_access",
+      "kind": "@accesses",
+      "condition": "sequence"
+    },
+    {
+      "from_type": "include",
+      "to_type": "template_inst",
+      "kind": "@enables",
+      "condition": "file"
+    }
+  ],
+  "lexicon": {
+    "classes": [
+      {
+        "name": "space",
+        "pattern": "\\s+",
+        "action": "skip",
+        "role": "separator"
+      },
+      {
+        "name": "glyph",
+        "pattern": "(?:[\\xC2-\\xDF][\\x80-\\xBF]|[\\xE0-\\xEF][\\x80-\\xBF]{2}|[\\xF0-\\xF4][\\x80-\\xBF]{3}|[\\x80-\\xFF])",
+        "action": "atom",
+        "role": "glyph"
+      },
+      {
+        "name": "word_core",
+        "pattern": "[A-Za-z]+",
+        "action": "text",
+        "role": "word"
+      },
+      {
+        "name": "word_plain",
+        "pattern": "[A-Za-z0-9]+",
+        "action": "text",
+        "role": "word"
+      },
+      {
+        "name": "word_full",
+        "pattern": "[A-Za-z0-9_]+",
+        "action": "text",
+        "role": "word"
+      },
+      {
+        "name": "word_key",
+        "pattern": "[A-Za-z0-9_']+",
+        "action": "text",
+        "role": "word"
+      },
+      {
+        "name": "punct",
+        "pattern": "[^\\sA-Za-z0-9_'\\x80-\\xFF]",
+        "action": "punct",
+        "role": "punct"
+      }
+    ],
+    "profiles": {
+      "default": {
+        "lower": true,
+        "min_len": 1,
+        "keep": [
+          "word_full"
+        ]
+      },
+      "ngram": {
+        "lower": true,
+        "min_len": 1,
+        "keep": [
+          "word_key"
+        ]
+      },
+      "distributional": {
+        "lower": true,
+        "min_len": 1,
+        "keep": [
+          "word_full"
+        ]
+      },
+      "alnum_plain": {
+        "lower": true,
+        "min_len": 1,
+        "keep": [
+          "word_plain"
+        ]
+      },
+      "governs": {
+        "lower": true,
+        "min_len": 3,
+        "keep": [
+          "word_core"
+        ]
+      },
+      "glyph_lm": {
+        "lower": true,
+        "min_len": 1,
+        "keep": [
+          "word_key",
+          "glyph",
+          "punct"
+        ]
+      }
+    }
+  },
+  "adapter_layer": "AST",
+  "ast_name": "Abstract Syntax Transpiler",
+  "downstream_execution_authority": "K'UHUL"
+}

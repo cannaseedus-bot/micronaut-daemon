@@ -1,0 +1,532 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from vectors.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH </pattern>
+    <template>source vectors.gml; label Semantic_Cohesion_Graph; identity vectors; authority data_only; directed 1; nodes 44; edges 43. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 1</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 1; centroid_norm: 0.96827418; cohesion: 0.93691836; domain_sim: 0.97036928; glyph: ⟁ANIMAL; id: 1; kind: sem_anchor; label: sem_anchor:⟁ANIMAL; record_count: 216. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 1; centroid_norm: 0.96827418; cohesion: 0.93691836; domain_sim: 0.97036928; glyph: ⟁ANIMAL; id: 1; kind: sem_anchor; label: sem_anchor:⟁ANIMAL; record_count: 216. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 2</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 2; centroid_norm: 0.96704078; cohesion: 0.93415498; domain_sim: 0.9786669; glyph: ⟁BALL; id: 2; kind: sem_anchor; label: sem_anchor:⟁BALL; record_count: 65. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 2; centroid_norm: 0.96704078; cohesion: 0.93415498; domain_sim: 0.9786669; glyph: ⟁BALL; id: 2; kind: sem_anchor; label: sem_anchor:⟁BALL; record_count: 65. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 3</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 3; centroid_norm: 0.9794054; cohesion: 0.95813316; domain_sim: 0.98394907; glyph: ⟁BARK; id: 3; kind: sem_anchor; label: sem_anchor:⟁BARK; record_count: 38. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 3; centroid_norm: 0.9794054; cohesion: 0.95813316; domain_sim: 0.98394907; glyph: ⟁BARK; id: 3; kind: sem_anchor; label: sem_anchor:⟁BARK; record_count: 38. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 4</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 4; centroid_norm: 0.96897882; cohesion: 0.93382987; domain_sim: 0.96702141; glyph: ⟁BAT; id: 4; kind: sem_anchor; label: sem_anchor:⟁BAT; record_count: 13. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 4; centroid_norm: 0.96897882; cohesion: 0.93382987; domain_sim: 0.96702141; glyph: ⟁BAT; id: 4; kind: sem_anchor; label: sem_anchor:⟁BAT; record_count: 13. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 5</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 5; centroid_norm: 0.97710299; cohesion: 0.95343689; domain_sim: 0.9830721; glyph: ⟁BICYCLE; id: 5; kind: sem_anchor; label: sem_anchor:⟁BICYCLE; record_count: 36. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 5; centroid_norm: 0.97710299; cohesion: 0.95343689; domain_sim: 0.9830721; glyph: ⟁BICYCLE; id: 5; kind: sem_anchor; label: sem_anchor:⟁BICYCLE; record_count: 36. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 6</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 6; centroid_norm: 0.9731214; cohesion: 0.94666439; domain_sim: 0.98769945; glyph: ⟁BIRD; id: 6; kind: sem_anchor; label: sem_anchor:⟁BIRD; record_count: 143. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 6; centroid_norm: 0.9731214; cohesion: 0.94666439; domain_sim: 0.98769945; glyph: ⟁BIRD; id: 6; kind: sem_anchor; label: sem_anchor:⟁BIRD; record_count: 143. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 7</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 7; centroid_norm: 0.97368562; cohesion: 0.94589969; domain_sim: 0.97966653; glyph: ⟁BOAT; id: 7; kind: sem_anchor; label: sem_anchor:⟁BOAT; record_count: 25. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 7; centroid_norm: 0.97368562; cohesion: 0.94589969; domain_sim: 0.97966653; glyph: ⟁BOAT; id: 7; kind: sem_anchor; label: sem_anchor:⟁BOAT; record_count: 25. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 8</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 8; centroid_norm: 0.97063023; cohesion: 0.93871855; domain_sim: 0.98525691; glyph: ⟁BUS; id: 8; kind: sem_anchor; label: sem_anchor:⟁BUS; record_count: 18. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 8; centroid_norm: 0.97063023; cohesion: 0.93871855; domain_sim: 0.98525691; glyph: ⟁BUS; id: 8; kind: sem_anchor; label: sem_anchor:⟁BUS; record_count: 18. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 9</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 9; centroid_norm: 0.97092468; cohesion: 0.94234848; domain_sim: 0.99380177; glyph: ⟁CAR; id: 9; kind: sem_anchor; label: sem_anchor:⟁CAR; record_count: 304. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 9; centroid_norm: 0.97092468; cohesion: 0.94234848; domain_sim: 0.99380177; glyph: ⟁CAR; id: 9; kind: sem_anchor; label: sem_anchor:⟁CAR; record_count: 304. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 10</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 10; centroid_norm: 1.0; cohesion: 1.0; domain_sim: 0.91620189; glyph: ⟁CARGO; id: 10; kind: sem_anchor; label: sem_anchor:⟁CARGO; record_count: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 10; centroid_norm: 1.0; cohesion: 1.0; domain_sim: 0.91620189; glyph: ⟁CARGO; id: 10; kind: sem_anchor; label: sem_anchor:⟁CARGO; record_count: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 11</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 11; centroid_norm: 0.97379738; cohesion: 0.94800395; domain_sim: 0.99263316; glyph: ⟁CAT; id: 11; kind: sem_anchor; label: sem_anchor:⟁CAT; record_count: 249. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 11; centroid_norm: 0.97379738; cohesion: 0.94800395; domain_sim: 0.99263316; glyph: ⟁CAT; id: 11; kind: sem_anchor; label: sem_anchor:⟁CAT; record_count: 249. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 12</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 12; centroid_norm: 0.97218722; cohesion: 0.94501781; domain_sim: 0.99257398; glyph: ⟁DOG; id: 12; kind: sem_anchor; label: sem_anchor:⟁DOG; record_count: 336. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 12; centroid_norm: 0.97218722; cohesion: 0.94501781; domain_sim: 0.99257398; glyph: ⟁DOG; id: 12; kind: sem_anchor; label: sem_anchor:⟁DOG; record_count: 336. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 13</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 13; centroid_norm: 0.96133369; cohesion: 0.91468292; domain_sim: 0.98105013; glyph: ⟁DRIVER; id: 13; kind: sem_anchor; label: sem_anchor:⟁DRIVER; record_count: 9. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 13; centroid_norm: 0.96133369; cohesion: 0.91468292; domain_sim: 0.98105013; glyph: ⟁DRIVER; id: 13; kind: sem_anchor; label: sem_anchor:⟁DRIVER; record_count: 9. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 14</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 14; centroid_norm: 0.96505684; cohesion: 0.93041914; domain_sim: 0.98319674; glyph: ⟁ENERGY; id: 14; kind: sem_anchor; label: sem_anchor:⟁ENERGY; record_count: 76. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 14; centroid_norm: 0.96505684; cohesion: 0.93041914; domain_sim: 0.98319674; glyph: ⟁ENERGY; id: 14; kind: sem_anchor; label: sem_anchor:⟁ENERGY; record_count: 76. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 15</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 15; centroid_norm: 0.96190447; cohesion: 0.92284937; domain_sim: 0.98497367; glyph: ⟁ENGINE; id: 15; kind: sem_anchor; label: sem_anchor:⟁ENGINE; record_count: 32. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 15; centroid_norm: 0.96190447; cohesion: 0.92284937; domain_sim: 0.98497367; glyph: ⟁ENGINE; id: 15; kind: sem_anchor; label: sem_anchor:⟁ENGINE; record_count: 32. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 16</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 16; centroid_norm: 0.93000871; cohesion: 0.85741155; domain_sim: 0.97081757; glyph: ⟁FIELD; id: 16; kind: sem_anchor; label: sem_anchor:⟁FIELD; record_count: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 16; centroid_norm: 0.93000871; cohesion: 0.85741155; domain_sim: 0.97081757; glyph: ⟁FIELD; id: 16; kind: sem_anchor; label: sem_anchor:⟁FIELD; record_count: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 17</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 17; centroid_norm: 0.96911007; cohesion: 0.93788022; domain_sim: 0.97891718; glyph: ⟁FLAT; id: 17; kind: sem_anchor; label: sem_anchor:⟁FLAT; record_count: 48. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 17; centroid_norm: 0.96911007; cohesion: 0.93788022; domain_sim: 0.97891718; glyph: ⟁FLAT; id: 17; kind: sem_anchor; label: sem_anchor:⟁FLAT; record_count: 48. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 18</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 18; centroid_norm: 0.96484542; cohesion: 0.92915559; domain_sim: 0.97628492; glyph: ⟁FLOW; id: 18; kind: sem_anchor; label: sem_anchor:⟁FLOW; record_count: 40. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 18; centroid_norm: 0.96484542; cohesion: 0.92915559; domain_sim: 0.97628492; glyph: ⟁FLOW; id: 18; kind: sem_anchor; label: sem_anchor:⟁FLOW; record_count: 40. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 19</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 19; centroid_norm: 0.97811705; cohesion: 0.95504823; domain_sim: 0.98840648; glyph: ⟁FUR; id: 19; kind: sem_anchor; label: sem_anchor:⟁FUR; record_count: 27. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 19; centroid_norm: 0.97811705; cohesion: 0.95504823; domain_sim: 0.98840648; glyph: ⟁FUR; id: 19; kind: sem_anchor; label: sem_anchor:⟁FUR; record_count: 27. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 20</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 20; centroid_norm: 0.96125889; cohesion: 0.92412508; domain_sim: 0.97686261; glyph: ⟁GAME; id: 20; kind: sem_anchor; label: sem_anchor:⟁GAME; record_count: 267. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 20; centroid_norm: 0.96125889; cohesion: 0.92412508; domain_sim: 0.97686261; glyph: ⟁GAME; id: 20; kind: sem_anchor; label: sem_anchor:⟁GAME; record_count: 267. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 21</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 21; centroid_norm: 0.94518226; cohesion: 0.87204345; domain_sim: 0.97003007; glyph: ⟁GROWTH; id: 21; kind: sem_anchor; label: sem_anchor:⟁GROWTH; record_count: 6. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 21; centroid_norm: 0.94518226; cohesion: 0.87204345; domain_sim: 0.97003007; glyph: ⟁GROWTH; id: 21; kind: sem_anchor; label: sem_anchor:⟁GROWTH; record_count: 6. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 22</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 22; centroid_norm: 0.97402513; cohesion: 0.94806757; domain_sim: 0.98823661; glyph: ⟁HORSE; id: 22; kind: sem_anchor; label: sem_anchor:⟁HORSE; record_count: 79. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 22; centroid_norm: 0.97402513; cohesion: 0.94806757; domain_sim: 0.98823661; glyph: ⟁HORSE; id: 22; kind: sem_anchor; label: sem_anchor:⟁HORSE; record_count: 79. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 23</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 23; centroid_norm: 0.9609251; cohesion: 0.92274635; domain_sim: 0.9904846; glyph: ⟁MATTER; id: 23; kind: sem_anchor; label: sem_anchor:⟁MATTER; record_count: 130. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 23; centroid_norm: 0.9609251; cohesion: 0.92274635; domain_sim: 0.9904846; glyph: ⟁MATTER; id: 23; kind: sem_anchor; label: sem_anchor:⟁MATTER; record_count: 130. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 24</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 24; centroid_norm: 0.98456556; cohesion: 0.96499343; domain_sim: 0.98140037; glyph: ⟁MEOW; id: 24; kind: sem_anchor; label: sem_anchor:⟁MEOW; record_count: 8. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 24; centroid_norm: 0.98456556; cohesion: 0.96499343; domain_sim: 0.98140037; glyph: ⟁MEOW; id: 24; kind: sem_anchor; label: sem_anchor:⟁MEOW; record_count: 8. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 25</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 25; centroid_norm: 0.95751631; cohesion: 0.90852124; domain_sim: 0.98431778; glyph: ⟁MOTION; id: 25; kind: sem_anchor; label: sem_anchor:⟁MOTION; record_count: 11. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 25; centroid_norm: 0.95751631; cohesion: 0.90852124; domain_sim: 0.98431778; glyph: ⟁MOTION; id: 25; kind: sem_anchor; label: sem_anchor:⟁MOTION; record_count: 11. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 26</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 26; centroid_norm: 0.9728747; cohesion: 0.93979592; domain_sim: 0.98029459; glyph: ⟁MOTORCYCLE; id: 26; kind: sem_anchor; label: sem_anchor:⟁MOTORCYCLE; record_count: 9. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 26; centroid_norm: 0.9728747; cohesion: 0.93979592; domain_sim: 0.98029459; glyph: ⟁MOTORCYCLE; id: 26; kind: sem_anchor; label: sem_anchor:⟁MOTORCYCLE; record_count: 9. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 27</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 27; centroid_norm: 0.94921786; cohesion: 0.88121761; domain_sim: 0.97064686; glyph: ⟁PASSENGER; id: 27; kind: sem_anchor; label: sem_anchor:⟁PASSENGER; record_count: 6. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 27; centroid_norm: 0.94921786; cohesion: 0.88121761; domain_sim: 0.97064686; glyph: ⟁PASSENGER; id: 27; kind: sem_anchor; label: sem_anchor:⟁PASSENGER; record_count: 6. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 28</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 28; centroid_norm: 1.0; cohesion: 1.0; domain_sim: 0.95038146; glyph: ⟁PATH; id: 28; kind: sem_anchor; label: sem_anchor:⟁PATH; record_count: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 28; centroid_norm: 1.0; cohesion: 1.0; domain_sim: 0.95038146; glyph: ⟁PATH; id: 28; kind: sem_anchor; label: sem_anchor:⟁PATH; record_count: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 29</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 29; centroid_norm: 1.0; cohesion: 1.0; domain_sim: 0.89836997; glyph: ⟁PAW; id: 29; kind: sem_anchor; label: sem_anchor:⟁PAW; record_count: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 29; centroid_norm: 1.0; cohesion: 1.0; domain_sim: 0.89836997; glyph: ⟁PAW; id: 29; kind: sem_anchor; label: sem_anchor:⟁PAW; record_count: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 30</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 30; centroid_norm: 0.95091581; cohesion: 0.90232567; domain_sim: 1.0; glyph: ⟁PHYSICAL; id: 30; kind: sem_anchor; label: sem_anchor:⟁PHYSICAL; record_count: 51. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 30; centroid_norm: 0.95091581; cohesion: 0.90232567; domain_sim: 1.0; glyph: ⟁PHYSICAL; id: 30; kind: sem_anchor; label: sem_anchor:⟁PHYSICAL; record_count: 51. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 31</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 31; centroid_norm: 0.96272492; cohesion: 0.89025895; domain_sim: 0.96351999; glyph: ⟁PITCH; id: 31; kind: sem_anchor; label: sem_anchor:⟁PITCH; record_count: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 31; centroid_norm: 0.96272492; cohesion: 0.89025895; domain_sim: 0.96351999; glyph: ⟁PITCH; id: 31; kind: sem_anchor; label: sem_anchor:⟁PITCH; record_count: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 32</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 32; centroid_norm: 0.96102315; cohesion: 0.9210998; domain_sim: 0.98472077; glyph: ⟁PLANE; id: 32; kind: sem_anchor; label: sem_anchor:⟁PLANE; record_count: 32. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 32; centroid_norm: 0.96102315; cohesion: 0.9210998; domain_sim: 0.98472077; glyph: ⟁PLANE; id: 32; kind: sem_anchor; label: sem_anchor:⟁PLANE; record_count: 32. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 33</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 33; centroid_norm: 0.96489131; cohesion: 0.92695738; domain_sim: 0.98235804; glyph: ⟁ROAD; id: 33; kind: sem_anchor; label: sem_anchor:⟁ROAD; record_count: 18. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 33; centroid_norm: 0.96489131; cohesion: 0.92695738; domain_sim: 0.98235804; glyph: ⟁ROAD; id: 33; kind: sem_anchor; label: sem_anchor:⟁ROAD; record_count: 18. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 34</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 34; centroid_norm: 0.94087148; cohesion: 0.85654896; domain_sim: 0.96511525; glyph: ⟁ROTATION; id: 34; kind: sem_anchor; label: sem_anchor:⟁ROTATION; record_count: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 34; centroid_norm: 0.94087148; cohesion: 0.85654896; domain_sim: 0.96511525; glyph: ⟁ROTATION; id: 34; kind: sem_anchor; label: sem_anchor:⟁ROTATION; record_count: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 35</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 35; centroid_norm: 0.9593733; cohesion: 0.91509037; domain_sim: 0.97262377; glyph: ⟁SCORE; id: 35; kind: sem_anchor; label: sem_anchor:⟁SCORE; record_count: 16. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 35; centroid_norm: 0.9593733; cohesion: 0.91509037; domain_sim: 0.97262377; glyph: ⟁SCORE; id: 35; kind: sem_anchor; label: sem_anchor:⟁SCORE; record_count: 16. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 36</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 36; centroid_norm: 0.96878737; cohesion: 0.93748939; domain_sim: 0.9587177; glyph: ⟁SPORTS; id: 36; kind: sem_anchor; label: sem_anchor:⟁SPORTS; record_count: 59. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 36; centroid_norm: 0.96878737; cohesion: 0.93748939; domain_sim: 0.9587177; glyph: ⟁SPORTS; id: 36; kind: sem_anchor; label: sem_anchor:⟁SPORTS; record_count: 59. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 37</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 37; centroid_norm: 0.95447958; cohesion: 0.88137498; domain_sim: 0.95452458; glyph: ⟁SWING; id: 37; kind: sem_anchor; label: sem_anchor:⟁SWING; record_count: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 37; centroid_norm: 0.95447958; cohesion: 0.88137498; domain_sim: 0.95452458; glyph: ⟁SWING; id: 37; kind: sem_anchor; label: sem_anchor:⟁SWING; record_count: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 38</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 38; centroid_norm: 0.9796297; cohesion: 0.95160935; domain_sim: 0.9781962; glyph: ⟁TIRE; id: 38; kind: sem_anchor; label: sem_anchor:⟁TIRE; record_count: 6. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 38; centroid_norm: 0.9796297; cohesion: 0.95160935; domain_sim: 0.9781962; glyph: ⟁TIRE; id: 38; kind: sem_anchor; label: sem_anchor:⟁TIRE; record_count: 6. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 39</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 39; centroid_norm: 0.96310717; cohesion: 0.92498889; domain_sim: 0.98055708; glyph: ⟁TRAIN; id: 39; kind: sem_anchor; label: sem_anchor:⟁TRAIN; record_count: 29. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 39; centroid_norm: 0.96310717; cohesion: 0.92498889; domain_sim: 0.98055708; glyph: ⟁TRAIN; id: 39; kind: sem_anchor; label: sem_anchor:⟁TRAIN; record_count: 29. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 40</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 40; centroid_norm: 0.98137343; cohesion: 0.95973878; domain_sim: 0.96825522; glyph: ⟁TRANSPORT; id: 40; kind: sem_anchor; label: sem_anchor:⟁TRANSPORT; record_count: 12. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 40; centroid_norm: 0.98137343; cohesion: 0.95973878; domain_sim: 0.96825522; glyph: ⟁TRANSPORT; id: 40; kind: sem_anchor; label: sem_anchor:⟁TRANSPORT; record_count: 12. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 41</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 41; centroid_norm: 0.97142804; cohesion: 0.93933945; domain_sim: 0.98993927; glyph: ⟁TRUCK; id: 41; kind: sem_anchor; label: sem_anchor:⟁TRUCK; record_count: 14. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 41; centroid_norm: 0.97142804; cohesion: 0.93933945; domain_sim: 0.98993927; glyph: ⟁TRUCK; id: 41; kind: sem_anchor; label: sem_anchor:⟁TRUCK; record_count: 14. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 42</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 42; centroid_norm: 0.96446627; cohesion: 0.92482558; domain_sim: 0.98575276; glyph: ⟁VEHICLE; id: 42; kind: sem_anchor; label: sem_anchor:⟁VEHICLE; record_count: 14. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 42; centroid_norm: 0.96446627; cohesion: 0.92482558; domain_sim: 0.98575276; glyph: ⟁VEHICLE; id: 42; kind: sem_anchor; label: sem_anchor:⟁VEHICLE; record_count: 14. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 43</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 43; centroid_norm: 0.96729499; cohesion: 0.93208512; domain_sim: 0.98422813; glyph: ⟁WHEEL; id: 43; kind: sem_anchor; label: sem_anchor:⟁WHEEL; record_count: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 43; centroid_norm: 0.96729499; cohesion: 0.93208512; domain_sim: 0.98422813; glyph: ⟁WHEEL; id: 43; kind: sem_anchor; label: sem_anchor:⟁WHEEL; record_count: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 2000; family: semantic_cohesion; id: 2000; kind: learned_parameter; label: weight:semantic_cohesion; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Semantic_Cohesion_Graph; node 2000; family: semantic_cohesion; id: 2000; kind: learned_parameter; label: weight:semantic_cohesion; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 1 to 2000; feature: 0.93691836; label: sem_bias; source: 1; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 2  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 2 to 2000; feature: 0.93415498; label: sem_bias; source: 2; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 3  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 3 to 2000; feature: 0.95813316; label: sem_bias; source: 3; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 4  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 4 to 2000; feature: 0.93382987; label: sem_bias; source: 4; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 5  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 5 to 2000; feature: 0.95343689; label: sem_bias; source: 5; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 6  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 6 to 2000; feature: 0.94666439; label: sem_bias; source: 6; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 7  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 7 to 2000; feature: 0.94589969; label: sem_bias; source: 7; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 8  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 8 to 2000; feature: 0.93871855; label: sem_bias; source: 8; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 9  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 9 to 2000; feature: 0.94234848; label: sem_bias; source: 9; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 10  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 10 to 2000; feature: 1.0; label: sem_bias; source: 10; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 11  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 11 to 2000; feature: 0.94800395; label: sem_bias; source: 11; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 12  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 12 to 2000; feature: 0.94501781; label: sem_bias; source: 12; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 13  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 13 to 2000; feature: 0.91468292; label: sem_bias; source: 13; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 14  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 14 to 2000; feature: 0.93041914; label: sem_bias; source: 14; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 15  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 15 to 2000; feature: 0.92284937; label: sem_bias; source: 15; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 16  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 16 to 2000; feature: 0.85741155; label: sem_bias; source: 16; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 17  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 17 to 2000; feature: 0.93788022; label: sem_bias; source: 17; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 18  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 18 to 2000; feature: 0.92915559; label: sem_bias; source: 18; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 19  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 19 to 2000; feature: 0.95504823; label: sem_bias; source: 19; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 20  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 20 to 2000; feature: 0.92412508; label: sem_bias; source: 20; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 21  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 21 to 2000; feature: 0.87204345; label: sem_bias; source: 21; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 22  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 22 to 2000; feature: 0.94806757; label: sem_bias; source: 22; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 23  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 23 to 2000; feature: 0.92274635; label: sem_bias; source: 23; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 24  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 24 to 2000; feature: 0.96499343; label: sem_bias; source: 24; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 25  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 25 to 2000; feature: 0.90852124; label: sem_bias; source: 25; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 26  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 26 to 2000; feature: 0.93979592; label: sem_bias; source: 26; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 27  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 27 to 2000; feature: 0.88121761; label: sem_bias; source: 27; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 28  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 28 to 2000; feature: 1.0; label: sem_bias; source: 28; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 29  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 29 to 2000; feature: 1.0; label: sem_bias; source: 29; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 30  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 30 to 2000; feature: 0.90232567; label: sem_bias; source: 30; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 31  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 31 to 2000; feature: 0.89025895; label: sem_bias; source: 31; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 32  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 32 to 2000; feature: 0.9210998; label: sem_bias; source: 32; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 33  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 33 to 2000; feature: 0.92695738; label: sem_bias; source: 33; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 34  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 34 to 2000; feature: 0.85654896; label: sem_bias; source: 34; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 35  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 35 to 2000; feature: 0.91509037; label: sem_bias; source: 35; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 36  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 36 to 2000; feature: 0.93748939; label: sem_bias; source: 36; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 37  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 37 to 2000; feature: 0.88137498; label: sem_bias; source: 37; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 38  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 38 to 2000; feature: 0.95160935; label: sem_bias; source: 38; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 39  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 39 to 2000; feature: 0.92498889; label: sem_bias; source: 39; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 40  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 40 to 2000; feature: 0.95973878; label: sem_bias; source: 40; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 41  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 41 to 2000; feature: 0.93933945; label: sem_bias; source: 41; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 42  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 42 to 2000; feature: 0.92482558; label: sem_bias; source: 42; target: 2000. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 43  2000</pattern>
+    <template>Graph Semantic_Cohesion_Graph; edge 43 to 2000; feature: 0.93208512; label: sem_bias; source: 43; target: 2000. Data-only graph record.</template>
+  </category>
+</aiml>

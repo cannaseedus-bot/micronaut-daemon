@@ -1,0 +1,51 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "math-drills",
+  "@key": "⟁APP:MATH_DRILLS",
+  "@mount": "⟁ROOT:MATH_DRILLS",
+  "@theme": { "accent": "#4ade80", "bg": "#001006", "surface": "#001e0a", "text": "#dcfce7", "hero_phase": "Sek", "tagline": "Practice. Get faster. Get better." },
+  "@layout": { "mode": "single", "regions": [{ "id": "main", "component": "⟁WIDGET:MAIN", "position": "center" }], "responsive": { "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "current_drill": null, "score": 0, "streak": 0, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:MATH_DRILLS": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:MAIN"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁WIDGET:SCORE_DISPLAY", "⟁ACTION:HISTORY"] },
+    "⟁WIDGET:SCORE_DISPLAY": { "@type": "stat", "@bind": "state.score" },
+    "⟁ACTION:HISTORY": { "@type": "button", "@text": "History", "@on": { "click": "md.open_history" } },
+    "⟁WIDGET:MAIN": { "@type": "layout", "@children": ["⟁WIDGET:DRILL_SELECT", "⟁WIDGET:PROBLEM", "⟁WIDGET:ANSWER_INPUT"] },
+    "⟁WIDGET:DRILL_SELECT": { "@type": "button-group", "@options": ["Addition", "Subtraction", "Multiplication", "Division", "Mixed"], "@on": { "click": "md.select_drill" } },
+    "⟁WIDGET:PROBLEM": { "@type": "content-card", "@bind": "state.current_drill" },
+    "⟁WIDGET:ANSWER_INPUT": { "@type": "input", "@placeholder": "Answer...", "@on": { "submit": "md.submit" } }
+  },
+  "@programs": {
+    "md.select_drill": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_drill", "@out": "current_drill" }] },
+    "md.submit": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "ADD", "@in": ["event_score", "1"], "@out": "score" }] },
+    "md.open_history": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "drill.select": "md.select_drill", "answer.submit": "md.submit", "history.open": "md.open_history" },
+  "@imports": [{ "ref": "drill_session", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "timed-mode", "name": "Timed Mode", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "60-second timed drill challenge." },
+      { "id": "difficulty-adapt", "name": "Adaptive Difficulty", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Automatically adjust problem difficulty based on performance." },
+      { "id": "algebra-module", "name": "Algebra Module", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Expand beyond arithmetic into basic algebra problems." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "md.start", "pattern": "START DRILL|PRACTICE MATH|MULTIPLICATION DRILL", "intent": "select_drill" },
+      { "id": "md.score", "pattern": "MY SCORE|BEST STREAK|HOW AM I DOING", "intent": "open_history" }
+    ]
+  },
+  "@data": {
+    "spotlight": [
+      { "id": "sp1", "title": "Multiplication — Best Session", "score": 42, "badge": "Record", "streak": 18, "excerpt": "42 correct answers. 18-problem streak in timed mode." },
+      { "id": "sp2", "title": "Mixed Mode — This Week", "score": 284, "badge": "This Week", "excerpt": "284 problems correct this week across all types." },
+      { "id": "sp3", "title": "Division — Improving", "badge": "Trending Up", "accuracy_pct": 84, "excerpt": "Up from 61% accuracy last week. Consistent improvement." }
+    ],
+    "schema": {
+      "drill_session": { "primaryKey": "session_id", "fields": { "session_id": { "type": "string" }, "drill_type": { "type": "string", "required": true }, "correct": { "type": "integer" }, "incorrect": { "type": "integer" }, "best_streak": { "type": "integer" }, "completed_at": { "type": "datetime", "required": true } } }
+    }
+  }
+}

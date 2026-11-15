@@ -1,0 +1,38 @@
+(* Compiled pattern bank is indexed data, never executable code. *)
+pattern-bank = "pattern-bank", identifier, "{", "version", ":", semver, ",",
+               "authority:data_only", ",", "rule-count", ":", integer, ",",
+               "topics", ":", string-array, ",", "rules", ":", "[", bank-rule, { ",", bank-rule }, "]", "}" ;
+bank-rule = "{", "id", ":", string, ",", "pattern", ":", pattern-string, ",", "topic", ":", string, ",",
+            [ "that", ":", pattern-string, "," ], "template", ":", template-spec, ",",
+            "specificity", ":", number, ",", "literal-chars", ":", integer, ",",
+            "wildcard-count", ":", integer, ",", "wildcard-priority", ":", integer, "}" ;
+template-spec = literal-template | srai-template | sr-template | declarative-template ;
+literal-template = "{", "kind:literal", ",", "text", ":", string, "}" ;
+srai-template = "{", "kind:srai", ",", "parts", ":", "[", template-part, { ",", template-part }, "]", "}" ;
+sr-template = "{", "kind:sr", ",", "capture-index", ":", integer, "}" ;
+declarative-template = "{", "kind:data", ",", "payload", ":", object, "}" ;
+template-part = string | capture-ref ;
+capture-ref = "{", "kind:capture", ",", "index", ":", integer, "}" ;
+pattern-string = '"', { literal | wildcard }, '"' ;
+wildcard = "*" | "_" ;
+string-array = "[", [ string, { ",", string } ], "]" ;
+object = "{", [ string, ":", value, { ",", string, ":", value } ], "}" ;
+value = string | number | boolean | null | object | array ;
+array = "[", [ value, { ",", value } ], "]" ;
+number = integer | integer, ".", digit, { digit } ;
+integer = digit, { digit } ;
+boolean = "true" | "false" ;
+null = "null" ;
+semver = integer, ".", integer, ".", integer ;
+identifier = letter, { letter | digit | "_" | "-" } ;
+string = '"', { ? escaped Unicode string character ? }, '"' ;
+digit = "0".."9" ;
+letter = "A".."Z" | "a".."z" ;
+
+specificity = if wildcard-count == 0 then 1.0
+              else clamp(0.5 + (literal-chars / (literal-chars + wildcard-count)) * 0.5
+                         - wildcard-count * 0.15 + wildcard-priority * 0.10, 0.0, 1.0) ;
+wildcard-priority = exact:0 | star:1 | underscore:2 ;
+invariant-unique-ids = every bank-rule.id is unique ;
+invariant-data-only = every bank-rule.template.kind in {"literal", "srai", "sr", "data"} ;
+invariant-target-resolution = every SRAI target is resolved by the router or rejected without dispatch ;

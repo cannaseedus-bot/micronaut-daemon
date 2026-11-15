@@ -1,0 +1,66 @@
+{# XML is emitted only from validated manifest data. Text and attribute values
+   pass through the xml_escape filter installed by render_aiml.py. #}
+{% macro pattern(value) -%}<pattern>{{ value | upper | xml_escape }}</pattern>{%- endmacro %}
+{% macro that_pattern(value) -%}<that>{{ value | upper | xml_escape }}</that>{%- endmacro %}
+{% macro template(nodes) -%}<template>{{ render_nodes(nodes) }}</template>{%- endmacro %}
+{% macro category(pattern_text, nodes, that=None) -%}
+<category>{{ pattern(pattern_text) }}{% if that %}{{ that_pattern(that) }}{% endif %}{{ template(nodes) }}</category>
+{%- endmacro %}
+
+{% macro srai(nodes) -%}<srai>{{ render_nodes(nodes) }}</srai>{%- endmacro %}
+{% macro star(index=None) -%}{% if index is not none %}<star index="{{ index | xml_escape }}"/>{% else %}<star/>{% endif %}{%- endmacro %}
+{% macro thatstar(index=None) -%}{% if index is not none %}<thatstar index="{{ index | xml_escape }}"/>{% else %}<thatstar/>{% endif %}{%- endmacro %}
+{% macro topicstar(index=None) -%}{% if index is not none %}<topicstar index="{{ index | xml_escape }}"/>{% else %}<topicstar/>{% endif %}{%- endmacro %}
+{% macro bot(name) -%}<bot name="{{ name | xml_escape }}"/>{%- endmacro %}
+{% macro get(name) -%}<get name="{{ name | xml_escape }}"/>{%- endmacro %}
+{% macro set_predicate(name, nodes) -%}<set name="{{ name | xml_escape }}">{{ render_nodes(nodes) }}</set>{%- endmacro %}
+{% macro think(nodes) -%}<think>{{ render_nodes(nodes) }}</think>{%- endmacro %}
+{% macro random(nodes) -%}<random>{{ render_nodes(nodes) }}</random>{%- endmacro %}
+{% macro condition(name, nodes, value=None) -%}
+{% if value is not none %}<condition name="{{ name | xml_escape }}" value="{{ value | xml_escape }}">{{ render_nodes(nodes) }}</condition>{% else %}<condition name="{{ name | xml_escape }}">{{ render_nodes(nodes) }}</condition>{% endif %}
+{%- endmacro %}
+{% macro li(nodes, value=None, name=None) -%}
+<li{% if value is not none %} value="{{ value | xml_escape }}"{% endif %}{% if name is not none %} name="{{ name | xml_escape }}"{% endif %}>{{ render_nodes(nodes) }}</li>
+{%- endmacro %}
+{% macro topic(name, categories) -%}
+<topic name="{{ name | xml_escape }}">{% for cat in categories %}{{ category(cat.pattern, cat.template, cat.get('that')) }}{% endfor %}</topic>
+{%- endmacro %}
+
+{% macro render_nodes(nodes) -%}
+{%- for node in nodes -%}{{- render_node(node) -}}{%- endfor -%}
+{%- endmacro %}
+
+{% macro render_node(node) -%}
+{%- if node is string -%}{{- node | xml_escape -}}
+{%- elif node is mapping -%}
+{%- set tag = node.get('tag', '') -%}{%- set content = node.get('content', []) -%}{%- set attrs = node.get('attrs', {}) -%}
+{%- if tag == 'srai' -%}{{- srai(content) -}}
+{%- elif tag == 'star' -%}{{- star(attrs.get('index')) -}}
+{%- elif tag == 'thatstar' -%}{{- thatstar(attrs.get('index')) -}}
+{%- elif tag == 'topicstar' -%}{{- topicstar(attrs.get('index')) -}}
+{%- elif tag == 'bot' -%}{{- bot(attrs.get('name', '')) -}}
+{%- elif tag == 'get' -%}{{- get(attrs.get('name', '')) -}}
+{%- elif tag == 'set' -%}{{- set_predicate(attrs.get('name', ''), content) -}}
+{%- elif tag == 'think' -%}{{- think(content) -}}
+{%- elif tag == 'random' -%}{{- random(content) -}}
+{%- elif tag == 'condition' -%}{{- condition(attrs.get('name', ''), content, attrs.get('value')) -}}
+{%- elif tag == 'li' -%}{{- li(content, attrs.get('value'), attrs.get('name')) -}}
+{%- elif tag == 'that' -%}{{- that_pattern(''.join(content)) -}}
+{%- elif tag == 'br' -%}<br/>
+{%- elif tag == 'p' -%}<p>{{- render_nodes(content) -}}</p>
+{%- elif tag in ['uppercase', 'lowercase', 'formal', 'sentence'] -%}<{{- tag -}}>{{- render_nodes(content) -}}</{{- tag -}}>
+{%- else -%}{{- raise_unsupported(tag) -}}{%- endif -%}
+{%- else -%}{{- raise_unsupported('template fragment must be text or a node object') -}}{%- endif -%}
+{%- endmacro %}
+
+{% macro render_brain(manifest) -%}
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="{{ manifest.get('aiml_version', '2.0') | xml_escape }}">
+{% for brain in manifest.get('brains', []) %}
+{% for cat in brain.get('categories', []) %}{{ category(cat.pattern, cat.template, cat.get('that')) }}
+{% endfor %}
+{% for topic_data in brain.get('topics', []) %}{{ topic(topic_data.name, topic_data.categories) }}
+{% endfor %}
+{% endfor %}
+</aiml>
+{%- endmacro %}

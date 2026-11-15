@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kuhul:khanary:schema:semantic-envelope:v1",
+  "title": "KHANARY semantic envelope",
+  "@type": "khanary.semantic_envelope_contracts.v1",
+  "description": "Every route/decision envelope is correlatable: it carries a stable identity, the phase it was evaluated in, the authority it does and does not hold, and the schema a consumer validates against. Metadata a caller claims but the engine does not grant is a refusal, not a hint (GAP-072).",
+  "type": "object",
+  "required": [
+    "@kind",
+    "correlation_id",
+    "phase",
+    "epistemic_state",
+    "authority",
+    "result_schema"
+  ],
+  "properties": {
+    "@kind": {
+      "type": "string",
+      "const": "khanary.decision.result.v1"
+    },
+    "correlation_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+      "description": "echoed from the spec when declared, otherwise decmu-<fnv1a64 of the canonical spec>"
+    },
+    "phase": {
+      "type": "string",
+      "enum": [
+        "Pop",
+        "Wo",
+        "Yax",
+        "Sek",
+        "Chen",
+        "Ch_en",
+        "Ch'en",
+        "Xul"
+      ]
+    },
+    "epistemic_state": {
+      "type": "string",
+      "enum": [
+        "SUPPORTED",
+        "MISS",
+        "UNKNOWN",
+        "CONTRADICTED"
+      ]
+    },
+    "result_schema": {
+      "type": "string",
+      "const": "khanary.decision.result.v1"
+    },
+    "authority": {
+      "type": "object",
+      "required": [
+        "semantic_authority",
+        "commit_authorized",
+        "fact_commit",
+        "next_gate"
+      ],
+      "properties": {
+        "semantic_authority": {
+          "type": "boolean",
+          "const": false
+        },
+        "commit_authorized": {
+          "type": "boolean",
+          "const": false
+        },
+        "fact_commit": {
+          "type": "string",
+          "const": "denied"
+        },
+        "xul_scope": {
+          "type": "string",
+          "const": "action_only"
+        },
+        "next_gate": {
+          "type": "string",
+          "const": "Ch'en/XCFE/Xul"
+        }
+      },
+      "additionalProperties": true
+    },
+    "causes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "epistemic_causes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "contradictions": {
+    "policy": "a spec that claims authority the engine does not grant is refused",
+    "fields": [
+      "semantic_authority",
+      "commit_authorized",
+      "fact_commit"
+    ],
+    "error": "envelope_contradiction:<field>"
+  },
+  "invariants": {
+    "ENV1": {
+      "name": "every_envelope_correlates",
+      "check": "correlation_id is present on successes and refusals alike"
+    },
+    "ENV2": {
+      "name": "identity_is_stable",
+      "check": "the same spec yields the same derived correlation id across processes"
+    },
+    "ENV3": {
+      "name": "authority_is_denied_not_asserted",
+      "check": "authority.semantic_authority and commit_authorized are false in every envelope"
+    },
+    "ENV4": {
+      "name": "claimed_authority_is_refused",
+      "check": "a spec claiming semantic_authority, commit_authorized, or a non-denied fact_commit yields envelope_contradiction:<field>"
+    },
+    "ENV5": {
+      "name": "result_schema_is_named",
+      "check": "result_schema equals the envelope @kind so a consumer can validate"
+    }
+  }
+}

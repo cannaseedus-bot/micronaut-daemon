@@ -1,0 +1,236 @@
+{
+  "@type": "khanary.fold_binding_registry.v1",
+  "version": "1.0.0",
+  "semantic_owner": "K'UHUL",
+  "backend_owner": "binding_layer",
+  "authority": "binding_contract_only_not_semantic_authority",
+  "semantic_authority": false,
+  "law": {
+    "tuple": "FoldBinding = (alpha, theta, backend, entrypoint, contract)",
+    "relation": "Bind_backend(alpha_theta) = K_theta^backend",
+    "validity": "K_theta^backend models Contract(alpha_theta)",
+    "chain": [
+      "K'UHUL Fold",
+      "Fold Binding",
+      "KXC",
+      "HLSL",
+      "GPU"
+    ],
+    "control_chain": [
+      "Fold",
+      "Phase Binding",
+      "Backend Binding",
+      "Executor"
+    ],
+    "boundary": "K'UHUL owns alpha and theta; backend bindings supply backend, entrypoint, dispatch, and contract evidence."
+  },
+  "phase_contracts": {
+    "Pop": {
+      "alpha": "alpha_Pop",
+      "contract_type": "partial_isometry",
+      "pre": "input is |k>",
+      "post": "output is a distribution over N(k)"
+    },
+    "Wo": {
+      "alpha": "alpha_Wo",
+      "contract_type": "instrument",
+      "pre": "input is B_P",
+      "post": "output is B_W subset_of B_P plus rejection outcome"
+    },
+    "Yax": {
+      "alpha": "alpha_Yax",
+      "contract_type": "branching_map",
+      "pre": "input is B_W",
+      "post": "output is candidate set B_Y"
+    },
+    "Sek": {
+      "alpha": "alpha_Sek",
+      "contract_type": "operator_backed_map",
+      "pre": "input is B_Y and policy Pi",
+      "post": "output is B_S = Pi_op(B_Y)"
+    },
+    "Ch'en": {
+      "alpha": "alpha_Chen",
+      "contract_type": "projection",
+      "pre": "input is B_S",
+      "post": "output is observable B_C"
+    },
+    "Xul": {
+      "alpha": "alpha_Xul",
+      "contract_type": "policy_function",
+      "pre": "input is B_C and policy Pi",
+      "post": "output is k_prime = Pi(B_C)"
+    }
+  },
+  "fold_field_binding": {
+    "note": "FoldField = vertex in G_runtime = G_semantic \u25a1 G_phase. Each phase binding alpha_theta has an associated FoldField (node_id, theta, W, C, R). fold_relevance() is the product-graph edge weight between two bindings. ConvergenceTest tracks whether the Kleene iteration over FoldStates converges to Xul.",
+    "convergence_invariant": "(Fold\u2218Unfold)(h) \u2261 h; violation drops sigma to UNBOUND and blocks the Xul commit path"
+  },
+  "bindings": [
+    {
+      "@fold": "reasoning",
+      "@phase": "Pop",
+      "@semantic": "XCFE:PERCEIVE",
+      "@backend": "hlsl",
+      "@entry": "PopKernel",
+      "@dispatch": [
+        64,
+        1,
+        1
+      ],
+      "@contract": {
+        "pre": "input is |k>",
+        "post": "output is a distribution over N(k)"
+      },
+      "@notes": "Pop gathers the semantic neighborhood distribution without claiming truth.",
+      "@resources": [
+        "input_tensor",
+        "neighborhood_index"
+      ]
+    },
+    {
+      "@fold": "reasoning",
+      "@phase": "Wo",
+      "@semantic": "XCFE:GUARD",
+      "@backend": "hlsl",
+      "@entry": "ConstraintKernel",
+      "@dispatch": [
+        64,
+        1,
+        1
+      ],
+      "@contract": {
+        "pre": "input is B_P",
+        "post": "output is B_W subset_of B_P plus rejection outcome"
+      },
+      "@notes": "Wo constrains Pop output and may reject, but it does not collapse UNKNOWN to else.",
+      "@resources": [
+        "candidate_set",
+        "evidence_pool"
+      ]
+    },
+    {
+      "@fold": "reasoning",
+      "@phase": "Yax",
+      "@semantic": "XCFE:BRANCH",
+      "@backend": "hlsl",
+      "@entry": "CandidateKernel",
+      "@dispatch": [
+        64,
+        1,
+        1
+      ],
+      "@contract": {
+        "pre": "input is B_W",
+        "post": "output is candidate set B_Y"
+      },
+      "@notes": "Yax expands candidate branches while preserving unresolved alternatives.",
+      "@resources": [
+        "candidate_set",
+        "lorentz_frame"
+      ]
+    },
+    {
+      "@fold": "reasoning",
+      "@phase": "Sek",
+      "@semantic": "XCFE:INFER",
+      "@backend": "hlsl",
+      "@entry": "OperationKernel",
+      "@dispatch": [
+        64,
+        1,
+        1
+      ],
+      "@contract": {
+        "pre": "input is B_Y and policy Pi",
+        "post": "output is B_S = Pi_op(B_Y)"
+      },
+      "@notes": "Sek runs policy-authorized operators over candidates.",
+      "@resources": [
+        "ranked_candidates",
+        "comparison_report"
+      ]
+    },
+    {
+      "@fold": "reasoning",
+      "@phase": "Ch'en",
+      "@semantic": "XCFE:OBSERVE",
+      "@backend": "hlsl",
+      "@entry": "ObservationKernel",
+      "@dispatch": [
+        64,
+        1,
+        1
+      ],
+      "@contract": {
+        "pre": "input is B_S",
+        "post": "output is observable B_C"
+      },
+      "@notes": "Ch'en observes/verifies; MISS and UNKNOWN remain distinct from contradiction.",
+      "@resources": [
+        "input_tensor"
+      ]
+    },
+    {
+      "@fold": "reasoning",
+      "@phase": "Xul",
+      "@semantic": "XCFE:COLLAPSE",
+      "@backend": "hlsl",
+      "@entry": "CollapseKernel",
+      "@dispatch": [
+        64,
+        1,
+        1
+      ],
+      "@contract": {
+        "pre": "input is B_C and policy Pi",
+        "post": "output is k_prime = Pi(B_C)"
+      },
+      "@notes": "Xul may collapse computation only through policy; semantic certainty is not fabricated.",
+      "@resources": [
+        "verified_outcome",
+        "weight_delta"
+      ]
+    }
+  ],
+  "invariants": {
+    "V1": {
+      "name": "binding_record_complete",
+      "check": "every binding declares @fold, @phase, @semantic, @backend, @entry, @dispatch, @contract and @resources"
+    },
+    "V2": {
+      "name": "phase_is_a_kuhul_phase",
+      "check": "@phase is one of Pop, Wo, Yax, Sek, Ch'en, Xul"
+    },
+    "V3": {
+      "name": "dispatch_shape",
+      "check": "@dispatch is exactly three positive integers"
+    },
+    "V4": {
+      "name": "contract_is_declared",
+      "check": "@contract.pre and @contract.post are non-empty"
+    },
+    "V5": {
+      "name": "binding_identity_is_unique",
+      "check": "no two bindings claim the same (@fold, @phase, @backend) triple"
+    },
+    "V6": {
+      "name": "fallback_is_contract_bound",
+      "check": "a declared @fallback names a backend that a binding of the same fold and phase provides"
+    },
+    "V7": {
+      "name": "executor_is_not_semantic_law",
+      "check": "no binding asserts verification or commit authority, and a Ch'en/Xul binding is executed by XCFE, never by a model backend"
+    }
+  },
+  "resolution": {
+    "key": [
+      "@fold",
+      "@phase",
+      "@backend"
+    ],
+    "on_miss": "MISS_capability",
+    "fallback_rule": "an exact (fold, phase, backend) binding wins; otherwise a binding of the same fold and phase may answer through its declared @fallback",
+    "capability_rule": "a capability name is <Phase>.<operation>; it resolves only against a binding of that phase whose @resources declare the operation"
+  }
+}

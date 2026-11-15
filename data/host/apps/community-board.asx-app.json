@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "community-board",
+  "@key": "⟁APP:COMMUNITY_BOARD",
+  "@mount": "⟁ROOT:COMMUNITY_BOARD",
+  "@theme": { "accent": "#4ade80", "bg": "#051005", "surface": "#0d1f0d", "text": "#dcfce7", "hero_phase": "Wo", "tagline": "Your community, your conversation" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "threads", "component": "⟁WIDGET:THREADS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "threads": [], "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:COMMUNITY_BOARD": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:NEW_THREAD"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:NEW_THREAD": { "@type": "button", "@text": "New Thread", "@on": { "click": "community.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:THREADS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:THREADS": { "@type": "feed", "@bind": "state.threads", "@children": ["⟁WIDGET:THREAD_CARD"] },
+    "⟁WIDGET:THREAD_CARD": { "@type": "content-card", "@bind": "thread", "@on": { "open": "community.open_thread", "upvote": "community.upvote" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:MEMBERS_COUNT", "⟁WIDGET:PINNED"] },
+    "⟁WIDGET:MEMBERS_COUNT": { "@type": "stat", "@bind": "data.member_count" },
+    "⟁WIDGET:PINNED": { "@type": "list", "@bind": "data.pinned" }
+  },
+  "@programs": {
+    "community.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "community.open_thread": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "community.upvote": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "ADD", "@in": ["event_votes", "event_delta"], "@out": "event_votes" }] },
+    "community.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "thread.open": "community.open_thread", "thread.upvote": "community.upvote", "compose.open": "community.open_compose", "search.input": "community.search" },
+  "@imports": [{ "ref": "thread", "mode": "schema_table" }, { "ref": "reply", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "moderation-tools", "name": "Moderation Tools", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Flag, hide, and pin threads with moderator controls." },
+      { "id": "moderation-bot", "name": "Moderation Bot", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Auto-flag threads that match community rules." },
+      { "id": "digest-bot", "name": "Weekly Digest Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Auto-compile top threads of the week into a digest email." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "community.post", "pattern": "POST THREAD|NEW THREAD|START DISCUSSION", "intent": "open_compose" },
+      { "id": "community.search", "pattern": "SEARCH *|FIND THREAD *", "intent": "filter_threads" }
+    ]
+  },
+  "@data": {
+    "member_count": 312,
+    "pinned": ["Welcome to the Board", "Community Rules", "Introduce Yourself"],
+    "spotlight": [
+      { "id": "sp1", "title": "Welcome — please introduce yourself!", "slug": "welcome-intro", "badge": "Pinned", "excerpt": "Tell us who you are and what you're working on." },
+      { "id": "sp2", "title": "What tools are you using in 2025?", "slug": "tools-2025", "badge": "Hot Thread", "excerpt": "72 replies and counting. The thread that started a gear debate." },
+      { "id": "sp3", "title": "Showcase: What are you building?", "slug": "showcase-builds", "badge": "Showcase", "excerpt": "A monthly thread for members to share their projects." }
+    ],
+    "schema": {
+      "thread": { "primaryKey": "thread_id", "fields": { "thread_id": { "type": "string" }, "title": { "type": "string", "required": true }, "body": { "type": "textarea", "required": true }, "user_id": { "type": "string" }, "category": { "type": "string" }, "votes": { "type": "integer" }, "reply_count": { "type": "integer" }, "pinned": { "type": "bool" }, "created_at": { "type": "datetime" } } },
+      "reply": { "primaryKey": "reply_id", "fields": { "reply_id": { "type": "string" }, "thread_id": { "type": "string", "required": true }, "user_id": { "type": "string" }, "body": { "type": "textarea", "required": true }, "votes": { "type": "integer" }, "created_at": { "type": "datetime" } } }
+    }
+  }
+}

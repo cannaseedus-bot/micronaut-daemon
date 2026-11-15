@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Generated key lookup bank from script-pattern.key-grammar.jsonl; entries are data, not execution authority.-->
+  <category>
+    <pattern>LOOK UP KEY SCRIPT:STACK</pattern>
+    <template>Key SCRIPT:STACK. definition: The script stack runs string pattern wildcard regex grammar state machine behavior agent.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY SCRIPT:LOOP</pattern>
+    <template>Key SCRIPT:LOOP. definition: The universal script loop is perceive, search, match, transition.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY SCRIPT:PATTERN</pattern>
+    <template>Key SCRIPT:PATTERN. definition: Pattern can be literal, wildcard, regex, grammar, state, or behavior.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY SCRIPT:WILDCARD</pattern>
+    <template>Key SCRIPT:WILDCARD. definition: Wildcard represents unknown token or unknown sequence as first-class grammar.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY SCRIPT:REGEX</pattern>
+    <template>Key SCRIPT:REGEX. definition: Regex is compact symbol pattern grammar with atoms and operators.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY SCRIPT:GRAMMAR</pattern>
+    <template>Key SCRIPT:GRAMMAR. definition: Grammar structures pattern rules into nonterminals and alternatives.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY SCRIPT:BEHAVIOR</pattern>
+    <template>Key SCRIPT:BEHAVIOR. definition: Behavior pattern composes perceive, search, match, decide, act.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY SCRIPT:AGENT</pattern>
+    <template>Key SCRIPT:AGENT. definition: Agent is reactive pattern engine: perceive, search, match, decide, act.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY SCRIPT:MATCH:EXACT</pattern>
+    <template>Key SCRIPT:MATCH:EXACT. definition: Exact match succeeds when pattern equals input.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY SCRIPT:MATCH:WILDCARD</pattern>
+    <template>Key SCRIPT:MATCH:WILDCARD. definition: Wildcard match binds unknown token or sequence before response.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY SCRIPT:MATCH:GRAPH</pattern>
+    <template>Key SCRIPT:MATCH:GRAPH. definition: Graph match compares node and edge patterns inside graph state.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY SCRIPT:MATCH:SEMANTIC</pattern>
+    <template>Key SCRIPT:MATCH:SEMANTIC. definition: Semantic match uses meaning rather than surface string only.</template>
+  </category>
+</aiml>

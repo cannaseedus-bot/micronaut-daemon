@@ -1,0 +1,22 @@
+{
+  "@type": "khanary.xcfe_program.v1",
+  "@no-eval": true,
+  "id": "xcfe.verification",
+  "program_class": "VERIFICATION",
+  "phase": "Ch'en",
+  "input_role": "evidence_record",
+  "output_role": "verified_record",
+  "admission": "explicit",
+  "description": "Verifies evidence at Ch'en and commits the verdict at Xul. Sek proposes; Ch'en proves — the boundary between ParsedGraph and VerifiedGraph. VERIFICATION class — canonical authority phase Ch'en.",
+  "steps": [
+    { "phase": "Pop",   "op": "gramRead",   "id": "xcfe_evidence" },
+    { "phase": "Sek",   "op": "dispatch",   "id": "propose" },
+    { "phase": "Ch'en", "op": "verify",     "id": "evidence_record" },
+    { "phase": "Xul",   "op": "gramWrite",  "id": "verified_record" }
+  ],
+  "authority": {
+    "semantic_authority": false,
+    "topology_mutation": false,
+    "commit_authorized": false
+  }
+}

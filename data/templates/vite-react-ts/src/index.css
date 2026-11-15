@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand:      {{brand_color}};
+  --brand-dark: {{brand_dark}};
+}
+
+body {
+  @apply bg-white text-gray-900;
+}
+
+.dark body {
+  background-color: var(--brand-dark);
+  @apply text-gray-100;
+}

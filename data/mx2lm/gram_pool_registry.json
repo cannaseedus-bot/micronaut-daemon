@@ -1,0 +1,72 @@
+{
+  "@type": "khanary.gram_pool_registry.v1",
+  "generated_at_utc": "2026-10-14T11:25:03+00:00",
+  "generated_by": "tools/build_dataset_ingestion.py",
+  "tracks": {
+    "ADVISOR-µ": {
+      "artifacts": {
+        "binary_snapshot": "data\\mx2lm\\dataset.ngram.advisor_mu.bin",
+        "candidate_key_grammar": "data\\grammar\\dataset.advisor_mu.key-grammar.candidates.jsonl",
+        "gram_container": "data\\mx2lm\\advisor_mu_gram_container.json",
+        "ngram_summary": "data\\mx2lm\\advisor_mu_ngram_summary.json",
+        "pattern_container": "data\\mx2lm\\advisor_mu_pattern_container.json",
+        "vector_projection_container": "data\\mx2lm\\advisor_mu_vector_projection.json"
+      },
+      "lexical_units": 19350903,
+      "rows_used": 634583,
+      "slug": "advisor_mu"
+    },
+    "JOKE-µ": {
+      "artifacts": {
+        "binary_snapshot": "data\\mx2lm\\dataset.ngram.joke_mu.bin",
+        "candidate_key_grammar": "data\\grammar\\dataset.joke_mu.key-grammar.candidates.jsonl",
+        "gram_container": "data\\mx2lm\\joke_mu_gram_container.json",
+        "ngram_summary": "data\\mx2lm\\joke_mu_ngram_summary.json",
+        "pattern_container": "data\\mx2lm\\joke_mu_pattern_container.json",
+        "vector_projection_container": "data\\mx2lm\\joke_mu_vector_projection.json"
+      },
+      "lexical_units": 15844,
+      "rows_used": 500,
+      "slug": "joke_mu"
+    },
+    "Mx2LM": {
+      "artifacts": {
+        "binary_snapshot": "data\\mx2lm\\dataset.ngram.mx2lm.bin",
+        "candidate_key_grammar": "data\\grammar\\dataset.mx2lm.key-grammar.candidates.jsonl",
+        "gram_container": "data\\mx2lm\\mx2lm_gram_container.json",
+        "ngram_summary": "data\\mx2lm\\mx2lm_ngram_summary.json",
+        "pattern_container": "data\\mx2lm\\mx2lm_pattern_container.json",
+        "vector_projection_container": "data\\mx2lm\\mx2lm_vector_projection.json"
+      },
+      "lexical_units": 13584064,
+      "rows_used": 30452,
+      "slug": "mx2lm"
+    },
+    "PLAN-µ": {
+      "artifacts": {
+        "binary_snapshot": "data\\mx2lm\\dataset.ngram.plan_mu.bin",
+        "candidate_key_grammar": "data\\grammar\\dataset.plan_mu.key-grammar.candidates.jsonl",
+        "gram_container": "data\\mx2lm\\plan_mu_gram_container.json",
+        "ngram_summary": "data\\mx2lm\\plan_mu_ngram_summary.json",
+        "pattern_container": "data\\mx2lm\\plan_mu_pattern_container.json",
+        "vector_projection_container": "data\\mx2lm\\plan_mu_vector_projection.json"
+      },
+      "lexical_units": 179205,
+      "rows_used": 1000,
+      "slug": "plan_mu"
+    },
+    "POLITICS-µ": {
+      "artifacts": {
+        "binary_snapshot": "data\\mx2lm\\dataset.ngram.politics_mu.bin",
+        "candidate_key_grammar": "data\\grammar\\dataset.politics_mu.key-grammar.candidates.jsonl",
+        "gram_container": "data\\mx2lm\\politics_mu_gram_container.json",
+        "ngram_summary": "data\\mx2lm\\politics_mu_ngram_summary.json",
+        "pattern_container": "data\\mx2lm\\politics_mu_pattern_container.json",
+        "vector_projection_container": "data\\mx2lm\\politics_mu_vector_projection.json"
+      },
+      "lexical_units": 295802,
+      "rows_used": 286,
+      "slug": "politics_mu"
+    }
+  }
+}

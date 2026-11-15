@@ -1,0 +1,31 @@
+{
+  "@program": "training.opencl.loop",
+  "@kind": "kuhul.opencl.training.v1",
+  "@backend": "opencl_1_2",
+  "@fallback": "opencl_1_2_cpu",
+  "@description": "Explicit OpenCL training dispatch contract. Host code must bind shapes and scalar arguments for each kernel.",
+  "@registry": "programs/opencl.kernel.json",
+  "phases": {
+    "forward": [
+      { "kernel": "swiglu_forward", "status": "implemented" },
+      { "kernel": "rms_norm_forward", "status": "implemented" },
+      { "kernel": "matmul", "status": "contracted" },
+      { "kernel": "softmax_forward", "status": "implemented" }
+    ],
+    "backward": [
+      { "kernel": "cross_entropy_loss_back", "status": "implemented" },
+      { "kernel": "matmul_back", "status": "contracted" },
+      { "kernel": "rms_norm_back", "status": "implemented" },
+      { "kernel": "swiglu_back", "status": "contracted" }
+    ],
+    "optimizer": [
+      { "kernel": "adamw_step", "status": "implemented" }
+    ]
+  },
+  "requirements": {
+    "shape_manifest": "programs/tensor.shape.json",
+    "memory_manifest": "programs/opencl.memory.json",
+    "fail_if_contracted_kernel_dispatched": true,
+    "cpu_fallback_requires_probe": "scratch/cl_harness.exe --device cpu"
+  }
+}

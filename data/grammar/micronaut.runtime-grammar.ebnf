@@ -1,0 +1,488 @@
+(* ================================================================ *)
+(* KHANARY Micronaut Runtime Grammar                                *)
+(* Projection-only profile, route, tensor-slot, and JROM event layer *)
+(* ================================================================ *)
+
+micronaut_document      = { micronaut_decl | micronaut_profile_decl | route_contract_decl
+                          | micronaut_program_ref
+                          | mml_micronaut_decl
+                          | micronaut_fieldgraph_gml_decl
+                          | micronaut_fieldgraph_contract_ref
+                          | mml_strategy_catalog
+                          | aiml_pattern_decl | aiml_template_decl
+                          | scfml_pattern_decl | scfml_template_decl
+                          | key_grammar_decl | semantic_envelope_decl
+                          | track_field_decl | micronaut_program_decl
+                          | micronaut_control_template_decl
+                          | verified_fold_delta_decl | comment } ;
+
+(* Micronaut declarations describe phase-scoped execution containers.  They do
+   not verify facts, commit topology, or grant semantic authority. *)
+micronaut_decl          = "micronaut" micronaut_id "{" { micronaut_section } "}" ;
+micronaut_section       = identity_section
+                        | phase_scope_section
+                        | capability_section
+                        | tensor_slot_section
+                        | route_contract_ref
+                        | micronaut_profile_ref
+                        | pattern_ref
+                        | template_ref
+                        | key_grammar_ref
+                        | sandbox_section
+                        | authority_boundary_section
+                        | track_ref_section | program_ref_section
+                        | control_template_ref_section ;
+
+identity_section        = "identity" "{" "name" ":" string [ "," "role" ":" string ]
+                          [ "," "category" ":" string ] [ "," "version" ":" string ] "}" ;
+phase_scope_section     = "phase_scope" ":" phase_list ;
+capability_section      = "capabilities" ":" string_list ;
+sandbox_section         = "sandbox" ":" projection_object ;
+
+(* Tensor slots bind a Micronaut to a local fiber/provider address.  The slot is
+   executable/routing geometry only. *)
+tensor_slot_section     = "tensor_slot" "{" "provider" ":" tensor_provider ","
+                          "anchor" ":" string [ "," "slot_id" ":" string ]
+                          [ "," "cso" ":" cso_uri ] [ "," "semantic_authority" ":" false_lit ] "}" ;
+tensor_provider         = "UnifiedTensor" | "STBMap" | "TensorSubstrate" | identifier ;
+cso_uri                 = string ;
+
+route_contract_ref      = "route_contract" ":" route_contract_id ;
+micronaut_profile_ref   = "micronaut_profile" ":" micronaut_profile_id ;
+
+(* Profile declarations are projection-only: they may bias routing, diagnostics,
+   and presentation, but cannot claim semantic/topology/verification/commit
+   authority. *)
+micronaut_profile_decl  = "micronaut_profile" micronaut_profile_id "{"
+                          projection_only_clause
+                          [ brain_profile_section ]
+                          [ personality_section ]
+                          [ capability_grams_section ]
+                          [ progression_section ]
+                          authority_boundary_section
+                          "}" ;
+
+projection_only_clause  = "projection_only" ":" true_lit ;
+brain_profile_section   = "brain_profile" ":" projection_object ;
+personality_section     = "personality" ":" projection_object ;
+capability_grams_section = "capability_grams" ":" bounded_metric_object ;
+progression_section     = "progression" ":" progression_object ;
+
+bounded_metric_object   = "{" { metric_pair [ "," ] } "}" ;
+metric_pair             = identifier ":" bounded_number ;
+progression_object      = "{" "level" ":" nonnegative_number
+                          [ "," "title" ":" string ]
+                          [ "," "xp" ":" nonnegative_number ]
+                          [ "," "unlocked_capabilities" ":" string_list ] "}" ;
+projection_object       = "{" { projection_pair [ "," ] } "}" ;
+projection_pair         = identifier ":" value ;
+
+route_contract_decl     = "route_contract" route_contract_id "{"
+                          [ "schemes" ":" string_list ]
+                          [ "verbs" ":" relation_verb_list ]
+                          [ "aiml_patterns" ":" string_list ]
+                          [ "aiml_templates" ":" string_list ]
+                          [ "key_patterns" ":" string_list ]
+                          [ "key_templates" ":" string_list ]
+                          [ "key_grammar" ":" string_list ]
+                          [ "tokens" ":" string_list ]
+                          authority_boundary_section
+                          "}" ;
+route_contract_id       = identifier | string ;
+micronaut_profile_id    = identifier | string ;
+micronaut_id            = identifier | string ;
+
+(* Known callable grammar surfaces. These declarations make a pattern/template
+   addressable by a Micronaut. They do not verify facts or authorize execution. *)
+aiml_pattern_decl       = "aiml_pattern" pattern_id "{"
+                          "match" ":" string
+                          [ "," "role" ":" string ]
+                          [ "," "phase" ":" phase_name ]
+                          authority_boundary_section
+                          "}" ;
+aiml_template_decl      = "aiml_template" template_id "{"
+                          "body" ":" string
+                          [ "," "format" ":" string ]
+                          [ "," "phase" ":" phase_name ]
+                          authority_boundary_section
+                          "}" ;
+
+scfml_pattern_decl      = "scfml_pattern" pattern_id "{"
+                          "condition" ":" string ","
+                          "then" ":" string
+                          [ "," "else" ":" string ]
+                          [ "," "unknown" ":" string ]
+                          [ "," "epistemic_state" ":" epistemic_state ]
+                          authority_boundary_section
+                          "}" ;
+scfml_template_decl     = "scfml_template" template_id "{"
+                          "surface" ":" scfml_surface ","
+                          "body" ":" string
+                          [ "," "phase" ":" phase_name ]
+                          authority_boundary_section
+                          "}" ;
+scfml_surface           = "branch" | "pattern_learning" | "normalization" | "route" ;
+epistemic_state         = "SUPPORTED" | "CONTRADICTED" | "UNKNOWN" | "MISS" ;
+
+key_grammar_decl        = "key_grammar" key_grammar_id "{"
+                          "schema" ":" string ","
+                          "rows" ":" string_list
+                          [ "," "source" ":" string ]
+                          [ "," "pattern_learning" ":" true_lit ]
+                          authority_boundary_section
+                          "}" ;
+
+pattern_ref             = "patterns" ":" identifier_list ;
+template_ref            = "templates" ":" identifier_list ;
+key_grammar_ref         = "key_grammar" ":" identifier_list ;
+control_template_ref_section = "control_templates" ":" identifier_list ;
+pattern_id              = identifier | string ;
+template_id             = identifier | string ;
+key_grammar_id          = identifier | string ;
+identifier_list         = "[" [ identifier { "," identifier } ] "]" ;
+
+(* A Micronaut control template binds one or more surface patterns to typed
+   wildcard captures. Its declared phase set is the hard legality boundary.
+   Learned FoldDirection evidence may rank/narrow inside that set only. *)
+micronaut_control_template_decl = "micronaut_control_template" template_id "{"
+                          "intent" ":" string ","
+                          "verb" ":" command_verb ","
+                          "patterns" ":" string_list ","
+                          "captures" ":" wildcard_capture_list ","
+                          "phases" ":" template_phase_list ","
+                          [ "," "phase_floor" ":" canonical_phase_name ]
+                          "track" ":" track_id ","
+                          "render" ":" string ","
+                          "admission" ":" direction_gate ","
+                          "effect" ":" template_effect
+                          authority_boundary_section
+                          "}" ;
+
+wildcard_capture_list   = "[" [ wildcard_capture { "," wildcard_capture } ] "]" ;
+wildcard_capture        = "{" "index" ":" number ","
+                          "name" ":" string ","
+                          "type" ":" wildcard_binding_type ","
+                          "on_unresolved" ":" "defer"
+                          [ "," "on_resolved" ":" "bind" ] "}" ;
+wildcard_binding_type   = "text" | "entity" | "relation" | "property"
+                        | "question" | "program" ;
+
+template_phase_list     = "[" canonical_phase_name
+                          { "," canonical_phase_name } "]" ;
+canonical_phase_name    = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul" ;
+command_verb            = "GET" | "POST" | "READ" | "WRITE" | "PATCH"
+                        | "LIST" | "INSPECT" | "RUN" | "COMPILE" | "CALL"
+                        | "HEALTH" | "SEARCH" ;
+direction_gate          = "{" "mode" ":" "rank_if_verified" ","
+                          "capabilities" ":" string_list ","
+                          "min_score" ":" bounded_number "}" ;
+template_effect         = "read_only" | "invoke_candidate" | "file_read"
+                        | "file_write" | "file_patch" | "program_dispatch"
+                        | "code_compile" | "registered_call" | "web_retrieval" ;
+
+(* Only externally verified GOOD deltas may contribute phase compatibility to
+   FoldDirection.phase_key. This declaration records evidence; it does not
+   grant phase, verification, topology, or commit authority. *)
+verified_fold_delta_decl = "verified_fold_delta" "{"
+                          "micronaut" ":" micronaut_id ","
+                          "verdict" ":" "GOOD" ","
+                          "phase_position" ":" canonical_phase_name
+                          [ "," "next_phase" ":" canonical_phase_name ] ","
+                          "jrom_seq" ":" nonnegative_number ","
+                          "extracted_at" ":" string
+                          authority_boundary_section
+                          "}" ;
+
+(* JROM semantic envelopes preserve proposed or observed content with an explicit
+   epistemic type.  They are replay evidence only. *)
+semantic_envelope_decl  = "semantic_envelope" "{"
+                          "type" ":" envelope_type ","
+                          "epistemic_type" ":" epistemic_type ","
+                          "disposition" ":" string ","
+                          "status" ":" string ","
+                          "content" ":" value ","
+                          "result" ":" value ","
+                          authority_boundary_section
+                          "}" ;
+envelope_type           = "think" | "reason" | "plan" | "task" | "commands"
+                        | "sql" | "grammar" | "route" | "decision" | "memory"
+                        | "verify" | "commit" | "unknown" ;
+epistemic_type          = "observation" | "preference" | "plan" | "generated_output"
+                        | "verified_fact" | "failed_retrieval" | "capability_metric"
+                        | "execution_trace" ;
+
+authority_boundary_section = "authority_boundary" "{" 
+                          "semantic_authority" ":" false_lit ","
+                          "topology_authority" ":" false_lit ","
+                          "verification_authority" ":" false_lit ","
+                          "commit_authority" ":" false_lit
+                          "}" ;
+
+phase_list              = "[" phase_name { "," phase_name } "]" ;
+phase_name              = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Chen" | "Xul" ;
+relation_verb_list      = "[" relation_verb { "," relation_verb } "]" ;
+relation_verb           = string ;
+string_list             = "[" [ string { "," string } ] "]" ;
+
+value                   = string | number | true_lit | false_lit | null_lit
+                        | string_list | projection_object | bounded_metric_object ;
+bounded_number          = number ;  (* validator P2 requires finite 0 <= value <= 1 *)
+nonnegative_number      = number ;  (* validator P2 requires finite value >= 0 *)
+true_lit                = "true" ;
+false_lit               = "false" ;
+null_lit                = "null" ;
+identifier              = letter { letter | digit | "_" | "-" | ":" | "µ" } ;
+string                  = '"' { character } '"' ;
+number                  = [ "-" ] digit { digit } [ "." digit { digit } ] ;
+comment                 = "#" { character } newline ;
+letter                  = ? Unicode letter ? ;
+digit                   = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+character               = ? any character except unescaped quote or newline ? ;
+newline                 = ? line break ? ;
+
+
+(* ================================================================ *)
+(* v2 EXTENSION — Key-Grammar v4 / AIML v5 / Script Pattern v2       *)
+(* Additive: existing declarations and authority boundaries remain. *)
+(* Track = field of play; context = invocation-scoped active state.   *)
+(* ================================================================ *)
+
+(* The track owns the available lexical priors, ordered relational geometry,
+   and executable trigram addresses. It is NOT the active query context. *)
+track_field_decl        = "track_field" track_id "{"
+                          "key_grammar" ":" key_grammar_id ","
+                          "unigrams" ":" unigram_rows ","
+                          "bigrams" ":" bigram_rows ","
+                          "trigrams" ":" trigram_rows
+                          [ "," "vector_field" ":" string ]
+                          authority_boundary_section
+                          "}" ;
+track_id                = identifier | string ;
+track_ref_section       = "track" ":" track_id ;
+
+unigram_rows            = "[" [ unigram_row { "," unigram_row } ] "]" ;
+unigram_row             = "{" "key" ":" string "," "corpus_weight" ":" number "}" ;
+
+(* Bigram vectors are geometric/relational metadata, not tensor authority. *)
+bigram_rows             = "[" [ bigram_row { "," bigram_row } ] "]" ;
+bigram_row              = "{" "left" ":" string "," "right" ":" string ","
+                          "vector_ref" ":" string "}" ;
+
+(* Each trigram explicitly stores its own phase; templates cannot supply or
+   override it. Identity is phase-qualified to prevent key collisions. *)
+trigram_rows            = "[" [ trigram_row { "," trigram_row } ] "]" ;
+trigram_row             = "{" "pattern" ":" trigram_pattern ","
+                          "phase" ":" phase_name ","
+                          "fold_ref" ":" string
+                          [ "," "binding_ref" ":" string ]
+                          [ "," "template_ref" ":" string ] "}" ;
+trigram_pattern         = "[" gram_atom "," gram_atom "," gram_atom "]" ;
+gram_atom               = string | "*" | "?" ;
+
+(* Micronaut programs are callable compositions of pattern bindings and
+   collection operators. Declaring a call does not grant execution authority. *)
+micronaut_program_decl  = "micronaut_program" program_id "{"
+                          "track" ":" track_id ","
+                          "context" ":" context_schema ","
+                          "pipeline" ":" micronaut_pipeline
+                          [ "," "calls" ":" micronaut_calls ]
+                          [ "," "learning" ":" learning_policy ]
+                          authority_boundary_section
+                          "}" ;
+program_id              = identifier | string ;
+program_ref_section     = "programs" ":" identifier_list ;
+
+(* Bridge to a separately registered JSON/KXML program identity. *)
+micronaut_program_ref   = "micronaut_program" ":" string ;
+
+(* Context is an invocation-local environment, not persistent track state. *)
+context_schema          = "{" "input" ":" string
+                          [ "," "bindings" ":" context_bindings ]
+                          [ "," "candidate_ref" ":" string ] "}" ;
+context_bindings        = "[" [ context_binding { "," context_binding } ] "]" ;
+context_binding         = "{" "name" ":" string ","
+                          "source" ":" binding_source ","
+                          "value_ref" ":" string "}" ;
+binding_source          = "capture" | "lm_chain" | "char_overlap" | "explicit" ;
+
+(* Map/Filter/Fold here are collection operators, not six-phase execution. *)
+micronaut_pipeline      = "[" "match" "," "bind" "," "filter" ","
+                          "map" "," "score" "," "phase_execute"
+                          [ "," "collection_fold" ] "]" ;
+micronaut_calls         = "[" [ micronaut_call { "," micronaut_call } ] "]" ;
+micronaut_call          = "{" "callee" ":" program_id ","
+                          "input_binding" ":" string
+                          [ "," "output_binding" ":" string ] "}" ;
+
+(* Learning is a proposal/evidence surface. No direct topology/weight commit
+   authority is conferred; updates require the established Ch'en/Xul gate. *)
+learning_policy         = "{" "corpus_prior" ":" "frozen" ","
+                          "learned_layer" ":" string ","
+                          "observe_phase" ":" "Ch'en" ","
+                          "commit_phase" ":" "Xul" "}" ;
+
+(* Host validation requirements beyond context-free EBNF:
+   1. Every trigram has exactly three ordered atoms and a stored phase.
+   2. Index by (track, pattern, phase, fold_ref); do not collapse phases.
+   3. Unigram corpus weights are static; learned deltas remain separate.
+   4. Bigram vector references must resolve to typed geometric relations.
+   5. Validate wildcard arity and all capture/LM-chain/char-overlap/explicit
+      bindings against the selected pattern and invocation context.
+   6. Resolve fold/template/program references; guard recursive Micronaut
+      calls with depth, cycle, and resource policies.
+   7. Apply XCFE admission and phase legality before executable dispatch.
+   8. A program declaration does not bypass projection-only authority limits.
+   9. Observe in Ch'en; any Xul commit requires external gate authorization.
+  10. Preserve key, value, phase, fold and binding identities through any
+      BSON/CBOR serialization or optional SCXQ2 lowering/round-trip.
+  11. Semantic fields/graph relations are not automatically numeric tensors.
+  12. EBNF syntax does not itself implement these runtime requirements.
+  13. Test current_phase in template phases before wildcard resolution or
+      DirectionStore ranking; learned evidence cannot expand the phase set.
+  14. Only a GOOD FoldDelta with a canonical phase_position may contribute to
+      FoldDirection.phase_key; a legacy delta has no phase-gating authority.
+  15. Every unresolved typed wildcard emits defer; it cannot default a binding.
+  16. Every admitted command still crosses InvocationValidationBoundary.
+*)
+
+
+(* ================================================================ *)
+(* v3 EXTENSION — MML programmable Micronauts, XAIML, and tool bus   *)
+(* Additive XML surface; admission and tool grants remain host-owned. *)
+(* ================================================================ *)
+
+(* Canonical MML container accepted by mu-factory.py. The factory normalizes
+   declarations into a DATA_ONLY agent candidate. program.entry and phase
+   actions are references; this grammar does not compile or execute K'uhul. *)
+mml_micronaut_decl     = "<micronaut" { xml_space xml_attribute } ">"
+                         { mml_section } "</micronaut>" ;
+mml_section            = mml_program | mml_behavior | mml_vector | mml_field
+                       | mml_memory | mml_capabilities | mml_tools
+                       | mml_learning | mml_phases | mml_strategy
+                       | xml_comment ;
+mml_program            = "<program" { xml_space xml_attribute } "/>" ;
+mml_behavior           = "<behavior>" { mml_mode | xml_comment } "</behavior>" ;
+mml_mode               = "<mode" { xml_space xml_attribute } "/>" ;
+mml_vector             = "<vector>" { mml_bias | xml_comment } "</vector>" ;
+mml_bias               = "<bias" { xml_space xml_attribute } "/>" ;
+mml_field              = "<field" { xml_space xml_attribute } "/>" ;
+mml_memory             = "<memory" { xml_space xml_attribute } ">"
+                         { mml_memory_type | xml_comment } "</memory>" ;
+mml_memory_type        = "<type" { xml_space xml_attribute } "/>" ;
+mml_capabilities       = "<capabilities>" { mml_invoke | xml_comment } "</capabilities>" ;
+mml_invoke             = "<invoke" { xml_space xml_attribute } "/>" ;
+mml_tools              = "<tools>" { mml_tool_request | xml_comment } "</tools>" ;
+mml_tool_request       = "<tool" { xml_space xml_attribute } "/>" ;
+mml_learning           = "<learning>" { mml_learning_item | xml_comment }
+                         "</learning>" ;
+mml_learning_item      = "<strategy" { xml_space xml_attribute } "/>"
+                       | "<target" { xml_space xml_attribute } "/>"
+                       | "<commit" { xml_space xml_attribute } "/>" ;
+mml_phases             = "<phases>" { mml_phase | xml_comment } "</phases>" ;
+mml_phase              = "<phase" { xml_space xml_attribute } "/>" ;
+
+(* Strategy manifests label cross-domain patterns and their intended mapping.
+   Source-domain names are analogy labels, not factual research authority. *)
+mml_strategy_catalog   = "<strategies" { xml_space xml_attribute } ">"
+                         { mml_strategy | xml_comment } "</strategies>" ;
+mml_strategy           = "<strategy" { xml_space xml_attribute } ">"
+                         { mml_strategy_item | xml_comment } "</strategy>" ;
+mml_strategy_item      = "<pattern_bank" { xml_space xml_attribute } "/>"
+                       | "<interpretation" { xml_space xml_attribute } "/>"
+                       | "<source_authority" { xml_space xml_attribute } "/>"
+                       | mml_thinking | mml_reasoning ;
+mml_thinking           = "<thinking" { xml_space xml_attribute } ">"
+                         { mml_focus | mml_fold_function | xml_comment } "</thinking>" ;
+mml_reasoning          = "<reasoning" { xml_space xml_attribute } ">"
+                         { mml_reasoning_item | mml_fold_function | xml_comment } "</reasoning>" ;
+mml_focus              = "<focus" { xml_space xml_attribute } "/>" ;
+mml_fold_function      = "<fold" { xml_space xml_attribute } "/>" ;
+mml_reasoning_item     = "<evidence" { xml_space xml_attribute } "/>"
+                       | "<inference" { xml_space xml_attribute } "/>"
+                       | "<counterexample" { xml_space xml_attribute } "/>"
+                       | "<verification" { xml_space xml_attribute } "/>" ;
+
+(* Thinking declares a bounded perspective/focus. Reasoning declares the
+   evidence-to-inference structure, counterexample, and verification contract.
+   Both are projections; neither is an execution grant or a source of facts. *)
+
+(* The factory semantically requires root id; program language+entry; mode
+   ref; bias name and finite value; tool ref+permission; and canonical phase
+   refs. Generic attribute productions make ordering immaterial, as in XML. *)
+xml_attribute         = xml_name "=" xml_string ;
+xml_name              = letter { letter | digit | "_" | "-" | "." | ":" } ;
+xml_string            = '"' { xml_character } '"' ;
+xml_space             = (" " | "\t" | "\r" | "\n") { " " | "\t" | "\r" | "\n" } ;
+xml_comment           = "<!--" { xml_character } "-->" ;
+xml_character         = ? XML character except an unescaped quote or forbidden markup delimiter ? ;
+tool_permission       = "read" | "compute" | "network" | "write" | "execute" ;
+mml_phase_name        = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul" ;
+
+(* XAIML projection emitted by the factory has pattern-match authority only.
+   Its text template is not a Python program or an executable command. *)
+xaiml_bank_format      = "kuhul.xaiml.pattern-bank.v1" ;
+xaiml_bank_authority   = "pattern_match_only" ;
+xaiml_template_item    = "{" "tag" ":" "text" "," "value" ":" string "}" ;
+mml_candidate_status   = "candidate" | "admitted_to_daemon_registry" ;
+mml_admission_policy   = "explicit_host_xcfe" ;
+
+(* Tool refs in MML are capability requests, never grants. Discovery returns
+   tools registered by trusted host code; JSON argument schemas are validated
+   before dispatch. The host must supply a HostGrant for the exact tool name.
+   A model or MML payload cannot construct that grant or register callables. *)
+tool_discovery_result  = "{" "name" ":" string "," "description" ":" string ","
+                         "permission" ":" string "," "parameters" ":" projection_object "}" ;
+tool_call_request      = "{" "name" ":" string "," "arguments" ":" projection_object "}" ;
+tool_call_result       = "{" "tool" ":" string "," "result" ":" value ","
+                         "status" ":" ("complete" | "rejected") "}" ;
+
+(* micronaut/tool_bridge.py currently registers graph.traverse and vector.score.
+   Other tool names (for example search.query, memory.retrieve, model.infer,
+   program.execute) are unresolved until a host adapter registers them. The
+   current daemon model-response loop is not yet wired to dispatch these calls. *)
+
+(* GGUF may carry these optional, non-standard custom string keys. Reading the
+   metadata is inspection only; GGUF consumers do not thereby activate the
+   Micronaut or execute referenced source. *)
+gguf_micronaut_key     = "micronaut.schema_version" | "micronaut.manifest"
+                       | "micronaut.mml" | "micronaut.program_ref"
+                       | "micronaut.field_ref" | "micronaut.memory_schema"
+                       | "micronaut.xcfe" ;
+gguf_micronaut_value   = gguf_micronaut_key ":" string ;
+
+(* The fold FieldGraph is authored as GML topology and paired with the MML
+   projection contract. A runtime tensor file is derived output, not authority. *)
+micronaut_fieldgraph_gml_decl = "graph" "[" { fieldgraph_gml_item } "]" ;
+fieldgraph_gml_item    = fieldgraph_graph_attribute
+                       | fieldgraph_gml_node
+                       | fieldgraph_gml_edge ;
+fieldgraph_graph_attribute = identifier (string | number | identifier) ;
+fieldgraph_gml_node    = "node" "[" { fieldgraph_gml_attribute } "]" ;
+fieldgraph_gml_edge    = "edge" "[" { fieldgraph_gml_attribute } "]" ;
+fieldgraph_gml_attribute = identifier (string | number | identifier) ;
+micronaut_fieldgraph_contract_ref = "fieldgraph_contract" ":" string ;
+fieldgraph_fold_name   = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul" | "System" ;
+fieldgraph_node_weight = "1" | "2" | "3" | "5" | "8" ;
+fieldgraph_resident_selector = "fold=Pop" | "fold=Wo" | "fold=Yax" | "fold=Sek"
+                             | "fold=Ch'en|fold=Chen" | "fold=Xul"
+                             | "fold=null|fold=missing" ;
+fieldgraph_projection_formula = "gravity_i=confidence_i*node_weight_i"
+                               | "score_i=softmax(node_weight*dot(W,C_i)/sqrt(d))"
+                               | "R=sum_i(score_i*V_i)" ;
+fieldgraph_tensor_name  = "node_ids" | "node_features" | "node_weights" | "node_residents"
+                        | "adj" | "gravity" | "W" | "R" | "wcr_scores"
+                        | "names" | "fold_names" | "state_cols" ;
+
+(* Semantic validation not expressible in EBNF:
+   1. Validate the MML id and field ranges before writing a candidate.
+   2. Preserve the source MML and require normalized manifest/source consistency.
+   3. Candidate promotion is a separate explicit host operation; it does not
+      imply tool grants, K'uhul execution authority, verification, or commit.
+   4. Resolve MML references against host registries; unknown tools are not
+      callable even when requested by an admitted agent.
+   5. Keep tool results and provenance outside the model-authored request.
+   6. Never evaluate source strings or expressions from MML/GGUF metadata.
+   7. Keep GGUF custom metadata declarative; runtime bindings pass XCFE admission.
+   8. Mutable Replay:Field memory and learned state remain host-side, outside
+      immutable GGUF weight tensors.
+*)

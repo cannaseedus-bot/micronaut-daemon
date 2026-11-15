@@ -1,0 +1,26 @@
+<section id="seed-checkout" data-asx-key="⟁APP:SEED_CHECKOUT/⟁ROOT:SEED_CHECKOUT" aria-label="Checkout">
+  <header data-asx-key="⟁APP:SEED_CHECKOUT/⟁WIDGET:CHECKOUT_HEADER"><h1>Checkout</h1><button data-asx-key="⟁APP:SEED_CHECKOUT/⟁ACTION:CHECKOUT_THEME" data-event="theme.toggle">Theme</button></header>
+  <div data-asx-key="⟁APP:SEED_CHECKOUT/⟁WIDGET:CHECKOUT_LAYOUT">
+    <aside data-asx-key="⟁APP:SEED_CHECKOUT/⟁WIDGET:CART" data-bind="state.cart_ref">
+      <h2>Your Cart</h2><div data-asx-key="⟁APP:SEED_CHECKOUT/⟁WIDGET:CART_ITEMS" data-source="state.seed_store.cart"></div>
+      <button data-asx-key="⟁APP:SEED_CHECKOUT/⟁ACTION:CART_CLEAR" data-event="cart.clear">Empty Cart</button>
+    </aside>
+    <main data-asx-key="⟁APP:SEED_CHECKOUT/⟁WIDGET:CHECKOUT_FORM_PANEL">
+  <form data-asx-key="⟁APP:SEED_CHECKOUT/⟁WIDGET:CHECKOUT_FORM" data-bind="state.cart_ref" data-event="checkout.submit">
+    <input name="name" required placeholder="Your Name" />
+    <input name="email" type="email" required placeholder="Email Address" />
+    <input name="phone" type="tel" required placeholder="Phone Number" />
+    <input name="address" required placeholder="Street Address" />
+    <input name="city" required placeholder="City" /><input name="state" required placeholder="State" /><input name="zipcode" required placeholder="Zip Code" />
+    <input name="shipping_fee" type="number" min="0" step="0.01" value="10.00" />
+    <textarea name="order_notes" placeholder="Order notes"></textarea>
+    <input name="order_number" readonly data-bind="state.order_number" />
+    <button type="submit">Submit Order</button>
+  </form>
+    </main>
+  </div>
+  <footer data-asx-key="⟁APP:SEED_CHECKOUT/⟁WIDGET:CHECKOUT_FOOTER">Secure checkout · <a href="tel:+19284043178">928-404-3178</a></footer>
+</section>
+<script type="application/json" id="asx-json-runtime">
+{"@kind":"asx.key-runtime.binding.v1","@app":"⟁APP:SEED_CHECKOUT","@manifest":"data/host/apps/seed-checkout.asx-app.json","@executor":"mx.run","@authority":"projection_only","@state":"request_scoped","@semantic_commit":false,"@events":{"theme.toggle":"checkout.toggle_theme","checkout.submit":"checkout.submit_order","payment.open":"checkout.open_payment"}}
+</script>

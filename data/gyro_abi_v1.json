@@ -1,0 +1,54 @@
+{
+  "⟁GYRO_ABI_v1": {
+    "description": "Versioned ABI map: µ-track measurement basis → epistemic ABI coordinates. Changing this file constitutes a Gyroscope ABI version change. Structural ABI (6 dimensions, 6 measurement tracks, mapping matrix) is unchanged in this revision; ELIZA's governs vocabulary was extended to cover the adaptive greeting-learning surface (lingo/mannerism adaptation vocabulary routes through ELIZA, whose governs already carry greeting and salutation).",
+    "revision": "v1.1 — ELIZA governs vocabulary extension for adaptive greeting learning (GREETING-µ micronaut routes through ELIZA's measurement basis); structural ABI unchanged.",
+    "dimensions": [
+      "⟁FIELD",
+      "⟁EVIDENCE",
+      "⟁INFER",
+      "⟁COUNTEREXAMPLE",
+      "⟁VERIFY",
+      "⟁XUL"
+    ],
+    "measurement_tracks": [
+      "REASON-µ",
+      "INFER-µ",
+      "ORCH-µ",
+      "MEM-µ",
+      "CREATE-µ",
+      "ELIZA"
+    ],
+    "track_governs": {
+      "REASON-µ": ["reason", "infer", "deduce", "analyze", "query", "semantic", "graph", "conclude",
+                   "search", "find", "investigate", "fold", "parser", "syntax", "relation", "glyph", "book"],
+      "INFER-µ":  ["evaluate", "evidence", "judge", "accumulate", "conclude", "verify", "weigh", "assess",
+                   "license", "attribution", "royalty", "policy", "media",
+                   "research", "sources", "citation", "equivalence", "similarity", "synonym", "rewrite", "preserve"],
+      "ORCH-µ":   ["orchestrate", "route", "coordinate", "dispatch", "direct", "plan", "supervise",
+                   "delegate", "layout", "scaffold", "slot", "emit",
+                   "tool", "invoke", "action", "execute", "trigger", "gml", "overlay", "projection", "topology", "edge", "verb", "phase"],
+      "MEM-µ":    ["memory", "store", "retrieve", "recall", "gram", "confidence", "read", "lookup",
+                   "assoc", "ngram", "dictionary", "lexicon", "cache", "key"],
+      "CREATE-µ": ["create", "compose", "generate", "assemble", "build", "make", "design", "write",
+                   "app", "blog", "template", "blueprint", "wizard", "draft", "publish",
+                   "transform", "rephrase", "paraphrase", "variant"],
+      "ELIZA":    ["pattern", "response", "intent", "greeting", "salutation", "question", "answer", "chat", "synonym", "match", "wildcard",
+                   "synonymize", "@syn", "equivalent", "alternate",
+                   "lingo", "mannerism", "adapt", "reactive", "mirror", "blend"]
+    },
+    "mapping": {
+      "⟁FIELD":          ["ORCH-µ", "MEM-µ"],
+      "⟁EVIDENCE":       ["REASON-µ", "ELIZA"],
+      "⟁INFER":          ["INFER-µ", "REASON-µ"],
+      "⟁COUNTEREXAMPLE": ["REASON-µ"],
+      "⟁VERIFY":         ["REASON-µ", "INFER-µ"],
+      "⟁XUL":            ["MEM-µ", "ORCH-µ"]
+    },
+    "lexical_equivalence": {
+      "enabled": true,
+      "synonym_credit": 0.65,
+      "sources": ["data/gram/english-dictionary.jsonl", "word_similarity:*", "synonym:*", "assoc:semantic:*"],
+      "invariant": "Lexical equivalence adjusts scoring only; phase authority remains canonical."
+    }
+  }
+}

@@ -1,0 +1,207 @@
+(* ================================================================ *)
+(* MX2LM-µ — Ngram Vocabulary Provider Grammar                     *)
+(* Individual Micronaut domain language                             *)
+(* Role: provide                                                    *)
+(* Owns: pool track selection, channel selection, ngram vocabulary  *)
+(*        distribution proposal, gram read/write closure            *)
+(* Does NOT own: model invocation, checkpoint writes, inference     *)
+(*               execution, direct token sampling, model dispatch   *)
+(*                                                                  *)
+(* MX2LM-µ produces NgramDistributionProposals. A proposal is not   *)
+(* an inference invocation. CHANNEL selection does not trigger      *)
+(* model dispatch; XCFE admission is required before dispatch.      *)
+(* gramWrite at Xul records the evidence trace only.                *)
+(* The vocabulary is universal: it connects to both kuhul-pi and    *)
+(* daemon bot inference layers via neighbourhood-attention.         *)
+(* ================================================================ *)
+
+
+(* ---- Part I: Program Surface Syntax ---- *)
+
+program = { pool_decl | channel_decl | select_rule | emit_rule
+          | type_decl | operation_contract_decl | comment } ;
+
+(* POOL — declare a named ngram track pool with its binary snapshot *)
+(* SNAPSHOT names the binary ngram pool file; declaring it does
+   not load the pool or trigger any inference call. *)
+pool_decl = "POOL" pool_id "{"
+              "TRACK" string
+              "SNAPSHOT" string
+              "ROWS" integer
+              [ "REGISTRY_REF" string ]
+            "}" ;
+
+(* CHANNEL — declare a named channel type within a pool *)
+(* TOP_K specifies the per-channel emission limit; it does not
+   control model beam width or sampling temperature. *)
+channel_decl = "CHANNEL" channel_id "{"
+                 "TYPE" channel_type
+                 "TOP_K" integer
+               "}" ;
+
+channel_type = "unigram" | "bigram" | "trigram" | "quadgram"
+             | "coarse_gram" | "function_gram" | "tool_gram" ;
+
+(* SELECT — choose a pool track and channel set at Wo *)
+(* FROM names a declared pool_id; it does not load the pool.
+   CHANNELS is a subset of declared channel_ids.
+   WHEN names the namespace condition for pool selection;
+   meeting the condition does not dispatch to the checkpoint. *)
+select_rule = "SELECT" identifier "{"
+                "FROM" pool_id
+                "CHANNELS" "[" channel_id { "," channel_id } "]"
+                "WHEN" select_condition
+              "}" ;
+
+select_condition = "NAMESPACE" string
+                 | "INTENT" identifier
+                 | "TASK" task_ref ;
+
+task_ref  = identifier ;
+
+(* EMIT — produce an NgramDistributionProposal at Sek *)
+(* FROM references a prior SELECT identifier.
+   The emitted NgramDistributionProposal is a candidate; it is not
+   an inference invocation. XCFE admission is required before the
+   kuhul-pi or daemon bot inference layer may consume it. *)
+emit_rule = "EMIT" identifier "{"
+              "FROM" identifier
+              "OUTPUT" emit_output_type
+            "}" ;
+
+emit_output_type = "NgramDistributionProposal" ;
+
+(* TYPE declarations make the type inventory machine-readable. *)
+type_decl = "TYPE" type_id ":" string
+            [ "requires_xcfe" ":" bool_lit ] ;
+type_id   = identifier ;
+bool_lit  = true_lit | false_lit ;
+true_lit  = "true" ;
+false_lit = "false" ;
+
+(* CONTRACT declarations make operation signatures machine-readable. *)
+operation_contract_decl = "CONTRACT" identifier
+                          "INPUT" type_id
+                          "OUTPUT" type_id
+                          "PHASE" phase_name
+                          [ "xcfe" ":" "required" ] ;
+
+(* ---- Shared terminals ---- *)
+pool_id     = identifier ;
+channel_id  = identifier ;
+phase_name  = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Chen" | "Ch_en" | "Xul" ;
+identifier  = letter { letter | digit | "_" | "-" | "." } ;
+string      = '"' { string_char } '"' ;
+string_char = ? any character except unescaped '"' or newline ? ;
+integer     = digit { digit } ;
+digit       = "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9" ;
+letter      = ? Unicode letter or underscore ? ;
+whitespace  = ? space, tab, CR, LF ? ;
+comment     = "#" { ? any character except newline ? } newline ;
+
+
+(* ================================================================ *)
+(* Part II: Static Signatures for MX2LM-µ                          *)
+(* ================================================================ *)
+
+(*
+  Operation contracts
+  ┌──────────────────────┬────────────────────────────────┬──────────────────────────────┬────────┐
+  │ Operation            │ Input                          │ Output                       │ Phase  │
+  ├──────────────────────┼────────────────────────────────┼──────────────────────────────┼────────┤
+  │ POOL declare         │ snapshot_ref × integer rows    │ PoolDescriptor               │ Pop    │
+  │ CHANNEL declare      │ channel_type × integer top_k   │ ChannelDescriptor            │ Pop    │
+  │ gramRead             │ GramNamespace                  │ NgramPoolBinding             │ Pop    │
+  │ SELECT/FROM          │ NgramPoolBinding               │ ChannelSet                   │ Wo     │
+  │ SELECT/WHEN          │ ChannelSet × namespace_cond    │ SelectedDistribution         │ Wo     │
+  │ EMIT                 │ SelectedDistribution           │ NgramDistributionProposal    │ Sek    │
+  │ gramWrite            │ evidence_trace                 │ GramTrace                    │ Xul    │
+  └──────────────────────┴────────────────────────────────┴──────────────────────────────┴────────┘
+
+  Output type definitions
+  ─────────────────────────────────────────────────────────────────────
+  PoolDescriptor          — declared pool with snapshot reference and row count;
+                            read-only; no load on declaration
+  ChannelDescriptor       — declared channel type with top-k limit; read-only
+  GramNamespace           — input from Pop/gramRead: namespace string from the
+                            gram_pool_registry selector
+  NgramPoolBinding        — resolved pool for the given namespace; Pop binding;
+                            not yet routed to inference
+  ChannelSet              — selected channel subset from the pool; Wo output;
+                            not yet emitted or dispatched
+  SelectedDistribution    — ngram distribution for the selected channels;
+                            not yet admitted; no inference authority
+  NgramDistributionProposal — admitted SelectedDistribution; NOT an invocation;
+                            model dispatch requires separate XCFE admission by
+                            the kuhul-pi or daemon bot inference layer
+  GramTrace               — evidence trace written at Xul; scope=local;
+                            authorized Xul commit only
+
+  Pool invariants
+  ─────────────────────────────────────────────────────────────────────
+  POOL ROWS must reflect the actual row count in the SNAPSHOT binary
+  SNAPSHOT is a read-only binary ngram pool; writes are not permitted
+  5 declared pools:
+       Mx2LM      (dataset.ngram.bin,          rows 30000)
+       ADVISOR-µ  (dataset.ngram.advisor_mu.bin, rows 634000)  → micronaut:ADVISOR
+       PLAN-µ     (dataset.ngram.plan_mu.bin,    rows 1000)
+       POLITICS-µ (dataset.ngram.politics_mu.bin, rows 286)
+       JOKE-µ     (dataset.ngram.joke_mu.bin,    rows 500)
+
+  Channel invariants
+  ─────────────────────────────────────────────────────────────────────
+  7 channels per pool: unigram, bigram, trigram, quadgram,
+       coarse_gram, function_gram, tool_gram
+  TOP_K per channel: 512 (uniform across all pools and channels)
+  Total unique grams in Mx2LM base pool: 9,668,412
+  Top tool_gram: "function" (48531 occurrences in Mx2LM)
+  Top K'UHUL-aware quadgrams: "ch'en bucket medium xul" (4000),
+       "yax lane syntax sek" (4000), "pop wo fold reasoning" (2562)
+
+  Checkpoint connection
+  ─────────────────────────────────────────────────────────────────────
+  MX2LM ngram vocabulary connects to:
+       .micronaut/checkpoints/neighborhood-attention.safetensors  (GQA attention)
+       .micronaut/checkpoints/neighborhood-attention.bones.safetensors  (fold-bone vocab)
+  Bone vocabulary schema: kuhul.fold-bone-rig.v1; 991 bones
+  Bone slots include: FIELD, FOLD, ⟁FLOW, ⟁FUNCTION, ⟁JAVASCRIPT,
+       ⟁KUHUL, ⟁CODE, ⟁LANGUAGE, ⟁REASONING, and 982 further semantic bones
+  Connection is data-universal: vocabulary is not domain-locked to code or
+       conversation; it bridges kuhul-pi and daemon bot inference layers
+  The checkpoint reader is in the kuhul-pi or daemon bot inference layer;
+       MX2LM grammar declares the vocabulary; it does not invoke the checkpoint
+
+  Phase legality
+  ─────────────────────────────────────────────────────────────────────
+  POOL declare:    Pop   (gramRead binding; no model call; no XCFE)
+  CHANNEL declare: Pop   (channel descriptor binding; no model call; no XCFE)
+  gramRead:        Pop   (read-only vocabulary load from gram namespace; no XCFE)
+  SELECT/FROM:     Wo    (pool binding; no inference; no XCFE)
+  SELECT/WHEN:     Wo    (channel and namespace matching; no XCFE)
+  EMIT:            Sek   (distribution proposal; XCFE admission required
+                           before downstream inference dispatch)
+  gramWrite:       Xul   (evidence trace only; authorized closure required)
+
+  Static errors
+  ─────────────────────────────────────────────────────────────────────
+  - pool_duplicate_id
+  - channel_duplicate_id
+  - select_duplicate_id
+  - emit_before_select (EMIT requires prior SELECT)
+  - select_references_undeclared_pool
+  - select_references_undeclared_channel
+  - rows_mismatch (ROWS declared but snapshot size differs)
+  - top_k_exceeds_pool_capacity
+
+  Authority
+  ─────────────────────────────────────────────────────────────────────
+  grammar_grants_execution: false
+  channel_select_grants_inference: false
+  vocabulary_match_grants_model_dispatch: false
+  emit_grants_checkpoint_write: false
+  gramwrite_grants_output_persistence: false
+  route_requires_xcfe_admission: true
+  persistence_requires_verified_authorized_fold: true
+  semantic_authority: false
+  commit_authority: false
+*)

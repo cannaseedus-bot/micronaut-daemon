@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kuhul:khanary:schema:active-fold-graph:v1",
+  "title": "KHANARY Active Fold Graph G_F^Q(h)",
+  "description": "Query-conditioned, masked, ephemeral view derived from a Fold Graph. It is not a committed graph and carries no semantic authority (GAP-093).",
+  "$ref": "#/$defs/ActiveFoldGraph",
+  "$defs": {
+    "Edge": {
+      "type": "object",
+      "required": [
+        "@id",
+        "@typed",
+        "@from",
+        "@to",
+        "@relation",
+        "@orientation"
+      ],
+      "properties": {
+        "@id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "@typed": {
+          "type": "boolean",
+          "const": true
+        },
+        "@from": {
+          "type": "string",
+          "minLength": 1
+        },
+        "@to": {
+          "type": "string",
+          "minLength": 1
+        },
+        "@relation": {
+          "type": "string",
+          "minLength": 2
+        },
+        "@orientation": {
+          "type": "string",
+          "enum": [
+            "forward",
+            "reverse",
+            "bidirectional",
+            "blocked"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "ActiveFoldGraph": {
+      "type": "object",
+      "required": [
+        "@type",
+        "@handle",
+        "@query",
+        "@gate_operator",
+        "@active_nodes",
+        "@edges",
+        "@ephemeral",
+        "@query_conditioned",
+        "@semantic_authority"
+      ],
+      "properties": {
+        "@type": {
+          "type": "string",
+          "const": "khanary.active_fold_graph.v1"
+        },
+        "@handle": {
+          "type": "string",
+          "minLength": 1
+        },
+        "@query": {
+          "type": "string"
+        },
+        "@gate_operator": {
+          "type": "string",
+          "const": "Gate_Q"
+        },
+        "@active_nodes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "@edges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Edge"
+          }
+        },
+        "@ephemeral": {
+          "type": "boolean",
+          "const": true
+        },
+        "@query_conditioned": {
+          "type": "boolean",
+          "const": true
+        },
+        "@semantic_authority": {
+          "type": "boolean",
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

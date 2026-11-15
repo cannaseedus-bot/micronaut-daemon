@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "classifieds",
+  "@key": "⟁APP:CLASSIFIEDS",
+  "@mount": "⟁ROOT:CLASSIFIEDS",
+  "@theme": { "accent": "#fbbf24", "bg": "#0f0d00", "surface": "#1c1a02", "text": "#fef9c3", "hero_phase": "Yax", "tagline": "Local deals, local people" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "listings", "component": "⟁WIDGET:LISTINGS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "listings": [], "search": "", "category": null, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:CLASSIFIEDS": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:POST"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:POST": { "@type": "button", "@text": "Post Ad", "@on": { "click": "classifieds.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:LISTINGS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:LISTINGS": { "@type": "grid", "@bind": "state.listings", "@children": ["⟁WIDGET:AD_CARD"] },
+    "⟁WIDGET:AD_CARD": { "@type": "media-card", "@bind": "listing", "@on": { "contact": "classifieds.contact", "view": "classifieds.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:CATEGORIES", "⟁WIDGET:RECENT"] },
+    "⟁WIDGET:CATEGORIES": { "@type": "tag-cloud", "@bind": "data.categories" },
+    "⟁WIDGET:RECENT": { "@type": "list", "@bind": "data.recent" }
+  },
+  "@programs": {
+    "classifieds.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "classifieds.contact": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "classifieds.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "classifieds.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "ad.contact": "classifieds.contact", "ad.view": "classifieds.view", "compose.open": "classifieds.open_compose", "search.input": "classifieds.search" },
+  "@imports": [{ "ref": "listing", "mode": "schema_table" }, { "ref": "contact_request", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "featured-ads", "name": "Featured Ads", "category": "commerce", "price": "free", "status": "available_unconfigured", "description": "Boost an ad to the top of the listings page." },
+      { "id": "auto-expire", "name": "Auto-Expire Listings", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Automatically expire ads after a set number of days." },
+      { "id": "image-check-bot", "name": "Image Checker Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Flag listings with no photo or low-quality images." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "classifieds.post", "pattern": "POST AD|LIST ITEM|SELL *", "intent": "open_compose" },
+      { "id": "classifieds.search", "pattern": "FIND * FOR SALE|SEARCH *", "intent": "filter_listings" }
+    ]
+  },
+  "@data": {
+    "categories": ["Electronics", "Furniture", "Vehicles", "Services", "Free Stuff"],
+    "recent": ["Vintage desk lamp — $35", "Road bike — $280", "Piano lessons — $50/hr"],
+    "spotlight": [
+      { "id": "sp1", "title": "2018 Road Bike — Excellent Condition", "category": "Vehicles", "badge": "Featured", "price": 280, "excerpt": "Shimano 105, carbon fork, new chain and cables." },
+      { "id": "sp2", "title": "Standing Desk — Adjustable Height", "category": "Furniture", "badge": "Reduced", "price": 120, "excerpt": "Motorised height adjustment. Holds two monitors. Barely used." },
+      { "id": "sp3", "title": "Piano Lessons — All Levels", "category": "Services", "badge": "Service", "price": 50, "excerpt": "Classically trained, 10+ years teaching. In-home sessions." }
+    ],
+    "schema": {
+      "listing": { "primaryKey": "listing_id", "fields": { "listing_id": { "type": "string" }, "title": { "type": "string", "required": true }, "description": { "type": "textarea" }, "price": { "type": "float" }, "category": { "type": "string" }, "condition": { "type": "string" }, "image_url": { "type": "uri" }, "posted_at": { "type": "datetime" }, "expires_at": { "type": "datetime" } } },
+      "contact_request": { "primaryKey": "contact_id", "fields": { "contact_id": { "type": "string" }, "listing_id": { "type": "string", "required": true }, "message": { "type": "text", "required": true }, "requester_email": { "type": "email", "required": true }, "sent_at": { "type": "datetime" } } }
+    }
+  }
+}

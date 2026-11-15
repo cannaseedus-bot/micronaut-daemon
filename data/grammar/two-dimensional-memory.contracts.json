@@ -1,0 +1,78 @@
+{
+  "@type": "khanary.two_dimensional_memory.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "replay_records_what_happened_field_records_how_things_relate_and_neither_replaces_the_other",
+  "lane": "KHANARY_TWO_DIMENSIONAL_MEMORY_TEST",
+  "owner": "src/kuhul/memory_record.cpp",
+  "why": "Collapsing episodic and semantic memory loses the one question a learning system most needs answered: *how* did this come to be known, and what happened when it was used. A single store cannot answer it, because the field rewrites itself as weights change while the trajectory must remain intact. So memory is addressed in two dimensions — M = (R, F) — with different mutation laws and links in both directions.",
+  "axes": {
+    "R": {
+      "is": "Replay — temporal history, execution trajectories, prior folds, learning deltas, observed outcomes",
+      "answers": "what happened",
+      "mutation": "R_{t+1} = R_t || e_t: append-only and versioned; an event is never rewritten"
+    },
+    "F": {
+      "is": "Field — semantic relationships, vector neighbourhoods, behavioural biases, graph topology, contextual relevance",
+      "answers": "how things relate",
+      "mutation": "F_{t+1} = Apply(F_t, Delta_F_t): evolves through verified deltas only"
+    },
+    "why_different_laws": "the field may legitimately change as understanding improves, while the trajectory that produced it must stay intact; rewriting replay would destroy the evidence the field's changes rest on"
+  },
+  "record": {
+    "fields": [
+      "memory_id",
+      "replay_ref",
+      "field_ref",
+      "replay",
+      "field",
+      "scope",
+      "provenance"
+    ],
+    "replay_block": [
+      "sequence_id",
+      "phase_trace",
+      "actions",
+      "observations",
+      "learning_deltas",
+      "outcome",
+      "field_version_at_append"
+    ],
+    "field_block": [
+      "vector_ref",
+      "graph_neighborhood",
+      "mode_bias",
+      "semantic_bindings",
+      "edge_weights"
+    ],
+    "scope_block": [
+      "principal_id",
+      "workspace_id",
+      "permissions"
+    ],
+    "provenance_block": [
+      "source",
+      "timestamp",
+      "verification_status"
+    ],
+    "law": "the two references let the same event be reconstructed historically or retrieved semantically"
+  },
+  "retrieval": {
+    "replay_to_field": "retrieve an earlier execution and reconstruct the semantic field that was active when it happened",
+    "field_to_replay": "find a relevant semantic neighbourhood and recover the trajectories that produced or modified it",
+    "use": "an agent can find a successful strategy through Field similarity and then inspect the Replay history to see which queries actually worked",
+    "scope": "both directions are scope-checked: a vector may not be read across principals, and neither may the trajectory behind it"
+  },
+  "invariants": {
+    "TM1": "memory is addressed in two dimensions, R and F, which are never collapsed into one another",
+    "TM2": "Replay is append-only and versioned: appending advances the version, and any attempt to rewrite an existing event is refused",
+    "TM3": "Field evolves only through verified deltas; an unverified delta is refused and the field version does not advance",
+    "TM4": "each replay event records the field version that was active when it happened, so the semantic state at that moment can be reconstructed later",
+    "TM5": "a later field change never alters what an earlier replay→field retrieval returns: history is preserved even as weights move",
+    "TM6": "field→replay returns the events that produced or modified a field version, so every semantic state names its own history",
+    "TM7": "both retrieval directions are scope-checked against the principal, and a cross-principal read fails in either direction",
+    "TM8": "append and delta application are deterministic and return the new version, so the same sequence reproduces the same store",
+    "TM9": "a verified outcome is recorded as a field event as well as a replay event, so 'what do I know' and 'how did I learn it' stay linked",
+    "TM10": "the store answers both questions the design exists for: what is known, and how it was learned and what happened when it was used"
+  }
+}

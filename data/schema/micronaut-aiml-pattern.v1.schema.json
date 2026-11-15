@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kuhul:micronaut-aiml-pattern:1",
+  "title": "Micronaut-owned AIML pattern v1",
+  "description": "An owner-scoped AIML prompt pattern. The response is plain text; an optional registered tool is emitted as a command proposal only.",
+  "type": "object",
+  "required": ["id", "micronaut", "contract_ref", "pattern", "response", "status"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^mp-[0-9a-f]{32}$" },
+    "micronaut": { "type": "string", "pattern": "^micronaut:[A-Z0-9_-]+$" },
+    "contract_ref": { "type": "string", "minLength": 1 },
+    "pattern": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "topic": { "type": ["string", "null"] },
+    "response": { "type": "string", "maxLength": 4000 },
+    "status": { "const": "active" },
+    "tool": {
+      "type": "object",
+      "required": ["id", "capability", "arguments"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "capability": { "type": "string", "minLength": 1 },
+        "arguments": { "type": "object" },
+        "bindings": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 1 }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

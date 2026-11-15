@@ -1,0 +1,17 @@
+{
+  "@program": "app_ts",
+  "@import": [
+    { "@from": "lib_math.json", "@use": ["square", "add", "mul"] }
+  ],
+  "@state": {
+    "a": 5,
+    "b": 7
+  },
+  "@control": [
+    { "@op": "IMPORT", "@from": "lib_math.json", "@use": ["square", "add", "mul"] },
+    { "@op": "CALL", "@fn": "add", "@args": ["$a", "$b"], "@out": "sum" },
+    { "@op": "CALL", "@fn": "square", "@args": ["$sum"], "@out": "sum_sq" },
+    { "@op": "CALL", "@fn": "mul", "@args": ["$a", "$b"], "@out": "prod" },
+    { "@op": "LOG", "@fn": "log", "@args": ["sum=$sum sum_sq=$sum_sq prod=$prod"] }
+  ]
+}

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1060" role="img" aria-labelledby="title desc">
+ <title id="title">K’UHUL semantic runtime infographic</title>
+ <desc id="desc">Six phase flow from input through context, candidate expansion, dispatch proposal, verification, and closure, with a separate host admission boundary.</desc>
+ <defs>
+  <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#101e32"/><stop offset="1" stop-color="#07111f"/></linearGradient>
+  <linearGradient id="accent"><stop stop-color="#58d6c4"/><stop offset="1" stop-color="#83aaff"/></linearGradient>
+  <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#86a9c8"/></marker>
+  <style>
+   text{font-family:Segoe UI,Arial,sans-serif;fill:#edf4ff}.muted{fill:#b5c6da}.teal{fill:#76e1d0}.caps{font-size:22px;font-weight:700;letter-spacing:4px}.title{font-size:62px;font-weight:750}.subtitle{font-size:30px}.phase{font-size:32px;font-weight:700}.label{font-size:24px}.small{font-size:22px}
+  </style>
+ </defs>
+ <rect width="1800" height="1060" rx="34" fill="url(#bg)"/>
+ <rect x="2" y="2" width="1796" height="1056" rx="32" fill="none" stroke="#294663" stroke-width="3"/>
+ <text x="86" y="92" class="caps teal">RUNTIME MAP · REPOSITORY DEFINITION</text>
+ <text x="86" y="176" class="title">What is K’UHUL?</text>
+ <text x="88" y="232" class="subtitle muted">A typed semantic runtime and language stack for bounded Micronaut programs.</text>
+ <rect x="84" y="282" width="1632" height="105" rx="20" fill="#142941" stroke="#315675" stroke-width="2"/>
+ <text x="116" y="326" class="label teal">SEMANTIC RESOURCES</text>
+ <text x="116" y="363" class="label">Typed keys + fields  ·  graphs + bindings  ·  semantic tracks  ·  Micronaut programs</text>
+ <g fill="none" stroke="#86a9c8" stroke-width="5" marker-end="url(#arrow)">
+  <path d="M335 555h62"/><path d="M600 555h62"/><path d="M865 555h62"/><path d="M1130 555h62"/><path d="M1395 555h62"/>
+ </g>
+ <g>
+  <g transform="translate(82 430)"><rect width="250" height="245" rx="22" fill="#142941" stroke="#4c82a8" stroke-width="3"/><circle cx="38" cy="42" r="22" fill="#58d6c4"/><text x="31" y="51" font-size="24" font-weight="700" fill="#07111f">1</text><text x="30" y="105" class="phase">Pop</text><text x="30" y="151" class="label teal">Ingress</text><text x="30" y="191" class="small muted">Input, identity,</text><text x="30" y="222" class="small muted">provenance</text></g>
+  <g transform="translate(347 430)"><rect width="250" height="245" rx="22" fill="#142941" stroke="#4c82a8" stroke-width="3"/><circle cx="38" cy="42" r="22" fill="#67c8ed"/><text x="31" y="51" font-size="24" font-weight="700" fill="#07111f">2</text><text x="30" y="105" class="phase">Wo</text><text x="30" y="151" class="label teal">Bind context</text><text x="30" y="191" class="small muted">Definitions, typed</text><text x="30" y="222" class="small muted">assignments</text></g>
+  <g transform="translate(612 430)"><rect width="250" height="245" rx="22" fill="#142941" stroke="#4c82a8" stroke-width="3"/><circle cx="38" cy="42" r="22" fill="#8ab5ff"/><text x="31" y="51" font-size="24" font-weight="700" fill="#07111f">3</text><text x="30" y="105" class="phase">Yax</text><text x="30" y="151" class="label teal">Expand</text><text x="30" y="191" class="small muted">Candidate keys,</text><text x="30" y="222" class="small muted">questions, routes</text></g>
+  <g transform="translate(877 430)"><rect width="250" height="245" rx="22" fill="#142941" stroke="#4c82a8" stroke-width="3"/><circle cx="38" cy="42" r="22" fill="#c3a1f2"/><text x="31" y="51" font-size="24" font-weight="700" fill="#07111f">4</text><text x="30" y="105" class="phase">Sek</text><text x="30" y="151" class="label teal">Propose</text><text x="30" y="191" class="small muted">Select or request</text><text x="30" y="222" class="small muted">admitted dispatch</text></g>
+  <g transform="translate(1142 430)"><rect width="250" height="245" rx="22" fill="#142941" stroke="#4c82a8" stroke-width="3"/><circle cx="38" cy="42" r="22" fill="#ffd17a"/><text x="31" y="51" font-size="24" font-weight="700" fill="#07111f">5</text><text x="30" y="105" class="phase">Ch’en</text><text x="30" y="151" class="label teal">Verify</text><text x="30" y="191" class="small muted">Evidence, contracts,</text><text x="30" y="222" class="small muted">and results</text></g>
+  <g transform="translate(1407 430)"><rect width="250" height="245" rx="22" fill="#142941" stroke="#4c82a8" stroke-width="3"/><circle cx="38" cy="42" r="22" fill="#ff9d88"/><text x="31" y="51" font-size="24" font-weight="700" fill="#07111f">6</text><text x="30" y="105" class="phase">Xul</text><text x="30" y="151" class="label teal">Close</text><text x="30" y="191" class="small muted">Close admitted work</text><text x="30" y="222" class="small muted">and record result</text></g>
+ </g>
+ <rect x="84" y="733" width="1632" height="220" rx="22" fill="#101b29" stroke="#a17852" stroke-width="3"/>
+ <text x="120" y="786" class="caps" fill="#ffd17a">HOST ADMISSION · SEPARATE EXECUTION BOUNDARY</text>
+ <text x="120" y="842" class="label">Registered capabilities  +  runtime contracts  +  XCFE admission</text>
+ <text x="120" y="899" class="subtitle muted">Sek proposes · Ch’en verifies · Xul closes admitted work</text>
+ <text x="86" y="1008" class="small muted">Semantic tracks guide key and intent candidates; they do not prove facts or grant execution authority.</text>
+</svg>

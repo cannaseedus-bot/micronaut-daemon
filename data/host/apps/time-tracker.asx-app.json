@@ -1,0 +1,55 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "time-tracker",
+  "@key": "⟁APP:TIME_TRACKER",
+  "@mount": "⟁ROOT:TIME_TRACKER",
+  "@theme": { "accent": "#fb7185", "bg": "#100407", "surface": "#1e060d", "text": "#ffe4e6", "hero_phase": "Sek", "tagline": "Know where your time actually goes" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "sessions", "component": "⟁WIDGET:SESSIONS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "sessions": [], "running": false, "elapsed_sec": 0, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:TIME_TRACKER": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁WIDGET:TIMER", "⟁ACTION:START_STOP"] },
+    "⟁WIDGET:TIMER": { "@type": "stat", "@bind": "state.elapsed_sec" },
+    "⟁ACTION:START_STOP": { "@type": "button", "@text": "Start", "@bind": "state.running", "@on": { "click": "timer.toggle" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:SESSIONS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:SESSIONS": { "@type": "feed", "@bind": "state.sessions", "@children": ["⟁WIDGET:SESSION_ROW"] },
+    "⟁WIDGET:SESSION_ROW": { "@type": "content-card", "@bind": "session" },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:TODAY_TOTAL", "⟁WIDGET:PROJECT_BREAKDOWN"] },
+    "⟁WIDGET:TODAY_TOTAL": { "@type": "stat", "@bind": "data.today_total" },
+    "⟁WIDGET:PROJECT_BREAKDOWN": { "@type": "chart", "@bind": "data.by_project" }
+  },
+  "@programs": {
+    "timer.toggle": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_running", "@out": "running" }] }
+  },
+  "@events": { "timer.toggle": "timer.toggle" },
+  "@imports": [{ "ref": "session", "mode": "schema_table" }, { "ref": "project", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "pomodoro", "name": "Pomodoro Mode", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "25-min focus blocks with 5-min breaks." },
+      { "id": "invoice-sync", "name": "Invoice Sync", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Sync billable hours to your invoicing app." },
+      { "id": "focus-bot", "name": "Focus Coach Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Daily focus report and distraction analysis." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "timer.start", "pattern": "START TIMER|BEGIN SESSION|TRACK TIME", "intent": "toggle_start" },
+      { "id": "timer.stop", "pattern": "STOP TIMER|END SESSION|PAUSE TRACKING", "intent": "toggle_stop" }
+    ]
+  },
+  "@data": {
+    "today_total": "5h 42m",
+    "by_project": [{ "name": "KHANARY", "hours": 3.5 }, { "name": "Client A", "hours": 1.5 }, { "name": "Admin", "hours": 0.7 }],
+    "spotlight": [
+      { "id": "sp1", "title": "KHANARY Sprint", "project": "KHANARY", "badge": "Today", "duration_h": 3.5, "excerpt": "Deep focus session on the fold engine refactor." },
+      { "id": "sp2", "title": "Client Review — Craft Studio", "project": "Client A", "badge": "Yesterday", "duration_h": 2.0, "excerpt": "Design review call + revisions." },
+      { "id": "sp3", "title": "Admin & emails", "project": "Admin", "badge": "Routine", "duration_h": 0.7, "excerpt": "Weekly admin block." }
+    ],
+    "schema": {
+      "session": { "primaryKey": "session_id", "fields": { "session_id": { "type": "string" }, "project_id": { "type": "string" }, "description": { "type": "text" }, "start_at": { "type": "datetime", "required": true }, "end_at": { "type": "datetime" }, "duration_sec": { "type": "integer" }, "billable": { "type": "bool" } } },
+      "project": { "primaryKey": "project_id", "fields": { "project_id": { "type": "string" }, "name": { "type": "string", "required": true }, "color": { "type": "string" }, "hourly_rate": { "type": "float" } } }
+    }
+  }
+}

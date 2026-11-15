@@ -1,0 +1,41 @@
+{
+  "@kind": "khanary.app_host.manifest.v1",
+  "role": "Apps host lane bootstrap: rest api port, stdlib op declarations, SCO registry, and sidecar targets. Paths resolve against the repository root the process runs in. MicroXcfe is projection-level: no phase authorization, no commit; executable changes route through JSON-RPC/KQL/Ch'en/XCFE/Xul.",
+  "port": 17885,
+  "models": "drivers/runtime/models.toml",
+  "model_required": true,
+  "programs_root": "data/programs",
+  "program_registration_roots": [
+    "data/host",
+    "data/manifest"
+  ],
+  "stdlib": "data/host/app-host-stdlib.json",
+  "kxml_lowering_contract": "data/grammar/xcfe-kxml-lowering.contracts.json",
+  "sco_registry": "data/host/app-host-sco-registry.json",
+  "json_program_registry": "data/host/json-program.registry.json",
+  "sidecars": {
+    "@CDATA": "GGUF",
+    "@SVG": "PNG",
+    "@XML": "FEED"
+  },
+  "micronaut_registry": "drivers/micronauts/registry.json",
+  "micronaut_drivers_root": "drivers/micronauts",
+  "css_key_grammar": "data/grammar/css.key-grammar.jsonl",
+  "asx_key_grammar": "data/grammar/asx-mini-app.key-grammar.jsonl",
+  "key_grammar_manifests": [
+    "data/manifest/gml.manifest.json",
+    "data/manifest/joke.manifest.json",
+    "data/manifest/kuhul.manifest.json",
+    "data/manifest/words.manifest.json",
+    "data/manifest/aiml.manifest.json",
+    "data/manifest/css.manifest.json",
+    "data/manifest/eliza.manifest.json",
+    "data/manifest/folds.manifest.json",
+    "data/manifest/tool.manifest.json",
+    "data/manifest/kgf.manifest.json"
+  ],
+  "widget_registry": "data/host/widget-program.registry.json",
+  "atomic_runtime_manifest": "data/host/manifests/atomic-runtime.manifest.json"
+  ,"atomic_keybase": "data/host/manifests/atomic-keybase.json",
+  "cdata_store": "data/host/storage/cdata-db.json"
+}

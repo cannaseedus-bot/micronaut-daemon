@@ -1,0 +1,144 @@
+{
+  "@program": "xjson-ml",
+  "@schema": "xjson.ml.micronaut.v1",
+  "identity": {
+    "id": "XJSON-ML-µ",
+    "name": "XJSON-ML",
+    "version": "1.0.0",
+    "authority_claim": "xcfe_gated_read_only"
+  },
+  "descriptor_status": "declarative_proposal",
+  "registered": false,
+  "registered_status": "unregistered; call register_micronaut() to activate",
+  "track_ref": "data/tracks/TENSOR-u.semantic-tracks.v1.json",
+  "bindings_ref": "shell/xjson-ml.bindings.psm1",
+  "manifest": {
+    "display_name": "XJSON ML",
+    "tagline": "JSON-native ML substrate — tensors, ops, training, inference via OpenCL/D3D11",
+    "color": "#00cc88",
+    "icon_svg": "data/micronauts/assets/xjson-ml.svg",
+    "animated_svg": "data/micronauts/assets/xjson-ml.animated.svg",
+    "profile_card": {
+      "widget": "data/host/apps/micronaut-card.asx-app.json",
+      "props": { "id": "XJSON-ML-µ", "phase": "Sek", "category": "runtime" }
+    }
+  },
+  "name": "XJSON ML",
+  "version": "1.0.0",
+  "role": "json_native_machine_learning_substrate",
+  "authority": {
+    "opcodes": "programs/opcode.table.json",
+    "tensor_storage": "tools/stb.py",
+    "model_versions": "content_addressed_cso",
+    "binary_payload": "CDATA_or_STB_reference"
+  },
+  "backend_policy": {
+    "native_compute": ["opencl_1_2", "d3d11_cs5"],
+    "browser_compute_visualization": "webgl2",
+    "forbidden": ["webgpu", "wgsl"],
+    "gpu_dispatch": "registry_selected_kernel_only"
+  },
+  "ops": {
+    "TENSOR": { "type": "primitive", "impl": "native.EVAL", "fn": "tensor" },
+    "MATMUL": { "type": "primitive", "impl": "native.EVAL", "fn": "matmul", "gpu": true, "status": "contracted" },
+    "CONV2D": { "type": "primitive", "impl": "native.EVAL", "fn": "conv2d", "gpu": true, "status": "contracted" },
+    "POOL": { "type": "primitive", "impl": "native.EVAL", "fn": "pool", "gpu": true, "status": "contracted" },
+    "RELU": { "type": "primitive", "impl": "native.EVAL", "fn": "relu", "gpu": true, "status": "implemented_webgl2" },
+    "SOFTMAX": { "type": "primitive", "impl": "native.EVAL", "fn": "softmax", "gpu": true, "status": "implemented_opencl_webgl2" },
+    "DROPOUT": { "type": "primitive", "impl": "native.EVAL", "fn": "dropout", "gpu": true, "status": "contracted" },
+    "BATCH_NORM": { "type": "primitive", "impl": "native.EVAL", "fn": "batch_norm", "gpu": true, "status": "contracted" },
+    "LOSS_MSE": { "type": "primitive", "impl": "native.EVAL", "fn": "mse_loss", "gpu": true, "status": "contracted" },
+    "LOSS_CROSS_ENTROPY": { "type": "primitive", "impl": "native.EVAL", "fn": "cross_entropy", "gpu": true, "status": "implemented_opencl" },
+    "OPTIM_SGD": { "type": "primitive", "impl": "native.EVAL", "fn": "sgd_update", "gpu": true, "status": "implemented_opencl" },
+    "OPTIM_ADAM": { "type": "primitive", "impl": "native.EVAL", "fn": "adam_update", "gpu": true, "status": "implemented_opencl" },
+    "GRADIENT": { "type": "primitive", "impl": "native.EVAL", "fn": "gradient", "gpu": true, "status": "contracted" },
+    "BACKPROP": { "type": "primitive", "impl": "native.PHASE", "fn": "backprop", "status": "contracted" }
+  },
+  "model_schema": {
+    "type": "xjson/ml/model",
+    "required": ["@id", "@version", "architecture", "weights", "training"],
+    "architecture": {
+      "layers": "array<layer>",
+      "layer_types": ["conv2d", "pool", "flatten", "dense", "attention", "norm"]
+    },
+    "weights": { "format": "xjson/tensor", "reference": "cso://" },
+    "training": { "optimizer": "adam|sgd", "loss": "registered_loss", "batch_size": "integer" }
+  },
+  "example_model": {
+    "@type": "xjson/ml/model",
+    "@id": "model://mnist_cnn",
+    "@version": "1.0.0",
+    "architecture": {
+      "layers": [
+        { "type": "conv2d", "filters": 32, "kernel_size": [3, 3], "activation": "relu", "input_shape": [28, 28, 1] },
+        { "type": "pool", "pool_size": [2, 2], "stride": [2, 2] },
+        { "type": "conv2d", "filters": 64, "kernel_size": [3, 3], "activation": "relu" },
+        { "type": "pool", "pool_size": [2, 2], "stride": [2, 2] },
+        { "type": "flatten" },
+        { "type": "dense", "units": 128, "activation": "relu", "dropout": 0.5 },
+        { "type": "dense", "units": 10, "activation": "softmax" }
+      ]
+    },
+    "weights": { "cso": "cso://QmWeightsHash", "format": "xjson/tensor", "compression": "zstd" },
+    "training": { "optimizer": "adam", "learning_rate": 0.001, "batch_size": 64, "epochs": 10, "loss": "categorical_crossentropy", "metrics": ["accuracy"] }
+  },
+  "training_job_schema": {
+    "type": "training_job",
+    "phases": ["load_data", "init_model", "train_epoch", "save_model", "verify_model"],
+    "phase_hooks": {
+      "Pop": "load_data_and_model",
+      "Wo": "bind_batch_and_weights",
+      "Yax": "select_training_route",
+      "Sek": "forward_loss_backward_optimizer",
+      "Chen": "evaluate_metrics_and_constraints",
+      "Xul": "hash_and_commit_model"
+    },
+    "forward_ops": ["TENSOR", "MATMUL", "RELU", "DROPOUT", "SOFTMAX", "LOSS_CROSS_ENTROPY"],
+    "backward_ops": ["BACKPROP", "GRADIENT"],
+    "optimizer_ops": ["OPTIM_ADAM", "OPTIM_SGD"]
+  },
+  "inference_bot_schema": {
+    "type": "inference_bot",
+    "endpoint": { "protocol": "http", "path": "/predict" },
+    "pipeline": ["SCO_LOAD", "XJSON_DECODE_TENSOR", "GPU_DISPATCH", "XJSON_FORMAT_RESPONSE"],
+    "response": { "format": "application/json", "top_k": 5 }
+  },
+  "tensor_schema": {
+    "@type": "xjson/tensor",
+    "required": ["metadata", "storage"],
+    "metadata": {
+      "shape": "integer[]",
+      "dtype": "f32|f16|i32",
+      "order": "row_major|NCHW|NHWC",
+      "stride": "integer[]",
+      "offset": "integer"
+    },
+    "payload": "CDATA base64 or stb:// reference",
+    "compression": ["zstd", "scxq2"],
+    "storage": ["memory_mapped", "stb_file", "webgl2_texture", "opencl_buffer"]
+  },
+  "automl_schema": {
+    "type": "automl_search",
+    "search_space": { "layers": ["conv2d", "pool", "dense", "attention"], "activation": ["relu", "gelu", "swish"] },
+    "optimization": { "objective": "accuracy", "algorithm": "bayesian_optimization", "trials": 100, "parallel_trials": 8 },
+    "constraints": { "flops": "<1e9", "params": "<1e7" }
+  },
+  "transfer_learning_schema": {
+    "type": "transfer_learning",
+    "base_model": "cso://",
+    "freeze_layers": "string[]",
+    "unfreeze_layers": "string[]",
+    "fine_tuning": { "learning_rate": "number", "optimizer": "adam|sgd", "epochs": "integer", "patience": "integer" },
+    "distillation": { "teacher": "cso://", "temperature": "number", "alpha": "number" }
+  },
+  "distributed_training_schema": {
+    "type": "distributed_training",
+    "worker_transport": "sidecar://",
+    "reduction": "synchronous_all_reduce",
+    "current_hardware_note": "CUDA worker declarations are portable contracts; this machine's native path is OpenCL 1.2/D3D11."
+  },
+  "performance_metrics": {
+    "status": "targets_only",
+    "note": "CPU/GPU timings require benchmark artifacts and are not asserted by this manifest."
+  }
+}

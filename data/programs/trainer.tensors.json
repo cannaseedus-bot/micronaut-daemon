@@ -1,0 +1,48 @@
+{
+  "@program": "trainer.tensors",
+  "@fold": "Pop",
+  "@node": "trainer-tensors-root",
+  "@state": {
+    "model": "E:/models/GPT2/coder_micronaut/ultrachat_coder_slerp_0p35.webgl2.dashboard.safetensors",
+    "token_bin": "E:/models/GPT2/coder_micronaut/coder_ast_json_seq256_tokens.bin",
+    "output": "E:/models/GPT2/micronaut_four_lanes_v2",
+    "model_format": "safetensors",
+    "backend": "xvm_fiber",
+    "tensor_filter": "",
+    "bias_log_reference": "field/distilled/compare.bias.jsonl",
+    "bias_evidence": null,
+    "tensors": null,
+    "training": null,
+    "verified": false
+  },
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "trainer-tensors-validate" },
+    { "@op": "CALL", "@fn": "validate_safetensors", "@args": ["$model"], "@out": "model_valid" },
+    { "@op": "CALL", "@fn": "validate_token_bin", "@args": ["$token_bin"], "@out": "dataset_valid" },
+    { "@op": "LOG", "@args": ["[trainer.tensors] safetensors and packed token data validated"] },
+    { "@op": "FOLD_EXIT", "@fold": "Wo", "@node": "trainer-tensors-validate", "@args": ["$model_valid", "$dataset_valid"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Wo", "@node": "trainer-tensors-discover" },
+    { "@op": "CALL", "@fn": "discover_hf_tensors", "@args": ["$model", "$tensor_filter"], "@out": "tensors" },
+    { "@op": "LOG", "@args": ["[trainer.tensors] discovered full HuggingFace tensor set"] },
+    { "@op": "FOLD_EXIT", "@fold": "Yax", "@node": "trainer-tensors-discover", "@args": ["$tensors"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Yax", "@node": "trainer-tensors-dispatch" },
+    { "@op": "CALL", "@fn": "load_bias_evidence", "@args": ["$bias_log_reference"], "@out": "bias_evidence" },
+    { "@op": "GPU_DISPATCH", "@args": ["fabric_kernels.hlsl", "$model", "$token_bin", "$tensors", "$backend"], "@out": "gpu_dispatch" },
+    { "@op": "CALL", "@fn": "train_hf_tensors", "@args": ["$gpu_dispatch", "$output", "$bias_evidence"], "@out": "training" },
+    { "@op": "LOG", "@args": ["[trainer.tensors] full tensor training dispatched with bias_evidence"] },
+    { "@op": "FOLD_EXIT", "@fold": "Sek", "@node": "trainer-tensors-dispatch", "@args": ["$training", "$bias_evidence"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Sek", "@node": "trainer-tensors-verify" },
+    { "@op": "CALL", "@fn": "tensor_training_sync", "@args": ["$training"], "@out": "synced" },
+    { "@op": "CALL", "@fn": "verify_safetensors_output", "@args": ["$synced", "$output"], "@out": "verified" },
+    { "@op": "LOG", "@args": ["[trainer.tensors] output verified=$verified"] },
+    { "@op": "FOLD_EXIT", "@fold": "Chen", "@node": "trainer-tensors-verify", "@args": ["$synced", "$verified"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Chen", "@node": "trainer-tensors-emit" },
+    { "@op": "SET", "@key": "training", "@args": ["$synced"] },
+    { "@op": "LOG", "@args": ["[trainer.tensors] emitted tensor-training result"] },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "trainer-tensors-emit", "@args": ["$synced", "$verified"] }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "SCFML:": [
+    "Semantic_Control_Flow_Machine_Learning",
+    "Pattern_Learning",
+    "key.grammar.scfml:v1",
+    "phase:Wo",
+    "phase:Yax",
+    "phase:Ch'en"
+  ],
+  "scfml:grammar": [
+    "grammar:data/grammar/scfml.runtime-grammar.ebnf",
+    "normalization:data/grammar/scfml.normalization.json",
+    "surface:AIML|JSON|memory_event",
+    "canonical_order:if_then_else_unknown",
+    "layer:above_XCFE"
+  ],
+  "key.grammar.scfml:v1": [
+    "schema:scfml.branch.v1",
+    "schema:scfml.pattern_learning.v1",
+    "branch:condition_then_else_unknown",
+    "pattern_learning:SUPPORTED_or_user_verified",
+    "fact_authority:false_by_default"
+  ],
+  "scfml:branch": [
+    "@if:condition",
+    "@then:SUPPORTED_branch",
+    "@else:CONTRADICTED_complement_branch",
+    "@unknown:UNKNOWN_handler",
+    "MISS_not_CONTRADICTED",
+    "UNKNOWN_not_else",
+    "else_not_not"
+  ],
+  "scfml:pattern-learning": [
+    "source:memory:event:*",
+    "source:aiml.semantic_branch:*",
+    "candidate:aiml_pattern|aiml_template|semantic_branch|key_grammar|route_pattern",
+    "promotion_requires:SUPPORTED_or_user_verified",
+    "phase:Ch'en",
+    "phase:Xul"
+  ],
+  "scfml:xcfe-boundary": [
+    "SCFML_surface->canonical_branch_row->epistemic_resolution->XCFE_move_projection",
+    "XCFE_moves:guard|select|spawn|preserve|retrieve|defer|merge|commit|rollback",
+    "SCFML_declares_XCFE_authorizes"
+  ],
+  "scfml:track": [
+    "data/tracks/SCFML-u.semantic-tracks.v1.json",
+    "authority:declarative_candidate_only",
+    "aiml_class:SCFML-µ"
+  ],
+  "scfml:aiml-class": [
+    "data/alice/semantic-control-classes.aiml",
+    "class:SCFML-µ",
+    "class:XCFE-µ",
+    "class:CFPC-µ",
+    "surface_is_not_execution_authority"
+  ]
+}

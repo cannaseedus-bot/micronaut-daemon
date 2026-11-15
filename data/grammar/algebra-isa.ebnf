@@ -1,0 +1,331 @@
+(* ============================================================ *)
+(* Algebraic Operator ISA Grammar                               *)
+(* The law surface of an executable operator.                   *)
+(* ============================================================ *)
+
+(* The Algebraic Operator ISA (AOI) is not an executor and not a policy.
+   It is the layer that says which algebraic laws a declared operator obeys,
+   so execution can decide whether an operation may be regrouped,
+   reordered, parallelised, accumulated, inverted, or safely repeated.
+
+       AIML / SRAI          select and redirect an operator
+       MathML -> KAST       parse the mathematical expression
+       Algebraic contract   validate types, identities, laws, effects
+       XCFE + K'UHUL        admit and execute the operation
+       Ch'en -> Xul         verify, then commit
+
+   AOI != XCFE Policy != Fold Kernel != Execution.
+
+   Three-valued laws are the core discipline:
+
+       true   the law holds
+       false  the law provably fails
+       null   the law is NOT APPLICABLE
+
+   null never means "unchecked". A unary operator such as SCORE has no
+   associativity at all; the associativity that matters belongs to the
+   binary operation that later combines the scalars. Collapsing null into
+   "probably fine" is the defect this grammar exists to prevent.
+
+   Mathematical associativity is NOT executable associativity. Real
+   addition is associative; IEEE-754 float addition is not. A contract
+   therefore carries a reproducibility policy in addition to its laws:
+   regrouping is licensed only when both the law and the carrier agree.
+
+   Unitality is a law, not a flag. An algebra is unital when a two-sided
+   identity exists:
+
+       1_A . x = x . 1_A = x
+
+   Unital does not imply commutative, and associative does not imply
+   commutative. Matrix multiplication is the standard witness: (AB)C = A(BC)
+   and AI = IA = A, yet AB != BA in general. That combination is exactly what
+   ordered K'UHUL transformation composition needs, so the ISA must be able to
+   state "associative, unital, not commutative" as one contract.
+
+   Bilinearity is a second, independent axis:
+
+       (x+y).z = x.z + y.z ,  z.(x+y) = z.x + z.y ,  (ax).(by) = (ab)(x.y)
+
+   Bilinearity licenses distributing a product over a sum. It does not license
+   regrouping, and it does not survive normalization: cosine similarity is a
+   derived metric, not an inner product, and does not inherit the algebra of
+   the product it normalizes.
+
+   The square-zero (trivial) extension A = K + V completes the picture. Give V
+   the zero product, v.w = 0, and set
+
+       (a,v)(b,w) = (ab, aw + bv)
+
+   There is no vw term, yet A is associative, commutative, bilinear and UNITAL,
+   because the identity 1_A = (1,0) comes entirely from K. V is an ideal whose
+   square is zero, and every submodule of V is an ideal of A contained in V.
+
+   Zero multiplication is NOT zero computation. (0,v).(0,w) = 0 says nothing
+   about <v,w>, cos(v,w) or M.v: those are external bilinear forms and module
+   actions owned by other contracts. The algebraic product is silent about
+   them, and a runtime that confuses the two would let a representational
+   algebra claim execution authority. *)
+
+(* ============================================================ *)
+(* 1. CONCRETE GRAMMAR — JSON SHAPE                             *)
+(* ============================================================ *)
+
+AlgebraRegistry ::= "{" RegistryMember ( "," RegistryMember )* "}" ;
+RegistryMember  ::= IdKey
+                  | VersionKey
+                  | DescriptionKey
+                  | AuthorityKey
+                  | VocabularyKey
+                  | StructuresKey
+                  | OperatorsKey
+                  | ReducersKey
+                  | FoldDefaultsKey
+                  | InvariantsKey
+                  | ValidationKey ;
+
+IdKey           ::= '"id"' ":" String ;
+VersionKey      ::= '"version"' ":" String ;
+DescriptionKey  ::= '"description"' ":" String ;
+AuthorityKey    ::= '"authority"' ":" Object ;
+ValidationKey   ::= '"validation"' ":" Object ;
+
+AuthorityMember ::= GrammarSrcKey
+                  | OperatorRegistryKey
+                  | ImplementationsKey
+                  | RuntimeTypesKey ;
+GrammarSrcKey   ::= '"grammar"' ":" String ;
+OperatorRegistryKey ::= '"operator_registry"' ":" String ;
+ImplementationsKey ::= '"implementations"' ":" StringList ;
+RuntimeTypesKey ::= '"runtime_types"' ":" String ;
+
+VocabularyKey   ::= '"vocabulary"' ":" Vocabulary ;
+Vocabulary      ::= "{" LawStatesKey "," ReproducibilityKey "," CarriersKey "}" ;
+LawStatesKey    ::= '"law_states"' ":" Object ;
+ReproducibilityKey ::= '"reproducibility"' ":" Object ;
+CarriersKey     ::= '"carriers"' ":" CarrierTable ;
+
+CarrierTable    ::= "{" CarrierEntry ( "," CarrierEntry )* "}" ;
+CarrierEntry    ::= String ":" CarrierSpec ;
+CarrierSpec     ::= "{" ExactKey ( "," NoteKey )? "}" ;
+ExactKey        ::= '"exact"' ":" Boolean ;
+NoteKey         ::= '"note"' ":" String ;
+
+StructuresKey   ::= '"structures"' ":" StructureList ;
+StructureList   ::= "[" Structure ( "," Structure )* "]" ;
+Structure       ::= "{" StructureMember ( "," StructureMember )* "}" ;
+StructureMember ::= StructureIdKey
+                  | FamilyKey
+                  | StructureDescKey
+                  | LawsKey
+                  | StructuralKey
+                  | ProductImageKey
+                  | BinaryOperationsKey ;
+StructureIdKey  ::= '"id"' ":" StructureName ;
+FamilyKey       ::= '"family"' ":" FamilyName ;
+StructureDescKey ::= '"description"' ":" String ;
+LawsKey         ::= '"laws"' ":" LawTable ;
+StructuralKey   ::= '"structural"' ":" StructuralTable ;
+ProductImageKey ::= '"product_image"' ":" ProductImage ;
+BinaryOperationsKey ::= '"binary_operations"' ":" StringList ;
+
+LawTable        ::= "{" ( LawEntry ( "," LawEntry )* )? "}" ;
+LawEntry        ::= LawName ":" LawRequirement ;
+LawRequirement  ::= "true" | "false" | "null" | '"*"' ;
+
+StructuralTable ::= "{" ( StructuralEntry ( "," StructuralEntry )* )? "}" ;
+StructuralEntry ::= StructuralName ":" Boolean ;
+
+OperatorsKey    ::= '"operators"' ":" ContractList ;
+ReducersKey     ::= '"reducers"' ":" ContractList ;
+ContractList    ::= "[" Contract ( "," Contract )* "]" ;
+Contract        ::= "{" ContractMember ( "," ContractMember )* "}" ;
+ContractMember  ::= OperatorKey
+                  | KindKey
+                  | ContractDescKey
+                  | AlgebraKey ;
+OperatorKey     ::= '"operator"' ":" OperatorName ;
+KindKey         ::= '"kind"' ":" ( '"operator"' | '"reducer"' ) ;
+ContractDescKey ::= '"description"' ":" String ;
+AlgebraKey      ::= '"algebra"' ":" AlgebraBlock ;
+
+FoldDefaultsKey ::= '"fold_defaults"' ":" Object ;
+InvariantsKey   ::= '"invariants"' ":" StringList ;
+
+AlgebraBlock    ::= "{" ( AlgebraMember ( "," AlgebraMember )* )? "}" ;
+AlgebraMember   ::= StructureKey
+                  | CarrierKey
+                  | ScalarFieldKey
+                  | BinaryOpKey
+                  | ProductImageKey
+                  | ClosedKey
+                  | IdentityKey
+                  | AssociativeKey
+                  | CommutativeKey
+                  | IdempotentKey
+                  | InvertibleKey
+                  | DistributiveKey
+                  | UnitalKey
+                  | BilinearKey
+                  | AnticommutativeKey
+                  | PureKey
+                  | DeterministicKey
+                  | OrderSensitiveKey
+                  | PhasePolicyKey
+                  | ReproducibilityPolicyKey
+                  | CanonicalGroupingKey
+                  | AlgebraNoteKey ;
+
+StructureKey    ::= '"structure"' ":" StructureName ;
+CarrierKey      ::= '"carrier"' ":" CarrierName ;
+ScalarFieldKey  ::= '"scalar_field"' ":" ( String | "null" ) ;
+BinaryOpKey     ::= '"binary_operation"' ":" BinaryOpName ;
+ClosedKey       ::= '"closed"' ":" Boolean ;
+IdentityKey     ::= '"identity"' ":" ( String | Number | "null" ) ;
+AssociativeKey  ::= '"associative"' ":" LawValue ;
+CommutativeKey  ::= '"commutative"' ":" LawValue ;
+IdempotentKey   ::= '"idempotent"' ":" LawValue ;
+InvertibleKey   ::= '"invertible"' ":" LawValue ;
+DistributiveKey ::= '"distributive"' ":" LawValue ;
+UnitalKey       ::= '"unital"' ":" LawValue ;
+BilinearKey     ::= '"bilinear"' ":" LawValue ;
+AnticommutativeKey ::= '"anticommutative"' ":" LawValue ;
+PureKey         ::= '"pure"' ":" Boolean ;
+DeterministicKey ::= '"deterministic"' ":" Boolean ;
+OrderSensitiveKey ::= '"order_sensitive"' ":" Boolean ;
+PhasePolicyKey  ::= '"phase_policy"' ":" PhasePolicyName ;
+ReproducibilityPolicyKey ::= '"reproducibility"' ":" ReproducibilityName ;
+CanonicalGroupingKey ::= '"canonical_grouping"' ":" GroupingSpec ;
+AlgebraNoteKey  ::= '"note"' ":" String ;
+
+GroupingSpec    ::= "{" '"kind"' ":" GroupingName "," '"chunk"' ":" Integer "}" ;
+
+LawValue        ::= "true" | "false" | "null" ;
+StructureName   ::= '"none"' | '"scalar_arithmetic"' | '"monoid"'
+                  | '"commutative_monoid"' | '"group"' | '"abelian_group"'
+                  | '"semilattice_meet"' | '"semilattice_join"' | '"lattice"'
+                  | '"ring"' | '"module"' | '"algebra"'
+                  | '"associative_algebra"' | '"unital_associative_algebra"'
+                  | '"nonassociative_algebra"' | '"inner_product_space"'
+                  | '"square_zero_extension"' ;
+FamilyName      ::= '"atomic"' | '"group_like"' | '"ring_like"'
+                  | '"lattice_like"' | '"module_like"' | '"algebra_like"' ;
+ProductImage    ::= '"none"' | '"carrier"' | '"scalar"' ;
+PhasePolicyName ::= '"none"' | '"preserve"' | '"advance"' ;
+ReproducibilityName ::= '"exact"' | '"deterministic_grouping"'
+                  | '"implementation_defined"' | '"unspecified"' ;
+GroupingName    ::= '"sequential"' | '"chunked"' | '"balanced"' | '"free"' ;
+CarrierName     ::= String ;
+BinaryOpName    ::= String ;
+LawName         ::= '"associative"' | '"commutative"' | '"idempotent"'
+                  | '"invertible"' | '"distributive"' | '"unital"'
+                  | '"bilinear"' | '"anticommutative"' ;
+StructuralName  ::= '"closed"' ;
+OperatorName    ::= String ;
+Integer         ::= JSON_Integer ;
+String          ::= JSON_String ;
+Number          ::= JSON_Number ;
+Boolean         ::= JSON_Boolean ;
+StringList      ::= "[" ( String ( "," String )* )? "]" ;
+Object          ::= JSON_Object ;
+
+
+(* ============================================================ *)
+(* 2. ABSTRACT GRAMMAR — THE LAW ALGEBRA                        *)
+(* ============================================================ *)
+
+AlgebraADT      ::= "<" "operator:" OperatorName ","
+                         "structure:" StructureName ","
+                         "carrier:" CarrierName ","
+                         "scalar_field:" ( CarrierName | "null" ) ","
+                         "laws:" LawVector ","
+                         "purity:" Purity ","
+                         "phase:" PhasePolicyName ","
+                         "reproducibility:" ReproducibilityName ">" ;
+
+LawVector       ::= "(" "assoc:" LawValue "," "comm:" LawValue ","
+                         "idem:" LawValue "," "inv:" LawValue ","
+                         "dist:" LawValue "," "unit:" LawValue ","
+                         "bilin:" LawValue "," "anticomm:" LawValue ")" ;
+
+Purity          ::= "pure" | "impure" ;
+Determinism     ::= "deterministic" | "nondeterministic" ;
+
+TypeJudgment    ::= "|-" AlgebraADT ":" StructureFamily ;
+StructureFamily ::= FamilyName ;
+
+(* The derived execution permissions. Every one of them is a theorem over the
+   declared laws, never an assumption over the operator's name. *)
+Permission      ::= "regroup"
+                  | "reorder"
+                  | "swap_with_sign"
+                  | "distribute"
+                  | "elide_unit"
+                  | "parallel"
+                  | "repeat"
+                  | "invert"
+                  | "empty_fold"
+                  | "phase_step" ;
+
+RegroupDerivation   ::= "regroup"    "<=" "assoc = true" "AND" "pure = true"
+                                      "AND" "reproducible(carrier)" ;
+ReorderDerivation   ::= "reorder"    "<=" "regroup" "AND" "comm = true"
+                                      "AND" "order_safe(carrier)" ;
+SwapDerivation      ::= "swap_with_sign" "<=" "anticomm = true" "AND" "pure = true" ;
+DistributeDerivation ::= "distribute" "<=" "bilin = true" "AND" "pure = true" ;
+UnitDerivation      ::= "elide_unit" "<=" "unit = true" "AND" "pure = true" ;
+ParallelDerivation  ::= "parallel"   "<=" "regroup" ;
+RepeatDerivation    ::= "repeat"     "<=" "idem = true" "AND" "pure = true" ;
+InvertDerivation    ::= "invert"     "<=" "inv = true" "AND" "pure = true" ;
+EmptyFoldDerivation ::= "empty_fold" "<=" "unit = true" "AND" "pure = true" ;
+PhaseDerivation     ::= "phase_step" "<=" "phase_policy = advance" "AND" "xcfe_admission" ;
+PhasePreserve       ::= "phase_policy = preserve" "implies" "NOT phase_step" ;
+
+Grouping        ::= Sequential | Chunked | Balanced | Free ;
+Sequential      ::= "left_fold" "(" "identity" "," "x_1..x_n" ")" ;
+Chunked         ::= "(" "chunk_1" ")" "op" "(" "chunk_2" ")" "op" "..." ;
+Balanced        ::= "tree" "(" "x_1..x_n" ")" ;
+Free            ::= "any_tree" "(" "permutation" "(" "x_1..x_n" ")" ")" ;
+
+(* Product type contracts: the image of the binary operation decides whether an
+   operator can be composed as a multiplication. *)
+ProductType     ::= "V x V -> V" | "V x V -> R" | "V x R -> V" | "none" ;
+AlgebraLaw      ::= ProductType "=" '"carrier"' implies Composable ;
+InnerProductLaw ::= ProductType "=" '"scalar"' implies NotComposable ;
+
+
+(* ============================================================ *)
+(* 3. SEMANTIC INVARIANTS                                        *)
+(* ============================================================ *)
+
+A1  ::= law_value in {true, false, null} ;
+A2  ::= null means NOT_APPLICABLE, never unchecked and never permitted ;
+A3  ::= a structure's laws table is binding on every contract of that structure ;
+A4  ::= '*' requires an applicable declaration: true or false, never null ;
+A5  ::= commutative = true implies order_sensitive = false ;
+A6  ::= associative = true does not imply commutative and does not license regroup ;
+A7  ::= regroup requires associative = true and pure = true ;
+A8  ::= regroup on a non-exact carrier requires reproducibility in {exact, deterministic_grouping} ;
+A9  ::= reorder additionally requires commutative = true ;
+A10 ::= repeat requires idempotent = true and pure = true ;
+A11 ::= invert requires invertible = true and pure = true ;
+A12 ::= empty_fold requires has_identity = true ;
+A13 ::= effects containing propose_delta implies pure = false ;
+A14 ::= product_image = carrier implies associative is applicable ;
+A15 ::= inner_product_space has product_image = scalar and associativity not applicable ;
+A16 ::= nonassociative_algebra requires associative = false explicitly ;
+A17 ::= deterministic = false withholds every executable algebraic permission ;
+A18 ::= lattice meet cannot widen authority: meet(A,B) <= A and meet(A,B) <= B ;
+A19 ::= every SRAI operator resolves to exactly one algebra entry ;
+A20 ::= the executable grouping is chosen from the contract, never from lexical position ;
+A21 ::= mathematical associativity is not executable associativity ;
+A22 ::= SCORE declares no binary law; its combiner does ;
+A23 ::= unital = true iff identity names an element; unital = false means no unit exists; unital = null means no product ;
+A24 ::= unital does not imply commutative; associative does not imply commutative ;
+A25 ::= an identity operator preserves the phase; only phase_policy = advance crosses a phase boundary ;
+A26 ::= bilinearity licenses distribution over addition, not regrouping; it does not survive normalization ;
+A27 ::= anticommutativity licenses swapping operands only together with a sign flip ;
+A28 ::= a derived metric does not inherit the algebra of the operation it normalizes ;
+A29 ::= square_zero_extension binds associative, commutative, unital and bilinear, and binds invertible = false ;
+A30 ::= zero multiplication is not zero computation: an internal product of zero says nothing about an external bilinear form ;
+A31 ::= a representational algebra is not an executable fold: it organizes state and grants no execution authority ;

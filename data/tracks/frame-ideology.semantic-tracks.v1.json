@@ -1,0 +1,74 @@
+{
+  "@no-eval": true,
+  "id": "frame:ideology",
+
+  "schemes": ["frameideology"],
+  "schema": "semantic-tracks.v1",
+  "description": "Abstract ideology-frame node used as a declared routing schema for ideological sense disambiguation. Projection-only; it is not an endorsed position and has no semantic or topology authority.",
+  "phase": "Yax",
+  "category": "abstract-frame",
+  "confidence": 1.0,
+  "static_weight": 0.2,
+  "health": 1.0,
+  "governs": [
+    "frame:ideology",
+    "ideology",
+    "ideological framing",
+    "political sense",
+    "position frame",
+    "coalition frame"
+  ],
+  "capabilities": [],
+  "relations": [
+    {
+      "target": "frame:argument",
+      "verb": "@defines",
+      "directed": true
+    },
+    {
+      "target": "POLITICS-µ",
+      "verb": "@related_to",
+      "directed": false
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "identify_ideology_handle",
+      "key": "frame:ideology",
+      "note": "Resolve an ideological-frame handle as routing metadata only."
+    },
+    {
+      "phase": "Yax",
+      "op": "crystallize_ideology_schema",
+      "key": "frame:ideology",
+      "note": "Expose declared ideological context without endorsing it."
+    },
+    {
+      "phase": "Sek",
+      "op": "map_ideology_to_argument_schema",
+      "key": "frame:ideology",
+      "scope": "frame:argument",
+      "note": "Map framing schema to argument structure for verification."
+    }
+  ],
+  "boundary_rules": [
+    {
+      "id": "ideology_frame_not_position",
+      "rule": "Ideological framing is a routing schema, not an endorsed position."
+    },
+    {
+      "id": "abstract_frame_not_executor",
+      "rule": "frame:ideology is a projection target only and cannot execute operations."
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "frame:ideology",
+    "manifest_access": [
+      "kuhul"
+    ],
+    "effects": [],
+    "ports": [],
+    "coordinator": false
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:khanary:semantic.json-program.v1",
+  "title": "KHANARY JSON Program",
+  "type": "object",
+  "required": ["@kind", "@route", "@verb"],
+  "properties": {
+    "@kind": { "const": "semantic.json-program.v1" },
+    "@route": { "type": "string", "minLength": 1 },
+    "@verb": { "enum": ["GET", "POST", "READ", "WRITE", "PATCH"] },
+    "@operation": { "type": "string", "minLength": 1 },
+    "@authority": { "type": "string" },
+    "@path": { "type": "string", "minLength": 1 },
+    "@approval_ref": { "type": "string", "minLength": 1 },
+    "@document": true,
+    "@patch": { "type": "object" },
+    "@bindings": { "type": "array", "items": { "type": "object" } },
+    "@state": { "type": "object" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "@verb": { "const": "POST" } } },
+      "then": { "required": ["@operation"] }
+    },
+    {
+      "if": { "properties": { "@verb": { "const": "PATCH" } } },
+      "then": { "required": ["@patch"] }
+    },
+    {
+      "if": { "properties": { "@verb": { "const": "WRITE" } } },
+      "then": { "required": ["@path", "@document", "@approval_ref"] }
+    }
+  ],
+  "additionalProperties": true
+}

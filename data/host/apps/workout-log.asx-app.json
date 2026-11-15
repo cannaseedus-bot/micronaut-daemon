@@ -1,0 +1,55 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "workout-log",
+  "@key": "⟁APP:WORKOUT_LOG",
+  "@mount": "⟁ROOT:WORKOUT_LOG",
+  "@theme": { "accent": "#f97316", "bg": "#0f0600", "surface": "#1e0e00", "text": "#ffedd5", "hero_phase": "Sek", "tagline": "Log it. Beat it." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "workouts", "component": "⟁WIDGET:WORKOUTS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "workouts": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:WORKOUT_LOG": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:LOG_WORKOUT"] },
+    "⟁ACTION:LOG_WORKOUT": { "@type": "button", "@text": "Log Workout", "@on": { "click": "workout.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:WORKOUTS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:WORKOUTS": { "@type": "feed", "@bind": "state.workouts", "@children": ["⟁WIDGET:WORKOUT_CARD"] },
+    "⟁WIDGET:WORKOUT_CARD": { "@type": "content-card", "@bind": "workout", "@on": { "view": "workout.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:WEEKLY_VOLUME", "⟁WIDGET:PR_LIST"] },
+    "⟁WIDGET:WEEKLY_VOLUME": { "@type": "stat", "@bind": "data.weekly_volume" },
+    "⟁WIDGET:PR_LIST": { "@type": "list", "@bind": "data.personal_records" }
+  },
+  "@programs": {
+    "workout.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "workout.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "workout.log": "workout.open_compose", "workout.view": "workout.view" },
+  "@imports": [{ "ref": "workout", "mode": "schema_table" }, { "ref": "set_log", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "exercise-library", "name": "Exercise Library", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Browse 500+ exercises with form tips and muscle groups." },
+      { "id": "program-bot", "name": "Program Generator Bot", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Generate a custom training program based on your goals." },
+      { "id": "progress-photos", "name": "Progress Photos", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Log weekly progress photos alongside your workouts." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "workout.log", "pattern": "LOG WORKOUT|NEW WORKOUT|TRAINING TODAY", "intent": "open_compose" },
+      { "id": "workout.pr", "pattern": "PERSONAL RECORD|NEW PR *|BEST LIFT", "intent": "view_prs" }
+    ]
+  },
+  "@data": {
+    "weekly_volume": { "label": "This Week", "sets": 48, "reps": 576, "kg_lifted": 12480 },
+    "personal_records": ["Deadlift — 140kg", "Bench Press — 90kg", "Squat — 120kg"],
+    "spotlight": [
+      { "id": "sp1", "title": "Upper Body — Push A", "type": "strength", "badge": "Latest", "duration_min": 52, "excerpt": "Bench 5×5 at 87.5kg. New rep PR on incline." },
+      { "id": "sp2", "title": "5K Run — Riverside Loop", "type": "cardio", "badge": "Best Time", "duration_min": 24, "excerpt": "24:38. Sub-25 finally in the bag." },
+      { "id": "sp3", "title": "Lower Body — Squat Day", "type": "strength", "badge": "Heavy", "duration_min": 65, "excerpt": "Squatted 120kg for 3. Back to heavy sets after deload." }
+    ],
+    "schema": {
+      "workout": { "primaryKey": "workout_id", "fields": { "workout_id": { "type": "string" }, "name": { "type": "string", "required": true }, "type": { "type": "string" }, "duration_min": { "type": "integer" }, "notes": { "type": "text" }, "date": { "type": "datetime", "required": true } } },
+      "set_log": { "primaryKey": "set_id", "fields": { "set_id": { "type": "string" }, "workout_id": { "type": "string", "required": true }, "exercise": { "type": "string", "required": true }, "sets": { "type": "integer" }, "reps": { "type": "integer" }, "weight_kg": { "type": "float" } } }
+    }
+  }
+}

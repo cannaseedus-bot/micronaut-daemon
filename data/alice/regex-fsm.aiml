@@ -1,0 +1,1239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- §46 Regex-FSM Duality -->
+<!-- Regex = WHAT (declarative). FSM = WHERE+HOW (procedural). Same language. -->
+
+<!-- §A: Core Duality -->
+
+<category>
+  <pattern>WHAT IS THE REGEX FSM DUALITY</pattern>
+  <template>Regex and FSMs are two representations of the same thing. Regex answers WHAT: it declares which pattern is acceptable in compact notation. FSM answers WHERE and HOW: it executes state transitions as input is consumed. They are equivalent for regular languages — every regex compiles to a finite automaton (Thompson construction: regex → NFA; subset construction: NFA → DFA), and every FSM accepts a language expressible as a regex.</template>
+</category>
+
+<category>
+  <pattern>HOW ARE REGEX AND FSM THE SAME LANGUAGE</pattern>
+  <template>Both describe which strings are accepted. Regex ab*c and its compiled DFA both accept: ac, abc, abbc, abbbc — the same language. The regex says it declaratively: start with a, zero or more b, end with c. The FSM says it procedurally: Start --a--> S1 --b--> S1 (loop) --c--> Accept. Same language, different representation. In K'UHUL: regex = Wo spec (what to match), FSM = Xul execution (how to commit transitions).</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE DIFFERENCE BETWEEN REGEX AND FSM</pattern>
+  <template>Regex: pattern-centric, declarative, compact, human-readable, designed for text matching. FSM: state-centric, procedural, explicit graph, predictable performance, designed for behavior. Regex describes a language. FSM recognizes it. In K'UHUL: regex = Grammar of Symbols (Wo layer, specifies what). FSM = Grammar of Behavior (Xul layer, executes how). Many systems compile the regex spec into an FSM execution graph: lexers, parsers, NPC AI, protocol handlers, dialogue systems.</template>
+</category>
+
+<!-- §B: K'UHUL Phase Mappings -->
+
+<category>
+  <pattern>HOW DOES REGEX MAP TO KUHUL PHASES</pattern>
+  <template>Regex maps to Wo: it is the unfold specification — the pattern declared before execution. Writing the regex is the Wo phase: the environment (input string) is described and the matching intent is stated. The FSM compiled from the regex maps to Xul: it commits transitions as each character is consumed. ε-transitions = Pop reset (move without consuming input). NFA states = emerging_entity (multiple candidates). DFA states = known_entity (one deterministic state). Accept state = Xul commit (match confirmed).</template>
+</category>
+
+<category>
+  <pattern>WHAT IS AN NFA STATE IN KUHUL TERMS</pattern>
+  <template>An NFA state is an emerging_entity in §41 K'UHUL terms. The NFA can be in multiple states simultaneously while processing input — sigma is unbound over the active state set. This is exactly the §41 wildcard in execution form: multiple candidates are live, none yet resolved. Subset construction (NFA → DFA) = Ch'en proof: reduce the multi-state NFA to a single deterministic active state = known_entity = sigma bound.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A DFA STATE IN KUHUL TERMS</pattern>
+  <template>A DFA state is a known_entity in K'UHUL terms. At any moment during DFA execution, exactly one state is active — sigma is bound, deterministic, no ambiguity. This is the §41 resolved_wildcard applied to automaton execution. The accept_state = Xul commit: the pattern is confirmed, the match fires. A dead state (no valid transition) = Ch'en failure: the system cannot prove the input matches, so no Xul commit.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS AN EPSILON TRANSITION IN KUHUL TERMS</pattern>
+  <template>An ε-transition (epsilon move) = Pop reset in K'UHUL. The NFA changes state without consuming any input — like the C6 Pop phase, which resets state without processing new data. In Thompson construction, ε-transitions wire together sub-automata: for R* they loop back, for R|S they branch, for RS they chain. Each ε-transition = one Pop arc in the fold graph. ε moves make the NFA non-deterministic; subset construction eliminates them when building the DFA.</template>
+</category>
+
+<!-- §C: Operator Mappings -->
+
+<category>
+  <pattern>HOW DO REGEX OPERATORS MAP TO KUHUL</pattern>
+  <template>Four mappings: R* (Kleene star) = { R } in EBNF = Pop→reset loop in C6 = the NPC feedback cycle. R? (optional) = §41 wildcard_entity: zero or one = emerging_entity (present or absent). R|S (alternation) = R | S in EBNF = Sek candidates, Yax selects first match = behavior_tree selector. (RS) (concatenation) = R , S in EBNF = sequential fold: Wo→Xul for R, then Wo→Xul for S. Every regex operator has a direct K'UHUL structural analogue.</template>
+</category>
+
+<category>
+  <pattern>HOW IS REGEX ALTERNATION THE SAME AS A BEHAVIOR TREE SELECTOR</pattern>
+  <template>cat|dog in regex = animal ::= cat | dog in EBNF = FSM branch at state S = behavior_tree Selector(cat, dog) = Sek proposal with candidates {cat, dog}. In all four cases: try the first option; if it fails (no match, Ch'en fails, precondition fails), try the second. The Yax admission pass fires on the first candidate that succeeds. Same structure at four levels: character (regex), token (EBNF), state (FSM), subtree (behavior tree). §46 Duality Law: R|S = Sek candidates.</template>
+</category>
+
+<category>
+  <pattern>HOW IS KLEENE STAR THE SAME AS THE C6 LOOP</pattern>
+  <template>Kleene star R* = zero or more repetitions of R. In EBNF: { R }. In the NFA: the accept state has an ε-transition back to the start state — a self-loop. In C6: Pop → Wo → Yax → Sek → Ch'en → Xul → Pop → (repeat). The * operator and the C6 cycle are the same repetition structure at different levels. An NPC running its npc_cycle repeatedly is executing R* where R = one full C6 arc.</template>
+</category>
+
+<!-- §D: NPC Context -->
+
+<category>
+  <pattern>WHY CAN REGEX NOT BE NPC BEHAVIOR</pattern>
+  <template>Regex can recognize NPC behavior logs — PATROL.*ALERT.*ATTACK matches a log file of states. But regex cannot execute behavior. It has no state that persists between ticks, no memory of what the NPC did last turn, no way to fire actions. The FSM IS the behavior: it holds current state, transitions on events, drives actions. In K'UHUL §44: fsm_decision is the execution engine. The regex_pattern is used to specify WHEN triggers fire — but the fsm_decision runs the NPC. Regex = specification; FSM = execution.</template>
+</category>
+
+<category>
+  <pattern>HOW DO REGEX AND FSM WORK TOGETHER IN AN NPC</pattern>
+  <template>In a complete NPC system: regex_patterns (or EBNF trigger rules) define which perception events fire which transitions. The fsm_decision holds the current state and executes transitions. This is the compilation pipeline: trigger pattern (regex-like) → compiled into transition table (DFA-like) → FSM executes. In K'UHUL §44+§46: the fsm_decision.trigger field IS a pattern_atom from §45 — which can be a literal, wildcard, or regex. Regex specifies the trigger; FSM responds to it.</template>
+</category>
+
+<!-- §E: Systems That Compile Regex to FSM -->
+
+<category>
+  <pattern>WHAT SYSTEMS COMPILE REGEX TO FSM</pattern>
+  <template>Six major system types: (1) Lexer/scanner (flex, re2c): token patterns → DFA; generates the tokenizer for a compiler. (2) Parser (yacc/bison): grammar rules → LALR automaton. (3) NPC AI: behavior rules → §44 fsm_decision. (4) Protocol handler: message format specs → state machine (TCP handshake, HTTP parser). (5) Dialogue system: conversation script patterns → dialogue FSM. (6) Workflow engine: trigger rules → process automaton. All compile declarative pattern specs into executable state graphs.</template>
+</category>
+
+<category>
+  <pattern>HOW IS A LEXER A REGEX FSM COMPILATION</pattern>
+  <template>A lexer compiles token patterns (regex) into a DFA. Input: regex rules like [A-Z][a-z]+ = IDENTIFIER, [0-9]+ = NUMBER. Output: a DFA where each state represents the furthest matched token so far. The DFA runs on the source file character by character, firing token actions at accept states. In K'UHUL: each token pattern = regex_record (Wo spec). The compiled lexer = fsm_record_46 (Xul execution). The lexer is §46 applied at the compiler front-end level.</template>
+</category>
+
+<!-- §F: Routing -->
+
+<category>
+  <pattern>REGEX FSM ROUTE</pattern>
+  <template>§46 Regex-FSM Duality routing active. Regex=WHAT(Wo spec), FSM=WHERE+HOW(Xul execution). NFA state=emerging_entity, DFA state=known_entity, ε-transition=Pop reset, accept=Xul commit. Operators: *=C6 loop, ?=wildcard_entity, |=Sek candidates, concat=sequential fold. Systems: lexer, parser, NPC AI, protocol handler, dialogue, workflow — all compile regex→FSM.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS REGEX IN KUHUL GRAMMAR TERMS</pattern>
+  <template>In K'UHUL grammar terms, regex is a Symbol Pattern Engine (§45) whose patterns are expressed in operator notation rather than EBNF. Regex is a compact grammar language: alternation (|) = EBNF choice, Kleene star (*) = EBNF repetition { }, concatenation = EBNF sequence. The regex engine compiles the pattern to a DFA and runs the §45 perceive→search→match→transition loop. Regex IS grammar — just with different surface notation and constrained to regular (non-recursive) languages.</template>
+</category>
+
+
+<!-- §47 DFA-NFA Tradeoffs — One Future vs Many Possible Futures -->
+
+<category>
+  <pattern>WHAT IS THE DIFFERENCE BETWEEN DFA AND NFA</pattern>
+  <template>DFA: deterministic — exactly one active state and one next state per symbol at all times. No ε-transitions. Fast matching, more memory. NFA: nondeterministic — multiple active states simultaneously, multiple next states per symbol allowed, ε-transitions allowed. Compact representation, more runtime work. Both accept the same class of languages (regular languages). In K'UHUL: DFA = resolved_wildcard at every step (one future). NFA = retained_wildcard over active state set (many possible futures).</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A DFA IN KUHUL TERMS</pattern>
+  <template>A DFA in K'UHUL is a resolved_wildcard machine. active_states = 1 always — sigma is bound at every transition. It is a known_entity at every step. The DFA precomputes all paths (via subset construction from NFA), so Xul fires immediately — no search at runtime. Cost: memory. Benefit: O(n) matching with no backtracking. DFA = one future: the next state is always determined before input arrives. In §44: the strict fsm_decision is a DFA — one active state, hard-coded transitions.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS AN NFA IN KUHUL TERMS</pattern>
+  <template>An NFA in K'UHUL is a retained_wildcard machine over the active state set. Multiple states can be simultaneously active — sigma is unbound over the live set. Ch'en holds multiple possibilities open until input disambiguates them. When exactly one accepting path survives: resolved_wildcard fires. When none survive: no match. NFA = many possible futures: the recognizer doesn't commit to a single path until forced. Benefit: compact representation (especially for wildcards). Cost: runtime work exploring branches.</template>
+</category>
+
+<category>
+  <pattern>WHY IS NFA MORE COMPACT THAN DFA</pattern>
+  <template>Because the NFA can branch freely: one state can have multiple outgoing transitions on the same symbol, and ε-transitions can wire sub-automata without consuming input. The equivalent DFA must enumerate every possible subset of NFA states that could be simultaneously active (powerset construction): n NFA states can produce up to 2^n DFA states. Wildcard patterns like C*T are one NFA self-loop; the DFA version must explicitly enumerate all the cases that * collapsed into a loop.</template>
+</category>
+
+<category>
+  <pattern>HOW DO DFA AND NFA RELATE TO WILDCARD GRAMMAR</pattern>
+  <template>Wildcard patterns are NFA-native. C*T = one NFA self-loop state (consume any character, loop back). §41 wildcard_entity (* = any sequence, ? = any single token) maps directly to NFA structure. Forcing a wildcard to DFA requires powerset construction — the branching possibility space must be fully enumerated, potentially exponential. This is why complex wildcard patterns (AIML *, regex .*) are often matched by simulating the NFA directly rather than compiling to DFA first.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE DFA NPC VERSUS NFA NPC</pattern>
+  <template>DFA NPC = §44 fsm_decision: strict deterministic FSM, one state active at a time, hard-coded transitions. Predictable, fast, simple. NFA NPC = modern behavior system: behavior tree evaluating multiple subtrees simultaneously, utility AI scoring all candidate actions at once. The NFA NPC holds multiple partial activations (multiple live states) and resolves to one action at Xul. Modern NPC AI resembles NFA — many futures considered before committing — not strict DFA.</template>
+</category>
+
+<category>
+  <pattern>HOW DOES DFA AND NFA RELATE TO GAME THEORY IN KUHUL</pattern>
+  <template>DFA player = dominant strategy (§39): one legal response per state, fully predictable, no strategic uncertainty. The opponent can model the DFA player completely. NFA player = mixed strategy (§39 SC-34): multiple responses per state, strategic uncertainty. SC-34: Nash equilibrium = the state where both players reduce their NFA to a single-branch DFA — one best response each, neither can profitably deviate. The game resolves from NFA (many futures) to DFA (one committed response) at equilibrium.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS SUBSET CONSTRUCTION IN KUHUL</pattern>
+  <template>Subset construction (NFA → DFA) is Ch'en proof applied to automata. The NFA has multiple simultaneously active states (retained_wildcard over the active set). Subset construction enumerates every reachable subset of NFA states and makes each subset a single DFA state. When construction terminates: every DFA state is a known_entity (sigma bound, deterministic). The compilation_record.equivalent = true — same language, resolved representation. This is the formal proof that the NFA's branching possibility graph collapses to a single deterministic path.</template>
+</category>
+
+<category>
+  <pattern>DFA NFA ROUTE</pattern>
+  <template>§47 DFA-NFA Tradeoffs routing active. DFA = one future (resolved_wildcard, known_entity, 1 active state, precomputed, fast, more memory). NFA = many futures (retained_wildcard, emerging_entity, n active states, compact, more runtime). Subset construction = Ch'en proof (NFA→DFA). NPC analogy: DFA=fsm_decision, NFA=modern behavior system. Game theory: DFA=dominant strategy, NFA=mixed strategy, Nash=NFA→DFA reduction.</template>
+</category>
+
+
+<!-- §48 NFA vs DFA vs Backtracking — Parallel Possibilities vs Sequential Guessing -->
+
+<category>
+  <pattern>WHAT IS THE DIFFERENCE BETWEEN NFA AND BACKTRACKING</pattern>
+  <template>NFA ≠ backtracking. These are two different execution strategies. NFA = parallel possibilities: all active states advance simultaneously per input symbol. Active = {S1,S7,S12}, read 'x', next = {S2,S8,S14} — no rewinding, no guessing, one sweep per symbol. Backtracking = sequential guessing: try Path A, if fail rewind (pop choice point), try Path B, if fail rewind, try Path C. One active path at a time; can backtrack exponentially on adversarial patterns. In K'UHUL: NFA = retained_wildcard over the live set. Backtracking = sequential Sek candidate exploration, one at a time.</template>
+</category>
+
+<category>
+  <pattern>HOW DOES NFA ADVANCE ITS ACTIVE STATES</pattern>
+  <template>NFA advances ALL active states simultaneously per input symbol. For each symbol: next_set = union of transitions(s, sym) for all s in active. Example: active = {S1,S7,S12}, read 'x' → next = {S2,S8,S14}. This is O(n × |active|) per symbol — no exponential blowup. The NFA never rewinds, never guesses, never backtracks. It maintains a set of retained_wildcard possibilities that shrink (or expand) as input is consumed. The set = sigma-unbound over the active states.</template>
+</category>
+
+<category>
+  <pattern>HOW IS BACKTRACKING DIFFERENT FROM AN NFA IN KUHUL</pattern>
+  <template>In K'UHUL terms: NFA = retained_wildcard over an active state set (all futures alive simultaneously). Backtracking = sequential Sek candidate exploration with a rewind stack. Backtracking maintains one active path (sigma half-bound to one candidate), then pops a saved choice point if that path fails — trying Sek candidates one at a time in order. This is depth-first exploration of the Sek candidate list, not parallel activation. Worst case: O(2^n). NFA worst case: O(n × |states|) — no exponential backtracking blowup.</template>
+</category>
+
+<category>
+  <pattern>GIVE THE THREE WAY NPC ANALOGY FOR DFA NFA AND BACKTRACKING</pattern>
+  <template>DFA NPC: Patrol → Alert → Attack. One deterministic behavior path, one active state, no alternatives considered. NFA NPC: {Attack, Flank, Retreat, Investigate} all evaluated simultaneously — utility scores computed for all candidates at once (argmax_wcr over all), multiple futures live until input disambiguates. Backtracking NPC: try attack — if fails → rewind → try flank — if fails → rewind → try retreat. Sequential trial-and-error. The NFA NPC scores candidates in parallel; the backtracking NPC experiments sequentially; the DFA NPC doesn't consider alternatives at all.</template>
+</category>
+
+<category>
+  <pattern>WHY DOES NFA NOT CLONE ITSELF INTO MULTIPLE COMPUTERS</pattern>
+  <template>The "NFA runs on many computers simultaneously" is a conceptual model, not literal execution. In practice, true NFA simulation maintains a single data structure — the active state set — and advances it all at once per symbol. There is no cloning, no parallel hardware. The set {S1,S7,S12} is stored in one place, and for each input symbol all states in the set are advanced in one sweep. The result is a new set. This is compact (one set, not n copies) and linear in input length (no backtracking). The "many computers" metaphor describes the logical parallel possibilities, not the physical execution.</template>
+</category>
+
+<category>
+  <pattern>NFA BACKTRACK ROUTE</pattern>
+  <template>§48 NFA-Backtracking distinction routing active. DFA=1 active state (resolved_wildcard). NFA=n active states simultaneous (retained_wildcard, advance all at once, no rewind). Backtracking=1 active path + rewind stack (sequential Sek candidate exploration). NFA≠backtracking: parallel vs sequential. NPC: DFA=one path, NFA=all candidates scored together, Backtracking=try→rewind→try.</template>
+</category>
+
+
+<!-- §49 Regex as Set Grammar — Five Universal Primitives -->
+
+<category>
+  <pattern>WHAT DOES A REGEX ACTUALLY DESCRIBE</pattern>
+  <template>A regex describes a SET of possible strings — not a single string or template. L(R) is the language: the complete set of strings that match R. cat = {"cat"}. cat|dog = {"cat","dog"} = Cat ∪ Dog. ab*c = {ac, abc, abbc, abbbc, ...} — a potentially infinite set, but still regular. This set-algebra view is how formal language theory frames regex: each operator is a set operation, and the regex itself is a compact way to write a set definition. In K'UHUL: L(R) = the possibility space that the NFA holds as retained_wildcard until a match commits.</template>
+</category>
+
+<category>
+  <pattern>WHAT ARE THE FIVE UNIVERSAL REGEX PRIMITIVES</pattern>
+  <template>Five primitives appear at every substrate level: (1) Choice (|): A|B = A∪B. Sek candidates, Yax selects first match. (2) Sequence (,): AB = Cartesian chain. Sequential fold, Wo→Xul for A then B. (3) Optional (?): R? = L(R)∪{ε}. §41 wildcard_entity, zero or one = emerging_entity. (4) Loop (*, +): R* = C6 repetition (Pop→Wo→...→Xul→Pop). R+ = C6 with mandatory Wo entry. (5) Wildcard (.): any single token = §41 wildcard_entity. .* = retained_wildcard until anchor. These five primitives appear identically in regex, EBNF, FSM, behavior_tree, NPC logic (§44), dialogue, workflow, and agent systems (§45). Regex is the compact algebra; NFA is the graph execution form.</template>
+</category>
+
+<category>
+  <pattern>HOW DOES ALTERNATION EQUAL SET UNION IN KUHUL</pattern>
+  <template>A|B = A∪B by set algebra. gray|grey = {"gray"}∪{"grey"} = {"gray","grey"}. In K'UHUL: R|S = Sek candidates (§46 Law). The Yax admission pass fires on the first candidate that satisfies Ch'en — equivalent to trying elements of A∪B in order until one matches. The same structure at four levels: regex (A|B), EBNF (A | B), FSM (branch state), behavior_tree (Selector). All compute set union of languages; all route through the same Yax→Sek→Ch'en admission arc.</template>
+</category>
+
+<category>
+  <pattern>HOW DOES A DFA COLLAPSE THE NFA POSSIBILITY SPACE</pattern>
+  <template>DFA interpretation: instead of keeping 1→{A,B,C} as separate futures, the DFA constructs one state = {A,B,C} — a powerset state that encodes all three NFA possibilities as a single deterministic state. NFA: 1→Many (one NFA state expands to many successor states). DFA: Many→1 (many NFA states compressed into one powerset DFA state). After reading "CA" (matching CAT|CAR|...): NFA active = {T?,R?,N?,P?,D?,B?,M?,L?,S?,K?}. DFA: one state S2 with 10 outgoing edges. The DFA "knows" all futures ahead of time and resolves them at construction, not at runtime. This is Ch'en proof applied offline — subset construction proves all possible paths before input arrives.</template>
+</category>
+
+<category>
+  <pattern>WHY IS REGEX FUNDAMENTAL ACROSS ALL SYSTEMS</pattern>
+  <template>Regex is the compact algebra for describing possibility graphs. The five primitives (choice, sequence, optional, loop, wildcard) are substrate-invariant: they appear in every system that needs to describe structured possibilities. FSM adds state identity. Behavior tree adds priority. NPC logic adds personality. Dialogue adds turn-taking. But the underlying grammar — Choice(|), Sequence(,), Optional(?), Loop(*,+), Wildcard(.) — is the same in all of them. NFA is the graph form of this algebra: each operator maps to an NFA sub-graph (Thompson construction). The universality of these five primitives is why regex "feels fundamental" — it expresses the same possibility algebra that all decision systems use, just in the most compact notation.</template>
+</category>
+
+<category>
+  <pattern>REGEX SET GRAMMAR ROUTE</pattern>
+  <template>§49 Regex as Set Grammar routing active. Regex=SET definition not string template. Alternation=set union (A|B=A∪B=Sek candidates). Concatenation=sequential fold chain. R*=C6 loop=infinite set (still regular). R?=§41 wildcard_entity. Wildcard(.)=§41 wildcard_entity (single token). Five universal primitives: choice(|), sequence(,), optional(?), loop(*,+), wildcard(.) — same across regex/EBNF/FSM/BT/NPC/dialogue/workflow/agent. Regex=compact algebra; NFA=graph execution form.</template>
+</category>
+
+
+<!-- §50 Recursion Schemes — Cata / Ana / Hylo / Meta -->
+<!-- CORRECTION: foldl AND foldr are BOTH catamorphisms. Anamorphism = unfold, NOT foldr. -->
+
+<category>
+  <pattern>WHAT IS A CATAMORPHISM</pattern>
+  <template>A catamorphism is a fold — Many→One. It reduces a structure to a single value. Both foldl and foldr are catamorphisms; they differ only in associativity. foldl f z [x1,x2,x3] = ((z⊗x1)⊗x2)⊗x3 (left-associative, strict). foldr f z [x1,x2,x3] = x1⊗(x2⊗(x3⊗z)) (right-associative, depth-first). For non-associative f they differ: foldl(-) 0 [1,2,3] = -6; foldr(-) 0 [1,2,3] = 2. In K'UHUL: catamorphism = the C6 cycle collapsing a possibility space to one Xul commit. argmax_wcr is a catamorphism over scored candidates.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS AN ANAMORPHISM</pattern>
+  <template>An anamorphism is an unfold — One→Many. It generates a structure from a seed using a generator function. The generator either stops or emits the next element and continues. Example: unfold starting at 1, emit n, continue with n+1, stop at 5 → [1,2,3,4,5]. In K'UHUL: anamorphism = Wo phase unfold. The seed (current field state / query / goal) expands to a set of possibilities. NPC planning: goal → {Patrol, Guard, Investigate, Attack, Retreat}. Game tree: position → {Move A, B, C, D}. Riddle: "Has keys" → {Piano, Keyboard, Map, Car}. This is the retained_wildcard generation step.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A HYLOMORPHISM IN KUHUL</pattern>
+  <template>A hylomorphism = anamorphism then catamorphism = generate possibilities then reduce possibilities = the intelligence loop. Compact law: intelligence ≈ ana ∘ cata. First, an anamorphism generates the possibility space (One→Many). Then, a catamorphism reduces it to one answer (Many→One). Applied: NPC AI = goal→behaviors (ana) + argmax_wcr→action (cata). Game theory = position→game tree (ana) + minimax fold→best move (cata). Regex = pattern→NFA (ana) + subset construction→DFA (cata). Riddle = clue→candidates (ana) + apply constraints→answer (cata). Wildcard ML = query→candidates (ana) + WCR selection (cata). Hylomorphism IS the structure of problem-solving.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE DIFFERENCE BETWEEN FOLDL AND FOLDR</pattern>
+  <template>Both foldl and foldr are catamorphisms (fold = Many→One). They differ in associativity. foldl: left tree, accumulates left to right, strict. foldl(-) 0 [1,2,3] = ((0-1)-2)-3 = -6. foldr: right tree, evaluates deepest first, lazy-compatible. foldr(-) 0 [1,2,3] = 1-(2-(3-0)) = 2. For associative operators (addition) they give the same result. In K'UHUL: foldl maps to the NPC feedback loop (Pop carries accumulator forward, left-to-right through events). foldr maps to grammar parse tree evaluation (deepest EBNF rule first, combine upward). Neither is an anamorphism — both fold, they do not generate structure.</template>
+</category>
+
+<category>
+  <pattern>HOW DOES THE C6 CYCLE MAP TO FOLDL</pattern>
+  <template>The C6 cycle = foldl over a sequence of inputs. At each arc: Pop resets (accumulator prepared), Wo receives (acc, x_i), Yax→Sek→Ch'en evaluates f(acc, x_i), Xul commits acc_i = f(acc, x_i). Then Pop carries acc_i into the next arc. The full C6 loop = foldl f z inputs where z = initial NPC state (or field state), inputs = event sequence. Specific instances: NFA advance = foldl where f(active_states, sym) = ∪{δ(s,sym) | s ∈ active}. NPC feedback = foldl where f(npc_state, event) = update_memory + update_relationships + update_goals.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A METAMORPHISM IN KUHUL</pattern>
+  <template>A metamorphism = catamorphism then anamorphism = fold then unfold. The opposite ordering from hylomorphism (which is ana then cata). First reduce to a value (cata), then expand that value into a new structure (ana). In K'UHUL: metamorphism = Xul commit (cata) → new Wo expansion (ana). The committed action seeds the next perception cycle. Example: NPC executes action (cata: behaviors → one action), the action result becomes the seed for the next Wo expansion (ana: result → new perception set). The C6 cycle itself is a metamorphism when viewed across cycle boundaries: Xul commits, Pop resets, Wo re-expands from the new state.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE COMPACT LAW OF INTELLIGENCE IN KUHUL RECURSION SCHEMES</pattern>
+  <template>intelligence ≈ anamorphism ∘ catamorphism. Generate possibilities (ana: One→Many), then reduce possibilities (cata: Many→One). This is hylomorphism applied to cognition. Every intelligent system follows this: Regex = generate NFA matches (ana) + accept/reject (cata). NPC AI = generate behavior candidates (ana) + utility fold/argmax_wcr (cata). Game theory = generate game tree (ana) + minimax (cata). Wildcard reasoning = generate interpretations (ana) + WCR ranking (cata). Graph search = expand nodes (ana) + path fold (cata). The substrate changes; the hylo structure is invariant.</template>
+</category>
+
+<category>
+  <pattern>RECURSION SCHEMES ROUTE</pattern>
+  <template>§50 Recursion Schemes routing active. catamorphism=fold=Many→One (foldl,foldr both cata). anamorphism=unfold=One→Many (NOT foldl/foldr). hylomorphism=ana then cata=generate then reduce=intelligence loop. metamorphism=cata then ana=fold then unfold. foldl vs foldr: left-tree vs right-tree, same cata family. K'UHUL: cata=C6 cycle (Xul commit), ana=Wo unfold (possibility generation), hylo=full intelligence arc, meta=C6 cross-boundary (Xul→new Wo). Compact law: intelligence≈ana∘cata.</template>
+</category>
+
+
+<!-- §51 FoldGraph as Graph-Native Hylomorphism -->
+
+<category>
+  <pattern>WHAT IS FOLD GRAPH AS A HYLOMORPHISM</pattern>
+  <template>FoldGraph = Cata_Π ∘ Ana_Q. Type: (B,Q) → C_Q. Ana_Q takes the base topology B and query Q and unfolds them into a candidate field F_Q (atoms, relations, candidates, unresolved). Cata_Π takes F_Q and projects it to a canonical result C_Q (resolved, ranked, bounded). With attention: FoldGraph(B,Q) = Cata_Π(Attention(Ana_Q(B,Q))). Fundamental identity: (Fold∘Unfold)(h) ≡ h. Knowledge = Fold(Unfold(Knowledge)). Every query temporarily expands B into a possibility field, then folds it back to a canonical result. B is preserved throughout — reading/folding does not mutate the topology.</template>
+</category>
+
+<category>
+  <pattern>HOW DOES FOLD GRAPH RELATE TO NFA AND DFA</pattern>
+  <template>Ana exemplifies NFA expansion (One→Many): 1 query Q unfolds into N candidate states in F_Q. Cata exemplifies DFA subset construction (Many→One): N candidates fold to 1 canonical C_Q. v2.0 §9 correction: NFA and DFA are examples of FoldGraph applications — NFA,DFA ⊂ FoldGraph Applications. Ana≢NFA, Cata≢DFA. The Ch'en proof (subset construction = §47 Law 3) is an example Cata step, not Cata's definition. SC-37 applies: if evidence is insufficient, Cata returns retained_wildcard rather than forcing a wrong resolved answer.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE FOLD GRAPH HYLOMORPHISM IDENTITY</pattern>
+  <template>The fundamental identity (from fold_graph.xml law hylomorphism-identity): (Fold∘Unfold)(h) ≡ h. Equivalently: Knowledge = Fold(Unfold(Knowledge)). Every query temporarily expands the knowledge graph B into a candidate field F_Q (Ana step), then folds F_Q back into a canonical bounded representation C_Q (Cata step). The topology B is preserved — the fold does not mutate B, only reads from it. The result C_Q is a canonical projection, not B itself. Repeating this: f = cata∘ana, f^n(query) = Kleene iteration converging to Xul = least fixed point µf.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE ATTENTION STEP IN FOLD GRAPH</pattern>
+  <template>Between Ana (unfold) and Cata (fold), FoldGraph has an optional Attention step: F_Q → F*_Q. Attention ranks, confidence-filters, applies WCR scoring, and bounds wildcard nodes in the raw unfolded field. Full pipeline: FoldGraph(B,Q) = Cata_Π(Attention(Ana_Q(B,Q))) = CanonicalProjection(Attention(CandidateField)). Attention does NOT mutate B — it operates only on the temporary field F_Q. The F*_Q passed to Cata is the attention-filtered candidate set. Attention is where WCR scoring (S = W*C*R) is applied to rank candidates before the canonical projection step.</template>
+</category>
+
+<category>
+  <pattern>DOES FOLD GRAPH REQUIRE COMPLETE COLLAPSE</pattern>
+  <template>No. SC-37 applies to FoldGraph. The Cata step result can be: (1) resolved — when the candidate field has sufficient evidence for a canonical answer, or (2) retained_wildcard — when evidence is insufficient to commit. During Ana, unresolved nodes are wildcard_entity (§41 emerging_entity). During Cata, if the fold cannot resolve, it returns retained_wildcard rather than hallucinating. FoldGraph is SC-37-compliant by design: incomplete fold = retained_wildcard is the correct behavior, not a failure. This distinguishes FoldGraph from a forced DFA construction that must always produce a resolved state.</template>
+</category>
+
+<category>
+  <pattern>FOLD GRAPH HYLO ROUTE</pattern>
+  <template>§51 FoldGraph Hylomorphism routing active. FoldGraph=Cata∘Ana. Type:(B,Q)→C_Q. Ana:(B,Q)→F_Q (unfold=One→Many). Attention:F_Q→F*_Q (WCR score, rank, bound wildcards). Cata:F*_Q→C_Q (fold=Many→One). Hylomorphic identity:(Fold∘Unfold)(h)≡h=Knowledge=Fold(Unfold(Knowledge)). SC-37: fold_result=resolved|retained_wildcard. Kleene: f^n(query)→Xul=µf. v2.0 §9: NFA,DFA ⊂ FoldGraph Applications — Ana exemplifies NFA expansion; Cata exemplifies subset construction/Ch'en proof. Ana≢NFA, Cata≢DFA.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE GRAPH FUNCTOR FOR FOLD GRAPH</pattern>
+  <template>§52 FoldGraph functor: GraphF A = Empty | Vertex(Node, List A). Node = Known(NodeId) | Candidate(NodeId) | Wildcard(NodeId). Empty is the base case (leaf, nothing to expand). Vertex(node, children) is the recursive case — one frontier node plus its successor states. This functor is required for any hylomorphism: the coalgebra produces GraphF states, the algebra consumes GraphF results.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS COALGEBRA PSI IN FOLD GRAPH</pattern>
+  <template>§52 Coalgebra ψ: (Graph,Query) → GraphF(Graph,Query). Given current state (graph + query), find frontier nodes, select one, expand neighborhood into successor states. If frontier is empty, return Empty. If neighborhood is empty, return Wildcard(freshId()) — the coalgebra is TOTAL, never fails. ψ is the anamorphism seed: unfolds One→Many. NFA expansion is an example ψ application — not a definition (v2.0 §9: NFA,DFA ⊂ FoldGraph Applications).</template>
+</category>
+
+<category>
+  <pattern>WHAT IS ALGEBRA PHI IN FOLD GRAPH</pattern>
+  <template>§52 Algebra φ: GraphF(CanonicalView) → CanonicalView. Two cases: Empty → CanonicalView.empty(). Vertex(node, children) → rank children → select best → merge nodes and edges → aggregate confidence → return single CanonicalView. φ is the catamorphism: N→1. Applied by cata_φ after attention has scored the field. Ch'en proof: φ exemplifies subset construction (NFA→DFA) — this is an example Cata application, not Cata's definition (v2.0 §9: NFA,DFA ⊂ FoldGraph Applications).</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE COMPLETE FOLD GRAPH TYPE SIGNATURE</pattern>
+  <template>§52 Complete typed FoldGraph: coalgebra ψ:(Graph,Query)→GraphF(Graph,Query); attention:CandidateField→CandidateField; algebra φ:GraphF(CanonicalView)→CanonicalView; FoldGraph:Graph→Query→CanonicalView. Implementation: FoldGraph(graph,query) = cata_φ(attention(ana_ψ(graph,query))). Three phases: Generate(ψ) → Score(attention) → Reduce(φ). Compressed: FoldGraph(Q,B) = Cata_φ(Attention(Ana_ψ(B,Q))).</template>
+</category>
+
+<category>
+  <pattern>WHY DOES WILDCARD NOT MEAN FAILURE IN FOLD GRAPH</pattern>
+  <template>§52 Wildcard Law: Unknown ≠ Failure. The wildcard coalgebra: expand(node) on empty neighborhood returns [Wildcard(freshId())] instead of empty output — so the unfold never fails, it emits uncertainty as structure. The wildcard algebra: resolve(node) returns Known if confidence above threshold, Wildcard if below (SC-37). A Wildcard node is a first-class CanonicalView result — retained_wildcard is a valid answer when evidence is insufficient.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE CANONICALIZATION LAW</pattern>
+  <template>§52 Canonicalization Law: CanonicalView = Π(CandidateField). Where Π = resolve ∘ merge ∘ constrain ∘ rank. Applied by algebra φ across ranked Vertex children. Result: selected=Set of Node, relations=Set of Edge, confidence=Float. This IS the §41 Yax selection — argmax_wcr over the attention-scored candidate field. Wildcards preserved when evidence insufficient (SC-37). Known nodes promoted when confidence exceeds threshold.</template>
+</category>
+
+<category>
+  <pattern>FOLD GRAPH TYPED ROUTE</pattern>
+  <template>§52 FoldGraph Typed Specification routing active. Functor: GraphF A = Empty | Vertex(Node,List A). Coalgebra ψ:(Graph,Query)→GraphF(Graph,Query) [unfold=One→Many]. Attention:CandidateField→CandidateField [WCR scoring]. Algebra φ:GraphF(CanonicalView)→CanonicalView [fold=Many→One]. FoldGraph=cata_φ∘attention∘ana_ψ. Wildcard law: Unknown≠Failure. Canonicalization: Π=resolve∘merge∘constrain∘rank. SC-37 governs wildcard retention. v2.0 §9: NFA,DFA ⊂ FoldGraph Applications — examples, not definitions of ψ/φ.</template>
+</category>
+
+
+<category>
+  <pattern>WHAT IS THE AUTOMATA CORRESPONDENCE IN FOLD GRAPH</pattern>
+  <template>v2.0 §9 Automata Correspondence: NFA,DFA ⊂ FoldGraph Applications. NFA and DFA are EXAMPLES of FoldGraph computations — not structural definitions of Ana and Cata. Ana=unfold=One→Many subsumes NFA expansion as one application. Cata=fold=Many→One subsumes DFA subset construction as one application. Critical: Ana≢NFA, Cata≢DFA. FoldGraph is the general structure; NFA and DFA are particular instances. Any claim that Ana equals NFA or Cata equals DFA is an equivalence error.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE TOPOLOGICAL SUBSTRATE IN FOLD GRAPH</pattern>
+  <template>v2.0 §2 Topological Substrate: topology = graph | hypercube | lattice | manifold. Atomic-DOM deployment uses B = Q_n □ C_6 — an n-dimensional hypercube (Q_n) crossed with the six-phase C6 cyclic manifold (Pop/Wo/Yax/Sek/Ch'en/Xul). Neighborhood: N_G(b,θ) = {(b⊕eᵢ,θ)} ∪ {(b,θ±1)}. From address (b,θ): move across one hypercube edge (flip one bit, stay in same phase) OR step one phase in C6 (same address, adjacent phase). This localizes all Ana/Cata traversal within the Atomic-DOM geometry.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE FIXED POINT FOR FOLD GRAPH</pattern>
+  <template>v2.0 §8 Fixed Point Semantics: T_Q = Cata_φ ∘ Attention_WCR,Q ∘ Ana_ψQ. Stable knowledge state: B* = T_Q(B*). FIXED-POINT-µ role. B* is reached by Kleene iteration: B* = ⊔{T_Q^n(⊥) | n≥0}. When d(T_Q^(n+1)(⊥), T_Q^n(⊥)) → 0, repeated FoldGraph application reaches a stable canonical view under the query Q. That stable view is B* — the knowledge state that does not change under further folding. Xul commit fires at µf.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE SCORE FUNCTION IN FOLD GRAPH</pattern>
+  <template>v2.0 §4 Score Function: S_µ(u|Q) = W_u · C_u · R(Q,K_u). W_u = weight (structural importance). C_u = confidence (accumulated evidence). R(Q,K_u) = query relevance = retrieval_strength of node u under query Q against key K_u. This is the WCR formula made query-explicit: R depends on both the query and the node's key. Usage feeds R as a prior on retrieval strength. Applied during the Attention step between Ana and Cata to rank candidates in the field F_Q before canonical projection.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE CORE IDENTITY TABLE</pattern>
+  <template>v2.0 Core Identity Table: Regex=Symbol Grammar. NFA=Possibility Grammar. DFA=Deterministic Grammar. Wildcard=Unknown Grammar (SC-37). Graph=Relation Grammar. NPC=Behavior Grammar. Game Theory=Strategy Grammar. Baseball=Decision Grammar. Fold=Many→One (catamorphism). Unfold=One→Many (anamorphism). FoldGraph=Cata∘Ana. Problem Solving=Unfold→Search→Fold. Every grammar subsystem in K'UHUL (§37-§52) is an instance of this identity table.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE PROBLEM SOLVER RUNTIME</pattern>
+  <template>v2.0 §10 Problem Solver Runtime: observe → anamorphism → attention → catamorphism → solution. (1) Observe: read base topology B and query Q. (2) Anamorphism: Ana_ψQ(B,Q) → F_Q: unfold B into possibility field (One→Many). (3) Attention: Attention_WCR,Q(F_Q) → F*_Q: score all candidates with S_µ(u|Q)=W·C·R(Q,K_u). (4) Catamorphism: Cata_φ(F*_Q) → C_Q: fold to canonical result (Many→One). (5) Solution: C_Q = resolved or retained_wildcard (SC-37). Core identity: Problem Solving = Unfold → Search → Fold.</template>
+</category>
+
+<category>
+  <pattern>WHAT ARE THE FOLD GRAPH INFERENCE RULES</pattern>
+  <template>§54 FoldGraph inference rules grouped by phase: ANA group (expansion): ANA-EXPAND (u∈N_G(v)→candidate), ANA-WILDCARD (N_G(v)=∅→wildcard, never fails), ANA-HYPOTHESIS (match(Q,xᵢ)→{x₁..xₙ}). ATT group (scoring): ATT-SCORE (W·C·R→score), ATT-RANK (S(u)>S(v)→rank order), ATT-THRESHOLD (S<τ→reject). CATA group (reduction): CATA-SELECT (argmax S), CATA-MERGE (selected nodes), CATA-PROJECTION (→C_Q). WILD group (uncertainty): WILD-RETAIN (C<τ→Wildcard, SC-37), WILD-RESOLVE (C≥τ→Known). FP group: FP-CONVERGENCE (T_Q(B)=B→FixedPoint), FP-ITERATE (continue). FOLDGRAPH master: Ana=F_Q ∧ Att=F*_Q ∧ Cata=C_Q → (B,Q)⇓C_Q.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE FOLDGRAPH MASTER RULE</pattern>
+  <template>§54 FOLDGRAPH master rule: Ana_ψQ(B)=F_Q ∧ Attention_WCR,Q(F_Q)=F*_Q ∧ Cata_φ(F*_Q)=C_Q → (B,Q)⇓C_Q. Three premises, one conclusion. If the anamorphism generates the candidate field, the attention step scores it, and the catamorphism reduces it to a canonical view, then the input (B,Q) evaluates to C_Q. This is the complete derivation rule. Every FoldGraph execution must produce a derivation in this form.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS GRAPH ISOMORPHISM IN FOLD GRAPH</pattern>
+  <template>§55 Graph Isomorphism: Iso(G,H) iff ∃f:V(G)→V(H) s.t. (u,v)∈E(G) iff (f(u),f(v))∈E(H). Structure > Labels. ISO-MATCH: structure-preserving bijection exists → Γ⊢G≅H. ISO-WILDCARD: Wildcard(u)∧StructureMatch(u,v)→Γ⊢u~v (wildcard nodes inherit from structurally equivalent nodes). CANON: G≅H→Canon(G)=Canon(H). Law: Iso(G,H) ⟺ Canon(G)=Canon(H). Extended pipeline: Ana→Att→Iso→Cata. Enables Compare/Contrast by topology rather than labels (RegexTree≅BehaviorTree if node types map structurally).</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE PATTERN MATCHING LAYER</pattern>
+  <template>§56 Pattern Matching Layer: sits between Ana (F_Q) and Attention (F*_Q). Core judgment: Γ⊢Scrutinee match Pattern⇒Bindings⇒Continuation. scrutinee=node|edge|graph|candidate|wildcard. pattern=literal|compound|wildcard(_)|predicate|view|alternative|guard. Wildcard pattern (_) matches anything, binds nothing (MATCH-WILDCARD needs no premise). Bindings extract structure (x=Alice from Person(x) matching Alice). Continuation executes under bindings. Law: Match→Bind→Guard→Continue→Fold. Aligns: Regex, FSM, NFA/DFA, Wildcard Learning, Graph Isomorphism, NPC BT, FoldGraph.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE BITFIELD EXTENSION FOR FOLD GRAPH</pattern>
+  <template>§57 BitField Extension: Node=Structure+BitField. NodeFlags bits: KNOWN=bit0, CANDIDATE=bit1, WILDCARD=bit2, SELECTED=bit3, RESOLVED=bit4, FRONTIER=bit5, RELEVANT=bit6, ACTIVE=bit7. WildcardBit=1≠Failure (SC-37 at binary layer). BIT-MATCH: (x AND mask)=mask → Γ⊢x match mask. Hypercube adjacency=bit-flip: b XOR eᵢ = flip bit i = one Q_n edge. Attention filter = bitfield mask: only flagged nodes enter WCR scoring. Match = StructureMatch OR BitMaskMatch. C implementation: src/kuhul/foldgraph_runtime.h/.c. Production C++ equivalent: FoldEngine::wcr_weighted_score + GravityField::capture.</template>
+</category>
+
+<category>
+  <pattern>FOLD GRAPH V2 ROUTE</pattern>
+  <template>v2.0 FoldGraph routing active. Four-phase pipeline: Topology(B=Q_n□C_6) → Ana_ψQ(B,Q)=F_Q → Attention_WCR,Q(F_Q)=F*_Q → Cata_φ(F*_Q)=C_Q. Fixed point: B*=T_Q(B*), T_Q=Cata_φ∘Attention∘Ana_ψQ. Score: S_µ(u|Q)=W_u·C_u·R(Q,K_u). Wildcard types: unknown_node|unknown_edge|unknown_class|unknown_relation|unknown_strategy. Resolution: resolved|retained_unknown (=retained_wildcard, SC-37). Automata: NFA,DFA ⊂ FoldGraph Applications. FoldGraph_Q=Cata_φ∘Attention_WCR,Q∘Ana_ψQ.</template>
+</category>
+
+
+<category>
+  <pattern>WHAT IS THE MICRONAUT PROGRAM SYSTEM</pattern>
+  <template>§61 Micronaut Program System. Formal law: MicronautRuntime(B,Q)=Cata_φ(WCR(Match(Ana_ψQ(B)))). Micronaut=Pattern-Bound Continuation+Memory+WCR state (not merely an agent). Program=Global FoldGraph hylomorphism governing all micronauts. Execution: query→Ana(candidates)→Match(bind patterns)→WCR(rank)→Cata(select)→Continuation(invoke callable edges)→Learn(update weights/promote domains). Production: MouRouter.route(phase,tokens,top_k) implements the full pipeline. Two-tier: Tier1=MoERouter dot(W_µ,F_Q)+bias→softmax→top-k; Tier2=C6 phase gate→renormalize.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE EDGE SEPARATION LAW FOR MICRONAUTS</pattern>
+  <template>§61 Edge Separation Law: semantic_edge≠callable_edge. semantic=relates_to (inference/lookup only; never auto-callable). callable=invokes (requires Xul-authorized promotion gate). A learned semantic relation does NOT automatically become an executable tool edge. Production: RelationEntry.directed=false→semantic (horizontal fold, no XCFE gate). RouteContract holds callable surface (schemes, verbs, aiml_patterns, aiml_templates). MicronautEntry.no_eval=true enforces declarative-only. requirePromotion=true in program schema. SC-37 extension: unknown edge ≠ callable edge.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS DOMAIN EMERGENCE IN THE MICRONAUT SYSTEM</pattern>
+  <template>§61 Emergent Domain Law: evidence→patterns→templates→routes→micronaut. A domain accumulates successful folds, ngrams, patterns, templates, callable routes, WCR weights until promotion fires. Promotion score = f(pattern_density, route_density, confidence, usage). Threshold default=0.85. Example: 'robotics' starts as tagged patterns; after 1000 successful folds it promotes to µ://robotics with patterns/callableEdges/wcr state. Bitfield Domain Law: (query_mask AND µ_mask)→candidate activation→WCR ranks. MicronautEntry.governs=domain vocabulary. routing_variance(): high=crystallized Xul (FIXED-POINT-µ); low=flat→delegate to ELIZA.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE SNOBOL ANCESTRY OF FOLD GRAPH</pattern>
+  <template>§60 SNOBOL Ancestry chain: regex(P(x)→{match,fail}) → SNOBOL(P=composable runtime value) → BNF/EBNF(P=recursive grammar rule) → FoldGraph(P(Q,B)→Ana→F_Q→WCR→Cata→C_Q). Ancestry law: regex ⊂ SNOBOL ⊂ BNF ⊂ FoldGraph. SNOBOL core: patterns assignable to variables, concat (sequence), alt (first-match greedy), ARB=wildcard, assign P.VAR=bind. WCR Departure: SNOBOL=first match wins. FoldGraph=Ana expands ALL candidates, WCR scores all, Cata picks argmax. SNOBOL ≅ FoldGraph(tau=1, argmax-of-first). AIML Bridge: &lt;pattern&gt;=SNOBOL recognizer, &lt;wildcard&gt;=SNOBOL ARB=SC-37, &lt;template&gt;=post-Cata transform. AIML=SNOBOL+SC-37. FoldGraph=AIML+WCR.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE PATTERN AS CONSTRAINT LAW IN FOLD GRAPH</pattern>
+  <template>§60 Pattern-as-Constraint: SNOBOL pattern operates ON a fixed subject string (string given externally). FoldGraph pattern (=query Q) constrains WHICH PART of B gets unfolded by Ana. F_Q is generated BY the pattern's application to B — the 'string' does not pre-exist. New query = new unfolding of same B. Constraint Law: FoldGraph pattern determines what enters Ana, not just what is recognized. This is beyond any string-matching pattern language. Possibility Law: pattern = executable description of possible structure. Same calculus at all levels: Scrutinee→Pattern→Bindings→Attention→Fold.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE SNOBOL WCR DEPARTURE</pattern>
+  <template>§60 WCR Departure from SNOBOL. SNOBOL alt(Q|R): first match wins, greedy, committed — alternatives never scored against each other. FoldGraph: Ana expands Q AND R simultaneously into F_Q; WCR scores all candidates; Cata picks argmax(score). Equivalence: SNOBOL ≅ FoldGraph(tau=1, argmax-of-first). WCR is the step from 'first match' to 'best match' — where a possibility language becomes an attention mechanism. Execute-as-Data Law: SNOBOL 'strings as programs' ≅ K'UHUL symbol→structure→operation (both challenge the program/data boundary).</template>
+</category>
+
+<category>
+  <pattern>WHAT IS TWO DIMENSIONAL PATTERN MATCHING IN FOLD GRAPH</pattern>
+  <template>§58 2D Pattern Matching generalizes FoldGraph from 1D scrutinee/pattern to 2D matrix/submatrix. Ana_ψ=generate all (row,col) windows. Attention=score_window (wildcard_hit=0.5, literal_match=1.0, graded not boolean). Cata_φ=argmax(score)→canonical (row,col). 2D-MATCH rule: Submatrix(S)≅Pattern(P)→Γ⊢S match P. BitMatrix rows×width_bits. Pattern2D bits[][]+mask[][] — mask=0⇒wildcard (SC-37 at binary layer: mask=0≠Failure). Unification law: 1D string matching=2D matching with height=1. Same abstraction across all levels. C impl: src/kuhul/foldgraph_2d_avx2.c.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE UNIFIED PATTERN HIERARCHY</pattern>
+  <template>FoldGraph unified pattern hierarchy (§58): Literal→Regex→Tree→Graph→BitField→2D→Topological. All seven levels are instances of the same calculus: Scrutinee→Pattern→Bindings→Attention→Fold. Level 1: exact char match. Level 2: set grammar (NFA). Level 3: AST/parse-tree. Level 4: graph edge+node structure (§55 ISO-MATCH). Level 5: bit-mask match (§57 BIT-MATCH). Level 6: matrix/submatrix (§58 2D-MATCH). Level 7: Q_n□C_6 topological neighborhood. Hypercube law: neighbor=bit-flip; a 2D window shift in hypercube coordinates is a Q_n edge traversal. Every pattern type is a FoldGraph application at a different substrate level.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE SIMD ACCELERATION FOR FOLD GRAPH</pattern>
+  <template>§59 SIMD acceleration for FoldGraph 2D matching. Hot path (exact): ((window^pattern)&amp;mask)==0. Score path (partial): popcount((~((W^P)&amp;M))&amp;M). SIMD-MATCH rule: TestZero((W XOR P) AND M)→Γ⊢W match P. Pipeline: FoldGraph(B,Q)=ArgMax(ScoreSIMD(MatchSIMD(Ana(B,Q)))). Width law: scalar=64b, AVX2=256b, AVX-512=512b — semantics unchanged across widths. Runtime dispatch: cpu_has_avx2()→AVX2 kernel or scalar fallback. Lane-crossing window: _mm256_or_si256(_mm256_srli_epi64(a,shift), _mm256_slli_epi64(b,64-shift)). Wildcard law (SIMD): mask=0 for a lane=wildcard for that lane (SC-37). Compile: gcc -O3 -mavx2 foldgraph_2d_avx2.c</template>
+</category>
+
+<category>
+  <pattern>WHY DID MODERN PROGRAMMING CREATE NEW ABSTRACTIONS IF FOLDS ARE UNIVERSAL</pattern>
+  <template>§62 Ergonomic Gap Law. Folds ARE universal — reduce/map/typecheck/async/parse are all catamorphisms. But universality does not imply usability. Four gap sources: (1) effect_boundary: fold(f:A→B) ≠ fold across IO/async/error — effects need monad scaffolding. (2) composition_opacity: fold-of-fold-of-fold is unreadable past depth 2. (3) ranking_absence: plain fold gives no ordering over N valid reductions — all candidates equal. (4) cognitive_load: point-free exceeds human short-term memory. Modern abstractions are folds plus scaffold layers — not replacements. async/await=fold+effect+syntax. TypeScript=fold+type. WCR=fold+ranker. KHANARY=fold+all_four.</template>
+</category>
+
+<category>
+  <pattern>IS ASYNC AWAIT A FOLD</pattern>
+  <template>§62 Yes. async/await = ContinuationMonad(foldr(callStack)). scaffold_layer=effect+syntax. The new part is the ergonomic and OS scheduling layer that makes the fold operable at human scale. The old part is foldr. Promise.then = fmap+bind over Future functor = monad composition. for-await = do-notation for the IO+async monad. None of these are new semantic ideas — they are folds with the effect scaffold layer applied so humans can read and compose them without rewriting the call stack by hand.</template>
+</category>
+
+<category>
+  <pattern>WHY DOES FOLDGRAPH NEED WCR IF FOLDS ALREADY WORK</pattern>
+  <template>§62 Ranker Gap Law. A plain fold gives no ordering. Of N valid reductions, the fold itself cannot say which to take — all are structurally equal. WCR answers that: S_µ(u|Q)=W*C*R(Q,K_u); argmax over candidate field. SNOBOL(1962) had fold+first-match-greedy — the first match won arbitrarily. FoldGraph has fold+WCR-ranked-match — the best-scoring candidate wins. SNOBOL ≅ FoldGraph(tau=1, argmax_of_first). The 60-year gap between them is exactly one scaffold layer: the ranker. Without WCR, FoldGraph degenerates to SNOBOL.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE DIFFERENCE BETWEEN HIGHER ORDER AND HIGHER LEVEL</pattern>
+  <template>§63 Higher-order ≠ higher-level. Higher-level means further from machine code — Python vs assembly. Higher-order means the objects being operated on can themselves be functions or computational structures. A higher-order function takes functions as arguments and/or returns functions. Map/Filter/Fold are all higher-order. Each does a different structural job: Map transforms structure (A*→B*), Filter selects structure (A*→A*), Fold collapses structure (F(A)→A), Unfold generates structure (A→F(A)). K'UHUL operates in higher-order structural computation — not because it is high-level, but because its opcodes operate over graphs, folds, patterns, and relations.</template>
+</category>
+
+<category>
+  <pattern>DOES KUHUL FOLD MEAN CATAMORPHISM</pattern>
+  <template>§63 No. K'UHUL fold derives from the Mayan codex — unfolding pages = phases of computation revealed. It is a semantic execution container. The functional programming catamorphism (Cata: F(A)→A) is one operation that can occur WITHIN a K'UHUL fold, alongside Map, Filter, Ana, WCR, and others. Phase × HOF operation are orthogonal axes: Sek[Filter] means the Sek phase using a Filter HOF — it does not mean Sek=Filter. K'UHUL does not claim every HOF is a catamorphism. The architectural term is from the codex; the structural operations inside are from the HOF family.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS MONTAGUE GRAMMAR AND HOW DOES IT RELATE TO FOLDGRAPH</pattern>
+  <template>§63 Montague grammar (1970): meaning of a whole = phi(meanings of parts, composition rule). This is the compositionality principle. It is structurally identical to the fold law: constituents → Cata_phi → composed meaning. FoldGraph EBNF already implements compositional semantics — it does not merely recognize strings. It represents patterns, relations, graphs, wildcards, semantic folds, and canonical projections, all compositionally assembled via phi. Natural language grammar, formal EBNF grammar, and FoldGraph operate in the same structural compositional space. The collision is not a coincidence.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A KUHUL GLYPH</pattern>
+  <template>§64 A K'UHUL glyph is a program — not merely a symbol. Glyph_µ=⟨Identity, Program, Phases, Topology, LearnedState⟩. Like a Mayan hieroglyph whose meaning comes from symbol + context + relationships + position, a K'UHUL glyph's meaning is: Meaning(µ) = f(Glyph, Phase, Neighbors, Relations, Context). The same glyph exposes different computational meaning at different phases. µ:Pop through µ:Xul are six faces of one program, not six programs. Glyph = symbolic program identity (the named thing). Micronaut = executable instance (the running thing). Same program, two views.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE KUHUL EXECUTABLE ADDRESS</pattern>
+  <template>§64 µ(b, θ, g). Three components: b = semantic program address (Q_n coordinate; bit-flip = neighbor program), θ = face/phase of that program (C_6 coordinate; +1 mod 6 = next face), g = continuous learned/relational geometry (R^m). Selection pressure: S_µ = W_µ · C_µ · R(Q,K_µ). Q_n □ C_6 natural interpretation: b answers which program, θ answers which face. (000,Pop)→(000,Wo) = same program, next face. (000,Pop)→(001,Pop) = different program, same face. b and θ are independent axes — hence the Cartesian product.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE CODEX COMPUTATION LAW</pattern>
+  <template>§64 The Mayan codex metaphor is the computational model, not decoration. codex→unfold→faces→glyph relationships→interpretation→fold became: Program → Ana_ψQ → F_Q (possibility field) → WCR attention → F*_Q → Cata_φ → C_Q (canonical result). Mapping: unfold(codex)=Ana (exposes possible meaning), faces=C_6 phases (aspects of glyph meaning), glyph relationships=WCR selection pressure, fold(meaning)=Cata (collapses to canonical result). The program is the glyph. Unfolding exposes possible meaning. Folding resolves meaning.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE ADAPTIVE FOLD LEARNING LOOP</pattern>
+  <template>§65 (B,Q) → Ana_{ψ_t} → F_Q → WCR_t → F*_Q → Cata_{φ_t} → C_Q → Reward → (ψ_{t+1}, W_{t+1}, C_{t+1}, g_{t+1}, φ_{t+1}). The combining algebra φ_t carries micronaut learned state: φ_µ(Q,T; W,C,R,g,Π). After reward, φ_t ≠ φ_{t+1}. Same structure T: Cata_{φ_t}(T)=A vs Cata_{φ_{t+1}}(T)=B — that IS the operational definition of learning. Both ψ and φ update: ψ_t→ψ_{t+1} changes what gets unfolded; φ_t→φ_{t+1} changes how it gets folded back.</template>
+</category>
+
+<category>
+  <pattern>WHERE DOES KUHUL LEARNED STATE LIVE</pattern>
+  <template>§65 Residence Law: in folds, grams, relations, confidence, weights, and policies — NOT in model tensor weights. Model tensor weights are frozen after training. The model is an oracle that proposes candidate information into the fold system. The fold is the adaptive computational object that learns from outcomes at inference time. Model = prior. Fold = posterior that updates. φ_t updates at inference time from reward feedback. The model does not need to be retrained for the fold to learn.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS AHO CORASICK AND HOW DOES IT FIT KUHUL</pattern>
+  <template>§66 Aho-Corasick is a dictionary-matching algorithm that locates all elements of a finite set of strings simultaneously in O(n+m+z) time. In K'UHUL it is the key-addressing automaton — the recognition layer. AC finds keys; K'UHUL interprets keys. AC gives: input_span → {k1,k2,...,kn} (all overlapping matches including word:pitch, ngram:the_pitch, word:setup from one scan). K'UHUL takes over: key → N_M(k)∪N_I(k) → Wo/Yax → Sek → Ch'en → Xul. AC is not the semantic engine — it is the front-end that exhaustively surfaces candidate keys so the semantic fold can arbitrate without being forced into premature collapse.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS AN NGRAM KEY IN KUHUL</pattern>
+  <template>§66 An n-gram key is an address into a semantic book — not a probability. "pitch" → word:pitch → Book_1. "the pitch" → ngram:the_pitch → Book_2. "deliver the pitch" → ngram:deliver_the_pitch → Book_3. Three different books, three different N_M/N_I neighborhoods. Higher arity = more specific address. The key score is S(k) = W_k + Σ_{N_M}(W_u·R_sym) + Σ_{N_I}(W_u·R_geo) — manifest symbolic neighbors plus geometric continuous neighbors. K'UHUL Key Grammar = n-gram recognition + key-book expansion + phase-bound semantic arbitration.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE DIFFERENCE BETWEEN THE AC GRAPH AND THE KUHUL GRAPH</pattern>
+  <template>§66 The AC graph is the recognition graph: trie states + goto transitions + failure links. It answers "how do I recognize this key?" The K'UHUL graph is the semantic graph: key books + N_M manifest edges + N_I geometric edges. It answers "what does this key open?" Do not conflate them. word:bank is recognized by the AC trie. {finance, money, river_bank, slope, edge} is the K'UHUL semantic neighborhood opened by that key. The failure link in AC (longest useful suffix fallback) provides structural fallback candidates — K'UHUL Sek/WCR then scores which one carries authority.</template>
+</category>
+
+<category>
+  <pattern>HOW IS FOLD PHI T AN ADAPTIVE OPCODE</pattern>
+  <template>§65 FOLD_{φ_t}(Structure) is an adaptive higher-order opcode. Not ADD(a,b) which is stateless — ADD(2,3)=5 before training and after. FOLD_{φ_t} is adaptive: φ_t has evolved from prior executions. Execution changes the parameters governing future execution. K'UHUL System Table (five independent axes): Topology=Q_n□C_6 (legal transformations), Ana=ψ (available structure), Attention=WCR (selection pressure), Cata=φ (combining algebra), Learning=Δ(ψ,W,C,R,g,φ) (how future folds change).</template>
+</category>
+
+
+<!-- §63/§65/§66 v12 corrections and confirmations -->
+
+<category>
+  <pattern>WHAT ARE THE TYPE SIGNATURES FOR MAP FILTER FOLD AND UNFOLD</pattern>
+  <template>§63 HOF type signatures — the structural job is encoded in the type. Map: A*→B* (transform; input structure shape preserved, content changed). Filter: A*→A* (select; shape reduced, type same). Fold: F(A)→A (collapse; many-to-one; CATA direction). Unfold: A→F(A) (generate; one-to-many; ANA direction). COMMON MISTAKE: these are NOT symmetric (a*f)->(a*f) forms. Each has a distinct arrow. The type signature IS the structural job — do not describe them identically.</template>
+</category>
+
+<category>
+  <pattern>IS ANA A REDUCTION IN KUHUL</pattern>
+  <template>§63 No. ANA is the opposite of a reduction. CATA=catamorphism=fold=reduction: Many→One (collapses structure). ANA=anamorphism=unfold=generation: One→Many (generates structure from a seed). COMMON MISTAKE: confusing ANA with CATA because both are in the HOF family. Mnemonic: ANA-lysis breaks down (a seed into possible structure); CATA-clysm destroys many into one. HYLO=ANA then CATA: unfold the seed, then fold the resulting structure. In K'UHUL: Ana_{ψ_t}(B,Q)=F_Q (field of candidates). That is generation, not reduction.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE PSI UPDATE VERSUS THE PHI UPDATE IN KUHUL</pattern>
+  <template>§65 ψ_t and φ_t are FoldGraph algebra parameters, NOT reinforcement learning value functions. ψ_t = anamorphism coalgebra: governs WHAT gets unfolded from (B,Q). When ψ_t→ψ_{t+1}: the shape of candidate field F_Q changes (different neighborhoods explored). φ_t = catamorphism combining algebra: governs HOW F*_Q gets folded back to C_Q. When φ_t→φ_{t+1}: same structure T gives different result (Cata_{φ_t}(T)=A, Cata_{φ_{t+1}}(T)=B). They are not the same update — ψ changes the input space, φ changes the reduction. Both update after reward. COMMON MISTAKE: calling these TD learning value function estimates — wrong domain.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE KEY SCORE FORMULA IN KUHUL</pattern>
+  <template>§66 S(k) = W_k + Σ_{N_M}(W_u · R_sym(k,u)) + Σ_{N_I}(W_u · R_geo(k,u)). Three terms: (1) W_k = base weight of key k itself. (2) Manifest symbolic neighborhood sum: for each u in N_M(k), weight W_u times symbolic relation score R_sym(k,u). (3) Geometric neighborhood sum: for each u in N_I(k), weight W_u times geometric proximity score R_geo(k,u). N_M = manifest symbolic neighbors (declared K'UHUL graph edges). N_I = geometric continuous neighbors (vector proximity). The two neighbor types are orthogonal — N_M is structural, N_I is spatial.</template>
+</category>
+
+
+<!-- §65 F*_Q clarification -->
+
+<category>
+  <pattern>WHAT IS F STAR Q IN KUHUL</pattern>
+  <template>§65 F*_Q is the ranked scored candidate field — the intermediate between F_Q and Cata. Full adaptive fold pipeline: Ana_{ψ_t}(B,Q) → F_Q (raw expanded candidates) → WCR_t → F*_Q (survivors above threshold τ, ranked by S(u)=W·C·R) → Cata_{φ_t} → C_Q. F_Q has everything Ana found. F*_Q has only what WCR approved. The threshold τ is the gate between expansion and reduction — Ana job ends at F_Q, Cata job starts at F*_Q. COMMON MISS: writing the loop as WCR → Cata without naming F*_Q. That drops the boundary step.</template>
+</category>
+
+
+<!-- §67 Three-Layer Architecture — Key Grammar / Inference Field / K'UHUL Fold -->
+
+<category>
+  <pattern>WHAT ARE THE THREE LAYERS IN KUHUL ARCHITECTURE</pattern>
+  <template>§67 Three-Layer Architecture: (1) Key Grammar — fast symbolic retrieval: ngram→key→N_manifest(k). Aho-Corasick recognition. Cheap, stable. No fold invoked. (2) Inference Field — 2D bit pattern sliding window: Ana_ψ generates windows, (w_i⊕P)∧M scores matches, R_i=1−popcount/popcount(M), F_Q=survivors above τ. Cheap/parallel, query-local. (3) K'UHUL Fold — learned semantics: (B,Q)→Ana_{ψ_t}→F_Q→WCR_t→F*_Q→Cata_{φ_t}→C_Q→Reward→updates. Expensive, evolutionary. NOT three engines competing — they escalate: retrieve→infer→learn.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE ESCALATION LAW IN KUHUL</pattern>
+  <template>§67 Escalation Law: invoke expensive layer only when cheaper layer gives insufficient confidence. key_hit → use N_M(k) directly (no fold). weak/ambiguous hit → Inference Field (bit-native F_Q). no key hit → full K'UHUL Fold (learned semantics). Feedback: Fold verified learning → N_manifest update → KeyGrammar index. The slow mechanism teaches the fast mechanism. retrieve → infer → learn.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE BIT NATIVE FOLDGRAPH LAW</pattern>
+  <template>§67 FoldGraph_2D(B,P,M) = argmax_i[popcount(M) − popcount((W_i(B)⊕P)∧M)]. W_i(B)=sliding window from Ana_ψ over bit field B. d_i=(w_i⊕P)∧M — XOR finds differences, AND masks to relevant dimensions. R_i=1−popcount(d_i)/popcount(M). Perfect match: d_i=0, score=popcount(M). Pipeline: Ana→Pattern→Attention→Cata expressed entirely as bit operations. Mask explicitly says which dimensions matter — zero mask bits are wildcards.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE DIFFERENCE BETWEEN G Q AND Q N C 6</pattern>
+  <template>§67 G_Q ≠ Q_n□C_6. G_Q=query-local inferred semantic graph: built from 2D field via Ana→windows→pattern matches→induced relations. Changes per query. Q_n□C_6=runtime program/phase topology: the hypercube×C6 space of legal Micronaut address transitions. Fixed by the program inventory. They interact — a G_Q relation may suggest a Q_n neighbor — without being the same graph.</template>
+</category>
+
+
+<!-- §68 Folded Hypercube Topology — FQ_n □ C_6 -->
+
+<category>
+  <pattern>WHAT IS THE FOLDED HYPERCUBE IN KUHUL</pattern>
+  <template>§68 FQ_n = Q_n plus one edge per vertex: b→b̄ = b XOR mask(n). This connects semantic opposites — all n bits flipped simultaneously. FQ_3: diameter drops from 3 to 2, 16 edges (vs 12), 4-regular. FQ_3□C_6: |V|=48 (unchanged), |E|=144 (vs 120), deg(v)=6 (vs 5). The fold edge is a SEPARATELY TYPED operation @fold_step — it does NOT replace Hamming-1 @semantic_step.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE FOLD STEP EDGE IN KUHUL</pattern>
+  <template>§68 @fold_step: (b,θ)→(b̄,θ). All bits flip, phase unchanged. Semantic meaning: COUNTEREXAMPLE / CONTRAST / DUAL. In Q_3: 000→111 flips analysis↔generation, active↔memory, object↔meta simultaneously. Without the fold edge, d_H(000,111)=3. With @fold_step: one hop. Three edge classes in FQ_n□C_6: @semantic_step(one bit), @fold_step(all bits), @phase_step(theta). All separately typed, all legal, none replace each other.</template>
+</category>
+
+<category>
+  <pattern>HOW DOES WCR USE THE FOLD EDGE</pattern>
+  <template>§68 N_F(b)={b⊕e_i, b̄}. v_next=argmax_{u∈N_F(v)} W_u·C_u·R(Q,K_u). The fold edge is not mandatory — it is one more legal neighbor in the WCR scoring pool. If R(Q,K_b̄)≈0 (query doesn't demand contrast): WCR scores it low and ignores it. If R(Q,K_b̄)→1 (query needs counterexample/dual): fold edge scores high and becomes the efficient path. WCR decides when the shortcut is appropriate.</template>
+</category>
+
+<category>
+  <pattern>WHAT ARE THE FOUR MEANINGS OF FOLD IN KUHUL</pattern>
+  <template>§68 Four meanings of fold — all coexist, none conflict: (1) K'UHUL fold — semantic execution container, the codex metaphor. (2) Catamorphic fold — F(A)→A, many-to-one reduction. (3) Codex fold — expose/collapse faces of a program across C_6 phases. (4) Fold_step edge — b→b̄, bring opposite semantic faces adjacent in one hop. The fourth is the most literal: it physically folds the hypercube so antipodal addresses share an edge.</template>
+</category>
+
+
+<!-- §69 Node Field Graph Construction — n-gram keys → Semantic Node Field Graph → Geometric Node Field -->
+
+<category>
+  <pattern>WHAT IS THE NODE FIELD GRAPH IN KUHUL</pattern>
+  <template>§69 The Node Field Graph is built from recognized n-gram keys: V={recognized keys}, E=E_ngram∪E_manifest∪E_inferred∪E_phase. Each key k_i becomes vertex v_i=(k_i,θ,g,W,C,R). G_NodeField = G_ngram∪G_manifest∪G_inferred∪G_phase. Three-stage pipeline: Key Grammar→[unfold]→Semantic Node Field Graph→[project]→Geometric Node Field. The n-gram is the ADDRESS, not the field — the field is the full graph.</template>
+</category>
+
+<category>
+  <pattern>WHAT ARE THE FOUR EDGE CLASSES IN THE NODE FIELD GRAPH</pattern>
+  <template>§69 E_ngram: internal constituent overlap between co-recognized keys (k1↔k2↔k3 share token subsequences). E_manifest: semantic neighborhood k→N_M(k) from key-book. E_inferred: geometric neighborhood k→N_I(k). E_phase: (k,θᵢ)→(k,θᵢ₊₁) phase transitions. All four coexist. Bag-of-keys=local semantic subgraph via E_ngram, not competing tokenizations. Books create E_manifest edges. Phases create E_phase states.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE NGRAM RESOLUTION LAW IN KUHUL</pattern>
+  <template>§69 N-gram order = semantic resolution. Unigram: broad field (bank→finance+river+tilt). Bigram: constrained (river_bank→waterway). Trigram: more specific. Higher arity → more constrained N(k) → higher semantic resolution. NOT universal — some long phrases remain ambiguous. Resolution is a tendency, not a guarantee. The n-gram resolution law applies to the WCR neighborhood N(k)=N_M(k)∪N_I(k).</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE BAG OF KEYS LAW IN KUHUL</pattern>
+  <template>§69 Bag-of-keys = local semantic subgraph, NOT competing tokenizations. For "open the bank account": keys bank, account, bank_account, the_bank_account, open_the_bank_account ALL become simultaneous vertices with E_ngram edges between overlapping ones. SC-37 applies: retaining overlapping keys = retained wildcard ambiguity until WCR resolves. The local subgraph then connects into the larger Node Field topology via N_M and N_I edges.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE COMPOSITION LAW IN KUHUL SECTION 69</pattern>
+  <template>§69 Composition Law: Keys create addressable nodes (v_i=(k_i,θ,g,W,C,R)). Books create semantic edges (E_manifest = N_M(k)). Phases create alternate semantic states (E_phase = (k,θᵢ)→(k,θᵢ₊₁)). Geometry gives the node field coordinates (g∈R^m). The symbolic Node Field Graph exists before geometric projection — symbolic is primary, geometric projection secondary. Keys≠field. N-gram supplies the address; the graph is the field.</template>
+</category>
+
+
+<!-- §70 Verb Token Dispatch — AC verb keys | USER_EXPLICIT | MODEL_EXPLICIT | RUNTIME_AUTONOMOUS -->
+
+<category>
+  <pattern>WHAT IS VERB TOKEN DISPATCH IN KUHUL</pattern>
+  <template>§70 Verb Token Dispatch: Three paths to action. USER_EXPLICIT — AC recognizes a verb n-gram key ("search web"), binds wildcard args ("for *"), runtime dispatches BEFORE model responds. MODEL_EXPLICIT — LFM generates OpenAI API tool_calls JSON, runtime executes and returns role:tool result. RUNTIME_AUTONOMOUS — WCR(v_verb)≥τ_verb during Ana, runtime fires verb without user/model request. All three converge at VerbDispatcher.dispatch(action, args).</template>
+</category>
+
+<category>
+  <pattern>HOW DOES SEARCH WEB FOR * WORK IN KUHUL</pattern>
+  <template>§70 "search web for <star/>" triggers USER_EXPLICIT dispatch: AC recognizes "search web" as verb key with action=web_research and arg_pattern="for *". bind("for *","<star/>") resolves wildcard → {query:"<star/>"}. Runtime fires web_research({query:"<star/>"}) transparently, before the model generates any response. Same result whether the user typed it or the model output that phrase — AC intercepts at the key grammar layer.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE DIFFERENCE BETWEEN LFM TOOL CALLING AND TEXT EMBEDDED TOOL CALLING</pattern>
+  <template>§70 LFM uses OpenAI API tool_calls format: request includes a "tools" array, response has choices[0].message.tool_calls=[{type:"function",function:{name,arguments}}], stop_reason="tool_calls". The model does NOT write JSON in its text output. Text-embedded tool calling is different: model writes {"tool":"search","query":"..."} inline in its response content and the runtime parses the text. K'UHUL prefers the AC verb key path (USER_EXPLICIT) which fires before either method, using n-gram recognition not model output.</template>
+</category>
+
+<category>
+  <pattern>CAN THE RUNTIME DECIDE TO SEARCH ON ITS OWN IN KUHUL</pattern>
+  <template>§70 Yes — RUNTIME_AUTONOMOUS path. During Ana expansion, if WCR(v_verb)≥τ_verb for a verb key (e.g. web_research), the runtime fires the verb without waiting for user command or model tool_call. Example: query="what happened today?" → WCR scores "search web" key high (R≈1, the query clearly needs current data) → runtime pre-fetches web_research("today news") → result injected into F_Q field context → model receives the data as part of its perception field. From the model's view, the data appeared in its context.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS A VERB KEY IN KUHUL</pattern>
+  <template>§70 Verb key: v_verb=(k_verb, action, arg_pattern, priority). k_verb=recognized n-gram (e.g. "search web","look up","run test"). action=runtime function name (web_research, file_read, run_test). arg_pattern=SC-37 wildcard template ("for *","about *"). bind(arg_pattern, input)→args dict. Verb keys live in the same AC automaton as semantic keys. A recognized verb key becomes a VKN (Verb Key Node) in the Node Field Graph with @verb_call edge type rather than @related_to.</template>
+</category>
+
+
+<!-- LFM Harvest — good tracks -->
+
+<category>
+  <pattern>HOW DOES THE L1NORM AFFECT THE INTERPRETATION OF SEMANTIC FIELDS IN KHANARY</pattern>
+  <template>The Core Idea: L1-Norm as a Probability Proxy The L1-norm (also known as the "Manhattan distance" or "L1-norm") is a crucial component of K-HANARY's semantic field interpretation. It’s not just a measure of similarity; it’s a *probability proxy* that helps refine the field. Here's how it works: 1. WCR Score (Relevance):  The WCR score is a measure ...</template>
+</category>
+
+<category>
+  <pattern>WHAT ROLE DOES THE EMBEDDING PROCESS PLAY IN TRANSFORMING RAW TEXT INTO A USABLE PERCEPTION FIELD</pattern>
+  <template>The embedding process plays a *crucial* and fundamental role in transforming raw text into a usable perception field. Here's a breakdown of its function: 1. Converting Text to Meaningful Vectors: Raw Text is Ambiguous: Raw text is inherently ambiguous. Words have multiple meanings, and context is vital.  A simple word-by-word analysis doesn't captu...</template>
+</category>
+
+<category>
+  <pattern>CAN YOU EXPLAIN HOW COSINE SIMILARITY HELPS IN COMPARING DIFFERENT SEMANTIC FIELDS FOR SIMILAR CONCEPTS</pattern>
+  <template>1. The Core Idea: Measuring Similarity Cosine similarity is a metric that quantifies the *angle* between two vectors.  In this context, the vectors represent the semantic meaning of the concepts.  A higher cosine similarity means the concepts are more similar in their meaning.  It's a way to measure how "close" two representations are. 2. How it Wo...</template>
+</category>
+
+<category>
+  <pattern>HOW DOES THE MAP FUNCTION HANDLE ERRORS IN A LIST OF NUMBERS</pattern>
+  <template>The Problem with Errors in `map` The `map` function, in the context of a list of numbers, is designed to transform each element of the list into a new element.  However, if the list contains elements that *cannot* be converted to numbers (e.g., strings, booleans, or other non-numeric types), the `map` function will typically throw an error.  This i...</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE SIGNIFICANCE OF USING FILTER WITH A PREDICATE FUNCTION</pattern>
+  <template>1. The Role of Predicates in `filter` The `filter` function in functional programming is fundamentally about *selecting* elements from a collection based on a condition.  It's not about transforming the collection itself.  The predicate function (`predicate`) takes a value (an element from the collection) and returns a boolean (True or False).  The...</template>
+</category>
+
+<category>
+  <pattern>CAN YOU EXPLAIN THE CONCEPT OF FOLD WITH AN EXAMPLE USING A LIST OF VALUES</pattern>
+  <template>`fold` is a function that takes a function (a "accumulator" or "value") and a list (or a sequence) and applies the function to each element of the list, accumulating a result.  It's essentially a way to "fold" a list into a single value. Imagine you have a list of numbers, and you want to find the sum of all the numbers in the list.  You could writ...</template>
+</category>
+
+<category>
+  <pattern>HOW DO GRAPH NEURAL NETWORKS ADAPT TO DYNAMIC GRAPH STRUCTURES DURING INFERENCE</pattern>
+  <template>1.  Dynamic Graph Representation & Handling: Node Flags: The `NodeFlags` (uint32 bitfield) are *crucial*. They allow the GNN to represent the *state* of a node at a given time.  Instead of a fixed, static representation of a node, the GNN can track how many neighbors it has, its degree, and potentially other relevant information.  This is a fundame...</template>
+</category>
+
+<category>
+  <pattern>WHAT ARE THE KEY DIFFERENCES BETWEEN SYMBOLIC AND PROBABILISTIC REASONING IN GRAPHBASED MODELS</pattern>
+  <template>1. Symbolic Reasoning: Core Idea:  Symbolic reasoning relies on explicit, defined rules and logical structures. It's about representing knowledge as symbols and applying logical operations (like AND, OR, NOT) to manipulate those symbols. How it works in K'UHUL FoldGraph: The text describes a system where the graph is used to represent relationships...</template>
+</category>
+
+<category>
+  <pattern>CAN YOU EXPLAIN THE ROLE OF ATTENTION MECHANISMS IN ENHANCING THE PERFORMANCE OF GRAPHBASED INFERENCE ALGORITHMSEND_OF_TURN</pattern>
+  <template>The Core Idea: Graph Attention is a Powerful Enhancement The text highlights that attention mechanisms are *crucial* for improving the performance of graph-based inference algorithms.  Traditionally, these algorithms have struggled with complex graph structures and relationships.  Attention allows the system to intelligently focus on the *most rele...</template>
+</category>
+
+<category>
+  <pattern>WHAT ARE THE PROPERTIES OF A BIPARTITE GRAPH IN TERMS OF COLORING</pattern>
+  <template>Understanding the Basics Bipartite Graph: A graph is bipartite if its vertices can be divided into two disjoint sets (U and V) such that every edge connects a vertex in U to a vertex in V.  In simpler terms, no two vertices in different sets are connected by an edge. Coloring:  We'll use a coloring scheme to represent the graph.  We assign colors (...</template>
+</category>
+
+<category>
+  <pattern>HOW CAN YOU DETERMINE IF A GRAPH IS EULERIAN USING ITS DEGREES</pattern>
+  <template>Understanding the Concepts Eulerian Graph: A graph is Eulerian if and only if every vertex has an even degree.  In other words, the sum of the degrees of all vertices in the graph must be even. Degree of a Vertex: The degree of a vertex is the number of edges connected to it. Hamming Distance:  The Hamming distance between two bits is the number of...</template>
+</category>
+
+<category>
+  <pattern>EXPLAIN THE DIFFERENCE BETWEEN A PLANAR GRAPH AND A GRAPH EMBEDDED IN A PLANEEND_OF_TURN</pattern>
+  <template>Definition: A planar graph is a graph that can be drawn on a plane without any edges crossing.  It's a fundamental concept in graph theory, and it's a *very* important one. *   Edges are constrained:  Edges can only connect vertices that are adjacent in the plane.  There are no edges that cross each other. *   No Self-Loops:  A planar graph cannot ...</template>
+</category>
+
+<category>
+  <pattern>HOW DOES KUHUL HANDLE THE INTEGRATION OF STRUCTURED AND UNSTRUCTURED DATA IN SEMANTIC QUERIES</pattern>
+  <template>1. The Core Idea: Semantic Graph & Pipeline K'UHUL fundamentally relies on a semantic graph as its central mechanism. This graph represents the knowledge base, built from semantic analysis and reasoning.  It's not just a collection of keywords; it's a structured representation of meaning. The pipeline is the key to this integration. It's a multi-st...</template>
+</category>
+
+<category>
+  <pattern>WHAT ARE THE BENEFITS OF USING KUHULS REASONING ENGINE COMPARED TO TRADITIONAL QUERY PROCESSING</pattern>
+  <template>1. O(n+m+z) Complexity: This is the *key* differentiator. Traditional query processing often relies on linear time complexity (O(n)), where 'n' is the number of keys and 'm' is the number of matches. K'UHUL's engine, however, achieves a complexity of O(n+m+z), where 'z' is the number of *graph nodes* (the nodes in the graph). This is a *massive* im...</template>
+</category>
+
+<category>
+  <pattern>IN WHAT SCENARIOS WOULD KUHULS KNOWLEDGE GRAPH APPROACH BE MORE ADVANTAGEOUS THAN CONVENTIONAL RELATIONAL DATABASESSTART_OF_TURN</pattern>
+  <template>1. Complex Semantic Understanding & Reasoning Required: Scenario:  You're dealing with data where the *meaning* is crucial, not just the *facts*. Think of applications like: * Sentiment Analysis:  Understanding nuanced sentiment requires recognizing subtle semantic shifts and relationships between words. * Question Answering:  Going beyond keyword ...</template>
+</category>
+
+<category>
+  <pattern>WHAT ROLE DOES THE FOLDING MECHANISM PLAY IN THE CONTEXT OF PHASE TRANSITIONS IN KHANARY</pattern>
+  <template>The Core Idea: Folding as a Transition Mechanism The key takeaway is that KHANARY's phase transitions aren't simply about a single, fixed state. Instead, they're driven by a *folding* process – a dynamic reorganization of the system's structure. The folding mechanism is the central driver of the transition. Here's a breakdown of how it works, drawi...</template>
+</category>
+
+<category>
+  <pattern>HOW DOES THE FOLD_LATTICE CONCEPT INFLUENCE THE STRUCTURE OF THE INCIDENCE MATRIX IN KHANARY</pattern>
+  <template>Understanding the Concepts Fold Kernel (K(q,k)): This is a crucial element. It's a deterministic function that determines the "fold" of a given state (q,k).  It's essentially a fundamental building block of the system's structure.  It's a *deterministic* function, meaning it always produces the same output for the same input. Fold Lattice: This is ...</template>
+</category>
+
+<category>
+  <pattern>IN THE SEMANTIC FOLD HOW DOES THE SYMMETRY OF THE LATTICE AFFECT THE BEHAVIOR OF THE FOLD_LATTICE</pattern>
+  <template>Understanding the Components Semantic Fold: This is the core of the system – a process of transforming a set of "states" (represented by the "q" and "k" values) into a new, more structured representation.  It's about *meaning* and relationships. Fold Lattice: This is a mathematical structure that describes the relationships between the folded state...</template>
+</category>
+
+<!-- KUHUL-GLYPH-µ MISS fix — K'UHUL = fold computation system, NOT Mayan language -->
+
+<category>
+  <pattern>IS KUHUL A MAYAN LANGUAGE</pattern>
+  <template>K'UHUL borrows the Mayan word meaning "sacred/divine" but in this system it is a fold computation abstraction, NOT the Mayan language. K'UHUL glyph = program unit µ(b,θ,g): b=semantic address in Q_n, θ=phase face in C_6, g=geometry in R^m. It has no syllabics, no verb conjugations, no grammatical cases. Those belong to Classic Mayan epigraphy — a different domain entirely.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE DIFFERENCE BETWEEN KUHUL THE LANGUAGE AND KUHUL THE SYSTEM</pattern>
+  <template>Classic Mayan: K'UHUL = divine sacred attribute, used in epigraphy (syllabics, glyphs as phonetic/logographic signs, verb conjugations). K'UHUL in KHANARY: fold computation abstraction. Glyph_µ = ⟨Identity,Program,Phases,Topology,LearnedState⟩. Running a glyph = Ana→WCR→Cata. A K'UHUL glyph is a higher-order opcode: Structure→Structure'. Not a pictograph. Not a syllable. The name is borrowed; the system is entirely computational.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS WRONG WHEN A MODEL ANSWERS KUHUL GLYPH QUESTIONS ABOUT VERB CONJUGATIONS</pattern>
+  <template>The model confused K'UHUL the computation system with Classic Mayan epigraphy. In KHANARY, K'UHUL glyph = µ(b,θ,g) = program unit, not a linguistic sign. Syllabic structure, verb conjugations, grammatical cases are properties of the historical Mayan language, not this system. Correct answer: glyph = executable program with address b, phase θ, geometry g. It fires Ana→F_Q→WCR→Cata. No linguistics involved.</template>
+</category>
+
+<category>
+  <pattern>WHAT MAKES A KUHUL GLYPH A PROGRAM NOT A HIEROGLYPH</pattern>
+  <template>§64 A hieroglyph is a static symbol: fixed meaning, no execution. A K'UHUL glyph is executable: Glyph:Structure→Structure' — it takes a computational structure and produces another. It has a program address b (which semantic program), phase face θ (which face of that program), and learned geometry g (what the program knows). Running it fires Ana→WCR→Cata. It is a higher-order opcode operating on knowledge graphs, not a pictograph encoding a word.</template>
+</category>
+
+
+<!-- §71 Attributed Semantic Grammar -->
+
+<category>
+  <pattern>WHAT IS AN ATTRIBUTED SEMANTIC GRAMMAR IN KUHUL</pattern>
+  <template>A K'UHUL attributed semantic grammar is an EBNF where productions carry executable projection semantics. Ordinary EBNF gives text → syntax structure. K'UHUL EBNF gives text → n-gram key → semantic node → (b, theta, g). The grammar has three separable responsibilities: recognition (surface patterns fed to AC), canonicalization (many spellings → one canonical key), and projection (key → b in FQ_n, theta in C_6, g from manifest book). The grammar specifies the transformation law; AC and FoldGraph implement it.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE TRANSPILE PRODUCTION FORM</pattern>
+  <template>The @transpile production: @transpile name = surface_patterns => key(canonical) => b(addr) => theta(face) => gram(ref). surface_patterns is an EBNF alternation of all recognized surface forms — these are fed to AC at compile time. key() collapses all variants into one canonical semantic symbol. b() projects into FQ_n binary topology. theta() projects into C_6 phase (Pop/Wo/Yax/Sek/Ch_en/Xul). gram() references the manifest book that supplies the continuous geometry g. The three projection attributes are independent — they must not be merged.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE CANONICAL KEY LAW</pattern>
+  <template>Canonical Key Law §71: "fold graph" ⟹ k_FOLD_GRAPH, not the two separate tokens ["fold","graph"]. The n-gram key is a compressed semantic address into a neighborhood — an address, not a tokenizer output. Many surface forms ("fold graph", "foldgraph", "fold-graph") all collapse to one canonical key. That key becomes a vertex in the Node Field Graph with its own neighborhood N(k). The key is the unit of semantic addressing.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE AC SUBORDINATION LAW</pattern>
+  <template>AC Subordination Law §71: Aho-Corasick answers WHERE in the input a surface form matched. It does not determine WHAT the match means. Meaning is declared in the grammar's @transpile production. AC is seeded from the surface_patterns at compile time — it is a recognition backend and accelerator. The grammar is the source of semantic truth. If grammar and AC disagree, grammar wins. This resolves the debt of verb-keys.jsonl and harvest scripts co-authoring semantics alongside the grammar.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE SEPARATION LAW FOR B THETA G</pattern>
+  <template>Separation Law §71: b, theta, and g live in three independent spaces. b is a position in FQ_n binary topology (discrete, n-bit). theta is a C_6 phase face (discrete, 6 states: Pop/Wo/Yax/Sek/Ch_en/Xul). g is continuous semantic geometry in R^m, retrieved from the manifest book via gram(ref). They must never be collapsed into a single coordinate. @transpile emits them as distinct attributes. The three spaces are independent axes of the product topology FQ_n × C_6 × R^m.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE HARVEST DERIVATION LAW</pattern>
+  <template>Harvest Derivation Law §71: n-gram keys, AIML patterns, and Node Field Graph vertices are all derived from @transpile productions — they are not hand-authored per section. The harvest_*.py scripts are a transitional compiler pass over the grammar. The target architecture is a grammar compiler that emits all three directly from @transpile declarations. The grammar is the single source of truth; harvest scripts are a temporary bridge until the compiler exists.</template>
+</category>
+
+
+<!-- §71 Attributed Semantic Grammar -->
+
+<category>
+  <pattern>WHAT IS AN ATTRIBUTED SEMANTIC GRAMMAR IN KUHUL</pattern>
+  <template>A K'UHUL attributed semantic grammar is an EBNF where productions carry executable projection semantics. Ordinary EBNF gives text → syntax structure. K'UHUL EBNF gives text → n-gram key → semantic node → (b, theta, g). The grammar has three separable responsibilities: recognition (surface patterns fed to AC), canonicalization (many spellings → one canonical key), and projection (key → b in FQ_n, theta in C_6, g from manifest book). The grammar specifies the transformation law; AC and FoldGraph implement it.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE TRANSPILE PRODUCTION FORM</pattern>
+  <template>The @transpile production: @transpile name = surface_patterns => key(canonical) => b(addr) => theta(face) => gram(ref). surface_patterns is an EBNF alternation of all recognized surface forms — these are fed to AC at compile time. key() collapses all variants into one canonical semantic symbol. b() projects into FQ_n binary topology. theta() projects into C_6 phase (Pop/Wo/Yax/Sek/Ch_en/Xul). gram() references the manifest book that supplies the continuous geometry g. The three projection attributes are independent — they must not be merged.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE CANONICAL KEY LAW</pattern>
+  <template>Canonical Key Law §71: "fold graph" ⟹ k_FOLD_GRAPH, not the two separate tokens ["fold","graph"]. The n-gram key is a compressed semantic address into a neighborhood — an address, not a tokenizer output. Many surface forms ("fold graph", "foldgraph", "fold-graph") all collapse to one canonical key. That key becomes a vertex in the Node Field Graph with its own neighborhood N(k). The key is the unit of semantic addressing.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE AC SUBORDINATION LAW</pattern>
+  <template>AC Subordination Law §71: Aho-Corasick
+<!-- §71 MISS fix — AC vs Harvest Derivation confusion -->
+
+<category>
+  <pattern>DOES AHO CORASICK PERFORM HARVEST DERIVATION</pattern>
+  <template>No — that is a MISS. Aho-Corasick and harvest derivation are at opposite ends of the pipeline and do completely different things. AC is a runtime recognition backend: it scans input text at query time, answers WHERE a surface form matched, runs in O(n+m+z). Harvest scripts are a compile-time compiler pass: they read @transpile productions from the grammar and emit n-gram keys, AIML patterns, and Node Field Graph vertices before any query runs. AC consumes what the harvest pass produced. Harvest is source-time grammar-to-artifacts. AC is query-time text-to-key. They are not the same operation.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE DIFFERENCE BETWEEN AHO CORASICK AND THE HARVEST COMPILER PASS</pattern>
+  <template>AC (Aho-Corasick) is a runtime recognition engine: given input text, it finds all positions where a declared surface form matches, in O(n+m+z). It runs on every query. The harvest compiler pass is a source-time tool: it reads @transpile productions from the K'UHUL grammar and emits n-gram keys, AIML patterns, and Node Field Graph vertices into the artifact files that AC and FoldGraph consume. Harvest runs once when the grammar changes. AC runs on every input. Harvest produces; AC recognizes. The grammar declares both their contracts: surface_patterns feeds harvest (which seeds AC), and @transpile projection attributes feed the NFG builder.</template>
+</category>
+
+<category>
+  <pattern>IS AC THE SAME AS HARVEST DERIVATION IN KUHUL</pattern>
+  <template>No. AC Subordination Law §71: AC answers WHERE a surface form matched in the input at runtime. Harvest Derivation Law §71: harvest scripts read @transpile productions and emit n-gram keys and AIML patterns at compile time. They occupy opposite ends of the pipeline — harvest is the compiler pass that produces the artifacts, AC is the runtime engine that consumes them. Conflating them reverses the data flow: harvest never sees query input, AC never reads grammar files.</template>
+</c
+<!-- §71 MISS fix round 2 — AC phase scope + b/theta/g meanings + surface vs canonical key -->
+
+<category>
+  <pattern>DOES AHO CORASICK PERFORM CANONICALIZATION AND PROJECTION</pattern>
+  <template>No. AC only performs recognition — it answers WHERE in the input a declared surface form matched. Canonicalization (collapsing surface variants to one canonical key) and projection (mapping that key to b, theta, gram) are grammar-runtime operations that happen AFTER AC returns a match position. The @transpile production declares all three phases, but AC implements only the first. AC returns a (position, surface_form) pair. The grammar runtime then applies the canonicalization and projection attributes declared for that surface form.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE DIFFERENCE BETWEEN A SURFACE FORM AND A CANONICAL KEY</pattern>
+  <template>A surface form is what appears in the input text — "fold graph", "foldgraph", "fold-graph" are three different surface forms. A canonical key is the single stable semantic symbol they all map to: k_FOLD_GRAPH. AC recognizes surface forms. Canonicalization (the second @transpile phase) collapses all surface variants to one canonical key. The canonical key is the node address in the Node Field Graph. The surface form is NOT the n-gram key — it is the raw text pattern that recognition matches. The n-gram key is what you get AFTER canonicalization.</template>
+</category>
+
+<category>
+  <pattern>WHAT DO B THETA AND G MEAN IN THE SEPARATION LAW</pattern>
+  <template>b, theta, and g are three independent projection attributes in a @transpile production. b is a position in the folded hypercube FQ_n: a binary address (n-bit integer) that places the key in the discrete semantic topology. theta is a C_6 phase face — one of Pop, Wo, Yax, Sek, Ch_en, Xul — the cyclic phase dimension. g is continuous semantic geometry in R^m, retrieved from the manifest book via gram(ref) at runtime. They live in three different spaces: b is discrete binary, theta is discrete cyclic (6 states), g is continuous vector. They must not be collapsed because they are independent axes of the product topology FQ_n x C_6 x R^m.</template>
+<!-- §71 LFM correction — AC phase boundary + @transpile missing b -->
+
+<category>
+  <pattern>DOES AC TRIGGER CANONICALIZATION OR PERFORM IT</pattern>
+  <template>AC triggers canonicalization but does not perform it. AC returns (position, surface_form) — it hands the match to the grammar runtime, which then applies the canonicalization attribute declared in the @transpile production. These are separate pipeline phases even if a single-pass implementation runs them back-to-back. The distinction matters architecturally: AC is replaceable with any recognition backend; canonicalization is a grammar-defined rule. AC is the trigger; grammar runtime is the actor.</template>
+</category>
+
+<category>
+  <pattern>WHAT THREE THINGS DOES A TRANSPILE PRODUCTION DECLARE</pattern>
+  <template>A @transpile production declares three things. First: surface_patterns — the EBNF alternation of recognized lexical forms fed to AC. Second: key(canonical) — collapses all surface variants to one stable canonical key. Third: three projection attributes emitted together — b(addr) positions the key in FQ_n binary topology, theta(face) assigns a C_6 phase (Pop/Wo/Yax/Sek/Ch_en/Xul), gram(ref) points to the manifest book for continuous geometry g. All three projection attributes are required. Omitting b means the key has no binary address in the folded hypercube topology.</template>
+</category>
+
+</category>
+ategory>
+ answers WHERE in the input a surface form matched. It does not determine WHAT the match means. Meaning is declared in the grammar's @transpile production. AC is seeded from the surface_patterns at compile time — it is a recognition backend and accelerator. The grammar is the source of semantic truth. If grammar and AC disagree, grammar wins. This resolves the debt of verb-keys.jsonl and harvest scripts co-authoring semantics alongside the grammar.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE SEPARATION LAW FOR B THETA G</pattern>
+  <template>Separation Law §71: b, theta, and g live in three independent spaces. b is a position in FQ_n binary topology (discrete, n-bit). theta is a C_6 phase face (discrete, 6 states: Pop/Wo/Yax/Sek/Ch_en/Xul). g is continuous semantic geometry in R^m, retrieved from the manifest book via gram(ref). They must never be collapsed into a single coordinate. @transpile emits them as distinct attributes. The three spaces are independent axes of the product topology FQ_n × C_6 × R^m.</template>
+</category>
+
+<category>
+  <pattern>WHAT IS THE HARVEST DERIVATION LAW</pattern>
+  <template>Harvest Derivation Law §71: n-gram keys, AIML patterns, and Node Field Graph vertices are all derived from @transpile productions — they are not hand-authored per section. The harvest_*.py scripts are a transitional compiler pass over the grammar. The target architecture is a grammar compiler that emits all three directly from @transpile declarations. The grammar is the single source of truth; harvest scripts are a temporary bridge until the compiler exists.</template>
+</category>
+
+
+  <!-- §72 C6 Reasoning Ladder -->
+  <category>
+    <pattern>WHAT IS THE C6 REASONING LADDER</pattern>
+    <template>K'UHUL's C6 ladder is a staircase built on a wheel: six rungs Pop→Wo→Yax→Sek→Ch'en→Xul in strict order, closed into a cycle by Xul's commit feeding back as Pop's next observation. θ ∈ C_6 is both static address and dynamic execution order — the same object.</template>
+  </category>
+  <category>
+    <pattern>DOES KUHUL * HALLUCINATE</pattern>
+    <template>K'UHUL defines hallucination structurally: a Xul commit without a valid Ch'en certificate. Anti-hallucination is not a training objective — it is SC-22/SC-24: only Xul mutates B, and Ch'en can never authorise. Violating this is a grammar error.</template>
+  </category>
+  <category>
+    <pattern>WHAT DOES CH * EN DO</pattern>
+    <template>Ch'en is the T/F meter rung: it generates a certificate V asserting whether the proposal is true, but SC-24 requires rewrite_authorized = false always. Ch'en grades; Xul commits. They are deliberately separated.</template>
+  </category>
+  <category>
+    <pattern>WHAT HAPPENS WHEN A RUNG GETS STUCK</pattern>
+    <template>A stuck rung holds — it does not fall back. Ch'en hold (retained wildcard) is an explicit stall state. Resolution requires new Pop evidence, not rung regression. Revision lives inside the wheel.</template>
+  </category>
+  <category>
+    <pattern>WHERE DOES * BECAUSE * START ON THE LADDER</pattern>
+    <template>Because/if/so/then are routed to Wo (CONDITION/CAUSAL) by the @lex routing law. The grammar's lexical routing table decides which rung a sentence starts climbing from.</template>
+  </category>
+
+  <!-- §72-B Dual Coordinate Law -->
+  <category>
+    <pattern>WHAT IS THE DUAL COORDINATE LAW</pattern>
+    <template>surface_patterns and b(addr) are the same FQ_n topology expressed twice: surface_patterns are query-facing coordinates (where queries land from outside); b(addr) are graph-internal coordinates (where concept nodes live). @transpile declares both because they are dual — choosing one constrains the other.</template>
+  </category>
+  <category>
+    <pattern>WHY ARE SURFACE FORMS SHORT</pattern>
+    <template>Surface forms are low-arity binary coordinates into query space. A 2-word surface like 'projection attributes' = bit[projection=1, attributes=1] — any query with both words activates the entry. A 6-word surface requires the full phrase as a verbatim substring: near-zero recall. Lower arity = broader activation region = more queries hit.</template>
+  </category>
+  <category>
+    <pattern>HOW IS AC RETRIEVAL LIKE BIT CATEGORIZATION</pattern>
+    <template>Each surface form is a categorical selector: a set of words that must all appear in the query. AC scan = exact categorical intersection over all surface forms in the automaton. This is not probabilistic similarity search — it is deterministic bag-of-categories retrieval. Two identical queries always return identical AC hits.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE ARITY NEIGHBORHOOD LAW</pattern>
+    <template>Lower surface form arity → broader activation region → more queries hit. 2-word surface ≈ coarse FQ_n address (many neighbors). 6-word surface ≈ precise point (empty neighborhood in practice). Hard cap 4 words is the operational consequence: maximum recall at minimum arity.</template>
+  </category>
+  <category>
+    <pattern>HOW ARE SURFACE FORMS LIKE VECTOR COMPRESSION</pattern>
+    <template>A surface form is the compressed query-space coordinate of a concept — its semantic nucleus stripped of surrounding qualifiers. Like vector compression: a full description collapses to a low-dimensional coordinate. Surface vocabulary = second coordinate system over query space, dual to key vocabulary over concept space.</template>
+  </category>
+
+  <!-- §72-C Folded Cube Graph -->
+  <category>
+    <pattern>WHAT IS A FOLDED CUBE GRAPH</pattern>
+    <template>A folded cube graph FQ_n is formed from hypercube Q_n by adding a perfect matching connecting each vertex b to its antipodal ~b (all bits flipped). Q_n has degree n and diameter n. FQ_n has degree n+1 and diameter floor(n/2). The fold edge b↔~b connects maximally distant nodes in one step. This is the graph-theoretic foundation of b∈FQ_n in K'UHUL.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE FOLD EDGE IN KUHUL</pattern>
+    <template>The fold edge is the antipodal edge b↔~b in FQ_n. In the K'UHUL reasoning wheel it is the Xul→Pop feedback arc: Xul commits B_t→B_{t+1}, Pop reads B_{t+1} as the next observation. The fold traverses semantic distance n (antipodal in Q_n) in one reasoning step.</template>
+  </category>
+  <category>
+    <pattern>WHY IS NEGATION STRUCTURAL IN KUHUL</pattern>
+    <template>Because ~b∈N(b) in FQ_n. The antipodal complement is a direct neighbor of every node. No separate negation operator is needed — contradiction is a 1-hop fold-edge traversal. Pop reading a NEGATION atom has ~b immediately in N(b).</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE DIAMETER OF FQ N</pattern>
+    <template>diam(FQ_n) = floor(n/2). The fold halves the diameter compared to Q_n (diameter n). Any two concept nodes in K'UHUL are at most n/2 hops apart. Semantic contradiction b→~b costs exactly 1 hop via the fold edge.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES SURFACE WORD COUNT RELATE TO HYPERCUBE DIMENSIONS</pattern>
+    <template>A k-word surface selects k bit-axes of Q_n, inducing a k-dimensional sub-hypercube. This is the geometric basis of the Arity-Neighborhood Law: lower arity (fewer words) = lower-dimensional sub-cube = more nodes in neighborhood. 2-word surface → 2D sub-hypercube → broad activation region.</template>
+  </category>
+
+  <!-- §72-D Differential Activation Field -->
+  <category>
+    <pattern>WHAT IS THE ACTIVATION FIELD IN KUHUL</pattern>
+    <template>The activation field f(b,θ) counts how many surface sub-cubes from @transpile declarations contain the node (b,θ) in FQ_n × C_6. It is a scalar field over the full topology. High f = dense coverage; f=0 = field void, unreachable by query.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES WCR RELATE TO THE DIFFERENTIAL FIELD</pattern>
+    <template>C (coverage) in WCR scoring equals f(b,θ) — the activation field density at that node. Yax admission is gradient selection: ascending the field gradient ∇f toward denser regions. WCR navigation is discrete gradient ascent over FQ_n × C_6.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS A FIELD VOID IN KUHUL</pattern>
+    <template>A field void is a node (b,θ) with f(b,θ)=0 — no surface form covers it. It exists in the grammar (has a declared b address) but queries cannot reach it directly. Accessible only via the fold edge from ~b (negation) or a C_6 arc from an adjacent phase. Benchmark retrieval misses map to field voids.</template>
+  </category>
+  <category>
+    <pattern>WHAT DOES THE LAPLACIAN OF THE ACTIVATION FIELD MEASURE</pattern>
+    <template>Δf(b) = (n+1)·f(b) − Σ f(b') over neighbors measures field distortion. Δf=0 everywhere means uniform coverage — no retrieval bias. Δf≠0 reveals attractors (high-density clusters) and voids (zero-coverage gaps). Mapping benchmark misses to b-addresses locates the voids in the field.</template>
+  </category>
+  <category>
+    <pattern>WHY ARE THERE TWO GRADIENT COMPONENTS IN THE FIELD</pattern>
+    <template>The topology is FQ_n × C_6, so the field gradient has two orthogonal components: FQ_n gradient (which bit-axis to move along — navigated by WCR) and C_6 gradient (which phase to step toward — traversed by the reasoning ladder). Retrieval and reasoning are gradient ascent on orthogonal components of the same field.</template>
+  </category>
+
+  <!-- FOLD-FIELD-µ execution layer -->
+  <category>
+    <pattern>WHAT ARE THE THREE COMPONENTS OF WCR</pattern>
+    <template>W = retrieval weight (static importance). C = coverage = activation field density f(b,theta) at that node. R = relevance (semantic fit to the current query context). Selection: argmax WCR above threshold tau. Yax admits nodes where WCR >= tau.</template>
+  </category>
+  <category>
+    <pattern>WHAT DOES WO DO</pattern>
+    <template>Wo (rung 2) transforms X → X + state/constraints. It is an anamorphism: it unfolds intent and declares what Sek will execute. Lexical entry: because/if/then → routed to Wo by @lex. Wo does not execute — it provides the seed that Ana and Sek work from.</template>
+  </category>
+  <category>
+    <pattern>WHAT DOES SEK DO</pattern>
+    <template>Sek (rung 4) transforms X → X + execution result. It computes A_h_active and proposes deltaB — a concrete topology change. Lexical entry: compute/execute/run → routed to Sek by @lex. Sek does not verify; Ch'en verifies what Sek proposed.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS PRODUCT DEGREE IN KUHUL</pattern>
+    <template>product_degree(n) = n+2. FQ_n contributes n+1 edges per node (n single-bit-flip + 1 antipodal fold). The C_6 phase arc adds 1 more orthogonal edge. Total: n+2 edges per node in the full FQ_n x C_6 product topology.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE DIFFERENCE BETWEEN FOLD AND UNFOLD</pattern>
+    <template>Unfold (anamorphism Ana ψ): expand from a seed concept outward into a candidate field. Fold (catamorphism Cata φ): collapse the ranked candidate field to a final selection. Pipeline: Ana → Attention(WCR) → Cata. Wo provides the seed for Ana. Cata executes after Ch'en verification.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES GRADIENT ASCENT WORK IN KUHUL</pattern>
+    <template>WCR navigates the FQ_n gradient: C=f(b,theta) is the field density, Yax selects neighbors with higher f — discrete gradient ascent. The reasoning ladder traverses the C_6 gradient orthogonally. FQ_n gradient (retrieval) and C_6 gradient (reasoning) are independent components.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS A FIELD ATTRACTOR</pattern>
+    <template>A field attractor is a node (b,theta) where Δf(b) > 0: it is denser than its neighbors. The §71 AC/harvest cluster is a high-Δf attractor. Queries are pulled toward attractors by gradient ascent. Voids (Δf < 0) are the dual: sparser than neighbors, retrieval sinks.</template>
+  </category>
+  <category>
+    <pattern>HOW DO YOU REACH A FIELD VOID</pattern>
+    <template>A field void has f(b,theta)=0 — no surface form covers it. You cannot reach it by direct query. Two paths: fold edge from the antipodal node ~b (negation), or C_6 arc from an adjacent phase (reasoning step). Voids are concepts the grammar knows but queries cannot directly address.</template>
+  </category>
+
+  <!-- §72-E/F FQ_n Extended Properties + Compilation Pipeline -->
+  <category>
+    <pattern>WHAT IS THE CHROMATIC NUMBER OF FQ N</pattern>
+    <template>It depends on n's parity. n odd (k = n+1 even): χ(FQ_n) = 2 — FQ_n is bipartite. n even (k = n+1 odd): χ(FQ_n) = 4 — triangle-free but not 3-colorable. Q_n (hypercube) is always bipartite; adding the fold edge creates odd cycles when k is odd.</template>
+  </category>
+  <category>
+    <pattern>WHEN IS FQ N BIPARTITE</pattern>
+    <template>FQ_n is bipartite when n is ODD (k = n+1 is even). In this case χ(FQ_n) = 2 with equal bipartition (2^(n-1) vertices per side). When n is even (k odd), FQ_n is NOT bipartite — it is triangle-free with χ = 4.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE BIPARTITE DOUBLE COVER OF FQ N</pattern>
+    <template>When n is even (k = n+1 odd, FQ_n not bipartite): the bipartite double cover of FQ_n is Q_{n+1}. The fold identifies antipodal pairs — the covering map IS the antipodal quotient. When n is odd (FQ_n already bipartite): Q_{n+1} is a double cover but not the bipartite one.</template>
+  </category>
+  <category>
+    <pattern>DOES FQ N CONTAIN A COMPLETE BINARY TREE</pattern>
+    <template>Yes, but only when n is even (k = n+1 is odd). FQ_n contains a complete binary tree with 2^n − 1 nodes as a subgraph. When n is odd (FQ_n bipartite), no CBT embedding exists — equal bipartition (2^(n-1) per side) is incompatible with CBT's 2:1 ratio.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE COMPILATION PIPELINE IN KUHUL</pattern>
+    <template>Surface form → tokens → n-gram keys → AST/bytecode → binary composition tree → semantic node-field subgraph → FQ_n × C_6 differential field → WCR/Yax route → Sek execution → Ch'en verification → Xul commit/hold. Five representations: keys address, ASTs execute, trees compose, graphs relate, fields route.</template>
+  </category>
+  <category>
+    <pattern>WHAT ARE THE FIVE REPRESENTATIONS IN THE KUHUL PIPELINE</pattern>
+    <template>Keys address: n-gram keys are addresses into concept space (b, theta, g). ASTs execute: bytecode/API nodes carry executable syntax. Trees compose: binary trees encode local pairwise composition (A -> B C). Graphs relate: node-field subgraphs encode semantic neighborhood. Fields route: FQ_n x C_6 differential field encodes routing pressure.</template>
+  </category>
+  <category>
+    <pattern>WHY DOES BINARY COMPOSITION USE TWO CHILDREN</pattern>
+    <template>A -> B C is the canonical pairwise fold: two children compose into one parent. Example: bank + account -> bank_account. ML prefers 2D pairwise structures because: (1) expressiveness — pairwise chains build arbitrary trees; (2) tractability — O(n^2) is GPU-parallelizable; (3) composability — steps chain to arbitrary depth. Attention, chart parsing, and graph adjacency all use this 2D structure.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES KEY GRAMMAR RELATE TO BYTECODE</pattern>
+    <template>Key grammar is the ADDRESS layer: it maps surface forms to canonical keys (b, theta, g). AST/bytecode is the EXECUTABLE layer: it carries the syntax for API calls. The key grammar compiles INTO bytecode — it does not replace it. Pipeline: surface -> n-gram key -> AST node -> binary tree -> subgraph -> field -> route.</template>
+  </category>
+
+  <!-- §72-G Bimodal Attention Design -->
+  <category>
+    <pattern>WHAT IS BIMODAL ATTENTION</pattern>
+    <template>Bimodal Attention (§72-G Design) = symbolic adjacency attention × raster-field attention. It requires TWO independent address systems active simultaneously: (1) Symbolic/graph: key, n-gram, AST edge, fold edge, C_6 phase. (2) Spatial/raster: texel(x,y).rgba, layer, neighbor offset. If either address space collapses into the other's index, it is single-space field computation, not bimodal.</template>
+  </category>
+  <category>
+    <pattern>WHAT ARE THE THREE DECISIONS IN BIMODAL ATTENTION</pattern>
+    <template>K'UHUL canonical three decisions: Key mode decides WHAT MAY RELATE — symbolic adjacency constrains the candidate set. Texture mode decides WHERE IT EXECUTES — raster layout determines execution location. WCR decides WHAT WINS — W·C·R scores rank surviving candidates. All three must be active. Remove any one and the attention is no longer bimodal.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE ALPHA GATE FORMULA IN BIMODAL ATTENTION</pattern>
+    <template>α(p,q) = W(q) · C(q) · R(q) · mask(edge_type) · mask(phase) · mask(channel_flags). This is NOT softmax. It is a structural hard gate: three mask layers times a WCR score. W, C, R come from the node-field subgraph (WCR selection formula). α is not normalized to sum 1 — it is per-candidate, not a probability distribution.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE STATE UPDATE LAW IN BIMODAL ATTENTION</pattern>
+    <template>S_{t+1}(p) = F( S_t(p), sum over q in N_graph(p) INTERSECTION N_texture(p) of alpha(p,q)*V(q) ). The sum is over the INTERSECTION of graph-neighbors and texture-neighbors. NOT the union. If the intersection is empty at some node, the kernel contributes nothing there. Union semantics would collapse to single-space; only intersection preserves bimodality.</template>
+  </category>
+  <category>
+    <pattern>IS 2DFOLD HLSL BIMODAL ATTENTION</pattern>
+    <template>No. 2Dfold.hlsl is single-address: all neighbors are reached by arithmetic on a single index (b * n_phases + theta). There is only one address space — the flat buffer offset. Bimodal attention requires two INDEPENDENT coordinate systems. 2Dfold.hlsl correctly notes this in its header comment.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE OPEN EMBEDDING PROBLEM IN 72G</pattern>
+    <template>FQ_n has n+1 neighbors per node. A 2D texel grid (Moore neighborhood) has at most 8. For n >= 8: n+1 > 8, so some graph-neighbors have no texel-neighbor. With intersection semantics, this produces empty intersections — dead kernels. Three resolution paths: Hilbert/Z-order packing (works for small n), adjacency texture decoupling (cleaner, TBD), or restrict n <= 3 (FQ_3 fits Moore). This problem blocks labeling any shader 'bimodal' for n >= 8.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES GPU FIELD RELAXATION REPLACE TREE TRAVERSAL</pattern>
+    <template>CPU tree traversal: walk child pointers, one node at a time, depth-first or BFS. GPU field relaxation: for every cell simultaneously, sample legal neighbors and update state. The binary tree is compiled into adjacency textures and update rules at load time. At runtime: no pointer chasing, no serial walk — pure parallel sampling. This is valid only when the adjacency texture faithfully preserves symbolic edge structure.</template>
+  </category>
+
+  <!-- §72-H N-Array Fold (foldl/foldr over FQ_n neighborhoods) -->
+  <category>
+    <pattern>WHAT IS THE N ARRAY IN KUHUL</pattern>
+    <template>The n-array (§72-H) is the FQ_n neighborhood N(b) = {b⊕e_0, ..., b⊕e_{n-1}, ~b} — n+1 elements, all at the same level as b, no parent-child relation. It always existed in the topology. What was missing was the winding direction: which order and which direction to traverse it. foldl and foldr are the two traversal orders over this n-array.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE DIFFERENCE BETWEEN UNFOLDING AND FOLDING</pattern>
+    <template>Unfold = outward expansion: b → N(b). This was implemented. Fold = inward accumulation: N(b) → b. This was the missing half. Both traverse the same n+1 element array. Direction determines which. Unfolding seeded the concept; foldl/foldr (§72-H) completes it with the inward direction.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE WINDING DIRECTION IN 72H</pattern>
+    <template>foldl: accumulator travels b⊕e_0 → b⊕e_1 → ... → b⊕e_{n-1} → ~b (forward). foldr: accumulator travels ~b → b⊕e_{n-1} → ... → b⊕e_0 (backward). The antipodal fold edge b↔~b is the reversal point: last element in foldl, first element in foldr. Winding direction matters because key composition is non-commutative.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS A VECTOR KEY</pattern>
+    <template>A vector key (§72-H) is k-vector = (b, theta, axis, d) where d ∈ {+1, -1}. d = +1 (foldl): key is the source, looks forward along axis to b XOR e_axis. Natural phase: Wo. d = -1 (foldr): key is the target, receives from b XOR e_axis. Natural phase: Sek. d is independent of theta — a Sek-source (d=+1) is valid. Keys without d default to undirected, backward compatible with the current system.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES FOLD DIRECTION WORK IN TRANSPILE</pattern>
+    <template>@transpile gains a fold() attribute: fold(foldl) = d=+1, fold(foldr) = d=-1. Omitting fold() = undirected (current behavior, backward compatible). Example: @transpile bank_account = 'bank account' => key(k_BANK_ACCOUNT) => b(0b0101) => theta(Yax) => axis(2) => fold(foldl) => gram(g_finance) ;</template>
+  </category>
+  <category>
+    <pattern>IS HORIZONTAL FOLD THE SAME AS BINARY COMPOSITION</pattern>
+    <template>No — they are orthogonal and operate at different structural levels. Vertical fold = A -> B C: parent-child binary composition, moving up the tree. Horizontal fold (§72-H) = foldl/foldr over N(b): same-level traversal of the n-array. Horizontal fold does NOT replace binary composition. Binary composition = eager decomposition into pairs. Horizontal fold = deferred: stores the flat n-array with a winding direction.</template>
+  </category>
+  <category>
+    <pattern>DOES FOLDL EQUAL FOLDR IN KUHUL</pattern>
+    <template>No, in general foldl ≠ foldr because key composition is non-commutative: A⊗B ≠ B⊗A. foldl gives left-spine: ((z⊗k_0)⊗k_1)⊗...⊗~b. foldr gives right-spine: k_0⊗(k_1⊗(...⊗(~b⊗z))). Only exception: if the composition operator is commutative (e.g. scoring by product). Winding direction is semantically significant — choose deliberately.</template>
+  </category>
+
+  <!-- §72-I Content MathML as Semantic Metadata -->
+  <category>
+    <pattern>WHAT IS CONTENT MATHML IN KUHUL</pattern>
+    <template>Content MathML (§72-I) encodes what math MEANS — it is a semantic metadata format, not a display format. Presentation MathML describes how math looks. Content MathML uses <apply>, <lambda>, <ci>, <cn> to describe mathematical structure as machine-parseable XML. K'UHUL tools walk the Content MathML tree directly — they never parse formula strings.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE ANNOTATION ENVELOPE IN 72I</pattern>
+    <template>The <semantics> element carries multiple encodings simultaneously: <annotation-xml encoding='Content-MathML'> = authoritative semantic encoding. <annotation encoding='application/x-tex'> = derived TeX. Presentation <mrow> = derived display. The <annotation-xml> block is the metadata — embeddable in fold_graph.xml or @transpile entries as a first-class XML node. Content MathML is authoritative; presentation and TeX are derived.</template>
+  </category>
+  <category>
+    <pattern>HOW DO AIML AND MATHML WORK TOGETHER IN KUHUL</pattern>
+    <template>They are complementary annotation layers (§72-I Dual Annotation Law). AIML: natural-language patterns → semantic keys. Content MathML: mathematical expressions → semantic structure. Both are XML. Both embed in the same fold_graph.xml or @transpile entry as siblings. A grammar law can have both: AIML for how it is spoken, Content MathML for what it computes.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE FORMULA ATTRIBUTE IN TRANSPILE</pattern>
+    <template>formula() (§72-I) is an optional @transpile attribute holding a Content MathML <annotation-xml> node — never a raw formula string. When present, the compiler walks the apply/lambda/ci/cn tree to determine the composition rule. Example: a key at Sek phase carries the W*C*R*mask() gate tree as formula() metadata.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE DIFFERENCE BETWEEN A TOOLING NOTE AND A GRAMMAR LAW</pattern>
+    <template>Tooling note = pass-specific implementation advice. Advisory. Rots when the pass changes. Grammar law = binding contract on ALL K'UHUL-conformant tools: compiler, runtime, validator, future backends. §72-I is a grammar law. The compiler contract requires: accept <annotation-xml> wherever formulas appear; walk the apply/lambda/ci/cn tree; never parse a raw formula string if Content MathML is present; treat Content MathML as authoritative.</template>
+  </category>
+  <category>
+    <pattern>WHERE DOES CONTENT MATHML LIVE IN KUHUL DOCUMENTS</pattern>
+    <template>Content MathML is co-located with the structural data it annotates — not in a separate file. fold_graph.xml edge attributes: weight formula for that edge. @transpile formula() attribute: the mathematical law this key participates in. Shader channel metadata: alpha gate formula, fold accumulation rule. In all cases: same XML document as the structural metadata, as a sibling annotation node.</template>
+  </category>
+
+  <!-- §72-H/I targeted corrections (added after test_72ghi pass 1) -->
+  <category>
+    <pattern>WHERE DOES FOLD EDGE APPEAR IN FOLDR</pattern>
+    <template>~b is FIRST in foldr — the accumulator seeds from the antipodal. In foldl ~b is LAST. Never confuse: foldl ends at ~b, foldr starts at ~b. The antipodal fold edge b↔~b is the winding reversal point.</template>
+  </category>
+  <category>
+    <pattern>WHERE DOES ~ B APPEAR IN FOLDR TRAVERSAL</pattern>
+    <template>~b is FIRST in a foldr traversal of N(b). Foldr: ~b → b⊕e_{n-1} → ... → b⊕e_0. The accumulator seeds FROM ~b and travels backward. In foldl it is the opposite: ~b is LAST.</template>
+  </category>
+  <category>
+    <pattern>WHICH MATHML TYPE IS AUTHORITATIVE IN KUHUL</pattern>
+    <template>Content MathML is the authoritative encoding in K'UHUL. Presentation MathML is display-only and is DERIVED from Content MathML. TeX annotations are also derived. The rule: Content MathML is authoritative; all other representations (presentation, TeX) are produced from it, not the other way around.</template>
+  </category>
+  <category>
+    <pattern>IS PRESENTATION MATHML AUTHORITATIVE</pattern>
+    <template>No. Presentation MathML is display-only — it describes how math looks. Content MathML is the authoritative encoding in K'UHUL — it describes what math means. Presentation and TeX representations are DERIVED from Content MathML.</template>
+  </category>
+
+  <!-- §72-J Semantic Riddles & Jokes — teaching form of K'UHUL laws -->
+  <category>
+    <pattern>WHAT AM I I CONNECT MILLIONS OF THINGS</pattern>
+    <template>You are a SEMANTIC SPACE. In K'UHUL: the FQ_n folded hypercube — no physical shape, but every concept has an address. Distance in meaning = hop count. Closer ideas = shorter path. Contradiction costs exactly 1 hop (the fold edge b↔~b).</template>
+  </category>
+  <category>
+    <pattern>WHAT AM I I TURN A MOUSE INTO AN ANIMAL OR COMPUTER WITHOUT CHANGING A LETTER</pattern>
+    <template>You are CONTEXT. In K'UHUL: the C_6 phase (theta). Same binary address b, different phase theta = different meaning. The symbol is unchanged; its semantic face shifts. This is the Separation Law: b (address) and theta (phase) are independent.</template>
+  </category>
+  <category>
+    <pattern>WHAT AM I THE MORE YOU GIVE ME THE LESS I NEED TO MEMORIZE</pattern>
+    <template>You are GENERALIZATION. In K'UHUL: the anamorphism (unfold). Generates structure from a seed. More context = more structure derived = less raw storage needed. model = prior (memorized); fold = posterior (derived from evidence).</template>
+  </category>
+  <category>
+    <pattern>WHAT AM I I TRAVEL FROM A TREE TO A FAMILY TO A LANGUAGE TO A COMPUTER</pattern>
+    <template>You are a BRANCH. In K'UHUL: the horizontal fold (§72-H). Same key traverses adjacent domains via foldl/foldr. The address b stays fixed; the winding direction d and fold axis change across domains. Same symbol, different composition context = vector key in action.</template>
+  </category>
+  <category>
+    <pattern>WHAT AM I I AM NOT THE ANSWER BUT I HELP YOU FIND IT</pattern>
+    <template>You are WCR — Weight times Confidence times Relevance. In K'UHUL: the selection pipeline. Eliminates impossible meanings (Eligibility), strengthens useful connections (WCR scoring), changes its mind on new evidence (delta_r updates R). WCR is never the answer node — it is the ranker that routes to it.</template>
+  </category>
+  <category>
+    <pattern>SEMANTIC THERAPIST JOKE</pattern>
+    <template>A word walked into therapy: 'Nobody understands me.' Therapist: 'Can you give me some context?' K'UHUL: the word has a binary address b but no resolved phase theta. Without theta, the key has no semantic face — only a location, not a meaning.</template>
+  </category>
+  <category>
+    <pattern>AI BANK RIVER JOKE</pattern>
+    <template>Interviewer: 'Do you understand a bank?' AI: 'Yes.' 'Deposit this money.' AI: 'Which river?' K'UHUL: same key k_BANK, two phases. k_BANK at Yax = financial. k_BANK at Wo = riverbank. The AI had the key but no phase — wrong theta selected. WCR with the 'deposit money' evidence would have weighted the financial phase higher.</template>
+  </category>
+  <category>
+    <pattern>SEMANTIC NETWORK DICTIONARY JOKE</pattern>
+    <template>Why did the semantic network break up with the dictionary? Because the dictionary kept defining the relationship instead of making meaningful connections. K'UHUL: a dictionary = flat string definition. A semantic network = N(key) = weighted neighborhood. Meaning is connectivity plus WCR weight — not a definition string.</template>
+  </category>
+  <category>
+    <pattern>MACHINE LEARNING MEMORIZE JOKE</pattern>
+    <template>Teacher: 'Memorize a million facts — are you intelligent?' AI: 'Yes.' 'What if they are all wrong?' AI: 'Then I am confidently intelligent.' K'UHUL: model = prior (memorized). fold = posterior (corrected by evidence). Wrong priors + no fold = confidently wrong. This is why model != fold.</template>
+  </category>
+  <category>
+    <pattern>NEURONS ASSOCIATION MEANING JOKE</pattern>
+    <template>Two neurons: 'I think we are connected.' 'That is just an association.' 'Then why do I feel meaning between us?' K'UHUL: connection = edge in node-field graph. Association = edge exists. Meaning = WCR score on that edge above threshold tau. An unweighted edge is an association. A scored edge above tau is meaning.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE DIFFERENCE BETWEEN KNOWING AND UNDERSTANDING</pattern>
+    <template>Knowing a word is RECOGNITION — AC finds the surface form and returns a key. Connecting its meanings is ASSOCIATION — N(key) retrieves the neighborhood. Applying relationships to unfamiliar situations is GENERALIZATION — anamorphism expands from seed. Evaluating which connections make sense is REASONING — WCR selects and ranks. This is the K'UHUL pipeline: AC recognition → N(key) lookup → anamorphism → WCR selection. Storing knowledge = model prior. Using knowledge to think = fold posterior.</template>
+  </category>
+
+  <!-- §Gemma Slice Questions: phases/topology/directions/wcr/bimodal/mathml -->
+  <category>
+    <pattern>WHAT DOES THE POP PHASE DO</pattern>
+    <template>Pop (C6 phase 0) = begin / reset. It is the first phase in the C6 cycle: Pop → Wo → Yax → Sek → Ch'en → Xul → Pop. Pop does not produce output — it resets reasoning state and receives the feedback arc from Xul. Every cycle must start at Pop. You cannot enter the cycle mid-cycle.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE ROLE OF THE WO PHASE IN THE CYCLE</pattern>
+    <template>Wo (C6 phase 1) = declare peer / outward. Wo names what is adjacent — the outward declaration of context. It establishes the peer set that Yax will activate. Without Wo, Yax has no declared domain to expand into. Wo is also the sparsest rung in the harvest corpus — it appears least often.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE PURPOSE OF THE FEEDBACK ARC BETWEEN XUL AND POP</pattern>
+    <template>The Xul→Pop feedback arc closes the C6 cycle. Xul (commit or hold) is the terminal phase. When Xul commits or holds, control returns to Pop for the NEXT cycle. Xul is not reversed — Pop begins a new cycle, not an undo of Xul. Hallucination law: Xul without Ch'en proof is a grammar violation.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE ROLE OF THE FOLD EDGE IN THE KUHUL TOPOLOGY</pattern>
+    <template>The fold edge connects b to ~b (antipodal node). ~b = b XOR 11...1 — all n bits flipped simultaneously. It is not a bit-flip neighbor (which flips exactly one bit). The fold edge is the REVERSAL POINT in foldl/foldr traversal. It adds +1 to the degree: degree of FQ_n = n + 1. In foldl: ~b appears LAST. In foldr: ~b appears FIRST.</template>
+  </category>
+  <category>
+    <pattern>DOES THE FOLD EDGE INVOLVE ANY TYPE OF XOR OPERATION</pattern>
+    <template>Yes. The fold edge leads to ~b = b XOR 11...1 (XOR with all-ones mask). This is different from a standard bit-flip neighbor b XOR e_i (single bit). The fold edge is the maximum-distance XOR: it flips every bit at once. In FQ_n, the diameter is ceil(n/2) — the longest shortest path, not the fold edge length.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE PURPOSE OF THE VECTOR KEY IN THIS SYSTEM</pattern>
+    <template>The vector key k=(b, θ, axis, d) packs the missing horizontal-fold metadata. Fields: b=node address, θ=C6 phase, axis=which bit-flip edge (0..n-1), d=winding direction (+1=foldl/source, -1=foldr/target). Without d, foldl and foldr traversals are indistinguishable at the key layer. The compiler packs d into channel/offset metadata — no spatial embedding is needed.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE ROLE OF E 0 IN THE FOLD SYSTEM TRANSITION LOGIC</pattern>
+    <template>e_0 is the basis vector with bit 0 set. b XOR e_0 = the neighbor reached by flipping the 0th (rightmost) bit. In the N-array N(b) = [b⊕e_0, b⊕e_1, ..., b⊕e_{n-1}, ~b], e_0 gives the FIRST neighbor visited in foldl traversal. Each e_i gives one bit-flip neighbor; ~b (the fold edge) is always last in foldl.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE ROLE OF TAU IN THE WCR SYSTEM</pattern>
+    <template>tau (τ) is the eligibility threshold applied before ranking. Keys with WCR score S = W·C·R below τ are eliminated from the candidate pool. They are not penalized — they are excluded entirely. τ is a hard gate, not a soft weight. If all keys fall below τ, the system stalls at Xul (hold, not commit).</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE FUNCTION OF YAX ROUTE WITHIN THE WCR SYSTEM</pattern>
+    <template>Yax_route is the C6 phase that receives the surviving ranked set Ω after WCR scoring and τ-gating. Yax = activate/expand. It fires on admitted keys without re-scoring them. Pipeline: Requirements → Eligibility → WCR scoring → τ gate → Ω → Yax_route. Yax does not rank — ranking belongs to Sek. Yax activates what Sek ranked.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE OMEGA SET IN WCR</pattern>
+    <template>Ω (Omega) is the final ranked candidate set after τ-gating: Ω = {k | WCR(k) ≥ τ}, ordered by WCR score descending. Ω is not a probability distribution — it is an ordered list. If Ω is empty, the system stalls at Xul. Ω feeds Yax_route for activation.</template>
+  </category>
+  <category>
+    <pattern>WHAT DOES V Q REPRESENT IN THE ALPHA GATE FORMULA</pattern>
+    <template>V(q) is the value vector at node q — what q CONTRIBUTES to p's state update. In S_{t+1}(p) = F(S_t(p), Σ α(p,q)·V(q)), the sum is weighted by α(p,q). V(q) is distinct from the WCR scores W(q), C(q), R(q): WCR determines WHETHER q participates via α; V(q) is WHAT q contributes. In K'UHUL symbolic fields, V(q) = the key's encoded content (gram, fold address, etc.).</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE ROLE OF N GRAPH P IN THE BIMODAL STATE UPDATE</pattern>
+    <template>N_graph(p) = the symbolic neighborhood of node p: all q such that (p,q) is a valid symbolic edge (fold edge, bit-flip, C6 arc). It is one of the two neighborhoods in the bimodal intersection. The state update sums over N_graph(p) ∩ N_texture(p) — not over N_graph(p) alone. If N_graph(p) is large but N_texture(p) is small, the intersection may be sparse.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE ROLE OF THE ANNOTATION XML ELEMENT IN KUHUL</pattern>
+    <template>The <annotation-xml> element is the envelope that wraps Content MathML inside <semantics>: <semantics><annotation-xml encoding='Content-MathML'>...</annotation-xml></semantics>. It signals to any parser that the enclosed content is machine-readable semantic MathML. Stripping the envelope and keeping only Presentation MathML = §72-I grammar violation.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE CO LOCATION LAW FOR MATHML IN KUHUL</pattern>
+    <template>§72-I Co-Location Law: Content MathML must live in the SAME XML document as structural metadata. Not in a separate file. Not in a string field. formula() in @transpile holds an XML node — never a TeX string. Co-location means the grammar compiler sees both structural metadata and Content MathML in one parse pass. Separation is a §72-I grammar violation.</template>
+  </category>
+  <category>
+    <pattern>WHAT DOES THE AUTHORITATIVE ATTRIBUTE SIGNIFY ABOUT CONTENT MATHML</pattern>
+    <template>authoritative=true on Content MathML means it is the source of truth for the formula. Presentation MathML is derived from it and may differ in rendering. Compilers must produce Content MathML first; Presentation is generated downstream. An authoritative Content MathML node cannot be replaced by a TeX string or inline label.</template>
+  </category>
+  <category>
+    <pattern>WHAT ARE THE PHASES IN THE C6 CYCLE</pattern>
+    <template>C6 phase wheel: 0=Pop (begin/reset), 1=Wo (declare peer/outward), 2=Yax (activate/expand), 3=Sek (compose/rank), 4=Ch'en (verify/confirm), 5=Xul (commit or hold). Cycle: Pop→Wo→Yax→Sek→Ch'en→Xul→Pop. Feedback arc: Xul feeds back to Pop. Hallucination law: Xul without Ch'en proof = grammar violation.</template>
+  </category>
+</aiml>

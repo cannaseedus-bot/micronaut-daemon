@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfpc>
+  <learn id="contract-validation-learning" owner="CODE-µ" mode="shadow">
+    <pattern>Detect contract-validation errors</pattern>
+    <example>Unknown relation must not be admitted to FactIndex</example>
+    <proposal target="candidate_pattern" status="shadow"/>
+    <gap kind="KNOWLEDGE_GAP" ref="missing-evidence"/>
+    <policy promote_generated_facts="false"/>
+    <result><finding>Unresolved gaps are findings; patterns remain proposals</finding></result>
+  </learn>
+</cfpc>

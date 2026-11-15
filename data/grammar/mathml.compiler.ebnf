@@ -1,0 +1,186 @@
+(* ============================================================ *)
+(* Content MathML Compiler Grammar                             *)
+(* Transforms infix math expressions into Content MathML ASTs  *)
+(* using the Pratt / TDOP compilation strategy.                *)
+(* ============================================================ *)
+
+(* The compiler occupies the Yax (READ/COMPOSE) phase of MATH-µ.
+   Its job is to decide whether a user's raw text is a parseable
+   math expression, and if so, produce:
+     (a) a Content MathML document (input for the symbolic resolver)
+     (b) a numeric result when no variables are present
+     (c) symbolic=true when variables are detected
+
+   The compiler is deterministic and purely functional:
+     - same input always yields same output
+     - no network calls, no database reads, no model calls
+     - no eval(), no new Function(); the evaluator is a typed AST walk
+
+   Phase contract:
+     Yax: compile(text) → { mathml, result, symbolic, display }
+     Sek: if !symbolic && result ≠ null → short-circuit (skip model)
+          if symbolic → route to solve_symbolic (INFER-µ delegate)
+
+   Authority:
+     compile() grants authority {}
+     A numeric result is data, not execution. *)
+
+
+(* ============================================================ *)
+(* 1. INPUT STRIPPING RULES                                     *)
+(* ============================================================ *)
+
+(* Before parsing, natural-language prefixes and trailing noise are
+   stripped so that "What is 2+2?" reaches the parser as "2+2". *)
+
+StrippedExpr  ::= StripPrefix ( RawExpr ) StripSuffix ;
+
+StripPrefix   ::= /^(?:what(?:'s|\s+(?:is|does|equals?))\s+
+                        |calculate\s+
+                        |compute\s+
+                        |evaluate\s+
+                        |find\s+)/i ;
+
+StripSuffix   ::= /[?!.=]+$/
+                , /\s+equals?\s*$/i
+                ;
+
+RawExpr       ::= InfixExpr ;
+
+
+(* ============================================================ *)
+(* 2. INFIX EXPRESSION GRAMMAR (input surface)                  *)
+(* ============================================================ *)
+
+InfixExpr    ::= AddExpr ;
+AddExpr      ::= MulExpr ( ( "+" | "-" ) MulExpr )* ;
+MulExpr      ::= ExpExpr ( ( "*" | "/" | "%" ) ExpExpr )* ;
+ExpExpr      ::= UnaryExpr ( "^" ExpExpr )? ;       (* right-associative *)
+UnaryExpr    ::= "-" UnaryExpr
+               | "+" UnaryExpr
+               | PrimaryExpr
+               ;
+PrimaryExpr  ::= NumberLiteral
+               | ConstantRef
+               | FunctionCall
+               | VariableRef
+               | "(" InfixExpr ")"
+               ;
+
+NumberLiteral ::= Digit+ ( "." Digit* )? ( ExponentPart )?
+                | "." Digit+ ( ExponentPart )? ;
+ExponentPart  ::= ( "e" | "E" ) ( "+" | "-" )? Digit+ ;
+
+ConstantRef   ::= "pi" | "e" | "tau" | "inf" | "infinity" ;
+VariableRef   ::= Identifier ;       (* → symbolic output *)
+
+FunctionCall  ::= FunctionName "(" InfixExpr ")" ;
+FunctionName  ::= "sqrt"  | "cbrt"
+               | "abs"
+               | "sin"   | "cos"   | "tan"
+               | "asin"  | "acos"  | "atan"
+               | "exp"   | "ln"    | "log" | "log10" | "log2"
+               | "floor" | "ceil"  | "round"
+               ;
+
+
+(* ============================================================ *)
+(* 3. OPERATOR PRECEDENCE TABLE                                 *)
+(* ============================================================ *)
+
+(* Left-binding powers used by the Pratt parser in mathml-eval.cjs:
+       "+" "-"   → bp 1   (additive,  left-associative)
+       "*" "/" "%" → bp 2 (multiplicative, left-associative)
+       "^"       → bp 3   (exponentiation, RIGHT-associative)
+       unary "-" → highest (tighter than any infix operator)
+
+   Convention: (-2)^2 = 4,  -2^2 = -(2^2) = -4
+   The parser folds a unary-minus applied to a NumberLiteral immediately,
+   so -2 produces cn(-2) not apply(minus, cn(2)).
+   The semantic invariant is: 2^2 = 4 always, sign is applied after. *)
+
+BindingPower  ::= Additive | Multiplicative | Exponential ;
+Additive      ::= { op: "+"|"-", bp: 1,  assoc: "left"  } ;
+Multiplicative ::= { op: "*"|"/"|"%", bp: 2, assoc: "left" } ;
+Exponential   ::= { op: "^", bp: 3, assoc: "right" } ;
+
+
+(* ============================================================ *)
+(* 4. COMPILATION RULES (infix → Content MathML AST)           *)
+(* ============================================================ *)
+
+CompileExpr   ::= CompileAdd ;
+CompileAdd    ::= CompileMul
+                  ( "+" → { tag:"apply", op:"plus",   args:[lhs, rhs] }
+                  | "-" → { tag:"apply", op:"minus",  args:[lhs, rhs] }
+                  )* ;
+CompileMul    ::= CompileExp
+                  ( "*" → { tag:"apply", op:"times",  args:[lhs, rhs] }
+                  | "/" → { tag:"apply", op:"divide", args:[lhs, rhs] }
+                  | "%" → { tag:"apply", op:"rem",    args:[lhs, rhs] }
+                  )* ;
+CompileExp    ::= CompileUnary
+                  ( "^" CompileExp  → { tag:"apply", op:"power", args:[lhs, rhs] } )? ;
+CompileUnary  ::= "-" CompileUnary  → { tag:"apply", op:"minus", args:[operand] }
+                  (* fold: if operand is cn, negate value and return cn directly *)
+               | CompilePrimary
+               ;
+CompilePrimary ::= NumberLiteral  → { tag:"cn", value: n }
+               | ConstantRef     → { tag:"cn", value: CONSTANTS[name] }
+               | FunctionCall    → FN_BUILDERS[name](arg)
+               | VariableRef     → { tag:"ci", name: id,  hasVars: true }
+               | "(" InfixExpr ")" → inner
+               ;
+
+
+(* ============================================================ *)
+(* 5. OUTPUT TYPE                                               *)
+(* ============================================================ *)
+
+CompileResult  ::= "{" "mathml:" MathMLXML "," "result:" ( String | "null" ) ","
+                       "symbolic:" Boolean "," "display:" String "}"
+                 | "null"   (* input was not parseable as a math expression *)
+                 ;
+
+(* result is null iff symbolic=true or eval threw *)
+(* null return means input was rejected; caller may try another resolver *)
+
+MathMLXML     ::= '<math xmlns="http://www.w3.org/1998/Math/MathML">'
+                  ContentMathMLExpr
+                  "</math>" ;
+
+ContentMathMLExpr ::= "<cn>" Number "</cn>"
+                    | '<cn type="double">' FloatLiteral "</cn>"
+                    | "<ci>" Identifier "</ci>"
+                    | "<apply>" OperatorElement ContentMathMLExpr+ "</apply>"
+                    ;
+
+
+(* ============================================================ *)
+(* 6. SEMANTIC INVARIANTS                                       *)
+(* ============================================================ *)
+
+C1  ::= result ≠ null implies symbolic = false ;
+C2  ::= symbolic = true implies result = null ;
+C3  ::= null return implies the caller MUST NOT treat the input as math ;
+C4  ::= VariableRef in expr implies hasVars = true and symbolic = true ;
+C5  ::= display preserves the original expression with whitespace normalised ;
+C6  ::= display does NOT include stripped prefix or suffix ;
+C7  ::= same input always produces same output (deterministic) ;
+C8  ::= no I/O, no network, no model calls are made during compilation ;
+C9  ::= the compiler does not grant execute authority ;
+C10 ::= "-" applied to NumberLiteral is folded at compile time, not stored as apply(minus, cn) ;
+C11 ::= "^" is right-associative: 2^3^2 = 2^(3^2) = 512, not (2^3)^2 = 64 ;
+C12 ::= Infinity and -Infinity are valid results; NaN is not (returns null) ;
+
+
+(* ============================================================ *)
+(* 7. TOKEN DEFINITIONS                                         *)
+(* ============================================================ *)
+
+Identifier  ::= Letter ( Letter | Digit | "_" )* ;
+Letter      ::= "a" .. "z" | "A" .. "Z" ;
+Digit       ::= "0" .. "9" ;
+Boolean     ::= "true" | "false" ;
+String      ::= JSON_String ;
+Number      ::= JSON_Number ;

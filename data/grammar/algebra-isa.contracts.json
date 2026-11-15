@@ -1,0 +1,1791 @@
+{
+  "id": "urn:kuhul:algebra-isa:v1",
+  "version": "2",
+  "description": "Algebraic Operator ISA. Each XCFE/SRAI operator and each Fold reducer declares the algebraic structure it inhabits and the individual laws that structure licenses. Execution decisions (regroup, reorder, parallelise, distribute, elide a unit, repeat, invert, cross a phase) are derived from the declaration, never assumed from the operator name.",
+  "authority": {
+    "grammar": "data/grammar/algebra-isa.ebnf",
+    "content_dictionary": "urn:kuhul:algebra-isa:v1",
+    "operator_registry": "data/grammar/srai-operators.contracts.json",
+    "implementations": [
+      "src/kuhul/algebra_contract.cpp",
+      "src/graphscript/graph_algebra.cpp"
+    ],
+    "runtime_types": "src/kuhul/algebra_contract.h"
+  },
+  "vocabulary": {
+    "law_states": {
+      "true": "the law holds for this operator",
+      "false": "the law provably fails for this operator",
+      "null": "the law is NOT APPLICABLE (e.g. a unary operator has no associativity). null never means 'unchecked' and never means 'permitted'."
+    },
+    "laws": {
+      "associative": "grouping does not change the result: (a.b).c = a.(b.c)",
+      "commutative": "operand order does not change the result: a.b = b.a",
+      "idempotent": "repeating the operation is stable: a.a = a",
+      "invertible": "every element has an inverse",
+      "distributive": "the product distributes over the sum: a.(b+c) = a.b + a.c",
+      "unital": "a two-sided multiplicative identity exists: 1.x = x.1 = x. Unital does not imply commutative.",
+      "bilinear": "the product is linear in each argument separately. Bilinearity does not imply associativity.",
+      "anticommutative": "swapping the operands negates the result: a.b = -(b.a). Anticommutative implies neither associativity nor commutativity."
+    },
+    "phase_policy": {
+      "none": "the operator has no phase authority at all (most reducers and unary metrics)",
+      "preserve": "the operator leaves the K'UHUL phase untouched; it may never be used to cross a phase boundary",
+      "advance": "the operator may request a phase transition, and that request still passes through XCFE admission"
+    },
+    "reproducibility": {
+      "exact": "every grouping of the operation returns the identical value (integer arithmetic, max/min, set intersection, list append)",
+      "deterministic_grouping": "one canonical grouping is byte-reproducible; other groupings may differ, so only the canonical tree may be used",
+      "implementation_defined": "the executable carrier's grouping behaviour is not pinned by this contract",
+      "unspecified": "no reproducibility claim is made; regrouping is therefore not licensed"
+    },
+    "carriers": {
+      "real": {
+        "exact": false,
+        "note": "mathematical reals; an executable carrier must still be chosen"
+      },
+      "float32": {
+        "exact": false
+      },
+      "float64": {
+        "exact": false
+      },
+      "integer": {
+        "exact": true
+      },
+      "fixed_point": {
+        "exact": true
+      },
+      "effect_set": {
+        "exact": true
+      },
+      "gram_event_list": {
+        "exact": true
+      },
+      "boolean": {
+        "exact": true
+      },
+      "record": {
+        "exact": true
+      },
+      "vector": {
+        "exact": false
+      },
+      "vector3": {
+        "exact": false,
+        "note": "real 3-vectors under the cross product"
+      },
+      "square_matrix_n": {
+        "exact": false,
+        "note": "n x n real matrices under matrix multiplication"
+      },
+      "micronaut_state": {
+        "exact": false,
+        "note": "A_mu = K + V_mu, the square-zero state algebra; exact under integer coefficients, not under floats"
+      },
+      "state": {
+        "exact": false,
+        "note": "mutable execution state; regrouping is never value-preserving for an impure carrier"
+      },
+      "multivector_2d": {
+        "exact": false,
+        "note": "Cl(2,0) multivector s + x e1 + y e2 + b I; four coefficients over four basis elements, not four spatial dimensions"
+      },
+      "binary_vector": {
+        "exact": true,
+        "note": "F2^n bit vector; XOR is exact, so every grouping and reordering is value-identical"
+      },
+      "scalar_field_2d": {
+        "exact": false,
+        "note": "scalar potential over a sampled domain or a node set"
+      },
+      "vector_field_2d": {
+        "exact": false,
+        "note": "sampled vector field; finite-difference derivatives are approximations"
+      },
+      "edge_field": {
+        "exact": false,
+        "note": "per-edge potential differences over a graph"
+      },
+      "tensor_term": {
+        "exact": false,
+        "note": "a graded element of T(V) as a sparse sum of words; the CARRIER does not determine the product"
+      },
+      "rectangular_matrix": {
+        "exact": false,
+        "note": "m×n real matrix with m≠n in general; the carrier for incidence fingerprints B_τ[h,*] (vertices × contexts)"
+      }
+    }
+  },
+  "structures": [
+    {
+      "id": "none",
+      "family": "atomic",
+      "description": "No compositional algebraic structure is declared, so no law is bound by the structure. The operator is atomic (unary or effect-only) and declares its own laws explicitly: COLLAPSE declares associativity false, PROJECT declares idempotence true, RANK leaves every binary law null because no binary operation is involved.",
+      "structural": {
+        "closed": false
+      },
+      "product_image": "none"
+    },
+    {
+      "id": "scalar_arithmetic",
+      "family": "atomic",
+      "description": "A unary evaluation that maps its inputs to one scalar. Associativity and commutativity are not applicable to the operator itself — they belong to whatever binary operation later combines the scalars.",
+      "laws": {
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null
+      },
+      "structural": {
+        "closed": false
+      },
+      "product_image": "scalar"
+    },
+    {
+      "id": "monoid",
+      "family": "group_like",
+      "description": "One associative binary operation with a two-sided identity. Grouping is free; operand order is not. A monoid is what makes an empty fold return a defined value without inventing an element.",
+      "laws": {
+        "associative": true,
+        "unital": true
+      },
+      "structural": {
+        "closed": true
+      },
+      "product_image": "carrier"
+    },
+    {
+      "id": "commutative_monoid",
+      "family": "group_like",
+      "description": "An associative, commutative binary operation with a two-sided identity. Grouping and operand order are both free.",
+      "laws": {
+        "associative": true,
+        "commutative": true,
+        "unital": true
+      },
+      "structural": {
+        "closed": true
+      },
+      "product_image": "carrier"
+    },
+    {
+      "id": "group",
+      "family": "group_like",
+      "description": "A monoid in which every element has an inverse. Composition is associative; inverses exist, so a completed operation can in principle be undone.",
+      "laws": {
+        "associative": true,
+        "invertible": true,
+        "unital": true
+      },
+      "structural": {
+        "closed": true
+      },
+      "product_image": "carrier"
+    },
+    {
+      "id": "abelian_group",
+      "family": "group_like",
+      "description": "A group whose operation is also commutative.",
+      "laws": {
+        "associative": true,
+        "commutative": true,
+        "invertible": true,
+        "unital": true
+      },
+      "structural": {
+        "closed": true
+      },
+      "product_image": "carrier"
+    },
+    {
+      "id": "semilattice_meet",
+      "family": "lattice_like",
+      "description": "A single associative, commutative, idempotent operation that lowers information (intersection, min, logical and). Idempotence makes repetition safe; meet can only narrow authority.",
+      "laws": {
+        "associative": true,
+        "commutative": true,
+        "idempotent": true,
+        "unital": true
+      },
+      "structural": {
+        "closed": true
+      },
+      "product_image": "carrier",
+      "binary_operations": [
+        "intersect",
+        "min",
+        "and",
+        "gcd",
+        "meet"
+      ]
+    },
+    {
+      "id": "semilattice_join",
+      "family": "lattice_like",
+      "description": "A single associative, commutative, idempotent operation that adds information (union, max, logical or). Idempotence makes repetition safe.",
+      "laws": {
+        "associative": true,
+        "commutative": true,
+        "idempotent": true,
+        "unital": true
+      },
+      "structural": {
+        "closed": true
+      },
+      "product_image": "carrier",
+      "binary_operations": [
+        "union",
+        "max",
+        "or",
+        "lcm",
+        "join"
+      ]
+    },
+    {
+      "id": "lattice",
+      "family": "lattice_like",
+      "description": "Two idempotent operations (meet and join) satisfying absorption. Meet combines constraints, join combines alternatives.",
+      "laws": {
+        "associative": true,
+        "commutative": true,
+        "idempotent": true,
+        "unital": true
+      },
+      "structural": {
+        "closed": true
+      },
+      "product_image": "carrier",
+      "binary_operations": [
+        "meet_join_pair"
+      ]
+    },
+    {
+      "id": "ring",
+      "family": "ring_like",
+      "description": "Addition and multiplication with distributivity. The additive side is an abelian group; the multiplicative side is a monoid.",
+      "laws": {
+        "associative": true,
+        "invertible": true,
+        "distributive": true,
+        "unital": true
+      },
+      "structural": {
+        "closed": true
+      },
+      "product_image": "carrier",
+      "scalar_field": true
+    },
+    {
+      "id": "module",
+      "family": "module_like",
+      "description": "An abelian group of vectors with scalar multiplication by a ring. Scalars are not vectors: the scalar action is V*R -> V.",
+      "laws": {
+        "associative": true,
+        "invertible": true,
+        "distributive": true,
+        "unital": true
+      },
+      "structural": {
+        "closed": false
+      },
+      "product_image": "carrier",
+      "scalar_field": true
+    },
+    {
+      "id": "algebra",
+      "family": "algebra_like",
+      "description": "A vector space equipped with a bilinear product V*V -> V. Associativity is applicable but not implied; declare true or false.",
+      "laws": {
+        "associative": "*",
+        "bilinear": true
+      },
+      "structural": {
+        "closed": true
+      },
+      "product_image": "carrier",
+      "scalar_field": true
+    },
+    {
+      "id": "associative_algebra",
+      "family": "algebra_like",
+      "description": "An algebra whose internal product is associative. Associativity does not imply commutativity (matrix multiplication is the standard witness).",
+      "laws": {
+        "associative": true,
+        "bilinear": true
+      },
+      "structural": {
+        "closed": true
+      },
+      "product_image": "carrier",
+      "scalar_field": true
+    },
+    {
+      "id": "unital_associative_algebra",
+      "family": "algebra_like",
+      "description": "The algebra of ordered composable transformations: bilinear, associative, and carrying a multiplicative identity 1_A with 1_A.x = x.1_A = x. Unital does not imply commutative, so operand order remains semantically significant.",
+      "laws": {
+        "associative": true,
+        "bilinear": true,
+        "unital": true
+      },
+      "structural": {
+        "closed": true
+      },
+      "product_image": "carrier",
+      "scalar_field": true
+    },
+    {
+      "id": "nonassociative_algebra",
+      "family": "algebra_like",
+      "description": "An algebra whose internal product is NOT associative (cross product, Lie bracket, most composition of semantic operators). Associativity must be declared false - null is rejected because the law is applicable and known to fail.",
+      "laws": {
+        "associative": false,
+        "bilinear": true
+      },
+      "structural": {
+        "closed": true
+      },
+      "product_image": "carrier",
+      "scalar_field": true
+    },
+    {
+      "id": "inner_product_space",
+      "family": "algebra_like",
+      "description": "A vector space with an inner product V*V -> R. This is not an algebra multiplication: the product leaves the carrier. It is bilinear, symmetric and positive definite, and it has no multiplicative identity.",
+      "laws": {
+        "associative": null,
+        "idempotent": null,
+        "bilinear": "*"
+      },
+      "structural": {
+        "closed": false
+      },
+      "product_image": "scalar",
+      "scalar_field": true
+    },
+    {
+      "id": "square_zero_extension",
+      "family": "algebra_like",
+      "description": "The trivial extension A = K + V with v.w = 0 for all v, w in V. Multiplication is (a,v)(b,w) = (ab, aw + bv): there is no vw term. The result is associative, commutative, bilinear and UNITAL, with 1_A = (1,0) taken entirely from K even though V has no internal product of its own. V is an ideal and its square is zero, so no element (0,v) is invertible. This is the representational algebra of a Micronaut's local state: K carries the coefficients and the identity, V carries the features.",
+      "laws": {
+        "associative": true,
+        "commutative": true,
+        "unital": true,
+        "bilinear": true,
+        "invertible": false
+      },
+      "structural": {
+        "closed": true
+      },
+      "product_image": "carrier",
+      "scalar_field": true
+    },
+    {
+      "id": "clifford_algebra",
+      "family": "algebra_like",
+      "description": "Cl(2,0): the Clifford algebra over R² with signature (+,+). Basis {1, e1, e2, e12} with e1²=+1, e2²=+1, e12²=-1, e1*e2=e12, e2*e1=-e12. The product is associative, unital (1_A=(1,0,0,0)), bilinear, and NOT commutative (e1*e2 != e2*e1). Not invertible in general (zero divisors exist in grade-mixed multivectors). phase_policy=none: Cl(2,0) is a representational/measurement layer; it carries no phase authority and does not enforce phase adjacency — the fold_engine dist!=1 gate stays authoritative for vertical folds.",
+      "laws": {
+        "associative": true,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": true,
+        "unital": true,
+        "bilinear": true,
+        "anticommutative": false
+      },
+      "structural": {
+        "closed": true
+      },
+      "product_image": "carrier",
+      "scalar_field": true
+    },
+    {
+      "id": "binary_vector_space",
+      "family": "group_like",
+      "description": "F2^n under XOR: an abelian group and a vector space over GF(2). Associative, commutative, unital (the zero vector) and fully invertible — in fact every element is its OWN inverse, a XOR a = 0, which is stronger than invertibility and is what makes XOR a difference operator rather than a comparison. Not idempotent: a XOR a is 0, not a.",
+      "laws": {
+        "associative": true,
+        "commutative": true,
+        "idempotent": false,
+        "invertible": true,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null
+      },
+      "structural": {
+        "closed": true
+      },
+      "product_image": "carrier",
+      "scalar_field": true
+    },
+    {
+      "id": "tensor_algebra",
+      "family": "algebra_like",
+      "description": "T(V), the free unital associative algebra on V, with concatenation as multiplication. It imposes NO relations: u(v)w != v(u)w is not identified with anything, and e1(x)e1 stays a word rather than collapsing to a scalar. Every other algebra in this family is a quotient of it, and the quotient is never inferred from the fact that an element is stored as a tensor.",
+      "laws": {
+        "associative": true,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": true,
+        "unital": true,
+        "bilinear": true,
+        "anticommutative": false
+      },
+      "structural": {
+        "closed": true
+      },
+      "product_image": "carrier",
+      "scalar_field": true
+    },
+    {
+      "id": "symmetric_algebra",
+      "family": "algebra_like",
+      "description": "Sym(V) = T(V)/(uv - vu): the generators commute, so words reduce to their sorted form with no sign. This is the quotient to choose when order is genuinely irrelevant; choosing it by accident silently discards order.",
+      "laws": {
+        "associative": true,
+        "commutative": true,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": true,
+        "unital": true,
+        "bilinear": true,
+        "anticommutative": false
+      },
+      "structural": {
+        "closed": true
+      },
+      "product_image": "carrier",
+      "scalar_field": true
+    },
+    {
+      "id": "exterior_algebra",
+      "family": "algebra_like",
+      "description": "Lambda(V) = T(V)/(v(x)v): v^v = 0, so any repeated generator annihilates, and swapping two generators flips the sign. The Clifford algebra with Q = 0.",
+      "laws": {
+        "associative": true,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": true,
+        "unital": true,
+        "bilinear": true,
+        "anticommutative": true
+      },
+      "structural": {
+        "closed": true
+      },
+      "product_image": "carrier",
+      "scalar_field": true
+    }
+  ],
+  "operators": [
+    {
+      "operator": "SCORE",
+      "kind": "operator",
+      "description": "Unary evaluation producing one score per candidate. Score combination is a property of the reducer, not of SCORE.",
+      "algebra": {
+        "structure": "scalar_arithmetic",
+        "carrier": "float32",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "scalar",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "unspecified"
+      }
+    },
+    {
+      "operator": "RANK",
+      "kind": "operator",
+      "description": "Orders an admitted set. Ordering is a unary operator over a set: no binary law applies, but the output is order-carrying, so it may not be regrouped with anything.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "float32",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "unspecified"
+      }
+    },
+    {
+      "operator": "COLLAPSE",
+      "kind": "operator",
+      "description": "Total-order reduction under Jyggalag at T=0.00. Deterministic and idempotent, but NOT associative: the surviving candidate depends on the rank order it consumed, so regrouped execution is not licensed.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "float32",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": false,
+        "commutative": null,
+        "idempotent": true,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "unspecified"
+      }
+    },
+    {
+      "operator": "VERIFY",
+      "kind": "operator",
+      "description": "The Ch'en gate. A unary predicate over candidate + evidence; produces a gate token. No commit, no delta.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "boolean",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "operator": "TRAIN",
+      "kind": "operator",
+      "description": "Proposes a W_learned delta. Impure and non-deterministic: the same input evaluated twice against an updated W_learned is not the same call. Never regroupable, never repeat-safe.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "state",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": false,
+        "deterministic": false,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "unspecified"
+      }
+    },
+    {
+      "operator": "COMPARE",
+      "kind": "operator",
+      "description": "Structured comparison of two candidates. Antisymmetric, not commutative: COMPARE(a,b) and COMPARE(b,a) are different reports.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "record",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": false,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "operator": "RECALL",
+      "kind": "operator",
+      "description": "GramStore + vector evidence retrieval. Read-only, order-carrying output.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "gram_event_list",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "operator": "PROJECT",
+      "kind": "operator",
+      "description": "VectorMu geodesic projection. Idempotent: projecting an already-projected substrate is stable. Mutation none, so the projection itself is pure.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "vector",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": true,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "implementation_defined"
+      }
+    },
+    {
+      "operator": "QUESTION",
+      "kind": "operator",
+      "description": "Question selector. Records q_pref entries, so it is impure and its answer depends on question history.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "record",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": false,
+        "deterministic": false,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "unspecified"
+      }
+    },
+    {
+      "operator": "IDENTITY_STATE",
+      "kind": "operator",
+      "description": "The unit of the endomorphism monoid over FoldState: returns the state it was given, unchanged. Pure, idempotent, and phase-preserving. It is not a phase transition and may never be used as one.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "state",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": true,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "preserve",
+        "reproducibility": "exact",
+        "note": "Endomorphism identity: id . f = f . id = f. A no-op inside a phase is not a phase transition."
+      }
+    },
+    {
+      "operator": "IDENTITY_TRANSFORM",
+      "kind": "operator",
+      "description": "The unit of vector/tensor transformation composition: returns the substrate unchanged. Phase-preserving for the same reason IDENTITY_STATE is.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "vector",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": true,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "preserve",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "operator": "ADVANCE_PHASE",
+      "kind": "operator",
+      "description": "Explicitly requests the next phase in the K'UHUL cycle. This is the only operator with phase authority, it is impure (control state changes), and the request still passes through XCFE admission - declaring the policy is not the authorization.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "state",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": false,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": false,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "advance",
+        "reproducibility": "unspecified",
+        "note": "Advancing twice from Wo lands in Yax then Sek, never back to Wo: not idempotent."
+      }
+    },
+    {
+      "operator": "PROPOSE",
+      "kind": "operator",
+      "description": "Proposes candidates for a gap. Unary over the constraints a caller supplied: it generates a set, ranks nothing, selects nothing and admits nothing, so no binary law applies. The proposals are candidates by construction.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "record",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "deterministic_grouping"
+      }
+    }
+  ],
+  "reducers": [
+    {
+      "operator": "SUM_SCORES",
+      "kind": "reducer",
+      "description": "Mathematically a commutative monoid over the reals. The executable carrier is float32, and float addition is not associative in general, so regrouping is licensed only into the canonical balanced tree.",
+      "algebra": {
+        "structure": "commutative_monoid",
+        "carrier": "float32",
+        "scalar_field": null,
+        "binary_operation": "add",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "0",
+        "associative": true,
+        "commutative": true,
+        "idempotent": false,
+        "invertible": true,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "deterministic_grouping",
+        "canonical_grouping": {
+          "kind": "balanced",
+          "chunk": 64
+        }
+      }
+    },
+    {
+      "operator": "WEIGHT_DELTA_SUM",
+      "kind": "reducer",
+      "description": "Accumulates proposed W_learned deltas before the commit gate. Pure arithmetic over float64; ordering of accumulation is pinned by the canonical tree so TRAIN accounting is reproducible.",
+      "algebra": {
+        "structure": "commutative_monoid",
+        "carrier": "float64",
+        "scalar_field": null,
+        "binary_operation": "add",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "0",
+        "associative": true,
+        "commutative": true,
+        "idempotent": false,
+        "invertible": true,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "deterministic_grouping",
+        "canonical_grouping": {
+          "kind": "balanced",
+          "chunk": 64
+        },
+        "note": "Accumulating the delta is pure; APPLYING it is TRAIN, which is impure. Do not conflate the two."
+      }
+    },
+    {
+      "operator": "MAX_SCORES",
+      "kind": "reducer",
+      "description": "Semilattice join over the score order. max is grouping-exact for IEEE-754 non-NaN inputs, so full tree reduction and arbitrary chunking are licensed.",
+      "algebra": {
+        "structure": "semilattice_join",
+        "carrier": "float32",
+        "scalar_field": null,
+        "binary_operation": "max",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "-inf",
+        "associative": true,
+        "commutative": true,
+        "idempotent": true,
+        "invertible": false,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact",
+        "note": "NaN is the only exception: a comparator that propagates NaN keeps maximum grouping-exact; one that ignores NaN does not."
+      }
+    },
+    {
+      "operator": "MIN_SCORES",
+      "kind": "reducer",
+      "description": "Semilattice meet over the score order. Mirror of MAX_SCORES; grouping-exact.",
+      "algebra": {
+        "structure": "semilattice_meet",
+        "carrier": "float32",
+        "scalar_field": null,
+        "binary_operation": "min",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "+inf",
+        "associative": true,
+        "commutative": true,
+        "idempotent": true,
+        "invertible": false,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "operator": "EVIDENCE_MEET",
+      "kind": "reducer",
+      "description": "Combines authority over the effect lattice by intersection. P_effective = P_phase & P_track & P_executor. Combining authorities can never grant an effect none of them permitted.",
+      "algebra": {
+        "structure": "semilattice_meet",
+        "carrier": "effect_set",
+        "scalar_field": null,
+        "binary_operation": "intersect",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "universe",
+        "associative": true,
+        "commutative": true,
+        "idempotent": true,
+        "invertible": false,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "operator": "EVIDENCE_JOIN",
+      "kind": "reducer",
+      "description": "Combines alternatives over the effect lattice by union. Grants only the union of what the parts already granted; it is not an authority amplifier, so callers must still gate on XCFE.",
+      "algebra": {
+        "structure": "semilattice_join",
+        "carrier": "effect_set",
+        "scalar_field": null,
+        "binary_operation": "union",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "empty_set",
+        "associative": true,
+        "commutative": true,
+        "idempotent": true,
+        "invertible": false,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "operator": "GRAM_SEQUENCE",
+      "kind": "reducer",
+      "description": "Appends gram events. Associative and pure, so chunked regrouping is legal, but not commutative: the event order is the payload. Balanced regrouping is licensed for value, never for permutation.",
+      "algebra": {
+        "structure": "monoid",
+        "carrier": "gram_event_list",
+        "scalar_field": null,
+        "binary_operation": "append",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "[]",
+        "associative": true,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "operator": "MATMUL",
+      "kind": "reducer",
+      "description": "Ordered composition of transformations: bilinear, associative, unital, and NOT commutative. The identity matrix is the unit, which is why A(I) = A and why an absent transform can be elided instead of skipped. Operand order is semantically significant, so no reordering is licensed.",
+      "algebra": {
+        "structure": "unital_associative_algebra",
+        "carrier": "square_matrix_n",
+        "scalar_field": "real",
+        "binary_operation": "matmul",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "identity_matrix",
+        "associative": true,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": true,
+        "unital": true,
+        "bilinear": true,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "deterministic_grouping",
+        "note": "invertible is false, not null: singular matrices have no inverse, so inversion is a per-value precondition rather than a carrier law."
+      }
+    },
+    {
+      "operator": "DOT_PRODUCT",
+      "kind": "reducer",
+      "description": "The inner product V x V -> R. Bilinear, symmetric, and NOT unital: an inner product has no multiplicative identity because its result leaves the carrier.",
+      "algebra": {
+        "structure": "inner_product_space",
+        "carrier": "vector",
+        "scalar_field": "real",
+        "binary_operation": "inner_product",
+        "product_image": "scalar",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": true,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": true,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "implementation_defined"
+      }
+    },
+    {
+      "operator": "COSINE_SIMILARITY",
+      "kind": "reducer",
+      "description": "The normalized inner product. Bilinearity does NOT survive normalization: cos(a, b+c) != cos(a,b) + cos(a,c), because the denominator depends on the operands. This is the counterexample to 'it operates on vectors, therefore it inherits vector algebra'.",
+      "algebra": {
+        "structure": "inner_product_space",
+        "carrier": "vector",
+        "scalar_field": "real",
+        "binary_operation": "cosine",
+        "product_image": "scalar",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": true,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": false,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "implementation_defined",
+        "note": "Derived from DOT_PRODUCT but not an inner product: division by ||a||.||b|| destroys bilinearity."
+      }
+    },
+    {
+      "operator": "CROSS_PRODUCT",
+      "kind": "reducer",
+      "description": "Bilinear, anticommutative, distributive, and nonassociative: (a x b) x c != a x (b x c), and a x b = -(b x a). Swapping operands is licensed only together with a sign flip, and there is no identity element.",
+      "algebra": {
+        "structure": "nonassociative_algebra",
+        "carrier": "vector3",
+        "scalar_field": "real",
+        "binary_operation": "cross",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": null,
+        "associative": false,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": null,
+        "distributive": true,
+        "unital": false,
+        "bilinear": true,
+        "anticommutative": true,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "exact",
+        "note": "unital is false, not null: the law is applicable and no unit exists (a x 1 = 0 for every candidate 1)."
+      }
+    },
+    {
+      "operator": "LEARNING_STATE_UPDATE",
+      "kind": "reducer",
+      "description": "Sequential state update. Function composition IS associative, so regrouping is mathematically sound, but each step is impure, so the regroup permission is withheld on impurity rather than on associativity. This is the case that distinguishes the two.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "state",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": "no_op",
+        "associative": true,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": null,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": false,
+        "deterministic": false,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "unspecified",
+        "note": "Composition is unital (id) and associative, yet not executable: purity, not algebra, is what withholds the permission."
+      }
+    },
+    {
+      "operator": "MICRONAUT_STATE_ALGEBRA",
+      "kind": "algebra",
+      "description": "A_mu = K + V_mu, the square-zero (trivial) extension of a Micronaut's local feature module. (a,v)(b,w) = (ab, aw + bv) with v.w = 0: the identity 1_A = (1,0) comes entirely from K even though V_mu has no internal product, and V_mu is an ideal whose square is zero. This is a REPRESENTATIONAL algebra, not an executable fold: it organizes state compartments and grants no execution authority, and it never licenses an inner-product claim (see DOT_PRODUCT, which is an external bilinear form).",
+      "algebra": {
+        "structure": "square_zero_extension",
+        "carrier": "micronaut_state",
+        "scalar_field": "real",
+        "binary_operation": "square_zero_product",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "1_A",
+        "associative": true,
+        "commutative": true,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": true,
+        "unital": true,
+        "bilinear": true,
+        "anticommutative": false,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "deterministic_grouping",
+        "note": "invertible is false, not null: (0,v) squares to zero, so it has no inverse, while (a,v) with a != 0 inverts to (1/a, -v/a^2). Invertibility is a per-value precondition, not a carrier law."
+      }
+    },
+    {
+      "operator": "GA_PRODUCT",
+      "kind": "algebra",
+      "description": "The Cl(2,0) geometric product. Associative, unital (identity = scalar 1), bilinear, and NOT commutative: e1*e2 = e12 but e2*e1 = -e12. Operand order is semantically significant; no reordering is licensed. This is the base Clifford product from which the derived operators GA_PHASE_PRODUCT (full-angle phase product, scalar=arc_weight) and GA_PHASE_ROTATION (half-angle rotor for sandwich rotation) are constructed. phase_policy=none: the product is a geometric measurement layer and carries no phase authority.",
+      "algebra": {
+        "structure": "clifford_algebra",
+        "carrier": "multivector_2d",
+        "scalar_field": "real",
+        "binary_operation": "geometric_product",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "1",
+        "associative": true,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": true,
+        "unital": true,
+        "bilinear": true,
+        "anticommutative": false,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "operator": "GA_PHASE_PRODUCT",
+      "kind": "algebra",
+      "description": "The relative-orientation rotor e_j e_i of two C6 phase vectors. Its scalar part equals arc_weight(after, before) exactly, so the existing cosine weight is the scalar half of this product; its bivector part carries the oriented sweep that cosine cannot see.",
+      "algebra": {
+        "structure": "clifford_algebra",
+        "carrier": "multivector_2d",
+        "scalar_field": "real",
+        "binary_operation": "phase_geometric_product",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "1",
+        "associative": true,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": true,
+        "unital": true,
+        "bilinear": true,
+        "anticommutative": false,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "operator": "GA_PHASE_ROTATION",
+      "kind": "algebra",
+      "description": "Half-angle rotor U = cos(dtheta/2) - I sin(dtheta/2) acting by v' = U v ~U. This is the only correct way to rotate a phase vector: sandwiching the full-angle product rotates by TWICE the swept angle.",
+      "algebra": {
+        "structure": "module",
+        "carrier": "multivector_2d",
+        "scalar_field": "real",
+        "binary_operation": "rotor_sandwich",
+        "product_image": "carrier",
+        "closed": false,
+        "identity": "1",
+        "associative": true,
+        "commutative": null,
+        "idempotent": false,
+        "invertible": true,
+        "distributive": true,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "exact",
+        "note": "A module action, not a product on two vectors: ((R1R2)v = R1(R2v), 1 v = v). The even subalgebra of Cl(2,0) is commutative, so rotor composition commutes, but the action itself has no commutativity law."
+      }
+    },
+    {
+      "operator": "GA_MEASURE",
+      "kind": "algebra",
+      "description": "Extracts alignment (a.b), orientation (the I coefficient of a^b) and distance-squared from a pair of multivectors. Evidence only: it establishes no semantic truth, authorizes no training and moves no topology.",
+      "algebra": {
+        "structure": "scalar_arithmetic",
+        "carrier": "multivector_2d",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "scalar",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact",
+        "note": "Two candidates with identical scalar alignment but opposite orientation are distinguishable here, and only here."
+      }
+    },
+    {
+      "operator": "GA_ENCODE_TWIST",
+      "kind": "algebra",
+      "description": "Opt-in conversion of an existing (x, y, z) triple into M = x e1 + y e2 + z I. This is NOT an isometric embedding of Euclidean 3D: M^2 = (x^2 + y^2 - z^2) 1, so the bivector coordinate enters with negative signature and the Euclidean norm is not recoverable from the Clifford square.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "multivector_2d",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact",
+        "note": "The existing 3D normalization is preserved unchanged; the multivector interpretation is a separate, explicit conversion."
+      }
+    },
+    {
+      "operator": "VECTOR_XOR",
+      "kind": "algebra",
+      "description": "Elementwise XOR of two binary feature vectors. The result is a difference mask: the positions where the two encodings disagree. Self-inverse, so (a XOR b) XOR b = a exactly — the mask is also the undo, which is what makes it usable for wildcard binding checks rather than only for comparison.",
+      "algebra": {
+        "structure": "binary_vector_space",
+        "carrier": "binary_vector",
+        "scalar_field": "GF(2)",
+        "binary_operation": "xor",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "zero_vector",
+        "associative": true,
+        "commutative": true,
+        "idempotent": false,
+        "invertible": true,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact",
+        "note": "Every element is its own inverse: a XOR a = 0. No operand order, no grouping and no repetition can change the value."
+      }
+    },
+    {
+      "operator": "VECTOR_POPCOUNT",
+      "kind": "algebra",
+      "description": "popcount(a): the number of set bits. For a difference mask this is the number of differing features, which is why popcount(a XOR b) is the Hamming distance rather than a second operation.",
+      "algebra": {
+        "structure": "scalar_arithmetic",
+        "carrier": "binary_vector",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "scalar",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "operator": "VECTOR_HAMMING_DISTANCE",
+      "kind": "algebra",
+      "description": "d_H(a,b) = popcount(a XOR b), and S_H = 1 - d_H/n. A metric on the binary encodings: it says how many features differ, never whether the difference is semantically meaningful.",
+      "algebra": {
+        "structure": "scalar_arithmetic",
+        "carrier": "binary_vector",
+        "scalar_field": null,
+        "binary_operation": "xor_popcount",
+        "product_image": "scalar",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact",
+        "note": "Metric evidence for Q3 adjacency and wildcard binding comparison, not a semantic judgement."
+      }
+    },
+    {
+      "operator": "FIELD_GRADIENT",
+      "kind": "algebra",
+      "description": "V = grad(phi) on a sampled domain, by finite differences. Linear in the potential, which the distributive law records. This is the CONTINUOUS side: it approximates a derivative and its accuracy is a property of the sampling, not of the algebra.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "scalar_field_2d",
+        "scalar_field": "real",
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": true,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "implementation_defined",
+        "note": "grad(a.phi + b.psi) = a.grad(phi) + b.grad(psi): linear, and that is the only algebraic law it claims."
+      }
+    },
+    {
+      "operator": "FIELD_EDGE_DELTA",
+      "kind": "algebra",
+      "description": "(grad_G phi)(u, v) = phi(v) - phi(u) on a graph edge. The DISCRETE side: an exact difference, not an approximation of a derivative. Reversing the edge negates it exactly.",
+      "algebra": {
+        "structure": "scalar_arithmetic",
+        "carrier": "edge_field",
+        "scalar_field": null,
+        "binary_operation": "potential_difference",
+        "product_image": "scalar",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact",
+        "note": "Discrete and continuous gradient are separate implementations on separate domains; neither substitutes for the other."
+      }
+    },
+    {
+      "operator": "FIELD_DIVERGENCE",
+      "kind": "algebra",
+      "description": "div V = dVx/dx + dVy/dy, the scalar part of the vector derivative. For a gradient field this measures how the potential's slope spreads.",
+      "algebra": {
+        "structure": "scalar_arithmetic",
+        "carrier": "vector_field_2d",
+        "scalar_field": null,
+        "binary_operation": "finite_difference",
+        "product_image": "scalar",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "operator": "FIELD_CURL_BIVECTOR",
+      "kind": "algebra",
+      "description": "The bivector part of the vector derivative: dVy/dx - dVx/dy. For a gradient field this vanishes, because the exterior part of grad(grad phi) is zero — the discrete analogue of a conservative field having no circulation.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "vector_field_2d",
+        "scalar_field": "real",
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "implementation_defined",
+        "note": "Curl of a gradient vanishes up to discretisation error; the test tolerance is the sampling's, not the algebra's."
+      }
+    },
+    {
+      "operator": "FIELD_CYCLE_INTEGRAL",
+      "kind": "algebra",
+      "description": "Sum of the edge deltas around a closed path. For a potential-derived edge field this is zero by telescoping: the integral between two points depends only on the endpoints. This is the deterministic consistency test the C6 cosine arc_weight FAILS, because a cosine is not a potential.",
+      "algebra": {
+        "structure": "scalar_arithmetic",
+        "carrier": "edge_field",
+        "scalar_field": null,
+        "binary_operation": "cycle_sum",
+        "product_image": "scalar",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact",
+        "note": "The six-cycle of adjacent arc_weight values sums to 3, not 0. That is the counterexample that keeps the two weights distinct."
+      }
+    },
+    {
+      "operator": "INCIDENCE_PRODUCT",
+      "kind": "reducer",
+      "description": "The weighted Gram matrix A = B W_E Bᵀ. B is the |V|×|C| incidence fingerprint (rows = vertices, cols = contexts/edges); W_E is the |C|×|C| edge weight matrix. The result A is |V|×|V| — the node-similarity matrix of the Active Fold Graph at Yax, which Sek operates on. This is the A_h_active = B_h_active W_E B_h_activeᵀ formula from SEMANTIC_FOLDS.md and FOLD_GRAPH.md. Linear in W_E for fixed B. The full map B → BWBᵀ is quadratic in B, NOT linear: (αB1+βB2)W(αB1+βB2)ᵀ expands with cross terms. Entry-wise A[i][j] = B_i W_E B_jᵀ defines the W_E-Gram bilinear form on vertex-row pairs. Result is symmetric (A = Aᵀ) when W_E is symmetric. No identity, not closed: output shape |V|×|V| differs from input shape |V|×|C|.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "rectangular_matrix",
+        "scalar_field": "real",
+        "binary_operation": "incidence_gram",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": false,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "implementation_defined",
+        "note": "bilinear=false records that B ↦ BWBᵀ is quadratic in B. Entry-wise bilinearity (A[i][j] bilinear in (B_i, B_j)) is a property of the inner bilinear form, not a law of the full operator. Parity: incidence_product(B, W) must agree with direct triple matmul B*W*Bᵀ to 1e-12."
+      }
+    },
+    {
+      "operator": "TENSOR_PRODUCT",
+      "kind": "algebra",
+      "description": "Concatenation in T(V). Associative and unital, and deliberately NOT commutative: e0(x)e1 and e1(x)e0 are different elements. This is the general associative construction, so a contract that uses it may not borrow commutativity, antisymmetry or a Clifford square from somewhere else.",
+      "algebra": {
+        "carrier": "tensor_term",
+        "scalar_field": "real",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "1",
+        "associative": true,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": true,
+        "unital": true,
+        "bilinear": true,
+        "anticommutative": false,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "exact",
+        "structure": "tensor_algebra",
+        "binary_operation": "tensor_product",
+        "note": "The quotient is an argument to the product, not a property of the carrier."
+      }
+    },
+    {
+      "operator": "SYMMETRIC_PRODUCT",
+      "kind": "algebra",
+      "description": "The symmetric quotient Sym(V) = T(V)/(uv - vu). Commutative, so operand order carries no meaning and the contract says so explicitly.",
+      "algebra": {
+        "carrier": "tensor_term",
+        "scalar_field": "real",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "1",
+        "associative": true,
+        "commutative": true,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": true,
+        "unital": true,
+        "bilinear": true,
+        "anticommutative": false,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact",
+        "structure": "symmetric_algebra",
+        "binary_operation": "symmetric_product"
+      }
+    },
+    {
+      "operator": "EXTERIOR_PRODUCT",
+      "kind": "algebra",
+      "description": "The exterior quotient Lambda(V) = T(V)/(v(x)v). Graded-anticommutative and nilpotent: a^a = 0 for every vector, which is why invertible is false.",
+      "algebra": {
+        "carrier": "tensor_term",
+        "scalar_field": "real",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "1",
+        "associative": true,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": true,
+        "unital": true,
+        "bilinear": true,
+        "anticommutative": true,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "exact",
+        "structure": "exterior_algebra",
+        "binary_operation": "wedge"
+      }
+    },
+    {
+      "operator": "TENSOR_COPRODUCT",
+      "kind": "algebra",
+      "description": "The shuffle (cut) coproduct: delta(w) = sum over subsets S of w_S (x) w_complement. It decomposes a word into ordered pairs without branching: total degree is preserved and no generator appears that was not already there. A coproduct is not automatically graph branching, and this one is not a learning system.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "tensor_term",
+        "scalar_field": "real",
+        "binary_operation": "coproduct",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "operator": "TENSOR_ANTIPODE",
+      "kind": "algebra",
+      "description": "The Hopf antipode S(w) = (-1)^|w| reverse(w), extended as an anti-algebra map. It is a convolution inverse of the identity, m(S(x)id)delta = epsilon(1), NOT an inverse of each element: T(V) is a Hopf algebra and its contract still declares invertible = false.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "tensor_term",
+        "scalar_field": "real",
+        "binary_operation": "antipode",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    }
+  ],
+  "fold_defaults": {
+    "sequential": {
+      "kind": "sequential",
+      "chunk": 1
+    },
+    "chunked": {
+      "kind": "chunked",
+      "chunk": 64
+    },
+    "balanced": {
+      "kind": "balanced",
+      "chunk": 64
+    },
+    "free": {
+      "kind": "free",
+      "chunk": 64
+    },
+    "description": "Grouping names a tree shape, never a permutation. 'free' may reorder operands only because the contract is commutative AND order-safe."
+  },
+  "invariants": [
+    "A1 law values are three-valued: true, false, null. null means NOT APPLICABLE and never means 'unchecked' or 'permitted'.",
+    "A2 a structure's laws table is binding: every law the structure names must be declared at exactly the required value ('*' means 'applicable, either true or false').",
+    "A3 commutative=true implies order_sensitive=false.",
+    "A4 associative=true does NOT imply commutativity and does NOT by itself license regrouping.",
+    "A5 regrouping a fold requires associative=true AND pure=true.",
+    "A6 regrouping a fold over a non-exact carrier additionally requires reproducibility in {exact, deterministic_grouping}.",
+    "A7 reordering operands additionally requires commutative=true.",
+    "A8 a fold over an empty sequence requires unital=true: the unit is the seed that lets an empty candidate set return a defined value without inventing a candidate.",
+    "A9 repeating an operator safely requires idempotent=true AND pure=true.",
+    "A10 inverting an operator requires invertible=true AND pure=true.",
+    "A11 an operator whose effects include propose_delta must declare pure=false.",
+    "A12 structure=algebra means the product closes on the carrier (V*V->V); a contract with product_image=carrier must declare associativity as applicable (true or false, never null).",
+    "A13 structure=inner_product_space means product_image=scalar and associativity is not applicable; it is not an algebra multiplication and may not be composed as one.",
+    "A14 structure=nonassociative_algebra requires associative=false explicitly; null is rejected.",
+    "A15 the effect lattice meet cannot widen authority: the combined set is a subset of every contributing authority.",
+    "A16 every SRAI operator resolves to exactly one algebra entry; no algebra entry may be orphaned.",
+    "A17 mathematical associativity is not executable associativity: float32/float64 addition is regrouped only into its declared canonical tree.",
+    "A18 a contract that declares deterministic=false may not claim any executable algebraic permission (regroup, reorder, repeat, invert).",
+    "A19 unital=true requires a named identity element, and a named identity requires unital=true. Unital does not imply commutative: matrix multiplication is the standard witness.",
+    "A20 an identity operator preserves the phase. A no-op inside a phase is not a phase transition, and only phase_policy=advance may cross a phase boundary.",
+    "A21 bilinearity licenses distribution over addition: a.(b+c) = a.b + a.c. It does not license regrouping, and it does not survive normalization: cosine similarity is not bilinear.",
+    "A22 anticommutativity licenses swapping operands only together with a sign flip: a.b = -(b.a).",
+    "A23 associativity does not imply commutativity, and unital does not imply commutativity. Ordered K'UHUL transformation composition is the case that needs both distinctions at once.",
+    "A24 a derived metric does not inherit the algebra of the operation it normalizes.",
+    "A25 a discrete edge difference is not a continuous derivative; FIELD_GRADIENT and FIELD_EDGE_DELTA have separate implementations and separate domains",
+    "A26 the C6 cosine arc_weight is not a potential difference: its six-cycle sums to 3, while a potential-derived edge field sums to 0 around every closed path",
+    "A27 XOR identifies which topological coordinate changed; a gradient identifies how the potential changed along it; neither grants topology authority",
+    "A28 a field measurement is evidence: no operator whose output is a field measurement may declare phase_policy other than none",
+    "A29 the quotient is declared in the contract, never inferred from the carrier: T(V), Sym(V), Lambda(V) and Cl(V,Q) are different algebras whose elements may share one storage type"
+  ],
+  "validation": {
+    "checker": "tools/check_algebra_isa.py",
+    "fixtures": "data/conformance/algebra_isa.json",
+    "cpp_test": "KHANARY_ALGEBRA_ISA_TEST"
+  }
+}

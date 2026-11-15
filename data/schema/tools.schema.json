@@ -1,0 +1,43 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "khanary.tools.v1",
+    "title": "CFPC Tools Permitted Set Contract",
+    "description": "Declares which tools a µ or task is permitted to invoke. Separate from <tool> catalog-only entries. Advisory or Enforced mode.",
+    "type": "object",
+    "required": ["@kind", "@id"],
+    "properties": {
+        "@kind": {
+            "type": "string",
+            "const": "semantic.tools.v1"
+        },
+        "@id": {
+            "type": "string",
+            "description": "Unique identifier for this permitted set contract."
+        },
+        "@owner": {
+            "type": "string",
+            "description": "Owning micronaut id."
+        },
+        "@permitted": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "minLength": 1
+            },
+            "uniqueItems": true,
+            "description": "Tool IDs this contract permits. Empty array = zero-access (valid)."
+        },
+        "@policy": {
+            "type": "object",
+            "properties": {
+                "mode": {
+                    "type": "string",
+                    "enum": ["advisory", "enforced"],
+                    "description": "advisory (default): violations logged but not blocked. enforced: violations block execution."
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

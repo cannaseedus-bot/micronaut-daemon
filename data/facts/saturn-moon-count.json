@@ -1,0 +1,45 @@
+{
+  "@kind": "kuhul.temporal.fact.v1",
+  "key": "fact:SATURN_MOONS",
+  "manifest_ref": "data/manifest/facts.manifest.json#fact:SATURN_MOONS",
+  "question": "How many moons does Saturn have?",
+  "subject_key": "entity:SATURN",
+  "quantity_key": "quantity:MOON_COUNT",
+  "temporal_class": "MUTABLE",
+  "counts_what": "confirmed saturnian satellites",
+  "counts_what_excludes": "unnamed moonlets and unconfirmed candidates",
+  "provenance_note": "Candidate values are preserved from micronauts-data/how-many-moons-does-saturn-have.json. They have not passed this repository's numeric verification/admission process; each remains unverified evidence and cannot answer a current-count query.",
+  "current_state": {
+    "status": "verified_unresolved",
+    "verified": true,
+    "current_value": null,
+    "effective": "2026-11-14",
+    "statement": "No current Saturn moon count has been verified in this repository; the real current number remains undiscovered here.",
+    "verification_scope": "repository_knowledge_state",
+    "verification_basis": "repository_owner_declaration",
+    "authority": "source_declaration"
+  },
+  "observations": [
+    {
+      "key": "fact:SATURN_2025_03",
+      "value": 274,
+      "effective": "2025-03",
+      "source": "NASA",
+      "source_ref": "source:NASA",
+      "statement": "As of March 2025, Saturn had 274 confirmed moons.",
+      "status": "superseded_candidate",
+      "verified": false,
+      "evidence": "micronauts-data/how-many-moons-does-saturn-have.json"
+    },
+    {
+      "key": "fact:SATURN_2026_06",
+      "value": 293,
+      "effective": "2026-06",
+      "source": "Wikipedia",
+      "source_ref": "source:WIKIPEDIA",
+      "statement": "Saturn has 293 moons with confirmed orbits as of June 2026.",
+      "status": "current_candidate",
+      "verified": false
+    }
+  ]
+}

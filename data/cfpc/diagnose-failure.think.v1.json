@@ -1,0 +1,39 @@
+{
+  "@kind": "semantic.think.v1",
+  "@id": "diagnose_failure",
+  "@owner": "REASON-µ",
+  "@mode": "diagnose",
+  "@subject": "contract_17",
+  "@context": "cfpc.field",
+  "@functions": [
+    {
+      "@kind": "semantic.function.v1",
+      "@id": "check_binding",
+      "@owner": "REASON-µ",
+      "@governs": ["schema_validation", "contract"],
+      "@capabilities": ["schema_validation"],
+      "@bindings": {
+        "artifact": {"type": "json", "required": true, "wildcard": "{artifact}"}
+      },
+      "@backend": {
+        "type": "micronaut",
+        "capability": "pattern_discovery"
+      },
+      "@policy": {
+        "max_depth": 3,
+        "cycle_detection": true,
+        "allow_dynamic_resolution": false
+      },
+      "@result": {
+        "retain_provenance": true,
+        "retain_gaps": true,
+        "allow_pattern_candidates": false
+      }
+    }
+  ],
+  "@policy": {
+    "max_depth": 3,
+    "max_operations": 6,
+    "cycle_detection": true
+  }
+}

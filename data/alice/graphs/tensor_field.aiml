@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from tensor_field.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH </pattern>
+    <template>source tensor_field.gml; label Tensor_Bundle_Projection_Field; identity 1501; directed 1; nodes 2; edges 1. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 1</pattern>
+    <template>Graph Tensor_Bundle_Projection_Field; node 1; id: 1; is_smooth_section: 1; jacobian_determinant: 1.0834; label: Tensor_Source; riemann_curvature_scalar: -0.412; tensor_rank_p: 1; tensor_rank_q: 1; x: 0.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Tensor_Bundle_Projection_Field; node 1; id: 1; is_smooth_section: 1; jacobian_determinant: 1.0834; label: Tensor_Source; riemann_curvature_scalar: -0.412; tensor_rank_p: 1; tensor_rank_q: 1; x: 0.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 2</pattern>
+    <template>Graph Tensor_Bundle_Projection_Field; node 2; id: 2; is_smooth_section: 1; label: Tensor_Target; tensor_rank_p: 1; tensor_rank_q: 1; x: 1.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph Tensor_Bundle_Projection_Field; node 2; id: 2; is_smooth_section: 1; label: Tensor_Target; tensor_rank_p: 1; tensor_rank_q: 1; x: 1.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1  2</pattern>
+    <template>Graph Tensor_Bundle_Projection_Field; edge 1 to 2; field_kind: tensor_field; g_00: -0.8524; g_01: 0.0125; g_10: 0.0125; g_11: 1.1486; jacobian_w: 1.0834; label: coordinate_transition; source: 1; target: 2; verb: @requires; vx: 0.1; vy: 0.0; vz: 0.0; weight: 1.0. Data-only graph record.</template>
+  </category>
+</aiml>

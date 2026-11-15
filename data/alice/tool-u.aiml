@@ -1,0 +1,121 @@
+<aiml version="1.0.1">
+  <!-- TOOL-µ AIML patterns.
+       Pattern engine: ELIZA/AIML.  Execution authority: K'UHUL via dispatch_call.
+       All templates wrap into <mx2lm>tool-u ...</mx2lm> for micronaut routing.
+       Tool call logs are written to gram store: tool:log:{name}, tool:count:{name}. -->
+
+  <!-- ── Canonical entry point ───────────────────────────────────────────── -->
+  <category>
+    <pattern>TOOL BANK</pattern>
+    <template><mx2lm>tool-u op=list phase=Pop bank=tool_manifest</mx2lm></template>
+  </category>
+
+  <!-- ── Tool card display ─────────────────────────────────────────────────
+       Returns a tool_card.v1: description, params, phase, micronaut, call_count -->
+  <category>
+    <pattern>TOOL CARD *</pattern>
+    <template><mx2lm>tool-u op=card tool=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>WHAT DOES TOOL * DO</pattern>
+    <template><mx2lm>tool-u op=card tool=<star/> phase=Pop card_view=true</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>DESCRIBE TOOL *</pattern>
+    <template><mx2lm>tool-u op=card tool=<star/> phase=Pop card_view=true</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>SHOW TOOL CARDS</pattern>
+    <template><mx2lm>tool-u op=list phase=Pop card_view=true</mx2lm></template>
+  </category>
+
+  <!-- ── Tool invocation ───────────────────────────────────────────────────
+       These patterns delegate to ORCH-µ/Coordinator for actual dispatch -->
+  <category>
+    <pattern>USE TOOL * WITH *</pattern>
+    <template><mx2lm>tool-u op=invoke tool=<star index="1"/> params=<star index="2"/> phase=Sek</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CALL TOOL * WITH *</pattern>
+    <template><mx2lm>tool-u op=invoke tool=<star index="1"/> params=<star index="2"/> phase=Sek</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CALL TOOL *</pattern>
+    <template><mx2lm>tool-u op=invoke tool=<star/> phase=Sek</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>RUN TOOL *</pattern>
+    <template><mx2lm>tool-u op=invoke tool=<star/> phase=Sek</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>INVOKE *</pattern>
+    <template><mx2lm>tool-u op=invoke tool=<star/> phase=Sek</mx2lm></template>
+  </category>
+
+  <!-- ── Tool status / log ─────────────────────────────────────────────────
+       Reads tool:log:last and tool:count:{name} from gram store -->
+  <category>
+    <pattern>TOOL STATUS</pattern>
+    <template><mx2lm>tool-u op=status phase=Pop key=tool:log:last</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>TOOL STATUS *</pattern>
+    <template><mx2lm>tool-u op=status tool=<star/> phase=Pop key=tool:log:<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>LAST TOOL</pattern>
+    <template><mx2lm>tool-u op=recall phase=Pop key=tool:log:last</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>HOW MANY TIMES DID I USE *</pattern>
+    <template><mx2lm>tool-u op=count tool=<star/> phase=Pop key=tool:count:<star/></mx2lm></template>
+  </category>
+
+  <!-- ── Phase-explicit surface ────────────────────────────────────────────
+       Allows direct phase-addressed tool operations -->
+  <category>
+    <pattern>TOOL POP *</pattern>
+    <template><mx2lm>tool-u op=recall phase=Pop tool=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>TOOL WO *</pattern>
+    <template><mx2lm>tool-u op=normalize phase=Wo tool=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>TOOL YAX *</pattern>
+    <template><mx2lm>tool-u op=assemble phase=Yax tool=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>TOOL SEK *</pattern>
+    <template><mx2lm>tool-u op=dispatch phase=Sek tool=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>TOOL CHEN *</pattern>
+    <template><mx2lm>tool-u op=verify phase=Ch'en tool=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>TOOL XUL *</pattern>
+    <template><mx2lm>tool-u op=commit phase=Xul tool=<star/></mx2lm></template>
+  </category>
+
+  <!-- ── Fallback ───────────────────────────────────────────────────────── -->
+  <category>
+    <pattern>TOOL *</pattern>
+    <template><mx2lm>tool-u hint TOOL BANK for op=card|invoke|status|list <star/></mx2lm></template>
+  </category>
+</aiml>

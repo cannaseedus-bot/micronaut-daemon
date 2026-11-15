@@ -1,0 +1,27 @@
+{
+  "id": "phase-driver.yax.v2",
+  "phase": "Yax",
+  "phase_order": 2,
+  "profile": "default",
+  "driver_weight": 1.0,
+  "ops": [
+    "admit_neighborhood",
+    "compose",
+    "aggregate",
+    "resolve_eliza_field_candidates",
+    "graph_bfs",
+    "srai_program_project",
+    "pi_triangle_route"
+  ],
+  "semantic_channels": {},
+  "emits": {
+    "data": true,
+    "next_phase_hint": true,
+    "verb": true,
+    "noun": true,
+    "opcode": true,
+    "confidence_delta": true
+  },
+  "default_verb": "@compose",
+  "terminal": false
+}

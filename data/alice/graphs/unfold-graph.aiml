@@ -1,0 +1,872 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from unfold-graph.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH UNFOLD-GRAPH</pattern>
+    <template>source unfold-graph.gml; label unfold-graph; identity unfold-graph; directed 0; nodes 48; edges 120. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 0</pattern>
+    <template>Graph unfold-graph; node 0; b0: 0; b1: 0; b2: 0; id: 0; label: REASON-µ:Pop; micronaut: REASON-µ; phase: Pop; theta: 0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE REASON-Μ:POP</pattern>
+    <template>Graph unfold-graph; node 0; b0: 0; b1: 0; b2: 0; id: 0; label: REASON-µ:Pop; micronaut: REASON-µ; phase: Pop; theta: 0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 1</pattern>
+    <template>Graph unfold-graph; node 1; b0: 0; b1: 0; b2: 0; id: 1; label: REASON-µ:Wo; micronaut: REASON-µ; phase: Wo; theta: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE REASON-Μ:WO</pattern>
+    <template>Graph unfold-graph; node 1; b0: 0; b1: 0; b2: 0; id: 1; label: REASON-µ:Wo; micronaut: REASON-µ; phase: Wo; theta: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 2</pattern>
+    <template>Graph unfold-graph; node 2; b0: 0; b1: 0; b2: 0; id: 2; label: REASON-µ:Yax; micronaut: REASON-µ; phase: Yax; theta: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE REASON-Μ:YAX</pattern>
+    <template>Graph unfold-graph; node 2; b0: 0; b1: 0; b2: 0; id: 2; label: REASON-µ:Yax; micronaut: REASON-µ; phase: Yax; theta: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 3</pattern>
+    <template>Graph unfold-graph; node 3; b0: 0; b1: 0; b2: 0; id: 3; label: REASON-µ:Sek; micronaut: REASON-µ; phase: Sek; theta: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE REASON-Μ:SEK</pattern>
+    <template>Graph unfold-graph; node 3; b0: 0; b1: 0; b2: 0; id: 3; label: REASON-µ:Sek; micronaut: REASON-µ; phase: Sek; theta: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 4</pattern>
+    <template>Graph unfold-graph; node 4; b0: 0; b1: 0; b2: 0; id: 4; label: REASON-µ:Chen; micronaut: REASON-µ; phase: Chen; theta: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE REASON-Μ:CHEN</pattern>
+    <template>Graph unfold-graph; node 4; b0: 0; b1: 0; b2: 0; id: 4; label: REASON-µ:Chen; micronaut: REASON-µ; phase: Chen; theta: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 5</pattern>
+    <template>Graph unfold-graph; node 5; b0: 0; b1: 0; b2: 0; id: 5; label: REASON-µ:Xul; micronaut: REASON-µ; phase: Xul; theta: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE REASON-Μ:XUL</pattern>
+    <template>Graph unfold-graph; node 5; b0: 0; b1: 0; b2: 0; id: 5; label: REASON-µ:Xul; micronaut: REASON-µ; phase: Xul; theta: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 6</pattern>
+    <template>Graph unfold-graph; node 6; b0: 1; b1: 0; b2: 0; id: 6; label: CREATE-µ:Pop; micronaut: CREATE-µ; phase: Pop; theta: 0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE CREATE-Μ:POP</pattern>
+    <template>Graph unfold-graph; node 6; b0: 1; b1: 0; b2: 0; id: 6; label: CREATE-µ:Pop; micronaut: CREATE-µ; phase: Pop; theta: 0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 7</pattern>
+    <template>Graph unfold-graph; node 7; b0: 1; b1: 0; b2: 0; id: 7; label: CREATE-µ:Wo; micronaut: CREATE-µ; phase: Wo; theta: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE CREATE-Μ:WO</pattern>
+    <template>Graph unfold-graph; node 7; b0: 1; b1: 0; b2: 0; id: 7; label: CREATE-µ:Wo; micronaut: CREATE-µ; phase: Wo; theta: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 8</pattern>
+    <template>Graph unfold-graph; node 8; b0: 1; b1: 0; b2: 0; id: 8; label: CREATE-µ:Yax; micronaut: CREATE-µ; phase: Yax; theta: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE CREATE-Μ:YAX</pattern>
+    <template>Graph unfold-graph; node 8; b0: 1; b1: 0; b2: 0; id: 8; label: CREATE-µ:Yax; micronaut: CREATE-µ; phase: Yax; theta: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 9</pattern>
+    <template>Graph unfold-graph; node 9; b0: 1; b1: 0; b2: 0; id: 9; label: CREATE-µ:Sek; micronaut: CREATE-µ; phase: Sek; theta: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE CREATE-Μ:SEK</pattern>
+    <template>Graph unfold-graph; node 9; b0: 1; b1: 0; b2: 0; id: 9; label: CREATE-µ:Sek; micronaut: CREATE-µ; phase: Sek; theta: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 10</pattern>
+    <template>Graph unfold-graph; node 10; b0: 1; b1: 0; b2: 0; id: 10; label: CREATE-µ:Chen; micronaut: CREATE-µ; phase: Chen; theta: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE CREATE-Μ:CHEN</pattern>
+    <template>Graph unfold-graph; node 10; b0: 1; b1: 0; b2: 0; id: 10; label: CREATE-µ:Chen; micronaut: CREATE-µ; phase: Chen; theta: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 11</pattern>
+    <template>Graph unfold-graph; node 11; b0: 1; b1: 0; b2: 0; id: 11; label: CREATE-µ:Xul; micronaut: CREATE-µ; phase: Xul; theta: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE CREATE-Μ:XUL</pattern>
+    <template>Graph unfold-graph; node 11; b0: 1; b1: 0; b2: 0; id: 11; label: CREATE-µ:Xul; micronaut: CREATE-µ; phase: Xul; theta: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 12</pattern>
+    <template>Graph unfold-graph; node 12; b0: 0; b1: 1; b2: 0; id: 12; label: INFER-µ:Pop; micronaut: INFER-µ; phase: Pop; theta: 0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE INFER-Μ:POP</pattern>
+    <template>Graph unfold-graph; node 12; b0: 0; b1: 1; b2: 0; id: 12; label: INFER-µ:Pop; micronaut: INFER-µ; phase: Pop; theta: 0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 13</pattern>
+    <template>Graph unfold-graph; node 13; b0: 0; b1: 1; b2: 0; id: 13; label: INFER-µ:Wo; micronaut: INFER-µ; phase: Wo; theta: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE INFER-Μ:WO</pattern>
+    <template>Graph unfold-graph; node 13; b0: 0; b1: 1; b2: 0; id: 13; label: INFER-µ:Wo; micronaut: INFER-µ; phase: Wo; theta: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 14</pattern>
+    <template>Graph unfold-graph; node 14; b0: 0; b1: 1; b2: 0; id: 14; label: INFER-µ:Yax; micronaut: INFER-µ; phase: Yax; theta: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE INFER-Μ:YAX</pattern>
+    <template>Graph unfold-graph; node 14; b0: 0; b1: 1; b2: 0; id: 14; label: INFER-µ:Yax; micronaut: INFER-µ; phase: Yax; theta: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 15</pattern>
+    <template>Graph unfold-graph; node 15; b0: 0; b1: 1; b2: 0; id: 15; label: INFER-µ:Sek; micronaut: INFER-µ; phase: Sek; theta: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE INFER-Μ:SEK</pattern>
+    <template>Graph unfold-graph; node 15; b0: 0; b1: 1; b2: 0; id: 15; label: INFER-µ:Sek; micronaut: INFER-µ; phase: Sek; theta: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 16</pattern>
+    <template>Graph unfold-graph; node 16; b0: 0; b1: 1; b2: 0; id: 16; label: INFER-µ:Chen; micronaut: INFER-µ; phase: Chen; theta: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE INFER-Μ:CHEN</pattern>
+    <template>Graph unfold-graph; node 16; b0: 0; b1: 1; b2: 0; id: 16; label: INFER-µ:Chen; micronaut: INFER-µ; phase: Chen; theta: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 17</pattern>
+    <template>Graph unfold-graph; node 17; b0: 0; b1: 1; b2: 0; id: 17; label: INFER-µ:Xul; micronaut: INFER-µ; phase: Xul; theta: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE INFER-Μ:XUL</pattern>
+    <template>Graph unfold-graph; node 17; b0: 0; b1: 1; b2: 0; id: 17; label: INFER-µ:Xul; micronaut: INFER-µ; phase: Xul; theta: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 18</pattern>
+    <template>Graph unfold-graph; node 18; b0: 1; b1: 1; b2: 0; id: 18; label: ELIZA:Pop; micronaut: ELIZA; phase: Pop; theta: 0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE ELIZA:POP</pattern>
+    <template>Graph unfold-graph; node 18; b0: 1; b1: 1; b2: 0; id: 18; label: ELIZA:Pop; micronaut: ELIZA; phase: Pop; theta: 0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 19</pattern>
+    <template>Graph unfold-graph; node 19; b0: 1; b1: 1; b2: 0; id: 19; label: ELIZA:Wo; micronaut: ELIZA; phase: Wo; theta: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE ELIZA:WO</pattern>
+    <template>Graph unfold-graph; node 19; b0: 1; b1: 1; b2: 0; id: 19; label: ELIZA:Wo; micronaut: ELIZA; phase: Wo; theta: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 20</pattern>
+    <template>Graph unfold-graph; node 20; b0: 1; b1: 1; b2: 0; id: 20; label: ELIZA:Yax; micronaut: ELIZA; phase: Yax; theta: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE ELIZA:YAX</pattern>
+    <template>Graph unfold-graph; node 20; b0: 1; b1: 1; b2: 0; id: 20; label: ELIZA:Yax; micronaut: ELIZA; phase: Yax; theta: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 21</pattern>
+    <template>Graph unfold-graph; node 21; b0: 1; b1: 1; b2: 0; id: 21; label: ELIZA:Sek; micronaut: ELIZA; phase: Sek; theta: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE ELIZA:SEK</pattern>
+    <template>Graph unfold-graph; node 21; b0: 1; b1: 1; b2: 0; id: 21; label: ELIZA:Sek; micronaut: ELIZA; phase: Sek; theta: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 22</pattern>
+    <template>Graph unfold-graph; node 22; b0: 1; b1: 1; b2: 0; id: 22; label: ELIZA:Chen; micronaut: ELIZA; phase: Chen; theta: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE ELIZA:CHEN</pattern>
+    <template>Graph unfold-graph; node 22; b0: 1; b1: 1; b2: 0; id: 22; label: ELIZA:Chen; micronaut: ELIZA; phase: Chen; theta: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 23</pattern>
+    <template>Graph unfold-graph; node 23; b0: 1; b1: 1; b2: 0; id: 23; label: ELIZA:Xul; micronaut: ELIZA; phase: Xul; theta: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE ELIZA:XUL</pattern>
+    <template>Graph unfold-graph; node 23; b0: 1; b1: 1; b2: 0; id: 23; label: ELIZA:Xul; micronaut: ELIZA; phase: Xul; theta: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 24</pattern>
+    <template>Graph unfold-graph; node 24; b0: 0; b1: 0; b2: 1; id: 24; label: TOOL-µ:Pop; micronaut: TOOL-µ; phase: Pop; theta: 0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE TOOL-Μ:POP</pattern>
+    <template>Graph unfold-graph; node 24; b0: 0; b1: 0; b2: 1; id: 24; label: TOOL-µ:Pop; micronaut: TOOL-µ; phase: Pop; theta: 0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 25</pattern>
+    <template>Graph unfold-graph; node 25; b0: 0; b1: 0; b2: 1; id: 25; label: TOOL-µ:Wo; micronaut: TOOL-µ; phase: Wo; theta: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE TOOL-Μ:WO</pattern>
+    <template>Graph unfold-graph; node 25; b0: 0; b1: 0; b2: 1; id: 25; label: TOOL-µ:Wo; micronaut: TOOL-µ; phase: Wo; theta: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 26</pattern>
+    <template>Graph unfold-graph; node 26; b0: 0; b1: 0; b2: 1; id: 26; label: TOOL-µ:Yax; micronaut: TOOL-µ; phase: Yax; theta: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE TOOL-Μ:YAX</pattern>
+    <template>Graph unfold-graph; node 26; b0: 0; b1: 0; b2: 1; id: 26; label: TOOL-µ:Yax; micronaut: TOOL-µ; phase: Yax; theta: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 27</pattern>
+    <template>Graph unfold-graph; node 27; b0: 0; b1: 0; b2: 1; id: 27; label: TOOL-µ:Sek; micronaut: TOOL-µ; phase: Sek; theta: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE TOOL-Μ:SEK</pattern>
+    <template>Graph unfold-graph; node 27; b0: 0; b1: 0; b2: 1; id: 27; label: TOOL-µ:Sek; micronaut: TOOL-µ; phase: Sek; theta: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 28</pattern>
+    <template>Graph unfold-graph; node 28; b0: 0; b1: 0; b2: 1; id: 28; label: TOOL-µ:Chen; micronaut: TOOL-µ; phase: Chen; theta: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE TOOL-Μ:CHEN</pattern>
+    <template>Graph unfold-graph; node 28; b0: 0; b1: 0; b2: 1; id: 28; label: TOOL-µ:Chen; micronaut: TOOL-µ; phase: Chen; theta: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 29</pattern>
+    <template>Graph unfold-graph; node 29; b0: 0; b1: 0; b2: 1; id: 29; label: TOOL-µ:Xul; micronaut: TOOL-µ; phase: Xul; theta: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE TOOL-Μ:XUL</pattern>
+    <template>Graph unfold-graph; node 29; b0: 0; b1: 0; b2: 1; id: 29; label: TOOL-µ:Xul; micronaut: TOOL-µ; phase: Xul; theta: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 30</pattern>
+    <template>Graph unfold-graph; node 30; b0: 1; b1: 0; b2: 1; id: 30; label: ORCH-µ:Pop; micronaut: ORCH-µ; phase: Pop; theta: 0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE ORCH-Μ:POP</pattern>
+    <template>Graph unfold-graph; node 30; b0: 1; b1: 0; b2: 1; id: 30; label: ORCH-µ:Pop; micronaut: ORCH-µ; phase: Pop; theta: 0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 31</pattern>
+    <template>Graph unfold-graph; node 31; b0: 1; b1: 0; b2: 1; id: 31; label: ORCH-µ:Wo; micronaut: ORCH-µ; phase: Wo; theta: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE ORCH-Μ:WO</pattern>
+    <template>Graph unfold-graph; node 31; b0: 1; b1: 0; b2: 1; id: 31; label: ORCH-µ:Wo; micronaut: ORCH-µ; phase: Wo; theta: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 32</pattern>
+    <template>Graph unfold-graph; node 32; b0: 1; b1: 0; b2: 1; id: 32; label: ORCH-µ:Yax; micronaut: ORCH-µ; phase: Yax; theta: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE ORCH-Μ:YAX</pattern>
+    <template>Graph unfold-graph; node 32; b0: 1; b1: 0; b2: 1; id: 32; label: ORCH-µ:Yax; micronaut: ORCH-µ; phase: Yax; theta: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 33</pattern>
+    <template>Graph unfold-graph; node 33; b0: 1; b1: 0; b2: 1; id: 33; label: ORCH-µ:Sek; micronaut: ORCH-µ; phase: Sek; theta: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE ORCH-Μ:SEK</pattern>
+    <template>Graph unfold-graph; node 33; b0: 1; b1: 0; b2: 1; id: 33; label: ORCH-µ:Sek; micronaut: ORCH-µ; phase: Sek; theta: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 34</pattern>
+    <template>Graph unfold-graph; node 34; b0: 1; b1: 0; b2: 1; id: 34; label: ORCH-µ:Chen; micronaut: ORCH-µ; phase: Chen; theta: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE ORCH-Μ:CHEN</pattern>
+    <template>Graph unfold-graph; node 34; b0: 1; b1: 0; b2: 1; id: 34; label: ORCH-µ:Chen; micronaut: ORCH-µ; phase: Chen; theta: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 35</pattern>
+    <template>Graph unfold-graph; node 35; b0: 1; b1: 0; b2: 1; id: 35; label: ORCH-µ:Xul; micronaut: ORCH-µ; phase: Xul; theta: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE ORCH-Μ:XUL</pattern>
+    <template>Graph unfold-graph; node 35; b0: 1; b1: 0; b2: 1; id: 35; label: ORCH-µ:Xul; micronaut: ORCH-µ; phase: Xul; theta: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 36</pattern>
+    <template>Graph unfold-graph; node 36; b0: 0; b1: 1; b2: 1; id: 36; label: MEM-µ:Pop; micronaut: MEM-µ; phase: Pop; theta: 0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE MEM-Μ:POP</pattern>
+    <template>Graph unfold-graph; node 36; b0: 0; b1: 1; b2: 1; id: 36; label: MEM-µ:Pop; micronaut: MEM-µ; phase: Pop; theta: 0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 37</pattern>
+    <template>Graph unfold-graph; node 37; b0: 0; b1: 1; b2: 1; id: 37; label: MEM-µ:Wo; micronaut: MEM-µ; phase: Wo; theta: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE MEM-Μ:WO</pattern>
+    <template>Graph unfold-graph; node 37; b0: 0; b1: 1; b2: 1; id: 37; label: MEM-µ:Wo; micronaut: MEM-µ; phase: Wo; theta: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 38</pattern>
+    <template>Graph unfold-graph; node 38; b0: 0; b1: 1; b2: 1; id: 38; label: MEM-µ:Yax; micronaut: MEM-µ; phase: Yax; theta: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE MEM-Μ:YAX</pattern>
+    <template>Graph unfold-graph; node 38; b0: 0; b1: 1; b2: 1; id: 38; label: MEM-µ:Yax; micronaut: MEM-µ; phase: Yax; theta: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 39</pattern>
+    <template>Graph unfold-graph; node 39; b0: 0; b1: 1; b2: 1; id: 39; label: MEM-µ:Sek; micronaut: MEM-µ; phase: Sek; theta: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE MEM-Μ:SEK</pattern>
+    <template>Graph unfold-graph; node 39; b0: 0; b1: 1; b2: 1; id: 39; label: MEM-µ:Sek; micronaut: MEM-µ; phase: Sek; theta: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 40</pattern>
+    <template>Graph unfold-graph; node 40; b0: 0; b1: 1; b2: 1; id: 40; label: MEM-µ:Chen; micronaut: MEM-µ; phase: Chen; theta: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE MEM-Μ:CHEN</pattern>
+    <template>Graph unfold-graph; node 40; b0: 0; b1: 1; b2: 1; id: 40; label: MEM-µ:Chen; micronaut: MEM-µ; phase: Chen; theta: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 41</pattern>
+    <template>Graph unfold-graph; node 41; b0: 0; b1: 1; b2: 1; id: 41; label: MEM-µ:Xul; micronaut: MEM-µ; phase: Xul; theta: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE MEM-Μ:XUL</pattern>
+    <template>Graph unfold-graph; node 41; b0: 0; b1: 1; b2: 1; id: 41; label: MEM-µ:Xul; micronaut: MEM-µ; phase: Xul; theta: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 42</pattern>
+    <template>Graph unfold-graph; node 42; b0: 1; b1: 1; b2: 1; id: 42; label: Coordinator:Pop; micronaut: Coordinator; phase: Pop; theta: 0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE COORDINATOR:POP</pattern>
+    <template>Graph unfold-graph; node 42; b0: 1; b1: 1; b2: 1; id: 42; label: Coordinator:Pop; micronaut: Coordinator; phase: Pop; theta: 0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 43</pattern>
+    <template>Graph unfold-graph; node 43; b0: 1; b1: 1; b2: 1; id: 43; label: Coordinator:Wo; micronaut: Coordinator; phase: Wo; theta: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE COORDINATOR:WO</pattern>
+    <template>Graph unfold-graph; node 43; b0: 1; b1: 1; b2: 1; id: 43; label: Coordinator:Wo; micronaut: Coordinator; phase: Wo; theta: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 44</pattern>
+    <template>Graph unfold-graph; node 44; b0: 1; b1: 1; b2: 1; id: 44; label: Coordinator:Yax; micronaut: Coordinator; phase: Yax; theta: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE COORDINATOR:YAX</pattern>
+    <template>Graph unfold-graph; node 44; b0: 1; b1: 1; b2: 1; id: 44; label: Coordinator:Yax; micronaut: Coordinator; phase: Yax; theta: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 45</pattern>
+    <template>Graph unfold-graph; node 45; b0: 1; b1: 1; b2: 1; id: 45; label: Coordinator:Sek; micronaut: Coordinator; phase: Sek; theta: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE COORDINATOR:SEK</pattern>
+    <template>Graph unfold-graph; node 45; b0: 1; b1: 1; b2: 1; id: 45; label: Coordinator:Sek; micronaut: Coordinator; phase: Sek; theta: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 46</pattern>
+    <template>Graph unfold-graph; node 46; b0: 1; b1: 1; b2: 1; id: 46; label: Coordinator:Chen; micronaut: Coordinator; phase: Chen; theta: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE COORDINATOR:CHEN</pattern>
+    <template>Graph unfold-graph; node 46; b0: 1; b1: 1; b2: 1; id: 46; label: Coordinator:Chen; micronaut: Coordinator; phase: Chen; theta: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE 47</pattern>
+    <template>Graph unfold-graph; node 47; b0: 1; b1: 1; b2: 1; id: 47; label: Coordinator:Xul; micronaut: Coordinator; phase: Xul; theta: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH NODE COORDINATOR:XUL</pattern>
+    <template>Graph unfold-graph; node 47; b0: 1; b1: 1; b2: 1; id: 47; label: Coordinator:Xul; micronaut: Coordinator; phase: Xul; theta: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 0  6</pattern>
+    <template>Graph unfold-graph; edge 0 to 6; bit: b0; label: b0_flip; source: 0; target: 6; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 1  7</pattern>
+    <template>Graph unfold-graph; edge 1 to 7; bit: b0; label: b0_flip; source: 1; target: 7; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 2  8</pattern>
+    <template>Graph unfold-graph; edge 2 to 8; bit: b0; label: b0_flip; source: 2; target: 8; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 3  9</pattern>
+    <template>Graph unfold-graph; edge 3 to 9; bit: b0; label: b0_flip; source: 3; target: 9; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 4  10</pattern>
+    <template>Graph unfold-graph; edge 4 to 10; bit: b0; label: b0_flip; source: 4; target: 10; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 5  11</pattern>
+    <template>Graph unfold-graph; edge 5 to 11; bit: b0; label: b0_flip; source: 5; target: 11; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 12  18</pattern>
+    <template>Graph unfold-graph; edge 12 to 18; bit: b0; label: b0_flip; source: 12; target: 18; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 13  19</pattern>
+    <template>Graph unfold-graph; edge 13 to 19; bit: b0; label: b0_flip; source: 13; target: 19; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 14  20</pattern>
+    <template>Graph unfold-graph; edge 14 to 20; bit: b0; label: b0_flip; source: 14; target: 20; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 15  21</pattern>
+    <template>Graph unfold-graph; edge 15 to 21; bit: b0; label: b0_flip; source: 15; target: 21; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 16  22</pattern>
+    <template>Graph unfold-graph; edge 16 to 22; bit: b0; label: b0_flip; source: 16; target: 22; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 17  23</pattern>
+    <template>Graph unfold-graph; edge 17 to 23; bit: b0; label: b0_flip; source: 17; target: 23; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 24  30</pattern>
+    <template>Graph unfold-graph; edge 24 to 30; bit: b0; label: b0_flip; source: 24; target: 30; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 25  31</pattern>
+    <template>Graph unfold-graph; edge 25 to 31; bit: b0; label: b0_flip; source: 25; target: 31; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 26  32</pattern>
+    <template>Graph unfold-graph; edge 26 to 32; bit: b0; label: b0_flip; source: 26; target: 32; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 27  33</pattern>
+    <template>Graph unfold-graph; edge 27 to 33; bit: b0; label: b0_flip; source: 27; target: 33; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 28  34</pattern>
+    <template>Graph unfold-graph; edge 28 to 34; bit: b0; label: b0_flip; source: 28; target: 34; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 29  35</pattern>
+    <template>Graph unfold-graph; edge 29 to 35; bit: b0; label: b0_flip; source: 29; target: 35; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 36  42</pattern>
+    <template>Graph unfold-graph; edge 36 to 42; bit: b0; label: b0_flip; source: 36; target: 42; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 37  43</pattern>
+    <template>Graph unfold-graph; edge 37 to 43; bit: b0; label: b0_flip; source: 37; target: 43; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 38  44</pattern>
+    <template>Graph unfold-graph; edge 38 to 44; bit: b0; label: b0_flip; source: 38; target: 44; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 39  45</pattern>
+    <template>Graph unfold-graph; edge 39 to 45; bit: b0; label: b0_flip; source: 39; target: 45; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 40  46</pattern>
+    <template>Graph unfold-graph; edge 40 to 46; bit: b0; label: b0_flip; source: 40; target: 46; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 41  47</pattern>
+    <template>Graph unfold-graph; edge 41 to 47; bit: b0; label: b0_flip; source: 41; target: 47; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 0  12</pattern>
+    <template>Graph unfold-graph; edge 0 to 12; bit: b1; label: b1_flip; source: 0; target: 12; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 1  13</pattern>
+    <template>Graph unfold-graph; edge 1 to 13; bit: b1; label: b1_flip; source: 1; target: 13; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 2  14</pattern>
+    <template>Graph unfold-graph; edge 2 to 14; bit: b1; label: b1_flip; source: 2; target: 14; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 3  15</pattern>
+    <template>Graph unfold-graph; edge 3 to 15; bit: b1; label: b1_flip; source: 3; target: 15; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 4  16</pattern>
+    <template>Graph unfold-graph; edge 4 to 16; bit: b1; label: b1_flip; source: 4; target: 16; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 5  17</pattern>
+    <template>Graph unfold-graph; edge 5 to 17; bit: b1; label: b1_flip; source: 5; target: 17; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 6  18</pattern>
+    <template>Graph unfold-graph; edge 6 to 18; bit: b1; label: b1_flip; source: 6; target: 18; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 7  19</pattern>
+    <template>Graph unfold-graph; edge 7 to 19; bit: b1; label: b1_flip; source: 7; target: 19; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 8  20</pattern>
+    <template>Graph unfold-graph; edge 8 to 20; bit: b1; label: b1_flip; source: 8; target: 20; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 9  21</pattern>
+    <template>Graph unfold-graph; edge 9 to 21; bit: b1; label: b1_flip; source: 9; target: 21; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 10  22</pattern>
+    <template>Graph unfold-graph; edge 10 to 22; bit: b1; label: b1_flip; source: 10; target: 22; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 11  23</pattern>
+    <template>Graph unfold-graph; edge 11 to 23; bit: b1; label: b1_flip; source: 11; target: 23; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 24  36</pattern>
+    <template>Graph unfold-graph; edge 24 to 36; bit: b1; label: b1_flip; source: 24; target: 36; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 25  37</pattern>
+    <template>Graph unfold-graph; edge 25 to 37; bit: b1; label: b1_flip; source: 25; target: 37; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 26  38</pattern>
+    <template>Graph unfold-graph; edge 26 to 38; bit: b1; label: b1_flip; source: 26; target: 38; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 27  39</pattern>
+    <template>Graph unfold-graph; edge 27 to 39; bit: b1; label: b1_flip; source: 27; target: 39; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 28  40</pattern>
+    <template>Graph unfold-graph; edge 28 to 40; bit: b1; label: b1_flip; source: 28; target: 40; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 29  41</pattern>
+    <template>Graph unfold-graph; edge 29 to 41; bit: b1; label: b1_flip; source: 29; target: 41; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 30  42</pattern>
+    <template>Graph unfold-graph; edge 30 to 42; bit: b1; label: b1_flip; source: 30; target: 42; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 31  43</pattern>
+    <template>Graph unfold-graph; edge 31 to 43; bit: b1; label: b1_flip; source: 31; target: 43; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 32  44</pattern>
+    <template>Graph unfold-graph; edge 32 to 44; bit: b1; label: b1_flip; source: 32; target: 44; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 33  45</pattern>
+    <template>Graph unfold-graph; edge 33 to 45; bit: b1; label: b1_flip; source: 33; target: 45; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 34  46</pattern>
+    <template>Graph unfold-graph; edge 34 to 46; bit: b1; label: b1_flip; source: 34; target: 46; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 35  47</pattern>
+    <template>Graph unfold-graph; edge 35 to 47; bit: b1; label: b1_flip; source: 35; target: 47; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 0  24</pattern>
+    <template>Graph unfold-graph; edge 0 to 24; bit: b2; label: b2_flip; source: 0; target: 24; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 1  25</pattern>
+    <template>Graph unfold-graph; edge 1 to 25; bit: b2; label: b2_flip; source: 1; target: 25; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 2  26</pattern>
+    <template>Graph unfold-graph; edge 2 to 26; bit: b2; label: b2_flip; source: 2; target: 26; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 3  27</pattern>
+    <template>Graph unfold-graph; edge 3 to 27; bit: b2; label: b2_flip; source: 3; target: 27; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 4  28</pattern>
+    <template>Graph unfold-graph; edge 4 to 28; bit: b2; label: b2_flip; source: 4; target: 28; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 5  29</pattern>
+    <template>Graph unfold-graph; edge 5 to 29; bit: b2; label: b2_flip; source: 5; target: 29; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 6  30</pattern>
+    <template>Graph unfold-graph; edge 6 to 30; bit: b2; label: b2_flip; source: 6; target: 30; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 7  31</pattern>
+    <template>Graph unfold-graph; edge 7 to 31; bit: b2; label: b2_flip; source: 7; target: 31; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 8  32</pattern>
+    <template>Graph unfold-graph; edge 8 to 32; bit: b2; label: b2_flip; source: 8; target: 32; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 9  33</pattern>
+    <template>Graph unfold-graph; edge 9 to 33; bit: b2; label: b2_flip; source: 9; target: 33; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 10  34</pattern>
+    <template>Graph unfold-graph; edge 10 to 34; bit: b2; label: b2_flip; source: 10; target: 34; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 11  35</pattern>
+    <template>Graph unfold-graph; edge 11 to 35; bit: b2; label: b2_flip; source: 11; target: 35; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 12  36</pattern>
+    <template>Graph unfold-graph; edge 12 to 36; bit: b2; label: b2_flip; source: 12; target: 36; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 13  37</pattern>
+    <template>Graph unfold-graph; edge 13 to 37; bit: b2; label: b2_flip; source: 13; target: 37; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 14  38</pattern>
+    <template>Graph unfold-graph; edge 14 to 38; bit: b2; label: b2_flip; source: 14; target: 38; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 15  39</pattern>
+    <template>Graph unfold-graph; edge 15 to 39; bit: b2; label: b2_flip; source: 15; target: 39; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 16  40</pattern>
+    <template>Graph unfold-graph; edge 16 to 40; bit: b2; label: b2_flip; source: 16; target: 40; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 17  41</pattern>
+    <template>Graph unfold-graph; edge 17 to 41; bit: b2; label: b2_flip; source: 17; target: 41; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 18  42</pattern>
+    <template>Graph unfold-graph; edge 18 to 42; bit: b2; label: b2_flip; source: 18; target: 42; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 19  43</pattern>
+    <template>Graph unfold-graph; edge 19 to 43; bit: b2; label: b2_flip; source: 19; target: 43; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 20  44</pattern>
+    <template>Graph unfold-graph; edge 20 to 44; bit: b2; label: b2_flip; source: 20; target: 44; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 21  45</pattern>
+    <template>Graph unfold-graph; edge 21 to 45; bit: b2; label: b2_flip; source: 21; target: 45; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 22  46</pattern>
+    <template>Graph unfold-graph; edge 22 to 46; bit: b2; label: b2_flip; source: 22; target: 46; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 23  47</pattern>
+    <template>Graph unfold-graph; edge 23 to 47; bit: b2; label: b2_flip; source: 23; target: 47; verb: @semantic_step; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 0 POP→WO 1</pattern>
+    <template>Graph unfold-graph; edge 0 to 1; label: Pop→Wo; source: 0; target: 1; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 1 WO→YAX 2</pattern>
+    <template>Graph unfold-graph; edge 1 to 2; label: Wo→Yax; source: 1; target: 2; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 2 YAX→SEK 3</pattern>
+    <template>Graph unfold-graph; edge 2 to 3; label: Yax→Sek; source: 2; target: 3; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 3 SEK→CHEN 4</pattern>
+    <template>Graph unfold-graph; edge 3 to 4; label: Sek→Chen; source: 3; target: 4; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 4 CHEN→XUL 5</pattern>
+    <template>Graph unfold-graph; edge 4 to 5; label: Chen→Xul; source: 4; target: 5; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 5 XUL→POP 0</pattern>
+    <template>Graph unfold-graph; edge 5 to 0; label: Xul→Pop; source: 5; target: 0; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 6 POP→WO 7</pattern>
+    <template>Graph unfold-graph; edge 6 to 7; label: Pop→Wo; source: 6; target: 7; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 7 WO→YAX 8</pattern>
+    <template>Graph unfold-graph; edge 7 to 8; label: Wo→Yax; source: 7; target: 8; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 8 YAX→SEK 9</pattern>
+    <template>Graph unfold-graph; edge 8 to 9; label: Yax→Sek; source: 8; target: 9; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 9 SEK→CHEN 10</pattern>
+    <template>Graph unfold-graph; edge 9 to 10; label: Sek→Chen; source: 9; target: 10; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 10 CHEN→XUL 11</pattern>
+    <template>Graph unfold-graph; edge 10 to 11; label: Chen→Xul; source: 10; target: 11; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 11 XUL→POP 6</pattern>
+    <template>Graph unfold-graph; edge 11 to 6; label: Xul→Pop; source: 11; target: 6; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 12 POP→WO 13</pattern>
+    <template>Graph unfold-graph; edge 12 to 13; label: Pop→Wo; source: 12; target: 13; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 13 WO→YAX 14</pattern>
+    <template>Graph unfold-graph; edge 13 to 14; label: Wo→Yax; source: 13; target: 14; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 14 YAX→SEK 15</pattern>
+    <template>Graph unfold-graph; edge 14 to 15; label: Yax→Sek; source: 14; target: 15; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 15 SEK→CHEN 16</pattern>
+    <template>Graph unfold-graph; edge 15 to 16; label: Sek→Chen; source: 15; target: 16; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 16 CHEN→XUL 17</pattern>
+    <template>Graph unfold-graph; edge 16 to 17; label: Chen→Xul; source: 16; target: 17; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 17 XUL→POP 12</pattern>
+    <template>Graph unfold-graph; edge 17 to 12; label: Xul→Pop; source: 17; target: 12; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 18 POP→WO 19</pattern>
+    <template>Graph unfold-graph; edge 18 to 19; label: Pop→Wo; source: 18; target: 19; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 19 WO→YAX 20</pattern>
+    <template>Graph unfold-graph; edge 19 to 20; label: Wo→Yax; source: 19; target: 20; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 20 YAX→SEK 21</pattern>
+    <template>Graph unfold-graph; edge 20 to 21; label: Yax→Sek; source: 20; target: 21; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 21 SEK→CHEN 22</pattern>
+    <template>Graph unfold-graph; edge 21 to 22; label: Sek→Chen; source: 21; target: 22; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 22 CHEN→XUL 23</pattern>
+    <template>Graph unfold-graph; edge 22 to 23; label: Chen→Xul; source: 22; target: 23; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 23 XUL→POP 18</pattern>
+    <template>Graph unfold-graph; edge 23 to 18; label: Xul→Pop; source: 23; target: 18; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 24 POP→WO 25</pattern>
+    <template>Graph unfold-graph; edge 24 to 25; label: Pop→Wo; source: 24; target: 25; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 25 WO→YAX 26</pattern>
+    <template>Graph unfold-graph; edge 25 to 26; label: Wo→Yax; source: 25; target: 26; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 26 YAX→SEK 27</pattern>
+    <template>Graph unfold-graph; edge 26 to 27; label: Yax→Sek; source: 26; target: 27; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 27 SEK→CHEN 28</pattern>
+    <template>Graph unfold-graph; edge 27 to 28; label: Sek→Chen; source: 27; target: 28; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 28 CHEN→XUL 29</pattern>
+    <template>Graph unfold-graph; edge 28 to 29; label: Chen→Xul; source: 28; target: 29; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 29 XUL→POP 24</pattern>
+    <template>Graph unfold-graph; edge 29 to 24; label: Xul→Pop; source: 29; target: 24; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 30 POP→WO 31</pattern>
+    <template>Graph unfold-graph; edge 30 to 31; label: Pop→Wo; source: 30; target: 31; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 31 WO→YAX 32</pattern>
+    <template>Graph unfold-graph; edge 31 to 32; label: Wo→Yax; source: 31; target: 32; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 32 YAX→SEK 33</pattern>
+    <template>Graph unfold-graph; edge 32 to 33; label: Yax→Sek; source: 32; target: 33; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 33 SEK→CHEN 34</pattern>
+    <template>Graph unfold-graph; edge 33 to 34; label: Sek→Chen; source: 33; target: 34; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 34 CHEN→XUL 35</pattern>
+    <template>Graph unfold-graph; edge 34 to 35; label: Chen→Xul; source: 34; target: 35; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 35 XUL→POP 30</pattern>
+    <template>Graph unfold-graph; edge 35 to 30; label: Xul→Pop; source: 35; target: 30; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 36 POP→WO 37</pattern>
+    <template>Graph unfold-graph; edge 36 to 37; label: Pop→Wo; source: 36; target: 37; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 37 WO→YAX 38</pattern>
+    <template>Graph unfold-graph; edge 37 to 38; label: Wo→Yax; source: 37; target: 38; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 38 YAX→SEK 39</pattern>
+    <template>Graph unfold-graph; edge 38 to 39; label: Yax→Sek; source: 38; target: 39; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 39 SEK→CHEN 40</pattern>
+    <template>Graph unfold-graph; edge 39 to 40; label: Sek→Chen; source: 39; target: 40; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 40 CHEN→XUL 41</pattern>
+    <template>Graph unfold-graph; edge 40 to 41; label: Chen→Xul; source: 40; target: 41; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 41 XUL→POP 36</pattern>
+    <template>Graph unfold-graph; edge 41 to 36; label: Xul→Pop; source: 41; target: 36; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 42 POP→WO 43</pattern>
+    <template>Graph unfold-graph; edge 42 to 43; label: Pop→Wo; source: 42; target: 43; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 43 WO→YAX 44</pattern>
+    <template>Graph unfold-graph; edge 43 to 44; label: Wo→Yax; source: 43; target: 44; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 44 YAX→SEK 45</pattern>
+    <template>Graph unfold-graph; edge 44 to 45; label: Yax→Sek; source: 44; target: 45; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 45 SEK→CHEN 46</pattern>
+    <template>Graph unfold-graph; edge 45 to 46; label: Sek→Chen; source: 45; target: 46; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 46 CHEN→XUL 47</pattern>
+    <template>Graph unfold-graph; edge 46 to 47; label: Chen→Xul; source: 46; target: 47; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH UNFOLD-GRAPH EDGE 47 XUL→POP 42</pattern>
+    <template>Graph unfold-graph; edge 47 to 42; label: Xul→Pop; source: 47; target: 42; verb: @phase_step; weight: 0.5. Data-only graph record.</template>
+  </category>
+</aiml>

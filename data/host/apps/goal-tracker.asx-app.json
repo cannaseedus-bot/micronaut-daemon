@@ -1,0 +1,56 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "goal-tracker",
+  "@key": "⟁APP:GOAL_TRACKER",
+  "@mount": "⟁ROOT:GOAL_TRACKER",
+  "@theme": { "accent": "#a78bfa", "bg": "#07040f", "surface": "#10081e", "text": "#ede9fe", "hero_phase": "Ch'en", "tagline": "Set the goal. Show the proof." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "goals", "component": "⟁WIDGET:GOALS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "goals": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:GOAL_TRACKER": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:ADD_GOAL"] },
+    "⟁ACTION:ADD_GOAL": { "@type": "button", "@text": "New Goal", "@on": { "click": "goals.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:GOALS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:GOALS": { "@type": "feed", "@bind": "state.goals", "@children": ["⟁WIDGET:GOAL_CARD"] },
+    "⟁WIDGET:GOAL_CARD": { "@type": "content-card", "@bind": "goal", "@on": { "log": "goals.log_evidence", "view": "goals.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:COMPLETION_RATE", "⟁WIDGET:ACTIVE"] },
+    "⟁WIDGET:COMPLETION_RATE": { "@type": "stat", "@bind": "data.completion_rate" },
+    "⟁WIDGET:ACTIVE": { "@type": "stat", "@bind": "data.active_goals" }
+  },
+  "@programs": {
+    "goals.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "goals.log_evidence": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "goals.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "goal.log": "goals.log_evidence", "goal.view": "goals.view", "compose.open": "goals.open_compose" },
+  "@imports": [{ "ref": "goal", "mode": "schema_table" }, { "ref": "evidence", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "milestone-badges", "name": "Milestone Badges", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Earn badges when you hit goal milestones." },
+      { "id": "accountability-partner", "name": "Accountability Partner", "category": "community", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Invite a partner to see your goal progress." },
+      { "id": "review-bot", "name": "Weekly Review Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Auto-generate a weekly goal progress review." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "goals.new", "pattern": "NEW GOAL|ADD GOAL|SET GOAL *", "intent": "open_compose" },
+      { "id": "goals.evidence", "pattern": "LOG EVIDENCE|ADD PROOF|MILESTONE *", "intent": "log_evidence" }
+    ]
+  },
+  "@data": {
+    "completion_rate": "67%",
+    "active_goals": 4,
+    "spotlight": [
+      { "id": "sp1", "title": "Launch KHANARY v1.0 by Dec 31", "badge": "On Track", "progress": 0.78, "excerpt": "Core features complete. Docs and conformance tests remaining." },
+      { "id": "sp2", "title": "Read 24 books this year", "badge": "Behind", "progress": 0.54, "excerpt": "13/24 complete. Need to pick up pace in Q4." },
+      { "id": "sp3", "title": "Build an emergency fund (6 months)", "badge": "Goal Met", "progress": 1.0, "excerpt": "Reached target. Now maintaining." }
+    ],
+    "schema": {
+      "goal": { "primaryKey": "goal_id", "fields": { "goal_id": { "type": "string" }, "title": { "type": "string", "required": true }, "description": { "type": "textarea" }, "target_date": { "type": "datetime" }, "progress": { "type": "float" }, "status": { "type": "string" }, "created_at": { "type": "datetime" } } },
+      "evidence": { "primaryKey": "evidence_id", "fields": { "evidence_id": { "type": "string" }, "goal_id": { "type": "string", "required": true }, "body": { "type": "textarea", "required": true }, "logged_at": { "type": "datetime" } } }
+    }
+  }
+}

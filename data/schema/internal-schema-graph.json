@@ -1,0 +1,172 @@
+{
+  "id": "khanary-internal-schema-graph-v1",
+  "internal_manifest_schema_links_only": true,
+  "description": "Registry of project-internal schema modules and their target assets.",
+  "runtime_contract_resolution": {
+    "policy": "runtime-critical modules resolve fold stack transitively via data/schema/kuhul.fold-runtime.json",
+    "stack_root": "data/schema/kuhul.fold-runtime.json",
+    "required_for_runtime_execution": [
+      "cycle-hash-spec",
+      "fold-runtime",
+      "kuhul-fold-runtime",
+      "phase-dll-drivers"
+    ]
+  },
+  "modules": [
+    {
+      "name": "manifest-map",
+      "schema_id": "urn:khanary:schema:manifest-map:1",
+      "schema_file": "data/schema/manifest-map.schema.json",
+      "targets": [
+        "data/manifest/css.manifest.json",
+        "data/manifest/kuhul.manifest.json",
+        "data/manifest/words.manifest.json",
+        "data/manifest/micronaut.manifest.json"
+      ]
+    },
+    {
+      "name": "micronaut-track-types",
+      "schema_id": "urn:khanary:schema:micronaut-track-types:1",
+      "schema_file": "data/schema/micronaut-track-types.schema.json",
+      "imports": []
+    },
+    {
+      "name": "micronaut-track",
+      "schema_id": "urn:khanary:schema:micronaut-track:1",
+      "schema_file": "data/schema/micronaut-track.schema.json",
+      "imports": [
+        "data/schema/micronaut-track-types.schema.json"
+      ],
+      "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+    },
+    {
+      "name": "kuhul-xsd",
+      "schema_id": "urn:khanary:schema:kuhul-xsd:1",
+      "schema_file": "data/schema/kuhul.xsd",
+      "targets": [
+        "docs/kuhul_atomic_horizontal_vertical_folds_guide.html",
+        "docs/SEMANTIC_FOLDS.md",
+        "docs/KUHUL_PHASE_ALGEBRA.md"
+      ]
+    },
+    {
+      "name": "cycle-hash-spec",
+      "schema_id": "urn:khanary:schema:cycle-hash-spec:1",
+      "schema_file": "data/schema/cycle-hash.spec.json",
+      "runtime_critical": true,
+      "imports": [
+        "data/schema/kuhul.xsd"
+      ]
+    },
+    {
+      "name": "fold-runtime",
+      "schema_id": "urn:khanary:schema:fold-runtime:1",
+      "schema_file": "data/schema/fold.runtime.json",
+      "runtime_critical": true,
+      "imports": [
+        "data/schema/cycle-hash.spec.json",
+        "data/schema/kuhul.xsd"
+      ]
+    },
+    {
+      "name": "resolver-primitives",
+      "schema_id": "urn:khanary:schema:resolver-primitives:1",
+      "schema_file": "data/schema/resolver.primitives.json",
+      "runtime_critical": false,
+      "imports": [
+        "data/schema/fold.runtime.json"
+      ],
+      "targets": [
+        "data/tracks/MATH-u.semantic-tracks.v1.json"
+      ]
+    },
+    {
+      "name": "math-isa",
+      "schema_id": "urn:khanary:schema:math-isa:1",
+      "schema_file": "data/schema/math-isa.json",
+      "runtime_critical": false,
+      "imports": [
+        "data/schema/fold.runtime.json",
+        "data/schema/resolver.primitives.json"
+      ],
+      "targets": [
+        "data/alice/math.aiml",
+        "data/tracks/MATH-u.semantic-tracks.v1.json"
+      ]
+    },
+    {
+      "name": "kuhul-fold-runtime",
+      "schema_id": "urn:khanary:schema:kuhul-fold-runtime:1",
+      "schema_file": "data/schema/kuhul.fold-runtime.json",
+      "runtime_critical": true,
+      "imports": [
+        "data/schema/cycle-hash.spec.json",
+        "data/schema/fold.runtime.json",
+        "data/schema/kuhul.xsd"
+      ],
+      "targets": [
+        "docs/SEMANTIC_FOLDS.md",
+        "docs/KUHUL_PHASE_ALGEBRA.md"
+      ]
+    },
+    {
+      "name": "semantic-code-parser-graph",
+      "schema_id": "urn:khanary:schema:semantic-code-parser-graph:1",
+      "description": "Grammar-driven fold-native code structure graph. Grammar files define token patterns (ECMAScript regex) and edge rules; output is fold-queryable via the same B_tau incidence surface as track nodes.",
+      "runtime_critical": false,
+      "imports": [
+        "data/schema/fold.runtime.json"
+      ],
+      "grammar_files": [
+        "data/grammar/klsl.code-grammar.json",
+        "data/grammar/cpp.code-grammar.json",
+        "data/grammar/typescript.code-grammar.json"
+      ],
+      "mcp_tool": "code_parse",
+      "targets": [
+        "docs/SEMANTIC_FOLDS.md"
+      ]
+    },
+    {
+      "name": "semantic-attention-shader",
+      "schema_id": "urn:khanary:schema:semantic-attention-shader:1",
+      "description": "Yax semantic-attention backend contract over semantic records (W,C,R + legality gates), with optional GPU execution via attention.hlsl.",
+      "runtime_critical": false,
+      "imports": [
+        "data/schema/fold.runtime.json"
+      ],
+      "runtime_components": [
+        "data/shaders/attention.hlsl",
+        "data/shaders/fold_compute.hlsl"
+      ],
+      "targets": [
+        "README.md"
+      ]
+    },
+    {
+      "name": "phase-dll-drivers",
+      "schema_id": "urn:khanary:schema:phase-dll-drivers:1",
+      "schema_file": "data/drivers/phases/phase-drivers.v2.json",
+      "description": "Phase driver artifact lock contract for Pop/Wo/Yax/Sek/Chen/Xul with hash anchors declared in runtime metadata.",
+      "runtime_critical": true,
+      "imports": [
+        "data/schema/fold.runtime.json",
+        "data/schema/kuhul.fold-runtime.json",
+        "data/schema/cycle-hash.spec.json"
+      ],
+      "driver_root": "data/drivers/phases",
+      "phase_dlls": [
+        "data/drivers/phases/pop.json",
+        "data/drivers/phases/wo.json",
+        "data/drivers/phases/yax.json",
+        "data/drivers/phases/sek.json",
+        "data/drivers/phases/chen.json",
+        "data/drivers/phases/xul.json"
+      ],
+      "targets": [
+        "docs/KUHUL_PHASE_ALGEBRA.md",
+        "docs/SEMANTIC_FOLDS.md"
+      ]
+    }
+  ]
+}

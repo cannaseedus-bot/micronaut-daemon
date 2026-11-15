@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="atomic-unity">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⟁ ASX → K'UHUL — Unified Semantic Runtime Evolution</title>
+  <style>
+    /* ============================================================
+       PRIME ATOMIC UNITY — Complete Integration
+       XJSON + SCX + ASX Runtime + Mx2LM Training
+       ============================================================ */
+    :root {
+      --bg-page: #f0f4f8;
+      --bg-surface: #ffffff;
+      --bg-code: #1a1a2e;
+      --bg-panel: #f8fafc;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --accent-cyan: #0ea5e9;
+      --accent-emerald: #10b981;
+      --accent-purple: #8b5cf6;
+      --accent-gold: #f59e0b;
+      --accent-rose: #ef4444;
+      --border-light: #e2e8f0;
+      --border-code: #334155;
+      --code-fg: #e2e8f0;
+      --radius-card: 20px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg-page);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+    }
+
+    /* Layout: Sidebar + Main */
+    .unified-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Navigation */
+    .unified-sidebar {
+      width: 300px;
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border-light);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 24px 16px;
+      z-index: 10;
+    }
+
+    .unified-sidebar h1 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .unified-sidebar .tagline {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .nav-section { margin-bottom: 20px; }
+    .nav-section-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .nav-link {
+      display: block;
+      padding: 6px 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      transition: all 0.15s;
+    }
+    .nav-link:hover { background: var(--bg-page); color: var(--accent-cyan); }
+
+    /* Main Content */
+    .unified-main {
+      flex: 1;
+      max-width: calc(100% - 300px);
+      padding: 32px 40px;
+    }
+
+    /* Typography */
+    h1 { font-size: 32px; font-weight: 700; margin-bottom: 16px; }
+    h2 { font-size: 24px; font-weight: 600; margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--border-light); }
+    h3 { font-size: 18px; font-weight: 600; margin: 24px 0 12px; }
+    h4 { font-size: 15px; font-weight: 600; margin: 16px 0 8px; color: var(--accent-purple); }
+    p { margin: 12px 0; color: var(--text-secondary); line-height: 1.6; }
+
+    /* Code Blocks */
+    pre {
+      background: var(--bg-code);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+      border: 1px solid var(--border-code);
+    }
+    code {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      background: var(--bg-code);
+      color: var(--code-fg);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    pre code { background: transparent; padding: 0; }
+
+    /* Cards / Panels */
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-card);
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .callout {
+      border-left: 4px solid var(--accent-cyan);
+      background: rgba(14, 165, 233, 0.05);
+      padding: 16px 20px;
+      border-radius: var(--radius-md);
+      margin: 20px 0;
+    }
+    .callout.warning { border-left-color: var(--accent-gold); background: rgba(245, 158, 11, 0.05); }
+    .callout.purple { border-left-color: var(--accent-purple); background: rgba(139, 92, 246, 0.05); }
+    .callout.emerald { border-left-color: var(--accent-emerald); background: rgba(16, 185, 129, 0.05); }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid var(--border-light);
+      padding: 10px 12px;
+      text-align: left;
+    }
+    th { background: var(--bg-page); font-weight: 600; }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 10px;
+      font-weight: 600;
+      border-radius: 20px;
+      margin-right: 6px;
+    }
+    .badge-cyan { background: rgba(14, 165, 233, 0.1); color: var(--accent-cyan); }
+    .badge-emerald { background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); }
+    .badge-purple { background: rgba(139, 92, 246, 0.1); color: var(--accent-purple); }
+    .badge-gold { background: rgba(245, 158, 11, 0.1); color: var(--accent-gold); }
+
+    /* Glyph Grid */
+    .glyph-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .glyph-item {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      text-align: center;
+    }
+    .glyph-symbol {
+      font-size: 24px;
+      font-family: var(--font-mono);
+      font-weight: bold;
+      color: var(--accent-cyan);
+    }
+    .glyph-desc { font-size: 10px; color: var(--text-muted); margin-top: 6px; }
+
+    /* Live Demo Panel */
+    .demo-panel {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      border-radius: var(--radius-card);
+      padding: 20px;
+      margin: 24px 0;
+      color: #e2e8f0;
+    }
+    .demo-panel h3 { color: var(--accent-cyan); margin-top: 0; }
+    .demo-panel input, .demo-panel textarea {
+      width: 100%;
+      background: #0f0f1a;
+      border: 1px solid #334155;
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      color: #e2e8f0;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      margin: 8px 0;
+    }
+    .demo-panel button {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 8px;
+    }
+    .demo-output {
+      white-space: pre-wrap; overflow-wrap: anywhere;
+      background: #0f0f1a;
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      margin-top: 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      border: 1px solid #334155;
+    }
+
+    /* Evolution guide additions */
+    .evolution-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .evolution-stage { background:var(--bg-surface); border:1px solid var(--border-light); border-radius:12px; padding:18px; }
+    .evolution-stage h3 { margin-top:0; }
+    .phase-strip { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:8px; margin:18px 0; }
+    .phase-chip { background:var(--bg-panel); border:1px solid var(--border-light); border-radius:10px; padding:12px 6px; text-align:center; cursor:pointer; color:var(--text-primary); }
+    .phase-chip[aria-pressed="true"] { border-color:var(--accent-purple); background:#ede9fe; }
+    .phase-chip strong,.phase-chip span { display:block; }
+    .phase-chip span { font-family:var(--font-mono); font-size:11px; color:var(--text-muted); }
+    .score-controls { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+    .score-controls label { display:block; font-size:12px; font-weight:600; }
+    .score-controls input { width:100%; }
+    .score-readout { font-family:var(--font-mono); font-size:22px; font-weight:700; color:var(--accent-purple); }
+    .subtle-note { font-size:12px; color:var(--text-muted); }
+    @media(max-width:720px) { .evolution-grid,.score-controls {grid-template-columns:1fr;} .phase-strip {grid-template-columns:repeat(3,minmax(0,1fr));} }
+    /* Responsive */
+    @media (max-width: 900px) {
+      .unified-layout { flex-direction: column; }
+      .unified-sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid var(--border-light);
+      }
+      .unified-main { max-width: 100%; padding: 24px; }
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-page); }
+    ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<div class="unified-layout">
+  
+  <!-- SIDEBAR -->
+  <aside class="unified-sidebar">
+    <h1>⟁ ASX · XJSON · SCX</h1>
+    <div class="tagline">Unified Semantic Runtime · PRIME Edition</div>
+    
+    <div class="nav-section">
+      <div class="nav-section-title">Core</div>
+      <a href="#overview" class="nav-link">📖 Unified Overview</a>
+      <a href="#evolution" class="nav-link">🧭 Then → Now</a>
+      <a href="#field-math" class="nav-link">📐 Field Mathematics</a>
+      <a href="#phase-explorer" class="nav-link">🔄 Phase Explorer</a>
+      <a href="#micronaut-routing" class="nav-link">🧲 Micronaut Routing</a>
+      <a href="#contracts" class="nav-link">📋 Execution Contracts</a>
+      <a href="#xjson-spec" class="nav-link">📜 XJSON Specification</a>
+      <a href="#scx-guide" class="nav-link">🧠 SCX Compression</a>
+      <a href="#atomic-asx" class="nav-link">⚛️ Atomic ASX Runtime</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">Agents & Training</div>
+      <a href="#mx2lm" class="nav-link">🤖 Mx2LM Training</a>
+      <a href="#agent-brains" class="nav-link">🧬 Agent Brain Maps</a>
+      <a href="#scx-grammar" class="nav-link">🔤 SCX Grammar</a>
+      <a href="#daemon-bot" class="nav-link">🛰️ Daemon Bot</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">Runtime Features</div>
+      <a href="#tape-format" class="nav-link">🎵 Tape / Holotape</a>
+      <a href="#reactive-binding" class="nav-link">📡 Reactive Binding</a>
+      <a href="#effects-system" class="nav-link">⚡ Effects System</a>
+      <a href="#components" class="nav-link">🧩 Components</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">Security & Deploy</div>
+      <a href="#security" class="nav-link">🔒 Security Model</a>
+      <a href="#deployment" class="nav-link">☁️ CDN Block Packs</a>
+      <a href="#best-practices" class="nav-link">✅ Best Practices</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="unified-main">
+    
+    <!-- ==================== OVERVIEW ==================== -->
+    <section id="overview">
+      <h1>⟁ ASX · XJSON · SCX · Mx2LM<br><span style="font-size: 18px; color: var(--text-muted);">The Unified Semantic Runtime · Origins and Evolution</span></h1>
+      
+      <div class="callout emerald">
+        <strong>🎯 The Great Equation:</strong> ASX = XJSON(contracts) + SCX(compression) + Mx2LM(agents) + JS(runtime).<br>
+        One unified system for building apps, games, and OS interfaces — no frameworks, no build steps.
+      </div>
+      
+      <div class="glyph-grid">
+        <div class="glyph-item"><div class="glyph-symbol">⟁HTML</div><div class="glyph-desc">html root</div></div>
+        <div class="glyph-item"><div class="glyph-symbol">⟁BODY</div><div class="glyph-desc">body frame</div></div>
+        <div class="glyph-item"><div class="glyph-symbol">⟁PANEL</div><div class="glyph-desc">card/panel</div></div>
+        <div class="glyph-item"><div class="glyph-symbol">⟁Fcol</div><div class="glyph-desc">flex column</div></div>
+        <div class="glyph-item"><div class="glyph-symbol">⟁Pop</div><div class="glyph-desc">activation phase</div></div>
+        <div class="glyph-item"><div class="glyph-symbol">⟁Sek</div><div class="glyph-desc">execution phase</div></div>
+      </div>
+    </section>
+
+
+    <!-- ==================== EVOLUTION: THEN TO NOW ==================== -->
+    <section id="evolution">
+      <h2>🧭 Then → Now: From Symbolic Applications to Semantic Field Execution</h2>
+      <p>The original ASX design joined XJSON contracts, SCX glyph compression, a JavaScript runtime and Mx2LM agents. The current K'UHUL work adds explicit semantic topology, phase-qualified executable folds, query-scoped context, and governed learning. These are architectural layers, not claims that all integration paths are already deployed.</p>
+      <div class="evolution-grid">
+        <div class="evolution-stage">
+          <h3>Then · ASX / XJSON / SCX / Mx2LM</h3>
+          <p><strong>Describe and render:</strong> XJSON document → SCX symbolic expansion → ASX interpreter → UI, state and agent actions.</p>
+          <pre><code>XJSON contracts
+  ↓
+SCX dictionary + glyphs
+  ↓
+ASX JavaScript runtime
+  ↓
+Mx2LM agent maps</code></pre>
+        </div>
+        <div class="evolution-stage">
+          <h3>Now · Key-Grammar / XCFE / K'UHUL</h3>
+          <p><strong>Recognize, select, execute and learn:</strong> bounded track → query context → n-gram field → XCFE admission → K'UHUL fold → evidence and authorized learning.</p>
+          <pre><code>Track + active Context
+  ↓
+Unigram / Bigram / Trigram
+  ↓
+Match → Bind → Filter → Map → Score
+  ↓
+XCFE admission → K'UHUL phases
+  ↓
+Ch'en observe → Xul commit</code></pre>
+        </div>
+      </div>
+      <table><thead><tr><th>Earlier concept</th><th>Current contract</th><th>Continuity</th></tr></thead><tbody>
+        <tr><td>SCX glyph lookup</td><td>Manifest-based symbolic dictionary and reusable templates</td><td>SCXQ2 remains an optional distinct encoding/execution path</td></tr>
+        <tr><td>Bigram/trigram agent maps</td><td>Ordered 2D bigram geometry and phase-qualified executable trigrams</td><td>Agent maps become structured field evidence</td></tr>
+        <tr><td>JS runtime operations</td><td>XCFE-governed phase execution</td><td>Declarative actions retain separate execution authority</td></tr>
+        <tr><td>Mx2LM agents</td><td>Composable Micronauts with vectors and learned route biases</td><td>Programs can invoke other programs under contracts</td></tr>
+        <tr><td>Reactive state</td><td>Query-scoped context and separate learned weights</td><td>Frozen corpus evidence is never overwritten by learning</td></tr>
+      </tbody></table>
+    </section>
+
+    <section id="field-math">
+      <h2>📐 Semantic Field Mathematics · 2D Contract</h2>
+      <p>Unigrams, bigrams and trigrams have distinct responsibilities. The field combines symbolic graph topology with numeric 2D geometry; semantic references are not automatically numeric tensors.</p>
+      <div class="glyph-grid">
+        <div class="glyph-item"><div class="glyph-symbol">U₁</div><div class="glyph-desc">Frozen corpus prior W_C(w)</div></div>
+        <div class="glyph-item"><div class="glyph-symbol">B₂</div><div class="glyph-desc">Ordered relation vector (x,y)</div></div>
+        <div class="glyph-item"><div class="glyph-symbol">T₃</div><div class="glyph-desc">Stored phase θ + executable FoldRef</div></div>
+      </div>
+      <pre><code>W_effective(w,t) = W_corpus(w) × W_learned(w,t)
+B₂(wᵢ,wⱼ) → v_b = (x_b,y_b) ∈ ℝ²
+G(q,b) = (v_q · v_b) / (||v_q|| ||v_b||)   [nonzero vectors]
+T₃ = (wᵢ,wⱼ,wₖ,θ,FoldRef),  θ ∈ {0,1,2,3,4,5}
+N(k) = N_manifest(k) ∪ N_inferred(k)
+M_F(h) = Σ_τ B_τ[h,*] ⊗ W_τ</code></pre>
+      <p class="subtle-note">The ⊗ symbol above denotes edge-wise weighting in this proposed field law; it does not require tensor contraction. Manifest and inferred evidence must remain distinguishable. The corpus prior is immutable; learned modifiers are stored separately.</p>
+      <h3>Example phase-qualified trigram record</h3>
+      <pre><code>{
+  "track": "reasoning.discovery",
+  "context": { "query": "what is a fold?" },
+  "trigram": {
+    "tokens": ["what", "is", "fold"],
+    "phase": "Yax",
+    "phase_code": "010",
+    "fold_ref": "question.expand.definition"
+  },
+  "binding_source": "capture"
+}</code></pre>
+      <p class="subtle-note">Illustrative record, not a claim of an already supported wire schema. The trigram stores its own phase; templates may not silently override it.</p>
+    </section>
+
+    <section id="phase-explorer">
+      <h2>🔄 Six-Phase K'UHUL Explorer</h2>
+      <p>The phase sequence describes semantic responsibilities, not a guarantee of linear control flow. A legal execution graph may branch, revisit a state, or invoke a nested Micronaut.</p>
+      <div class="phase-strip" id="phaseStrip" role="group" aria-label="K'UHUL phase selection">
+        <button class="phase-chip" data-phase="0" aria-pressed="true"><strong>Pop</strong><span>000</span></button>
+        <button class="phase-chip" data-phase="1" aria-pressed="false"><strong>Wo</strong><span>001</span></button>
+        <button class="phase-chip" data-phase="2" aria-pressed="false"><strong>Yax</strong><span>010</span></button>
+        <button class="phase-chip" data-phase="3" aria-pressed="false"><strong>Sek</strong><span>011</span></button>
+        <button class="phase-chip" data-phase="4" aria-pressed="false"><strong>Ch'en</strong><span>100</span></button>
+        <button class="phase-chip" data-phase="5" aria-pressed="false"><strong>Xul</strong><span>101</span></button>
+      </div>
+      <div class="card"><strong id="phaseTitle">Pop · Perceive</strong><p id="phaseDetail">Recognize input patterns, collect signals and initiate field lookup.</p></div>
+    </section>
+
+    <section id="micronaut-routing">
+      <h2>🧲 WCR Routing and Micronaut Field Bias</h2>
+      <p>XCFE gates admission independently of scoring. For an admitted fold, the illustrative routing score is S = W × C × R × Gₘ × Lₘ, where Gₘ is geometric compatibility and Lₘ is the Micronaut's learned route modifier.</p>
+      <div class="card">
+        <div class="score-controls">
+          <label>Field weight W <output id="wOut">0.80</output><input id="wRange" type="range" min="0" max="1" step="0.01" value="0.8"></label>
+          <label>Context C <output id="cOut">0.75</output><input id="cRange" type="range" min="0" max="1" step="0.01" value="0.75"></label>
+          <label>Query relevance R <output id="rOut">0.90</output><input id="rRange" type="range" min="0" max="1" step="0.01" value="0.9"></label>
+          <label>Geometry Gₘ <output id="gOut">0.85</output><input id="gRange" type="range" min="0" max="1" step="0.01" value="0.85"></label>
+          <label>Learned modifier Lₘ <output id="lOut">1.00</output><input id="lRange" type="range" min="0" max="2" step="0.01" value="1"></label>
+        </div>
+        <p>Illustrative score: <span class="score-readout" id="scoreOut">0.4590</span></p>
+        <p class="subtle-note">Demo uses nonnegative normalized values. Actual runtime must define normalization, sign handling, zero-vector behavior, eligibility and update policies. A high score never bypasses XCFE authority.</p>
+      </div>
+      <pre><code>Micronaut = Program + Vector + Field Bias + Evolution
+S_WCR(f | q) = W(f) × C(f,q) × R(f,q)
+S_m(f | q) = S_WCR(f | q) × G_m(f,q) × L_m(f,q)
+f* = argmax { S_m(f | q) : XCFE_admit(f,θ,context) = 1 }</code></pre>
+    </section>
+
+    <section id="contracts">
+      <h2>📋 Execution, Learning and Storage Contracts</h2>
+      <table><thead><tr><th>Layer</th><th>Responsibility</th><th>Boundary</th></tr></thead><tbody>
+        <tr><td>Key-Grammar</td><td>Recognize keys, wildcard captures and typed bindings</td><td>Does not assign or override a stored trigram phase</td></tr>
+        <tr><td>Track / Context</td><td>Bounded semantic field / query-scoped active state</td><td>Track is not the same object as an invocation</td></tr>
+        <tr><td>XCFE</td><td>Admission, legality and execution authority</td><td>Score is evidence, not permission</td></tr>
+        <tr><td>K'UHUL</td><td>Execute phase-qualified fold references</td><td>Phase belongs to the trigram</td></tr>
+        <tr><td>Ch'en / Xul</td><td>Measure outcomes / authorize learned commit</td><td>Never mutate frozen corpus prior</td></tr>
+        <tr><td>BSON</td><td>Preferred structured semantic-document storage</td><td>Preserve identifiers and typed fields</td></tr>
+        <tr><td>CBOR</td><td>Optional compact transport</td><td>Validate round-trip type preservation</td></tr>
+        <tr><td>SCXQ2</td><td>Optional field-graph chunks or compiled execution lanes</td><td>Separate round-trip and execution-equivalence tests</td></tr>
+      </tbody></table>
+      <pre><code>match → bind → filter → map → score → phase_execute
+Ch'en: r_t = Measure(z_t, f_t)
+Xul:   W_learned(t+1) = Update(W_learned(t), r_t) [if authorized]
+Invariant: W_corpus(t+1) = W_corpus(t)</code></pre>
+      <div class="callout warning"><strong>Implementation status:</strong> The equations, record example, and interactive routing sliders document proposed contracts and demonstrate behavior. They do not establish that all runtimes, parsers, GPU paths, or cross-format encoders pass conformance tests.</div>
+    </section>
+
+    <!-- ==================== XJSON SPECIFICATION ==================== -->
+    <section id="xjson-spec">
+      <h2>📜 XJSON Specification v2.0</h2>
+      <p>XJSON is a universal AST-JSON language capable of representing HTML, CSS, Logic, state, routing, components, SCX blocks, agents, and OS-level layout — all in one JSON tree.</p>
+      
+      <h3>Core Node Types</h3>
+      <pre><code>{
+  "type": "element",   // HTML/UI element
+  "type": "style",     // CSS/SCX styles
+  "type": "logic",     // JS/PY/PHP logic
+  "type": "control",   // @if/@then/@else flow
+  "type": "component", // Reusable UI
+  "type": "route",     // Navigation
+  "type": "state",     // Application state
+  "type": "agent",     // MX2LM/Mx2Qwen agent
+  "type": "tape"       // Holotape OS
+}</code></pre>
+
+      <div class="callout">
+        <strong>💡 Key Insight:</strong> XJSON is 100% valid JSON. Every node is declarative and combinable. The ASX Runtime interprets it directly — no compilation step.
+      </div>
+    </section>
+
+    <!-- ==================== SCX COMPRESSION ==================== -->
+    <section id="scx-guide">
+      <h2>🧠 SCX Compression Guide</h2>
+      <p>SCX (Symbolic Compression eXtension) replaces repetitive semantic patterns with glyphs, achieving 80-95% size reduction while preserving full meaning.</p>
+      
+      <h3>Core Glyph Catalog</h3>
+      <table>
+        <thead><tr><th>Glyph</th><th>Expansion</th><th>Category</th></tr></thead>
+        <tbody>
+          <tr><td><code>⟁F</code></td><td>display: flex</td><td>Layout</td></tr>
+          <tr><td><code>⟁Fcol</code></td><td>display: flex; flex-direction: column</td><td>Layout</td></tr>
+          <tr><td><code>⟁Acenter</code></td><td>align-items: center</td><td>Layout</td></tr>
+          <tr><td><code>⟁PANEL</code></td><td>background: var(--panel); border-radius: 12px; padding: 20px</td><td>UI</td></tr>
+          <tr><td><code>⟁CARD</code></td><td>⟁PANEL + box-shadow</td><td>UI</td></tr>
+          <tr><td><code>⟁BTN</code></td><td>padding: 8px 16px; border-radius: 8px; cursor: pointer</td><td>UI</td></tr>
+          <tr><td><code>⟁Pop</code></td><td>Activation phase — initialize</td><td>K'uhul</td></tr>
+          <tr><td><code>⟁Sek</code></td><td>Execution phase — compute</td><td>K'uhul</td></tr>
+        </tbody>
+      </table>
+      
+      <h3>Compression Example</h3>
+      <pre><code>// BEFORE (247 bytes)
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: var(--panel);
+  border-radius: 12px;
+}
+
+// AFTER (18 bytes) — 93% reduction
+⟁Fcol ⟁Acenter ⟁Pxl ⟁PANEL</code></pre>
+    </section>
+
+    <!-- ==================== ATOMIC ASX RUNTIME ==================== -->
+    <section id="atomic-asx">
+      <h2>⚛️ Atomic ASX Runtime</h2>
+      <p>The ASX Runtime is a framework-free JavaScript engine that interprets XJSON directly. One file ships an app: <code>$state</code>, <code>$routes</code>, <code>$effects</code>.</p>
+      
+      <pre><code>{
+  "$schema": "asx-shell-v1",
+  "$state": { "user": { "score": 0 } },
+  "$computed": { "userLevel": "Math.floor(get('user.score') / 100)" },
+  "$effects": [
+    {
+      "when": "user.score",
+      "run": {
+        "op": "if",
+        "test": { "gte": [{ "$get": "user.score" }, 100] },
+        "then": [{ "op": "notify", "message": "Level up!" }]
+      }
+    }
+  ],
+  "$routes": { "home": { "sections": [{ "panel": { "title": "Welcome" } }] } }
+}</code></pre>
+    </section>
+
+    <!-- ==================== LIVE DEMO ==================== -->
+    <div class="demo-panel" id="live-demo" data-asx-key="⟁APP:ASX_COMPRESSION/⟁WIDGET:SCX">
+      <h3>⚡ Live SCX → XJSON Demo</h3>
+      <p>Test compression and Mx2LM-style generation:</p>
+      <textarea id="demoInput" rows="3" data-asx-key="⟁APP:ASX_COMPRESSION/⟁INPUT:SCX">⟁Fcol ⟁Acenter ⟁PANEL</textarea>
+      <button id="decompressBtn" data-asx-key="⟁APP:ASX_COMPRESSION/⟁ACTION:DECOMPRESS">Decompress (SCX → CSS)</button>
+      <button id="compressTestBtn" data-asx-key="⟁APP:ASX_COMPRESSION/⟁ACTION:GENERATE">Test XJSON Generation</button>
+      <div id="demoOutput" class="demo-output" data-asx-key="⟁APP:ASX_COMPRESSION/⟁OUTPUT:SCX">// Output will appear here</div>
+    </div>
+
+    <!-- ==================== REGISTERED DAEMON BOT ==================== -->
+    <section class="demo-panel" id="daemon-bot" data-asx-key="⟁APP:ASX_COMPRESSION/⟁WIDGET:DAEMON_BOT">
+      <h3>🛰️ Daemon Bot · Registered AIML Pattern Bank</h3>
+      <p>Run the reviewed 86-category AIML bank through the app-host control plane. Static categories return observation-only findings. Blog requests return an explicit evidence gap until a feed executor is registered.</p>
+      <input id="daemonInput" value="WHAT IS CBD" aria-label="Daemon Bot question" data-asx-key="⟁APP:ASX_COMPRESSION/⟁INPUT:DAEMON_QUERY">
+      <button id="daemonAskBtn" data-asx-key="⟁APP:ASX_COMPRESSION/⟁ACTION:DAEMON_ASK">Ask Daemon Bot</button>
+      <button id="daemonInspectBtn" data-asx-key="⟁APP:ASX_COMPRESSION/⟁ACTION:DAEMON_INSPECT">Inspect Binding</button>
+      <div id="daemonStatus" class="subtle-note" role="status">Runtime: not checked</div>
+      <div id="daemonOutput" class="demo-output" data-asx-key="⟁APP:ASX_COMPRESSION/⟁OUTPUT:DAEMON">// The registered Micronaut result will appear here.</div>
+    </section>
+
+    <!-- ==================== MX2LM TRAINING ==================== -->
+    <section id="mx2lm">
+      <h2>🤖 Mx2LM Training Guide</h2>
+      <div class="callout purple">
+        <strong>Your Mission, Mx2LM:</strong> Generate perfect ASX JSON applications from user requests. You don't write React or HTML templates — you write pure JSON that the ASX Engine runs immediately.
+      </div>
+      
+      <h3>Available Operations</h3>
+      <table>
+        <thead><tr><th>Operation</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>set</code></td><td>Set state value</td><td><code>{"op": "set", "path": "score", "value": 10}</code></td></tr>
+          <tr><td><code>updateBy</code></td><td>Increment/decrement</td><td><code>{"op": "updateBy", "path": "score", "by": 5}</code></td></tr>
+          <tr><td><code>push</code></td><td>Add to array</td><td><code>{"op": "push", "path": "items", "value": "new"}</code></td></tr>
+          <tr><td><code>notify</code></td><td>Show notification</td><td><code>{"op": "notify", "message": "Done!"}</code></td></tr>
+          <tr><td><code>setRoute</code></td><td>Navigate</td><td><code>{"op": "setRoute", "route": "game"}</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== AGENT BRAIN MAPS ==================== -->
+    <section id="agent-brains">
+      <h2>🧬 Agent Brain Maps (Bigrams / Trigrams / Meta)</h2>
+      <pre><code>// bigrams.json
+{ "enter room": "scan environment", "low health": "seek medkit", "enemy spotted": "prepare attack" }
+
+// trigrams.json
+{ "player hears noise": "predict ambush route" }
+
+// meta-intent-map.json
+{ "threat_high": ["defend", "call_backup"], "resource_low": ["forage", "trade", "request_aid"] }</code></pre>
+    </section>
+
+    <!-- ==================== SCX GRAMMAR ==================== -->
+    <section id="scx-grammar">
+      <h2>🔤 SCX Grammar Reference</h2>
+      <table>
+        <thead><tr><th>Token</th><th>Meaning</th><th>JS Equivalent</th></tr></thead>
+        <tbody>
+          <tr><td><code>(?)</code></td><td>if</td><td><code>if (cond)</code></td></tr>
+          <tr><td><code>(∴)</code></td><td>then</td><td>then block</td></tr>
+          <tr><td><code>(¬)</code></td><td>else</td><td><code>else</code></td></tr>
+          <tr><td><code>(⊕)</code></td><td>increment</td><td><code>x++ / += 1</code></td></tr>
+          <tr><td><code>(💬>)</code></td><td>message</td><td>notify/log</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== TAPE FORMAT ==================== -->
+    <section id="tape-format">
+      <h2>🎵 Tape / Holotape Format</h2>
+      <p>Each tape is a mini-server: UI, logic, agents, standalone boot.</p>
+      <pre><code>{
+  "type": "tape",
+  "id": "prime-os",
+  "entry": "index.xjson",
+  "agents": ["mx2lm", "mx2qwen"],
+  "routes": ["/", "/api"],
+  "flashram": ["prime.snapshot.001"]
+}</code></pre>
+      <div class="callout purple"><strong>⟁ Every tape is a server. Every tape is a runtime.</strong></div>
+    </section>
+
+    <!-- ==================== REACTIVE BINDING ==================== -->
+    <section id="reactive-binding">
+      <h2>📡 Reactive Binding</h2>
+      <pre><code>&lt;span data-bind="user.score"&gt;&lt;/span&gt;
+&lt;button onclick="Atomic.set('user.score', Atomic.state.user.score + 5)"&gt;Add +5&lt;/button&gt;</code></pre>
+    </section>
+
+    <!-- ==================== EFFECTS SYSTEM ==================== -->
+    <section id="effects-system">
+      <h2>⚡ Effects System</h2>
+      <pre><code>"$effects": [{
+  "when": "player.health",
+  "run": {
+    "op": "if",
+    "test": { "lte": [{ "$get": "player.health" }, 0] },
+    "then": [
+      { "op": "set", "path": "game.gameOver", "value": true },
+      { "op": "notify", "message": "You died!" }
+    ]
+  }
+}]</code></pre>
+    </section>
+
+    <!-- ==================== COMPONENTS ==================== -->
+    <section id="components">
+      <h2>🧩 Component Model</h2>
+      <pre><code>{
+  "type": "component",
+  "id": "card.user",
+  "template": [
+    { "type": "element", "tag": "div", "props": { "scx": "⟁CARD" },
+      "children": [
+        { "type": "slot", "name": "avatar" },
+        { "type": "slot", "name": "name" }
+      ]
+    }
+  ]
+}</code></pre>
+    </section>
+
+    <!-- ==================== SECURITY ==================== -->
+    <section id="security">
+      <h2>🔒 Security Model</h2>
+      <ul>
+        <li><strong>Trust Stamps</strong> — Signed tapes prevent tampering</li>
+        <li><strong>Agent Sandboxing</strong> — Isolated execution contexts</li>
+        <li><strong>No eval()</strong> — Declarative control flow only</li>
+        <li><strong>Cipher Rotation</strong> — SCX tokens remappable per session</li>
+      </ul>
+    </section>
+
+    <!-- ==================== DEPLOYMENT ==================== -->
+    <section id="deployment">
+      <h2>☁️ CDN-fed Block Packs</h2>
+      <pre><code>{
+  "type": "style",
+  "id": "cdn.prime.blocks",
+  "src": "https://cdn.example.com/xjson/prime-blocks.json",
+  "vars": { "spacing.base": "10px", "radius.card": "12px" }
+}</code></pre>
+    </section>
+
+    <!-- ==================== BEST PRACTICES ==================== -->
+    <section id="best-practices">
+      <h2>✅ Best Practices</h2>
+      <ul>
+        <li>Initialize all state; avoid undefined paths</li>
+        <li>Use computed values for derived data</li>
+        <li>Use SCX glyphs for repeated patterns → 90% compression</li>
+        <li>Never use eval() — only parse whitelisted tokens</li>
+        <li>Every guide IS the specification. Every tape IS the runtime.</li>
+      </ul>
+    </section>
+
+    <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border-light); text-align: center; color: var(--text-muted); font-size: 12px;">
+      <p><strong>⟁ ASX · XJSON · SCX · Mx2LM — The Unified Semantic Runtime</strong><br>From ASX symbolic applications to phase-aware semantic fields. One evolving architecture, with explicit validation boundaries.</p>
+    </div>
+  </main>
+</div>
+
+<script type="application/json" id="asx-key-grammar">
+{
+  "@kind": "asx.key-grammar.v1",
+  "@app": "⟁APP:ASX_COMPRESSION",
+  "@authority": "projection_only",
+  "@keys": {
+    "⟁ACTION:DAEMON_ASK": {
+      "@program": "daemon_bot.chat",
+      "@route": "micronaut.program",
+      "@executor": "mx.run",
+      "@authority": "observation_only",
+      "@input": "⟁INPUT:DAEMON_QUERY",
+      "@output": "⟁OUTPUT:DAEMON"
+    },
+    "⟁ACTION:DAEMON_INSPECT": {
+      "@micronaut": "daemon_bot",
+      "@operation": "inspect",
+      "@route": "micronaut.program",
+      "@executor": "mx.run",
+      "@authority": "observation_only",
+      "@output": "⟁OUTPUT:DAEMON"
+    }
+  }
+}
+</script>
+<script>
+  // Interactive semantic field guide (self-contained illustration)
+  const phaseInfo = [
+    ["Pop · Perceive", "Recognize input patterns, collect signals and initiate field lookup."],
+    ["Wo · State", "Bind context, constraints, captures and active conditions."],
+    ["Yax · Candidates", "Expand possible questions, routes and fold candidates."],
+    ["Sek · Evaluate", "Apply authorized operations to admitted candidates."],
+    ["Ch'en · Observe", "Measure evidence and outcomes without changing frozen corpus weights."],
+    ["Xul · Commit", "Collapse selection and commit learned deltas only when authorized."]
+  ];
+  document.querySelectorAll('.phase-chip').forEach(btn => btn.addEventListener('click', () => {
+    document.querySelectorAll('.phase-chip').forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+    const [title,detail] = phaseInfo[Number(btn.dataset.phase)];
+    document.getElementById('phaseTitle').textContent = title;
+    document.getElementById('phaseDetail').textContent = detail;
+  }));
+  function updateRoutingScore() {
+    const names = ['w','c','r','g','l'];
+    const vals = names.map(n => {
+      const value = Number(document.getElementById(n+'Range').value);
+      document.getElementById(n+'Out').textContent = value.toFixed(2);
+      return value;
+    });
+    document.getElementById('scoreOut').textContent = vals.reduce((a,b)=>a*b,1).toFixed(4);
+  }
+  ['w','c','r','g','l'].forEach(n => document.getElementById(n+'Range').addEventListener('input', updateRoutingScore));
+  updateRoutingScore();
+
+  // Live Demo: SCX Decompression + XJSON Generation
+  const scxDictionary = {
+    '⟁Fcol': 'display: flex; flex-direction: column;',
+    '⟁Acenter': 'align-items: center;',
+    '⟁Jcenter': 'justify-content: center;',
+    '⟁Pxl': 'padding: 20px;',
+    '⟁PANEL': 'background: var(--panel); border-radius: 12px; border: 1px solid rgba(0,0,0,0.1);',
+    '⟁CARD': 'background: white; border-radius: 16px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);',
+    '⟁BTN': 'padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600;'
+  };
+
+  function decompressSCX(scxString) {
+    let result = scxString;
+    for (const [glyph, expansion] of Object.entries(scxDictionary)) {
+      result = result.split(glyph).join(expansion);
+    }
+    return result;
+  }
+
+  function generateXJSONFromSCX(scxString) {
+    const tokens = scxString.trim().split(/\s+/);
+    const xjson = {
+      "$schema": "asx-shell-v1",
+      "$metadata": { "name": "Generated from SCX" },
+      "$state": {},
+      "$routes": {
+        "main": {
+          "sections": tokens.map(token => ({
+            "panel": {
+              "title": token,
+              "children": [{ "text": { "text": `Rendered from ${token}` } }]
+            }
+          }))
+        }
+      }
+    };
+    return JSON.stringify(xjson, null, 2);
+  }
+
+  document.getElementById('decompressBtn').addEventListener('click', () => {
+    const input = document.getElementById('demoInput').value;
+    const decompressed = decompressSCX(input);
+    document.getElementById('demoOutput').textContent = '📤 Decompressed CSS:\n' + decompressed;
+  });
+
+  document.getElementById('compressTestBtn').addEventListener('click', () => {
+    const input = document.getElementById('demoInput').value;
+    const xjsonOutput = generateXJSONFromSCX(input);
+    document.getElementById('demoOutput').textContent = '📜 Generated XJSON:\n' + xjsonOutput.substring(0, 500) + (xjsonOutput.length > 500 ? '…' : '');
+  });
+
+  // Daemon Bot uses only the registered observation-only micronaut.program route.
+  const KHANARY_PROGRAM_ENDPOINT = 'http://127.0.0.1:17885/api/program/POST';
+  async function callDaemon(operation) {
+    const status = document.getElementById('daemonStatus');
+    const output = document.getElementById('daemonOutput');
+    const request = {
+      '@kind': 'semantic.json-program.v1',
+      '@route': 'micronaut.program',
+      '@verb': 'POST',
+      '@operation': operation,
+      '@authority': 'observation_only',
+      '@micronaut': 'daemon_bot'
+    };
+    if (operation === 'run') {
+      request['@program'] = 'chat';
+      request['@state'] = { input: document.getElementById('daemonInput').value };
+    }
+    status.textContent = 'Runtime: requesting ' + operation + '…';
+    try {
+      const response = await fetch(KHANARY_PROGRAM_ENDPOINT, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(request)
+      });
+      const result = await response.json();
+      if (!response.ok || result.error) throw new Error(result.error || `HTTP ${response.status}`);
+      const state = result.state;
+      status.textContent = state
+        ? `Runtime: ${state.matched ? 'matched' : 'deferred'} · ${state.phase || 'no phase'} · ${state.output_kind || 'wildcard'}`
+        : 'Runtime: registered binding loaded';
+      output.textContent = state && state.response ? state.response + '\n\n' + JSON.stringify({
+        program: state.program,
+        track: state.track,
+        phase: state.phase,
+        output_kind: state.output_kind,
+        captures: state.captures,
+        authority: result.authority,
+        promoted: result.promoted
+      }, null, 2) : JSON.stringify(result, null, 2);
+    } catch (error) {
+      status.textContent = 'Runtime: unavailable';
+      output.textContent = 'No local answer was fabricated. Start KHANARY_APP_HOST on 127.0.0.1:17885 and serve this page from a loopback origin.\n\n' + error.message;
+    }
+  }
+  document.getElementById('daemonAskBtn').addEventListener('click', () => callDaemon('run'));
+  document.getElementById('daemonInspectBtn').addEventListener('click', () => callDaemon('inspect'));
+</script>
+
+</body>
+</html>

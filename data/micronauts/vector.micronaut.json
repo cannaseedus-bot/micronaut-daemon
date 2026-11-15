@@ -1,0 +1,75 @@
+{
+  "@kind": "kuhul.micronaut.atomic.v1",
+  "id": "VECTOR-µ",
+  "descriptor_status": "active",
+  "track_ref": "data/tracks/VECTOR-u.semantic-tracks.v1.json",
+  "manifest": {
+    "name": "VECTOR-µ",
+    "version": "1.0.0",
+    "description": "Vector projection micronaut — EmbeddingGemma-backed AIML similarity matching, SRAI chain resolution, mesh feature projection, relation-conditioned geometry. Wo-phase compute. Served by agents/vector_match_bot.py (port 3220)."
+  },
+  "api": {
+    "namespace": "vector",
+    "atomic_keys": ["vector.match", "vector.project", "vector.srai", "vector.embed", "vector.health"],
+    "verb_surface": ["VECTOR MATCH *", "VECTOR PROJECT *", "VECTOR SRAI *", "VECTOR EMBED *", "VECTOR STATUS"]
+  },
+  "xcfe": {
+    "mode": "xcfe_gated_read_only",
+    "escalation_mode": "proposal_only",
+    "authority": "data_only",
+    "forbidden": ["emit_response", "write_state", "mutate_topology", "commit_patterns", "direct_dispatch"],
+    "note": "Vector similarity alone does not establish executability. XCFE must validate resolved category, bindings, and permissions before Sek dispatch."
+  },
+  "model_binding": {
+    "model":    "EmbeddingGemma",
+    "script":   "agents/vector_match_bot.py",
+    "port":     3220,
+    "api":      "HTTP /v1/vector"
+  },
+  "atomic_key_defs": {
+    "vector.match": {
+      "@type": "vector_similarity_match",
+      "description": "Wo/Yax-phase: cosine similarity match against AIML category corpus — returns top-K candidates with pattern, template, score, field scope, and wildcard_count. Source: category_midpoint by default.",
+      "phases": ["Wo", "Yax"],
+      "source": "category_midpoint",
+      "topk": 5,
+      "authority": "data_only"
+    },
+    "vector.project": {
+      "@type": "mesh_projection",
+      "description": "Wo-phase: apply mesh_feature_projection_gate — projects fold state through relation-conditioned geometry, phase-conditioned metric gate, and principal_direction_vector; returns semantic_geodesic_distance.",
+      "phases": ["Wo"],
+      "authority": "data_only"
+    },
+    "vector.srai": {
+      "@type": "srai_chain",
+      "description": "Yax-phase: recursive SRAI chain resolution — EMBED→RETRIEVE→FILTER (wildcard_count_match)→RANK→SRAI (max_depth 3)→FOLD. Shared with aiml.srai.vector block. Output: aiml.srai.vector.proposal, xcfe_status: pending_admission.",
+      "phases": ["Yax"],
+      "max_depth": 3,
+      "block_ref": "data/micronauts/aiml-srai-vector.micronaut.json",
+      "xcfe_required": true,
+      "authority": "data_only"
+    },
+    "vector.embed": {
+      "@type": "embed",
+      "description": "Wo-phase: generate EmbeddingGemma embedding for input text — returns 256-dim L2-normalised float32 vector.",
+      "phases": ["Wo"],
+      "dims": 256,
+      "dtype": "float32",
+      "authority": "data_only"
+    },
+    "vector.health": {
+      "@type": "status",
+      "description": "Pop-phase: reports vector_match_bot.py liveness (port 3220), corpus size, last match stats.",
+      "phases": ["Pop"]
+    }
+  },
+  "program_contract": {
+    "drivers": ["Micronaut.Core.dll"],
+    "script":  "agents/vector_match_bot.py",
+    "sandbox": "data_only",
+    "learning": false
+  },
+  "srai": { "enabled": true, "max_redirects": 3, "scope": "local" },
+  "capabilities": ["vector-similarity-match", "srai-chain-resolution", "mesh-feature-projection", "embedding-generation", "relation-conditioned-geometry"]
+}

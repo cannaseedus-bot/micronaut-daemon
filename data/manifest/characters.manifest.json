@@ -1,0 +1,112 @@
+{
+  "⟁CHARACTERS": [
+    "kind:character_model_key_book",
+    "format:kuhul.character-model.v1",
+    "reference:https://www.w3.org/TR/charmod/#sec-Perceptions",
+    "role:decode_and_binding_metadata",
+    "authority:read_only_no_execution",
+    "no_one_to_one_assumption:character_glyph_sound_input_collation_codepoint_byte"
+  ],
+  "unit:LOGICAL_CHARACTER": [
+    "definition:logical_text_unit_at_application_boundary",
+    "not_equal_to:code_point_grapheme_cluster_glyph_or_byte",
+    "indexing:profile_specific"
+  ],
+  "unit:UNICODE_SCALAR": [
+    "definition:Unicode_code_point_excluding_surrogates",
+    "encoding:UTF-8_interchange",
+    "not_equal_to:visible_glyph_or_semantic_key"
+  ],
+  "unit:GLYPH": [
+    "definition:visual_rendering_symbol",
+    "identity:font_and_context_sensitive",
+    "semantic_mapping:explicit_manifest_binding_only",
+    "unicode_identity_alone:insufficient"
+  ],
+  "unit:PHONEME": [
+    "definition:language_scoped_sound_unit",
+    "mapping:many_to_many_with_character_sequences",
+    "default_runtime_role:pattern_evidence_only"
+  ],
+  "unit:INPUT_EVENT": [
+    "definition:keyboard_or_input_method_event",
+    "mapping:many_to_many_with_logical_characters",
+    "ingress:preserve_event_and_decoded_text_provenance"
+  ],
+  "unit:COLLATION": [
+    "definition:language_and_application_specific_comparison_unit",
+    "identity_use:sorting_or_search_only",
+    "semantic_key_comparison:disabled_by_default"
+  ],
+  "unit:BYTE": [
+    "definition:physical_storage_or_transport_octet",
+    "mapping:encoding_dependent",
+    "formats:BSON/CBOR/SCXQ2",
+    "semantic_identity:never_inferred_from_byte_position"
+  ],
+  "profile:RAW_INGRESS": [
+    "preserve:original_text",
+    "preserve:input_event_provenance_when_available",
+    "decode:declared_encoding_or_UTF-8_default",
+    "text_order:logical",
+    "authority:none"
+  ],
+  "profile:NATURAL_LANGUAGE_MATCH": [
+    "projection:NFC",
+    "preserve:raw_text",
+    "case_folding:language_profile_only",
+    "collation:explicit_language_profile_only",
+    "NFKC:disabled_by_default",
+    "purpose:AIML_and_wildcard_surface_matching",
+    "authority:none"
+  ],
+  "profile:SEMANTIC_IDENTIFIER": [
+    "normalization:none",
+    "case_folding:none",
+    "comparison:exact_decoded_codepoint_sequence",
+    "applies_to:KGF_keys_QNames_glyph_keys_phase_names",
+    "confusable_mapping:explicit_alias_required",
+    "authority:none"
+  ],
+  "profile:COLLATION_SEARCH": [
+    "locale:explicit_per_query_or_user_profile",
+    "algorithm:Unicode_Collation_Algorithm_or_declared_equivalent",
+    "scope:search_and_sort_projection_only",
+    "must_not_rewrite:semantic_identifiers",
+    "authority:none"
+  ],
+  "glyph:PHASE_POP": [
+    "surface:⟁",
+    "codepoint:U+27C1",
+    "kind:proposed_phase_glyph_binding",
+    "phase:Pop",
+    "semantic_key:phase:POP",
+    "binding_status:illustrative_not_registered",
+    "dispatch_authority:none"
+  ],
+  "glyph:PHASE_WO": [
+    "surface:↦",
+    "codepoint:U+21A6",
+    "kind:proposed_phase_glyph_binding",
+    "phase:Wo",
+    "semantic_key:phase:WO",
+    "binding_status:illustrative_not_registered",
+    "dispatch_authority:none"
+  ],
+  "glyph:PHASE_YAX": [
+    "surface:⟲",
+    "codepoint:U+27F2",
+    "kind:proposed_phase_glyph_binding",
+    "phase:Yax",
+    "semantic_key:phase:YAX",
+    "binding_status:illustrative_not_registered",
+    "dispatch_authority:none"
+  ],
+  "law:CHARACTER_BINDING": [
+    "decode_precedes_tokenization",
+    "visual_similarity_does_not_establish_identity",
+    "glyph_binding_resolves_key_only",
+    "semantic_key_resolution_does_not_register_implementation",
+    "registration_does_not_grant_XCFE_admission"
+  ]
+}

@@ -1,0 +1,264 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from cfpc-questions.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH CFPCQUESTIONGRAPH</pattern>
+    <template>source cfpc-questions.gml; label CFPCQuestionGraph; identity cfpc-questions; directed 1; nodes 25; edges 14. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 1</pattern>
+    <template>Graph CFPCQuestionGraph; node 1; id: 1; kind: gap; label: INTENT_GAP; order: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE </pattern>
+    <template>Graph CFPCQuestionGraph; node 1; id: 1; kind: gap; label: INTENT_GAP; order: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 2</pattern>
+    <template>Graph CFPCQuestionGraph; node 2; id: 2; kind: gap; label: QUERY_GAP; order: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE </pattern>
+    <template>Graph CFPCQuestionGraph; node 2; id: 2; kind: gap; label: QUERY_GAP; order: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 3</pattern>
+    <template>Graph CFPCQuestionGraph; node 3; id: 3; kind: gap; label: KNOWLEDGE_GAP_NO_KEYS; order: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE </pattern>
+    <template>Graph CFPCQuestionGraph; node 3; id: 3; kind: gap; label: KNOWLEDGE_GAP_NO_KEYS; order: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 4</pattern>
+    <template>Graph CFPCQuestionGraph; node 4; id: 4; kind: gap; label: KNOWLEDGE_GAP_NO_VALUES; order: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE </pattern>
+    <template>Graph CFPCQuestionGraph; node 4; id: 4; kind: gap; label: KNOWLEDGE_GAP_NO_VALUES; order: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 5</pattern>
+    <template>Graph CFPCQuestionGraph; node 5; id: 5; kind: gap; label: RESOLVED; order: 5; terminal: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE RESOLVED</pattern>
+    <template>Graph CFPCQuestionGraph; node 5; id: 5; kind: gap; label: RESOLVED; order: 5; terminal: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 11</pattern>
+    <template>Graph CFPCQuestionGraph; node 11; id: 11; kind: route; label: disambiguation. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE DISAMBIGUATION</pattern>
+    <template>Graph CFPCQuestionGraph; node 11; id: 11; kind: route; label: disambiguation. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 12</pattern>
+    <template>Graph CFPCQuestionGraph; node 12; id: 12; kind: route; label: pattern_discovery. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE </pattern>
+    <template>Graph CFPCQuestionGraph; node 12; id: 12; kind: route; label: pattern_discovery. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 13</pattern>
+    <template>Graph CFPCQuestionGraph; node 13; id: 13; kind: route; label: retrieval. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE RETRIEVAL</pattern>
+    <template>Graph CFPCQuestionGraph; node 13; id: 13; kind: route; label: retrieval. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 14</pattern>
+    <template>Graph CFPCQuestionGraph; node 14; id: 14; kind: route; label: evidence_resolution. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE </pattern>
+    <template>Graph CFPCQuestionGraph; node 14; id: 14; kind: route; label: evidence_resolution. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 21</pattern>
+    <template>Graph CFPCQuestionGraph; node 21; id: 21; kind: condition; label: intent_present. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE </pattern>
+    <template>Graph CFPCQuestionGraph; node 21; id: 21; kind: condition; label: intent_present. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 22</pattern>
+    <template>Graph CFPCQuestionGraph; node 22; id: 22; kind: condition; label: query_present. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE </pattern>
+    <template>Graph CFPCQuestionGraph; node 22; id: 22; kind: condition; label: query_present. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 23</pattern>
+    <template>Graph CFPCQuestionGraph; node 23; id: 23; kind: condition; label: subject_present. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE </pattern>
+    <template>Graph CFPCQuestionGraph; node 23; id: 23; kind: condition; label: subject_present. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 24</pattern>
+    <template>Graph CFPCQuestionGraph; node 24; id: 24; kind: condition; label: pattern_present. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE </pattern>
+    <template>Graph CFPCQuestionGraph; node 24; id: 24; kind: condition; label: pattern_present. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 25</pattern>
+    <template>Graph CFPCQuestionGraph; node 25; id: 25; kind: condition; label: keys_present. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE </pattern>
+    <template>Graph CFPCQuestionGraph; node 25; id: 25; kind: condition; label: keys_present. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 26</pattern>
+    <template>Graph CFPCQuestionGraph; node 26; id: 26; kind: condition; label: values_present. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE </pattern>
+    <template>Graph CFPCQuestionGraph; node 26; id: 26; kind: condition; label: values_present. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 41</pattern>
+    <template>Graph CFPCQuestionGraph; node 41; id: 41; kind: question_form; label: what is the difference; order: 1; pattern: what-is-the-difference. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE WHAT IS THE DIFFERENCE</pattern>
+    <template>Graph CFPCQuestionGraph; node 41; id: 41; kind: question_form; label: what is the difference; order: 1; pattern: what-is-the-difference. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 42</pattern>
+    <template>Graph CFPCQuestionGraph; node 42; id: 42; kind: question_form; label: how does; order: 2; pattern: how-does-relate. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE HOW DOES</pattern>
+    <template>Graph CFPCQuestionGraph; node 42; id: 42; kind: question_form; label: how does; order: 2; pattern: how-does-relate. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 43</pattern>
+    <template>Graph CFPCQuestionGraph; node 43; id: 43; kind: question_form; label: how is; order: 3; pattern: how-does-relate. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE HOW IS</pattern>
+    <template>Graph CFPCQuestionGraph; node 43; id: 43; kind: question_form; label: how is; order: 3; pattern: how-does-relate. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 44</pattern>
+    <template>Graph CFPCQuestionGraph; node 44; id: 44; kind: question_form; label: why does; order: 4; pattern: why-does. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE WHY DOES</pattern>
+    <template>Graph CFPCQuestionGraph; node 44; id: 44; kind: question_form; label: why does; order: 4; pattern: why-does. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 45</pattern>
+    <template>Graph CFPCQuestionGraph; node 45; id: 45; kind: question_form; label: why is; order: 5; pattern: why-does. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE WHY IS</pattern>
+    <template>Graph CFPCQuestionGraph; node 45; id: 45; kind: question_form; label: why is; order: 5; pattern: why-does. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 46</pattern>
+    <template>Graph CFPCQuestionGraph; node 46; id: 46; kind: question_form; label: how to; order: 6; pattern: how-to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE HOW TO</pattern>
+    <template>Graph CFPCQuestionGraph; node 46; id: 46; kind: question_form; label: how to; order: 6; pattern: how-to. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 47</pattern>
+    <template>Graph CFPCQuestionGraph; node 47; id: 47; kind: question_form; label: tell me about; order: 7; pattern: tell-me-about. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE TELL ME ABOUT</pattern>
+    <template>Graph CFPCQuestionGraph; node 47; id: 47; kind: question_form; label: tell me about; order: 7; pattern: tell-me-about. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 48</pattern>
+    <template>Graph CFPCQuestionGraph; node 48; id: 48; kind: question_form; label: explain; order: 8; pattern: explain. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE EXPLAIN</pattern>
+    <template>Graph CFPCQuestionGraph; node 48; id: 48; kind: question_form; label: explain; order: 8; pattern: explain. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 49</pattern>
+    <template>Graph CFPCQuestionGraph; node 49; id: 49; kind: question_form; label: what does; order: 9; pattern: what-is. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE WHAT DOES</pattern>
+    <template>Graph CFPCQuestionGraph; node 49; id: 49; kind: question_form; label: what does; order: 9; pattern: what-is. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE 50</pattern>
+    <template>Graph CFPCQuestionGraph; node 50; id: 50; kind: question_form; label: what is; order: 10; pattern: what-is. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH NODE WHAT IS</pattern>
+    <template>Graph CFPCQuestionGraph; node 50; id: 50; kind: question_form; label: what is; order: 10; pattern: what-is. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH EDGE 21 GATES 1</pattern>
+    <template>Graph CFPCQuestionGraph; edge 21 to 1; relation: gates; source: 21; target: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH EDGE 22 GATES 2</pattern>
+    <template>Graph CFPCQuestionGraph; edge 22 to 2; relation: gates; source: 22; target: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH EDGE 23 GATES 2</pattern>
+    <template>Graph CFPCQuestionGraph; edge 23 to 2; relation: gates; source: 23; target: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH EDGE 24 GATES 2</pattern>
+    <template>Graph CFPCQuestionGraph; edge 24 to 2; relation: gates; source: 24; target: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH EDGE 25 GATES 3</pattern>
+    <template>Graph CFPCQuestionGraph; edge 25 to 3; relation: gates; source: 25; target: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH EDGE 26 GATES 4</pattern>
+    <template>Graph CFPCQuestionGraph; edge 26 to 4; relation: gates; source: 26; target: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH EDGE 1  2</pattern>
+    <template>Graph CFPCQuestionGraph; edge 1 to 2; relation: checked_before; source: 1; target: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH EDGE 2  3</pattern>
+    <template>Graph CFPCQuestionGraph; edge 2 to 3; relation: checked_before; source: 2; target: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH EDGE 3  4</pattern>
+    <template>Graph CFPCQuestionGraph; edge 3 to 4; relation: checked_before; source: 3; target: 4. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH EDGE 4  5</pattern>
+    <template>Graph CFPCQuestionGraph; edge 4 to 5; relation: checked_before; source: 4; target: 5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH EDGE 1  11</pattern>
+    <template>Graph CFPCQuestionGraph; edge 1 to 11; relation: routes_to; source: 1; target: 11. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH EDGE 2  12</pattern>
+    <template>Graph CFPCQuestionGraph; edge 2 to 12; relation: routes_to; source: 2; target: 12. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH EDGE 3  13</pattern>
+    <template>Graph CFPCQuestionGraph; edge 3 to 13; relation: routes_to; source: 3; target: 13. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCQUESTIONGRAPH EDGE 4  14</pattern>
+    <template>Graph CFPCQuestionGraph; edge 4 to 14; relation: routes_to; source: 4; target: 14. Data-only graph record.</template>
+  </category>
+</aiml>

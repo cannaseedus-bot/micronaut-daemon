@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0" xmlns="http://alicebot.org/2001/AIML-2020" xmlns:xcfe="urn:kuhul:xcfe:aiml:1.0">
+  <!-- Synonym normalization -->
+  <category><pattern>WEED</pattern><template><srai>SHOW ME YOUR SEEDS</srai></template></category>
+  <category><pattern>POT</pattern><template><srai>SHOW ME YOUR SEEDS</srai></template></category>
+  <category><pattern>GANJA</pattern><template><srai>SHOW ME YOUR SEEDS</srai></template></category>
+  <category><pattern>MARIJUANA</pattern><template><srai>SHOW ME YOUR SEEDS</srai></template></category>
+  <category><pattern>JELLY DOUGHNUT</pattern><template><srai>TELL ME ABOUT JELLY DONUTZ</srai></template></category>
+  <category><pattern>JELLY RUNTZ</pattern><template><srai>TELL ME ABOUT JELLY DONUTZ</srai></template></category>
+  <category><pattern>STRAWBERRY COUGH</pattern><template><srai>TELL ME ABOUT STRAWBERRY CBD H</srai></template></category>
+  <category><pattern>DELIVERY</pattern><template><srai>HOW MUCH IS SHIPPING</srai></template></category>
+
+  <!-- Product state -->
+  <category><pattern>HELLO</pattern><template><set name="lastTopic">greeting</set><set name="cartCount">0</set>Hey! 🌱 I'm Seed Bot. Ask about seeds, recommendations, the blog, or growing.</template></category>
+  <category><pattern>TELL ME ABOUT JELLY DONUTZ</pattern><template><set name="lastProduct">Jelly Donutz</set><set name="lastProductId">jelly-donutz</set><set name="lastTopic">product</set><xcfe:product-spotlight id="jelly-donutz" catalog="⟁APP:SEED_STORE/catalog.products" authority="observation_only"/></template></category>
+  <category><pattern>TELL ME ABOUT ALIEN OG</pattern><template><set name="lastProduct">Alien OG</set><set name="lastProductId">alien-og</set><set name="lastTopic">product</set><xcfe:product-spotlight id="alien-og" catalog="⟁APP:SEED_STORE/catalog.products" authority="observation_only"/></template></category>
+  <category><pattern>TELL ME ABOUT OCTANE</pattern><template><set name="lastProduct">Octane CBD-H</set><set name="lastProductId">octane-cbd-h</set><set name="lastTopic">product</set><xcfe:product-spotlight id="octane-cbd-h" catalog="⟁APP:SEED_STORE/catalog.products" authority="observation_only"/></template></category>
+
+  <!-- Contextual follow-ups -->
+  <category><pattern>ADD IT TO MY CART</pattern><template><condition name="lastProductId"><li value="">Ask me about a strain first.</li><li><xcfe:cart-add id="&lt;get name='lastProductId'/&gt;" app="⟁APP:SEED_STORE" authority="observation_only"/>Added <get name="lastProduct"/> to your cart.<xcfe:cart-snapshot app="⟁APP:SEED_STORE" authority="observation_only"/></li></condition></template></category>
+  <category><pattern>ADD THAT TO MY CART</pattern><template><srai>ADD IT TO MY CART</srai></template></category>
+  <category><pattern>I WILL TAKE IT</pattern><template><srai>ADD IT TO MY CART</srai></template></category>
+  <category><pattern>TELL ME MORE</pattern><template><condition name="lastProductId"><li><xcfe:product-spotlight id="&lt;get name='lastProductId'/&gt;" catalog="⟁APP:SEED_STORE/catalog.products" authority="observation_only"/></li><li>Ask me about a strain first.</li></condition></template></category>
+  <category><pattern>HOW MUCH IS IT</pattern><template><xcfe:product-price name="&lt;get name='lastProductId'/&gt;" catalog="⟁APP:SEED_STORE/catalog.products" authority="observation_only"/></template></category>
+  <category><pattern>SIMILAR STRAINS</pattern><template><xcfe:product-recommendation based_on="&lt;get name='lastProductId'/&gt;" catalog="⟁APP:SEED_STORE/catalog.products" authority="observation_only"/></template></category>
+
+  <!-- Cart and checkout context -->
+  <category><pattern>ADD * TO MY CART</pattern><template><set name="lastProduct"><star/></set><set name="lastTopic">cart</set><xcfe:cart-add-by-name name="&lt;star/&gt;" app="⟁APP:SEED_STORE" authority="observation_only"/>Added <star/> to your cart.<xcfe:cart-snapshot app="⟁APP:SEED_STORE" authority="observation_only"/></template></category>
+  <category><pattern>SHOW ME MY CART</pattern><template><xcfe:cart-snapshot app="⟁APP:SEED_STORE" authority="observation_only"/></template></category>
+  <category><pattern>EMPTY MY CART</pattern><template><set name="cartCount">0</set><set name="lastTopic">cart</set><xcfe:cart-clear app="⟁APP:SEED_STORE" authority="observation_only"/>Your cart is empty.</template></category>
+  <category><pattern>CHECKOUT</pattern><template><set name="lastTopic">payment</set><xcfe:payment-panel app="⟁APP:SEED_CHECKOUT" route="commerce.order" authority="observation_only"/></template></category>
+  <category><pattern>CHECKOUT</pattern><that>YOUR CART IS EMPTY *</that><template>Your cart is empty, so there's nothing to check out yet. Want to see our seeds?<xcfe:product-rail catalog="⟁APP:SEED_STORE/catalog.products" authority="observation_only"/></template></category>
+  <category><pattern>CHECKOUT</pattern><that>* ADDED *</that><template>Ready when you are — here's your total:<xcfe:payment-panel app="⟁APP:SEED_CHECKOUT" route="commerce.order" authority="observation_only"/></template></category>
+
+  <!-- Blog and guide state -->
+  <category><pattern>SHOW ME THE LATEST BLOG POSTS</pattern><template><set name="lastTopic">blog</set><xcfe:feed-rail limit="6" source="blog.store-and-community.v1" authority="observation_only"/></template></category>
+  <category><pattern>POSTS ABOUT *</pattern><template><set name="lastTopic">blog-search</set><set name="lastQuery"><star/></set><xcfe:feed-search query="&lt;star/&gt;" source="blog.store-and-community.v1" authority="observation_only"/></template></category>
+  <category><pattern>ORGANIC VS HYDRO</pattern><template><set name="lastGuide">organic-vs-hydro</set>Organic uses living soil; hydro uses dissolved nutrients with tighter EC/pH control.</template></category>
+  <category><pattern>HOW TO GERMINATE SEEDS</pattern><template><set name="lastGuide">germination</set>Use a warm, damp, dark setup, check daily, and plant the taproot carefully.</template></category>
+  <category><pattern>SHOW ME THE FULL GUIDE</pattern><template><condition name="lastGuide"><li value="organic-vs-hydro"><a href="/2025/10/organics-growing-vs-hydroponic-growing.html">Open the Growers Bible →</a></li><li value="germination"><a href="/2025/02/how-to-germinate-marijuana-seeds-step.html">Open the Germination Guide →</a></li><li>Ask about a guide first.</li></condition></template></category>
+
+  <category><pattern>*</pattern><template>I'm not sure I understood "<star/>". Try showing seeds, asking about a strain, viewing your cart, or opening checkout.</template></category>
+</aiml>

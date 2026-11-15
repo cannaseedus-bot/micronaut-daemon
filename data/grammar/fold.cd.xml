@@ -1,0 +1,1227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  fold.cd.xml  —  OpenMath-style Content Dictionary for the Fold Graph
+  namespace:  urn:kuhul:fold-graph:v1
+  version:    1.0.0
+
+  Declares the symbols used in vectors.mml and any future MathML that
+  references cd="urn:kuhul:fold-graph:v1".
+
+  Structure follows OpenMath CD conventions (symbols, descriptions,
+  formal properties) without requiring a full OM registry lookup. Any
+  XML validator that resolves the cd attribute to this file can verify
+  that the symbol names used in Content MathML are declared here.
+-->
+<CD xmlns="http://www.openmath.org/OpenMathCD"
+    xmlns:kfg="urn:kuhul:fold-graph:v1">
+
+  <CDName>fold</CDName>
+  <CDURI>urn:kuhul:fold-graph:v1</CDURI>
+  <CDDate>2026-09-30</CDDate>
+  <CDVersion>1</CDVersion>
+  <CDRevision>1</CDRevision>
+  <CDStatus>official</CDStatus>
+  <CDComment>
+    Content Dictionary for the K'UHUL Fold Graph semantic contract.
+    Defines FoldPair and its structural constraints as formalised in
+    vectors.mml and fold_graph.xml.
+
+    Key invariant (no-pattern-inflation):
+      |supp M[Y,·]| = #{X ∈ S : Y ∈ C_X}
+    FoldPair increases operator surface; it does not increase |X|.
+
+    Notation: M_{Y,X} = co-occurrence/association mass (forward matrix).
+    Do not conflate with W_Y = runtime selection weight (static_weight in WCR).
+    M and W are distinct; they feed different pipeline stages.
+  </CDComment>
+
+  <!-- ── FoldPair ────────────────────────────────────────────────────── -->
+  <CDDefinition>
+    <Name>FoldPair</Name>
+    <Description>
+      FoldPair(S) = ⟨ M_{Y,X}, C_{Y,X}^T ⟩
+
+      Returns a logical pair of accumulation matrices over the shared
+      semantic axis X ∈ S. The pair is a semantic contract, not a
+      physical memory layout.
+
+      Arguments:
+        S  — semantic position set (the X axis; fixed by the topology map)
+
+      Result members:
+        M_{Y,X}     — forward (membership) co-occurrence mass matrix:
+                      M[Y][X] += 1  if Y ∈ C_X,  else 0.
+                      NOT the WCR runtime selection weight W_Y (static_weight).
+        C_{Y,X}^T  — reverse (traversal) matrix, transposed:
+                      C[Y][X] += 1  for each Y ∈ C_X
+
+      Shared axis:  X  (both members indexed over the same S)
+
+      Physical lowering to [ M ; C^T ] is optional and backend-chosen.
+      This symbol asserts only the logical pair.
+    </Description>
+    <property>
+      <description>Shared-axis constraint: no pattern inflation</description>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <apply>
+          <eq/>
+          <!-- |supp M[Y,·]| -->
+          <apply>
+            <card/>
+            <apply>
+              <csymbol cd="urn:kuhul:fold-graph:v1">supp</csymbol>
+              <apply><selector/><ci>M</ci><ci>Y</ci></apply>
+            </apply>
+          </apply>
+          <!-- #{X ∈ S : Y ∈ C_X} -->
+          <apply>
+            <card/>
+            <apply>
+              <csymbol cd="urn:kuhul:fold-graph:v1">setbuilder</csymbol>
+              <ci>X</ci>
+              <apply><in/><ci>X</ci><ci>S</ci></apply>
+              <apply>
+                <in/><ci>Y</ci>
+                <apply><selector/><ci>C</ci><ci>X</ci></apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </math>
+    </property>
+    <property>
+      <description>FoldPair does not lower to a concatenated matrix. Physical backends may choose [M; C^T] but this symbol does not assert it.</description>
+    </property>
+    <property>
+      <description>Direction asymmetry is intentional: M uses membership test (indicator); C uses traversal (double quantifier). Both are correct update rules for the same underlying data.</description>
+    </property>
+  </CDDefinition>
+
+  <!-- ── FoldPairLower ────────────────────────────────────────────────── -->
+  <CDDefinition>
+    <Name>FoldPairLower</Name>
+    <Description>
+      FoldPairLower( FoldPair(S) ) = [ M ; C^T ]
+
+      Optional physical lowering of a FoldPair to a contiguous stacked
+      matrix. May only be applied when the physical backend requires
+      vertical concatenation. Storage dimensions: (2·|Y|) × |X|.
+
+      This symbol is non-normative with respect to the semantic contract.
+      The semantic contract is FoldPair; FoldPairLower is a projection.
+    </Description>
+    <property>
+      <description>semantic contract ≠ physical representation (fold_graph.xml law: representation-is-provider)</description>
+    </property>
+  </CDDefinition>
+
+  <!-- ── Axis ─────────────────────────────────────────────────────────── -->
+  <CDDefinition>
+    <Name>Axis</Name>
+    <Description>
+      Axis(name, set) declares a named semantic axis indexed over a set.
+      Used to assert that two matrices share a coordinate system without
+      implying physical adjacency.
+
+      Example: Axis("X", S) declares that both M_{Y,X} and C_{Y,X}
+      are indexed by the same position set S.
+    </Description>
+  </CDDefinition>
+
+  <!-- ── supp (support) ───────────────────────────────────────────────── -->
+  <CDDefinition>
+    <Name>supp</Name>
+    <Description>
+      supp(v) — support of a vector v: the set of indices at which v is nonzero.
+      Used in the no-pattern-inflation property of FoldPair: |supp M[Y,·]| = #{X ∈ S : Y ∈ C_X}.
+    </Description>
+  </CDDefinition>
+
+  <!-- ── setbuilder ───────────────────────────────────────────────────── -->
+  <CDDefinition>
+    <Name>setbuilder</Name>
+    <Description>
+      setbuilder(x, domain_condition, filter_condition) — set-builder notation:
+      { x | domain_condition AND filter_condition }.
+      Used to express #{X ∈ S : Y ∈ C_X} in the shared-axis constraint.
+    </Description>
+  </CDDefinition>
+
+  <!-- ── Statistical decision symbols ──────────────────────────────────── -->
+  <CDDefinition>
+    <Name>PriorDistribution</Name>
+    <Description>
+      PriorDistribution(θ) = Λ(θ). Antecedent distribution over latent semantic
+      parameter states preserved by FoldGraph B. It supplies statistical context
+      for VECTOR-µ representation decisions but does not verify semantic truth.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>Probability</Name>
+    <Description>
+      Probability(x, θ) = P(x | θ). Conditional probability of observing graph,
+      typed-edge, telemetry, or episode evidence x under latent semantic state θ.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>Loss</Name>
+    <Description>
+      Loss(θ, a) = L(θ,a). Penalty assigned when VECTOR-µ chooses derived
+      geometric action a for true latent semantic state θ. Loss constrains
+      projection admissibility; it is not a Ch'en proof.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>Risk</Name>
+    <Description>
+      Risk(θ, δ) = R(θ,δ) = E_{x|θ}[Loss(θ,δ(x))]. Expected loss of decision
+      rule δ under latent semantic state θ.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>DecisionRule</Name>
+    <Description>
+      DecisionRule(δ, x) maps observed GML/Fold/Episode evidence x to a derived
+      VECTOR-µ geometry action. A decision rule may be rejected as inadmissible
+      before Ch'en/Xul admission, but it cannot mutate B by itself.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>BayesRisk</Name>
+    <Description>
+      BayesRisk(Λ, δ) = ∫ Risk(θ,δ) dΛ(θ). Integrated average risk under an
+      antecedent prior distribution.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>MinimaxRule</Name>
+    <Description>
+      MinimaxRule chooses δ to minimize max_θ Risk(θ,δ). It protects VECTOR-µ
+      from worst-case structural/geometric collapse and emits projection-rule
+      rejection evidence, not topology mutation authority.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>MinimaxRiskBound</Name>
+    <Description>
+      MinimaxRiskBound is the local risk bound used to flag inadmissible vector
+      rules when a loss_cost exceeds endpoint risk_bound constraints.
+    </Description>
+  </CDDefinition>
+
+  <!-- ── Differential comparison symbols ───────────────────────────────── -->
+  <CDDefinition>
+    <Name>DeltaFieldDiff</Name>
+    <Description>
+      DeltaFieldDiff = ΔF_diff = ⟨ ΔM_{Y,X}, ΔRelations, R_minimax ⟩. Captures
+      differential NLP graph drift together with statistical risk constraints.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>DeltaCooccurrenceMass</Name>
+    <Description>
+      DeltaCooccurrenceMass(Y,X) = ΔM_{Y,X}. Co-occurrence mass delta observed
+      between graph/text states. This remains semantic evidence, not WCR weight.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>DeltaRelations</Name>
+    <Description>
+      DeltaRelations is the typed relation-edge component of ΔF_diff or FoldDelta.
+      It tracks structural relation drift and still requires Ch'en/Xul authority
+      before any committed topology mutation.
+    </Description>
+  </CDDefinition>
+
+  <!-- ── Quantum graph / continuous field symbols ───────────────────────── -->
+  <CDDefinition>
+    <Name>GraphHamiltonian</Name>
+    <Description>
+      GraphHamiltonian(ψ_e, U_e) = -d²ψ_e/dx² + U_e(x)ψ_e(x). Differential
+      operator over a metric graph edge interval [0,L_e]. It governs derived
+      VECTOR-µ/METRIC-µ wave geometry and does not redefine FoldGraph B.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>IncidentEdges</Name>
+    <Description>
+      IncidentEdges(v) returns the edge set E(v) adjacent to vertex v. Used for
+      vertex boundary conditions and flux conservation on quantum graphs.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>DerivativeAtVertex</Name>
+    <Description>
+      DerivativeAtVertex(e,v) is the outward derivative ∂ψ_e/∂x evaluated at
+      vertex v along edge e.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>FluxConservation</Name>
+    <Description>
+      FluxConservation(v): sum of outward edge derivatives at vertex v equals
+      the localized vertex potential/selection term W_v ψ_v. This covers
+      Kirchhoff/Robin matching as a projection invariant.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>PlaneWaveSuperposition</Name>
+    <Description>
+      PlaneWaveSuperposition(e,x) = A_e exp(i k_e x) + B_e exp(-i k_e x).
+      Represents forward and reflected semantic wave amplitudes on a metric
+      edge interval.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>ScatteringMatrix</Name>
+    <Description>
+      ScatteringMatrix(v,m,j) = 2/degree(v) - δ_mj under Kirchhoff/Neumann
+      boundary conditions. It distributes incoming plane-wave amplitude at a
+      vertex across adjacent channels.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>KroneckerDelta</Name>
+    <Description>
+      KroneckerDelta(m,j) = 1 when m=j, otherwise 0.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>Degree</Name>
+    <Description>
+      Degree(v) is the number of incident edge channels at vertex v.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>FieldZeroes</Name>
+    <Description>
+      FieldZeroes(V) returns isolated zeroes of vector field V. Used by the
+      Poincare-Hopf consistency law for derived flow fields.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>LocalIndex</Name>
+    <Description>
+      LocalIndex(z,V) is the vector-field index at isolated zero z.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>EulerCharacteristic</Name>
+    <Description>
+      EulerCharacteristic(M) = χ(M), the topological invariant equaling the sum
+      of local vector-field indices for admissible continuous reparameterizations.
+    </Description>
+  </CDDefinition>
+
+  <!-- ── GradientFlow ─────────────────────────────────────────────────── -->
+  <CDDefinition>
+    <Name>GradientFlow</Name>
+    <Description>
+      GradientFlow(γ, V) asserts the integral curve ODE: γ'(t) = V(γ(t)).
+
+      Arguments:
+        γ — smooth curve γ: ℝ → M on the semantic manifold M
+        V — continuous vector field V: M → TM (tangent bundle)
+
+      The curve γ is the unique trajectory a semantic state follows when
+      driven by field V. Existence and uniqueness follow from the Picard–
+      Lindelöf theorem on M.
+
+      Completeness: a GradientFlow path is complete when its flow line
+      propagates without reaching a structural boundary. Paths that terminate
+      at a boundary (divergence sink or manifold edge) are incomplete and are
+      flagged for Ch'en revalidation before Xul commits them.
+
+      Admissibility constraint: GradientFlow is derived geometry. It can
+      propose a trajectory; it cannot mutate FoldGraph B. Ch'en/Xul retain
+      exclusive commit authority.
+    </Description>
+    <property>
+      <description>Integral curve ODE: γ'(t) = V(γ(t))</description>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <apply>
+          <eq/>
+          <apply>
+            <csymbol cd="urn:kuhul:fold-graph:v1">GradientFlow</csymbol>
+            <ci>&#x03B3;</ci>
+            <ci>V</ci>
+            <ci>t</ci>
+          </apply>
+          <apply>
+            <ci>V</ci>
+            <apply><ci>&#x03B3;</ci><ci>t</ci></apply>
+          </apply>
+        </apply>
+      </math>
+    </property>
+    <property>
+      <description>Uniqueness: given initial condition γ(0) = p and a Lipschitz-continuous V, the integral curve through p is unique on M.</description>
+    </property>
+    <property>
+      <description>Completeness gate: GradientFlow is complete iff the flow line does not reach a structural sink (divergence &lt; 0) or manifold boundary within the admitted trajectory horizon. Incomplete paths route to Ch'en for revalidation.</description>
+    </property>
+    <property>
+      <description>Poincaré-Hopf consistency: the sum of LocalIndex values at all FieldZeroes of V equals EulerCharacteristic(M). This constrains admissible reparameterizations of the manifold; see EulerCharacteristic.</description>
+    </property>
+    <property>
+      <description>Derived geometry only: GradientFlow does not authorize topology mutation. It is a representation geometry layer above FoldGraph B. The fold_graph.xml law representation-is-provider applies.</description>
+    </property>
+  </CDDefinition>
+
+  <!-- ── LieBracket ──────────────────────────────────────────────────── -->
+  <CDDefinition>
+    <Name>LieBracket</Name>
+    <Description>
+      LieBracket(X, Y, f) = X(Y(f)) − Y(X(f)).
+
+      Arguments:
+        X, Y — vector-field operators (relation-conditioned derivations on M)
+        f    — smooth scalar test function f: M → ℝ
+
+      Measures the structural friction or alignment between two competing
+      semantic transformations. When [X,Y] = 0 the two operations commute:
+      applying @requires then @imports reaches the same geometric address
+      regardless of order. When [X,Y] ≠ 0 the order changes the output
+      address; this encodes asymmetric relational pairings such as
+      @causes/@contradicts as structural curl across the vector space.
+
+      Admissibility constraint: LieBracket is a measurement/diagnostic
+      operator. It can detect non-commuting flow friction and emit that
+      evidence to the scoring pipeline; it cannot itself authorize eligibility
+      or mutate FoldGraph B.
+    </Description>
+    <property>
+      <description>Definition: [X,Y](f) = X(Y(f)) − Y(X(f))</description>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <apply>
+          <eq/>
+          <apply>
+            <csymbol cd="urn:kuhul:fold-graph:v1">LieBracket</csymbol>
+            <ci>X</ci><ci>Y</ci><ci>f</ci>
+          </apply>
+          <apply>
+            <minus/>
+            <apply><ci>X</ci><apply><ci>Y</ci><ci>f</ci></apply></apply>
+            <apply><ci>Y</ci><apply><ci>X</ci><ci>f</ci></apply></apply>
+          </apply>
+        </apply>
+      </math>
+    </property>
+    <property>
+      <description>Antisymmetry: [X,Y] = −[Y,X]. Swapping the two operators negates the bracket.</description>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <apply>
+          <eq/>
+          <apply>
+            <csymbol cd="urn:kuhul:fold-graph:v1">LieBracket</csymbol>
+            <ci>X</ci><ci>Y</ci><ci>f</ci>
+          </apply>
+          <apply>
+            <minus/>
+            <apply>
+              <csymbol cd="urn:kuhul:fold-graph:v1">LieBracket</csymbol>
+              <ci>Y</ci><ci>X</ci><ci>f</ci>
+            </apply>
+          </apply>
+        </apply>
+      </math>
+    </property>
+    <property>
+      <description>Jacobi identity: [X,[Y,Z]] + [Y,[Z,X]] + [Z,[X,Y]] = 0. Structural consistency is preserved under triple-operator composition; no semantic torsion can escape the closed Lie algebra.</description>
+    </property>
+    <property>
+      <description>Commuting flows ([X,Y]=0): the two relation-channel traversals are path-independent. Example: @requires then @imports reaches the same geometric address as @imports then @requires.</description>
+    </property>
+    <property>
+      <description>Non-commuting friction ([X,Y]≠0): the order of semantic context changes the output address. Example: @causes then @contradicts ≠ @contradicts then @causes — the bracket is the signed curl magnitude of this asymmetric pairing.</description>
+    </property>
+    <property>
+      <description>Diagnostic only: LieBracket emits friction evidence to Ch'en scoring. It cannot authorize eligibility. Entropy may recommend; entropy may never authorize — the same constraint applies to bracket measurements.</description>
+    </property>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>ConditionalProbability</Name>
+    <Description>
+      ConditionalProbability(w_i, context) is used for structural n-gram reset
+      laws at sentence, paragraph, article, or section boundaries.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>StructuralBoundaryReset</Name>
+    <Description>
+      StructuralBoundaryReset maps a boundary delimiter (for example ◄/s► or
+      ◄par►) to a local context reset. It prevents n-gram windows from bleeding
+      across incompatible structural layers unless an admitted boundary
+      transition exists.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>DifferentiableCurve</Name>
+    <Description>
+      DifferentiableCurve(gamma,I,X) asserts gamma:I→X, a one-dimensional
+      differentiable trajectory used to project token, gram, sentence, or
+      paragraph progression over learned VECTOR-µ geometry.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>TangentVelocity</Name>
+    <Description>
+      TangentVelocity(gamma,t)=d gamma(t)/dt. It is the local direction of
+      semantic drift in the tangent space at gamma(t).
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>SemanticDisplacement</Name>
+    <Description>
+      SemanticDisplacement is the derived DeltaF_curve obtained by integrating a
+      velocity field along a differentiable trajectory. It is a projection
+      quantity, not a topology commit.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>TrajectoryLineIntegral</Name>
+    <Description>
+      TrajectoryLineIntegral(gamma,V)=∫_gamma V(s)·ds.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>CurveCurvature</Name>
+    <Description>
+      CurveCurvature(gamma,t)=kappa(t), a nonnegative local bend measure used to
+      mark structural inflections such as paragraph or article boundaries.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>ScalarPotential</Name>
+    <Description>
+      ScalarPotential(f,x) returns f(x), a projection-side potential surface used
+      by Euclidean gradient providers. It must not be confused with semantic truth.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>EuclideanGradient</Name>
+    <Description>
+      EuclideanGradient(f,x)=nabla f(x) in flat R^n with g_ij=delta_ij.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>ConservativeLineIntegral</Name>
+    <Description>
+      ConservativeLineIntegral(gamma,grad f)=f(gamma(b))-f(gamma(a)) for flat
+      conservative Euclidean gradient fields.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>ZeroCurlConstraint</Name>
+    <Description>
+      ZeroCurlConstraint(V) requires ∂V_i/∂x_j = ∂V_j/∂x_i for Euclidean
+      gradient fields, equivalent to curl(grad f)=0.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>LieDerivative</Name>
+    <Description>
+      LieDerivative(X,T) measures change of a scalar, vector, or tensor field T
+      along vector field X. It is a projection-side context drift operator.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>ProviderParameters</Name>
+    <Description>
+      ProviderParameters(phi) denotes learnable parameters owned by a projection
+      provider such as VECTOR-µ, METRIC-µ, GRAPH-µ, SDR-µ, or SCX. These
+      parameters tune geometry and indexes, not semantic truth.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>ProjectionLoss</Name>
+    <Description>
+      ProjectionLoss(L_total) is the provider-training objective assembled from
+      contrastive, bridge, differential, and risk terms.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>TrainingGradient</Name>
+    <Description>
+      TrainingGradient(phi,L)=∇_phi L. It is a provider-learning signal and is
+      not a FoldDelta.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>GradientNorm</Name>
+    <Description>
+      GradientNorm(g)=||g||, a nonnegative magnitude used for telemetry and
+      clipping.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>GradientClip</Name>
+    <Description>
+      GradientClip(g,c) bounds a training gradient by positive clip threshold c.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>ParameterUpdate</Name>
+    <Description>
+      ParameterUpdate(phi,eta,g)=phi-eta*g. It updates provider parameters only;
+      it does not commit FoldGraph topology.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>ShannonEntropy</Name>
+    <Description>
+      ShannonEntropy(P,x) = -sum_w P(w|x) log P(w|x), the local uncertainty of
+      the admitted token/gram distribution at projection coordinate x.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>EntropyGradient</Name>
+    <Description>
+      EntropyGradient(H,x)=nabla H(x), the direction of steepest change in local
+      uncertainty. It supports exploration and repair gating, not semantic truth.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>EntropySpike</Name>
+    <Description>
+      EntropySpike(DeltaH) records a nonnegative jump in structural uncertainty.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>EntropyBound</Name>
+    <Description>
+      EntropyBound(H,Hmax) asserts H is within an admitted entropy ceiling.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>FreeEnergyFlow</Name>
+    <Description>
+      FreeEnergyFlow(f,H,beta,x) = -nabla f(x) + beta^-1 nabla H(x), combining
+      relevance drift with entropy-gradient diffusion.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>FokkerPlanckFlow</Name>
+    <Description>
+      FokkerPlanckFlow(rho,f,beta) denotes partial_t rho =
+      div(rho nabla f) + beta^-1 Delta rho for projection-density evolution.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>DiffusionScale</Name>
+    <Description>
+      DiffusionScale(beta_inv)=beta^-1, a nonnegative entropy diffusion factor.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>GeodesicEntropy</Name>
+    <Description>
+      GeodesicEntropy(v) = -sum_{u!=v} p(d(v,u)) * log(p(d(v,u))) where
+      p(d) = |{u : d(v,u)=d}| / (|V|-1). Measures Shannon uncertainty of
+      the shortest-path distance distribution from node v. Low value = central
+      hub (trajectory concentrates); High value = scattered region (signal
+      diffuses globally). Derived geometry only; cannot mutate FoldGraph B.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>TriangularEntropy</Name>
+    <Description>
+      TriangularEntropy(T) = -sum_{sigma in T} w(sigma) * log(w(sigma)) where
+      T is a set of 2-simplices (3-node closed triangles) and w(sigma) is the
+      normalized simplex_weight for face sigma. Low value = stable equilateral
+      mesh (symmetric relation verbs); High value = warped/mismatched triangles
+      signaling local structural decomposition. Monitoring tool for the Factory;
+      diagnostic only — cannot authorize topology commits.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>Circumradius</Name>
+    <Description>
+      Circumradius(T)=R is the radius of the circumscribed circle for a local
+      inscribed semantic triangle T. It is projection geometry over FoldGraph B,
+      not semantic authority.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>Inradius</Name>
+    <Description>
+      Inradius(T)=r is the incircle radius of the local semantic compression
+      core inside triangle T. It is diagnostic projection geometry only.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>Circumcenter</Name>
+    <Description>
+      Circumcenter(T)=O is the coordinate center of the circumcircle. Drift
+      between O and a local mesh average indicates projection stress, not a
+      verified semantic mutation.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>EulerTriangleInequality</Name>
+    <Description>
+      EulerTriangleInequality(T) asserts Circumradius(T) >= 2*Inradius(T) for
+      the local inscribed triangle. Violations indicate warped projection mesh
+      geometry and cannot by themselves alter FoldGraph B.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>RaychaudhuriFlow</Name>
+    <Description>
+      RaychaudhuriFlow(H_G, gamma, t) = dH_G/dt =
+      sum_{e in gamma} (R_{mu nu} u^mu u^nu + (1/3)*theta^2).
+      Geodesic entropy production rate along streamline gamma as a function of
+      Ricci curvature focusing and expansion squared. Finite-time focusing
+      prevents infinite entropic diffusion; Ch'en checks the integral bound.
+      Derived geometry only.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>PropagatorKernel</Name>
+    <Description>
+      PropagatorKernel(x, y, tau) = sum_{gamma in Paths(x,y)} exp(-S[gamma])
+      where S[gamma] = integral_0^tau (1/2 * g_{ij} * x_dot^i * x_dot^j + U(x)) dt
+      is the Lagrangian action over curved metric g. Each GPU thread evaluates
+      one incident edge amplitude; reduction over all edges yields total
+      path-integral flux at the target node. Feeds geodesic_entropy update:
+      H_G = -log(total_flux / node_count). Derived geometry only; cannot
+      authorize eligibility or mutate FoldGraph B.
+    </Description>
+  </CDDefinition>
+
+
+  <CDDefinition>
+    <Name>MicronautAttraction</Name>
+    <Description>
+      MicronautAttraction(mu,Q)=Phi_mu(Q)=MicronautMass(mu) *
+      GeometricAlignment(Q,MicronautKeyVector(mu)) * WCRPrior(mu). It is the
+      projection-side attraction score for routing an unfolded query trajectory
+      into a phase-scoped Micronaut basin. It gates candidate capture only and
+      cannot verify semantic truth, rewrite RelationISA, or commit FoldGraph B.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>MicronautMass</Name>
+    <Description>
+      MicronautMass(mu) is the derived density of a Micronaut attractor basin,
+      typically assembled from forward co-occurrence mass M_{Y,X}, declared
+      governs/tokens neighborhoods, folds, and static_weight metadata. It is
+      representation evidence, not an authoritative fact.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>MicronautKeyVector</Name>
+    <Description>
+      MicronautKeyVector(mu)=K_mu denotes the vector_meta or coordinate anchor
+      for a Micronaut in TENSOR-µ projection geometry. Changing K_mu changes the
+      projection, not the semantic identity of the Micronaut.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>GeometricAlignment</Name>
+    <Description>
+      GeometricAlignment(Q,K_mu)=cos(Q,K_mu) or an equivalent provider-specific
+      angular/metric alignment score. It supplies relevance geometry only.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>WCRPrior</Name>
+    <Description>
+      WCRPrior(mu)=W_mu*C_mu*R_mu combines static selection weight,
+      operational/epistemic confidence, and provider relevance for a Micronaut.
+      WCR qualifies routing; it does not establish proof.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>EntropyDiffusion</Name>
+    <Description>
+      EntropyDiffusion(mu) is the local exploratory uncertainty pressure that a
+      Micronaut attraction score must overbalance before capture is admitted.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>CaptureGate</Name>
+    <Description>
+      CaptureGate(Q,mu) admits a query trajectory into a Micronaut execution
+      sandbox when MicronautAttraction(mu,Q) overbalances EntropyDiffusion(mu)
+      and policy_ok, capability, and XCFE authorization all hold. Capture is not
+      Ch'en verification and is not Xul persistence.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>PolicyOk</Name>
+    <Description>
+      PolicyOk(mu,Q) asserts that the Micronaut sandbox/policy boundary admits
+      the candidate operation for query Q.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>CapabilityOk</Name>
+    <Description>
+      CapabilityOk(mu,Q) asserts that the Micronaut exposes the capability needed
+      by the candidate operation.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>XcfeOk</Name>
+    <Description>
+      XcfeOk(mu,Q) asserts that XCFE move algebra authorizes the capture/dispatch
+      transition for the current phase.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>TensorField</Name>
+    <Description>
+      TensorField(M,p,q) assigns a type-(p,q) tensor to each admitted coordinate
+      point over the projection manifold M. In KHANARY this is TENSOR-µ derived
+      geometry over FoldGraph B; it cannot verify semantic truth or mutate B.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>TensorRank</Name>
+    <Description>
+      TensorRank(T)=(p,q), where p is the contravariant rank and q is the
+      covariant rank. Ranks are nonnegative integers and are carried in GML as
+      tensor_rank_p and tensor_rank_q.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>MetricTensor</Name>
+    <Description>
+      MetricTensor(g_ij) is the local covariant bilinear form used by TENSOR-µ
+      to measure projection distance, raise/lower indices, and evaluate local
+      tensor geometry. It is a projection metric, not RelationISA authority.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>JacobianMatrix</Name>
+    <Description>
+      JacobianMatrix(J) carries partial derivatives dx^{i'}/dx^i for coordinate
+      transitions between projection generations or local charts.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>InverseJacobian</Name>
+    <Description>
+      InverseJacobian(J^{-1}) carries partial derivatives dx^j/dx^{j'} and is
+      applied to lower/covariant tensor indices during coordinate transition.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>TensorTransform</Name>
+    <Description>
+      TensorTransform(T,J,J^{-1}) enforces the coordinate-independent tensor law:
+      upper indices transform by the Jacobian and lower indices transform by the
+      inverse Jacobian. For type-(1,1), T^{i'}_{j'} =
+      T^i_j * (dx^{i'}/dx^i) * (dx^j/dx^{j'}).
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>SmoothSection</Name>
+    <Description>
+      SmoothSection(T) marks a tensor field as admitted to smooth-section
+      projection checks. The parser flag is_smooth_section is declarative
+      projection metadata and does not by itself prove semantic truth.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>TensorBundle</Name>
+    <Description>
+      TensorBundle(M)=direct_sum_{p,q} (TM)^tensor_p tensor (T*M)^tensor_q.
+      KHANARY instantiates bounded projection slices of this bundle through
+      TensorSubstrate and TENSOR-µ; B remains the semantic topology authority.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>CoordinateTransition</Name>
+    <Description>
+      CoordinateTransition(chart_a,chart_b) is a projection-generation or
+      local-chart change mediated by JacobianMatrix and InverseJacobian. A
+      coordinate transition may realign geometry without implying Delta(B).
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>LogicalConsequence</Name>
+    <Description>
+      LogicalConsequence(Sigma,phi) asserts that phi follows from the currently
+      verified non-logical axiom base Sigma under the primary KHANARY laws. It is
+      a semantic claim and must not be supplied by projection geometry alone.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>DeductiveProofTrace</Name>
+    <Description>
+      DeductiveProofTrace(Sigma,phi) is the phase-scoped evidence trail showing
+      how phi is derived from Sigma through admitted K'UHUL inference moves. It
+      is required before a logical consequence claim can be exposed as SUPPORTED.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>MissState</Name>
+    <Description>
+      MissState(Sigma,phi) records an observation or retrieval deficit: Sigma
+      currently proves neither phi nor not-phi. MISS preserves unresolved
+      branches and is not CONTRADICTED without separate negative evidence.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>MinkowskiBilinearForm</Name>
+    <Description>
+      MinkowskiBilinearForm(u,v) is the invariant bilinear projection used by
+      hyperbolic key-grammar events. The default signature is
+      (-,+,+,+): B(u,v)=-u0*v0+u1*v1+u2*v2+u3*v3. It is routing geometry and
+      cannot by itself establish semantic truth.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>HyperbolicDistance</Name>
+    <Description>
+      HyperbolicDistance(u,v)=arcosh(-MinkowskiBilinearForm(u,v)) on the
+      admitted future sheet. It provides non-Euclidean distance for event
+      projections, not topology authority.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>HyperbolicEvent</Name>
+    <Description>
+      HyperbolicEvent(origin,key,rho,direction,interval_class) records a
+      future-directed key-grammar candidate continuation. Ch'en verifies any
+      semantic claim derived from it before Xul may commit.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>Rapidity</Name>
+    <Description>
+      Rapidity(rho) is the additive hyperbolic displacement parameter used for
+      token or gram event progression across a local Minkowski substrate.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>MinkowskiIntervalClass</Name>
+    <Description>
+      MinkowskiIntervalClass partitions event intervals into timelike candidate,
+      lightlike boundary, spacelike candidate, or unclassified states. The class
+      gates routing admissibility and does not assert fact authority.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>EinsteinContraction</Name>
+    <Description>
+      EinsteinContraction(index, A, v) denotes implicit summation over the
+      repeated upper/lower index pair. For the common type-(1,1) matrix-vector
+      projection, u^i = A^i_j v^j. In KHANARY this is used by shader backends
+      for coordinate-frame projection and does not verify semantic truth.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>LorentzFrameTransition</Name>
+    <Description>
+      LorentzFrameTransition(L,v) applies the row-contracted boost matrix
+      L^i_j to a hyperbolic event four-vector v^j. The result is a transformed
+      projection coordinate u^i for TENSOR-µ routing; Ch'en/Xul still control
+      verification and persistence.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>LorentzBoostTensor</Name>
+    <Description>
+      LorentzBoostTensor(rho,n) constructs the type-(1,1) Lorentz transition
+      matrix L^i_j from rapidity rho and spatial direction n. It must preserve
+      the Minkowski bilinear form under EinsteinContraction; it is routing
+      geometry only and cannot establish semantic authority.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>SemanticSignature</Name>
+    <Description>
+      SemanticSignature(F,B) denotes the immutable constructor and relation-verb
+      signature induced by the current Fold topology B. Interpretation algebras
+      may project or collapse neighborhoods over this signature, but they cannot
+      rewrite F without a verified Xul topology commit.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>Neighborhood</Name>
+    <Description>
+      Neighborhood(k) returns the local semantic neighborhood around key or
+      coordinate k: nodes, incident relation edges, and typed constructor context.
+      It is the input structure for algebraic folds and remains distinct from the
+      target-domain value produced by an interpretation algebra.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>AlgebraicFold</Name>
+    <Description>
+      AlgebraicFold(alpha,N,theta) applies the active interpretation algebra
+      alpha to semantic neighborhood N under K'UHUL phase theta. This is the
+      catamorphic fold operation: it maps structure into a target domain while
+      preserving the underlying signature F.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>XulCollapse</Name>
+    <Description>
+      XulCollapse(value) denotes the final collapse of a verified fold result
+      into a retained key, fingerprint, route, or admitted topology proposal.
+      It requires the normal Ch'en/XCFE/Xul authority path and is not granted by
+      projection geometry alone.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>SignatureIsomorphism</Name>
+    <Description>
+      SignatureIsomorphism(F_base,F_transformed) asserts that an interpretation
+      functor preserved constructor identity, edge connectivity, and relational
+      rank invariants between the source signature and transformed projection.
+    </Description>
+  </CDDefinition>
+
+  <CDDefinition>
+    <Name>MatrixRank</Name>
+    <Description>
+      MatrixRank(T) returns the structural rank used by the validator to compare
+      transformed tensor projections against their substrate representation.
+    </Description>
+  </CDDefinition>
+
+  <!-- ── FoldField ─────────────────────────────────────────────────────── -->
+  <CDDefinition>
+    <Name>FoldField</Name>
+    <Description>
+      FoldField(node_id, theta, W, C, R) is a vertex in the product graph
+      G_runtime = G_semantic □ G_phase.
+
+        node_id — @node root (NOT the fold operation itself)
+        theta   — phase angle in [0, 2π); canonical value from phase_angle(Phase)
+        W       — semantic arc weight from query ∈ [0, 1]
+        C       — confidence ∈ [0, 1]
+        R       — relevance to current query ∈ [0, 1]
+        score() — W · C · R  (WCR product score)
+
+      @node ≠ fold: the node_id names the root; the Fold is the algebra applied
+      to the structure rooted there.
+    </Description>
+    <property>
+      <description>score() = W · C · R; multiplicative, not additive</description>
+    </property>
+    <property>
+      <description>theta is set by phase_angle(Phase) for the canonical C6 phases; arbitrary theta is permitted for intermediate projection states</description>
+    </property>
+  </CDDefinition>
+
+  <!-- ── ProductGraph ──────────────────────────────────────────────────── -->
+  <CDDefinition>
+    <Name>ProductGraph</Name>
+    <Description>
+      ProductGraph(G_semantic, G_phase) = G_semantic □ G_phase = G_runtime.
+
+      Vertices: (node_id, phase) pairs from the Cartesian product of semantic
+      nodes and C6 phase positions.
+
+      Edge weight: W_arc(i,j) · cos(θ_j − θ_i), where W_arc is the semantic
+      arc weight from G_semantic and cos(Δθ) is the phase coherence term from
+      G_phase. The product graph formalizes G_runtime = G_semantic □ G_phase
+      as established in the hylomorphism synthesis.
+    </Description>
+    <property>
+      <description>Edge weight ∈ [−1, 1] when W_arc ∈ [0, 1]</description>
+    </property>
+    <property>
+      <description>FoldField is a vertex; fold_relevance() is the approximate edge weight when W_arc is not directly available</description>
+    </property>
+  </CDDefinition>
+
+  <!-- ── FoldRelevance ─────────────────────────────────────────────────── -->
+  <CDDefinition>
+    <Name>FoldRelevance</Name>
+    <Description>
+      FoldRelevance(a, b) is the approximate edge weight between two FoldField
+      vertices in G_runtime:
+
+        fold_relevance(a, b) = √(W_a · W_b) · √(C_a · C_b) · cos(θ_b − θ_a)
+
+      Returns a value in [−1, 1] when W, C ∈ [0, 1].
+      Self-relevance: fold_relevance(a, a) = W · C.
+
+      Exact form when arc weight is known:
+        fold_relevance(a, b, W_arc) = W_arc · √(C_a · C_b) · cos(θ_b − θ_a)
+
+      Negative W_arc is clamped to 0 (no physical meaning for negative arc weight).
+    </Description>
+    <property>
+      <description>Symmetric: fold_relevance(a,b) = fold_relevance(b,a)</description>
+    </property>
+    <property>
+      <description>Orthogonal phases (Δθ = π/2): fold_relevance = 0</description>
+    </property>
+    <property>
+      <description>Antipodal phases (Δθ = π): fold_relevance negative — incoherent alignment</description>
+    </property>
+  </CDDefinition>
+
+  <!-- ── ConvergenceTest ───────────────────────────────────────────────── -->
+  <CDDefinition>
+    <Name>ConvergenceTest</Name>
+    <Description>
+      ConvergenceTest(epsilon, k_max, max_iter, div_window) tracks the Kleene
+      iteration f^n(query) over FoldStates.
+
+      Status transitions:
+        ITERATING  → initial state and normal progress
+        CONVERGED  → d_n &lt; epsilon (fixed point reached within tolerance)
+        MAX_ITER   → n ≥ max_iter (hard stop)
+        DIVERGING  → k = d_n/d_{n-1} ≥ k_max for div_window consecutive steps
+
+      Fields:
+        FoldState.field    — 256D L1-normalised semantic field
+        FoldState.wcr_scores — (micronaut_id, score) pairs
+        fold_distance      — alpha * L1(field)/2 + (1-alpha) * mean_abs_dev(wcr)
+        best_state()       — FoldState at minimum observed d
+
+      Identity invariant: when d_last &lt; 1e-9 (first step after identity state),
+      k_last = 0 (avoids division-by-zero, CONVERGED immediately).
+    </Description>
+    <property>
+      <description>Kleene fixed point: µf = ⊔{f^n(⊥) | n≥0}. Xul is the least fixed point of the Micronaut hylomorphism.</description>
+    </property>
+    <property>
+      <description>Banach contraction: k &lt; 1 guarantees unique fixed point; k ≥ k_max for div_window steps → DIVERGING</description>
+    </property>
+  </CDDefinition>
+
+  <!-- ── IdentityInvariant ─────────────────────────────────────────────── -->
+  <CDDefinition>
+    <Name>IdentityInvariant</Name>
+    <Description>
+      IdentityInvariant asserts (Fold∘Unfold)(h) ≡ h: a round-trip hylomorphism
+      returns the original handle without loss.
+
+      In the K'UHUL pipeline:
+        Unfold(h) produces the active field F_Q.
+        Fold(F_Q) collapses back to a canonical handle.
+        The composition must recover h.
+
+      Violation: if (Fold∘Unfold)(h) ≠ h, the structural sigma drops to UNBOUND
+      and the state requires Ch'en revalidation before further Xul commits.
+
+      In ConvergenceTest: two consecutive identical FoldStates → d = 0 → k = 0 →
+      CONVERGED on the second step, confirming the identity invariant holds.
+    </Description>
+    <property>
+      <description>(Fold∘Unfold)(h) ≡ h is a necessary condition for topology-preserving semantic navigation</description>
+    </property>
+  </CDDefinition>
+
+  <!-- ── HylomorphismStep ──────────────────────────────────────────────── -->
+  <CDDefinition>
+    <Name>HylomorphismStep</Name>
+    <Description>
+      HylomorphismStep(f, query, n) = f^n(query), one Kleene iteration of the
+      Micronaut hylomorphism f = cata∘ana.
+
+        ana (anamorphism / coalgebra): query → F(wildcards, tail)
+          Unfolds the query into a structured active field.
+          AnaWildcard generator: text → AIML wildcard priority stack.
+
+        cata (catamorphism / algebra): F(wildcards, tail) → Xul
+          Folds the active field into a canonical result.
+          Xul is the catamorphic result = least fixed point.
+
+      Repeated application f^n(query) converges to µf under the Banach
+      contraction condition tracked by ConvergenceTest.
+    </Description>
+    <property>
+      <description>Termination: AnaWildcard tail strictly shrinks at each ana step; the unfold always terminates</description>
+    </property>
+    <property>
+      <description>f = cata∘ana is a hylomorphism; the Micronaut pipeline is the Kleene iteration of f</description>
+    </property>
+  </CDDefinition>
+
+</CD>

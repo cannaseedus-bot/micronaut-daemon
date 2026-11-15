@@ -1,0 +1,221 @@
+{
+  "@schema": "kuhul.word-key-field.v1",
+  "@kind": "kuhul.payload.schema",
+  "version": "1.0.0",
+  "description": "Intermediate semantic representation produced by GREETING-µ greeting.decompose. Carries gram evidence from raw prompt through GramStore → ELIZA-µ → SRAI-µ → π → XCFE without losing provenance. Every downstream micronaut receives this payload — not the raw string.",
+  "produced_by": "GREETING-µ greeting.decompose (Pop-phase)",
+  "consumed_by": ["ELIZA-µ", "SRAI-µ", "REASON-µ", "INFER-µ", "VECTOR-µ", "CFPC-µ", "ORCH-µ", "PLAN-µ"],
+  "logged_by": "Pattern.Log.dll at decompose, route, and each XCFE admission transition",
+  "word_domain_tree_schema_ref": "data/schema/word-domain-tree.v1.schema.json",
+  "word_domain_tree_ref": null,
+  "word_domain_tree_ref_note": "Set to data/word-domain-tree.json once a WDT instance is built. greeting.decompose uses the WDT to assign domain + pi_radius to each key and to prune excluded edges.",
+  "manifest_ref":      "data/manifest/words.manifest.json",
+  "keys_manifest_ref": "data/manifest/keys.micronaut.json",
+  "float_manifest_ref":"data/manifest/float.json",
+  "aiml_manifest_ref":          "data/manifest/aiml.manifest.json",
+  "mx2lm_manifest_ref":         "data/manifest/mx2lm.manifest.json",
+  "scfml_manifest_ref":         "data/manifest/scfml.manifest.json",
+  "semantic_fields_manifest_ref":"data/manifest/semantic-fields.manifest.json",
+  "tool_manifest_ref":          "data/manifest/tool.manifest.json",
+  "tools_manifest_ref":         "data/manifest/tools.manifest.json",
+  "relational_manifest_ref":    "data/manifest/relational.manifest.json",
+  "manifest_note":     "words.manifest.json Stage-1: corpus_provenance + pos_hint. keys.micronaut.json Stage-2: lane + authority + pi_routing_weight + routing_entropy. float.json: float32 precision contract. aiml.manifest.json: AIML lifecycle phase map + aiml:relation_verbs + match_grants_execution:false. mx2lm.manifest.json: MX2LM contract (nodes=meaning, relations=association, association_weight:pattern_strength_only, execution_authority:canonical_only) + WCR (Wc/Cc/Rc(Q)) candidate selection. scfml.manifest.json: SCFML branch semantics (SCFML_declares_XCFE_authorizes, MISS_not_CONTRADICTED, UNKNOWN_not_else, else_not_not, fact_authority:false_by_default). semantic-fields.manifest.json: ⟁KEY field membership and typed domain relations. tool.manifest.json: tool verb registry + InvocationValidationBoundary + tool:admission gate. tools.manifest.json: vector_match (embeddinggemma-2 / 256-dim) + field_query phase axes. relational.manifest.json: relational edge verbs + rendering_projection_only authority boundary + tensor-slot-law.",
+
+  "payload": {
+
+    "source_text": {
+      "type": "string",
+      "description": "Original raw prompt, unmodified. Never normalised, lowercased, or stripped at this layer."
+    },
+
+    "source_hash": {
+      "type": "string",
+      "description": "SHA-256 hex of source_text. Used for Pattern.Log.dll correlation across the pipeline."
+    },
+
+    "session_id": {
+      "type": "string",
+      "description": "Conversation session identifier. Binds this payload to a GramStore session context."
+    },
+
+    "tokens": {
+      "type": "array",
+      "description": "Ordered, offset-anchored tokens from the raw prompt. pos_hint is derived by Stage-1 manifest lookup (words.manifest.json) and Stage-2 keys lookup (keys.micronaut.json) in that priority order.",
+      "pos_hint_derivation_rules": [
+        "social:       token has intent:salutation in words.manifest, or is in the 'greeting' alias chain (hello/hi/hey/yo/sup/howdy)",
+        "code_token:   token has intent:debugging or intent:code_generation in words.manifest, OR the token's derived ⟁KEY matches lane:CODE-µ in keys.micronaut.json (authority:XCFE_required)",
+        "operator:     token has a control:* entry in words.manifest (if/then/else/when/who/why/how/for/from/as/equals)",
+        "question_word: token is who/what/when/where/why/how, or has an ELIZA-1:QUESTION op in words.manifest",
+        "anaphor:      token is it/this/that/they/them/those/here/there, confirmed by words.manifest alias chain or heuristic surface match",
+        "noun:         token has Book(SUBJECT) or intent:syntax_role subject in words.manifest; fallback POS inference",
+        "verb:         token has Book(PREDICATE) or intent:syntax_role action in words.manifest; fallback POS inference",
+        "unknown:      no manifest match and POS inference inconclusive",
+        "PRIORITY: social > code_token > operator > question_word > anaphor > noun/verb > unknown"
+      ],
+      "item": {
+        "token":        "string — surface form",
+        "normalized":   "string — lowercased, punctuation-stripped",
+        "offset_start": "int — char offset in source_text",
+        "offset_end":   "int — exclusive char offset",
+        "pos_hint":     "string — noun | verb | question_word | social | anaphor | code_token | operator | unknown",
+        "is_stopword":  "bool — true if token contributes no semantic weight alone"
+      }
+    },
+
+    "grams": {
+      "type": "array",
+      "description": "N-gram spans extracted at lengths 1–4. corpus_provenance is assigned by Stage-1 manifest lookup (words.manifest.json) with Stage-2 keys.micronaut.json for cfpc source confirmation. Rules apply in priority order — first match wins.",
+      "corpus_provenance_derivation_rules": [
+        "aiml:        (a) gram surface matches a triple-form dispatch prefix in words.manifest (KEYWORD: / keyword: / @keyword) → named micronaut dispatch; OR (b) gram matches an AIML structural keyword in aiml.manifest.json (aiml:pattern / aiml:wildcard / aiml:topic / aiml:that / aiml:graph / aiml:relation / aiml:relation_verbs); OR (c) gram matches a reasoning-board.aiml pattern head (WHAT_IS_* / COMPARE_*_AND_* / WHY_DOES_*) — these carry authority:data_only and match_grants_execution:false from aiml.manifest.json",
+        "code_corpus: gram has intent:debugging or intent:code_generation in words.manifest, OR the gram's first token maps to lane:CODE-µ in keys.micronaut.json",
+        "eliza:       gram has at least one ELIZA-1:* operator ref (ELIZA-1:CAUSE/EVIDENCE/STATE/SEQUENCE/CONTRAST/etc.) in words.manifest after alias expansion",
+        "cfpc:        gram matches entries in cfpc-wildcards.gml or cfpc-questions.gml (listed in keys.micronaut.json ⟁POP:FIELD_CONTEXT.graph); also applies when the gram's normalized form matches a known CFPC question template",
+        "none:        gram has no entry in words.manifest after alias expansion, and no match in keys.micronaut.json",
+        "PRIORITY: aiml > code_corpus > eliza > cfpc > none"
+      ],
+      "item": {
+        "text":              "string — surface gram text",
+        "length":            "int 1–4 (unigram/bigram/trigram/quadgram)",
+        "span": {
+          "token_start":     "int — index into tokens[]",
+          "token_end":       "int — exclusive index"
+        },
+        "corpus_provenance": "string — aiml | eliza | cfpc | code_corpus | none",
+        "semantic_role":     "string — question_operator | subject | relation | social | anaphor | mechanism | code_signal | modifier | unknown"
+      }
+    },
+
+    "keys": {
+      "type": "array",
+      "description": "Canonical ⟁KEY identifiers derived from grams. Keys are the nodes in the word-key field graph. Stage-2 keys.micronaut.json lookup populates lane, key_authority, pi_routing_weight, and routing_entropy. Stage-3 WDT lookup populates domain and pi_radius.",
+      "item": {
+        "id":             "string — ⟁KEY format (⟁WHAT_IS, ⟁KUHUL, ⟁HOW_DOES, ⟁IT, etc.)",
+        "gram_text":      "string — gram this key was derived from",
+        "semantic_role":  "string — same vocabulary as grams.semantic_role",
+        "graph_relation": "string — structural relations: DEFINE | EXPLAIN | CODE | COMPARE | PURPOSE | MECHANISM | GREETING | REFERS_TO | TARGET | ESCALATE | EXECUTE | MODIFY | UNKNOWN — AIML relation verbs (from aiml.manifest.json, all effect:read commit:none): RELATED_TO | DEPENDS_ON | SUPPORTS | DELEGATES_TO | HAS_PROPERTY | POSSESSES | VALUE_OF | IMPORTS | CALLS | EXPOSES — relational edge verbs (from relational.manifest.json relational:edge-verbs, all rendering_projection_only not_semantic_truth not_Xul_persistence): CALL | COMPOSE | DELEGATE | EVAL | INFORMS | RELATE",
+        "lane":           "string? — typed pipeline lane from keys.micronaut.json: lane:key-µ | lane:MX2LM-µ | lane:KUHUL-PI | lane:CODE-µ | null if no match",
+        "key_authority":  "string? — authority constraint from keys.micronaut.json entry: data_only | proposal_only | candidate_only | retrieval_only | candidate_ranking_only | XCFE_required | null if no match. lane:CODE-µ forces XCFE_required.",
+        "pi_routing_weight": "float32? range [0.0,1.0] — formula: 1.0 - hub_cost (Sek-phase, kernel: pi-routing-weight.cl). From lane:KUHUL-PI in keys.micronaut.json. DATA_ONLY: semantic_authority:false, xcfe_admission_required:true. NaN or Inf → treat as null, do not propagate as candidate. null if lane != KUHUL-PI.",
+        "routing_entropy":   "float32? range [0.0,1.0] — formula: -sum(p*log2(p))/log2(N) (Ch'en entropy_norm). From lane:KUHUL-PI. Must satisfy ENTROPY_BOUNDS at Ch'en before routing proposal advances to Xul. NaN or Inf → treat as null. null if lane != KUHUL-PI.",
+        "wcr_score":         "float32? range [0.0,1.0] — WCR candidate selection score (Wc=word cost, Cc=contextual cost, Rc(Q)=relation-conditioned query; Phase:Yax) from mx2lm:wcr. From lane:MX2LM-µ. association_weight:pattern_strength_only — this is co-occurrence strength, NOT semantic truth. execution_authority:canonical_only: a high wcr_score does NOT authorise execution. NaN or Inf → treat as null. null if lane != MX2LM-µ.",
+        "domain":         "string? — WDT domain node id this key matched (null if no WDT match or WDT unavailable)",
+        "pi_radius": {
+          "description":  "Inherited from the WDT node. Encodes geometric position on the K'UHUL π-wheel.",
+          "depth":        "int 0–10 — hierarchy depth in the domain tree",
+          "max_depth":    "int — tree's configured max depth",
+          "radians":      "float — angular position in radians",
+          "angle":        "string — human-readable angle label",
+          "degrees":      "float",
+          "domain":       "string — domain label at this radius",
+          "relation":     "string — relation type at this radius",
+          "depth_prior":  "float32 0.0–1.0 — depth-based prior; NOT a calibrated confidence score. NaN or Inf → treat as null per float.json authority boundary.",
+          "depth_prior_is_calibrated_confidence": false,
+          "note":         "null when domain is null"
+        },
+        "wdt_excludes":   "array of string? — domain ids this node excludes (from WDT node.excludes[]); used to prune false edges"
+      }
+    },
+
+    "edges": {
+      "type": "array",
+      "description": "Typed directed edges in the word-key field graph. Edges are EVIDENCE, not authorisation. An edge with evidence_type=vector is a similarity candidate — it does not establish that the relationship is valid or executable. Edges sourced from WDT associated[] carry evidence_type=symbolic. Edges between two keys where one node's wdt_excludes contains the other's domain are silently pruned during decompose and must not appear here.",
+      "item": {
+        "from":          "string — key.id",
+        "to":            "string — key.id",
+        "relation":      "string — same vocabulary as keys.graph_relation",
+        "evidence_type": "string — symbolic | vector | heuristic | cfpc",
+        "wdt_source":    "string? — 'associated' if this edge was produced from WDT node.associated[]; null otherwise",
+        "confidence":    "float 0.0–1.0"
+      }
+    },
+
+    "intent_candidates": {
+      "type": "array",
+      "description": "Possible user goals identified by gram analysis and intent-graph traversal. Ordered by confidence descending.",
+      "item": {
+        "operator":    "string — GREETING_ONLY | KNOWLEDGE_QUERY | RELATIONSHIP_QUERY | ACTION_REQUEST | OPINION_REQUEST | CODE_REQUEST | TASK_REQUEST",
+        "primary_key": "string — key.id of the main subject or target",
+        "confidence":  "float 0.0–1.0",
+        "source":      "string — aiml_match | cfpc | intent_graph | code_signal | heuristic"
+      }
+    },
+
+    "gap_type": {
+      "type": "string",
+      "description": "CFPC gap classification result. Set by cfpc_gap_classify fold. Null until that fold runs.",
+      "values": ["Resolved", "IntentGap", "QueryGap", "KnowledgeGapNoKeys", "KnowledgeGapNoValues", null]
+    },
+
+    "bindings": {
+      "type": "object",
+      "description": "Wildcard captures, entity resolutions, and anaphoric bindings accumulated during gram analysis.",
+      "wildcards":    "array of { pattern: string, capture: string }",
+      "entities":     "array of { key_id: string, type: string }",
+      "context_refs": "array of { from_key: string, resolves_to: string — key_id or 'unresolved' }. Entries where resolves_to='unresolved' and the source gram contains {@if}/{@then}/{@else} are SCFML branch markers — apply MISS_not_CONTRADICTED, UNKNOWN_not_else, else_not_not (from scfml.manifest.json). fact_authority:false_by_default on all SCFML-derived bindings."
+    },
+
+    "unresolved": {
+      "type": "array",
+      "description": "Tokens or references that could not be resolved at decompose time. Downstream micronauts must handle or escalate these.",
+      "item": {
+        "token":  "string",
+        "reason": "string — anaphoric_reference | unknown_entity | ambiguous_operator | code_fragment | out_of_vocabulary"
+      }
+    },
+
+    "routing": {
+      "type": "object",
+      "description": "Routing decision populated by greeting.route (Yax-phase). Null fields until route runs. Routing proposal is xcfe_required — XCFE must admit before any downstream micronaut receives the turn.",
+      "primary_target":    "string? — micronaut id (e.g. ELIZA-µ, CODE-µ, REASON-µ)",
+      "secondary_targets": "array of string — ordered additional micronauts in the escalation chain",
+      "escalation_path": [
+        { "micronaut": "string", "reason": "string", "phase": "string" }
+      ],
+      "log_ref":           "string? — Pattern.Log.dll record id for this routing decision",
+      "xcfe_status":       "string — pending_admission | admitted | rejected"
+    },
+
+    "provenance": {
+      "type": "object",
+      "micronaut":    "GREETING-µ",
+      "phase":        "string — phase at which this payload was produced",
+      "created_at_utc": "string — ISO 8601",
+      "schema_version": "kuhul.word-key-field.v1",
+      "xcfe_status":  "pending_admission"
+    }
+  },
+
+  "invariants": [
+    "Every edge.from and edge.to MUST reference a key.id present in keys[].",
+    "Every intent_candidates[].primary_key MUST reference a key.id present in keys[].",
+    "routing.primary_target is null until greeting.route executes — no micronaut may be dispatched on a null routing.",
+    "routing.xcfe_status must be 'admitted' before any entry in escalation_path receives the turn.",
+    "Edges with evidence_type='vector' are ranking evidence only — not proof that the relationship is semantically valid or executable.",
+    "code_signal in intent_candidates requires at least one token with pos_hint='code_token' OR backtick/indented block detection in source_text.",
+    "unresolved entries must be preserved through all pipeline stages until explicitly resolved by a downstream micronaut — they may not be silently dropped.",
+    "The payload is immutable after Ch'en verification. Downstream micronauts annotate their own outputs; they do not rewrite the WordKeyField in place.",
+    "Pattern.Log.dll records are append-only. source_hash is the correlation key across all log entries for a single prompt.",
+    "If keys[].domain is non-null, keys[].pi_radius MUST be populated from the matching WDT node and depth_prior_is_calibrated_confidence MUST be false — depth_prior is a prior, not a scored prediction.",
+    "Edges between two keys where one key's wdt_excludes contains the other key's domain MUST be pruned during greeting.decompose. Excluded edges must not appear in edges[] — they are silently dropped, never promoted or logged as candidates.",
+    "keys[].pi_routing_weight and keys[].routing_entropy MUST be float32 in [0.0, 1.0] when non-null. NaN or Inf values MUST be treated as null and must not propagate as routing candidates (per float.json float:authority-boundary).",
+    "keys[].pi_routing_weight confers no semantic authority: match_grants_execution:false, xcfe_admission_required:true. A high pi_routing_weight is a routing signal — not proof that the target is semantically correct or execution-authorised.",
+    "keys[].routing_entropy (entropy_norm) must satisfy ENTROPY_BOUNDS at Ch'en before the routing proposal advances to Xul. A routing proposal with routing_entropy outside [0.0, 1.0] or with NaN/Inf must be rejected at Ch'en verification.",
+    "edges[] with graph_relation in the AIML relation verb set (RELATED_TO / DEPENDS_ON / SUPPORTS / DELEGATES_TO / HAS_PROPERTY / POSSESSES / VALUE_OF / IMPORTS / CALLS / EXPOSES) carry effect:read and commit:none — they are read-only relational evidence. match_grants_execution:false applies to all reasoning-board.aiml pattern-sourced edges regardless of relation type.",
+    "mx2lm:nodes=meaning — MX2LM nodes ARE meaning, not pointers to meaning. Edges built on MX2LM nodes are associative only; they cannot be resolved into execution authority or semantic truth.",
+    "mx2lm:relations=association — MX2LM relations are association only, never causation, implication, or execution authority. relation_confidence is an earned signal from co-occurrence — not a proof.",
+    "mx2lm:association_weight:pattern_strength_only — keys[].wcr_score and any MX2LM-sourced edge weight measure pattern co-occurrence strength. They must not be used as semantic truth signals or as routing authority above a data_only boundary.",
+    "mx2lm:execution_authority:canonical_only — MX2LM cannot execute, cannot authorise dispatch, and cannot override XCFE. Only canonical micronauts with xcfe_gated authority can execute. A wcr_score near 1.0 does not change this.",
+    "SCFML: unresolved bindings.context_refs entries where the source gram contains {@if}/{@then}/{@else} are SCFML branch markers. MISS_not_CONTRADICTED: an unresolved SCFML branch is a MISS, never a contradiction. UNKNOWN_not_else: unresolved branches resolve to UNKNOWN, not to any else branch. else_not_not: an else branch is a fallback, not a logical negation of the if condition. fact_authority:false_by_default: no SCFML-derived binding carries fact authority until XCFE authorises it.",
+    "tool:admission — tool dispatch candidates in intent_candidates carry semantic_commit:false and audit:jrom_required. Tool admission requires BOTH a matching intent_key (from words.manifest.json) AND a registered_verb (from tool.manifest.json). Neither alone is sufficient: an intent_key without a registered_verb is not admissible; a registered_verb without an intent_key is not admissible. InvocationValidationBoundary must be satisfied before any tool verb is promoted from candidate to dispatch.",
+    "relational:rendering_projection_only — edges[] with graph_relation in {CALL, COMPOSE, DELEGATE, EVAL, INFORMS, RELATE} are rendering projections only. They are not_semantic_truth: a relational edge does not assert that the relationship is semantically valid. They are not_Xul_persistence: relational edges must not be persisted to Xul-layer storage as facts. They carry execution_plan_projection_only semantics — an edge describes a projected execution shape, not an authorised execution plan."
+  ],
+
+  "field_population_by_fold": {
+    "greeting.decompose (Pop)":          ["source_text", "source_hash", "session_id", "tokens", "grams", "keys (including domain + pi_radius from WDT)", "edges (heuristic/symbolic/wdt_associated; excludes-pruned)", "unresolved", "provenance"],
+    "greeting.intent (Wo)":              ["intent_candidates (intent_graph source)", "edges (cfpc source)", "bindings.wildcards"],
+    "greeting.cfpc (Yax)":               ["gap_type", "intent_candidates (cfpc source)"],
+    "greeting.route (Yax/Sek)":          ["routing.primary_target", "routing.secondary_targets", "routing.escalation_path", "routing.log_ref", "routing.xcfe_status"],
+    "XCFE admission (Ch'en)":            ["routing.xcfe_status → admitted | rejected"],
+    "vector similarity (VECTOR-µ Wo)":   ["edges (vector evidence_type) — appended by VECTOR-µ, not GREETING-µ"]
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "lost-found",
+  "@key": "⟁APP:LOST_FOUND",
+  "@mount": "⟁ROOT:LOST_FOUND",
+  "@theme": { "accent": "#fbbf24", "bg": "#080600", "surface": "#140f00", "text": "#fefce8", "hero_phase": "Pop", "tagline": "Post it. Find it. Return it." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "items", "component": "⟁WIDGET:ITEMS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "items": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:LOST_FOUND": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:POST_LOST", "⟁ACTION:POST_FOUND", "⟁INPUT:SEARCH"] },
+    "⟁ACTION:POST_LOST": { "@type": "button", "@text": "Post Lost", "@on": { "click": "lf.open_lost" } },
+    "⟁ACTION:POST_FOUND": { "@type": "button", "@text": "Post Found", "@on": { "click": "lf.open_found" } },
+    "⟁INPUT:SEARCH": { "@type": "input", "@placeholder": "Search...", "@on": { "input": "lf.search" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:ITEMS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:ITEMS": { "@type": "feed", "@bind": "state.items", "@children": ["⟁WIDGET:ITEM_CARD"] },
+    "⟁WIDGET:ITEM_CARD": { "@type": "media-card", "@bind": "item", "@on": { "view": "lf.view", "contact": "lf.contact" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:STATS", "⟁WIDGET:CATEGORIES"] },
+    "⟁WIDGET:STATS": { "@type": "stat", "@bind": "data.stats" },
+    "⟁WIDGET:CATEGORIES": { "@type": "tag-cloud", "@bind": "data.categories" }
+  },
+  "@programs": {
+    "lf.open_lost": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "lf.open_found": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "lf.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] },
+    "lf.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "lf.contact": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "item.lost": "lf.open_lost", "item.found": "lf.open_found", "search.input": "lf.search", "item.view": "lf.view", "item.contact": "lf.contact" },
+  "@imports": [{ "ref": "item", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "photo-upload", "name": "Photo Upload", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Upload photos of lost or found items for better identification." },
+      { "id": "map-pin", "name": "Location Pin", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Pin where the item was lost or found on a local map." },
+      { "id": "auto-expire", "name": "Auto-Expire Posts", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Automatically archive posts after 30 days unless renewed." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "lf.lost", "pattern": "I LOST *|POST LOST ITEM|MISSING *", "intent": "open_lost" },
+      { "id": "lf.found", "pattern": "I FOUND *|FOUND ITEM|POST FOUND", "intent": "open_found" }
+    ]
+  },
+  "@data": {
+    "stats": { "open_lost": 18, "open_found": 11, "reunited_this_month": 4 },
+    "categories": ["Pets", "Keys", "Phones", "Bags", "Clothing", "Other"],
+    "spotlight": [
+      { "id": "sp1", "title": "LOST — Tabby cat, Elm Street", "category": "Pets", "badge": "Urgent", "days_missing": 3, "excerpt": "Missing since Monday. Responds to 'Pixel'. Contact Sarah at ..." },
+      { "id": "sp2", "title": "FOUND — Keys with blue lanyard", "category": "Keys", "badge": "Found", "location": "Oak Park", "excerpt": "Found near the park bench by the fountain. Claim at ..." },
+      { "id": "sp3", "title": "LOST — Tan leather wallet", "category": "Other", "badge": "Lost", "reward": true, "excerpt": "Reward offered. Lost near Main & 4th. Contains ID." }
+    ],
+    "schema": {
+      "item": { "primaryKey": "item_id", "fields": { "item_id": { "type": "string" }, "type": { "type": "string", "required": true }, "category": { "type": "string" }, "title": { "type": "string", "required": true }, "description": { "type": "text" }, "location": { "type": "string" }, "contact": { "type": "string" }, "reward": { "type": "boolean" }, "status": { "type": "string" }, "posted_at": { "type": "datetime", "required": true } } }
+    }
+  }
+}

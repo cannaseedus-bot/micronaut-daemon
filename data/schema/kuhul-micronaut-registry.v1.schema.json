@@ -1,0 +1,274 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kuhul.dev/schema/kuhul-micronaut-registry.v1.schema.json",
+  "title": "K'UHUL Micronaut Semantic Registry v1",
+  "type": "object",
+  "required": ["registry_contract", "phase_descriptors", "micronauts", "code_generation_pipeline"],
+  "properties": {
+    "registry_contract": {
+      "type": "object",
+      "required": ["format", "shape", "content_digest", "document_status", "no_field_is_authority", "non_grants", "grants_require"],
+      "properties": {
+        "format": { "const": "kuhul.micronaut-registry/1" },
+        "shape": { "enum": ["full", "summary"] },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "content_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "document_status": { "enum": ["declarative_proposal", "runtime_snapshot"] },
+        "no_field_is_authority": { "const": true },
+        "non_grants": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "grants_require": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "digest_rule": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "phase_descriptors": {
+      "type": "object",
+      "required": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"],
+      "properties": {
+        "Pop": { "$ref": "#/$defs/phaseDescriptor", "properties": { "code": { "const": "000" } } },
+        "Wo": { "$ref": "#/$defs/phaseDescriptor", "properties": { "code": { "const": "001" } } },
+        "Yax": { "$ref": "#/$defs/phaseDescriptor", "properties": { "code": { "const": "010" } } },
+        "Sek": { "$ref": "#/$defs/phaseDescriptor", "properties": { "code": { "const": "011" } } },
+        "Ch'en": { "$ref": "#/$defs/phaseDescriptor", "properties": { "code": { "const": "100" } } },
+        "Xul": { "$ref": "#/$defs/phaseDescriptor", "properties": { "code": { "const": "101" } } }
+      },
+      "additionalProperties": false
+    },
+    "micronauts": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^micronaut:[A-Z0-9_-]+$" },
+      "additionalProperties": { "$ref": "#/$defs/micronaut" }
+    },
+    "code_generation_pipeline": {
+      "type": "object",
+      "required": ["format", "authority", "stages"],
+      "properties": {
+        "format": { "const": "kuhul.code-generation-pipeline/1" },
+        "authority": { "const": "declarative_only" },
+        "stages": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["stage", "owner", "role", "input_type", "output_type", "implementation_status"],
+            "properties": {
+              "stage": { "type": "string", "minLength": 1 },
+              "owner": { "type": "string", "pattern": "^(micronaut:[A-Z0-9_-]+|runtime:[A-Za-z0-9_-]+)$" },
+              "role": { "type": "string", "minLength": 1 },
+              "input_type": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+              "output_type": { "type": "string", "minLength": 1 },
+              "implementation_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+              "implementation_status": { "enum": ["verified", "partial", "interface_not_present", "unverified"] },
+              "observed_behavior": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "phaseDescriptor": {
+      "type": "object",
+      "required": ["code", "role", "operators"],
+      "properties": {
+        "code": { "enum": ["000", "001", "010", "011", "100", "101"] },
+        "role": { "type": "string", "minLength": 1 },
+        "operators": { "type": "array", "items": { "enum": ["MAP", "FILTER", "FOLD", "REDUCE"] }, "uniqueItems": true }
+      },
+      "additionalProperties": false
+    },
+    "micronaut": {
+      "type": "object",
+      "required": ["descriptor_status", "identity", "phase_bindings", "capabilities", "xcfe", "output", "program_contract"],
+      "properties": {
+        "descriptor_status": { "enum": ["declarative_proposal", "runtime_snapshot"] },
+        "model_profile_ref": {
+          "type": ["string", "null"],
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "description": "Declared task-profile id in micronaut/models.toml, or null when this Micronaut declares no shared-profile model call. A reference selects a configured model; it authorizes nothing."
+        },
+        "identity": {
+          "type": "object",
+          "required": ["id", "name", "class", "authority_claim"],
+          "properties": {
+            "id": { "type": "string", "minLength": 1 },
+            "name": { "type": "string", "minLength": 1 },
+            "class": { "type": "string", "minLength": 1 },
+            "version": { "type": "string" },
+            "authority_claim": { "type": "string", "minLength": 1 },
+            "evidence_refs": { "type": "array", "items": { "type": "string" } }
+          },
+          "additionalProperties": true
+        },
+        "phase_bindings": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "enum": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"] },
+          "additionalProperties": {
+            "type": "object",
+            "required": ["role", "descriptor_ref"],
+            "properties": {
+              "role": { "type": "string", "minLength": 1 },
+              "descriptor_ref": { "type": "string", "pattern": "^phase:(Pop|Wo|Yax|Sek|Ch'en|Xul)$" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "capabilities": {
+          "type": "object",
+          "required": ["declared", "registered", "registered_status"],
+          "properties": {
+            "declared": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+            "registered": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+            "registered_status": { "enum": ["verified", "not_verified_in_this_declarative_document"] },
+            "registration_source": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "xcfe": {
+          "type": "object",
+          "required": ["admission_requirement"],
+          "properties": {
+            "admission_requirement": { "enum": ["required_before_execution", "required_before_dispatch"] },
+            "execution_claim": { "const": "not_implicitly_authorized" }
+          },
+          "additionalProperties": true
+        },
+        "output": { "type": "object" }
+        ,"program_contract": { "$ref": "#/$defs/programContract" }
+      },
+      "additionalProperties": true
+    },
+    "programContract": {
+      "type": "object",
+      "required": ["format", "reference_base", "program_model", "role", "program_refs", "grammar_refs", "contract_refs", "entry_points", "bindings", "interaction", "sandbox", "field_relativity", "learning", "implementation"],
+      "properties": {
+        "format": { "const": "kuhul.micronaut-program/1" },
+        "reference_base": { "const": "repository_root" },
+      "program_model": { "enum": ["typed_python_runtime", "typed_ngram_pool", "ebnf_program", "route_map_compiler", "typed_gpu_kernel_contract", "ast_compiler", "manifest_only", "unimplemented"] },
+        "role": {
+          "oneOf": [
+            { "type": "string", "minLength": 1 },
+            { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+          ],
+          "description": "Micronaut-specific responsibility. A role is a declaration, not a registered implementation or authority grant."
+        },
+        "program_refs": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "grammar_refs": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "contract_refs": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "entry_points": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "bindings": {
+          "type": "object",
+          "required": ["inputs", "query_bindings", "output"],
+          "properties": {
+            "inputs": { "type": "array", "items": { "$ref": "#/$defs/typedBinding" } },
+            "query_bindings": { "type": "array", "items": { "$ref": "#/$defs/typedBinding" } },
+            "output": {
+              "type": "object",
+              "required": ["type", "lane_ref", "consumer", "direct_user_delivery"],
+              "properties": {
+                "type": { "type": "string", "minLength": 1 },
+                "lane_ref": { "type": "string", "pattern": "^lane:.+" },
+                "consumer": { "type": "string", "minLength": 1 },
+                "direct_user_delivery": { "const": false }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "interaction": {
+          "type": "object",
+          "required": ["host_binding_required", "direct_user_io"],
+          "properties": {
+            "host_binding_required": { "const": true },
+            "direct_user_io": { "const": false }
+          },
+          "additionalProperties": false
+        },
+        "sandbox": { "$ref": "#/$defs/sandboxContract" },
+        "field_relativity": { "$ref": "#/$defs/fieldRelativity" },
+        "training": {
+          "type": "object",
+          "required": ["mode", "backward_status", "trainable_targets", "gradient_outputs", "learning_owner_ref", "commit_requirement"],
+          "properties": {
+            "mode": { "enum": ["forward_only", "forward_and_backward", "not_applicable"] },
+            "backward_status": { "enum": ["not_implemented", "declared", "registered", "validated"] },
+            "trainable_targets": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+            "gradient_outputs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+            "learning_owner_ref": { "type": "string", "minLength": 1 },
+            "commit_requirement": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": true,
+          "description": "Optional program-specific training contract; distinct from semantic field gradients and XCFE authority."
+        },
+        "learning": {
+          "type": "object",
+          "required": ["mode", "replay_policy", "commit_requirement"],
+          "properties": {
+            "mode": { "enum": ["disabled", "proposal_only", "proposal_and_gated_commit"] },
+            "replay_policy": { "enum": ["none", "record_evidence_only", "consume_evidence_only"] },
+            "confidence_source": { "type": "string" },
+            "confidence_target": { "type": "string" },
+            "commit_requirement": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false
+        },
+        "implementation": {
+          "type": "object",
+          "required": ["source_status", "runtime_registration", "validation_status"],
+          "properties": {
+            "source_status": { "enum": ["source_present", "grammar_only", "manifest_only", "not_found"] },
+            "runtime_registration": { "enum": ["verified", "unverified", "not_registered"] },
+            "validation_status": { "enum": ["passed", "failed", "not_recorded", "not_applicable"] }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "typedBinding": {
+      "type": "object",
+      "required": ["name", "type", "lane_ref", "binding_ref", "resolution_status"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "type": { "type": "string", "minLength": 1 },
+        "lane_ref": { "type": "string", "pattern": "^lane:.+" },
+        "binding_ref": { "type": "string", "minLength": 1 },
+        "resolution_status": { "enum": ["resolved", "unverified", "external_resolution_required"] }
+      },
+      "additionalProperties": false
+    },
+    "sandboxContract": {
+      "type": "object",
+      "required": ["filesystem", "network", "process", "effects", "admission"],
+      "properties": {
+        "filesystem": { "enum": ["none", "input_only", "host_temp_only", "host_managed"] },
+        "network": { "enum": ["none", "host_allowlist", "host_managed"] },
+        "process": { "enum": ["none", "host_allowlist", "host_managed"] },
+        "gram_namespace": { "type": "string", "minLength": 1 },
+        "effects": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "admission": { "const": "host_policy" }
+      },
+      "additionalProperties": false,
+      "description": "Declared operational envelope. Host policy determines actual sandboxing and admission."
+    },
+    "fieldRelativity": {
+      "type": "object",
+      "required": ["anchor", "scope", "relation_types", "max_hops", "cross_track"],
+      "properties": {
+        "anchor": { "type": "string", "minLength": 1 },
+        "scope": { "enum": ["input", "local_field", "neighbor_fields", "track", "graph"] },
+        "relation_types": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "max_hops": { "type": "integer", "minimum": 0, "maximum": 64 },
+        "cross_track": { "enum": ["deny", "references_only", "host_gated"] }
+      },
+      "additionalProperties": false,
+      "description": "Semantic traversal scope; not WCR relativity, capability registration, or execution authority."
+    }
+  },
+  "additionalProperties": false
+}

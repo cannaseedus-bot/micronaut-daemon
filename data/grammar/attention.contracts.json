@@ -1,0 +1,63 @@
+{
+  "@type": "khanary.attention_admission.v1",
+  "version": "1.0.0",
+  "id": "attention:admission:v1",
+  "authority": "projection_admission_contract_not_semantic_authority",
+  "semantic_authority": false,
+  "topology_authority": false,
+  "commit_authority": false,
+  "law": {
+    "name": "Attention geometry admission",
+    "statement": "Every record entering attention dispatch is admitted through the same geometry/authority contract the GML validator applies to parsed graph evidence.",
+    "order": "collect -> admit_geometry -> dispatch -> rank -> (Ch'en verifies) -> (Xul commits)",
+    "boundary": "Admission decides what may be projected. It never decides what is true: Ch'en verifies, XCFE authorizes, Xul commits.",
+    "mirrors": "data/grammar/gml.validator.json — Q5/Q9 (finite geometry), Q13 (field kind), HE4/HE6 (interval class, projection-only authority), and the gml_before_geometry invariant in vectors.xml"
+  },
+  "inputs": {
+    "key": "attention record address (GramStore key)",
+    "vector": "3-component projection geometry (fold weight, relation weight, phase weight derive from it)",
+    "geometry_source": "declared projection basis the vector comes from (gml_before_geometry)",
+    "interval_class": "optional hyperbolic class; when declared it must match the interval sign",
+    "minkowski_interval": "optional B(u,u); required to check a declared interval_class",
+    "authority_claims": ["semantic_authority", "topology_authority", "commit_authority", "verification_authority"]
+  },
+  "geometry_sources": [
+    "gml:topology_contract",
+    "prompt_gram_geometry",
+    "track.vector",
+    "stb:geodesic_sidecar",
+    "tensor_bundle:projection"
+  ],
+  "interval_classes": [
+    "timelike_candidate",
+    "spacelike_candidate",
+    "lightlike_boundary",
+    "unclassified"
+  ],
+  "statuses": {
+    "Admitted": "geometry finite, non-degenerate, source declared, no authority claim, interval coherent",
+    "GeometryNotFinite": "a vector component is NaN or Inf (mirrors Q5 PARTIAL_VELOCITY_VECTOR / Q9 CURVE_PARAMETER_NOT_NUMERIC)",
+    "GeometryDegenerate": "vector magnitude <= 1e-9: a zero vector cannot address a projection",
+    "GeometrySourceMissing": "geometry_source is empty; geometry must name the basis it projects (gml_before_geometry)",
+    "GeometrySourceUnknown": "geometry_source is not in geometry_sources — an undeclared basis is not admissible",
+    "AuthorityClaimed": "the record claims semantic/topology/commit/verification authority (mirrors HE6)",
+    "IntervalClassInvalid": "declared interval_class is not in interval_classes",
+    "IntervalClassMismatch": "declared interval_class contradicts the sign of minkowski_interval (mirrors HE4)"
+  },
+  "invariants": {
+    "AT1": "no dispatch of a record whose geometry is non-finite or degenerate",
+    "AT2": "no dispatch of a record that does not name its geometry source",
+    "AT3": "no dispatch of a record that claims semantic, topology, commit or verification authority",
+    "AT4": "no dispatch of a hyperbolic-typed record whose interval_class contradicts its interval",
+    "AT5": "admission is projection-only: it can refuse geometry, never verify a fact",
+    "AT6": "the collector applies admission itself, so every consumer shares it by construction"
+  },
+  "runtime_binding": {
+    "header": "src/inference/attention_admission.h",
+    "implementation": "src/inference/attention_admission.cpp",
+    "collector": "src/inference/semantic_attention.cpp",
+    "dispatch_site": "src/main.cpp",
+    "native_test": "KHANARY_ATTENTION_ADMISSION_TEST",
+    "contract_test": "KHANARY_ATTENTION_ADMISSION_CONTRACT_TEST"
+  }
+}

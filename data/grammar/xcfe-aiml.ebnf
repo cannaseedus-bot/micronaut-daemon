@@ -1,0 +1,20 @@
+(* GENERATED from xcfe-aiml.contract.json; do not edit. *)
+xcfe_fold = pop_fold | wo_fold | yax_fold | sek_fold | chen_fold | xul_fold ;
+pop_fold = '<xcfe:fold phase="Pop" operator="', pop_operator, '"', fold_body ;
+pop_operator = "MATCH" | "CAPTURE" | "DETECT" | "RECALL" ;
+wo_fold = '<xcfe:fold phase="Wo" operator="', wo_operator, '"', fold_body ;
+wo_operator = "DEFINE" | "TYPE" | "BIND" | "REQUIRE" ;
+yax_fold = '<xcfe:fold phase="Yax" operator="', yax_operator, '"', fold_body ;
+yax_operator = "GENERATE" | "RELATE" | "INFER" | "PROJECT" ;
+sek_fold = '<xcfe:fold phase="Sek" operator="', sek_operator, '"', fold_body ;
+sek_operator = "COMPARE" | "GUARD" | "VERIFY" | "SELECT" ;
+chen_fold = '<xcfe:fold phase="Chen" operator="', chen_operator, '"', fold_body ;
+chen_operator = "OBSERVE" | "MEASURE" | "ATTRIBUTE" ;
+xul_fold = '<xcfe:fold phase="Xul" operator="', xul_operator, '"', fold_body ;
+xul_operator = "COLLAPSE" | "REVISE" | "STORE" | "EMIT" ;
+fold_body = [ ' mode="', identifier, '"' ], ">", { instruction }, "</xcfe:fold>" ;
+instruction = capture | wildcard | bind | guard | invoke | emit | store | revise ;
+binding_type = "text" | "entity" | "relation" | "property" | "question" | "program" ;
+unresolved_policy = "defer" | "default" ; (* default requires registered resolver default *)
+emit_kind = "question" | "candidate" | "gap" | "finding" ;
+identifier = ? XML NCName ? ;

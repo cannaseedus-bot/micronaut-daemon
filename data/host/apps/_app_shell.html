@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="khanary-app-owner" content="{{APP_OWNER}}">
+  <meta name="khanary-app-id"    content="{{APP_ID}}">
+  <title>Loading… · KHANARY</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #070b14;
+      --surface: #0d1422;
+      --panel: #101828;
+      --line: #1f2d45;
+      --muted: #8496b8;
+      --text: #e8eeff;
+      --accent: #7c6ef0;
+      --accent2: #56c0a7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font: 14px/1.6 "Segoe UI", system-ui, sans-serif; min-height: 100dvh; }
+
+    /* ── Ghost chrome ────────────────────────────────────────── */
+    #ghost-bar {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 18px; background: var(--surface);
+      border-bottom: 1px solid var(--line); height: 44px;
+    }
+    .ghost-back { color: var(--muted); font-size: 12px; text-decoration: none; display: flex; align-items: center; gap: 5px; }
+    .ghost-back:hover { color: var(--text); }
+    .ghost-app-title { font-size: 13px; font-weight: 650; color: var(--text); }
+    .ghost-vis { font-size: 10px; text-transform: uppercase; letter-spacing: .6px; border: 1px solid var(--line); border-radius: 99px; padding: 2px 7px; color: var(--muted); }
+    .ghost-vis.public { border-color: #1f4533; background: #0c2218; color: #4dcfa0; }
+    .ghost-spacer { flex: 1; }
+    .ghost-user { font-size: 11px; color: var(--muted); }
+
+    /* ── Page nav (rendered when @pages declared) ───────────── */
+    #page-nav {
+      display: none; /* shown by JS when @pages present */
+      gap: 0; overflow-x: auto; scrollbar-width: none;
+      border-bottom: 1px solid var(--line); background: var(--surface);
+      padding: 0 18px; height: 36px; align-items: stretch; flex-shrink: 0;
+    }
+    #page-nav::-webkit-scrollbar { display: none; }
+    .page-tab {
+      display: inline-flex; align-items: center;
+      padding: 0 14px; font-size: 12px; font-weight: 600;
+      color: var(--muted); text-decoration: none; border-bottom: 2px solid transparent;
+      white-space: nowrap; cursor: pointer; transition: color .15s;
+    }
+    .page-tab:hover { color: var(--text); }
+    .page-tab.active { color: var(--text); border-bottom-color: var(--accent); }
+
+    /* ── App viewport — panels go here ──────────────────────── */
+    #app-viewport {
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100dvh - 80px); /* shrinks when page-nav visible */
+    }
+
+    /* ── Panel rendering ─────────────────────────────────────── */
+    .app-panels { display: flex; flex: 1; gap: 0; overflow: hidden; }
+    .app-panel {
+      flex: 1; display: flex; flex-direction: column;
+      border-right: 1px solid var(--line); overflow: auto;
+      min-height: calc(100dvh - 44px);
+    }
+    .app-panel:last-child { border-right: 0; }
+    .app-panel-header {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 16px; border-bottom: 1px solid var(--line);
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .7px; color: var(--muted); background: var(--surface);
+      flex-shrink: 0;
+    }
+    .app-panel-body { padding: 18px; flex: 1; }
+
+    /* ── Component types ─────────────────────────────────────── */
+    .comp-card {
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: 12px; padding: 16px; margin-bottom: 12px;
+    }
+    .comp-card-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+    .comp-card-note { font-size: 12px; color: var(--muted); }
+    .comp-feed { display: grid; gap: 10px; }
+    .comp-feed-row {
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: 9px; padding: 12px 14px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      border: 1px solid var(--line); background: var(--surface);
+      color: var(--text); border-radius: 9px; padding: 8px 13px;
+      font: inherit; font-size: 12px; font-weight: 600; cursor: pointer;
+      text-decoration: none;
+    }
+    .btn:hover { border-color: var(--accent); }
+    .btn.primary { background: var(--accent); border: 0; color: #0d0f1e; }
+    .btn.primary:hover { filter: brightness(1.1); }
+    .table-badge {
+      display: inline-block; font-size: 9px; text-transform: uppercase;
+      letter-spacing: .5px; border: 1px solid #1e4535; background: #0c2218;
+      color: var(--accent2); border-radius: 6px; padding: 2px 7px; margin: 2px;
+    }
+
+    /* ── Loading + error states ──────────────────────────────── */
+    .state-loading {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 14px; padding: 80px 20px;
+      color: var(--muted); font-size: 13px;
+    }
+    .spinner {
+      width: 28px; height: 28px; border: 3px solid var(--line);
+      border-top-color: var(--accent); border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .state-error {
+      margin: 40px auto; max-width: 500px; padding: 24px;
+      background: #170a0a; border: 1px solid #4a1a1a; border-radius: 14px;
+      color: #f08080; font-size: 13px;
+    }
+    .state-error strong { display: block; margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+
+<!-- Ghost chrome — minimal bar, does not impose layout on the app -->
+<div id="ghost-bar">
+  <a class="ghost-back" href="/">← Hub</a>
+  <span class="ghost-app-title" id="ghost-title">{{APP_ID}}</span>
+  <span class="ghost-vis" id="ghost-vis">…</span>
+  <span class="ghost-spacer"></span>
+  <span class="ghost-user" id="ghost-user"></span>
+</div>
+
+<!-- Page nav — rendered when manifest declares @pages; hidden otherwise -->
+<div id="page-nav"></div>
+
+<!-- App viewport — panels are injected here by the manifest renderer -->
+<div id="app-viewport">
+  <div class="state-loading" id="state-loading">
+    <div class="spinner"></div>
+    <span>Loading app…</span>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var APP_OWNER = document.querySelector('meta[name="khanary-app-owner"]').content;
+  var APP_ID    = document.querySelector('meta[name="khanary-app-id"]').content;
+  // Manifest URL is always owner-scoped — two users with the same app_id never share.
+  var MANIFEST_URL = '/api/apps/' + APP_OWNER + '/' + APP_ID + '/manifest';
+  // Table fetch helper — resolves scope server-side, returns rows array.
+  window.KHANARY_TABLE = function (table_id) {
+    return fetch(MANIFEST_URL.replace('/manifest', '/tables/' + table_id),
+                 {credentials: 'same-origin'}).then(function (r) { return r.json(); });
+  };
+
+  function esc(s) {
+    return String(s || '').replace(/[&<>"']/g, function (c) {
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  // ── Session ────────────────────────────────────────────────────────────
+  fetch('/api/auth/me', {credentials: 'same-origin'})
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      window.KHANARY_SESSION = d;
+      document.dispatchEvent(new CustomEvent('khanary:session', {detail: d}));
+      document.getElementById('ghost-user').textContent =
+        d.anonymous ? 'Guest' : d.username;
+    })
+    .catch(function () { window.KHANARY_SESSION = {anonymous: true}; });
+
+  // ── Manifest fetch ─────────────────────────────────────────────────────
+  fetch(MANIFEST_URL, {credentials: 'same-origin'})
+    .then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(renderApp)
+    .catch(function (err) {
+      document.getElementById('state-loading').remove();
+      var vp = document.getElementById('app-viewport');
+      vp.innerHTML = '<div class="state-error"><strong>App unavailable</strong>' +
+        esc(err.message) + ' — <a href="/" style="color:#f08080">Return to Hub</a></div>';
+    });
+
+  // ── Manifest → panels renderer ─────────────────────────────────────────
+  var MANIFEST = null;  // cached after first load
+
+  function renderApp(m) {
+    MANIFEST = m;
+    document.getElementById('state-loading').remove();
+
+    var sett   = m['@settings'] || {};
+    var title  = m['@title']  || sett.title || APP_ID;
+    var vis    = sett.visibility || 'public';
+    var accent = sett.theme_color || '';
+
+    // Stamp document title and accent colour
+    document.title = title + ' · KHANARY';
+    if (accent) document.documentElement.style.setProperty('--accent', accent);
+
+    // Ghost bar
+    document.getElementById('ghost-title').textContent = title;
+    var visEl = document.getElementById('ghost-vis');
+    visEl.textContent = vis;
+    if (vis === 'public') visEl.classList.add('public');
+
+    // Build page nav from @pages if declared
+    var pages = m['@pages'] || {};
+    var pageKeys = Object.keys(pages);
+    if (pageKeys.length > 0) {
+      var nav = document.getElementById('page-nav');
+      nav.style.display = 'flex';
+      var navHtml = '';
+      for (var i = 0; i < pageKeys.length; i++) {
+        var pk = pageKeys[i];
+        var pg = pages[pk];
+        var pgHash = pg['@hash'] || ('/' + pk);
+        var pgTitle = pg['@title'] || pk;
+        navHtml += '<a class="page-tab" href="#' + esc(pgHash) + '" data-page-key="' + esc(pk) + '">'
+          + esc(pgTitle) + '</a>';
+      }
+      nav.innerHTML = navHtml;
+    }
+
+    // Route initial hash — or render default view
+    routeHash(location.hash, m);
+
+    // Dispatch ready event so extensions can hook in
+    document.dispatchEvent(new CustomEvent('khanary:app-ready',
+      {detail: {app_owner: APP_OWNER, app_id: APP_ID, manifest: m}}));
+  }
+
+  // ── Hash router ────────────────────────────────────────────────────────
+  // #/{page_key}  or  #/{page_key}/{param}
+  // Falls back to default (all components, no page filter) for unknown hashes.
+  function routeHash(hash, m) {
+    m = m || MANIFEST;
+    if (!m) return;
+
+    var pages = m['@pages'] || {};
+    var sett  = m['@settings'] || {};
+    var path  = hash ? hash.replace(/^#/, '') : '';  // strip leading #
+
+    // Highlight active tab
+    var tabs = document.querySelectorAll('.page-tab');
+    for (var i = 0; i < tabs.length; i++) {
+      var tabHash = tabs[i].getAttribute('href').replace(/^#/, '');
+      tabs[i].classList.toggle('active', path === tabHash || (path.startsWith(tabHash + '/') && tabHash !== '/'));
+    }
+
+    // Find matching page by @hash prefix (strip dynamic param segments)
+    var matchedKey = null;
+    var matchedPage = null;
+    var pageKeys = Object.keys(pages);
+    for (var j = 0; j < pageKeys.length; j++) {
+      var pk = pageKeys[j];
+      var pg = pages[pk];
+      var pgHash = pg['@hash'] || ('/' + pk);
+      // Strip param placeholders (:param) for prefix matching
+      var staticPrefix = pgHash.replace(/\/:[\w]+/g, '');
+      if (path === pgHash || path === staticPrefix || path.startsWith(staticPrefix + '/')) {
+        matchedKey = pk;
+        matchedPage = pg;
+        break;
+      }
+    }
+
+    var vp = document.getElementById('app-viewport');
+
+    if (matchedPage) {
+      // Extract params: build { param_name: value } from URL segments vs @hash template
+      var params = extractHashParams(matchedPage['@hash'] || ('/' + matchedKey), path);
+      renderPage(matchedKey, matchedPage, params, m, vp);
+    } else {
+      // Default view: all components with layout from @settings
+      renderDefaultView(m, vp);
+    }
+  }
+
+  function extractHashParams(template, actual) {
+    var params = {};
+    var tParts = template.split('/');
+    var aParts = actual.split('/');
+    for (var i = 0; i < tParts.length; i++) {
+      if (tParts[i].charAt(0) === ':') {
+        params[tParts[i].slice(1)] = aParts[i] || '';
+      }
+    }
+    return params;
+  }
+
+  function renderPage(key, page, params, m, vp) {
+    // A @page can declare its own @components; fall back to manifest-level @components.
+    var comps  = page['@components'] || m['@components'] || {};
+    var layout = page['@layout']     || m['@settings'] && m['@settings'].layout || 'single';
+    var title  = page['@title']      || key;
+    var desc   = page['@description'] || '';
+    var kg     = m['@key_grammar']   || [];
+    var tables = getLinkedTables(kg);
+    var panels = derivePanels(comps, layout, title, desc, tables, m);
+
+    var html = '<div class="app-panels">';
+    for (var i = 0; i < panels.length; i++) html += renderPanel(panels[i], m);
+    html += '</div>';
+    vp.innerHTML = html;
+
+    // Surface params as data attributes on the viewport for extensions
+    vp.dataset.pageKey = key;
+    vp.dataset.pageParams = JSON.stringify(params);
+  }
+
+  function renderDefaultView(m, vp) {
+    var sett   = m['@settings'] || {};
+    var comps  = m['@components'] || {};
+    var layout = sett.layout || 'single';
+    var title  = m['@title'] || APP_ID;
+    var desc   = m['@description'] || sett.description || '';
+    var kg     = m['@key_grammar'] || [];
+    var tables = getLinkedTables(kg);
+    var panels = derivePanels(comps, layout, title, desc, tables, m);
+
+    var html = '<div class="app-panels">';
+    for (var i = 0; i < panels.length; i++) html += renderPanel(panels[i], m);
+    html += '</div>';
+    vp.innerHTML = html;
+    vp.dataset.pageKey = '';
+    vp.dataset.pageParams = '{}';
+  }
+
+  // Extract unique table IDs from key grammar rows
+  function getLinkedTables(kg) {
+    var seen = {}, tables = [];
+    for (var i = 0; i < kg.length; i++) {
+      var tid = kg[i].table_id;
+      if (tid && !seen[tid]) { seen[tid] = 1; tables.push(tid); }
+    }
+    return tables;
+  }
+
+  // Derive panels from components and layout preference
+  function derivePanels(comps, layout, title, desc, tables, m) {
+    var keys   = Object.keys(comps);
+    var panels = [];
+
+    if (layout === 'triple' && keys.length >= 2) {
+      // Three-pane: nav + main + sidebar
+      panels.push({id: 'nav',     label: 'Nav',     comps: keys.slice(0, 1), wide: false});
+      panels.push({id: 'main',    label: 'Main',    comps: keys.slice(1, keys.length - 1), wide: true});
+      panels.push({id: 'sidebar', label: 'Sidebar', comps: keys.slice(-1), wide: false});
+    } else if (layout === 'sidebar' && keys.length >= 2) {
+      panels.push({id: 'sidebar', label: 'Sidebar', comps: keys.slice(0, 1), wide: false});
+      panels.push({id: 'main',    label: title,     comps: keys.slice(1), wide: true});
+    } else {
+      // Single-pane — all components, plus overview card
+      panels.push({id: 'main', label: title, comps: keys, overview: {desc: desc, tables: tables}});
+    }
+
+    return panels;
+  }
+
+  // Render one panel column
+  function renderPanel(panel, m) {
+    var comps  = m['@components'] || {};
+    var flex   = panel.wide ? ' style="flex:2"' : '';
+    var html   = '<div class="app-panel"' + flex + '>';
+    html += '<div class="app-panel-header">' + esc(panel.label) + '</div>';
+    html += '<div class="app-panel-body">';
+
+    // Overview card (single-pane only)
+    if (panel.overview) {
+      if (panel.overview.desc) {
+        html += '<div class="comp-card"><div class="comp-card-note">' +
+          esc(panel.overview.desc) + '</div></div>';
+      }
+      if (panel.overview.tables && panel.overview.tables.length) {
+        html += '<div class="comp-card"><div class="comp-card-title" style="font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)">Linked tables</div>';
+        for (var t = 0; t < panel.overview.tables.length; t++) {
+          html += '<span class="table-badge">' + esc(panel.overview.tables[t]) + '</span>';
+        }
+        html += '</div>';
+      }
+    }
+
+    // Component cards
+    for (var i = 0; i < panel.comps.length; i++) {
+      var key  = panel.comps[i];
+      var comp = comps[key] || {};
+      html += renderComponent(key, comp, m);
+    }
+
+    html += '</div></div>';
+    return html;
+  }
+
+  // Render a single component
+  function renderComponent(key, comp, m) {
+    var type    = comp['@type'] || comp.type || 'card';
+    var label   = comp['@label'] || comp.label || key;
+    var actions = comp['@actions'] || comp.actions || [];
+
+    var html = '<div class="comp-card">';
+    html += '<div class="comp-card-title">' + esc(label) + '</div>';
+
+    if (type === 'feed' || type === 'list') {
+      html += renderFeed(comp, m);
+    } else if (type === 'form') {
+      html += renderForm(comp, m);
+    } else {
+      // Default: show key + type as metadata
+      html += '<div class="comp-card-note" style="font-size:10px;color:var(--muted);margin-top:4px">'
+        + esc(type) + ' · ' + esc(key) + '</div>';
+    }
+
+    if (actions && actions.length) {
+      html += '<div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">';
+      for (var i = 0; i < actions.length; i++) {
+        var a = actions[i];
+        var alabel = (typeof a === 'string') ? a : (a.label || a.name || String(a));
+        html += '<button class="btn" data-asx-call="' + esc(typeof a === 'string' ? a : a.name || a) + '">'
+          + esc(alabel) + '</button>';
+      }
+      html += '</div>';
+    }
+
+    html += '</div>';
+    return html;
+  }
+
+  function renderFeed(comp) {
+    var items = comp.items || comp.seed_items || [];
+    if (!items.length) return '<div class="comp-feed"><div class="comp-feed-row" style="color:var(--muted);font-size:12px">No items yet</div></div>';
+    var html = '<div class="comp-feed">';
+    for (var i = 0; i < Math.min(items.length, 6); i++) {
+      var it = items[i];
+      html += '<div class="comp-feed-row">' + esc(typeof it === 'string' ? it : JSON.stringify(it)) + '</div>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  function renderForm(comp) {
+    var fields = comp.fields || [];
+    if (!fields.length) return '<div class="comp-card-note" style="color:var(--muted)">Form</div>';
+    var html = '';
+    for (var i = 0; i < fields.length; i++) {
+      var f = fields[i];
+      var name = typeof f === 'string' ? f : (f.name || f.label || String(f));
+      html += '<div style="margin-bottom:8px"><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:3px">'
+        + esc(name) + '</label>'
+        + '<input style="width:100%;background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--text);font:inherit;font-size:13px" placeholder="' + esc(name) + '"></div>';
+    }
+    html += '<button class="btn primary" style="margin-top:6px">Submit</button>';
+    return html;
+  }
+
+  // ── Hash routing — respond to back/forward and in-page nav clicks ─────
+  window.addEventListener('hashchange', function () {
+    routeHash(location.hash);
+  });
+
+  // ── ASX action dispatch ────────────────────────────────────────────────
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-asx-call]');
+    if (!el) return;
+    var action = el.getAttribute('data-asx-call');
+    document.dispatchEvent(new CustomEvent('khanary:asx-action', {detail: {action: action, element: el}}));
+  });
+
+})();
+</script>
+</body>
+</html>

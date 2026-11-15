@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Generated key lookup bank from kuhul-relational.key-grammar.jsonl; entries are data, not execution authority.-->
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:NODE:0:ORCH-Μ</pattern>
+    <template>Key RELATIONAL:NODE:0:ORCH-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:NODE:1:REASON-Μ</pattern>
+    <template>Key RELATIONAL:NODE:1:REASON-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:NODE:2:CREATE-Μ</pattern>
+    <template>Key RELATIONAL:NODE:2:CREATE-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:NODE:3:PLAN-Μ</pattern>
+    <template>Key RELATIONAL:NODE:3:PLAN-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:NODE:4:REASON-Μ</pattern>
+    <template>Key RELATIONAL:NODE:4:REASON-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:NODE:5:MEM-Μ</pattern>
+    <template>Key RELATIONAL:NODE:5:MEM-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:NODE:6:CODE-Μ</pattern>
+    <template>Key RELATIONAL:NODE:6:CODE-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:NODE:7:GRAPHICS-Μ</pattern>
+    <template>Key RELATIONAL:NODE:7:GRAPHICS-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:NODE:8:FILE-Μ</pattern>
+    <template>Key RELATIONAL:NODE:8:FILE-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:NODE:9:NET-Μ</pattern>
+    <template>Key RELATIONAL:NODE:9:NET-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:NODE:10:INFER-Μ</pattern>
+    <template>Key RELATIONAL:NODE:10:INFER-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:0:REASON-Μ:@CALL:PLAN-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:0:REASON-µ:@call:PLAN-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:1:CREATE-Μ:@EVAL:REASON-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:1:CREATE-µ:@eval:REASON-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:2:PLAN-Μ:@CALL:REASON-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:2:PLAN-µ:@call:REASON-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:3:ORCH-Μ:@DELEGATE:REASON-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:3:ORCH-µ:@delegate:REASON-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:4:ORCH-Μ:@DELEGATE:CREATE-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:4:ORCH-µ:@delegate:CREATE-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:5:ORCH-Μ:@DELEGATE:PLAN-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:5:ORCH-µ:@delegate:PLAN-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:6:REASON-Μ:@CALL:MEM-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:6:REASON-µ:@call:MEM-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:7:REASON-Μ:@CALL:CODE-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:7:REASON-µ:@call:CODE-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:8:REASON-Μ:@CALL:INFER-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:8:REASON-µ:@call:INFER-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:9:CREATE-Μ:@COMPOSE:GRAPHICS-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:9:CREATE-µ:@compose:GRAPHICS-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:10:CREATE-Μ:@COMPOSE:CODE-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:10:CREATE-µ:@compose:CODE-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:11:PLAN-Μ:@CALL:MEM-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:11:PLAN-µ:@call:MEM-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:12:PLAN-Μ:@CALL:REASON-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:12:PLAN-µ:@call:REASON-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:13:MEM-Μ:@CALL:FILE-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:13:MEM-µ:@call:FILE-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:14:CODE-Μ:@EVAL:REASON-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:14:CODE-µ:@eval:REASON-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:15:INFER-Μ:@CALL:REASON-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:15:INFER-µ:@call:REASON-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:16:INFER-Μ:@CALL:MEM-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:16:INFER-µ:@call:MEM-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:17:NET-Μ:@CALL:CODE-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:17:NET-µ:@call:CODE-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:18:NET-Μ:@CALL:FILE-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:18:NET-µ:@call:FILE-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:19:MEM-Μ:@RELATE:FILE-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:19:MEM-µ:@relate:FILE-µ. No descriptive fields.</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY RELATIONAL:EDGE:20:GRAPHICS-Μ:@EVAL:REASON-Μ</pattern>
+    <template>Key RELATIONAL:EDGE:20:GRAPHICS-µ:@eval:REASON-µ. No descriptive fields.</template>
+  </category>
+</aiml>

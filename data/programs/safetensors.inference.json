@@ -1,0 +1,36 @@
+{
+  "@program": "safetensors.inference",
+  "@kind": "kuhul.inference.safetensors.v1",
+  "@namespace": "https://kuhul.dev/",
+  "@backend": {
+    "compute": "d3d11_cs5",
+    "shader": "dist/json-runtime/shaders/huggingface.hlsl",
+    "semantic_state": "programs/semantic_cube.d3d11.json"
+  },
+  "@state": {
+    "source": null,
+    "manifest": null,
+    "xshard": null,
+    "scx_plan": null,
+    "verified": false
+  },
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "safetensors.validate" },
+    { "@op": "CALL", "@fn": "SafeTensorsReader::validate", "@args": ["$source"], "@out": "manifest" },
+    { "@op": "FOLD_EXIT", "@fold": "Wo", "@node": "safetensors.validate", "@args": ["$manifest"] },
+    { "@op": "CALL", "@fn": "safetensors_to_xshard", "@args": ["$source"], "@out": "xshard" },
+    { "@op": "CALL", "@fn": "buildScxManifestPlan", "@args": ["$xshard"], "@out": "scx_plan" },
+    { "@op": "GPU_DISPATCH", "@args": ["huggingface_bf16|huggingface_f16|huggingface_f32", "$xshard", "d3d11_cs5"], "@out": "dequant" },
+    { "@op": "CALL", "@fn": "streamXShardTilesToEngine", "@args": ["$xshard", "$scx_plan"], "@out": "inference" },
+    { "@op": "CALL", "@fn": "SemanticCubeMap::svgTensorToCubeMap", "@args": ["$inference"], "@out": "semantic_state" },
+    { "@op": "FOLD_EXIT", "@fold": "Chen", "@node": "safetensors.verify", "@args": ["$inference"] },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "safetensors.commit", "@args": ["$semantic_state"] }
+  ],
+  "@invariants": {
+    "source_format": "safetensors",
+    "intermediate_format": "xshard/xsq2",
+    "semantic_cube_is_state_not_projection": true,
+    "shader_model": "cs_5_0",
+    "no_webgpu": true
+  }
+}

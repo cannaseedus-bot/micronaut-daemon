@@ -1,0 +1,212 @@
+{
+  "@no-eval": true,
+  "id": "POLITICS-µ",
+
+  "schemes": ["politics"],
+  "schema": "semantic-tracks.v1",
+  "description": "First-class reusable political-reasoning frame track for argument structure, position framing, ideological sense disambiguation, policy folding, and cross-domain persuasion routing. It does not perform opinion authorship or normative judgment.",
+  "phase": "Yax",
+  "category": "political-reasoning-frame",
+  "confidence": 1.0,
+  "static_weight": 1.0,
+  "first_class": true,
+  "peers": [
+    "ADVISOR-µ",
+    "PLAN-µ",
+    "JOKE-µ"
+  ],
+  "availability": "all_domains",
+  "source_manifest": "data/manifest/politics.manifest.json",
+  "governs": [
+    "politics",
+    "intent:political_reasoning",
+    "frame:argument",
+    "frame:position",
+    "frame:policy",
+    "frame:ideology",
+    "frame:persuasion",
+    "frame:debate",
+    "frame:critique",
+    "frame:coalition",
+    "claim",
+    "counter-claim",
+    "warrant",
+    "grounds",
+    "rebuttal",
+    "stb_tensor_brain",
+    "data/world/stb_tensor_brains.json"
+  ],
+  "capabilities": [
+    "argument_structure_routing",
+    "position_frame_disambiguation",
+    "ideological_sense_selection",
+    "policy_fold_binding",
+    "persuasion_schema_detection",
+    "cross_domain_bridge_routing",
+    "claim_warrant_verification",
+    "rebuttal_frame_routing",
+    "coalition_frame_detection",
+    "wpf_card",
+    "consume-stb-tensor-brain-binding",
+    "consume-track-local-gram-tensor-brain"
+  ],
+  "relations": [
+    {
+      "target": "ADVISOR-µ",
+      "verb": "@related_to",
+      "directed": false
+    },
+    {
+      "target": "PLAN-µ",
+      "verb": "@related_to",
+      "directed": false
+    },
+    {
+      "target": "JOKE-µ",
+      "verb": "@related_to",
+      "directed": false
+    },
+    {
+      "target": "frame:argument",
+      "verb": "@supports",
+      "directed": true
+    },
+    {
+      "target": "frame:ideology",
+      "verb": "@defines",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "detect_argument_frame",
+      "key": "frame:argument",
+      "gate": "declared_position_or_claim_opener",
+      "note": "Open the claim/position frame without selecting a surface domain."
+    },
+    {
+      "phase": "Wo",
+      "op": "bind_position_roles",
+      "key": "frame:position",
+      "gate": "argument_candidate_present",
+      "note": "Bind claim, warrant, grounds slots to schema roles."
+    },
+    {
+      "phase": "Yax",
+      "op": "crystallize_ideological_context",
+      "key": "frame:ideology",
+      "scope": "politics.manifest",
+      "gate": "phase_typed_position_beats_present",
+      "note": "Crystallize dominant ideological framing as named SGSFG node. Select frame route from declared manifest entries only."
+    },
+    {
+      "phase": "Sek",
+      "op": "execute_argument_path",
+      "key": "frame:argument",
+      "source": "frame:ideology",
+      "verb": "@defines",
+      "gate": "selected_frame_route",
+      "note": "Traverse frame:ideology @defines frame:argument. Counter-claim redirects to frame:rebuttal at Ch'en."
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_argument_closure",
+      "key": "argument:verify",
+      "gate": "structural_closure_or_declared_rebuttal",
+      "note": "Verify resolved, rebutted, or failed argument structurally."
+    },
+    {
+      "phase": "Xul",
+      "op": "commit_position_and_semantic_key",
+      "scope": "politics_response",
+      "gate": "semantic_key_and_position_present",
+      "note": "Commit selected semantic key separately from rendered surface response."
+    }
+  ],
+  "boundary_rules": [
+    {
+      "id": "frames_declared_not_inferred",
+      "rule": "Argument frames are declared, not inferred from token co-occurrence."
+    },
+    {
+      "id": "beats_phase_typed",
+      "rule": "Position beats are phase-typed before accepted as folds."
+    },
+    {
+      "id": "no_normative_judgment",
+      "rule": "POLITICS-µ routes and disambiguates argument structure; it does not author opinions or render normative verdicts."
+    },
+    {
+      "id": "ideology_is_frame_not_position",
+      "rule": "Ideological framing is a routing schema, not an endorsed position."
+    },
+    {
+      "id": "rebuttal_declared_variant",
+      "rule": "Rebuttal is a declared variant of argument closure, not an exception."
+    },
+    {
+      "id": "no_promotion_from_token_association_to_frame",
+      "rule": "Frequent political token co-occurrence does not become a frame without manifest declaration."
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "POLITICS-µ",
+    "manifest_access": [
+      "words",
+      "politics",
+      "folds",
+      "kuhul"
+    ],
+    "effects": [
+      "gramRead",
+      "politics:route",
+      "argument:verify",
+      "card:project",
+      "gramWrite"
+    ],
+    "ports": [],
+    "coordinator": false,
+    "cannot": [
+      "promote raw token co-occurrence into an argument frame",
+      "render normative political judgments or opinions",
+      "treat ideological overlay as selected domain without frame evidence",
+      "override manifest-declared role boundaries"
+    ]
+  },
+  "ui": {
+    "card": "⟁WIDGETCARD",
+    "label": "POLITICS",
+    "fields": [
+      "prompt",
+      "surface_form",
+      "argument_frame",
+      "position_slots",
+      "candidate_senses",
+      "selected_semantic_key",
+      "rebuttal",
+      "authority",
+      "next"
+    ],
+    "activation_key": "track"
+  },
+  "stb_tensor_brain": {
+    "@type": "khanary.stb_tensor_brain.track_binding_ref.v1",
+    "registry": "data/world/stb_tensor_brains.json",
+    "checker": "tools/check_stb_tensor_brains.py",
+    "binding_key": "POLITICS-µ",
+    "binding_kind": "track_local_gram_tensor_brain",
+    "brain_run": "brain4",
+    "fallback_brain_run": "brain3",
+    "slug": "politics_mu",
+    "projection_only": true,
+    "semantic_authority": false,
+    "topology_authority": false,
+    "authority_boundary": "Track can consume the STB tensor brain as projection evidence only; Ch_en/Xul still verify and persist semantic state."
+  },
+  "model": {
+    "gguf": "C:/Users/canna/.lmstudio/models/lmstudio-community/LFM2.5-1.2B-Instruct-GGUF/LFM2.5-1.2B-Instruct-Q8_0.gguf",
+    "template": "chatml",
+    "role": "instruction"
+  }
+}

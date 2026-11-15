@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0">
+  <!-- Terminal command reasoning: propose and explain commands; never execute them. -->
+  <category><pattern>SEARCH TERMINAL _</pattern><template><srai>TERMINAL ROUTE RETRIEVAL <star/></srai></template></category>
+  <category><pattern>RETRIEVE TERMINAL _</pattern><template><srai>TERMINAL ROUTE RETRIEVAL <star/></srai></template></category>
+  <category><pattern>CHAT ABOUT _</pattern><template><srai>TERMINAL ROUTE CHAT <star/></srai></template></category>
+  <category><pattern>ASK MODEL _</pattern><template><srai>TERMINAL ROUTE MODEL <star/></srai></template></category>
+  <category><pattern>GENERATE CODE _</pattern><template><srai>TERMINAL ROUTE MODEL CODE <star/></srai></template></category>
+  <category><pattern>MODEL CODE _</pattern><template><srai>TERMINAL ROUTE MODEL CODE <star/></srai></template></category>
+  <category><pattern>TERMINAL ROUTE RETRIEVAL *</pattern><template>Route proposal: retrieval for <star/>. Host validation required.</template></category>
+  <category><pattern>TERMINAL ROUTE CHAT *</pattern><template>Route proposal: chat for <star/>. Host validation required.</template></category>
+  <category><pattern>TERMINAL ROUTE MODEL *</pattern><template>Route proposal: local model response for <star/>. Host validation required.</template></category>
+  <category><pattern>TERMINAL ROUTE MODEL CODE *</pattern><template>Route proposal: local model code generation for <star/>. Host validation required.</template></category>
+  <category>
+    <pattern>WHAT COMMAND SHOWS _</pattern>
+    <template>For <star/>, first inspect the relevant help or list command. I can propose a command, but this pattern does not run it.</template>
+  </category>
+  <category>
+    <pattern>HOW DO I _</pattern>
+    <template>Tell me the goal and the project or folder involved. I will identify a matching command, explain its arguments, and show it for review before execution.</template>
+  </category>
+  <category>
+    <pattern>RUN _</pattern>
+    <template>Command request received: <star/>. I will treat this as a request to prepare and explain a command. Execution requires an explicit host action.</template>
+  </category>
+  <category>
+    <pattern>EXECUTE _</pattern>
+    <template>Execution request received: <star/>. AIML can reason about the command, but cannot execute it; the host must validate and dispatch it.</template>
+  </category>
+  <category>
+    <pattern>BUILD _</pattern>
+    <template>Build target requested: <star/>. I can propose a build command after checking the project build files. This pattern does not start a process.</template>
+  </category>
+  <category>
+    <pattern>TEST _</pattern>
+    <template>Test target requested: <star/>. I can identify a matching test command and describe its effects before the host runs it.</template>
+  </category>
+  <category>
+    <pattern>DELETE _</pattern>
+    <template>Delete request noted for <star/>. I will not produce an executable delete operation from a pattern alone. The host must inspect the target and require explicit confirmation.</template>
+  </category>
+  <category>
+    <pattern>INSTALL _</pattern>
+    <template>Install request noted for <star/>. I can explain the package and propose an install command; the host must validate and authorize any system changes.</template>
+  </category>
+  <category>
+    <pattern>SHOW TERMINAL COMMANDS</pattern>
+    <template>Available command reasoning covers help, list, inspect, build, test, run, install, and delete requests. I explain proposed commands; execution remains with the host.</template>
+  </category>
+  <category>
+    <pattern>TERMINAL HELP</pattern>
+    <template>Describe the task and target. I will map it to a known command, explain each argument, and flag commands that change files or system state.</template>
+  </category>
+</aiml>

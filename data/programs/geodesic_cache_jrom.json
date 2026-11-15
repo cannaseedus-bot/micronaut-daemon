@@ -1,0 +1,94 @@
+{
+  "@program": "gpt2.geodesic_cache",
+  "@kind": "kuhul.tensor-cache.jrom.v1",
+  "@format": "JROM+CBOR",
+  "@version": 1,
+  "@phase": "Pop",
+  "@source": "E:/models/GPT2/geodesic_cache",
+  "@control": [
+    { "@op": "LOG", "@args": ["[geodesic_cache] verify source arrays before residency"] },
+    { "@op": "GPU_RESIDENCY_PLAN", "@args": ["sphere_pos_V50257", "knn_dist_k32", "knn_idx_k32", "arc_bias"], "@out": "residency_plan" },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "geodesic_cache.commit", "@args": ["$residency_plan"] }
+  ],
+  "cache": {
+    "model": "gpt2",
+    "vocab": 50257,
+    "source_format": "NumPy .npy",
+    "load_policy": "external_verified_blob",
+    "gpu_policy": {
+      "upload": "explicit",
+      "backend_order": ["d3d11", "opencl_1_2", "cpu"],
+      "reported_gpu_memory_bytes": 17179869184,
+      "dedicated_vram_bytes": 134217728,
+      "shared_gpu_memory_bytes": 2147483648,
+      "effective_cache_budget_bytes": 2281701376,
+      "sphere_position_strategy": "shared_or_tiled_upload",
+      "full_cache_bytes": 167773278
+    },
+    "tensors": [
+      {
+        "name": "sphere_pos_V50257",
+        "path": "E:/models/GPT2/geodesic_cache/sphere_pos_V50257.npy",
+        "shape": [50257, 768],
+        "dtype": "float32",
+        "bytes": 154389632,
+        "sha256": "0E22F074F61A0BF91116E9E910D438D56FB17C0315BAF3B60FDD69513D47707B",
+        "gpu_storage": "structured_buffer_tiled"
+      },
+      {
+        "name": "knn_dist_k32",
+        "path": "E:/models/GPT2/geodesic_cache/knn_dist_k32.npy",
+        "shape": [50257, 32],
+        "dtype": "float16",
+        "bytes": 3216576,
+        "sha256": "DC28A9611DFE2B5D6AF79FF20D1481722E241FA2D041066DA31E7BF263B9C92C",
+        "gpu_storage": "structured_buffer"
+      },
+      {
+        "name": "knn_idx_k32",
+        "path": "E:/models/GPT2/geodesic_cache/knn_idx_k32.npy",
+        "shape": [50257, 32],
+        "dtype": "int32",
+        "bytes": 6433024,
+        "sha256": "7E4D8C30B240EAB4EE44281D3F696D7C55ADFCEE04999D022DEA7F0DB6B4F604",
+        "gpu_storage": "structured_buffer"
+      },
+      {
+        "name": "arc_bias_vals",
+        "path": "E:/models/GPT2/geodesic_cache/arc_bias_vals.npy",
+        "shape": [266681],
+        "dtype": "float16",
+        "bytes": 533490,
+        "sha256": "3504EFCED943BE3AA80D49CF320FBA03E5E7C18AF6B79DFF7AD287C5B9661696",
+        "gpu_storage": "structured_buffer"
+      },
+      {
+        "name": "arc_bias_rows",
+        "path": "E:/models/GPT2/geodesic_cache/arc_bias_rows.npy",
+        "shape": [266681],
+        "dtype": "int32",
+        "bytes": 1066852,
+        "sha256": "3A1E5DC7A058F495F51D0F5888E06DF9473C390004445DE78AC953980CC2B6B6",
+        "gpu_storage": "structured_buffer"
+      },
+      {
+        "name": "arc_bias_cols",
+        "path": "E:/models/GPT2/geodesic_cache/arc_bias_cols.npy",
+        "shape": [266681],
+        "dtype": "int32",
+        "bytes": 1066852,
+        "sha256": "11457E603B55396C5CCB10266137ADE6942001D3E098E44C586FB483D6BC95BA",
+        "gpu_storage": "structured_buffer"
+      },
+      {
+        "name": "arc_bias_counts",
+        "path": "E:/models/GPT2/geodesic_cache/arc_bias_counts.npy",
+        "shape": [266681],
+        "dtype": "int32",
+        "bytes": 1066852,
+        "sha256": "782BAEF7BA20D3CD0F94E234D5119191B7E51C56F52DB69E82BA237122050E0D",
+        "gpu_storage": "structured_buffer"
+      }
+    ]
+  }
+}

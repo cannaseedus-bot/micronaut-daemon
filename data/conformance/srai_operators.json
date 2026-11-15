@@ -1,0 +1,255 @@
+{
+  "description": "Conformance fixtures for the SRAI operator dispatch surface. Contract authority: data/grammar/srai-operators.contracts.json and data/grammar/SraiOperators.mml.",
+  "positive": [
+    {
+      "id": "srai-pos-001",
+      "description": "Valid SCORE binding frame",
+      "frame": {
+        "operator": "SCORE",
+        "executor": "metric",
+        "phase": "Sek",
+        "input_roles": ["candidate_set", "query_vector", "context"],
+        "output_role": "scored_candidates",
+        "effects": ["read", "measure"]
+      },
+      "expect": "valid"
+    },
+    {
+      "id": "srai-pos-002",
+      "description": "Valid RANK binding frame",
+      "frame": {
+        "operator": "RANK",
+        "executor": "metric",
+        "phase": "Sek",
+        "input_roles": ["scored_candidates", "context"],
+        "output_role": "ranked_candidates",
+        "effects": ["read", "order"]
+      },
+      "expect": "valid"
+    },
+    {
+      "id": "srai-pos-003",
+      "description": "Valid TRAIN with commit_requires",
+      "frame": {
+        "operator": "TRAIN",
+        "executor": "learning",
+        "phase": "Xul",
+        "input_roles": ["ranked_candidates", "verified_feedback"],
+        "output_role": "weight_delta",
+        "effects": ["propose_delta"],
+        "commit_requires": ["Ch_en_verification", "Xul_authorization"],
+        "W_target": "W_learned"
+      },
+      "expect": "valid"
+    },
+    {
+      "id": "srai-pos-004",
+      "description": "Valid VERIFY frame — produces gate token, no commit",
+      "frame": {
+        "operator": "VERIFY",
+        "executor": "ch_en_gate",
+        "phase": "Ch_en",
+        "input_roles": ["candidate", "evidence_refs", "comparison_report"],
+        "output_role": "verified_outcome",
+        "effects": ["read", "gate"],
+        "commit_requires": null
+      },
+      "expect": "valid"
+    },
+    {
+      "id": "srai-pos-005",
+      "description": "Valid COLLAPSE frame — Greymarch record, not commit",
+      "frame": {
+        "operator": "COLLAPSE",
+        "executor": "jyggalag",
+        "phase": "Ch_en",
+        "input_roles": ["ranked_candidates", "critic_reports"],
+        "output_role": "collapsed_candidate",
+        "effects": ["read", "collapse"],
+        "commit_requires": null
+      },
+      "expect": "valid"
+    },
+    {
+      "id": "srai-pos-006",
+      "description": "Valid RECALL frame — Pop phase read-only retrieval",
+      "frame": {
+        "operator": "RECALL",
+        "executor": "gram_store",
+        "phase": "Pop",
+        "input_roles": ["query", "phase", "context"],
+        "output_role": "gram_evidence",
+        "effects": ["read"],
+        "commit_requires": null
+      },
+      "expect": "valid"
+    },
+    {
+      "id": "srai-pos-007",
+      "description": "Valid PROJECT frame — no mutation declared",
+      "frame": {
+        "operator": "PROJECT",
+        "executor": "vector_mu",
+        "phase": "Yax",
+        "input_roles": ["source_substrate", "context", "trajectory_id"],
+        "output_role": "result_substrate",
+        "effects": ["read", "project"],
+        "mutation": "none",
+        "commit_requires": null
+      },
+      "expect": "valid"
+    },
+    {
+      "id": "srai-pos-008",
+      "description": "Valid QUESTION frame — Yax emit with no commit",
+      "frame": {
+        "operator": "QUESTION",
+        "executor": "question_selector",
+        "phase": "Yax",
+        "input_roles": ["intent_gap", "context", "question_history"],
+        "output_role": "question_record",
+        "effects": ["read", "emit"],
+        "commit_requires": null
+      },
+      "expect": "valid"
+    },
+    {
+      "id": "srai-pos-009",
+      "description": "Valid COMPARE frame — Ch'en analysis, no commit",
+      "frame": {
+        "operator": "COMPARE",
+        "executor": "eliza",
+        "phase": "Ch_en",
+        "input_roles": ["candidate_a", "candidate_b", "evidence_refs"],
+        "output_role": "comparison_report",
+        "effects": ["read", "analyze"],
+        "commit_requires": null
+      },
+      "expect": "valid"
+    },
+    {
+      "id": "srai-pos-010",
+      "description": "IDENTITY_STATE is a real operator with an empty effect set: a no-op inside a phase is not a phase transition",
+      "frame": {
+        "operator": "IDENTITY_STATE",
+        "executor": "identity",
+        "phase": "Pop",
+        "input_roles": ["state"],
+        "output_role": "state_unchanged",
+        "effects": [],
+        "commit_requires": null
+      },
+      "expect": "valid"
+    },
+    {
+      "id": "srai-pos-011",
+      "description": "ADVANCE_PHASE carries effects.transition; only an operator that declares phase authority may request a phase change",
+      "frame": {
+        "operator": "ADVANCE_PHASE",
+        "executor": "phase_engine",
+        "phase": "Pop",
+        "input_roles": ["state", "current_phase", "target_phase"],
+        "output_role": "phase_transition_request",
+        "effects": ["transition"],
+        "commit_requires": null
+      },
+      "expect": "valid"
+    }
+  ],
+  "negative": [
+    {
+      "id": "srai-neg-001",
+      "description": "TRAIN without commit_requires — propose_delta must have commit_requires",
+      "frame": {
+        "operator": "TRAIN",
+        "executor": "learning",
+        "phase": "Xul",
+        "input_roles": ["ranked_candidates"],
+        "output_role": "weight_delta",
+        "effects": ["propose_delta"],
+        "commit_requires": null
+      },
+      "expect": "invalid",
+      "violation": "effects contains propose_delta but commit_requires is null"
+    },
+    {
+      "id": "srai-neg-002",
+      "description": "TRAIN without verified_outcome in input_roles — missing Ch'en gate input",
+      "frame": {
+        "operator": "TRAIN",
+        "executor": "learning",
+        "phase": "Xul",
+        "input_roles": ["ranked_candidates"],
+        "output_role": "weight_delta",
+        "effects": ["propose_delta"],
+        "commit_requires": ["Ch_en_verification", "Xul_authorization"]
+      },
+      "expect": "invalid",
+      "violation": "TRAIN input_roles must include verified_feedback (derived from verified_outcome)"
+    },
+    {
+      "id": "srai-neg-003",
+      "description": "SCORE with propose_delta effect — SCORE may not propose topology changes",
+      "frame": {
+        "operator": "SCORE",
+        "executor": "metric",
+        "phase": "Sek",
+        "input_roles": ["candidate_set", "query_vector"],
+        "output_role": "scored_candidates",
+        "effects": ["read", "measure", "propose_delta"]
+      },
+      "expect": "invalid",
+      "violation": "SCORE declared propose_delta but commit_requires is absent"
+    },
+    {
+      "id": "srai-neg-004",
+      "description": "COLLAPSE claiming to commit topology",
+      "frame": {
+        "operator": "COLLAPSE",
+        "executor": "jyggalag",
+        "phase": "Ch_en",
+        "input_roles": ["ranked_candidates", "critic_reports"],
+        "output_role": "topology_delta",
+        "effects": ["read", "collapse", "propose_delta"],
+        "commit_requires": null
+      },
+      "expect": "invalid",
+      "violation": "COLLAPSE output_role must be collapsed_candidate (Greymarch record), not topology_delta; and propose_delta requires commit_requires"
+    },
+    {
+      "id": "srai-neg-005",
+      "description": "Unknown effect value",
+      "frame": {
+        "operator": "RECALL",
+        "executor": "gram_store",
+        "phase": "Pop",
+        "input_roles": ["query"],
+        "output_role": "gram_evidence",
+        "effects": ["read", "mutate_topology"]
+      },
+      "expect": "invalid",
+      "violation": "mutate_topology is not in the permitted effects set {read,measure,order,analyze,gate,project,emit,collapse,propose_delta}"
+    },
+    {
+      "id": "srai-neg-006",
+      "description": "Pipeline shortcut — RANK output claimed to authorize TRAIN without VERIFY",
+      "pipeline_sequence": ["SCORE", "RANK", "TRAIN"],
+      "expect": "invalid",
+      "violation": "TRAIN without VERIFY in sequence; COLLAPSE and VERIFY must precede TRAIN"
+    },
+    {
+      "id": "srai-neg-007",
+      "description": "VERIFY committing topology directly",
+      "frame": {
+        "operator": "VERIFY",
+        "executor": "ch_en_gate",
+        "phase": "Ch_en",
+        "input_roles": ["candidate", "evidence_refs"],
+        "output_role": "topology_commit",
+        "effects": ["read", "gate"]
+      },
+      "expect": "invalid",
+      "violation": "VERIFY output_role must be verified_outcome (a gate token), not topology_commit; only Xul may commit topology"
+    }
+  ]
+}

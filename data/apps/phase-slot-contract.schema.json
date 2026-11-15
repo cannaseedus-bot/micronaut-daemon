@@ -1,0 +1,82 @@
+{
+  "schema": "phase-slot-contract.v1",
+  "description": "Declares layout slots for an app and which widget phases are allowed or denied per slot. GEMMA app generator respects this when ranking registry candidates.",
+  "note": "Phase names the user journey stage; slot names the physical layout position. They are independent axes. Same phase can appear in multiple slots (Pop nav appears in header AND footer) but under slot-specific names.",
+
+  "standard_slots": {
+    "header": {
+      "description": "Top of page — logo, primary nav, hero, session status",
+      "allowed_phases": ["Pop", "Xul"],
+      "allowed_component_types": ["nav", "hero", "toolbar", "status", "badge", "notification", "user-profile-card"],
+      "denied_component_types": ["data-table", "chart", "leaderboard", "admin-dashboard"],
+      "note": "Hero and slideshow ONLY in header. footer-menu is a DIFFERENT component from header-nav."
+    },
+    "footer": {
+      "description": "Bottom of page — secondary links, legal, final CTA, newsletter",
+      "allowed_phases": ["Pop", "Xul"],
+      "allowed_component_types": ["footer-nav", "cta", "footer", "badge", "social-share"],
+      "denied_component_types": ["hero", "slideshow", "data-table", "admin-dashboard", "map", "media-player"],
+      "note": "Menus are allowed but must be named footer-menu, not header-nav. No full-bleed heroes."
+    },
+    "sidebar-left": {
+      "description": "Left panel — section navigation, categories, filters, tree",
+      "allowed_phases": ["Pop", "Wo"],
+      "allowed_component_types": ["sidebar-nav", "accordion", "search", "progress", "profile-card"],
+      "denied_component_types": ["hero", "leaderboard", "chart", "media-player"]
+    },
+    "sidebar-right": {
+      "description": "Right panel — contextual info, TOC, related links, quick widgets",
+      "allowed_phases": ["Pop", "Sek", "Yax"],
+      "allowed_component_types": ["sidebar-nav", "card", "rating", "badge", "calendar", "weather"],
+      "denied_component_types": ["hero", "data-table", "admin-dashboard"]
+    },
+    "content": {
+      "description": "Main content area — feeds, grids, forms, chat, maps",
+      "allowed_phases": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"],
+      "allowed_component_types": "*",
+      "denied_component_types": ["hero"],
+      "note": "Most permissive slot. Hero only in header."
+    },
+    "admin-panel": {
+      "description": "Admin area — user management, settings, audit log",
+      "allowed_phases": ["Ch'en"],
+      "allowed_component_types": ["data-table", "admin-dashboard", "chart", "accordion", "form", "badge"],
+      "denied_component_types": ["hero", "carousel", "media-player"],
+      "requires_role": "admin"
+    },
+    "modal": {
+      "description": "Overlay — forms, confirmations, auth, media preview",
+      "allowed_phases": ["Wo", "Sek", "Ch'en", "Xul"],
+      "allowed_component_types": ["modal", "form", "auth-modal", "oauth-callback"],
+      "denied_component_types": ["hero", "sidebar-nav", "footer-nav"]
+    },
+    "core": {
+      "description": "Background services — plugins and micronauts that have no UI",
+      "allowed_phases": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"],
+      "allowed_component_types": ["service"],
+      "denied_component_types": "*"
+    }
+  },
+
+  "naming_convention": {
+    "rule": "Slot-specific widgets carry the slot name as a prefix or qualifier.",
+    "examples": {
+      "nav in header":        "widget:header-nav (not widget:sidebar or widget:footer-menu)",
+      "nav in footer":        "widget:footer-menu (not widget:header-nav)",
+      "nav in left sidebar":  "widget:sidebar-left-menu",
+      "nav in right sidebar": "widget:sidebar-right-menu",
+      "hero":                 "widget:hero-slideshow — header slot only, never footer",
+      "admin user list":      "widget:user-table — admin-panel slot, Ch'en phase"
+    }
+  },
+
+  "app_spec_usage": {
+    "description": "An app's slot_contract overrides this default. GEMMA filters registry candidates by slot.allowed_phases before cosine-ranking.",
+    "example_override": {
+      "slots": {
+        "header": { "allowed_phases": ["Pop"], "denied_component_types": ["notification-bell"] },
+        "footer": { "allowed_phases": ["Pop", "Xul"] }
+      }
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "@type": "khanary.micronaut_profile_contracts.v1",
+  "@schema": "urn:kuhul:khanary:contracts:micronaut-profile:v1",
+  "owner": "src/micronaut/track_loader.cpp",
+  "semantic_authority": false,
+  "purpose": "A micronaut profile is a projection. It may bias routing; it may not become a relation, a commit, or schema truth. The boundary is a type, and a malformed profile is refused by name instead of being dropped.",
+  "boundary": {
+    "type": "micronaut::ProjectionOnly<T>",
+    "declaration": "src/micronaut/micronaut_registry.h",
+    "field": "MicronautEntry::profile_projection",
+    "read_pattern": "entry.profile_projection.value()",
+    "no_implicit_conversion": true,
+    "may_not_provide": [
+      "relation",
+      "commit",
+      "schema_truth",
+      "semantic_authority"
+    ],
+    "consumers": [
+      "src/micronaut/micronaut_registry.cpp",
+      "src/micronaut/micronaut_transpiler.cpp"
+    ]
+  },
+  "profile_keys": [
+    "brain_profile",
+    "personality",
+    "capability_grams",
+    "progression"
+  ],
+  "schema_guard": {
+    "schema": "data/schema/micronaut-track.schema.json",
+    "types": "data/schema/micronaut-track-types.schema.json",
+    "def": "ProjectionOnlyObject",
+    "rule": "every profile key is typed as ProjectionOnlyObject, so a non-object profile is a schema error, not a silent omission"
+  },
+  "diagnostics": {
+    "surface": "micronaut::TrackLoader",
+    "fields": [
+      "code",
+      "track_id",
+      "detail"
+    ],
+    "codes": [
+      "track_schema_rejected",
+      "track_parse_failed",
+      "track_missing_id",
+      "profile_not_object"
+    ],
+    "rule": "a rejected track or a dropped profile is named; nothing is discarded silently",
+    "accessors": [
+      "diagnostics()",
+      "has_diagnostic(code)",
+      "clear_diagnostics()"
+    ]
+  },
+  "invariants": {
+    "PROFILE1": {
+      "name": "projection_is_a_type",
+      "check": "profile_projection is ProjectionOnly<util::JsonPtr>; there is no implicit conversion to the value"
+    },
+    "PROFILE2": {
+      "name": "schema_types_every_profile_key",
+      "check": "brain_profile, personality, capability_grams, progression all resolve to ProjectionOnlyObject"
+    },
+    "PROFILE3": {
+      "name": "no_silent_profile_loss",
+      "check": "a malformed profile is a typed diagnostic (track_schema_rejected / profile_not_object), never an empty projection"
+    },
+    "PROFILE4": {
+      "name": "shipped_tracks_are_clean",
+      "check": "loading every shipped track produces no profile_not_object and no track_parse_failed diagnostic"
+    }
+  }
+}

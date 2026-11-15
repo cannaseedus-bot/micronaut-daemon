@@ -1,0 +1,116 @@
+{
+  "@no-eval": true,
+  "schema": "semantic-tracks.v1",
+  "id": "TYPED-QUERY-µ",
+
+  "schemes": ["query"],
+  "description": "Deterministic typed-query Micronaut. Dispatches structured retrieval across five query contracts (KeyQuery, TextQuery, RelationQuery, PatternQuery, CapabilityQuery), enforces RetrievalResult immutability, and separates action proposals from retrieval authority. WCR ranks candidates; query match never implies semantic authority.",
+  "phase": "Yax",
+  "category": "retrieval",
+  "intent": "retrieve_typed_result",
+  "confidence": 1.0,
+  "static_weight": 1.0,
+  "health": 1.0,
+  "governs": [
+    "query", "typed query", "semantic query", "key query", "text query",
+    "relation query", "pattern query", "capability query",
+    "semantic key", "semantic field", "search results", "relationship candidates",
+    "pattern matches", "capability descriptors",
+    "retrieval result", "query contract", "query dispatch",
+    "FOUND", "UNRESOLVED", "REJECTED",
+    "query id", "result id", "supersedes", "action proposal",
+    "retrieve", "look up", "find", "search", "query capability"
+  ],
+  "capabilities": [
+    "key-query",
+    "text-query",
+    "relation-query",
+    "pattern-query",
+    "capability-query",
+    "enforce-retrieval-result-immutability",
+    "emit-found-unresolved-rejected-status",
+    "separate-action-proposal-from-retrieval-authority",
+    "rank-candidates-via-wcr",
+    "certify-result-id-uniqueness"
+  ],
+  "route_contract": {
+    "schemes": ["query"],
+    "verbs": ["KeyQuery", "TextQuery", "RelationQuery", "PatternQuery", "CapabilityQuery"],
+    "query_types": [
+      "KeyQuery",
+      "TextQuery",
+      "RelationQuery",
+      "PatternQuery",
+      "CapabilityQuery"
+    ],
+    "tokens": [
+      "query", "retrieve", "search", "find", "relation", "capability",
+      "pattern", "key", "field", "result"
+    ]
+  },
+  "relations": [
+    { "target": "NGRAM-KEY-µ", "verb": "@uses",         "directed": true },
+    { "target": "MEMORY-µ",    "verb": "@reads",        "directed": true },
+    { "target": "INFER-µ",     "verb": "@supports",     "directed": true },
+    { "target": "CONTROL-µ",   "verb": "@delegates_to", "directed": true },
+    { "target": "WILDCARD-µ",  "verb": "@related_to",   "directed": false }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "ingest_query_request",
+      "note": "Parse query type discriminant and validate query_id uniqueness."
+    },
+    {
+      "phase": "Wo",
+      "op": "bind_semantic_key",
+      "note": "Normalize SemanticKey and resolve CapabilityID to qualified name."
+    },
+    {
+      "phase": "Yax",
+      "op": "evaluate_candidates",
+      "note": "Evaluate query contract, rank evidence via WCR, assemble field."
+    },
+    {
+      "phase": "Sek",
+      "op": "propose_retrieval_result",
+      "gate": "query_type_and_evidence",
+      "note": "Select result_type; a successful query match does not imply semantic authority."
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_retrieval_result",
+      "scope": "local",
+      "note": "Certify immutability; revisions must create a new result_id citing supersedes."
+    },
+    {
+      "phase": "Xul",
+      "op": "emit_commit_record",
+      "scope": "local",
+      "note": "Close verified fold; emit commit record. ActionProposal does not inherit RetrievalResult authority."
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "TYPED-QUERY",
+    "manifest_access": ["words", "micronaut", "gram"],
+    "effects": ["gramRead", "gramWrite", "query:retrieve", "query:propose"],
+    "key_prefix_allow": ["query:"],
+    "key_prefix_deny": ["fact:", "xcfe.", "ctrl:"],
+    "ports": [],
+    "coordinator": false
+  },
+  "grammar_files": [
+    "typed-query-mu.kgf",
+    "data/grammar/typed-query.runtime-grammar.ebnf"
+  ],
+  "grammar_contract": {
+    "package_root": "vendor/key-grammar-kit",
+    "kgf_ref": "typed-query-mu.kgf",
+    "ebnf_ref": "data/grammar/typed-query.runtime-grammar.ebnf",
+    "version": "1.0",
+    "scope": "full_program_syntax_and_static_type_rules",
+    "role": "query",
+    "authority": "syntax_and_static_signatures_only",
+    "runtime_implementation": "not_registered"
+  }
+}

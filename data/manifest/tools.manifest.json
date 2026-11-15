@@ -1,0 +1,17 @@
+{
+  "TOOLS-CATALOG:": ["@tools_catalog", "tool:rpc", "tool:file", "tool:graph", "tool:xcfe", "intent:tool_manifest_lookup"],
+  "@tools_catalog": ["TOOLS-CATALOG:", "tool:allowlist", "tool:safety", "tool:dispatch", "tool:status", "tool:xcfe", "phase:Sek", "phase:Ch'en"],
+  "tool:rpc": ["resolve_manifest", "key_query", "fold_graph_parse", "infer", "list_keys", "key_encode", "key_decode", "keyspace_status"],
+  "tool:file": ["sandbox_query", "sandbox_list", "sandbox_violations", "phase:Ch'en"],
+  "tool:graph": ["world_state", "field_dag", "field_dag_svg", "relational_graph"],
+  "tool:xcfe": ["xcfe_eval", "kuhul_forge", "fold_execute", "op:if", "op:then", "op:else", "op:for", "op:from", "op:as", "op:cause", "op:direct", "phase:Pop", "phase:Wo", "phase:Yax", "phase:Sek", "phase:Ch'en", "phase:Xul"],
+  "tool:dispatch": ["micronaut_dispatch", "phase:Wo", "phase:Sek"],
+  "tool:status": ["snapshot:world", "snapshot:sandbox", "snapshot:keys", "phase:Pop"],
+  "tool:allowlist": ["normalize", "validate", "allow", "deny", "phase:Ch'en"],
+  "tool:safety": ["capability-check", "sandbox-gate", "audit-log", "phase:Ch'en", "phase:Xul"],
+  "tool:app": ["app:inspect", "app:build_candidate", "app:validate_candidate", "app:edit_spec_and_rebuild", "route:worker.py", "track:APP-WIZARD-µ", "kgf:key-app-builder", "phase:Pop", "phase:Wo", "phase:Yax", "phase:Sek", "phase:Ch'en", "phase:Xul", "authority:proposal_only"],
+  "tool:math": ["math:normalize_number_words", "mathml:parse_compile_evaluate", "track:MATH-µ", "grammar:data/grammar/mathml.parser.ebnf", "grammar:data/grammar/mathml.compiler.ebnf", "grammar:data/grammar/mathml.generator.ebnf", "implementation:lib/mathml-eval.cjs", "phase:Pop/Wo/Yax/Sek/Ch'en", "research_fallback:only_if_no_local_math_pattern"],
+  "tool:field_query": ["field_query", "xquery_ngram", "pop_query", "wo_query", "yax_query", "@weight", "@cond", "@label", "phase:Pop", "phase:Wo", "phase:Yax", "script:tools/field_query.py", "data:data/mx2lm.vectors.safetensors", "axes:Pop=unigrams/Wo=bigrams/Yax=trigrams"],
+  "tool:factory_research": ["factory_research", "semantic_driver_create", "micronaut_factory", "distill_lfm", "eliza_emit", "aiml_emit", "script:tools/factory_research.py", "output:drivers/micronauts/semantic/", "phase:Sek", "lfm:LFM2.5-1.2B-Instruct-Q8_0.gguf"],
+  "tool:vector_match": ["vector_match", "vector_search", "vector_lookup", "vector_redirect", "vector_srai", "pattern_vector", "template_vector", "category_vector", "cosine_lookup", "semantic_srai", "script:tools/aiml_vector_match.py", "data:io/aiml-embeddinggemma2-vectors", "sources:A_pattern_context/B_template/category_midpoint", "dims:256", "categories:99524", "model:google/embeddinggemma-2", "render:jinja_template", "phase:Wo", "phase:Sek", "authority:data_only"]
+}

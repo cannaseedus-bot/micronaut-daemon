@@ -1,0 +1,296 @@
+(* ================================================================ *)
+(* K'UHUL Program Grammar                                           *)
+(* Runtime grammar for MICRONAUT-PROGRAM-µ                          *)
+(* §61 formal law: MicronautRuntime(B,Q) = Cata_φ(WCR(Match(Ana_ψQ(B)))) *)
+(* version 1.1                                                      *)
+(*                                                                  *)
+(* Changes from v1.0:                                               *)
+(*   - ExecutionSet split: SelectedCandidates (CATA) +              *)
+(*                         AdmittedExecutionSet (ADMIT)             *)
+(*   - CONTINUE requires AdmittedExecutionSet; CATA alone is not    *)
+(*     sufficient — ADMIT is a mandatory preceding step             *)
+(*   - PROMOTE requires "GATE xcfe" as explicit syntax; the Xul     *)
+(*     phase name does not grant promotion authority                *)
+(*   - TYPE / CONTRACT decls: type inventory is now grammar-        *)
+(*     declared and machine-readable, not comment-only              *)
+(*   - MICRONAUT decl: each individual micronaut registers its own  *)
+(*     PROGRAM and GRAMMAR within the shared orchestration layer    *)
+(* ================================================================ *)
+
+
+(* ---- Part I: Program Surface Syntax ---- *)
+
+program                 = { program_decl | micronaut_decl
+                          | type_decl | operation_contract_decl
+                          | route_decl | edge_decl
+                          | domain_decl | comment } ;
+
+(* A PROGRAM block names a composition of phase-bound operations.
+   Declaring a program does not grant execution authority. *)
+program_decl            = "PROGRAM" program_id "{" { program_stmt } "}" ;
+program_id              = identifier ;
+program_stmt            = ana_stmt
+                        | match_stmt
+                        | wcr_stmt
+                        | cata_stmt
+                        | admit_stmt
+                        | continue_stmt
+                        | learn_stmt
+                        | promote_stmt
+                        | route_ref_stmt
+                        | edge_ref_stmt
+                        | let_stmt ;
+
+(* ANA — expand candidate micronauts from Q against knowledge base B *)
+(* Phase: Pop.  Output: CandidateExpansion. Read-only. *)
+ana_stmt                = "ANA" query_ref "FROM" base_ref [ "AS" binding_id ] ;
+query_ref               = identifier | string ;
+base_ref                = identifier | string ;
+
+(* MATCH — bind query to patterns in the candidate expansion *)
+(* Phase: Wo.  Output: MatchSet. *)
+match_stmt              = "MATCH" binding_id "AGAINST" pattern_expr [ "AS" binding_id ] ;
+pattern_expr            = string | identifier | wildcard ;
+wildcard                = "*" | "?" ;
+
+(* WCR — rank matched candidates by W × C × R *)
+(* Phase: Yax.  Output: RankedCandidates. *)
+wcr_stmt                = "WCR" binding_id [ "WEIGHT" number ] [ "CONFIDENCE" number ]
+                          [ "RELIABILITY" number ] [ "AS" binding_id ] ;
+
+(* CATA — select top-k from ranked candidates *)
+(* Phase: Sek.  Output: SelectedCandidates.
+   CATA selects; it does not admit or authorize dispatch.
+   ADMIT must follow before CONTINUE is legal. *)
+cata_stmt               = "CATA" binding_id [ "TOP" number ] [ "AS" binding_id ] ;
+
+(* ADMIT — explicit XCFE admission gate *)
+(* Phase: Sek (after CATA, before CONTINUE).
+   Converts SelectedCandidates to AdmittedExecutionSet.
+   CATA and ADMIT are distinct operations; selection ≠ admission. *)
+admit_stmt              = "ADMIT" binding_id [ "AS" binding_id ] ;
+
+(* CONTINUE — invoke callable edges from an admitted execution set *)
+(* Phase: Xul.  Input: AdmittedExecutionSet (requires prior ADMIT).
+   The Xul phase name is a closure responsibility, not an execution permission.
+   Only callable edges pass; semantic edges are never auto-invoked. *)
+continue_stmt           = "CONTINUE" binding_id [ "VIA" edge_id ] ;
+
+(* LEARN — record evidence to the evidence→patterns→routes chain *)
+(* Phase: Ch'en.  Output: PatternProposal.
+   Commits require the Xul gate; this statement proposes, never commits. *)
+learn_stmt              = "LEARN" "FROM" binding_id "INTO" target_layer ;
+target_layer            = "patterns" | "templates" | "routes" | "domain:" identifier ;
+
+(* PROMOTE — nominate a domain field for micronaut promotion *)
+(* Phase: Xul.  Requires XCFE gate + threshold + completed Ch'en observation.
+   GATE xcfe is mandatory syntax; promotion without an explicit gate is a static error.
+   The Xul phase name does not grant promotion authority — the GATE does. *)
+promote_stmt            = "PROMOTE" "DOMAIN" identifier "TO" micronaut_key
+                          [ "THRESHOLD" number ]
+                          "GATE" "xcfe" ;
+micronaut_key           = "µ://" identifier | "mu://" identifier ;
+
+(* LET — bind a local name to a value or prior result *)
+let_stmt                = "LET" binding_id "=" expr ;
+expr                    = string | number | identifier | micronaut_key
+                        | true_lit | false_lit ;
+binding_id              = identifier ;
+
+(* MICRONAUT declarations register individual micronaut programs within the shared layer.
+   Each micronaut owns its PROGRAM and GRAMMAR; the shared layer provides routing contracts.
+   This is the boundary between MICRONAUT-PROGRAM-µ (orchestration)
+   and each individual micronaut (domain program + grammar).
+   Declaring a micronaut does not make it callable; callable edges require XCFE admission. *)
+micronaut_decl          = "MICRONAUT" micronaut_key "{"
+                          "ROLE" identifier
+                          "PROGRAM" string
+                          [ "GRAMMAR" string ]
+                          "INPUT" type_ref
+                          "OUTPUT" type_ref
+                          { binding_decl }
+                          "}" ;
+binding_decl            = "BIND" identifier "TO" string ;
+type_ref                = type_id ;
+type_id                 = identifier ;
+
+(* TYPE declarations make the type inventory machine-readable.
+   A static checker can enumerate and verify type usage against these declarations.
+   TYPE declarations do not grant authority; they define names only. *)
+type_decl               = "TYPE" type_id ":" string
+                          [ "requires_xcfe" ":" bool_lit ] ;
+bool_lit                = true_lit | false_lit ;
+
+(* CONTRACT declarations make operation signatures machine-readable.
+   A static checker enforces input→output→phase legality by consuming these.
+   Declaring a CONTRACT does not execute it. *)
+operation_contract_decl = "CONTRACT" identifier
+                          "INPUT" type_ref
+                          "OUTPUT" type_ref
+                          "PHASE" phase_name
+                          [ "xcfe" ":" "required" ] ;
+
+(* Route contracts declare named routing surfaces.
+   They do not authorize execution; callable edges require a separate contract. *)
+route_decl              = "ROUTE" route_id "{" route_body "}" ;
+route_id                = identifier ;
+route_body              = { route_clause } ;
+route_clause            = "schemes" ":" string_list
+                        | "patterns" ":" string_list
+                        | "phase" ":" phase_name
+                        | "xcfe" ":" "required" ;
+
+(* EDGE declarations enforce the edge separation law:
+   semantic edges relate; callable edges invoke.
+   A semantic edge never automatically becomes callable. *)
+edge_decl               = semantic_edge_decl | callable_edge_decl ;
+
+semantic_edge_decl      = "SEMANTIC" "EDGE" edge_id
+                          "FROM" identifier "REL" relation_id "TO" identifier
+                          [ "WEIGHT" number ] ;
+
+callable_edge_decl      = "CALLABLE" "EDGE" edge_id
+                          micronaut_key "INVOKES" micronaut_key
+                          "PHASE" phase_name
+                          "ROUTE" route_id ;
+
+edge_id                 = identifier ;
+relation_id             = identifier | string ;
+route_ref_stmt          = "ROUTE" route_id ;
+edge_ref_stmt           = "EDGE" edge_id ;
+
+(* Domain field declarations track the emergence lifecycle *)
+domain_decl             = "DOMAIN" identifier "{" domain_body "}" ;
+domain_body             = { domain_clause } ;
+domain_clause           = "status" ":" domain_status
+                        | "patterns" ":" string_list
+                        | "templates" ":" string_list
+                        | "routes" ":" micronaut_key_list
+                        | "promotion_candidate" ":" micronaut_key ;
+domain_status           = "latent" | "emerging" | "dominant" ;
+micronaut_key_list      = "[" [ micronaut_key { "," micronaut_key } ] "]" ;
+
+(* ---- Shared terminals ---- *)
+phase_name      = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Chen" | "Ch_en" | "Xul" ;
+string_list     = "[" [ string { "," string } ] "]" ;
+identifier      = letter { letter | digit | "_" | "-" | ":" | "µ" } ;
+string          = '"' { character } '"' ;
+number          = [ "-" ] digit { digit } [ "." digit { digit } ] ;
+true_lit        = "true" ;
+false_lit       = "false" ;
+comment         = "#" { character } newline ;
+letter          = ? Unicode letter ? ;
+digit           = "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9" ;
+character       = ? any character except unescaped quote or newline ? ;
+newline         = ? line break ? ;
+
+
+(* ================================================================ *)
+(* Part II: Static Signatures                                       *)
+(* Contracts and invariants for MICRONAUT-PROGRAM-µ                 *)
+(*                                                                  *)
+(* The TYPE and CONTRACT forms above make these checkable by a      *)
+(* separate static analysis pass. Comments here remain the         *)
+(* canonical reference; the grammar-declared forms are the         *)
+(* machine-readable projection of the same contracts.              *)
+(* ================================================================ *)
+
+(*
+  Operation contracts (§61 formal law stages)
+  ┌────────────┬───────────────────────────────────┬──────────────────────┬────────┐
+  │ Operation  │ Input                             │ Output               │ Phase  │
+  ├────────────┼───────────────────────────────────┼──────────────────────┼────────┤
+  │ ANA        │ Query × KnowledgeBase             │ CandidateExpansion   │ Pop    │
+  │ MATCH      │ CandidateExpansion × Pattern      │ MatchSet             │ Wo     │
+  │ WCR        │ MatchSet                          │ RankedCandidates     │ Yax    │
+  │ CATA       │ RankedCandidates                  │ SelectedCandidates   │ Sek    │
+  │ ADMIT      │ SelectedCandidates                │ AdmittedExecutionSet │ Sek    │
+  │ CONTINUE   │ AdmittedExecutionSet×CallableEdge │ CallableResult       │ Xul    │
+  │ LEARN      │ Evidence                          │ PatternProposal      │ Ch'en  │
+  │ PROMOTE    │ DomainField (GATE xcfe required)  │ MicronautCandidate   │ Xul    │
+  └────────────┴───────────────────────────────────┴──────────────────────┴────────┘
+
+  Output type definitions
+  ─────────────────────────────────────────────────────────────────────────────────
+  CandidateExpansion    — read-only expansion of Q against B; no admission required
+  MatchSet              — set of (micronaut, pattern, capture_span) tuples; read-only
+  RankedCandidates      — MatchSet ordered by S_base = W × C × R (never fractional G)
+  SelectedCandidates    — top-k RankedCandidates chosen by CATA; not yet admitted;
+                          XCFE admission is required before CONTINUE
+  AdmittedExecutionSet  — XCFE-admitted SelectedCandidates; required input for CONTINUE;
+                          produced by ADMIT, never directly by CATA
+  CallableResult        — result of a callable edge invocation; XCFE admission required
+  PatternProposal       — Ch'en evidence record; proposal only, Xul commit required
+  MicronautCandidate    — nominated domain field; GATE xcfe + threshold required
+
+  Selection–admission separation invariant
+  ─────────────────────────────────────────────────────────────────────────────────
+  CATA  → SelectedCandidates      (ranked, not admitted)
+  ADMIT → AdmittedExecutionSet    (XCFE gate applied)
+  CONTINUE requires AdmittedExecutionSet; passing SelectedCandidates is a static error
+  Xul phase name is a closure responsibility, NOT an execution permission
+
+  WCR scoring invariants
+  ─────────────────────────────────────────────────────────────────────────────────
+  S_base = W × C × R                      (verified to ±1e-9; never recompute)
+  G ∈ {0, 1}                              (never fractional)
+  S_effective = S_base × G                (stored separately)
+  C is evidence-derived only
+  R is structural coverage or embedding similarity
+
+  Edge separation law
+  ─────────────────────────────────────────────────────────────────────────────────
+  SemanticEdge: relates two nodes; inference only; never auto-callable
+  CallableEdge: invokes a µ:// target; requires explicit route contract + XCFE gate
+  A semantic edge may NOT be promoted to callable by pattern match alone
+  Callable promotion requires: (1) route_contract declared, (2) Ch'en verify,
+                               (3) GATE xcfe in PROMOTE, (4) XCFE admission
+
+  Domain emergence law: evidence → patterns → templates → routes → micronaut
+  ─────────────────────────────────────────────────────────────────────────────────
+  promotion_threshold  default 0.85 (declared in program, not hardcoded)
+  promotion_requires_xul  must be true; PROMOTE without GATE xcfe is a static error
+  Domain status: latent → emerging → dominant; regression from dominant requires Ch'en
+
+  Learning invariants
+  ─────────────────────────────────────────────────────────────────────────────────
+  corpus_prior is immutable; feedback sources are never averaged
+  LEARN emits a PatternProposal; it does not write to corpus_prior
+  observe_phase: Ch'en; commit_phase: Xul
+  delta = eta × gradient  (eta from .kgf declaration, never default)
+  |delta| <= MAX_STEP
+
+  Phase legality
+  ─────────────────────────────────────────────────────────────────────────────────
+  ANA:      Pop    (read-only; no XCFE)
+  MATCH:    Wo     (read-only; no XCFE)
+  WCR:      Yax    (read-only; no XCFE)
+  CATA:     Sek    (outputs SelectedCandidates; ADMIT required before CONTINUE)
+  ADMIT:    Sek    (XCFE gate; outputs AdmittedExecutionSet)
+  CONTINUE: Xul    (callable only; requires AdmittedExecutionSet)
+  LEARN:    Ch'en  (proposal; Xul commit gate required)
+  PROMOTE:  Xul    (GATE xcfe + threshold required; Xul name ≠ permission)
+
+  Static errors
+  ─────────────────────────────────────────────────────────────────────────────────
+  - callable_edge_without_route_contract
+  - semantic_edge_auto_promoted_to_callable
+  - continue_on_selected_candidates_without_admit
+  - continue_on_semantic_edge
+  - promote_missing_gate_xcfe
+  - learn_commit_without_ch_en_observe
+  - wcr_G_fractional
+  - admit_applied_to_non_cata_output
+  - micronaut_decl_callable_without_xcfe
+
+  Authority
+  ─────────────────────────────────────────────────────────────────────────────────
+  grammar_grants_execution: false
+  match_grants_execution: false
+  route_requires_xcfe_admission: true
+  persistence_requires_verified_authorized_fold: true
+  semantic_authority: false
+  topology_authority: false
+  verification_authority: false
+  commit_authority: false
+*)

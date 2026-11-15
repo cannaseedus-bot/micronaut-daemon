@@ -1,0 +1,34 @@
+{
+  "@kind": "khanary.cfpc.pattern.v1",
+  "id": "what-is",
+  "intent": "Resolve what a subject IS by drawing on its semantic neighborhood graph.",
+  "phase": "Wo",
+  "@captures": {
+    "subject": {
+      "wildcard": "*",
+      "strip_prefix": "what is "
+    }
+  },
+  "neighborhood_resolve": {
+    "from_captures": [
+      "subject"
+    ],
+    "max_hops": 1
+  },
+  "question_templates": [
+    "What is {subject}?",
+    "How does {subject} relate to {neighbor}?",
+    "What concepts govern {subject}?"
+  ],
+  "context_template": "Subject: {subject}\nSemantic field: {field_keys}\nRelated domains: {neighbors}\nEpistemic state: UNKNOWN -- model verification required.",
+  "match": {
+    "rules": [
+      {
+        "prefix": "what does"
+      },
+      {
+        "prefix": "what is"
+      }
+    ]
+  }
+}

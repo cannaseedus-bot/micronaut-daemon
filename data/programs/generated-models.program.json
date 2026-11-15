@@ -1,0 +1,72 @@
+{
+  "@program": "generated-models",
+  "@kind": "kuhul.generated-model.program.v1",
+  "@description": "Manifest-selected execution for generated experts and MoE wave model variants.",
+  "@backend_policy": {
+    "compute": ["opencl_1_2", "d3d11_cs5", "directxmath_cpu"],
+    "visualization": "webgl2",
+    "webgpu": false,
+    "fallback": "directxmath_cpu",
+    "selection": "manifest_variant"
+  },
+  "@sources": {
+    "experts": {
+      "root": "dist/json-runtime/src/experts",
+      "kind": "header_library",
+      "role": "semantic expert implementations"
+    },
+    "generated": {
+      "root": "dist/json-runtime/src/generated",
+      "model": "FusedAttention",
+      "ir": "FusedAttention.ir.json",
+      "cpu": "FusedAttention.cpu.cpp",
+      "hlsl": "FusedAttention.hlsl",
+      "role": "single fused attention variant"
+    },
+    "generated_moe": {
+      "root": "dist/json-runtime/src/generated-moe",
+      "model": "MoEPhaseLLM",
+      "ir": "MoEPhaseLLM.ir.json",
+      "cpu": "MoEPhaseLLM.cpu.cpp",
+      "hlsl": "MoEPhaseLLM.hlsl",
+      "role": "standard MoE phase variant"
+    },
+    "generated_moe_wave": {
+      "root": "dist/json-runtime/src/generated-moe-wave",
+      "model": "MoEPhaseLLM",
+      "ir": "MoEPhaseLLM.ir.json",
+      "cpu": "MoEPhaseLLM.cpu.cpp",
+      "hlsl": "MoEPhaseLLM.hlsl",
+      "role": "wave-aware MoE phase variant"
+    }
+  },
+  "@variants": {
+    "fused_attention": {
+      "source": "generated",
+      "entry": "FusedAttention",
+      "phases": ["Pop", "Wo", "Sek", "Chen", "Xul"]
+    },
+    "moe": {
+      "source": "generated_moe",
+      "entry": "MoEPhaseLLM",
+      "phases": ["Pop", "Wo", "Yax", "Sek", "Chen", "Xul"]
+    },
+    "moe_wave": {
+      "source": "generated_moe_wave",
+      "entry": "MoEPhaseLLM",
+      "phases": ["Pop", "Wo", "Yax", "Sek", "Chen", "Xul"],
+      "semantic_mode": "wave"
+    }
+  },
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "generated-models" },
+    { "@op": "CALL", "@fn": "validate_generated_artifacts", "@args": ["$variant"], "@out": "validated" },
+    { "@op": "CALL", "@fn": "select_backend", "@args": ["$backend_policy", "$hardware"], "@out": "backend" },
+    { "@op": "FOLD_EXIT", "@fold": "Wo", "@node": "generated-models", "@args": ["$validated", "$backend"] },
+    { "@op": "GPU_DISPATCH", "@args": ["$variant", "$backend", "$inputs"], "@out": "result" },
+    { "@op": "CALL", "@fn": "verify_generated_result", "@args": ["$result"], "@out": "verified" },
+    { "@op": "FOLD_EXIT", "@fold": "Chen", "@node": "generated-models", "@args": ["$verified"] },
+    { "@op": "CALL", "@fn": "commit_generated_checkpoint", "@args": ["$result"], "@out": "checkpoint" },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "generated-models", "@args": ["$checkpoint"] }
+  ]
+}

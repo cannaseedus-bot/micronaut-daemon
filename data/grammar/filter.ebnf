@@ -1,0 +1,134 @@
+(* ========================================================================== *)
+(* K'UHUL FILTER OPERATOR GRAMMAR (EBNF) — v2.0                              *)
+(* Operator algebra: filter : FoldSet → FoldSet                              *)
+(* Contract: data/grammar/operator-algebra.contracts.json                    *)
+(* ========================================================================== *)
+
+(* ── Filter contract ────────────────────────────────────────────────────── *)
+
+FilterContract      ::= "{" FilterMembers "}"
+
+FilterMembers       ::= FilterId "," FilterSource "," FilterPredicate
+                      "," FilterOutput
+                      ("," FilterMetadata)?
+
+(* ── Identity ───────────────────────────────────────────────────────────── *)
+
+FilterId            ::= "id" ":" String
+
+(* ── Source ─────────────────────────────────────────────────────────────── *)
+
+FilterSource        ::= "source" ":" "{" FilterSourceBody "}"
+
+FilterSourceBody    ::= "fold_ids" ":" StringArray
+                      | "fold_set" ":" String
+                      | "phase" ":" PhaseName
+                      | "stream" ":" String
+                      | "all_folds" ":" Boolean
+
+StringArray         ::= "[" (String ("," String)*)? "]"
+
+(* ── Predicate ───────────────────────────────────────────────────────────── *)
+
+FilterPredicate     ::= "predicate" ":" "{" PredicateBody "}"
+
+PredicateBody       ::= "type" ":" PredicateType ","
+                        "expression" ":" Expression
+                        ("," "params" ":" ParamSet)?
+
+PredicateType       ::= "semantic" | "geometric" | "algebraic"
+                      | "tensor" | "phase" | "threshold"
+
+(* ── Expression grammar (fully specified) ───────────────────────────────── *)
+
+Expression          ::= LogicalExpr
+
+LogicalExpr         ::= AndExpr ("OR" AndExpr)*
+
+AndExpr             ::= NotExpr ("AND" NotExpr)*
+
+NotExpr             ::= "NOT" NotExpr
+                      | Comparison
+                      | "(" LogicalExpr ")"
+                      | FunctionCall
+                      | Literal
+                      | Path
+
+Comparison          ::= Operand CompareOp Operand
+
+Operand             ::= Path | Literal | FunctionCall
+
+Path                ::= Identifier ("." Identifier)*
+
+CompareOp           ::= ">" | "<" | ">=" | "<=" | "==" | "!="
+
+FunctionCall        ::= Identifier "(" (Expression ("," Expression)*)? ")"
+
+Literal              ::= Number | String | Boolean | Null
+                      | ArrayLiteral | ObjectLiteral
+
+ArrayLiteral        ::= "[" (Expression ("," Expression)*)? "]"
+
+ObjectLiteral       ::= "{" (ObjectField ("," ObjectField)*)? "}"
+
+ObjectField         ::= String ":" Expression
+
+Number              ::= ["-"] Digit+ ["." Digit+]
+
+String              ::= '"' Character* '"' | "'" Character* "'"
+
+Boolean             ::= "true" | "false"
+
+Null                ::= "null"
+
+(* ── Output ─────────────────────────────────────────────────────────────── *)
+
+FilterOutput        ::= "output" ":" "{" OutputBody "}"
+
+OutputBody          ::= "mode" ":" OutputMode
+                        ("," "target_fold" ":" String)?
+                        ("," "count_field" ":" String)?
+
+OutputMode          ::= "keep" | "drop" | "new_fold" | "in_place"
+
+(* ── Metadata ───────────────────────────────────────────────────────────── *)
+
+FilterMetadata      ::= "metadata" ":" "{" (MetadataField ("," MetadataField)*)? "}"
+
+MetadataField       ::= String ":" Value
+
+(* ── Phase names (canonical C6 identity) ────────────────────────────────── *)
+
+PhaseName           ::= "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul"
+
+(* ── Constraints ────────────────────────────────────────────────────────── *)
+
+(*
+   CONSTRAINT 1: Source must be specified
+     source.fold_ids OR source.fold_set OR source.phase
+     OR source.stream OR source.all_folds
+
+   CONSTRAINT 2: Predicate type must be one of the 6 canonical types
+     predicate.type ∈ {semantic, geometric, algebraic, tensor, phase, threshold}
+
+   CONSTRAINT 3: Expression must be parseable and reduce to Boolean
+     Every expression must reduce to Boolean
+
+   CONSTRAINT 4: Output mode is required
+     output.mode ∈ {keep, drop, new_fold, in_place}
+
+   CONSTRAINT 5: Filter preserves structural identity of passing folds
+     If output.mode = "keep" or "in_place":
+       passing folds keep structural fields unchanged
+
+   CONSTRAINT 6: Threshold predicates use UnitFloat comparison
+     If predicate.type = "threshold":
+       Comparison must be against Number in [0,1]
+
+   CONSTRAINT 7: Function calls are limited to a known set
+     See the operator signature registry (algebra-isa.contracts.json)
+
+   CONSTRAINT 8: A filter selects; it does not admit
+     filter : FoldSet → FoldSet is a proposal. Selecting a fold is a candidate
+     route, never an authorization to execute or commit it.
+*)

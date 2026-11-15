@@ -1,0 +1,78 @@
+{
+  "schema": "mx2lm.tool-verb-ngrams.v1",
+  "description": "AIML n-gram lexicon mapping tool-calling verbs to specific KHANARY RPC/MCP methods.",
+  "tool_verb_ngrams": [
+    {
+      "verb": "tool_keys",
+      "aiml_key": "tool.keys",
+      "ngrams": ["tool keys", "tool key map", "list tool keys"],
+      "surface": "rpc",
+      "method": "key_query",
+      "params": { "query": "TOOL KEYS" }
+    },
+    {
+      "verb": "status",
+      "aiml_key": "rpc_key_query",
+      "ngrams": ["status", "runtime status", "system status", "health status"],
+      "surface": "rpc",
+      "method": "key_query",
+      "params": { "query": "STATUS:" }
+    },
+    {
+      "verb": "tools",
+      "aiml_key": "rpc_key_query",
+      "ngrams": ["tools", "tool list", "available tools"],
+      "surface": "rpc",
+      "method": "key_query",
+      "params": { "query": "TOOLS:" }
+    },
+    {
+      "verb": "dispatch",
+      "aiml_key": "rpc_micronaut_dispatch",
+      "ngrams": ["dispatch", "route query", "micronaut dispatch"],
+      "surface": "rpc",
+      "method": "micronaut_dispatch",
+      "params": { "query": "__USER_QUERY__" }
+    },
+    {
+      "verb": "confidence",
+      "aiml_key": "mcp_confidence_get",
+      "ngrams": ["confidence", "confidence score", "confidence global"],
+      "surface": "mcp",
+      "method": "confidence_get",
+      "params": { "id": "global" }
+    },
+    {
+      "verb": "sandbox",
+      "aiml_key": "mcp_sandbox_list",
+      "ngrams": ["sandbox", "sandbox list", "sandbox violations"],
+      "surface": "mcp",
+      "method": "sandbox_list",
+      "params": {}
+    },
+    {
+      "verb": "world",
+      "aiml_key": "mcp_world_state",
+      "ngrams": ["world", "world state", "cube world"],
+      "surface": "mcp",
+      "method": "world_state",
+      "params": {}
+    },
+    {
+      "verb": "semantic_fold",
+      "aiml_key": "mcp_semantic_fold",
+      "ngrams": ["semantic fold", "semfold", "fold similarity"],
+      "surface": "mcp",
+      "method": "semantic_fold",
+      "params": { "include_phase_folds": true }
+    },
+    {
+      "verb": "replay",
+      "aiml_key": "mcp_jrom_replay",
+      "ngrams": ["replay", "jrom replay", "trace replay"],
+      "surface": "mcp",
+      "method": "jrom_replay",
+      "params": { "from_seq": 0 }
+    }
+  ]
+}

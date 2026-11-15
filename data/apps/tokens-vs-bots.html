@@ -1,0 +1,17 @@
+<div id="tokens-vs-bots-widget" data-asx-key="⟁APP:TOKENS_VS_BOTS/⟁ROOT:TOKENS_VS_BOTS">
+  <header data-asx-key="⟁APP:TOKENS_VS_BOTS/⟁WIDGET:TV_HERO"><h1>Tokens vs Bots — Cost Breakdown</h1><p>Compare real-world token usage with a one-time bot build.</p></header>
+  <section data-asx-key="⟁APP:TOKENS_VS_BOTS/⟁WIDGET:TV_INPUTS" data-source="usage_profile">
+    <select data-asx-key="⟁APP:TOKENS_VS_BOTS/⟁SELECT:TV_MODEL" data-source="models" data-bind="state.model_id" data-event="model.change"></select>
+    <input data-asx-key="⟁APP:TOKENS_VS_BOTS/⟁INPUT:TV_DAU" type="range" min="1" max="5000" step="5" data-bind="state.daily_active_users" data-event="usage.input" />
+    <input data-asx-key="⟁APP:TOKENS_VS_BOTS/⟁INPUT:TV_MSGS" type="range" min="1" max="100" data-bind="state.messages_per_user" data-event="usage.input" />
+    <input data-asx-key="⟁APP:TOKENS_VS_BOTS/⟁INPUT:TV_IN" type="range" min="100" max="8000" step="100" data-bind="state.avg_input_tokens" data-event="usage.input" />
+    <input data-asx-key="⟁APP:TOKENS_VS_BOTS/⟁INPUT:TV_OUT" type="range" min="50" max="3000" step="50" data-bind="state.avg_output_tokens" data-event="usage.input" />
+  </section>
+  <section data-asx-key="⟁APP:TOKENS_VS_BOTS/⟁WIDGET:TV_TOKENS" data-source="token_costs"></section>
+  <section data-asx-key="⟁APP:TOKENS_VS_BOTS/⟁WIDGET:TV_BOTS" data-source="bot_packages" data-bind="state.bot_package_id"></section>
+  <section data-asx-key="⟁APP:TOKENS_VS_BOTS/⟁WIDGET:TV_BREAKEVEN" data-source="derived_costs"></section>
+  <section data-asx-key="⟁APP:TOKENS_VS_BOTS/⟁WIDGET:TV_CHART" data-source="monthly_projection"></section>
+  <section data-asx-key="⟁APP:TOKENS_VS_BOTS/⟁WIDGET:TV_TRADEOFFS" data-source="tradeoffs"></section>
+  <section data-asx-key="⟁APP:TOKENS_VS_BOTS/⟁WIDGET:TV_RECOMMEND" data-source="derived_costs"></section>
+</div>
+<script type="application/json" id="asx-json-runtime">{"@kind":"asx.key-runtime.binding.v1","@app":"⟁APP:TOKENS_VS_BOTS","@manifest":"data/host/apps/tokens-vs-bots.asx-app.json","@executor":"mx.run","@authority":"projection_only","@state":"request_scoped","@semantic_commit":false}</script>

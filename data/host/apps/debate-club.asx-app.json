@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "debate-club",
+  "@key": "⟁APP:DEBATE_CLUB",
+  "@mount": "⟁ROOT:DEBATE_CLUB",
+  "@theme": { "accent": "#fb7185", "bg": "#0a0002", "surface": "#180004", "text": "#ffe4e6", "hero_phase": "Ch'en", "tagline": "Argue well. Listen better." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "debates", "component": "⟁WIDGET:DEBATES", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "debates": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:DEBATE_CLUB": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:NEW_DEBATE", "⟁ACTION:LEADERBOARD"] },
+    "⟁ACTION:NEW_DEBATE": { "@type": "button", "@text": "New Motion", "@on": { "click": "db.open_compose" } },
+    "⟁ACTION:LEADERBOARD": { "@type": "button", "@text": "Rankings", "@on": { "click": "db.open_rankings" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:DEBATES", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:DEBATES": { "@type": "feed", "@bind": "state.debates", "@children": ["⟁WIDGET:DEBATE_CARD"] },
+    "⟁WIDGET:DEBATE_CARD": { "@type": "content-card", "@bind": "debate", "@on": { "view": "db.view", "argue": "db.argue" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:STATS", "⟁WIDGET:TOPICS"] },
+    "⟁WIDGET:STATS": { "@type": "stat", "@bind": "data.stats" },
+    "⟁WIDGET:TOPICS": { "@type": "tag-cloud", "@bind": "data.topics" }
+  },
+  "@programs": {
+    "db.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "db.open_rankings": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "db.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "db.argue": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "debate.new": "db.open_compose", "rankings.open": "db.open_rankings", "debate.view": "db.view", "debate.argue": "db.argue" },
+  "@imports": [{ "ref": "debate", "mode": "schema_table" }, { "ref": "argument", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "timer-mode", "name": "Speech Timer", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Enforce per-speaker time limits in live debate rounds." },
+      { "id": "judge-scoring", "name": "Judge Scoring", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Multi-judge scoring rubric with content, style, and strategy." },
+      { "id": "research-bot", "name": "Research Assistant", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Summarise evidence and counterarguments for any motion." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "db.new", "pattern": "NEW DEBATE|ADD MOTION|DEBATE TOPIC *", "intent": "open_compose" },
+      { "id": "db.argue", "pattern": "ARGUE FOR *|FOR THE MOTION|AGAINST THE MOTION", "intent": "argue" }
+    ]
+  },
+  "@data": {
+    "stats": { "debates": 18, "arguments": 142, "win_rate_pct": 64 },
+    "topics": ["Technology", "Ethics", "Policy", "Science", "Philosophy", "K'UHUL"],
+    "spotlight": [
+      { "id": "sp1", "title": "K'UHUL Should Be Open-Source", "badge": "Active", "for_args": 8, "against_args": 6, "excerpt": "Ongoing debate. Proposing team leads by 2 arguments." },
+      { "id": "sp2", "title": "AI Cannot Achieve Semantic Fold", "badge": "Completed", "result": "Against wins", "excerpt": "12-argument debate. Against the motion won by judge consensus." },
+      { "id": "sp3", "title": "Fold Theory Is Just Category Theory", "badge": "Philosophy", "for_args": 4, "against_args": 4, "excerpt": "Tied after 8 arguments. Extended to overtime round." }
+    ],
+    "schema": {
+      "debate": { "primaryKey": "debate_id", "fields": { "debate_id": { "type": "string" }, "motion": { "type": "string", "required": true }, "topic": { "type": "string" }, "status": { "type": "string" }, "result": { "type": "string" }, "created_at": { "type": "datetime" } } },
+      "argument": { "primaryKey": "arg_id", "fields": { "arg_id": { "type": "string" }, "debate_id": { "type": "string", "required": true }, "side": { "type": "string", "required": true }, "content": { "type": "text", "required": true }, "score": { "type": "float" }, "submitted_at": { "type": "datetime" } } }
+    }
+  }
+}

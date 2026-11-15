@@ -1,0 +1,106 @@
+(* ============================================================ *)
+(* Fold Function Grammar — K'UHUL Mathematical Expressions       *)
+(* Syntax for parsing functional structures inside Fold Space.  *)
+(* ============================================================ *)
+
+(* A Fold Function is a text surface for graph-shaped math. It is
+   projection/compilation syntax only: semantic authority remains with
+   K'UHUL fold space, FoldGraph B, XCFE, Ch'en verification, and Xul/XulGate
+   commit. Compiler/GPU execution phases such as K'ayab'...Kumk'u are not
+   semantic folds and are not part of this grammar. *)
+
+FoldExpression  ::= IdentityTerm
+                  | CompositeTerm
+                  | WildcardTerm ;
+
+IdentityTerm    ::= OperationNode ;
+
+CompositeTerm   ::= OperationNode CompositionOperator FoldExpression ;
+
+CompositionOperator ::= "○" | "→" ;
+
+WildcardTerm    ::= "?" [ WildcardAnnotation ] ;
+
+WildcardAnnotation ::= "[" Identifier [ ":" ConstraintExpression ] "]" ;
+
+(* ============================================================ *)
+(* 1. OPERATIONAL TRANSFORMATION NODES                          *)
+(* ============================================================ *)
+
+(* HOF note (§63 vocabulary): Map = A*→B* — transform structure, preserve
+   shape. Filter = A*→A* — select structure, reduce cardinality. Fold = the
+   composition operator itself (FF6). Phase × HOF are orthogonal axes
+   (§63): the qualifiers below stay free — Filter is Yax-CLASS admission
+   and Map is Sek-CLASS transformation in spirit, but no phase is implied
+   and no phase equals the operation. *)
+
+OperationNode   ::= [ PhaseQualifier ] ( OperatorName | FilterOp | MapOp ) [ PropertiesBlock ] ;
+
+FilterOp        ::= "filter" "[" ConstraintExpression "]" ;
+
+MapOp           ::= "map" "[" FoldExpression "]" ;
+
+PhaseQualifier  ::= "Pop" "::"
+                  | "Wo" "::"
+                  | "Yax" "::"
+                  | "Sek" "::"
+                  | "Ch'en" "::"
+                  | "Xul" "::" ;
+
+OperatorName    ::= "sigmoid"
+                  | "softmax"
+                  | "relu"
+                  | "abs"
+                  | "sqrt"
+                  | "identity"
+                  | Identifier ;
+
+(* ============================================================ *)
+(* 2. PROPERTIES, INVARIANTS, AND SHAPES                        *)
+(* ============================================================ *)
+
+PropertiesBlock ::= "{" PropertyMember ( "," PropertyMember )* "}" ;
+
+PropertyMember  ::= InvariantDecl
+                  | ConstraintDecl
+                  | ShapeTransformDecl ;
+
+InvariantDecl   ::= '"invariant"' ":" String ;
+ConstraintDecl  ::= '"constraint"' ":" ConstraintExpression ;
+
+ShapeTransformDecl ::= '"shape_transform"' ":" DimMapping ;
+
+DimMapping      ::= "shapes" "->" "shapes" [ DimExpression ] ;
+DimExpression   ::= PredicateText ;
+
+ConstraintExpression ::= PredicateText ;
+
+PredicateText   ::= ? implementation-defined boolean predicate over NDArray/tensor traits ? ;
+
+(* ============================================================ *)
+(* 3. SEMANTIC AND AUTHORITY LAWS                               *)
+(* ============================================================ *)
+
+FF1 ::= "math_is_graph" ;
+FF2 ::= "FoldFunction is projection syntax, not semantic authority" ;
+FF3 ::= "PhaseQualifier is C6 semantic phase only" ;
+FF4 ::= "K'ayab'/Kumk'u compiler or GPU phases are excluded" ;
+FF4a ::= "K'ayab' and Kumk'u are not semantic folds" ;
+FF5 ::= "WildcardTerm is an unresolved graph intersection until bound" ;
+FF6 ::= "CompositionOperator creates directed graph edges" ;
+FF7 ::= "Unknown OperatorName lowers to identity unless a binding exists" ;
+FF8 ::= "PropertiesBlock carries invariants and constraints as metadata" ;
+FF9 ::= "Filter preserves element order and drops non-matching elements (A*→A*)" ;
+FF10 ::= "Map transforms every element with the embedded expression and preserves shape (A*→B*)" ;
+FF11 ::= "Malformed filter/map payload is a parse error, never identity (FF7 covers unknown operators, not broken syntax)" ;
+
+(* ============================================================ *)
+(* 4. PRIMITIVES AND TOKENS                                     *)
+(* ============================================================ *)
+
+String          ::= '"' StringChar* '"' ;
+StringChar      ::= ? any Unicode scalar except unescaped quote or backslash ? ;
+Identifier      ::= Letter ( Letter | Digit | "_" )* ;
+Letter          ::= "A".."Z" | "a".."z" ;
+Digit           ::= "0".."9" ;
+

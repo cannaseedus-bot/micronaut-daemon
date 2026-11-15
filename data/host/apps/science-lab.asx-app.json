@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "science-lab",
+  "@key": "⟁APP:SCIENCE_LAB",
+  "@mount": "⟁ROOT:SCIENCE_LAB",
+  "@theme": { "accent": "#34d399", "bg": "#001008", "surface": "#001e10", "text": "#d1fae5", "hero_phase": "Yax", "tagline": "Observe. Hypothesize. Experiment." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "experiments", "component": "⟁WIDGET:EXPERIMENTS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "experiments": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:SCIENCE_LAB": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:NEW_EXPERIMENT", "⟁ACTION:DATA_VIEW"] },
+    "⟁ACTION:NEW_EXPERIMENT": { "@type": "button", "@text": "New Experiment", "@on": { "click": "sl.open_compose" } },
+    "⟁ACTION:DATA_VIEW": { "@type": "button", "@text": "Data", "@on": { "click": "sl.open_data" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:EXPERIMENTS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:EXPERIMENTS": { "@type": "feed", "@bind": "state.experiments", "@children": ["⟁WIDGET:EXP_CARD"] },
+    "⟁WIDGET:EXP_CARD": { "@type": "content-card", "@bind": "experiment", "@on": { "view": "sl.view", "log_data": "sl.log_data" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:STATS", "⟁WIDGET:TAGS"] },
+    "⟁WIDGET:STATS": { "@type": "stat", "@bind": "data.stats" },
+    "⟁WIDGET:TAGS": { "@type": "tag-cloud", "@bind": "data.tags" }
+  },
+  "@programs": {
+    "sl.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "sl.open_data": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "sl.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "sl.log_data": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "exp.new": "sl.open_compose", "data.view": "sl.open_data", "exp.view": "sl.view", "data.log": "sl.log_data" },
+  "@imports": [{ "ref": "experiment", "mode": "schema_table" }, { "ref": "observation", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "data-chart", "name": "Data Visualizer", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Plot experiment data as scatter, line, or bar charts." },
+      { "id": "lab-report", "name": "Lab Report Generator", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Auto-generate a structured lab report from your data." },
+      { "id": "peer-review", "name": "Peer Review", "category": "community", "price": "optional", "status": "available_unconfigured", "description": "Submit experiments for peer feedback from classmates." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "sl.new", "pattern": "NEW EXPERIMENT|START EXPERIMENT|HYPOTHESIS *", "intent": "open_compose" },
+      { "id": "sl.log", "pattern": "LOG DATA|RECORD OBSERVATION|ADD RESULT", "intent": "log_data" }
+    ]
+  },
+  "@data": {
+    "stats": { "experiments": 11, "observations": 204, "active": 3 },
+    "tags": ["Physics", "Chemistry", "Biology", "Fold Theory", "Statistics"],
+    "spotlight": [
+      { "id": "sp1", "title": "Fold Convergence Rate", "subject": "Fold Theory", "badge": "In Progress", "observations": 48, "excerpt": "Measuring how many XOR steps it takes to reach a fixed point in Q3." },
+      { "id": "sp2", "title": "Plant Growth vs Light Spectrum", "subject": "Biology", "badge": "Complete", "observations": 90, "excerpt": "Full-spectrum vs red/blue LED. Red/blue wins by 22% at week 6." },
+      { "id": "sp3", "title": "Reaction Timer Study", "subject": "Statistics", "badge": "Published", "observations": 66, "excerpt": "66 trials. Afternoon reaction times 8% faster than morning." }
+    ],
+    "schema": {
+      "experiment": { "primaryKey": "exp_id", "fields": { "exp_id": { "type": "string" }, "title": { "type": "string", "required": true }, "hypothesis": { "type": "text" }, "method": { "type": "text" }, "subject": { "type": "string" }, "status": { "type": "string" }, "created_at": { "type": "datetime" } } },
+      "observation": { "primaryKey": "obs_id", "fields": { "obs_id": { "type": "string" }, "exp_id": { "type": "string", "required": true }, "value": { "type": "float" }, "unit": { "type": "string" }, "label": { "type": "string" }, "note": { "type": "text" }, "recorded_at": { "type": "datetime", "required": true } } }
+    }
+  }
+}

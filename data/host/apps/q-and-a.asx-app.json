@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "q-and-a",
+  "@key": "⟁APP:Q_AND_A",
+  "@mount": "⟁ROOT:Q_AND_A",
+  "@theme": { "accent": "#a3e635", "bg": "#060f00", "surface": "#0e1f02", "text": "#ecfccb", "hero_phase": "Ch'en", "tagline": "The best answer wins" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "questions", "component": "⟁WIDGET:QUESTIONS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "questions": [], "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:Q_AND_A": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:ASK"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:ASK": { "@type": "button", "@text": "Ask a Question", "@on": { "click": "qa.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:QUESTIONS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:QUESTIONS": { "@type": "feed", "@bind": "state.questions", "@children": ["⟁WIDGET:QUESTION_CARD"] },
+    "⟁WIDGET:QUESTION_CARD": { "@type": "content-card", "@bind": "question", "@on": { "open": "qa.open_question", "vote": "qa.vote" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:TOP_TAGS", "⟁WIDGET:STATS"] },
+    "⟁WIDGET:TOP_TAGS": { "@type": "tag-cloud", "@bind": "data.tags" },
+    "⟁WIDGET:STATS": { "@type": "stat", "@bind": "data.stats" }
+  },
+  "@programs": {
+    "qa.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "qa.open_question": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "qa.vote": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "ADD", "@in": ["event_votes", "event_delta"], "@out": "event_votes" }] },
+    "qa.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "question.open": "qa.open_question", "question.vote": "qa.vote", "compose.open": "qa.open_compose", "search.input": "qa.search" },
+  "@imports": [{ "ref": "question", "mode": "schema_table" }, { "ref": "answer", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "accepted-answers", "name": "Accepted Answers", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Mark one answer as accepted per question." },
+      { "id": "bounty-system", "name": "Bounty System", "category": "community", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Award points to incentivise high-quality answers." },
+      { "id": "duplicate-bot", "name": "Duplicate Detector", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Auto-flag likely duplicate questions before posting." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "qa.ask", "pattern": "ASK *|NEW QUESTION|POST QUESTION", "intent": "open_compose" },
+      { "id": "qa.search", "pattern": "SEARCH *|FIND ANSWER *", "intent": "filter_questions" }
+    ]
+  },
+  "@data": {
+    "tags": ["javascript", "python", "devops", "design", "security"],
+    "stats": { "questions": 482, "answers": 1203, "accepted": 341 },
+    "spotlight": [
+      { "id": "sp1", "title": "How do I prevent SQL injection in Node.js?", "slug": "sql-injection-nodejs", "badge": "Accepted", "excerpt": "The question that keeps coming back — here's the canonical answer." },
+      { "id": "sp2", "title": "What's the best way to handle async errors in Python?", "slug": "async-errors-python", "badge": "Popular", "excerpt": "Three patterns, one right answer for each context." },
+      { "id": "sp3", "title": "How do I set up CI/CD for a monorepo?", "slug": "monorepo-cicd", "badge": "Open Bounty", "excerpt": "14 answers, no accepted solution yet. Bounty open." }
+    ],
+    "schema": {
+      "question": { "primaryKey": "question_id", "fields": { "question_id": { "type": "string" }, "title": { "type": "string", "required": true }, "body": { "type": "textarea", "required": true }, "user_id": { "type": "string" }, "tags": { "type": "json" }, "votes": { "type": "integer" }, "answer_count": { "type": "integer" }, "accepted_answer_id": { "type": "string" }, "created_at": { "type": "datetime" } } },
+      "answer": { "primaryKey": "answer_id", "fields": { "answer_id": { "type": "string" }, "question_id": { "type": "string", "required": true }, "user_id": { "type": "string" }, "body": { "type": "textarea", "required": true }, "votes": { "type": "integer" }, "accepted": { "type": "bool" }, "created_at": { "type": "datetime" } } }
+    }
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "cfpc-tensor-contract.schema.json",
+  "title": "CfpcTensorContract",
+  "description": "K'UHUL tensor execution contract. @kind must be khanary.tensor.contract.v1. Declares the tensor representation, operator, accumulator, and phase-gated execution lifecycle. The five routing heads (v_pi, domain_relation, pi_radius, intent, cfpc_phase) populate @routing at inference time; the contract is the authority layer that validates whether execution is authorized. Pattern Induction Guard: promote_generated_facts MUST be false — any other value is a schema violation.",
+  "type": "object",
+  "required": ["@kind", "id", "@tensor", "@operator", "@lifecycle", "@policy", "@result"],
+  "additionalProperties": false,
+  "properties": {
+    "@kind": {
+      "type": "string",
+      "const": "khanary.tensor.contract.v1"
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique contract identifier used for cycle detection and result attribution.",
+      "pattern": "^[A-Za-z0-9_./-]+"
+    },
+    "intent": {
+      "type": "string",
+      "enum": ["define", "explain", "verify", "resolve", "generate"],
+      "description": "Optional semantic intent of this contract (metadata for routing)."
+    },
+    "phase_entry": {
+      "type": "string",
+      "enum": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"],
+      "description": "Phase at which the contract opens. Usually Pop (receive) or Wo (bind). Must precede authorization_phase."
+    },
+    "@tensor": {
+      "type": "object",
+      "required": ["dtype", "rank", "shape"],
+      "additionalProperties": false,
+      "description": "Input tensor representation constraints. These are requirements, not values.",
+      "properties": {
+        "dtype": {
+          "type": "string",
+          "enum": ["float32", "float16", "int32", "int8", "bool"],
+          "description": "Required element type."
+        },
+        "rank": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Required number of dimensions."
+        },
+        "shape": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              { "type": "integer", "minimum": 1 },
+              { "type": "string", "description": "Symbolic dimension, e.g. 'N' or 'batch'" }
+            ]
+          },
+          "description": "Required shape. Integer means fixed; string means symbolic/variable."
+        }
+      }
+    },
+    "@operator": {
+      "type": "object",
+      "required": ["name", "output_shape"],
+      "additionalProperties": false,
+      "description": "Operator contract. Declares what transformation runs and what output it must produce.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": ["MAP", "FILTER", "FOLD", "REDUCE", "STACK"],
+          "description": "MAP: Tensor→Tensor element-wise. FILTER: Tensor→Tensor/Selection. FOLD: Accumulator×Value→Accumulator (stateful sequence). REDUCE: Tensor→Result along axes (may use a fold internally). STACK: N×rank-k→rank-(k+1) (rank-increasing; assembles slices along a new leading axis). FOLD and REDUCE are distinct: FOLD carries accumulator state through a sequence; REDUCE combines values into a result."
+        },
+        "axis": {
+          "oneOf": [
+            { "type": "integer" },
+            { "type": "array", "items": { "type": "integer" } },
+            { "type": "null" }
+          ],
+          "description": "Axis or axes for REDUCE. Null means reduce all axes. Not required for MAP, FILTER, FOLD."
+        },
+        "output_shape": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              { "type": "integer", "minimum": 1 },
+              { "type": "string" }
+            ]
+          },
+          "description": "Required output shape after the operator runs. Verified at Ch'en before Xul close."
+        },
+        "accumulator_shape": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "type": "integer", "minimum": 1 },
+              { "type": "string" }
+            ]
+          },
+          "description": "Shape of the accumulator for FOLD (accumulator state) and REDUCE (intermediate state). Must match output_shape for FOLD."
+        },
+        "identity": {
+          "type": "string",
+          "enum": ["zeros", "ones", "neg_inf", "pos_inf", "none"],
+          "description": "Accumulator identity element. 'zeros' for addition, 'ones' for multiplication, 'neg_inf' for max, 'pos_inf' for min. 'none' means caller supplies initial state."
+        },
+        "combine": {
+          "type": "string",
+          "enum": ["add", "multiply", "max", "min", "concat", "logical_and", "logical_or"],
+          "description": "Binary combination function for FOLD/REDUCE."
+        }
+      }
+    },
+    "@lifecycle": {
+      "type": "object",
+      "description": "Phase-gated execution steps. Each phase key lists the steps that run in that phase. Steps are verified in order; any failure stops progression and opens a gap.",
+      "additionalProperties": false,
+      "properties": {
+        "Pop":   { "type": "array", "items": { "type": "string" }, "description": "Receive tensor and context." },
+        "Wo":    { "type": "array", "items": { "type": "string" }, "description": "Bind tensor and operator contracts." },
+        "Yax":   { "type": "array", "items": { "type": "string" }, "description": "Prepare candidate transformations and initialize accumulator." },
+        "Sek":   { "type": "array", "items": { "type": "string" }, "description": "Dispatch authorized operation. require_authorization must appear here if authorization is needed." },
+        "Ch'en": { "type": "array", "items": { "type": "string" }, "description": "Verify result and invariants (rank, shape, dtype, output contract)." },
+        "Xul":   { "type": "array", "items": { "type": "string" }, "description": "Close verified accumulator and emit result." }
+      }
+    },
+    "@routing": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Routing head outputs. Populated at inference time by VPiRouter.route_program(). Not required at schema definition time — absent means unconstrained. When present, dispatch validates that the runtime routing program satisfies these constraints.",
+      "properties": {
+        "dominant_field": {
+          "type": "string",
+          "description": "Required semantic field from intent_head (e.g. ⟁KUHUL, ⟁COMBUSTION). 'any' means unconstrained."
+        },
+        "dominant_operator": {
+          "type": "string",
+          "enum": ["map", "accumulate", "reduce", "stack", "any"],
+          "description": "Required XCFE operator from domain_relation_head. Maps to @operator.name: map→MAP/FILTER, accumulate→FOLD, reduce→REDUCE, stack→STACK."
+        },
+        "dominant_phase": {
+          "type": "string",
+          "enum": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul", "any"],
+          "description": "Required K'UHUL phase from cfpc_phase_head. Must be compatible with @lifecycle step availability."
+        },
+        "depth_norm_min": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Minimum normalized depth from pi_radius_head. Contracts that require deep traversal can gate on depth_norm >= threshold."
+        },
+        "depth_norm_max": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Maximum normalized depth from pi_radius_head."
+        }
+      }
+    },
+    "@policy": {
+      "type": "object",
+      "required": ["max_depth", "cycle_detection", "promote_generated_facts"],
+      "additionalProperties": false,
+      "properties": {
+        "max_depth": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Maximum traversal depth in the K'UHUL domain hierarchy. Corresponds to pi_radius_head depth_norm bound."
+        },
+        "cycle_detection": { "type": "boolean" },
+        "allow_partial_shape": {
+          "type": "boolean",
+          "description": "If true, symbolic shape dimensions are permitted at dispatch. If false, all dimensions must be resolved to integers before Sek."
+        },
+        "promote_generated_facts": {
+          "const": false,
+          "description": "Pattern Induction Guard — MUST be false. Grammar-level invariant, not a runtime policy. No parser may accept true."
+        }
+      }
+    },
+    "@result": {
+      "type": "object",
+      "required": ["retain_provenance", "retain_gaps", "allow_pattern_candidates"],
+      "additionalProperties": false,
+      "properties": {
+        "retain_provenance":        { "type": "boolean" },
+        "retain_gaps":              { "type": "boolean" },
+        "allow_pattern_candidates": { "type": "boolean" }
+      }
+    }
+  }
+}

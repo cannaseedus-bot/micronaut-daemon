@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:b="urn:kuhul:bindings:1.0"
+  targetNamespace="urn:kuhul:bindings:1.0"
+  elementFormDefault="qualified"
+  attributeFormDefault="unqualified">
+
+  <xs:annotation>
+    <xs:documentation>
+      K'UHUL Binding Module Schema
+      ─────────────────────────────
+      Declares the structure of a micronaut binding module — the XML-document
+      equivalent of a *.bindings.psm1 file.  A binding module wires a named
+      micronaut to its .NET drivers, its KUHUL verb surface, its semantic-delta
+      surface, and any domain-specific atomic key invocations.
+
+      Standard verb surface  (11): match / agent / call / topic / condition /
+                                   think / remember / recall / learn / decide / eval
+      Standard delta surface  (8): read / get / list / write / patch /
+                                   post / delete / save
+      Lifecycle surface       (3): register / health / identity
+      Phase wheel             (6): Pop / Wo / Yax / Sek / Ch'en / Xul
+    </xs:documentation>
+  </xs:annotation>
+
+  <!-- ── Primitive types ──────────────────────────────────────────────────── -->
+
+  <xs:simpleType name="SemVerType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9]+\.[0-9]+\.[0-9]+"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="PhaseNameType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Pop"/>
+      <xs:enumeration value="Wo"/>
+      <xs:enumeration value="Yax"/>
+      <xs:enumeration value="Sek"/>
+      <xs:enumeration value="Ch'en"/>
+      <xs:enumeration value="Xul"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="PhaseListType">
+    <xs:list itemType="b:PhaseNameType"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="VerbNameType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="match"/>
+      <xs:enumeration value="agent"/>
+      <xs:enumeration value="call"/>
+      <xs:enumeration value="topic"/>
+      <xs:enumeration value="condition"/>
+      <xs:enumeration value="think"/>
+      <xs:enumeration value="remember"/>
+      <xs:enumeration value="recall"/>
+      <xs:enumeration value="learn"/>
+      <xs:enumeration value="decide"/>
+      <xs:enumeration value="eval"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="DeltaVerbType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="read"/>
+      <xs:enumeration value="get"/>
+      <xs:enumeration value="list"/>
+      <xs:enumeration value="write"/>
+      <xs:enumeration value="patch"/>
+      <xs:enumeration value="post"/>
+      <xs:enumeration value="delete"/>
+      <xs:enumeration value="save"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="HttpMethodType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="GET"/>
+      <xs:enumeration value="POST"/>
+      <xs:enumeration value="PUT"/>
+      <xs:enumeration value="PATCH"/>
+      <xs:enumeration value="DELETE"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="UnitFloatType">
+    <xs:restriction base="xs:decimal">
+      <xs:minInclusive value="0.0"/>
+      <xs:maxInclusive value="1.0"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- ── Driver list ──────────────────────────────────────────────────────── -->
+
+  <xs:complexType name="DriverType">
+    <xs:attribute name="name"        type="xs:string"              use="required"/>
+    <xs:attribute name="path"        type="xs:string"              use="optional"/>
+    <xs:attribute name="load_order"  type="xs:nonNegativeInteger"  use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="DriverListType">
+    <xs:sequence>
+      <xs:element name="driver" type="b:DriverType" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- ── Verb surface ─────────────────────────────────────────────────────── -->
+
+  <xs:complexType name="VerbType">
+    <xs:sequence>
+      <xs:element name="allowed_phases" type="b:PhaseListType" minOccurs="0"/>
+      <xs:element name="description"    type="xs:string"       minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="name"    type="b:VerbNameType" use="required"/>
+    <xs:attribute name="enabled" type="xs:boolean"     use="optional" default="true"/>
+  </xs:complexType>
+
+  <xs:complexType name="VerbSurfaceType">
+    <xs:annotation>
+      <xs:documentation>
+        Standard KUHUL verb surface.  When absent or full="true" all 11 verbs
+        are assumed enabled with no phase restriction.  List individual verb
+        elements only to override defaults (disable a verb or add phase gates).
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="verb" type="b:VerbType" minOccurs="0" maxOccurs="11"/>
+    </xs:sequence>
+    <xs:attribute name="full" type="xs:boolean" use="optional" default="true"/>
+  </xs:complexType>
+
+  <!-- ── Semantic delta surface ───────────────────────────────────────────── -->
+
+  <xs:complexType name="DeltaType">
+    <xs:sequence>
+      <xs:element name="allowed_phases"    type="b:PhaseListType" minOccurs="0"/>
+      <xs:element name="resource_pattern"  type="xs:string"       minOccurs="0"/>
+      <xs:element name="description"       type="xs:string"       minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="name"    type="b:DeltaVerbType"  use="required"/>
+    <xs:attribute name="method"  type="b:HttpMethodType" use="optional"/>
+    <xs:attribute name="enabled" type="xs:boolean"       use="optional" default="true"/>
+  </xs:complexType>
+
+  <xs:complexType name="DeltaSurfaceType">
+    <xs:annotation>
+      <xs:documentation>
+        Semantic-delta surface (read / get / list / write / patch / post /
+        delete / save).  When absent or full="true" all 8 deltas are assumed.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="delta" type="b:DeltaType" minOccurs="0" maxOccurs="8"/>
+    </xs:sequence>
+    <xs:attribute name="full" type="xs:boolean" use="optional" default="true"/>
+  </xs:complexType>
+
+  <!-- ── Atomic key declaration ───────────────────────────────────────────── -->
+
+  <xs:complexType name="AtomicKeyType">
+    <xs:annotation>
+      <xs:documentation>
+        A domain-specific key dispatched via Invoke-AtomicKey.  The name
+        matches the key string passed to the bus (e.g. "graph-theory.query",
+        "xjson-ml.op", "user.log").
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="allowed_phases"  type="b:PhaseListType" minOccurs="0"/>
+      <xs:element name="payload_schema"  type="xs:string"       minOccurs="0"/>
+      <xs:element name="description"     type="xs:string"       minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="name"           type="xs:string"       use="required"/>
+    <xs:attribute name="dispatch_phase" type="b:PhaseNameType" use="optional"/>
+    <xs:attribute name="authority"      type="xs:string"       use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="AtomicKeysType">
+    <xs:sequence>
+      <xs:element name="key" type="b:AtomicKeyType" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- ── Bus config ───────────────────────────────────────────────────────── -->
+
+  <xs:complexType name="BusEndpointType">
+    <xs:attribute name="name"        type="xs:NCName"          use="required"/>
+    <xs:attribute name="base"        type="xs:anyURI"          use="required"/>
+    <xs:attribute name="timeout_sec" type="xs:positiveInteger" use="optional" default="15"/>
+  </xs:complexType>
+
+  <xs:complexType name="BusConfigType">
+    <xs:annotation>
+      <xs:documentation>
+        Bus endpoint overrides.  Named endpoints: AimlApiBase (default port 3217),
+        AppHostBase (default port 17885), PreviewBase (default port 5000).
+        Absent means use micronaut_bindings.psm1 defaults.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="endpoint" type="b:BusEndpointType" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- ── Lifecycle function declarations ──────────────────────────────────── -->
+
+  <xs:complexType name="LifecycleFnType">
+    <xs:attribute name="name"       type="xs:string" use="required"/>
+    <xs:attribute name="bridge_ref" type="xs:string" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="LifecycleType">
+    <xs:annotation>
+      <xs:documentation>
+        The three standard lifecycle functions present in every binding module:
+        register (loads bridge JSON), health (TCP/HTTP probe), identity (GET /identity).
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="register" type="b:LifecycleFnType" minOccurs="0"/>
+      <xs:element name="health"   type="b:LifecycleFnType" minOccurs="0"/>
+      <xs:element name="identity" type="b:LifecycleFnType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- ── Binding module ───────────────────────────────────────────────────── -->
+
+  <xs:complexType name="BindingModuleType">
+    <xs:annotation>
+      <xs:documentation>
+        A single binding module declaration — the XML equivalent of one
+        *.bindings.psm1 file.  The id attribute is the canonical micronaut
+        identifier used in all bus calls (e.g. "CM-1-µ", "GEMMA-µ",
+        "micronaut:GRAPH-THEORY", "USER-µ").  bridge_path is the relative
+        path to the micronaut JSON definition from the kit root
+        (e.g. "data/micronauts/control-micronaut-1.json").
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="drivers"        type="b:DriverListType"   minOccurs="0"/>
+      <xs:element name="lifecycle"      type="b:LifecycleType"    minOccurs="0"/>
+      <xs:element name="verb_surface"   type="b:VerbSurfaceType"  minOccurs="0"/>
+      <xs:element name="delta_surface"  type="b:DeltaSurfaceType" minOccurs="0"/>
+      <xs:element name="atomic_keys"    type="b:AtomicKeysType"   minOccurs="0"/>
+      <xs:element name="bus_config"     type="b:BusConfigType"    minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id"            type="xs:string"       use="required"/>
+    <xs:attribute name="bridge_path"   type="xs:string"       use="required"/>
+    <xs:attribute name="version"       type="b:SemVerType"    use="optional"/>
+    <xs:attribute name="import_phase"  type="b:PhaseNameType" use="optional"/>
+  </xs:complexType>
+
+  <!-- ── Bindings collection ──────────────────────────────────────────────── -->
+
+  <xs:complexType name="BindingsType">
+    <xs:sequence>
+      <xs:element name="binding" type="b:BindingModuleType" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="version" type="b:SemVerType" use="optional"/>
+  </xs:complexType>
+
+  <!-- ── Root elements ────────────────────────────────────────────────────── -->
+
+  <xs:element name="binding"  type="b:BindingModuleType"/>
+  <xs:element name="bindings" type="b:BindingsType"/>
+
+</xs:schema>

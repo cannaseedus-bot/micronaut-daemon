@@ -1,0 +1,545 @@
+{
+  "version": "1.0",
+  "source_feed": "https://duhdank.blogspot.com/feeds/posts/default",
+  "feed_status": "not_verified_in_this_environment",
+  "category_count": 86,
+  "groups": {
+    "growing": 15,
+    "definitions": 18,
+    "wildcard": 10,
+    "blog": 8,
+    "faq": 12,
+    "classics": 14,
+    "product": 9
+  },
+  "feed_actions": {
+    "BLOG_FEED_LATEST": "Fetch Atom feed, sort published/updated descending, show titles and canonical links",
+    "BLOG_FEED_SEARCH": "Search normalized title, summary and content; return matching post titles and URLs",
+    "BLOG_FEED_SUMMARY": "Summarize fetched posts with citations/links"
+  },
+  "rules": [
+    "Never fabricate catalog stock, pricing, promotions, policies or strain provenance",
+    "Never treat blog posts as live inventory",
+    "Keep source URL and published/updated timestamps for retrieved facts",
+    "Sanitize untrusted feed HTML and cap post content",
+    "Keep dynamic feed actions separate from static AIML responses"
+  ],
+  "records": [
+    {
+      "pattern": "WHAT IS A CANNABIS STRAIN",
+      "template": "A strain is a commonly used name for a cannabis variety or cultivar. Names alone do not guarantee identical genetics or effects.",
+      "group": "definitions",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS A CULTIVAR",
+      "template": "A cultivar is a cultivated plant variety selected for particular traits.",
+      "group": "definitions",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS THC",
+      "template": "THC is a cannabinoid associated with intoxicating effects. Actual potency varies by product and laboratory results.",
+      "group": "definitions",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS CBD",
+      "template": "CBD is a cannabinoid that is not typically intoxicating like THC. It can interact with medicines.",
+      "group": "definitions",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT ARE TERPENES",
+      "template": "Terpenes are aromatic compounds found in many plants. Aroma does not reliably predict a specific medical effect.",
+      "group": "definitions",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS A FEMINIZED SEED",
+      "template": "A feminized seed is produced to have a high likelihood of developing a female plant, but outcomes are not guaranteed.",
+      "group": "definitions",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS AN AUTOFLOWER",
+      "template": "An autoflowering cannabis variety generally initiates flowering based more on age than on changing day length.",
+      "group": "definitions",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS PHOTOPERIOD",
+      "template": "Photoperiod describes how plants respond to the length of light and darkness.",
+      "group": "definitions",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS A LANDRACE",
+      "template": "A landrace is a locally adapted plant population associated with a geographic region and long-term selection.",
+      "group": "definitions",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS A HYBRID",
+      "template": "A hybrid combines genetic ancestry from different lines; labels do not reliably predict experience.",
+      "group": "definitions",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT ARE TRICHOMES",
+      "template": "Trichomes are small surface structures; glandular trichomes can produce cannabinoids and terpenes.",
+      "group": "definitions",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS GERMINATION",
+      "template": "Germination is the process by which a viable seed begins growing.",
+      "group": "definitions",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS PH",
+      "template": "pH measures acidity or alkalinity and influences nutrient availability in growing media.",
+      "group": "definitions",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS EC",
+      "template": "Electrical conductivity, or EC, is a proxy for dissolved ion concentration in water or nutrient solution.",
+      "group": "definitions",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS A PHENOTYPE",
+      "template": "A phenotype is the observable expression of genetics interacting with the environment.",
+      "group": "definitions",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS A GENOTYPE",
+      "template": "A genotype is an organism’s genetic makeup.",
+      "group": "definitions",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS A SEED BANK",
+      "template": "A seed bank preserves or distributes seeds; specific inventory and shipping policies vary.",
+      "group": "definitions",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS A COA",
+      "template": "A certificate of analysis is a lab report for a tested sample. Check its batch identifier and date.",
+      "group": "definitions",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "ARE YOUR SEEDS IN STOCK",
+      "template": "Availability changes. Please check the current product listing or contact the store before ordering.",
+      "group": "faq",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "HOW MUCH IS SHIPPING",
+      "template": "Shipping costs depend on the seller and destination. Check the current checkout and shipping policy.",
+      "group": "faq",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "DO YOU SHIP TO *",
+      "template": "Shipping eligibility depends on the destination and applicable rules. Confirm the current store policy for <star/>.",
+      "group": "faq",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHERE IS MY ORDER",
+      "template": "Use your order confirmation and the store support channel to request tracking. Do not post private order information in public chat.",
+      "group": "faq",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "HOW DO I CONTACT SUPPORT",
+      "template": "Use the contact information on the official store website.",
+      "group": "faq",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS YOUR RETURN POLICY",
+      "template": "Please review the official store return and refund policy; I cannot verify policy details from a blog feed.",
+      "group": "faq",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "HOW DO I TRACK MY PACKAGE",
+      "template": "Check the tracking link in your shipping confirmation, or contact the store.",
+      "group": "faq",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "DO YOU OFFER DISCOUNTS",
+      "template": "Check current store promotions. I cannot guarantee an unverified coupon.",
+      "group": "faq",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "ARE THESE PRODUCTS LEGAL",
+      "template": "Rules differ by jurisdiction and product type. Check current local law before purchasing or cultivating.",
+      "group": "faq",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "CAN YOU GUARANTEE GERMINATION",
+      "template": "No seed can be guaranteed to germinate. Review the specific seller policy.",
+      "group": "faq",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT PAYMENT METHODS DO YOU ACCEPT",
+      "template": "Check the current checkout page for supported payment methods.",
+      "group": "faq",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "HOW LONG DOES DELIVERY TAKE",
+      "template": "Delivery estimates depend on the seller, carrier, destination and order processing. Check the store policy.",
+      "group": "faq",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "SHOW ME YOUR SEEDS",
+      "template": "Browse the current seed catalog on the official store. I can help explain the product labels.",
+      "group": "product",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "DO YOU HAVE *",
+      "template": "I cannot verify live inventory for <star/> without a current catalog entry. Check the product page.",
+      "group": "product",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "HOW MUCH IS *",
+      "template": "Prices for <star/> must come from a current product listing, not an older blog post.",
+      "group": "product",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "TELL ME ABOUT * SEEDS",
+      "template": "For <star/> seeds, verify breeder, genetics, seed type, package count and any lab-backed claims from the specific listing.",
+      "group": "product",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "COMPARE * AND *",
+      "template": "Compare <star index=\"1\"/> and <star index=\"2\"/> using verified breeder, seed type, genetics, stated traits and price. Avoid assuming effects from names alone.",
+      "group": "product",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHICH STRAIN IS BEST",
+      "template": "Best depends on your criteria: aroma, genetics, cultivation characteristics, and local legality. What matters most?",
+      "group": "product",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS THE DIFFERENCE BETWEEN FEMINIZED AND REGULAR SEEDS",
+      "template": "Feminized seeds are bred to favor female plants. Regular seeds can develop male or female plants.",
+      "group": "product",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT DOES PACK SIZE MEAN",
+      "template": "Pack size is the number of seeds in a product package. Confirm the listing for the exact count.",
+      "group": "product",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS A BREEDER",
+      "template": "A breeder develops plant lines by selecting and crossing plants for particular traits.",
+      "group": "product",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHY ARE MY LEAVES YELLOW",
+      "template": "Yellow leaves can result from aging, watering problems, nutrient imbalance, root stress or pests. Check the pattern and growing conditions before deciding.",
+      "group": "growing",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHY ARE MY LEAVES CURLING",
+      "template": "Leaf curling may relate to heat, light, water stress or pests. Examine the whole plant and environmental conditions.",
+      "group": "growing",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS OVERWATERING",
+      "template": "Overwatering occurs when excess water reduces oxygen availability around roots. Drainage and watering frequency both matter.",
+      "group": "growing",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS UNDERWATERING",
+      "template": "Underwatering occurs when a plant lacks enough available moisture to maintain normal function.",
+      "group": "growing",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "HOW DO I CHECK SOIL PH",
+      "template": "Use a calibrated pH meter or appropriate test kit and follow its instructions for the growing medium.",
+      "group": "growing",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT CAUSES ROOT ROT",
+      "template": "Root rot can involve pathogens and poorly oxygenated, persistently wet root conditions.",
+      "group": "growing",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "HOW DO I IDENTIFY PESTS",
+      "template": "Inspect leaf undersides, stems and the growing medium for insects, eggs, webbing or damage; identify the pest before treatment.",
+      "group": "growing",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS LIGHT STRESS",
+      "template": "Light stress is plant damage or reduced performance from unsuitable light intensity, duration or heat.",
+      "group": "growing",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS NUTRIENT LOCKOUT",
+      "template": "Nutrient lockout is a common grower term for conditions that limit nutrient uptake despite nutrients being present.",
+      "group": "growing",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "HOW DO I STORE SEEDS",
+      "template": "For many plant seeds, a cool, dry, dark, stable environment and moisture-resistant packaging support storage longevity.",
+      "group": "growing",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "HOW DO I PREVENT MOLD",
+      "template": "Improve ventilation, avoid persistent moisture, inspect plant material and keep storage areas clean.",
+      "group": "growing",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHY IS MY PLANT NOT GROWING",
+      "template": "Slow growth can involve temperature, light, root health, water, nutrients, genetics or pests. Check the simplest variables first.",
+      "group": "growing",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS HARDENING OFF",
+      "template": "Hardening off is gradually acclimating indoor-grown plants to outdoor conditions.",
+      "group": "growing",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS A GROW MEDIUM",
+      "template": "A growing medium supports roots and affects water, oxygen and nutrient availability.",
+      "group": "growing",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS INTEGRATED PEST MANAGEMENT",
+      "template": "Integrated pest management combines monitoring, prevention and proportionate controls rather than relying on one treatment.",
+      "group": "growing",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS NORTHERN LIGHTS",
+      "template": "Northern Lights is a longstanding cannabis cultivar family, often described as indica-leaning; exact genetics vary by breeder.",
+      "group": "classics",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS WHITE WIDOW",
+      "template": "White Widow is a classic cultivar name associated with 1990s Dutch breeding. Different sellers may offer distinct versions.",
+      "group": "classics",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS SKUNK NUMBER ONE",
+      "template": "Skunk #1 is a historically influential hybrid breeding line; modern products bearing the name may differ.",
+      "group": "classics",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS JACK HERER",
+      "template": "Jack Herer is a classic cultivar named for the cannabis activist and author; exact lineage varies by source.",
+      "group": "classics",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS HAZE",
+      "template": "Haze refers to a family of historically influential cannabis lines, commonly associated with sativa-leaning ancestry.",
+      "group": "classics",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS OG KUSH",
+      "template": "OG Kush is a well-known cultivar family with disputed or inconsistently documented early lineage.",
+      "group": "classics",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS BLUE DREAM",
+      "template": "Blue Dream is a popular cultivar commonly described as Blueberry × Haze, though commercial genetics vary.",
+      "group": "classics",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS SOUR DIESEL",
+      "template": "Sour Diesel is a longstanding cultivar name associated with pungent diesel-like aroma; its origin stories vary.",
+      "group": "classics",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS DURBAN POISON",
+      "template": "Durban Poison is a classic cultivar name associated with South African origins; present-day seed lines differ.",
+      "group": "classics",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS ACAPULCO GOLD",
+      "template": "Acapulco Gold is a historic cannabis name associated with the Acapulco region of Mexico.",
+      "group": "classics",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS PANAMA RED",
+      "template": "Panama Red is a historic cannabis cultivar name associated with Panama and older landrace-style lines.",
+      "group": "classics",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS GRANDDADDY PURPLE",
+      "template": "Granddaddy Purple is a well-known purple-flowered cultivar name, commonly associated with Purple Urkle and Big Bud ancestry.",
+      "group": "classics",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS AK 47",
+      "template": "AK-47 is a classic hybrid cultivar name; breeder-specific details should be checked at the source.",
+      "group": "classics",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "WHAT IS AMNESIA HAZE",
+      "template": "Amnesia Haze is a widely known Haze-related cultivar family, with variations among breeders.",
+      "group": "classics",
+      "source": "general_reference"
+    },
+    {
+      "pattern": "SHOW ME THE LATEST BLOG POSTS",
+      "template": "BLOG_FEED_LATEST",
+      "group": "blog",
+      "source": "feed_required"
+    },
+    {
+      "pattern": "WHAT IS NEW",
+      "template": "BLOG_FEED_LATEST",
+      "group": "blog",
+      "source": "feed_required"
+    },
+    {
+      "pattern": "WHAT S NEW",
+      "template": "BLOG_FEED_LATEST",
+      "group": "blog",
+      "source": "feed_required"
+    },
+    {
+      "pattern": "LATEST POSTS",
+      "template": "BLOG_FEED_LATEST",
+      "group": "blog",
+      "source": "feed_required"
+    },
+    {
+      "pattern": "SEARCH BLOG FOR *",
+      "template": "BLOG_FEED_SEARCH: <star/>",
+      "group": "blog",
+      "source": "feed_required"
+    },
+    {
+      "pattern": "WHAT DID YOU POST ABOUT *",
+      "template": "BLOG_FEED_SEARCH: <star/>",
+      "group": "blog",
+      "source": "feed_required"
+    },
+    {
+      "pattern": "SUMMARIZE YOUR BLOG",
+      "template": "BLOG_FEED_SUMMARY",
+      "group": "blog",
+      "source": "feed_required"
+    },
+    {
+      "pattern": "DO YOU HAVE AN ARTICLE ABOUT *",
+      "template": "BLOG_FEED_SEARCH: <star/>",
+      "group": "blog",
+      "source": "feed_required"
+    },
+    {
+      "pattern": "TELL ME ABOUT *",
+      "template": "Please specify whether <star/> is a strain, a product, a growing term, or a blog topic so I can give the right answer.",
+      "group": "wildcard",
+      "source": "static"
+    },
+    {
+      "pattern": "EXPLAIN *",
+      "template": "Please specify whether <star/> is a strain, a product, a growing term, or a blog topic so I can give the right answer.",
+      "group": "wildcard",
+      "source": "static"
+    },
+    {
+      "pattern": "DEFINE *",
+      "template": "Please specify whether <star/> is a strain, a product, a growing term, or a blog topic so I can give the right answer.",
+      "group": "wildcard",
+      "source": "static"
+    },
+    {
+      "pattern": "WHAT DOES *",
+      "template": "Please specify whether <star/> is a strain, a product, a growing term, or a blog topic so I can give the right answer.",
+      "group": "wildcard",
+      "source": "static"
+    },
+    {
+      "pattern": "HOW DO I CHOOSE *",
+      "template": "What criteria matter for <star/>: genetics, aroma, format, budget or growing conditions?",
+      "group": "wildcard",
+      "source": "static"
+    },
+    {
+      "pattern": "WHY DOES * HAPPEN",
+      "template": "What conditions were present when <star/> happened?",
+      "group": "wildcard",
+      "source": "static"
+    },
+    {
+      "pattern": "WHAT IS THE DIFFERENCE BETWEEN * AND *",
+      "template": "Compare <star index=\"1\"/> and <star index=\"2\"/> by their verified attributes rather than assuming the names determine their properties.",
+      "group": "wildcard",
+      "source": "static"
+    },
+    {
+      "pattern": "CAN YOU RECOMMEND *",
+      "template": "Tell me which non-medical product characteristics you care about, and I can explain the options.",
+      "group": "wildcard",
+      "source": "static"
+    },
+    {
+      "pattern": "IS * GOOD FOR ANXIETY",
+      "template": "I cannot predict or recommend a cannabis product to treat anxiety. Effects vary, and THC can worsen anxiety for some people. Consult a qualified clinician.",
+      "group": "wildcard",
+      "source": "static"
+    },
+    {
+      "pattern": "IS * SAFE",
+      "template": "Safety depends on the specific product, person and context. Check credible evidence, testing and applicable regulations.",
+      "group": "wildcard",
+      "source": "static"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "donations",
+  "@key": "⟁APP:DONATIONS",
+  "@mount": "⟁ROOT:DONATIONS",
+  "@theme": { "accent": "#f43f5e", "bg": "#100308", "surface": "#1e0610", "text": "#ffe4e6", "hero_phase": "Xul", "tagline": "Support what you believe in" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "campaigns", "component": "⟁WIDGET:CAMPAIGNS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "campaigns": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:DONATIONS": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:DONATE", "⟁ACTION:NEW_CAMPAIGN"] },
+    "⟁ACTION:DONATE": { "@type": "button", "@text": "Donate Now", "@on": { "click": "donations.open_donate" } },
+    "⟁ACTION:NEW_CAMPAIGN": { "@type": "button", "@text": "New Campaign", "@on": { "click": "donations.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:CAMPAIGNS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:CAMPAIGNS": { "@type": "feed", "@bind": "state.campaigns", "@children": ["⟁WIDGET:CAMPAIGN_CARD"] },
+    "⟁WIDGET:CAMPAIGN_CARD": { "@type": "content-card", "@bind": "campaign", "@on": { "donate": "donations.open_donate", "view": "donations.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:TOTAL_RAISED", "⟁WIDGET:RECENT_DONORS"] },
+    "⟁WIDGET:TOTAL_RAISED": { "@type": "stat", "@bind": "data.total_raised" },
+    "⟁WIDGET:RECENT_DONORS": { "@type": "list", "@bind": "data.recent_donors" }
+  },
+  "@programs": {
+    "donations.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "donations.open_donate": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "donations.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "campaign.donate": "donations.open_donate", "campaign.view": "donations.view", "compose.open": "donations.open_compose" },
+  "@imports": [{ "ref": "campaign", "mode": "schema_table" }, { "ref": "donation", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "stripe-payments", "name": "Stripe Donations", "category": "payments", "price": "free", "status": "setup_required", "description": "Accept one-time and recurring donations via Stripe." },
+      { "id": "donor-wall", "name": "Donor Wall", "category": "community", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Publicly honour donors with a scrolling supporter wall." },
+      { "id": "impact-bot", "name": "Impact Summary Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Auto-generate a monthly impact report for donors." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "donations.donate", "pattern": "DONATE|TIP *|SUPPORT *", "intent": "open_donate" },
+      { "id": "donations.create", "pattern": "NEW CAMPAIGN|CREATE CAMPAIGN|START FUNDRAISER", "intent": "open_compose" }
+    ]
+  },
+  "@data": {
+    "total_raised": 14320,
+    "recent_donors": ["Zara M. — $50", "Anonymous — $25", "Marco V. — $100"],
+    "spotlight": [
+      { "id": "sp1", "title": "Open-Source Dev Fund", "slug": "oss-dev-fund", "badge": "Active", "goal": 10000, "raised": 7840, "excerpt": "Funding three months of dedicated open-source work." },
+      { "id": "sp2", "title": "Community Server Costs", "slug": "server-costs", "badge": "Ongoing", "goal": 500, "raised": 500, "excerpt": "Covers six months of hosting. Fully funded — thank you!" },
+      { "id": "sp3", "title": "Scholarship Fund", "slug": "scholarship-fund", "badge": "New", "goal": 5000, "raised": 1240, "excerpt": "Sponsor developer bootcamp seats for underrepresented founders." }
+    ],
+    "schema": {
+      "campaign": { "primaryKey": "campaign_id", "fields": { "campaign_id": { "type": "string" }, "title": { "type": "string", "required": true }, "description": { "type": "textarea", "required": true }, "goal": { "type": "float" }, "raised": { "type": "float" }, "active": { "type": "bool" }, "ends_at": { "type": "datetime" } } },
+      "donation": { "primaryKey": "donation_id", "fields": { "donation_id": { "type": "string" }, "campaign_id": { "type": "string", "required": true }, "donor_name": { "type": "string" }, "amount": { "type": "float", "required": true }, "message": { "type": "text" }, "anonymous": { "type": "bool" }, "donated_at": { "type": "datetime" } } }
+    }
+  }
+}

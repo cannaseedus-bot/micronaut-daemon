@@ -1,0 +1,41 @@
+{
+  "@kind": "xjsl.webgl2.safetensor_trainer.v1",
+  "@trainer": {
+    "input": "E:\\models\\GPT2\\mini-GPT\\gpt2_forge_lora\\adapter_model.safetensors",
+    "output": "C:\\Users\\canna\\_khanary_inspect\\trainer\\build\\smoke_webgl2_out.safetensors",
+    "tensor": "base_model.model.transformer.h.0.attn.c_attn.lora_A.weight",
+    "dtype": "F32",
+    "shape": [
+      8,
+      768
+    ],
+    "train_dim": 8,
+    "batch": 4,
+    "steps": 5,
+    "lr": 0.0001,
+    "seed": 1337
+  },
+  "@dataset": {
+    "source": "synthetic",
+    "seed": 1337
+  },
+  "@backend": {
+    "api": "WebGL2",
+    "renderer": "ANGLE (Intel, Intel(R) HD Graphics 4600 (0x00000412) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "vendor": "Google Inc. (Intel)",
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "browser": "edge"
+  },
+  "@metrics": {
+    "loss_before": 0.15366437648592807,
+    "loss_after": 0.15354910855127982,
+    "gpu_ms": 39.59999996423721
+  },
+  "@kernels": [
+    {
+      "id": "linear_sgd_step",
+      "stage": "fragment",
+      "semantics": "MSE + SGD over bounded tensor slice"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "@kind": "semantic.think.v1",
+  "@id": "reason_chain",
+  "@owner": "REASON-µ",
+  "@mode": "step_by_step",
+  "@subject": "open_domain_query",
+  "@context": "cfpc.field",
+  "@functions": [
+    {
+      "@kind": "semantic.function.v1",
+      "@id": "identify_premises",
+      "@owner": "REASON-µ",
+      "@governs": ["premise", "given", "assumption", "infer"],
+      "@capabilities": ["pattern_discovery"],
+      "@bindings": {
+        "query": {"type": "text", "required": true, "wildcard": "{query}"}
+      },
+      "@backend": {
+        "type": "micronaut",
+        "capability": "pattern_discovery"
+      },
+      "@policy": {
+        "max_depth": 3,
+        "cycle_detection": true,
+        "allow_dynamic_resolution": false
+      },
+      "@result": {
+        "retain_provenance": true,
+        "retain_gaps": true,
+        "allow_pattern_candidates": false
+      }
+    },
+    {
+      "@kind": "semantic.function.v1",
+      "@id": "derive_conclusion",
+      "@owner": "REASON-µ",
+      "@governs": ["conclude", "deduce", "infer", "therefore"],
+      "@capabilities": ["pattern_discovery"],
+      "@bindings": {
+        "premises": {"type": "json", "required": true, "wildcard": "{premises}"}
+      },
+      "@backend": {
+        "type": "micronaut",
+        "capability": "pattern_discovery"
+      },
+      "@policy": {
+        "max_depth": 2,
+        "cycle_detection": true,
+        "allow_dynamic_resolution": false
+      },
+      "@result": {
+        "retain_provenance": true,
+        "retain_gaps": false,
+        "allow_pattern_candidates": false
+      }
+    }
+  ],
+  "@policy": {
+    "max_depth": 3,
+    "max_operations": 6,
+    "cycle_detection": true
+  }
+}

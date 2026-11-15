@@ -1,0 +1,55 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "symptom-log",
+  "@key": "⟁APP:SYMPTOM_LOG",
+  "@mount": "⟁ROOT:SYMPTOM_LOG",
+  "@theme": { "accent": "#f43f5e", "bg": "#0c0208", "surface": "#180310", "text": "#ffe4e6", "hero_phase": "Ch'en", "tagline": "Track how you feel. Find patterns." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "entries", "component": "⟁WIDGET:ENTRIES", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "entries": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:SYMPTOM_LOG": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:LOG_SYMPTOM"] },
+    "⟁ACTION:LOG_SYMPTOM": { "@type": "button", "@text": "Log Symptom", "@on": { "click": "sym.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:ENTRIES", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:ENTRIES": { "@type": "feed", "@bind": "state.entries", "@children": ["⟁WIDGET:SYM_CARD"] },
+    "⟁WIDGET:SYM_CARD": { "@type": "content-card", "@bind": "entry", "@on": { "view": "sym.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:FREQ", "⟁WIDGET:HEATMAP"] },
+    "⟁WIDGET:FREQ": { "@type": "list", "@bind": "data.frequency" },
+    "⟁WIDGET:HEATMAP": { "@type": "heatmap", "@bind": "data.calendar" }
+  },
+  "@programs": {
+    "sym.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "sym.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "sym.log": "sym.open_compose", "entry.view": "sym.view" },
+  "@imports": [{ "ref": "symptom_entry", "mode": "schema_table" }, { "ref": "symptom_type", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "trigger-analysis", "name": "Trigger Analysis", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Identify common times, foods, or activities linked to symptoms." },
+      { "id": "doctor-report", "name": "Doctor Report Export", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Generate a formatted PDF report for medical appointments." },
+      { "id": "pattern-bot", "name": "Pattern Finder", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "AI-assisted pattern detection across your symptom history." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "sym.log", "pattern": "LOG SYMPTOM|RECORD SYMPTOM|FEELING *", "intent": "open_compose" },
+      { "id": "sym.patterns", "pattern": "SYMPTOM PATTERNS|WHAT TRIGGERS *", "intent": "analyze" }
+    ]
+  },
+  "@data": {
+    "frequency": [{ "symptom": "Headache", "count": 14 }, { "symptom": "Fatigue", "count": 22 }, { "symptom": "Nausea", "count": 6 }],
+    "calendar": [],
+    "spotlight": [
+      { "id": "sp1", "title": "Fatigue Spike — Last Week", "badge": "Pattern Detected", "count": 8, "excerpt": "Fatigue logged on 5 of 7 days last week. Sleep duration below average." },
+      { "id": "sp2", "title": "Headache-Free Streak", "badge": "Progress", "days": 5, "excerpt": "5 consecutive days without a headache entry." },
+      { "id": "sp3", "title": "Afternoon Nausea Pattern", "badge": "Trigger Candidate", "excerpt": "Most nausea entries logged between 13:00–15:00." }
+    ],
+    "schema": {
+      "symptom_entry": { "primaryKey": "entry_id", "fields": { "entry_id": { "type": "string" }, "symptom_id": { "type": "string", "required": true }, "severity": { "type": "integer", "required": true }, "duration_min": { "type": "integer" }, "triggers": { "type": "json" }, "notes": { "type": "text" }, "logged_at": { "type": "datetime", "required": true } } },
+      "symptom_type": { "primaryKey": "symptom_id", "fields": { "symptom_id": { "type": "string" }, "name": { "type": "string", "required": true }, "category": { "type": "string" }, "unit": { "type": "string" } } }
+    }
+  }
+}

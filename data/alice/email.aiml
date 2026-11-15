@@ -1,0 +1,176 @@
+<aiml version="1.0.1">
+  <!-- EMAIL-µ AIML patterns.
+       Pattern engine: ELIZA/AIML.  Execution authority: K'UHUL via Xul gramWrite.
+       All templates emit <mx2lm>email-u ...</mx2lm> for micronaut routing.
+       Compose ops use phase=Wo (forming context); send/delete use phase=Xul (commit);
+       inbox/read use phase=Pop (surface read); search uses phase=Sek. -->
+
+  <!-- ── Canonical entry point ───────────────────────────────────────────── -->
+  <category>
+    <pattern>EMAIL BANK</pattern>
+    <template><mx2lm>email-u op=status phase=Pop bank=email_manifest</mx2lm></template>
+  </category>
+
+  <!-- ── Compose ────────────────────────────────────────────────────────── -->
+  <category>
+    <pattern>COMPOSE EMAIL</pattern>
+    <template><mx2lm>email-u op=compose phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>NEW EMAIL</pattern>
+    <template><mx2lm>email-u op=compose phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>WRITE EMAIL</pattern>
+    <template><mx2lm>email-u op=compose phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>EMAIL TO *</pattern>
+    <template><mx2lm>email-u op=compose to=<star/> phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>EMAIL TO * SUBJECT *</pattern>
+    <template><mx2lm>email-u op=compose to=<star index="1"/> subject=<star index="2"/> phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>EMAIL TO * SUBJECT * BODY *</pattern>
+    <template><mx2lm>email-u op=compose to=<star index="1"/> subject=<star index="2"/> body=<star index="3"/> phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>COMPOSE EMAIL TO *</pattern>
+    <template><mx2lm>email-u op=compose to=<star/> phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>COMPOSE EMAIL TO * ABOUT *</pattern>
+    <template><mx2lm>email-u op=compose to=<star index="1"/> subject=<star index="2"/> phase=Wo</mx2lm></template>
+  </category>
+
+  <!-- ── Send ───────────────────────────────────────────────────────────── -->
+  <category>
+    <pattern>SEND EMAIL</pattern>
+    <template><mx2lm>email-u op=send phase=Xul</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>SEND EMAIL TO *</pattern>
+    <template><mx2lm>email-u op=send to=<star/> phase=Xul</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>SEND EMAIL TO * SUBJECT * BODY *</pattern>
+    <template><mx2lm>email-u op=send to=<star index="1"/> subject=<star index="2"/> body=<star index="3"/> phase=Xul</mx2lm></template>
+  </category>
+
+  <!-- ── Inbox / read ───────────────────────────────────────────────────── -->
+  <category>
+    <pattern>EMAIL INBOX</pattern>
+    <template><mx2lm>email-u op=inbox phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CHECK EMAIL</pattern>
+    <template><mx2lm>email-u op=inbox phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>READ EMAIL</pattern>
+    <template><mx2lm>email-u op=inbox phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>READ EMAIL *</pattern>
+    <template><mx2lm>email-u op=read id=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>OPEN EMAIL *</pattern>
+    <template><mx2lm>email-u op=read id=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Reply / forward ────────────────────────────────────────────────── -->
+  <category>
+    <pattern>REPLY TO *</pattern>
+    <template><mx2lm>email-u op=reply to=<star/> phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>REPLY TO EMAIL *</pattern>
+    <template><mx2lm>email-u op=reply id=<star/> phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FORWARD EMAIL * TO *</pattern>
+    <template><mx2lm>email-u op=forward id=<star index="1"/> to=<star index="2"/> phase=Wo</mx2lm></template>
+  </category>
+
+  <!-- ── Search ─────────────────────────────────────────────────────────── -->
+  <category>
+    <pattern>SEARCH EMAIL *</pattern>
+    <template><mx2lm>email-u op=search query=<star/> phase=Sek</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FIND EMAIL FROM *</pattern>
+    <template><mx2lm>email-u op=search from=<star/> phase=Sek</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>FIND EMAIL ABOUT *</pattern>
+    <template><mx2lm>email-u op=search subject=<star/> phase=Sek</mx2lm></template>
+  </category>
+
+  <!-- ── Delete ─────────────────────────────────────────────────────────── -->
+  <category>
+    <pattern>DELETE EMAIL *</pattern>
+    <template><mx2lm>email-u op=delete id=<star/> phase=Xul</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>TRASH EMAIL *</pattern>
+    <template><mx2lm>email-u op=delete id=<star/> phase=Xul</mx2lm></template>
+  </category>
+
+  <!-- ── Phase-explicit surface ─────────────────────────────────────────── -->
+  <category>
+    <pattern>EMAIL POP *</pattern>
+    <template><mx2lm>email-u op=surface phase=Pop input=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>EMAIL WO *</pattern>
+    <template><mx2lm>email-u op=classify phase=Wo input=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>EMAIL YAX *</pattern>
+    <template><mx2lm>email-u op=compose phase=Yax input=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>EMAIL SEK *</pattern>
+    <template><mx2lm>email-u op=search phase=Sek query=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>EMAIL CHEN *</pattern>
+    <template><mx2lm>email-u op=verify phase=Ch'en input=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>EMAIL XUL *</pattern>
+    <template><mx2lm>email-u op=send phase=Xul input=<star/></mx2lm></template>
+  </category>
+
+  <!-- ── Fallback ───────────────────────────────────────────────────────── -->
+  <category>
+    <pattern>EMAIL *</pattern>
+    <template><mx2lm>email-u hint EMAIL BANK for op=compose|send|inbox|read|reply|search|delete <star/></mx2lm></template>
+  </category>
+</aiml>

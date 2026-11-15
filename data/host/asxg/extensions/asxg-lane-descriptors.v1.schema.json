@@ -1,0 +1,498 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "asx://schema/asxg-lane-descriptors-v1",
+  "title": "ASXG Lane Descriptor Contract v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "@contract",
+    "@container",
+    "@interpreted",
+    "@lanes",
+    "@edges"
+  ],
+  "properties": {
+    "@contract": {
+      "const": "asxg.lanes.v1"
+    },
+    "@container": {
+      "const": "ASXG/1"
+    },
+    "@interpreted": {
+      "const": false
+    },
+    "@lanes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "@id",
+              "@type",
+              "@phase",
+              "@field",
+              "@ngram",
+              "@source_class",
+              "@scope_id",
+              "@learning_state"
+            ],
+            "properties": {
+              "@id": {
+                "type": "string",
+                "pattern": "^lane\\.[a-z0-9_.-]+$"
+              },
+              "@type": {
+                "const": "NGramLane"
+              },
+              "@phase": {
+                "enum": [
+                  "Pop",
+                  "Wo",
+                  "Yax",
+                  "Sek",
+                  "Ch'en",
+                  "Xul"
+                ]
+              },
+              "@field": {
+                "type": "string",
+                "minLength": 1
+              },
+              "@ngram": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "@probability_orders",
+                  "@retrieval_min_order",
+                  "@key_refs"
+                ],
+                "properties": {
+                  "@probability_orders": {
+                    "const": [
+                      1,
+                      2,
+                      3
+                    ]
+                  },
+                  "@retrieval_min_order": {
+                    "const": 4
+                  },
+                  "@key_refs": {
+                    "type": "array",
+                    "maxItems": 4096,
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": [
+                            "@key_ref",
+                            "@order",
+                            "@sequence_length",
+                            "@layer",
+                            "@measure_ref",
+                            "@bandwidth"
+                          ],
+                          "properties": {
+                            "@key_ref": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "@order": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 3
+                            },
+                            "@sequence_length": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 3
+                            },
+                            "@layer": {
+                              "const": "probability"
+                            },
+                            "@measure_ref": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "@bandwidth": {
+                              "type": "number",
+                              "exclusiveMinimum": 0
+                            },
+                            "@evidence_ref": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": [
+                            "@key_ref",
+                            "@order",
+                            "@sequence_length",
+                            "@layer",
+                            "@key_type",
+                            "@store_ref",
+                            "@backoff"
+                          ],
+                          "properties": {
+                            "@key_ref": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "@order": {
+                              "type": "integer",
+                              "minimum": 4
+                            },
+                            "@sequence_length": {
+                              "type": "integer",
+                              "minimum": 4
+                            },
+                            "@layer": {
+                              "const": "retrieval"
+                            },
+                            "@key_type": {
+                              "enum": [
+                                "exact_hash",
+                                "rolling_hash",
+                                "suffix_automaton",
+                                "inverted_index"
+                              ]
+                            },
+                            "@store_ref": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "@backoff": {
+                              "const": "probability_layer"
+                            },
+                            "@evidence_ref": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "minItems": 1
+                  }
+                }
+              },
+              "@source_class": {
+                "enum": [
+                  "user_prompt",
+                  "model_response",
+                  "web_research",
+                  "user_memory",
+                  "project_history",
+                  "system_corpus"
+                ]
+              },
+              "@scope_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "@learning_state": {
+                "enum": [
+                  "approval_gated",
+                  "evidence_only",
+                  "user_scoped_memory",
+                  "project_scoped_history"
+                ]
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "@source_class": {
+                      "const": "user_prompt"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "@learning_state": {
+                      "const": "approval_gated"
+                    },
+                    "@scope_id": {
+                      "pattern": "^conversation:"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "@source_class": {
+                      "enum": [
+                        "model_response",
+                        "web_research",
+                        "system_corpus"
+                      ]
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "@learning_state": {
+                      "const": "evidence_only"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "@source_class": {
+                      "const": "user_memory"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "@learning_state": {
+                      "const": "user_scoped_memory"
+                    },
+                    "@scope_id": {
+                      "pattern": "^user:"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "@source_class": {
+                      "const": "project_history"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "@learning_state": {
+                      "const": "project_scoped_history"
+                    },
+                    "@scope_id": {
+                      "pattern": "^project:"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "@source_class": {
+                      "const": "web_research"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "@ngram": {
+                      "properties": {
+                        "@key_refs": {
+                          "items": {
+                            "required": [
+                              "@evidence_ref"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "@id",
+              "@type",
+              "@phase",
+              "@step_ref",
+              "@micronaut_ref",
+              "@program_ref",
+              "@requires_admission"
+            ],
+            "properties": {
+              "@id": {
+                "type": "string",
+                "pattern": "^lane\\.[a-z0-9_.-]+$"
+              },
+              "@type": {
+                "const": "PhaseLane"
+              },
+              "@phase": {
+                "enum": [
+                  "Pop",
+                  "Wo",
+                  "Yax",
+                  "Sek",
+                  "Ch'en",
+                  "Xul"
+                ]
+              },
+              "@step_ref": {
+                "type": "string",
+                "pattern": "^step:[0-9]+$"
+              },
+              "@micronaut_ref": {
+                "type": "string",
+                "pattern": "^micronaut\\.[a-z0-9_-]+$"
+              },
+              "@program_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "@requires_admission": {
+                "const": true
+              },
+              "@state": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "@id", "@type", "@phase", "@objective_ref", "@micronaut_ref",
+              "@field_ref", "@metric_refs", "@constraint_refs",
+              "@evaluation_policy_ref", "@learning_policy_ref", "@requires_admission"
+            ],
+            "properties": {
+              "@id": { "type": "string", "pattern": "^lane\\.[a-z0-9_.-]+$" },
+              "@type": { "const": "ObjectiveLane" },
+              "@phase": { "const": "Sek" },
+              "@objective_ref": { "type": "string", "pattern": "^objective\\.[a-z0-9_.-]+$" },
+              "@micronaut_ref": { "type": "string", "pattern": "^micronaut\\.[a-z0-9_-]+$" },
+              "@field_ref": { "type": "string", "minLength": 1 },
+              "@metric_refs": {
+                "type": "array", "minItems": 1, "uniqueItems": true,
+                "items": { "type": "string", "pattern": "^metric:[a-z0-9_.-]+$" }
+              },
+              "@constraint_refs": {
+                "type": "array", "minItems": 1, "uniqueItems": true,
+                "items": { "type": "string", "pattern": "^constraint:[a-z0-9_.-]+$" }
+              },
+              "@evaluation_policy_ref": { "type": "string", "minLength": 1 },
+              "@learning_policy_ref": { "type": "string", "minLength": 1 },
+              "@requires_admission": { "const": true }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "@id", "@type", "@phase", "@hypothesis_ref", "@micronaut_ref",
+              "@program_ref", "@field_ref", "@objective_ref", "@prediction_policy_ref",
+              "@evidence_refs", "@prediction_error_refs", "@uncertainty",
+              "@measurement_phase", "@requires_admission"
+            ],
+            "properties": {
+              "@id": { "type": "string", "pattern": "^lane\\.[a-z0-9_.-]+$" },
+              "@type": { "const": "EnvironmentHypothesisLane" },
+              "@phase": { "const": "Sek" },
+              "@hypothesis_ref": { "type": "string", "pattern": "^hypothesis:[a-z0-9_.-]+$" },
+              "@micronaut_ref": { "type": "string", "pattern": "^micronaut\\.[a-z0-9_-]+$" },
+              "@program_ref": { "type": "string", "minLength": 1 },
+              "@field_ref": { "type": "string", "minLength": 1 },
+              "@objective_ref": { "type": "string", "pattern": "^objective\\.[a-z0-9_.-]+$" },
+              "@prediction_policy_ref": { "type": "string", "minLength": 1 },
+              "@evidence_refs": {
+                "type": "array", "minItems": 1, "uniqueItems": true,
+                "items": { "type": "string", "minLength": 1 }
+              },
+              "@prediction_error_refs": {
+                "type": "array", "uniqueItems": true,
+                "items": { "type": "string", "minLength": 1 }
+              },
+              "@uncertainty": { "type": "number", "minimum": 0, "maximum": 1 },
+              "@measurement_phase": { "const": "Ch'en" },
+              "@requires_admission": { "const": true }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "@id", "@type", "@owner_ref", "@field_ref", "@scope_id",
+              "@record_refs", "@evidence_refs", "@provenance_refs",
+              "@fold_delta_refs", "@hypothesis_refs", "@read_policy_ref",
+              "@requires_admission"
+            ],
+            "properties": {
+              "@id": { "type": "string", "pattern": "^lane\\.[a-z0-9_.-]+$" },
+              "@type": { "const": "HistoryLane" },
+              "@owner_ref": { "type": "string", "pattern": "^micronaut\\.[a-z0-9_-]+$" },
+              "@field_ref": { "type": "string", "minLength": 1 },
+              "@scope_id": { "type": "string", "pattern": "^(conversation|user|project):[^\\s]+$" },
+              "@record_refs": {
+                "type": "array", "minItems": 1, "uniqueItems": true,
+                "items": { "type": "string", "minLength": 1 }
+              },
+              "@evidence_refs": {
+                "type": "array", "uniqueItems": true,
+                "items": { "type": "string", "minLength": 1 }
+              },
+              "@provenance_refs": {
+                "type": "array", "minItems": 1, "uniqueItems": true,
+                "items": { "type": "string", "minLength": 1 }
+              },
+              "@fold_delta_refs": {
+                "type": "array", "uniqueItems": true,
+                "items": { "type": "string", "minLength": 1 }
+              },
+              "@hypothesis_refs": {
+                "type": "array", "uniqueItems": true,
+                "items": { "type": "string", "pattern": "^hypothesis:[a-z0-9_.-]+$" }
+              },
+              "@read_policy_ref": { "type": "string", "minLength": 1 },
+              "@requires_admission": { "const": true }
+            }
+          }
+        ]
+      }
+    },
+    "@edges": {
+      "type": "array",
+      "maxItems": 1024,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "@source",
+          "@target",
+          "@relation"
+        ],
+        "properties": {
+          "@source": {
+            "type": "string"
+          },
+          "@target": {
+            "type": "string"
+          },
+          "@relation": {
+            "enum": [
+              "depends_on",
+              "transitions_to",
+              "provides_evidence",
+              "binds_objective",
+              "measures_hypothesis"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Question seed bank — Yax phase (candidate expansion)
+     Each pattern generates a discovery direction, not a final answer.
+     Templates produce the next question to ask, expanding the fold neighborhood.
+     12 families map to CFPC gap types and micronaut capability axes. -->
+<aiml version="2.0">
+
+  <!-- Identity: what a thing is -->
+  <category>
+    <pattern>WHAT IS *</pattern>
+    <template>What properties or defining characteristics belong to <star/>?</template>
+  </category>
+
+  <!-- Purpose: what a thing does -->
+  <category>
+    <pattern>WHAT DOES * DO</pattern>
+    <template>What capabilities or functions does <star/> perform or enable?</template>
+  </category>
+
+  <!-- Cause: why something happens -->
+  <category>
+    <pattern>WHY DOES * HAPPEN</pattern>
+    <template>What conditions or triggers are necessary for <star/> to occur?</template>
+  </category>
+
+  <!-- Mechanism: how something works -->
+  <category>
+    <pattern>HOW DOES * WORK</pattern>
+    <template>What components or steps are required for <star/> to operate?</template>
+  </category>
+
+  <!-- Dependency: what something requires -->
+  <category>
+    <pattern>WHAT DOES * REQUIRE</pattern>
+    <template>What prerequisites must be present before <star/> can function?</template>
+  </category>
+
+  <!-- Relationship: how two things connect -->
+  <category>
+    <pattern>HOW IS * RELATED TO *</pattern>
+    <template>What semantic relationship or edge connects <star index="1"/> and <star index="2"/>?</template>
+  </category>
+
+  <!-- Difference: how two things contrast -->
+  <category>
+    <pattern>HOW DOES * DIFFER FROM *</pattern>
+    <template>Which properties distinguish <star index="1"/> from <star index="2"/>?</template>
+  </category>
+
+  <!-- Evidence: what supports a claim -->
+  <category>
+    <pattern>WHAT SUPPORTS *</pattern>
+    <template>What evidence or provenance confirms or corroborates <star/>?</template>
+  </category>
+
+  <!-- Contradiction: what conflicts with a claim -->
+  <category>
+    <pattern>WHAT CONFLICTS WITH *</pattern>
+    <template>What known facts or bindings contradict or challenge <star/>?</template>
+  </category>
+
+  <!-- Missing knowledge: what remains unknown -->
+  <category>
+    <pattern>WHAT IS UNKNOWN ABOUT *</pattern>
+    <template>What unresolved knowledge gaps remain in the understanding of <star/>?</template>
+  </category>
+
+  <!-- Counterfactual: what would change -->
+  <category>
+    <pattern>WHAT HAPPENS IF * CHANGES</pattern>
+    <template>What consequence follows if <star/> is modified, removed, or replaced?</template>
+  </category>
+
+  <!-- Verification: how to test a claim -->
+  <category>
+    <pattern>HOW CAN * BE VERIFIED</pattern>
+    <template>What observable evidence would confirm or reject <star/>?</template>
+  </category>
+
+</aiml>

@@ -1,0 +1,29 @@
+{
+  "@program": "micronaut.jrom.research.gpt2-q8",
+  "@kind": "kuhul.jrom.research-adapter.v1",
+  "@model": "E:/models/GPT2/mini-GPT/gguf/gpt2.Q8_0.gguf",
+  "@adapter": "programs/micronauts/mx2-brain-jrom-adapter.json",
+  "@runtime": "dist/khanary-server/llama-cli.exe",
+  "@template": "chatml",
+  "purpose": "Measure whether a compiled Micronaut/JROM context improves research structure without changing model weights.",
+  "context_projection": {
+    "Pop": "load research context",
+    "Wo": "route the research request",
+    "Yax": "normalize KXML/JROM message and tool boundaries",
+    "Sek": "decode one answer",
+    "Chen": "verify exactly three ordered steps and no unknown command",
+    "Xul": "commit the replayable result"
+  },
+  "ab_test": {
+    "baseline": "plain research prompt",
+    "treatment": "same prompt with context_projection rendered as a system prompt",
+    "metric": ["instruction_following", "ordered_steps", "control_token_leakage", "tool_safety"],
+    "interpretation": "A context improvement is not a weight improvement; a base checkpoint that echoes ChatML requires training or a compatible export."
+  },
+  "output": {
+    "format": "json",
+    "required_steps": 3,
+    "max_tool_commands": 0,
+    "report": "scratch/jrom-research-gpt2-q8.json"
+  }
+}

@@ -1,0 +1,226 @@
+(* K'UHUL-PI / 1.0 — proposed grammar for ephemeral semantic comparisons.
+   EBNF describes syntax, not execution authorization.
+   Geometry is derived from embedding vectors; graph truth requires evidence.
+   Runtime sequencing is fixed: Pop -> Wo -> Yax -> Sek -> Ch'en -> Xul.
+*)
+
+program                 = header, embedding, { declaration },
+                          ( comparison | triangle_comparison ),
+                          sek_stage, chen_stage, closure ;
+
+header                  = "[Pop KUHUL-PI]", newline ;
+embedding               = "[Pop EMBED", space, model, space, "DIM", space,
+                          integer, "]", newline ;
+declaration             = "[Wo", space, identifier, space, "=", space,
+                          value, "]", newline ;
+
+comparison              = compare_pair, geometry,
+                          { yax_operation } ;
+compare_pair            = "[Yax COMPARE", space, reference, space,
+                          "<->", space, reference, "]", newline ;
+model                   = identifier ;
+geometry                = "[Yax PI", space, "SIM", space, metric, space,
+                          "ANGLE", space, angle_rule, space, "RADIUS", space,
+                          radius_rule, "]", newline ;
+metric                  = "COSINE" ;
+angle_rule              = "ACOS_SIM" ;
+radius_rule             = "HALF_ONE_MINUS_SIM" ;
+
+yax_operation           = attention | gradient | traversal ;
+attention               = "[Yax ATTEND", space, reference, "]", newline ;
+gradient                = "[Yax GRADIENT", space, "EDGE_DELTA", space,
+                          reference, "]", newline ;
+traversal               = "[Yax FILTER", space, "TYPED_NEIGHBORS", space,
+                          reference, "]", newline ;
+
+(* ── Triangle comparison (A↔B↔C) ───────────────────────────────────────── *)
+
+triangle_comparison     = compare_triple, triangle_proximity,
+                          [ entropy_operations ], { yax_operation } ;
+compare_triple          = "[Yax COMPARE_TRIANGLE", space,
+                          reference, space, reference, space, reference,
+                          "]", newline ;
+
+triangle_proximity      = "[Yax MAP PEER_ARC_WEIGHTS]", newline,
+                          "[Yax REDUCE HUB_COST]", newline,
+                          "[Yax MAP PI_ROUTING_WEIGHT]", newline ;
+
+entropy_operations      = "[Yax REDUCE ROUTING_ENTROPY]", newline,
+                          "[Yax MAP ENTROPY_TO_LEVITY]", newline,
+                          "[Yax MAP ENTROPY_TO_GRAVITY]", newline ;
+
+(* sek_stage is shared; bridge_selection, proximity_projection, and field_mode_selection extend it *)
+sek_stage               = synchronization, [ bias_log ],
+                          [ bridge_selection ], [ proximity_projection ],
+                          [ field_mode_selection ] ;
+synchronization         = "[Sek SYNC", space, "READY_COMPATIBLE_LANES",
+                          "]", newline ;
+bias_log                = "[Sek PROPOSE BIAS_LOG", space, reference,
+                          "]", newline ;
+
+bridge_selection        = "[Sek SELECT BRIDGE MAX_PI_ROUTING_WEIGHT]", newline ;
+proximity_projection    = "[Sek PROPOSE SEMANTIC_PROXIMITY_WRITE]", newline ;
+field_mode_selection    = "[Sek SELECT FIELD_MODE", space, field_mode, "]", newline ;
+field_mode              = "GRAVITY" | "NEUTRAL" | "LEVITY" ;
+
+pi_arc_weight           = "ONE_MINUS_RADIUS" ;
+pi_routing_weight       = "ONE_MINUS_HUB_COST" ;
+routing_entropy         = "NEG_SUM_P_LOG_P" ;
+entropy_norm            = "ENTROPY_OVER_LOG_N" ;
+
+chen_stage              = verification, { verification } ;
+verification            = "[Ch'en VERIFY", space, verification_kind,
+                          "]", newline ;
+verification_kind       = "VECTOR_SHAPE" | "GRAPH_EVIDENCE" | "PROVENANCE"
+                        | "SCORE_BOUNDS" | "BIAS_LOG" | "TRIANGLE_CONSISTENCY"
+                        | "PROXIMITY_CONTRACT" | "ENTROPY_BOUNDS" ;
+
+closure                 = "[Xul FOLD", space, fold_kind, "]",
+                          newline, "[Xul]", [ newline ] ;
+fold_kind               = "COMPARISON_RESULT" | "TRIANGLE_RESULT" | "FIELD_STATE" ;
+
+reference               = glyph | identifier ;
+glyph                   = "⟁", identifier ;
+value                   = reference | integer | decimal | quoted ;
+identifier              = letter, { letter | digit | "_" | "-" | "." | ":" } ;
+integer                 = digit, { digit } ;
+decimal                 = integer, ".", integer ;
+quoted                  = '"', { quoted_char }, '"' ;
+quoted_char             = letter | digit | space | "_" | "-" | "." | "/" | ":" ;
+letter                  = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z"
+                        | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" ;
+digit                   = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+space                   = " ", { " " } ;
+newline                 = "\n" ;
+
+(* Triangle example program (extended with entropy and field mode):
+   [Pop KUHUL-PI]
+   [Pop EMBED EmbeddingGemma DIM 768]
+   [Wo A = ⟁CAR]
+   [Wo B = ⟁ENGINE]
+   [Wo C = ⟁BATTERY]
+   [Wo scope = "ephemeral"]
+   [Wo authority = "data_only"]
+   [Yax COMPARE_TRIANGLE ⟁CAR ⟁ENGINE ⟁BATTERY]
+   [Yax PI SIM COSINE ANGLE ACOS_SIM RADIUS HALF_ONE_MINUS_SIM]
+   [Yax MAP PEER_ARC_WEIGHTS]
+   [Yax REDUCE HUB_COST]
+   [Yax MAP PI_ROUTING_WEIGHT]
+   [Yax REDUCE ROUTING_ENTROPY]
+   [Yax MAP ENTROPY_TO_LEVITY]
+   [Yax MAP ENTROPY_TO_GRAVITY]
+   [Sek SYNC READY_COMPATIBLE_LANES]
+   [Sek SELECT BRIDGE MAX_PI_ROUTING_WEIGHT]
+   [Sek PROPOSE BIAS_LOG ⟁CAR]
+   [Sek PROPOSE SEMANTIC_PROXIMITY_WRITE]
+   [Sek SELECT FIELD_MODE LEVITY]
+   [Ch'en VERIFY VECTOR_SHAPE]
+   [Ch'en VERIFY GRAPH_EVIDENCE]
+   [Ch'en VERIFY PROVENANCE]
+   [Ch'en VERIFY SCORE_BOUNDS]
+   [Ch'en VERIFY TRIANGLE_CONSISTENCY]
+   [Ch'en VERIFY BIAS_LOG]
+   [Ch'en VERIFY PROXIMITY_CONTRACT]
+   [Ch'en VERIFY ENTROPY_BOUNDS]
+   [Xul FOLD TRIANGLE_RESULT]
+   [Xul]
+*)
+
+(* Semantic rules outside grammar:
+   s = clamp(cosine(normalize(A), normalize(B)), -1, 1)
+   angle = acos(s), 0 <= angle <= pi
+   radius = (1 - s) / 2, 0 <= radius <= 1
+   For triangle comparisons (N=3, |P_i|=2 for each vertex):
+     w_ij     = 1 - r_ij = (1 + s_ij) / 2          arc weight (direct hop)
+     h_i      = (1/|P_i|) * sum_{j in P_i}(r_ij)   mean peer radius (hub cost)
+     w_i^pi   = 1 - h_i                             routing weight (MAP PI_ROUTING_WEIGHT)
+     Bridge   = argmax_i(w_i^pi)                    vertex with lowest mean peer radius
+              = argmax_i(1 - (1/2) * sum_{j != i}(r_ij))   (N=3 triangle)
+     Tie-breaking: when two or more vertices share max w_i^pi, select the first
+       in positional order (A before B before C, as declared in COMPARE_TRIANGLE).
+       This matches the OpenCL kernel: `if (w > max_w)` with strict inequality,
+       which preserves the first-seen maximum.
+   For entropy-driven field state (N = 3 routing candidates, T = temperature):
+     p_i      = softmax(w_i^pi / T)[i]              stable: subtract max before exp
+     H        = -sum_i(p_i * log(p_i))              Shannon entropy of routing distribution
+     H_n      = H / log(N)                           normalized entropy in [0, 1]
+     L        = H_n                                  levity  (exploration signal)
+     G        = 1 - H_n                              gravity (convergence signal)
+     Neutrality = 1 - |2*H_n - 1|                   strongest near H_n = 0.5
+   Entropy is computed from softmax of pi_routing_weight values; not from
+   cosine similarities or radii directly. High entropy indicates distributional
+   uncertainty and may reflect near-uniform routing weights (nearly equilateral
+   triangle), ambiguous candidates, or noisy embeddings. It does not guarantee
+   useful novelty.
+   G, L, Neutrality are independent control signals; they do not sum to 1.
+   Bridge selection (Sek SELECT BRIDGE) is provisional until Ch'en verifies
+   TRIANGLE_CONSISTENCY and PROXIMITY_CONTRACT; Sek proposes the candidate only.
+   SEMANTIC_PROXIMITY_WRITE is a proposal under authority = "data_only";
+   it cannot independently authorize a persistent field update — that requires
+   separate host/XCFE authorization after Ch'en verification passes.
+   Ch'en VERIFY TRIANGLE_CONSISTENCY checks (all must pass; any failure rejects the fold):
+     (1) r_ij in [0, 1] for all three pairs AB, BC, AC.
+     (2) Triangle inequality: r_ij <= r_ik + r_kj for every permutation of {A,B,C}.
+         For unit-normalized embedding vectors, cosine distance d = 1 - s is a valid
+         metric, so r = d/2 satisfies this by construction. A violation means the
+         input vectors were not normalized or the radius was mis-derived; routing
+         weights based on a degenerate triangle are unreliable.
+     (3) Hub sum consistency: hub["A"] = r_AB + r_AC, hub["B"] = r_AB + r_BC,
+         hub["C"] = r_AC + r_BC, to within abs <= 1e-6.
+     (4) Bridge assignment: bridge_glyph maps to argmin(hub_costs), i.e. the same
+         vertex selected by argmax(pi_routing_weights). Ties: first in A, B, C order.
+     (5) pi_routing_weight derivation: for each vertex X, pi_routing_weight_X =
+         1 - hub["X"] / n_peers (n_peers = 2 for a 3-node triangle), to within 1e-6.
+     (6) Embedding dimension match: all three vectors share the declared DIM integer.
+   Ch'en VERIFY PROXIMITY_CONTRACT checks (all must pass; any failure rejects the fold):
+     (1) authority = "data_only" in the proposed semantic_proximity block.
+     (2) peer_set_hash = sha256("|".join(sorted(peer_glyphs)))[:16] recomputed in-place.
+     (3) embedding_version matches the model identifier declared in [Pop EMBED].
+     (4) comparison_version is a positive integer (>= 1).
+     (5) is_bridge assignment is consistent: exactly the bridge_glyph vertex has
+         is_bridge = true; all others have is_bridge = false.
+     (6) pi_routing_weight = 1 - hub_cost to within abs <= 1e-6 (derived, not stored independently).
+     (7) triangle_fold_key matches the fold_key of the originating comparison result.
+   Bridge selection remains provisional until TRIANGLE_CONSISTENCY and
+   PROXIMITY_CONTRACT both pass. A failing check must reject the fold, not degrade
+   it. Ch'en may not silently coerce an inconsistent proximity block.
+   Bridge selection is a medoid-like signal useful for retrieval routing; it
+   does not prove causal intermediacy or that routing through it beats a direct
+   edge. Comparison version and peer_set_hash in semantic_proximity allow the
+   runtime to reject cached comparisons when the peer set or model changes.
+   The angular separation and radius are two transforms of the same cosine
+   similarity; a ranker must not count them, or their source cosine, as
+   independent score factors. If cosine supplies G in W*C*R*G*L, angle and
+   radius are descriptive projections only.
+   Geometric angle is distinct from the six-valued K'UHUL phase index.
+   Embedding dimensions and vector shapes must match before comparison.
+   A zero-norm input vector is invalid for cosine comparison and must produce
+   a typed rejection or unresolved result, never a fabricated zero similarity.
+   Candidate graph relations are not proven by embedding similarity.
+   If BIAS_LOG is proposed, Ch'en must verify it before Xul closure.
+   Xul emits a comparison result; it does not authorize a GramStore write.
+   Any learned-weight or persistent bias update needs separate host/XCFE
+   authorization after verification.
+*)
+
+(* Example program, ordered by phase gates:
+   [Pop KUHUL-PI]
+   [Pop EMBED EmbeddingGemma DIM 256]
+   [Wo field = ⟁CAR]
+   [Wo scope = "ephemeral"]
+   [Wo authority = "data_only"]
+   [Yax COMPARE ⟁CAR <-> ⟁ENGINE]
+   [Yax PI SIM COSINE ANGLE ACOS_SIM RADIUS HALF_ONE_MINUS_SIM]
+   [Yax ATTEND ⟁ENGINE]
+   [Yax GRADIENT EDGE_DELTA ⟁ENGINE]
+   [Yax FILTER TYPED_NEIGHBORS ⟁CAR]
+   [Sek SYNC READY_COMPATIBLE_LANES]
+   [Sek PROPOSE BIAS_LOG ⟁CAR]
+   [Ch'en VERIFY VECTOR_SHAPE]
+   [Ch'en VERIFY GRAPH_EVIDENCE]
+   [Ch'en VERIFY PROVENANCE]
+   [Ch'en VERIFY SCORE_BOUNDS]
+   [Ch'en VERIFY BIAS_LOG]
+   [Xul FOLD COMPARISON_RESULT]
+   [Xul]
+*)

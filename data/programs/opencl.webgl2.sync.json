@@ -1,0 +1,37 @@
+{
+  "@program": "opencl.webgl2.sync",
+  "@kind": "kuhul.host.bridge.v1",
+  "@description": "Explicit copy boundary between native OpenCL buffers and browser WebGL2 textures.",
+  "@authority": "tools/stb.py",
+  "transport": "host_readback_upload",
+  "dtype": "f32",
+  "directions": {
+    "opencl_to_webgl2": {
+      "source": "cl_mem",
+      "read": "clEnqueueReadBuffer(CL_TRUE)",
+      "wire": "ArrayBuffer/Float32Array",
+      "upload": "gl.texSubImage2D(TEXTURE_2D, 0, 0, 0, width, height, RED, FLOAT, data)",
+      "phase": "Chen"
+    },
+    "webgl2_to_opencl": {
+      "source": "WebGL2 texture",
+      "read": "gl.readPixels(..., RED, FLOAT, data)",
+      "wire": "ArrayBuffer/Float32Array",
+      "upload": "clEnqueueWriteBuffer(CL_TRUE)",
+      "phase": "Wo"
+    }
+  },
+  "invariants": {
+    "shape_preserved": true,
+    "row_major_preserved": true,
+    "explicit_copy_only": true,
+    "no_shared_memory_claim": true,
+    "alpha_channel": "not_used"
+  },
+  "runtime": {
+    "native_endpoint": "host OpenCL adapter",
+    "browser_endpoint": "WebGL2 dispatcher",
+    "shared_context": false,
+    "webgpu": false
+  }
+}

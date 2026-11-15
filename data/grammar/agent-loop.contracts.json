@@ -1,0 +1,44 @@
+{
+  "@type": "khanary.agent_loop.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "an_agent_selects_actions_xcfe_still_authorizes_them",
+  "lane": "KHANARY_AGENT_LOOP_TEST",
+  "owner": "src/micronaut/agent_loop.cpp",
+  "why": "Micronauts are programs capable of acting as agents, which does not prove that any particular Micronaut is one. Agency is a behavioural claim, so it is demonstrated operationally: generate a subgoal, choose an action from context rather than a template, invoke a capability through the authorized registry, observe the result and change the next decision, and emit a verified learning delta or an explicit no-change. Autonomy adds one test — a further bounded round initiated without a new user message.",
+  "classification": {
+    "law": "classification uses registry facts only — is it runnable, does it declare selectable capabilities — and never a claim inferred from a name",
+    "program": "runnable, declares no capabilities: it executes but takes no part in a selection loop",
+    "agent_capable": "runnable and declares capabilities: it can participate in observe → evaluate → select → act → feedback",
+    "unrunnable": "cannot act at all: unregistered, or registered with no driver manifest",
+    "no_llm_required": "agenthood does not require a model: this loop is rules and arithmetic over the registry, AIML-style subgoals and a bounded budget, and it is exactly reproducible"
+  },
+  "loop": {
+    "shape": "observe -> evaluate -> select -> act -> feedback",
+    "subgoal": "the next subgoal is the first planned capability not yet satisfied, so the goal drives the round rather than a fixed script",
+    "selection": "the action is chosen against current state; a capability that already failed is not preferred while an alternative remains, so observation changes the decision",
+    "invocation": "a capability resolves to a registered and runnable Micronaut through the registry; the executor receives the resolved Micronaut and never a bare capability name",
+    "feedback": "each round records success or failure and an observation, which becomes part of the state the next decision reads",
+    "budget": "the loop is bounded by the declared maximum rounds, and reaching it is reported as budget_exhausted rather than success",
+    "authorization": "XCXE authorizes capabilities, not the agent's intentions: a capability outside the grant is not executed, and the run reports blocked"
+  },
+  "autonomy": {
+    "law": "autonomy is not unlimited scope: it is the ability to run another bounded round under an existing authorization without a new user message",
+    "bounded_by": ["the declared maximum rounds", "the authorized capability set", "the goal's own plan"],
+    "prohibited": "an autonomous round may not widen its authorization, invent a capability, or continue past the budget"
+  },
+  "learning": {
+    "law": "a run ends with a verified learning delta or an explicit no-change outcome, never with silence",
+    "note": "the delta goes through the LearningDelta contract, so a run that taught nothing reports NO_CHANGE rather than pretending otherwise"
+  },
+  "invariants": {
+    "AG1": "a Micronaut is classified from registry facts only, and the classification vocabulary is program, agent_capable, autonomous_coordinator, unrunnable",
+    "AG2": "the loop generates or selects a relevant subgoal from the goal's plan rather than replaying a fixed script",
+    "AG3": "the selected action depends on current state: after a failed attempt the next decision differs while an alternative remains",
+    "AG4": "an action is invoked through the authorized registry, resolves to a registered and runnable Micronaut, and a capability outside the grant is not executed",
+    "AG5": "the run observes its results and records them into the state the next decision reads",
+    "AG6": "a run ends with a learning delta or an explicit NO_CHANGE outcome, and never with an unrecorded result",
+    "AG7": "autonomy is bounded: a further round may run without a new prompt, but only within the authorized set and the declared round budget, and reaching the budget is reported as budget_exhausted",
+    "AG8": "the loop is deterministic and model-free: the same goal, registry and authorization produce the same rounds, so agency is reproducible evidence rather than a description"
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "@type": "khanary.fold_kernel_contracts.v1",
+  "version": "1.0.0",
+  "authority": "fold_kernel_lifecycle_contract_not_semantic_authority",
+  "semantic_authority": false,
+  "owner": {
+    "fold_phase_semantics": "K'UHUL",
+    "learned": "N-Gram Burner",
+    "binding": "Binding Resolver",
+    "evidence": "Observation System",
+    "policy": "XCFE Policy Registry",
+    "route": "XCFE",
+    "ui": "Projection/UI"
+  },
+  "phase_cycle": [
+    "Pop",
+    "Wo",
+    "Yax",
+    "Sek",
+    "Ch'en",
+    "Xul"
+  ],
+  "states": [
+    "unbound",
+    "observed",
+    "learned",
+    "bound",
+    "validated",
+    "autonomous"
+  ],
+  "state_requirements": {
+    "unbound": [],
+    "observed": [],
+    "learned": [
+      "@learned"
+    ],
+    "bound": [
+      "@learned",
+      "@binding"
+    ],
+    "validated": [
+      "@learned",
+      "@binding",
+      "@evidence",
+      "@route"
+    ],
+    "autonomous": [
+      "@learned",
+      "@binding",
+      "@evidence",
+      "@policy",
+      "@route"
+    ]
+  },
+  "required_core_keys": [
+    "@fold",
+    "@phase",
+    "@semantic",
+    "@state"
+  ],
+  "allowed_route_targets": [
+    "local",
+    "local-test",
+    "fallback"
+  ],
+  "allowed_evidence_inputs": [
+    "observations",
+    "support",
+    "exceptions",
+    "validated",
+    "failures"
+  ],
+  "semantic_tags_by_phase": {
+    "Pop": [
+      "XCFE:PERCEIVE",
+      "XCFE:READ"
+    ],
+    "Wo": [
+      "XCFE:GUARD",
+      "XCFE:CONSTRAIN"
+    ],
+    "Yax": [
+      "XCFE:BRANCH",
+      "XCFE:CANDIDATE"
+    ],
+    "Sek": [
+      "XCFE:INFER",
+      "XCFE:OPERATE",
+      "XCFE:DISPATCH"
+    ],
+    "Ch'en": [
+      "XCFE:OBSERVE",
+      "XCFE:VERIFY"
+    ],
+    "Xul": [
+      "XCFE:COLLAPSE",
+      "XCFE:COMMIT"
+    ]
+  },
+  "invariants": {
+    "I1": "evidence.observations = evidence.support + evidence.exceptions",
+    "I2": "evidence.validated >= evidence.failures",
+    "I3": "XCFE Policy W1: alpha + beta + gamma + delta = 1",
+    "I4": "XCFE Policy W3: thresholds.fallback <= thresholds.autonomy",
+    "I5": "evidence.confidence in [0, 1]",
+    "S1": "state in {learned,bound,validated,autonomous} implies learned != null",
+    "S2": "state in {bound,validated,autonomous} implies binding != null",
+    "S3": "state in {validated,autonomous} implies evidence != null",
+    "S4": "state = autonomous implies policy != null",
+    "S5": "state in {validated,autonomous} implies route != null",
+    "A1": "route != null implies route.authority = XCFE",
+    "A2": "evidence.confidence = XCFEPolicy(evidence)",
+    "A3": "state = XCFE(previous_state,event,evidence,policy)",
+    "P1": "phase in phase_cycle implies fold in compatible_folds(phase)",
+    "P2": "semantic in semantic_tags(phase)",
+    "L0": "Fold Kernel coordinate K = (@phase, @state) is a Fold Lattice cell projection",
+    "FS0": "Fold Kernel lifecycle state is located inside Fold Space through (fold, phase, track, fold_state, state/runtime) projections"
+  },
+  "confidence_policy": {
+    "@type": "khanary.xcfe_policy_confidence.v1",
+    "source": "data/grammar/xcfe-policy.contracts.json",
+    "formula": "policy.@evidence.@derive.@confidence or xcfe default_derive",
+    "tolerance": 1e-06
+  },
+  "lifecycle": [
+    {
+      "state": "unbound",
+      "meaning": "core fold/phase/semantic identity exists without learned evidence"
+    },
+    {
+      "state": "observed",
+      "meaning": "N-Gram Burner has observed candidate evidence but no required learned projection"
+    },
+    {
+      "state": "learned",
+      "meaning": "@learned is present"
+    },
+    {
+      "state": "bound",
+      "meaning": "@binding is present and checkable"
+    },
+    {
+      "state": "validated",
+      "meaning": "@evidence and XCFE route are present"
+    },
+    {
+      "state": "autonomous",
+      "meaning": "@policy and XCFE route authorize autonomous selection"
+    }
+  ],
+  "policy_contract": "data/grammar/xcfe-policy.contracts.json",
+  "lattice_contract": "data/grammar/fold-lattice.contracts.json",
+  "fold_space_contract": "data/grammar/fold-space.contracts.json",
+  "fold_field_location": {
+    "fold_field_is": "static product-graph vertex: (node_id, theta, W, C, R)",
+    "score_formula": "S = W * C * R",
+    "kernel_state_vs_fold_field": "FoldKernel = lifecycle envelope; FoldField = scoring vertex in G_runtime = G_semantic □ G_phase",
+    "theta_source": "FoldKernel.@phase determines the canonical theta for the corresponding FoldField vertex",
+    "confidence_source": "FoldKernel.@evidence.confidence informs FoldField.C; XCFE remains authority"
+  },
+  "fold_field_invariants": {
+    "FK1": "FoldKernel.@phase determines theta for the corresponding FoldField vertex in G_runtime",
+    "FK2": "FoldField.score() = W·C·R is navigational pressure; XCFE route authority is not superseded"
+  }
+}

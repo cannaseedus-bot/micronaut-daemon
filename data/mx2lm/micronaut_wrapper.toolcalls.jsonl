@@ -1,0 +1,8 @@
+{"tool":"Command","arg":"powershell -File tools\\micronaut\\kmu.ps1 status","text":"capture runtime status snapshot from micronaut surfaces"}
+{"tool":"Command","arg":"powershell -File tools\\micronaut\\kmu.ps1 dispatch \"@math solve x^2+3x+2=0\"","text":"route a query through micronaut dispatch"}
+{"tool":"Command","arg":"powershell -File tools\\micronaut\\kmu.ps1 sandbox-violations -LastN 25","text":"inspect recent sandbox violations"}
+{"tool":"Tool","arg":"rpc.list_keys","text":"enumerate registered factory keys"}
+{"tool":"Tool","arg":"rpc.micronaut_dispatch","text":"resolve active micronaut route for a query"}
+{"tool":"Tool","arg":"mcp.semantic_fold","text":"query fold fingerprints and similarity data"}
+{"tool":"Agent","arg":"python bot.py tui --mode center --resume","text":"spawn an interactive micronaut worker"}
+{"tool":"Skill","arg":"khanary-micronaut-runtime","text":"call the micronaut skill wrapper"}

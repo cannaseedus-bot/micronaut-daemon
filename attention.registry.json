@@ -1,0 +1,516 @@
+{
+  "@kind": "asx.registry.v1",
+  "bindings": [
+    {
+      "glyph": "⨀",
+      "opcode": "WO_MATMUL",
+      "cpp_file": "attention/matmul.cpp",
+      "fold": "TENSOR",
+      "node_range": [
+        900,
+        907
+      ],
+      "signature": {
+        "inputs": [
+          "Q",
+          "K"
+        ],
+        "output": "attention_scores",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "◉",
+      "opcode": "WO_SCALE",
+      "cpp_file": "attention/scale.cpp",
+      "fold": "TENSOR",
+      "node_range": [
+        908,
+        915
+      ],
+      "signature": {
+        "inputs": [
+          "scores",
+          "scale"
+        ],
+        "output": "scaled_scores",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "⟐",
+      "opcode": "WO_SOFTMAX",
+      "cpp_file": "attention/softmax.cpp",
+      "fold": "TENSOR",
+      "node_range": [
+        916,
+        923
+      ],
+      "signature": {
+        "inputs": [
+          "scores"
+        ],
+        "output": "probabilities",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "◈",
+      "opcode": "WO_MASK",
+      "cpp_file": "attention/mask.cpp",
+      "fold": "TENSOR",
+      "node_range": [
+        924,
+        931
+      ],
+      "signature": {
+        "inputs": [
+          "scores",
+          "mask"
+        ],
+        "output": "masked_scores",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "◬",
+      "opcode": "WO_QKV_SPLIT",
+      "cpp_file": "attention/qkv_split.cpp",
+      "fold": "TENSOR",
+      "node_range": [
+        932,
+        939
+      ],
+      "signature": {
+        "inputs": [
+          "packed_qkv"
+        ],
+        "output": "Q,K,V",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "⌬",
+      "opcode": "WO_ROTARY",
+      "cpp_file": "attention/rotary.cpp",
+      "fold": "TENSOR",
+      "node_range": [
+        940,
+        947
+      ],
+      "signature": {
+        "inputs": [
+          "Q",
+          "K"
+        ],
+        "output": "rotary_qk",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "✦",
+      "opcode": "WO_FLASH_ATTN",
+      "cpp_file": "attention/flash_attn.cpp",
+      "fold": "KERNEL",
+      "node_range": [
+        948,
+        955
+      ],
+      "signature": {
+        "inputs": [
+          "Q",
+          "K",
+          "V",
+          "mask"
+        ],
+        "output": "context",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "✧",
+      "opcode": "WO_PAGED_ATTN",
+      "cpp_file": "attention/paged_attn.cpp",
+      "fold": "KERNEL",
+      "node_range": [
+        956,
+        963
+      ],
+      "signature": {
+        "inputs": [
+          "Q",
+          "K",
+          "V",
+          "pages"
+        ],
+        "output": "context",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "◉",
+      "opcode": "WO_RING_ATTN",
+      "cpp_file": "attention/ring_attn.cpp",
+      "fold": "KERNEL",
+      "node_range": [
+        964,
+        971
+      ],
+      "signature": {
+        "inputs": [
+          "Q",
+          "K",
+          "V",
+          "ring"
+        ],
+        "output": "context",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "◯",
+      "opcode": "WO_LOCAL_ATTN",
+      "cpp_file": "attention/local_attn.cpp",
+      "fold": "KERNEL",
+      "node_range": [
+        972,
+        979
+      ],
+      "signature": {
+        "inputs": [
+          "Q",
+          "K",
+          "V",
+          "window"
+        ],
+        "output": "context",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "◈",
+      "opcode": "WO_KV_CACHE",
+      "cpp_file": "attention/kv_cache.cpp",
+      "fold": "MEMORY",
+      "node_range": [
+        980,
+        987
+      ],
+      "signature": {
+        "inputs": [
+          "K",
+          "V",
+          "cache"
+        ],
+        "output": "cache_state",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "◍",
+      "opcode": "WO_SINK_ATTN",
+      "cpp_file": "attention/sink_attn.cpp",
+      "fold": "KERNEL",
+      "node_range": [
+        988,
+        995
+      ],
+      "signature": {
+        "inputs": [
+          "Q",
+          "K",
+          "V",
+          "sink"
+        ],
+        "output": "context",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "◐",
+      "opcode": "WO_SLIDING",
+      "cpp_file": "attention/sliding.cpp",
+      "fold": "KERNEL",
+      "node_range": [
+        996,
+        1003
+      ],
+      "signature": {
+        "inputs": [
+          "Q",
+          "K",
+          "V",
+          "window"
+        ],
+        "output": "context",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "◑",
+      "opcode": "WO_SPARSE_ATTN",
+      "cpp_file": "attention/sparse_attn.cpp",
+      "fold": "KERNEL",
+      "node_range": [
+        1004,
+        1011
+      ],
+      "signature": {
+        "inputs": [
+          "Q",
+          "K",
+          "V",
+          "pattern"
+        ],
+        "output": "context",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "◒",
+      "opcode": "WO_LINEAR_ATTN",
+      "cpp_file": "attention/linear_attn.cpp",
+      "fold": "KERNEL",
+      "node_range": [
+        1012,
+        1019
+      ],
+      "signature": {
+        "inputs": [
+          "Q",
+          "K",
+          "V"
+        ],
+        "output": "context",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "◓",
+      "opcode": "WO_CROSS_ATTN",
+      "cpp_file": "attention/cross_attn.cpp",
+      "fold": "KERNEL",
+      "node_range": [
+        1020,
+        1027
+      ],
+      "signature": {
+        "inputs": [
+          "Q",
+          "K",
+          "V",
+          "memory"
+        ],
+        "output": "context",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "◔",
+      "opcode": "WO_GQA",
+      "cpp_file": "attention/gqa.cpp",
+      "fold": "TENSOR",
+      "node_range": [
+        1028,
+        1035
+      ],
+      "signature": {
+        "inputs": [
+          "Q",
+          "K",
+          "V",
+          "groups"
+        ],
+        "output": "context",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "◕",
+      "opcode": "WO_MQA",
+      "cpp_file": "attention/mqa.cpp",
+      "fold": "TENSOR",
+      "node_range": [
+        1036,
+        1043
+      ],
+      "signature": {
+        "inputs": [
+          "Q",
+          "K",
+          "V"
+        ],
+        "output": "context",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "◖",
+      "opcode": "WO_MLA",
+      "cpp_file": "attention/mla.cpp",
+      "fold": "TENSOR",
+      "node_range": [
+        1044,
+        1051
+      ],
+      "signature": {
+        "inputs": [
+          "Q",
+          "latent_KV"
+        ],
+        "output": "context",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "◗",
+      "opcode": "WO_HEAD_ROUTE",
+      "cpp_file": "attention/head_routing.cpp",
+      "fold": "CONTROL",
+      "node_range": [
+        1052,
+        1059
+      ],
+      "signature": {
+        "inputs": [
+          "heads",
+          "policy"
+        ],
+        "output": "route_plan",
+        "dtype": [
+          "fp16",
+          "bf16",
+          "fp32"
+        ],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "⊙",
+      "opcode": "SEK_PI_RADIUS",
+      "cpp_file": "pi_radius.cpp",
+      "fold": "KERNEL",
+      "node_range": [1060, 1067],
+      "phase_gate": "Sek",
+      "signature": {
+        "inputs": ["positions", "radius"],
+        "output": "pi_radius_weights",
+        "shape": "[points, points]",
+        "kernel": "0.5 * (1 + cos(pi * distance / radius)) for distance <= radius; otherwise 0",
+        "dtype": ["fp32"],
+        "cpu_fallback": true
+      }
+    },
+    {
+      "glyph": "⊗",
+      "opcode": "SEK_FOLD_ACCUMULATE",
+      "cpp_file": "accumulator.cpp",
+      "fold": "TENSOR",
+      "node_range": [1068, 1075],
+      "phase_gate": "Sek",
+      "signature": {
+        "inputs": ["contribution", "accumulator (optional)", "weight (optional scalar)"],
+        "output": "accumulator",
+        "shape": "same as contribution and accumulator when supplied",
+        "operation": "accumulator += weight * contribution; missing accumulator starts at zero",
+        "dtype": ["fp32"],
+        "cpu_fallback": true
+      }
+    }
+  ]
+}

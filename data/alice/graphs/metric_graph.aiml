@@ -1,0 +1,240 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from metric_graph.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH </pattern>
+    <template>source metric_graph.gml; label METRIC_GRAPH_TRACK_COMPARTMENTS; identity 910; directed 1; nodes 18; edges 22. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 0</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 0; confidence: 0.98; health: 1.0; id: 0; label: FoldGraph_B; prior_mass: 0.90; risk_bound: 1.0; static_weight: 1.0; x: -1.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 0; confidence: 0.98; health: 1.0; id: 0; label: FoldGraph_B; prior_mass: 0.90; risk_bound: 1.0; static_weight: 1.0; x: -1.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 1</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 1; confidence: 0.94; health: 1.0; id: 1; label: METRIC-µ; prior_mass: 0.80; risk_bound: 0.75; static_weight: 0.90; x: 0.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE METRIC-Μ</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 1; confidence: 0.94; health: 1.0; id: 1; label: METRIC-µ; prior_mass: 0.80; risk_bound: 0.75; static_weight: 0.90; x: 0.0; y: 0.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 2</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 2; confidence: 0.82; health: 0.95; id: 2; label: VECTOR-µ_provider; prior_mass: 0.45; risk_bound: 0.60; static_weight: 0.55; x: 1.0; y: 0.8; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 2; confidence: 0.82; health: 0.95; id: 2; label: VECTOR-µ_provider; prior_mass: 0.45; risk_bound: 0.60; static_weight: 0.55; x: 1.0; y: 0.8; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 3</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 3; confidence: 0.70; health: 0.90; id: 3; label: SDR_provider; prior_mass: 0.30; risk_bound: 0.65; static_weight: 0.45; x: 1.0; y: 0.2; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 3; confidence: 0.70; health: 0.90; id: 3; label: SDR_provider; prior_mass: 0.30; risk_bound: 0.65; static_weight: 0.45; x: 1.0; y: 0.2; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 4</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 4; confidence: 0.88; health: 0.95; id: 4; label: GRAPH_provider; prior_mass: 0.60; risk_bound: 0.70; static_weight: 0.65; x: 1.0; y: -0.4; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 4; confidence: 0.88; health: 0.95; id: 4; label: GRAPH_provider; prior_mass: 0.60; risk_bound: 0.70; static_weight: 0.65; x: 1.0; y: -0.4; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 5</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 5; confidence: 0.86; health: 0.95; id: 5; label: SCX_keybook_provider; prior_mass: 0.55; risk_bound: 0.70; static_weight: 0.60; x: 1.0; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 5; confidence: 0.86; health: 0.95; id: 5; label: SCX_keybook_provider; prior_mass: 0.55; risk_bound: 0.70; static_weight: 0.60; x: 1.0; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 6</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 6; confidence: 0.96; health: 1.0; id: 6; label: WCR_Yax; prior_mass: 0.70; risk_bound: 0.80; static_weight: 0.85; x: 0.0; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 6; confidence: 0.96; health: 1.0; id: 6; label: WCR_Yax; prior_mass: 0.70; risk_bound: 0.80; static_weight: 0.85; x: 0.0; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 7</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 7; confidence: 1.0; health: 1.0; id: 7; label: Ch'en_verifier; prior_mass: 0.75; risk_bound: 1.0; static_weight: 1.0; x: -1.0; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 7; confidence: 1.0; health: 1.0; id: 7; label: Ch'en_verifier; prior_mass: 0.75; risk_bound: 1.0; static_weight: 1.0; x: -1.0; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 8</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 8; confidence: 0.90; health: 1.0; id: 8; label: Track_MATH; prior_mass: 0.55; risk_bound: 0.70; static_weight: 0.80; x: -2.0; y: 0.6; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 8; confidence: 0.90; health: 1.0; id: 8; label: Track_MATH; prior_mass: 0.55; risk_bound: 0.70; static_weight: 0.80; x: -2.0; y: 0.6; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 9</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 9; confidence: 0.90; health: 1.0; id: 9; label: Track_ELIZA; prior_mass: 0.55; risk_bound: 0.70; static_weight: 0.80; x: -2.0; y: 0.2; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 9; confidence: 0.90; health: 1.0; id: 9; label: Track_ELIZA; prior_mass: 0.55; risk_bound: 0.70; static_weight: 0.80; x: -2.0; y: 0.2; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 10</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 10; confidence: 0.90; health: 1.0; id: 10; label: Track_CODE; prior_mass: 0.55; risk_bound: 0.70; static_weight: 0.80; x: -2.0; y: -0.2; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 10; confidence: 0.90; health: 1.0; id: 10; label: Track_CODE; prior_mass: 0.55; risk_bound: 0.70; static_weight: 0.80; x: -2.0; y: -0.2; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 11</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 11; confidence: 0.90; health: 1.0; id: 11; label: Track_JOKE; prior_mass: 0.55; risk_bound: 0.70; static_weight: 0.80; x: -2.0; y: -0.6; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 11; confidence: 0.90; health: 1.0; id: 11; label: Track_JOKE; prior_mass: 0.55; risk_bound: 0.70; static_weight: 0.80; x: -2.0; y: -0.6; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 12</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 12; confidence: 0.80; health: 0.95; id: 12; label: Bridge_JOKE_ELIZA; prior_mass: 0.35; risk_bound: 0.60; static_weight: 0.45; x: -1.0; y: -0.8; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 12; confidence: 0.80; health: 0.95; id: 12; label: Bridge_JOKE_ELIZA; prior_mass: 0.35; risk_bound: 0.60; static_weight: 0.45; x: -1.0; y: -0.8; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 13</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 13; confidence: 0.75; health: 0.95; id: 13; label: GramNode:why@JOKE; prior_mass: 0.25; risk_bound: 0.55; static_weight: 0.35; x: -3.0; y: -0.6; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE GRAMNODE:WHY@JOKE</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 13; confidence: 0.75; health: 0.95; id: 13; label: GramNode:why@JOKE; prior_mass: 0.25; risk_bound: 0.55; static_weight: 0.35; x: -3.0; y: -0.6; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 14</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 14; confidence: 0.75; health: 0.95; id: 14; label: GramNode:why@ADVISOR; prior_mass: 0.25; risk_bound: 0.55; static_weight: 0.35; x: -3.0; y: 0.6; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE GRAMNODE:WHY@ADVISOR</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 14; confidence: 0.75; health: 0.95; id: 14; label: GramNode:why@ADVISOR; prior_mass: 0.25; risk_bound: 0.55; static_weight: 0.35; x: -3.0; y: 0.6; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 15</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 15; confidence: 0.95; health: 1.0; id: 15; label: FoldNode:Yax; prior_mass: 0.50; risk_bound: 0.75; static_weight: 0.75; x: -0.5; y: -1.6; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE FOLDNODE:YAX</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 15; confidence: 0.95; health: 1.0; id: 15; label: FoldNode:Yax; prior_mass: 0.50; risk_bound: 0.75; static_weight: 0.75; x: -0.5; y: -1.6; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 16</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 16; confidence: 0.88; health: 1.0; id: 16; label: MicronautNode:JOKE-µ; prior_mass: 0.45; risk_bound: 0.65; static_weight: 0.70; x: -2.6; y: -1.1; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE MICRONAUTNODE:JOKE-Μ</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 16; confidence: 0.88; health: 1.0; id: 16; label: MicronautNode:JOKE-µ; prior_mass: 0.45; risk_bound: 0.65; static_weight: 0.70; x: -2.6; y: -1.1; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 17</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 17; confidence: 0.78; health: 0.95; id: 17; label: MeshNode:delivery_reflection; prior_mass: 0.35; risk_bound: 0.60; static_weight: 0.45; x: -1.5; y: -1.1; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE </pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; node 17; confidence: 0.78; health: 0.95; id: 17; label: MeshNode:delivery_reflection; prior_mass: 0.35; risk_bound: 0.60; static_weight: 0.45; x: -1.5; y: -1.1; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 0  1</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 0 to 1; id: 101; label: B_to_metric; loss_cost: 0.05; mutation: unchanged; source: 0; target: 1; verb: @uses; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 7  1</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 7 to 1; id: 102; label: verified_delta_to_metric; loss_cost: 0.10; mutation: unchanged; source: 7; target: 1; verb: @verifies; weight: 0.95. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 2  1</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 2 to 1; id: 103; label: vector_as_metric_provider; loss_cost: 0.30; mutation: unchanged; source: 2; target: 1; verb: @delegates_to; weight: 0.75. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 3  1</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 3 to 1; id: 104; label: sdr_as_metric_provider; loss_cost: 0.35; mutation: unchanged; source: 3; target: 1; verb: @delegates_to; weight: 0.60. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 4  1</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 4 to 1; id: 105; label: graph_as_metric_provider; loss_cost: 0.20; mutation: unchanged; source: 4; target: 1; verb: @delegates_to; weight: 0.85. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 5  1</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 5 to 1; id: 106; label: keybook_as_metric_provider; loss_cost: 0.20; mutation: unchanged; source: 5; target: 1; verb: @delegates_to; weight: 0.80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1  6</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 1 to 6; id: 107; label: metric_relevance_to_yax; loss_cost: 0.15; mutation: unchanged; source: 1; target: 6; verb: @produces; weight: 0.90. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 6  7</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 6 to 7; id: 108; label: selected_candidate_to_chen; loss_cost: 0.10; mutation: unchanged; source: 6; target: 7; verb: @requires; weight: 0.90. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1  0</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 1 to 0; id: 109; label: metric_never_commits_B; loss_cost: 0.05; mutation: unchanged; source: 1; target: 0; verb: @related_to; weight: 0.40. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 8  1</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 8 to 1; id: 110; label: math_track_local_metric; loss_cost: 0.15; mutation: unchanged; source: 8; target: 1; verb: @requires; weight: 0.80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 9  1</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 9 to 1; id: 111; label: eliza_track_local_metric; loss_cost: 0.15; mutation: unchanged; source: 9; target: 1; verb: @requires; weight: 0.80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 10  1</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 10 to 1; id: 112; label: code_track_local_metric; loss_cost: 0.15; mutation: unchanged; source: 10; target: 1; verb: @requires; weight: 0.80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 11  1</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 11 to 1; id: 113; label: joke_track_local_metric; loss_cost: 0.15; mutation: unchanged; source: 11; target: 1; verb: @requires; weight: 0.80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 11  12</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 11 to 12; id: 114; label: joke_to_eliza_bridge_admission; loss_cost: 0.30; mutation: unchanged; source: 11; target: 12; verb: @delegates_to; weight: 0.55. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 12  9</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 12 to 9; id: 115; label: bridge_to_eliza_track; loss_cost: 0.30; mutation: unchanged; source: 12; target: 9; verb: @delegates_to; weight: 0.55. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 12  1</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 12 to 1; id: 116; label: authorized_cross_track_metric; loss_cost: 0.25; mutation: unchanged; source: 12; target: 1; verb: @requires; weight: 0.50. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 13  11</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 13 to 11; id: 117; label: why_owned_by_joke_track; loss_cost: 0.10; mutation: unchanged; source: 13; target: 11; verb: @part_of; weight: 0.80. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 14  1</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 14 to 1; id: 118; label: why_advisor_metric_local_only; loss_cost: 0.15; mutation: unchanged; source: 14; target: 1; verb: @requires; weight: 0.65. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 13  17</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 13 to 17; id: 119; label: joke_why_to_delivery_mesh; loss_cost: 0.25; mutation: unchanged; source: 13; target: 17; verb: @delegates_to; weight: 0.45. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 17  9</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 17 to 9; id: 120; label: mesh_discovers_eliza_reflection; loss_cost: 0.25; mutation: unchanged; source: 17; target: 9; verb: @exposes; weight: 0.45. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 16  11</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 16 to 11; id: 121; label: joke_micronaut_governs_joke_track; loss_cost: 0.10; mutation: unchanged; source: 16; target: 11; verb: @defines; weight: 0.70. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 15  6</pattern>
+    <template>Graph METRIC_GRAPH_TRACK_COMPARTMENTS; edge 15 to 6; id: 122; label: yax_fold_conditions_metric_selection; loss_cost: 0.10; mutation: unchanged; source: 15; target: 6; verb: @requires; weight: 0.85. Data-only graph record.</template>
+  </category>
+</aiml>

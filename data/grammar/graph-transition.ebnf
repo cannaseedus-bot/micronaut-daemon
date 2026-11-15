@@ -1,0 +1,127 @@
+(* ========================================================================== *)
+(* K'UHUL GRAPH-TRANSITION GRAMMAR (EBNF)                                    *)
+(* Version: 1.0                                                              *)
+(* Defines: legal atomic movement on G_runtime = Q_3 □ C_6                   *)
+(* Contract: data/grammar/runtime-graph.contracts.json                       *)
+(* Runtime:  src/world/runtime_graph.cpp                                     *)
+(* ========================================================================== *)
+
+(* This grammar turns data/unfold-graph.gml from a topology description into an
+   addressable routing substrate. It defines movement, not permission: every
+   transition is a candidate route that XCFE must admit, and only a verified,
+   authorized Xul may commit anything a transition produced. *)
+
+(* ── Transition contract ─────────────────────────────────────────────────── *)
+
+TransitionContract  ::= "{" TransitionMembers "}"
+
+TransitionMembers   ::= TransitionId "," TransitionFrom "," TransitionTo
+                      "," TransitionKind "," TransitionGuard
+                      ("," TransitionCost)?
+                      ("," TransitionAdmission)?
+                      ("," TransitionMetadata)?
+
+(* ── Identity ───────────────────────────────────────────────────────────── *)
+
+TransitionId        ::= "id" ":" String
+
+(* ── Endpoints: vertices of Q_3 □ C_6 ───────────────────────────────────── *)
+
+TransitionFrom      ::= "from" ":" "{" VertexRef "}"
+
+TransitionTo        ::= "to" ":" "{" VertexRef "}"
+
+VertexRef           ::= "address" ":" AddressBits
+                      | "micronaut" ":" String
+                      "," "phase" ":" PhaseName
+
+AddressBits         ::= Bit "," Bit "," Bit
+
+Bit                 ::= "0" | "1"
+
+(* Vertex encoding declared by the GML: id = address*6 + theta,
+   address = b0 + 2*b1 + 4*b2, theta = canonical C6 index. *)
+
+(* ── Movement kinds ─────────────────────────────────────────────────────── *)
+
+TransitionKind      ::= "kind" ":" KindName
+
+KindName            ::= "semantic_step"    (* address changes, phase does not *)
+                      | "phase_step"       (* phase advances, address does not *)
+                      | "composite"        (* an ordered sequence of the two *)
+
+(* ── Guards: the structural law that makes a transition legal ───────────── *)
+
+TransitionGuard     ::= "guard" ":" "{" GuardBody "}"
+
+GuardBody           ::= "hamming_distance" ":" Integer
+                      | "phase_delta" ":" DeltaPattern
+                      | "phase_forward" ":" Boolean
+                      | "new_execution" ":" Boolean
+                      | "requires_phase" ":" PhaseName
+                      | "forbids_phase" ":" PhaseName
+
+DeltaPattern        ::= "+1" | "-1" | "0" | "±1"
+
+(* ── Cost ───────────────────────────────────────────────────────────────── *)
+
+TransitionCost      ::= "cost" ":" "{" CostBody "}"
+
+CostBody            ::= "weight" ":" Number
+                      ("," "arc_weight" ":" Number)?
+                      ("," "model" ":" CostModel)?
+
+CostModel           ::= "uniform" | "incidence" | "measured"
+
+(* ── Admission: where authority actually lives ──────────────────────────── *)
+
+TransitionAdmission ::= "admission" ":" "{" AdmissionBody "}"
+
+AdmissionBody       ::= "owner" ":" AdmissionOwner
+                      ("," "requires" ":" String)?
+                      ("," "denied_status" ":" String)?
+
+AdmissionOwner      ::= "XCFE"
+
+(* ── Metadata ───────────────────────────────────────────────────────────── *)
+
+TransitionMetadata  ::= "metadata" ":" "{" (MetadataField ("," MetadataField)*)? "}"
+
+MetadataField       ::= String ":" Value
+
+(* ── Phase names (canonical C6 identity; `Chen` is an accepted alias) ───── *)
+
+PhaseName           ::= "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul"
+
+(* ── Constraints ────────────────────────────────────────────────────────── *)
+
+(*
+   CONSTRAINT 1: A semantic step flips exactly one address bit
+     kind = "semantic_step"  =>  guard.hamming_distance = 1  AND  phase_delta = 0
+
+   CONSTRAINT 2: A phase step leaves the address and moves one C6 phase
+     kind = "phase_step"  =>  same address  AND  |phase_delta| = 1
+
+   CONSTRAINT 3: The ladder is forward within one execution
+     phase_forward = true  =>  canonical_phase_index(to) = canonical_phase_index(from) + 1
+     The Xul -> Pop edge exists only as a new-execution boundary: it requires
+     new_execution = true, and a same-execution wrap is refused
+     (wrap_requires_new_execution).
+
+   CONSTRAINT 4: One phase identity
+     "Chen", "Ch_en" and "Ch'en" denote the same phase; the parser canonicalises the
+     token (world::canonical_phase_name) so a transition cannot address two phases
+     with one name. An unknown token is refused as unknown_phase.
+
+   CONSTRAINT 5: Topology is not permission
+     admission.owner = "XCFE" for every transition. An unbound or denying admission
+     denies the move; a legal edge is a candidate route, never an authorization.
+
+   CONSTRAINT 6: Cost is measurement, not a decision
+     cost.weight is the edge weight (1.0 semantic, 0.5 phase = cos(pi/3)). A cost may
+     inform routing; it can never buy a transition an unadmitted admission.
+
+   CONSTRAINT 7: Transitions do not mutate the graph
+     The vertex and edge sets are identical before and after any transition; only
+     the current position moves.
+*)

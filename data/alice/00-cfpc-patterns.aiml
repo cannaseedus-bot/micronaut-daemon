@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Generated from data/cfpc/*.cfpc-pattern.v1.json; markers route intent only and assert no facts.-->
+  <category>
+    <pattern>WHAT IS *</pattern>
+    <template>CFPC1|what-is|Wo|1|subject=<star index="1" />
+    </template>
+  </category>
+  <category>
+    <pattern>WHAT DOES * MEAN</pattern>
+    <template>CFPC1|what-is|Wo|1|subject=<star index="1" />
+    </template>
+  </category>
+  <category>
+    <pattern>WHAT DOES *</pattern>
+    <template>CFPC1|what-is|Wo|1|subject=<star index="1" />
+    </template>
+  </category>
+  <category>
+    <pattern>EXPLAIN *</pattern>
+    <template>CFPC1|explain|Sek|2|subject=<star index="1" />
+    </template>
+  </category>
+  <category>
+    <pattern>HOW TO *</pattern>
+    <template>CFPC1|how-to|Yax|2|subject=<star index="1" />
+    </template>
+  </category>
+  <category>
+    <pattern>HOW DO I *</pattern>
+    <template>CFPC1|how-to|Yax|2|subject=<star index="1" />
+    </template>
+  </category>
+  <category>
+    <pattern>HOW DO YOU *</pattern>
+    <template>CFPC1|how-to|Yax|2|subject=<star index="1" />
+    </template>
+  </category>
+  <category>
+    <pattern>HOW MANY * DOES * HAVE</pattern>
+    <template>CFPC1|how-many|Yax|1|quantity=<star index="1" />|subject=<star index="2" />
+    </template>
+  </category>
+  <category>
+    <pattern>HOW MANY * ARE THERE AROUND *</pattern>
+    <template>CFPC1|how-many|Yax|1|quantity=<star index="1" />|subject=<star index="2" />
+    </template>
+  </category>
+  <category>
+    <pattern>HOW MANY * ARE THERE ON *</pattern>
+    <template>CFPC1|how-many|Yax|1|quantity=<star index="1" />|subject=<star index="2" />
+    </template>
+  </category>
+  <category>
+    <pattern>HOW MANY * IS THERE IN *</pattern>
+    <template>CFPC1|how-many|Yax|1|quantity=<star index="1" />|subject=<star index="2" />
+    </template>
+  </category>
+  <category>
+    <pattern>HOW MANY * IS THERE ON *</pattern>
+    <template>CFPC1|how-many|Yax|1|quantity=<star index="1" />|subject=<star index="2" />
+    </template>
+  </category>
+  <category>
+    <pattern>HOW MUCH * DOES * HAVE</pattern>
+    <template>CFPC1|how-many|Yax|1|quantity=<star index="1" />|subject=<star index="2" />
+    </template>
+  </category>
+  <category>
+    <pattern>HOW MUCH * IS IN *</pattern>
+    <template>CFPC1|how-many|Yax|1|quantity=<star index="1" />|subject=<star index="2" />
+    </template>
+  </category>
+  <category>
+    <pattern>HOW MUCH * IS ON *</pattern>
+    <template>CFPC1|how-many|Yax|1|quantity=<star index="1" />|subject=<star index="2" />
+    </template>
+  </category>
+  <category>
+    <pattern>WHICH * HAVE *</pattern>
+    <template>CFPC1|which-have-property|Yax|1|entities=<star index="1" />|property=<star index="2" />
+    </template>
+  </category>
+  <category>
+    <pattern>WHICH * ARE KNOWN TO HAVE *</pattern>
+    <template>CFPC1|which-have-property|Yax|1|entities=<star index="1" />|property=<star index="2" />
+    </template>
+  </category>
+  <category>
+    <pattern>DO ANY * HAVE *</pattern>
+    <template>CFPC1|which-have-property|Yax|1|entities=<star index="1" />|property=<star index="2" />
+    </template>
+  </category>
+  <category>
+    <pattern>HOW DOES * AFFECT *</pattern>
+    <template>CFPC1|how-does-affect|Ch'en|2|verb=<star index="1" />|neighbor=<star index="2" />
+    </template>
+  </category>
+  <category>
+    <pattern>HOW DOES * INFLUENCE *</pattern>
+    <template>CFPC1|how-does-affect|Ch'en|2|verb=<star index="1" />|neighbor=<star index="2" />
+    </template>
+  </category>
+  <category>
+    <pattern>HOW DOES * RELATE TO *</pattern>
+    <template>CFPC1|how-does-relate|Sek|2|value=<star index="1" />|neighbor=<star index="2" />
+    </template>
+  </category>
+  <category>
+    <pattern>HOW IS * RELATED TO *</pattern>
+    <template>CFPC1|how-does-relate|Sek|2|value=<star index="1" />|neighbor=<star index="2" />
+    </template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE DIFFERENCE BETWEEN * AND *</pattern>
+    <template>CFPC1|what-is-the-difference|Sek|2|left=<star index="1" />|right=<star index="2" />
+    </template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE DIFFERENCE OF * AND *</pattern>
+    <template>CFPC1|what-is-the-difference|Sek|2|left=<star index="1" />|right=<star index="2" />
+    </template>
+  </category>
+  <category>
+    <pattern>WHY DOES *</pattern>
+    <template>CFPC1|why-does|Ch'en|2|subject=<star index="1" />
+    </template>
+  </category>
+  <category>
+    <pattern>WHY IS *</pattern>
+    <template>CFPC1|why-does|Ch'en|2|subject=<star index="1" />
+    </template>
+  </category>
+  <category>
+    <pattern>TELL ME ABOUT *</pattern>
+    <template>CFPC1|tell-me-about|Pop|2|subject=<star index="1" />
+    </template>
+  </category>
+</aiml>

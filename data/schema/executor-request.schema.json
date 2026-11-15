@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kuhul:khanary:schema:executor-request:v1",
+  "title": "KHANARY executor request envelope",
+  "description": "E_theta(contract, input, context) -> (result, evidence, status). A request names the fold, phase, semantic operator and backend binding it wants executed, plus the optional capability and micronaut that claim it. It never carries authority: the authority block denies semantic authority and commit by construction (GAP-091 laws E1-E6).",
+  "$ref": "#/$defs/ExecutorRequest",
+  "$defs": {
+    "Authority": {
+      "type": "object",
+      "required": ["semantic_authority", "commit_authorized", "fact_commit", "gated_by"],
+      "properties": {
+        "semantic_authority": { "type": "boolean", "const": false },
+        "commit_authorized": { "type": "boolean", "const": false },
+        "fact_commit": { "type": "string", "const": "denied" },
+        "gated_by": {
+          "type": "array",
+          "minItems": 3,
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "Binding": {
+      "type": "object",
+      "required": ["backend", "entry", "used_fallback"],
+      "properties": {
+        "backend": { "type": "string", "minLength": 1 },
+        "entry": { "type": "string" },
+        "used_fallback": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "ExecutorRequest": {
+      "type": "object",
+      "required": [
+        "@kind",
+        "correlation_id",
+        "fold",
+        "phase",
+        "semantic",
+        "binding",
+        "capability",
+        "track",
+        "authority"
+      ],
+      "properties": {
+        "@kind": { "type": "string", "const": "khanary.executor.request.v1" },
+        "correlation_id": { "type": "string", "minLength": 5 },
+        "fold": { "type": "string", "minLength": 1 },
+        "phase": {
+          "type": "string",
+          "enum": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Ch_en", "Xul"]
+        },
+        "semantic": { "type": "string", "minLength": 1 },
+        "binding": { "$ref": "#/$defs/Binding" },
+        "capability": { "type": "string" },
+        "track": { "type": "string" },
+        "context_present": { "type": "boolean" },
+        "authority": { "$ref": "#/$defs/Authority" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

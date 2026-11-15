@@ -1,0 +1,15 @@
+{
+  "@kind": "kuhul.async.manifest.v1",
+  "programs_dir": "programs/",
+  "async_ops": {
+    "dispatch": { "program": "kuhul_dispatch.json", "note": "async fold dispatch" },
+    "tile_upload": { "program": "scxq2_tile_upload.json", "note": "async SCXQ2 tile upload to GPU" },
+    "main": { "program": "main.json", "note": "main async program" }
+  },
+  "concurrency": {
+    "threads": 8,
+    "fabric": "DirectXMath SIMD x 8-thread cluster",
+    "gpu": "OpenCL 1.2 (128MB VRAM)"
+  },
+  "note": "Async operations across the stack. Programs live in programs/."
+}

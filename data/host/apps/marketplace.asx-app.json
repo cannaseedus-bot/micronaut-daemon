@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "marketplace",
+  "@key": "⟁APP:MARKETPLACE",
+  "@mount": "⟁ROOT:MARKETPLACE",
+  "@theme": { "accent": "#d97706", "bg": "#0d0800", "surface": "#1a1200", "text": "#fef3c7", "hero_phase": "Sek", "tagline": "Buy. Sell. Connect." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "listings", "component": "⟁WIDGET:LISTINGS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "listings": [], "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:MARKETPLACE": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:LIST_ITEM"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:LIST_ITEM": { "@type": "button", "@text": "List Item", "@on": { "click": "market.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:LISTINGS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:LISTINGS": { "@type": "grid", "@bind": "state.listings", "@children": ["⟁WIDGET:LISTING_CARD"] },
+    "⟁WIDGET:LISTING_CARD": { "@type": "media-card", "@bind": "listing", "@on": { "bid": "market.open_bid", "view": "market.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:CATEGORIES", "⟁WIDGET:ENDING_SOON"] },
+    "⟁WIDGET:CATEGORIES": { "@type": "tag-cloud", "@bind": "data.categories" },
+    "⟁WIDGET:ENDING_SOON": { "@type": "list", "@bind": "data.ending_soon" }
+  },
+  "@programs": {
+    "market.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "market.open_bid": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "market.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "market.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "listing.bid": "market.open_bid", "listing.view": "market.view", "compose.open": "market.open_compose", "search.input": "market.search" },
+  "@imports": [{ "ref": "listing", "mode": "schema_table" }, { "ref": "bid", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "escrow", "name": "Escrow Payments", "category": "payments", "price": "free", "status": "setup_required", "description": "Hold funds in escrow until buyer confirms delivery." },
+      { "id": "price-suggest", "name": "Price Suggest Bot", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Suggest a competitive price for new listings." },
+      { "id": "seller-ratings", "name": "Seller Ratings", "category": "community", "price": "optional", "status": "available_unconfigured", "description": "Rate and review sellers after completed transactions." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "market.list", "pattern": "LIST ITEM|SELL ITEM|ADD LISTING", "intent": "open_compose" },
+      { "id": "market.bid", "pattern": "BID ON *|MAKE OFFER *|BUY *", "intent": "open_bid" }
+    ]
+  },
+  "@data": {
+    "categories": ["Electronics", "Art", "Collectibles", "Clothing", "Digital"],
+    "ending_soon": ["Vintage Polaroid — 2h left", "Original Print — 4h left"],
+    "spotlight": [
+      { "id": "sp1", "title": "Vintage Polaroid OneStep+", "category": "Electronics", "badge": "Ending Soon", "current_bid": 85, "excerpt": "Original box, manual, and 10 packs of film included." },
+      { "id": "sp2", "title": "Limited Edition Print — 'Grid City'", "category": "Art", "badge": "Buy Now", "price": 120, "excerpt": "Risograph print, signed and numbered. 50 copies." },
+      { "id": "sp3", "title": "1990s Vintage Denim Jacket", "category": "Clothing", "badge": "Rare Find", "price": 65, "excerpt": "Wrangler, size M, barely worn. Classic wash." }
+    ],
+    "schema": {
+      "listing": { "primaryKey": "listing_id", "fields": { "listing_id": { "type": "string" }, "title": { "type": "string", "required": true }, "description": { "type": "textarea" }, "price": { "type": "float" }, "is_auction": { "type": "bool" }, "auction_ends_at": { "type": "datetime" }, "category": { "type": "string" }, "condition": { "type": "string" }, "image_url": { "type": "uri" }, "seller_id": { "type": "string" } } },
+      "bid": { "primaryKey": "bid_id", "fields": { "bid_id": { "type": "string" }, "listing_id": { "type": "string", "required": true }, "bidder_id": { "type": "string" }, "amount": { "type": "float", "required": true }, "placed_at": { "type": "datetime" } } }
+    }
+  }
+}

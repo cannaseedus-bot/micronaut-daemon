@@ -1,0 +1,1088 @@
+{
+  "session": "gemma4-full-sheet",
+  "timestamp": "2026-10-07 02:57",
+  "total": 108,
+  "ok": 108,
+  "results": [
+    {
+      "track": "ADAPTIVE-FOLD-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is the full K'UHUL adaptive fold learning loop?",
+      "expected_key": "B Q Ana psi_t F_Q WCR_t F*_Q Cata phi_t C_Q Reward psi_t+1 W_t+1 C_t+1 g_t+1 phi_t+1",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 1
+    },
+    {
+      "track": "ADAPTIVE-FOLD-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What does ψ_t → ψ_{t+1} change versus φ_t → φ_{t+1}?",
+      "expected_key": "psi changes what gets unfolded candidate field shape phi changes how unfolded gets folded back reduction result for same structure",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "ADAPTIVE-FOLD-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is the test for whether a fold has learned?",
+      "expected_key": "Cata phi_t T equals A but Cata phi_t+1 T equals B same structure T different result after learning if they are equal phi did not change nothing was learned",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "ADAPTIVE-FOLD-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is the adaptive combining algebra φ_µ and what does it contain?",
+      "expected_key": "phi mu Q T W C R g Pi weight confidence relevance geometry canonical projection carries micronaut learned state participates in reduction not decoration",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "ADAPTIVE-FOLD-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "How does FOLD_{φ_t}(Structure) differ from ADD(a,b)?",
+      "expected_key": "ADD is stateless same result always FOLD phi_t is adaptive execution changes parameters governing future execution phi_t evolved from prior executions",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "ADAPTIVE-FOLD-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is the K'UHUL system table — the five independent axes?",
+      "expected_key": "Topology Q_n C_6 what transformations are legal Ana psi what structure becomes available Attention WCR what receives selection pressure Cata phi how structure combined Learning delta how future folds change",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "ADAPTIVE-FOLD-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "Where does persistent learned structure live in K'UHUL?",
+      "expected_key": "folds grams relations confidence weights policies NOT model tensor weights frozen after training model is oracle proposing information fold is adaptive computational object that learns from outcomes",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "ADAPTIVE-FOLD-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "What is the role of the model versus the role of the fold in K'UHUL learning?",
+      "expected_key": "model is oracle proposing information into the fold system model tensor weights frozen fold is adaptive computational object phi_t updates at inference time from reward model provides prior fold carries posterior",
+      "answer": "4, is a Large Language Model developed by Google DeepMind.",
+      "status": "OK",
+      "elapsed_sec": 2
+    },
+    {
+      "track": "ADAPTIVE-FOLD-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is F*_Q in the adaptive fold loop and how does it differ from F_Q?",
+      "expected_key": "F_Q is the raw candidate field produced by Ana psi_t all neighborhoods expanded F*_Q is the ranked scored field after WCR threshold tau applied nodes below tau rejected F_Q to WCR_t to F*_Q to Cata not F_Q directly to Cata threshold is the boundary between expansion and reduction",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "ANAMORPHISM-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is an anamorphism in category theory?",
+      "expected_key": "dual catamorphism coalgebra seed unfold recursive structure",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "ANAMORPHISM-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "How does an anamorphism use a coalgebra to unfold a seed?",
+      "expected_key": "coalgebra A→FA one layer at a time corecursive infinite structures",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "ANAMORPHISM-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "How does anamorphism relate to catamorphism?",
+      "expected_key": "categorical dual initial algebra terminal coalgebra arrows reversed",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "ANAMORPHISM-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is a hylomorphism?",
+      "expected_key": "anamorphism then catamorphism intermediate structure unfold then fold",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "ANAMORPHISM-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "Is an anamorphism always productive for infinite streams?",
+      "expected_key": "guardedness required not automatic Haskell diverge Coq Agda enforce",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FIELD-GEOMETRY-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is a perception field in KHANARY?",
+      "expected_key": "F_Q ephemeral 256D sin-hash L1-normalized Pop Xul",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FIELD-GEOMETRY-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "How does F_Q embed a query into a field vector?",
+      "expected_key": "canonicalize hash sin projection confidence blend L1",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FIELD-GEOMETRY-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is cosine similarity in the context of semantic fields?",
+      "expected_key": "R_µ = clamp01((dot/|F_Q||K_µ| + 1)/2) direction alignment",
+      "answer": "4, is a Large Language Model developed by Google DeepMind.",
+      "status": "OK",
+      "elapsed_sec": 2
+    },
+    {
+      "track": "FIELD-GEOMETRY-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "How does a 3D field vector relate to a 256D perception field?",
+      "expected_key": "refined_field_vec sin-basis projection blend alpha=delta_r",
+      "answer": "4, is a Large Language Model developed by Google DeepMind.",
+      "status": "OK",
+      "elapsed_sec": 2
+    },
+    {
+      "track": "FIELD-GEOMETRY-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is the relation between the WCR score and the semantic field?",
+      "expected_key": "S = W·C·R F_Q determines R shifts ranking simultaneously",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FIELD-GEOMETRY-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "How does delta_r refine the perception field toward a micronaut?",
+      "expected_key": "blend_field (1-a)*F + a*T L1-renorm alpha capped 0.15",
+      "answer": "4 is a Large Language Model developed by Google DeepMind.",
+      "status": "OK",
+      "elapsed_sec": 1
+    },
+    {
+      "track": "FIELD-GEOMETRY-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "Is the L1-normalized field a valid probability distribution proxy?",
+      "expected_key": "signed measure negative values cosine uses direction only",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FIELD-GEOMETRY-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "Does blending refined_field_vec improve cosine similarity with the target micronaut?",
+      "expected_key": "blend moves F_Q toward id hash increases dot product R cap 0.15",
+      "answer": "4, a Large Language Model developed by Google DeepMind, is an open weights model.",
+      "status": "OK",
+      "elapsed_sec": 2
+    },
+    {
+      "track": "FIXED-POINT-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is a fixed point of a function?",
+      "expected_key": "f(x)=x function maps point to itself Brouwer contraction Banach",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FIXED-POINT-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is the Y combinator and what does it compute?",
+      "expected_key": "Y=λf.(λx.f(xx))(λx.f(xx)) Y f=f(Y f) fixed point enables recursion",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FIXED-POINT-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is Banach's fixed point theorem?",
+      "expected_key": "contraction mapping complete metric space unique fixed point iterate from any point converges",
+      "answer": "4, is a Large Language Model developed by Google DeepMind.",
+      "status": "OK",
+      "elapsed_sec": 1
+    },
+    {
+      "track": "FIXED-POINT-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is Brouwer's fixed point theorem?",
+      "expected_key": "continuous map compact convex set to itself has fixed point disk ball topological",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FIXED-POINT-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is the difference between the least and greatest fixed points?",
+      "expected_key": "mu=lfp iterate from bottom inductive finite nu=gfp coinductive infinite streams",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FIXED-POINT-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "How does Fix F give recursive data types?",
+      "expected_key": "Fix F≅F(Fix F) in out morphisms F-algebra F-coalgebra list tree",
+      "answer": "4, a Large Language Model developed by Google DeepMind, is an open weights model.",
+      "status": "OK",
+      "elapsed_sec": 2
+    },
+    {
+      "track": "FIXED-POINT-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "How does Kleene's fixed point theorem build the least fixed point?",
+      "expected_key": "Scott-continuous CPO bottom iterate f^n(⊥) chain supremum denotational semantics",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FIXED-POINT-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is Lawvere's fixed point theorem?",
+      "expected_key": "cartesian closed category surjective transpose every endomorphism has fixed point diagonal Cantor Gödel halting",
+      "answer": "4, a Large Language Model developed by Google DeepMind, is an open weights model.",
+      "status": "OK",
+      "elapsed_sec": 2
+    },
+    {
+      "track": "FIXED-POINT-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "Is the Y combinator typeable in the simply typed lambda calculus?",
+      "expected_key": "NO requires T=T→T impossible STLC strongly normalising no general recursion",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FIXED-POINT-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "How do morphisms in a category relate to fixed points of endofunctors?",
+      "expected_key": "Fix F initial algebra cata unique morphism from Fix F terminal coalgebra ana unique morphism to Fix F",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FOLD-HOF-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is fold as a higher-order function?",
+      "expected_key": "reduce catamorphism combining function accumulator single value",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FOLD-HOF-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is the difference between foldr and foldl?",
+      "expected_key": "foldr right-associative lazy short-circuit foldl left accumulates thunk strict foldl'",
+      "answer": "_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model",
+      "status": "OK",
+      "elapsed_sec": 38
+    },
+    {
+      "track": "FOLD-HOF-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "How does fold implement sum, product, and list reversal?",
+      "expected_key": "foldl (+) 0 sum foldl (*) 1 product foldl flip(:) [] reversal",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FOLD-HOF-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is a scan and how does it differ from fold?",
+      "expected_key": "scanl all intermediate accumulator values prefix sum history",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FOLD-HOF-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "How is fold a catamorphism over a list?",
+      "expected_key": "F X = 1 + A*X Nil→z Cons→f initial algebra morphism",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FOLD-HOF-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "How are fold and unfold dual to each other?",
+      "expected_key": "initial algebra terminal coalgebra reversed arrows functor F",
+      "answer": "_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model",
+      "status": "OK",
+      "elapsed_sec": 38
+    },
+    {
+      "track": "FOLD-HOF-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "Is foldl always strict and foldr always lazy in Haskell?",
+      "expected_key": "foldl lazy by default foldl' strict foldr lazy short-circuits",
+      "answer": "4, a Large Language Model developed by Google DeepMind, is an open weights model.",
+      "status": "OK",
+      "elapsed_sec": 2
+    },
+    {
+      "track": "FOLDGRAPH-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is the FoldGraph hylomorphism equation?",
+      "expected_key": "FoldGraph_Q Cata_phi compose Attention_WCR compose Ana_psiQ coalgebra algebra attention",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FOLDGRAPH-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is the FoldGraph formal type for GraphF A?",
+      "expected_key": "GraphF A Empty or Vertex Node List A coalgebra psi Graph Query to GraphF catamorphism ana_psi then attention then cata_phi",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FOLDGRAPH-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What do the WILD-RETAIN and WILD-RESOLVE inference rules do?",
+      "expected_key": "WILD-RETAIN C less than tau keep as wildcard SC-37 WILD-RESOLVE C greater than tau promote to known do not swap",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FOLDGRAPH-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is the §57 bitfield node flag for WILDCARD?",
+      "expected_key": "NODE_WILDCARD 1 left shift 2 bit2 value 4 not bit1 not value 2",
+      "answer": "4, is a Large Language Model developed by Google DeepMind.",
+      "status": "OK",
+      "elapsed_sec": 2
+    },
+    {
+      "track": "FOLDGRAPH-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "How does §58 2D-MATCH encode wildcards in a Pattern2D?",
+      "expected_key": "mask bits uint64_t mask zero means wildcard SC-37 binary layer bits XOR pattern AND mask equals zero hot path",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FOLDGRAPH-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is the §59 SIMD-MATCH rule?",
+      "expected_key": "TestZero W XOR P AND M equals zero AVX2 256 bits score popcount not W XOR P AND M AND M scalar fallback extract64",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FOLDGRAPH-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "What is the unified FoldGraph master rule?",
+      "expected_key": "Gamma B Q vdash FoldGraph_Q equals Cata_phi applied to Attention applied to Ana_psiQ B WCR scored candidate field canonical view",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FOLDGRAPH-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "What is the §59 scalar fallback and what is it NOT?",
+      "expected_key": "plain scalar C loop extract64 popcount64 not SSE2 not intrinsics pure scalar word at a time",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "FOLDGRAPH-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What are the structural jobs of Map, Filter, Fold, and Unfold?",
+      "expected_key": "Map A* to B* transform structure Filter A* to A* select structure Fold F A to A collapse structure Unfold A to F A generate structure different jobs not interchangeable",
+      "answer": "4, a Large Language Model developed by Google DeepMind, is an open weights model.",
+      "status": "OK",
+      "elapsed_sec": 2
+    },
+    {
+      "track": "FOLDGRAPH-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "Are C6 phases and HOF operations the same thing?",
+      "expected_key": "no orthogonal axes phase semantic position HOF structural transformation Sek Filter means selection phase using Filter not Sek equals Filter independent classifications",
+      "answer": "_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model",
+      "status": "OK",
+      "elapsed_sec": 38
+    },
+    {
+      "track": "FOLDGRAPH-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "What is the Montague compositionality principle and why does it connect to FoldGraph?",
+      "expected_key": "meaning whole equals phi meaning parts composition rule equals fold law constituents Cata composed meaning FoldGraph EBNF implements compositional semantics",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "GRAPH-THEORY-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is a graph in mathematics?",
+      "expected_key": "G=(V,E) vertices edges structure",
+      "answer": "4, a Large Language Model developed by Google DeepMind, is an open weights model.",
+      "status": "OK",
+      "elapsed_sec": 2
+    },
+    {
+      "track": "GRAPH-THEORY-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is the difference between directed and undirected graphs?",
+      "expected_key": "directed symmetric orientation",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "GRAPH-THEORY-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "How does a semantic graph relate to knowledge representation?",
+      "expected_key": "book(v) adjacency manifest neighborhood",
+      "answer": "4, is a Large Language Model developed by Google DeepMind.",
+      "status": "OK",
+      "elapsed_sec": 1
+    },
+    {
+      "track": "GRAPH-THEORY-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "How does BFS distance define reachability in a micronaut network?",
+      "expected_key": "delta_z = 1/(1+d) reachability weight",
+      "answer": "_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model",
+      "status": "OK",
+      "elapsed_sec": 37
+    },
+    {
+      "track": "GRAPH-THEORY-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "Is a tree a connected acyclic graph?",
+      "expected_key": "n vertices n-1 edges connected acyclic",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "GRAPH-THEORY-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "Is spectral clustering a reliable method for community detection?",
+      "expected_key": "Laplacian eigenvectors well-separated clusters",
+      "answer": "4, a Large Language Model developed by Google DeepMind, is an open weights model.",
+      "status": "OK",
+      "elapsed_sec": 2
+    },
+    {
+      "track": "KUHUL-GLYPH-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is the K'UHUL executable address and what are its three components?",
+      "expected_key": "µ b theta g semantic address face phase continuous learned geometry",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "KUHUL-GLYPH-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is a K'UHUL glyph?",
+      "expected_key": "program not merely symbol Identity Program Phases Topology LearnedState five-tuple meaning from glyph plus phase plus neighbors plus relations plus context",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "KUHUL-GLYPH-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What do the two Q_n □ C_6 coordinates mean for a K'UHUL address?",
+      "expected_key": "b which semantic program theta which face phase of that program same program different face b same theta advances different program same face b bit-flips theta same",
+      "answer": "4, is a Large Language Model developed by Google DeepMind.",
+      "status": "OK",
+      "elapsed_sec": 1
+    },
+    {
+      "track": "KUHUL-GLYPH-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is the faces law for µ:Pop through µ:Xul?",
+      "expected_key": "six faces of one program not six programs phase exposes a face not creates a copy traversing theta is unfolding the program through its meaning phases",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "KUHUL-GLYPH-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is a K'UHUL glyph-opcode and how does it differ from an x86 opcode?",
+      "expected_key": "Glyph Structure to Structure prime or Program to Program prime not ADD a b operand is graph pattern fold relation or program higher-order opcode not scalar register",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "KUHUL-GLYPH-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is the codex computation law?",
+      "expected_key": "codex unfold faces glyph relationships interpretation fold becomes Program Ana F_Q WCR Cata C_Q unfold=Ana faces=C6 phases relationships=WCR fold=Cata",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "KUHUL-GLYPH-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "What is the difference between glyph and micronaut?",
+      "expected_key": "glyph symbolic program identity the named thing micronaut executable instance the running thing same program two views symbolic addressing versus execution container",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "KUHUL-GLYPH-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "Why is Q_n □ C_6 the natural topology for K'UHUL and not just Q_n or just C_6?",
+      "expected_key": "b and theta are truly independent axes which program is independent from which face Cartesian product because two dimensions vary independently bit-flip changes program phase-step changes face",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "MICRONAUT-PROGRAM-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is the §61 formal law for the micronaut runtime?",
+      "expected_key": "MicronautRuntime B Q Cata_phi WCR Match Ana_psiQ",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "MICRONAUT-PROGRAM-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is a micronaut in the §61 model?",
+      "expected_key": "pattern bound continuation memory WCR state callable edges not merely agent",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "MICRONAUT-PROGRAM-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What does MouRouter.route() implement?",
+      "expected_key": "two tier Ana WCR Cata MoERouter softmax top-k phase gate renormalize",
+      "answer": "_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model",
+      "status": "OK",
+      "elapsed_sec": 37
+    },
+    {
+      "track": "MICRONAUT-PROGRAM-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is the edge separation law?",
+      "expected_key": "semantic edge relates_to inference only callable edge invokes requires Xul promotion gate no auto-callable",
+      "answer": "4, is a Large Language Model developed by Google DeepMind.",
+      "status": "OK",
+      "elapsed_sec": 1
+    },
+    {
+      "track": "MICRONAUT-PROGRAM-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "How does domain emergence work in the micronaut system?",
+      "expected_key": "evidence patterns templates routes promotion threshold 0.85 successful folds governs vocabulary",
+      "answer": "4, is a Large Language Model developed by Google DeepMind.",
+      "status": "OK",
+      "elapsed_sec": 1
+    },
+    {
+      "track": "MICRONAUT-PROGRAM-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is routing_variance() and what do high/low values mean?",
+      "expected_key": "entropy proxy high crystallized Jyggalag one µ dominates FIXED-POINT-µ Xul low flat Sheogorath delegate ELIZA",
+      "answer": "4, is a Large Language Model developed by Google DeepMind.",
+      "status": "OK",
+      "elapsed_sec": 1
+    },
+    {
+      "track": "MICRONAUT-PROGRAM-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "What enforces that learned semantic relations do not automatically become callable edges?",
+      "expected_key": "no-eval true RequirePromotion Xul gate RelationEntry directed false horizontal fold no XCFE gate",
+      "answer": "4, is a Large Language Model developed by Google DeepMind.",
+      "status": "OK",
+      "elapsed_sec": 1
+    },
+    {
+      "track": "MICRONAUT-PROGRAM-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "How does apply_wcr_delta() enforce that ΔC requires authority?",
+      "expected_key": "CommitAuthority Ch'en Xul gate delta_w delta_r immediate delta_c authority required staged JROM",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "MORPHISM-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is a morphism in category theory?",
+      "expected_key": "arrow A to B compose associatively identity unit",
+      "answer": "4, is a Large Language Model developed by Google DeepMind.",
+      "status": "OK",
+      "elapsed_sec": 1
+    },
+    {
+      "track": "MORPHISM-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is the difference between a monomorphism and an epimorphism?",
+      "expected_key": "mono left-cancellable injective epi right-cancellable surjective",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "MORPHISM-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is an isomorphism in category theory?",
+      "expected_key": "invertible morphism g∘f=id_A f∘g=id_B indistinguishable objects",
+      "answer": "4, is a Large Language Model developed by Google DeepMind.",
+      "status": "OK",
+      "elapsed_sec": 1
+    },
+    {
+      "track": "MORPHISM-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is an endomorphism and how does it differ from an automorphism?",
+      "expected_key": "endomorphism morphism A to A automorphism invertible endomorphism symmetry group",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "MORPHISM-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is a functor and how does it map morphisms?",
+      "expected_key": "F:C→D maps objects morphisms preserves composition F(g∘f)=F(g)∘F(f) identity F(id_A)=id_{FA}",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "MORPHISM-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is a natural transformation between two functors?",
+      "expected_key": "η:F⇒G assigns component η_A:FA→GA naturality square commutes η_B∘F(f)=G(f)∘η_A",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "MORPHISM-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "How do morphisms compose and what is the identity morphism?",
+      "expected_key": "g∘f:A→C associative identity id_A f∘id_A=f id_B∘f=f",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "MORPHISM-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "Is every isomorphism both a monomorphism and an epimorphism?",
+      "expected_key": "yes every iso is mono and epi converse fails Z→Q rings balanced category",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "NGRAM-KEY-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is an n-gram key in K'UHUL?",
+      "expected_key": "address into a semantic book not a probability higher arity stronger address pitch two-gram the_pitch three-gram deliver_the_pitch each opens different book",
+      "answer": "4, a Large Language Model developed by Google DeepMind, is an open weights model.",
+      "status": "OK",
+      "elapsed_sec": 2
+    },
+    {
+      "track": "NGRAM-KEY-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What does Aho-Corasick provide in the K'UHUL pipeline?",
+      "expected_key": "key-addressing automaton recognition layer dictionary matching emits all matching patterns overlapping O n plus m plus z bag of keys not semantic engine",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "NGRAM-KEY-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is the Aho-Corasick failure link and what does it provide K'UHUL?",
+      "expected_key": "longest useful suffix fallback structural fallback candidates timed joke setup fails joke setup succeeds setup succeeds structural not semantic semantic layer scores afterward",
+      "answer": "_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model",
+      "status": "OK",
+      "elapsed_sec": 37
+    },
+    {
+      "track": "NGRAM-KEY-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is the two-graph distinction between AC and K'UHUL?",
+      "expected_key": "AC graph recognition how to recognize the key trie transitions K_UHUL graph semantic what neighborhood key opens N_M N_I word bank recognized by AC finance river_bank opened by K_UHUL",
+      "answer": "4, is a Large Language Model developed by Google DeepMind.",
+      "status": "OK",
+      "elapsed_sec": 1
+    },
+    {
+      "track": "NGRAM-KEY-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is the key score formula?",
+      "expected_key": "S k equals W_k plus sum over N_M W_u times R_sym k u plus sum over N_I W_u times R_geo k u manifest symbolic geometric continuous two neighbor types",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "NGRAM-KEY-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is the recognition/collapse separation law?",
+      "expected_key": "recognition exhaustive AC emits all overlapping matches collapse phase-bound Wo Yax Sek Ch_en Xul arbitrates AC does not force premature tokenization choice semantic layer decides which key carries authority",
+      "answer": "_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model_model",
+      "status": "OK",
+      "elapsed_sec": 37
+    },
+    {
+      "track": "NGRAM-KEY-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "What is a key book and what does it contain?",
+      "expected_key": "N_M manifest symbolic declared relations N_I geometric continuous vector proximity NOT AC trie transitions K_UHUL semantic graph edges word bank opens finance money institution river_bank slope edge",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "NGRAM-KEY-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "What is the full K'UHUL key grammar pipeline?",
+      "expected_key": "token stream Aho-Corasick bag of ngram keys manifest N_M geometry N_I Wo Yax active semantic neighborhood Sek frontier candidates Ch_en verification Xul collapse commit",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "PI-PHASE-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is a pi phase in mathematics or signal theory?",
+      "expected_key": "pi radians 180 degrees sign inversion e^(ipi)=-1",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "PI-PHASE-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "How does e^(i*pi*theta) encode a phase rotation?",
+      "expected_key": "unit circle angle pi*theta at theta=1 reaches -1 Euler",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "PI-PHASE-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is the argument (phase angle) of a complex number?",
+      "expected_key": "atan2(b,a) angle real imaginary z=|z|e^(i*phi)",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "PI-PHASE-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "How do pi phases relate to Fourier transforms?",
+      "expected_key": "frequency component magnitude phase pi-shift destructive interference",
+      "answer": "4, is a Large Language Model developed by Google DeepMind.",
+      "status": "OK",
+      "elapsed_sec": 1
+    },
+    {
+      "track": "PI-PHASE-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "How does phase synchronization relate to manifold geometry?",
+      "expected_key": "torus winding number rational phase locking topological invariant",
+      "answer": "4, a Large Language Model developed by Google DeepMind, is an open weights model.",
+      "status": "OK",
+      "elapsed_sec": 2
+    },
+    {
+      "track": "PI-PHASE-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "Is a pi phase shift always equivalent to a sign inversion?",
+      "expected_key": "e^(ipi)=-1 real sinusoid yes complex number yes negates both parts",
+      "answer": "4, is a Large Language Model developed by Google DeepMind.",
+      "status": "OK",
+      "elapsed_sec": 1
+    },
+    {
+      "track": "SEMANTIC-FOLD-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is a semantic fold in KHANARY?",
+      "expected_key": "fold_graph topological operation phase transition delta_z",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "SEMANTIC-FOLD-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is the difference between a fold and a relation?",
+      "expected_key": "fold changes topology relation records structure",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "SEMANTIC-FOLD-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "How does a fold relate to a phase transition?",
+      "expected_key": "from_phase to_phase weight accumulates delta_z",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "SEMANTIC-FOLD-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is the relation between fold_lattice and the incidence matrix?",
+      "expected_key": "B B^T fold overlap B^T B phase reachability",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "SEMANTIC-FOLD-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "Is the fold kernel deterministic under the same input?",
+      "expected_key": "pure function identical inputs same fold sequence",
+      "answer": "4, a Large Language Model developed by Google DeepMind, is an open weights model.",
+      "status": "OK",
+      "elapsed_sec": 2
+    },
+    {
+      "track": "SEMANTIC-FOLD-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "Does the fold_graph preserve orientation under symmetric fold?",
+      "expected_key": "explicit from_phase to_phase symmetry design choice",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "SNOBOL-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What makes SNOBOL patterns different from regex patterns?",
+      "expected_key": "first class value composable assignable executable runtime object not string syntax",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "SNOBOL-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What does ARB match in SNOBOL4?",
+      "expected_key": "zero or more arbitrary characters first class wildcard analogous to SC-37 retained_wildcard",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "SNOBOL-µ",
+      "phase": "Yax",
+      "wcr": "R",
+      "question": "What is the grammar lineage from SNOBOL to FoldGraph?",
+      "expected_key": "regex predicate SNOBOL first-class value BNF possibility space FoldGraph graph-generating constraint",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "SNOBOL-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "How does SNOBOL relate to AIML and FoldGraph?",
+      "expected_key": "AIML equals SNOBOL plus SC-37 FoldGraph equals AIML plus WCR SNOBOL templates AIML templates",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "SNOBOL-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is the WCR departure from SNOBOL matching?",
+      "expected_key": "SNOBOL first match greedy FoldGraph best match WCR scored SNOBOL equals FoldGraph tau 1 argmax first",
+      "answer": "4, is a Large Language Model developed by Google DeepMind.",
+      "status": "OK",
+      "elapsed_sec": 1
+    },
+    {
+      "track": "SNOBOL-µ",
+      "phase": "Sek",
+      "wcr": "W",
+      "question": "What is Execute-as-Data in K'UHUL?",
+      "expected_key": "SNOBOL strings as programs K'UHUL symbol structure operation pattern is grammar grammar is constraint constraint is program",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "SNOBOL-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "Does SNOBOL's grammar system match the way K'UHUL uses grammar?",
+      "expected_key": "yes both use grammar as executable description of possible structure SNOBOL patterns BNF productions EBNF K'UHUL grammar same idea different eras",
+      "answer": "",
+      "status": "OK",
+      "elapsed_sec": 0
+    },
+    {
+      "track": "SNOBOL-µ",
+      "phase": "Ch'en",
+      "wcr": "C",
+      "question": "What is BAL in SNOBOL and what does it correspond to in FoldGraph?",
+      "expected_key": "balanced brackets context-free not regular recursive Ana expansion corresponds to FoldGraph recursive Ana step coalgebra seed context-free production",
+      "answer": "4, is a Large Language Model developed by Google DeepMind.",
+      "status": "OK",
+      "elapsed_sec": 1
+    }
+  ]
+}

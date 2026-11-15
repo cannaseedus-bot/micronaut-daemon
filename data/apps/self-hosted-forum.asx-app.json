@@ -1,0 +1,185 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "self-hosted-forum",
+  "@key": "⟁APP:SELF_HOSTED_FORUM",
+  "@mount": "⟁ROOT:FORUM",
+  "@state": {
+    "auth": { "user_id": null, "username": null, "email": null },
+    "query": "",
+    "posts": [],
+    "modal": null,
+    "status": "idle"
+  },
+  "@components": {
+    "⟁ROOT:FORUM": {
+      "@type": "app",
+      "@children": [
+        "⟁WIDGET:HEADER",
+        "⟁WIDGET:POSTS",
+        "⟁WIDGET:AUTH_MODAL",
+        "⟁WIDGET:POST_MODAL"
+      ]
+    },
+    "⟁WIDGET:HEADER": {
+      "@type": "toolbar",
+      "@children": ["⟁INPUT:SEARCH", "⟁ACTION:LOGIN", "⟁ACTION:NEW_TOPIC"],
+      "@on": {
+        "search.input": "forum.search",
+        "auth.open": "forum.open_auth",
+        "post.create": "forum.open_post"
+      }
+    },
+    "⟁INPUT:SEARCH": {
+      "@type": "input",
+      "@input_type": "search",
+      "@bind": "state.query"
+    },
+    "⟁ACTION:LOGIN": {
+      "@type": "button",
+      "@text": "Login",
+      "@on": { "click": "forum.open_auth" }
+    },
+    "⟁ACTION:NEW_TOPIC": {
+      "@type": "button",
+      "@text": "New Topic",
+      "@on": { "click": "forum.open_post" }
+    },
+    "⟁WIDGET:POSTS": {
+      "@type": "table",
+      "@bind": "state.posts",
+      "@children": ["⟁WIDGET:POST_ROW"]
+    },
+    "⟁WIDGET:POST_ROW": {
+      "@type": "row",
+      "@bind": "post",
+      "@on": { "click": "forum.read_post" }
+    },
+    "⟁WIDGET:AUTH_MODAL": {
+      "@type": "modal",
+      "@bind": "state.modal",
+      "@on": {
+        "submit": "forum.auth_submit",
+        "close": "forum.close_modal"
+      }
+    },
+    "⟁WIDGET:POST_MODAL": {
+      "@type": "modal",
+      "@bind": "state.modal",
+      "@on": {
+        "submit": "forum.post_submit",
+        "close": "forum.close_modal"
+      }
+    }
+  },
+  "@programs": {
+    "forum.search": {
+      "@kind": "asx.state-program.v1",
+      "@authority": "observation_only",
+      "@control": [
+        { "@op": "SET", "@from": "event_query", "@out": "query" },
+        { "@op": "LOG", "@args": ["forum search projected into request state"] }
+      ]
+    },
+    "forum.open_auth": {
+      "@kind": "asx.state-program.v1",
+      "@authority": "observation_only",
+      "@control": [
+        { "@op": "SET", "@from": "event_modal", "@out": "modal" }
+      ]
+    },
+    "forum.open_post": {
+      "@kind": "asx.state-program.v1",
+      "@authority": "observation_only",
+      "@control": [
+        { "@op": "SET", "@from": "event_modal", "@out": "modal" }
+      ]
+    },
+    "forum.close_modal": {
+      "@kind": "asx.state-program.v1",
+      "@authority": "observation_only",
+      "@control": [
+        { "@op": "SET", "@from": "event_modal", "@out": "modal" }
+      ]
+    },
+    "forum.auth_submit": {
+      "@kind": "asx.state-program.v1",
+      "@authority": "observation_only",
+      "@control": [
+        { "@op": "SET", "@from": "event_auth", "@out": "auth" },
+        { "@op": "SET", "@from": "event_status", "@out": "status" }
+      ]
+    },
+    "forum.post_submit": {
+      "@kind": "asx.state-program.v1",
+      "@authority": "observation_only",
+      "@control": [
+        { "@op": "APPEND", "@from": "event_post", "@out": "posts" },
+        { "@op": "SET", "@from": "event_status", "@out": "status" }
+      ]
+    },
+    "forum.read_post": {
+      "@kind": "asx.state-program.v1",
+      "@authority": "observation_only",
+      "@control": [
+        { "@op": "SET", "@from": "event_modal", "@out": "modal" }
+      ]
+    }
+  },
+  "@events": {
+    "search.input": "forum.search",
+    "auth.open": "forum.open_auth",
+    "post.create": "forum.open_post",
+    "auth.submit": "forum.auth_submit",
+    "post.submit": "forum.post_submit",
+    "post.read": "forum.read_post",
+    "modal.close": "forum.close_modal"
+  },
+  "@imports": [
+    { "ref": "cdata-schema", "mode": "local_data" },
+    { "ref": "user_profile", "mode": "schema_table" },
+    { "ref": "user_post", "mode": "schema_table" }
+  ],
+  "@permissions": {
+    "network": false,
+    "storage": "request_scoped",
+    "tools": [],
+    "semantic_commit": false
+  },
+  "@lifecycle": {
+    "load": "compile",
+    "mount": "project",
+    "event": "dispatch",
+    "unmount": "discard_request_state"
+  },
+  "@schema": {
+    "version": "1.0",
+    "tables": {
+      "user_profile": {
+        "id": "user_profile",
+        "label": "User Profile",
+        "primaryKey": "user_id",
+        "fields": {
+          "user_id": { "type": "string", "hidden": true },
+          "username": { "type": "string", "required": true },
+          "email": { "type": "email", "required": true },
+          "password": { "type": "password", "required": true },
+          "created_at": { "type": "datetime", "hidden": true, "default": "now" }
+        }
+      },
+      "user_post": {
+        "id": "user_post",
+        "label": "Forum Post",
+        "primaryKey": "post_id",
+        "fields": {
+          "post_id": { "type": "string", "hidden": true, "default": "uuid" },
+          "user_id": { "type": "string", "hidden": true },
+          "author_name": { "type": "string", "hidden": true },
+          "category": { "type": "select", "required": true, "options": ["General", "Guides", "Reviews", "Food Ideas", "DIY & Tips", "News", "Politics"] },
+          "post_title": { "type": "string", "required": true, "maxLength": 120 },
+          "post_body": { "type": "textarea", "required": true, "maxLength": 5000 },
+          "created_at": { "type": "datetime", "hidden": true, "default": "now" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,55 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Self Hosted Forum · ASX Mini-App</title>
+<style>
+  :root { color-scheme: dark; font-family: Inter, system-ui, sans-serif; }
+  body { margin: 0; background: #0d1117; color: #e6edf3; }
+  main { max-width: 1000px; margin: 24px auto; border: 1px solid #30363d; border-radius: 12px; overflow: hidden; }
+  header { display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 16px 20px; background: #161b22; }
+  h1 { margin: 0; color: #a855f7; font-size: 1.25rem; }
+  input, select, textarea, button { border: 1px solid #30363d; border-radius: 8px; padding: 9px 12px; font: inherit; }
+  input, select, textarea { background: #0d1117; color: #e6edf3; }
+  button { background: linear-gradient(135deg,#7c3aed,#a855f7); color: white; cursor: pointer; font-weight: 700; }
+  button[data-asx-key] { outline-offset: 3px; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 14px 16px; border-bottom: 1px solid #21262d; }
+  th { color: #8b949e; font-size: .75rem; text-transform: uppercase; }
+  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; }
+  .status { padding: 12px 16px; color: #8b949e; }
+  .empty { text-align: center; color: #8b949e; padding: 40px; }
+</style>
+<main data-asx-key="⟁APP:SELF_HOSTED_FORUM/⟁ROOT:FORUM">
+  <header data-asx-key="⟁APP:SELF_HOSTED_FORUM/⟁WIDGET:HEADER">
+    <h1>◈ Self Hosted Forum</h1>
+    <div class="toolbar">
+      <input id="query" type="search" placeholder="Search topics" data-asx-key="⟁APP:SELF_HOSTED_FORUM/⟁INPUT:SEARCH">
+      <button id="login" data-asx-key="⟁APP:SELF_HOSTED_FORUM/⟁ACTION:LOGIN">Login</button>
+      <button id="newTopic" data-asx-key="⟁APP:SELF_HOSTED_FORUM/⟁ACTION:NEW_TOPIC">New Topic</button>
+    </div>
+  </header>
+  <div class="status" id="status">Projection runtime: checking…</div>
+  <table data-asx-key="⟁APP:SELF_HOSTED_FORUM/⟁WIDGET:POSTS">
+    <thead><tr><th>Topic</th><th>Author</th><th>Category</th><th>Date</th></tr></thead>
+    <tbody id="posts"><tr><td class="empty" colspan="4">No posts yet.</td></tr></tbody>
+  </table>
+</main>
+<script type="application/json" id="asx-json-runtime">
+{
+  "@kind": "asx.key-runtime.binding.v1",
+  "@app": "⟁APP:SELF_HOSTED_FORUM",
+  "@manifest": "data/host/apps/self-hosted-forum.asx-app.json",
+  "@executor": "mx.run",
+  "@route": "json.app",
+  "@authority": "projection_only",
+  "@state": "request_scoped",
+  "@events": {
+    "search.input": { "key": "⟁APP:SELF_HOSTED_FORUM/⟁INPUT:SEARCH", "program": "forum.search" },
+    "auth.open": { "key": "⟁APP:SELF_HOSTED_FORUM/⟁ACTION:LOGIN", "program": "forum.open_auth" },
+    "post.create": { "key": "⟁APP:SELF_HOSTED_FORUM/⟁ACTION:NEW_TOPIC", "program": "forum.open_post" },
+    "auth.submit": { "key": "⟁APP:SELF_HOSTED_FORUM/⟁WIDGET:AUTH_MODAL", "program": "forum.auth_submit" },
+    "post.submit": { "key": "⟁APP:SELF_HOSTED_FORUM/⟁WIDGET:POST_MODAL", "program": "forum.post_submit" }
+  },
+  "@storage": { "mode": "request_scoped", "authority": "observation_only" },
+  "@semantic_commit": false
+}
+</script>

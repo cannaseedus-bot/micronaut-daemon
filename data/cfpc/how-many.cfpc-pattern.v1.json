@@ -1,0 +1,56 @@
+{
+  "@kind": "khanary.cfpc.pattern.v1",
+  "id": "how-many",
+  "intent": "Resolve how many of something exists, and say when the sources disagree rather than choosing a number.",
+  "phase": "Yax",
+  "@captures": {
+    "subject": {
+      "wildcard": "*",
+      "capture_group": "subject",
+      "type": "entity_key"
+    },
+    "quantity": {
+      "wildcard": "*",
+      "capture_group": "quantity",
+      "type": "quantity_key",
+      "resolve_manifest": "data/manifest/facts.manifest.json"
+    }
+  },
+  "neighborhood_resolve": {
+    "from_captures": [
+      "subject",
+      "quantity"
+    ],
+    "max_hops": 1
+  },
+  "question_templates": [
+    "How many {quantity} does {subject} have?",
+    "Which source states the current count of {quantity} for {subject}?",
+    "Do the available sources agree on how many {quantity} {subject} has?"
+  ],
+  "context_template": "Subject: {subject}\nQuantity: {quantity}\nSources: {source_names}\nEpistemic state: UNKNOWN -- counts disagree across sources when two values are present; report both, choose neither.",
+  "match": {
+    "rules": [
+      {
+        "prefix": "how many"
+      },
+      {
+        "prefix": "how much"
+      }
+    ]
+  },
+  "capture_patterns": [
+    "^how many (?P<quantity>.+?) does (?P<subject>.+?) have\\??$",
+    "^how many (?P<quantity>.+?) (?:is|are) there (?:on|around|in) (?P<subject>.+?)\\??$",
+    "^how much (?P<quantity>.+?) (?:does|do) (?P<subject>.+?) have\\??$",
+    "^how much (?P<quantity>.+?) (?:is|are) (?:in|on|at) (?P<subject>.+?)\\??$"
+  ],
+  "temporal_contract": {
+    "classification": "MUTABLE",
+    "freshness_required": true,
+    "default_requested_time": "CURRENT",
+    "answer_requires_verified_observation": true,
+    "historical_observations_retained": true,
+    "learning_write": "separate_xcfe_admission_required"
+  }
+}

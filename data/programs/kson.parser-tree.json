@@ -1,0 +1,27 @@
+{
+  "@program": "kson.parser-tree",
+  "@schema": "kuhul.kson.parser-tree.v1",
+  "@version": "1.0.0",
+  "@description": "Parser-tree projection for KSON/LBS AST training records.",
+  "source": "models/from_zero/coder_ast_chunks/kson_ast_lbs.jsonl",
+  "output": "models/from_zero/coder_ast_chunks/kson_parser_tree.jsonl",
+  "token_bin": "models/from_zero/tokens/mm-ast-kson-parser-tree.bin",
+  "builder": "tools/build_parser_tree_dataset.py",
+  "tree_contract": {
+    "root": "KSONRoot",
+    "branches": ["FoldNode", "InputRef", "OutputRef", "SemanticValue", "SemanticText"],
+    "preserves": ["fold", "lane", "opcode", "node_kind", "source_index"],
+    "json_value_tree": true
+  },
+  "runtime_targets": {
+    "native": "K'UHUL parser/AST host",
+    "wasm": "drivers/wasm/tree-sitter-*.wasm",
+    "webview2": "drivers/webgl2/fieldgraph_100d.mjs",
+    "fallback": "deterministic KSON structural projection"
+  },
+  "validation": {
+    "fail_on_missing_parser_tree": true,
+    "source_is_semantic_training_corpus": true,
+    "note": "This is a structural KSON tree until raw language source trees are added."
+  }
+}

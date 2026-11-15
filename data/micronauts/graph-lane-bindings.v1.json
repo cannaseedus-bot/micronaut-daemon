@@ -1,0 +1,329 @@
+{
+  "schema": "kuhul.micronaut.graph-lane-bindings.v1",
+  "version": "1.0.0",
+  "authority": "DATA_ONLY",
+  "status": "declarative_proposal",
+  "contract_refs": [
+    "data/micronauts/Micronaut.SRAI.AIML.ebnf",
+    "data/micronauts/srai_route.ebnf",
+    "data/grammar/gml.khanary.ebnf",
+    "data/grammar/runtime-graph.contracts.json",
+    "data/grammar/mml/v1/WildcardFieldResolution.mml",
+    "data/grammar/mml/v1/XaimlMicronautDispatch.mml"
+  ],
+  "execution_boundary": {
+    "graph_read": "in_process_read_only_after_XCFE_admission",
+    "relation_truth": "requires_source_evidence_and_Ch_en_verification",
+    "vector_role": "rank_or_retrieve_only",
+    "topology_mutation": "proposal_then_Ch_en_then_XCFE_then_Xul",
+    "tool_dispatch": "registered_local_executor; XCFE_admission_required_per_invocation",
+    "direct_dispatch": false,
+    "persistent_write": false
+  },
+  "lanes": {
+    "topology": "GML typed nodes and edges; graph shape only",
+    "field": "domain/intent membership candidates with provenance",
+    "vector": "read-only representation and ranking over graph nodes",
+    "phase_edge": "Pop-Wo-Yax-Sek-Ch'en-Xul transitions",
+    "tool": "route proposal from existing AIML patterns; host admits separately"
+  },
+  "graphs": [
+    {
+      "id": "hypercube_q3",
+      "path": "data/hypercube_Q3.gml",
+      "kind": "topology",
+      "use": [
+        "3-bit neighbor traversal",
+        "small topology features"
+      ],
+      "authority": "DATA_ONLY"
+    },
+    {
+      "id": "hypercube_q4",
+      "path": "data/hypercube_Q4.gml",
+      "kind": "topology",
+      "use": [
+        "4-bit neighbor traversal",
+        "higher-order topology features"
+      ],
+      "authority": "DATA_ONLY"
+    },
+    {
+      "id": "khanary_topology",
+      "path": "data/khanary_topology.gml",
+      "kind": "micronaut_track_topology",
+      "use": [
+        "track adjacency",
+        "delta-map proposals"
+      ],
+      "authority": "DATA_ONLY",
+      "note": "Contains the core Q3 tracks plus MORPHISM/FIXED-POINT overlays; read actual file counts rather than stale manifest counts."
+    },
+    {
+      "id": "unfold_graph",
+      "path": "data/unfold-graph.gml",
+      "kind": "product_topology",
+      "use": [
+        "Q3 x C6 fold address traversal",
+        "phase-aware neighbor proposals"
+      ],
+      "authority": "DATA_ONLY"
+    },
+    {
+      "id": "micronaut_fieldgraph",
+      "path": "data/micronaut_fieldgraph.gml",
+      "kind": "phase_edge",
+      "use": [
+        "fold phase transition visualization",
+        "resident selector hints"
+      ],
+      "authority": "projection_only",
+      "note": "Descriptive phase edges; Sek dispatch role does not authorize dispatch."
+    },
+    {
+      "id": "code_wildcard",
+      "path": "data/code-wildcard.gml",
+      "kind": "tool_route_structure",
+      "use": [
+        "wildcard capture structure",
+        "tool-route candidate formation"
+      ],
+      "authority": "DATA_ONLY",
+      "dispatch": "XCFE_required"
+    },
+    {
+      "id": "intent_graph",
+      "path": "data/intent-graph.gml",
+      "kind": "field",
+      "use": [
+        "explicit field_member supervision",
+        "intent candidate lookup"
+      ],
+      "authority": "DATA_ONLY"
+    },
+    {
+      "id": "cfpc_questions",
+      "path": "data/cfpc-questions.gml",
+      "kind": "question_field",
+      "use": [
+        "question candidate routing",
+        "gap-family references"
+      ],
+      "authority": "DATA_ONLY"
+    },
+    {
+      "id": "cfpc_wildcards",
+      "path": "data/cfpc-wildcards.gml",
+      "kind": "wildcard_field",
+      "use": [
+        "typed wildcard capture candidates"
+      ],
+      "authority": "DATA_ONLY"
+    },
+    {
+      "id": "metric_graph",
+      "path": "data/metric_graph.gml",
+      "kind": "metric_topology",
+      "use": [
+        "declared path-cost/risk comparisons"
+      ],
+      "authority": "DATA_ONLY",
+      "note": "Metric values are source data, not calibrated model confidence."
+    },
+    {
+      "id": "vectors",
+      "path": "data/vectors.gml",
+      "kind": "vector_projection",
+      "use": [
+        "read-only semantic ranking candidates"
+      ],
+      "authority": "projection_only",
+      "semantic_authority": false
+    },
+    {
+      "id": "kuhul_pi",
+      "path": "data/kuhul-pi.gml",
+      "kind": "vector_field_projection",
+      "use": [
+        "V_pi component evidence and ranking"
+      ],
+      "authority": "projection_only",
+      "semantic_authority": false
+    },
+    {
+      "id": "pi_radius_bias",
+      "path": "data/pi-radius-bias.gml",
+      "kind": "attention_bias_projection",
+      "use": [
+        "Pi-radius bias candidates for runtime evaluation"
+      ],
+      "authority": "projection_only",
+      "semantic_authority": false
+    },
+    {
+      "id": "daemon_behavior_modes",
+      "path": "data/daemon_behavior_modes.gml",
+      "kind": "behavior_mode_affinity",
+      "use": [
+        "behavior-mode candidate ranking"
+      ],
+      "authority": "DATA_ONLY",
+      "note": "Affinity weights are not probabilities, permissions, or optimizer gradients."
+    },
+    {
+      "id": "daemon_emotions",
+      "path": "data/daemon_emotions.gml",
+      "kind": "emotion_presentation_candidates",
+      "use": [
+        "emotion-cue icon lookup",
+        "candidate behavior-mode presentation links"
+      ],
+      "authority": "DATA_ONLY",
+      "note": "Icons and cue-to-mode edges are presentation metadata, not diagnoses, permissions, or response admission.",
+      "semantic_authority": false
+    },
+    {
+      "id": "english_dictionary_definition_relations",
+      "path": "english-dictionary.definition-relations.key-grammar.jsonl",
+      "kind": "lexical_relation_evidence",
+      "use": [
+        "definition relation neighborhood lookup",
+        "AIML query prompt and vector alignment candidates"
+      ],
+      "authority": "DATA_ONLY",
+      "evidence": "definition_unigram",
+      "relation": "@related_to",
+      "truth_claim": false,
+      "builder": "tools/build_key_relation_graph.py"
+    },
+    {
+      "id": "ccc_n3",
+      "path": "data/ccc_n3.gml",
+      "kind": "interconnect_topology",
+      "use": [
+        "cubic interconnect neighbor traversal",
+        "alternate topology features"
+      ],
+      "authority": "DATA_ONLY"
+    },
+    {
+      "id": "ccc_n4",
+      "path": "data/ccc_n4.gml",
+      "kind": "interconnect_topology",
+      "use": [
+        "higher-order interconnect neighbor traversal",
+        "alternate topology features"
+      ],
+      "authority": "DATA_ONLY"
+    },
+    {
+      "id": "autocomplete_wildcard",
+      "path": "data/autocomplete.wildcard.gml",
+      "kind": "wildcard_route_structure",
+      "use": [
+        "autocomplete candidate neighborhoods",
+        "wildcard route proposals"
+      ],
+      "authority": "DATA_ONLY"
+    },
+    {
+      "id": "wildcard",
+      "path": "data/wildcard.gml",
+      "kind": "wildcard_capture_structure",
+      "use": [
+        "typed wildcard candidate lookup",
+        "capture topology proposals"
+      ],
+      "authority": "DATA_ONLY"
+    },
+    {
+      "id": "syllable",
+      "path": "data/syllable.gml",
+      "kind": "lexical_structure",
+      "use": [
+        "syllable neighbor and membership lookup"
+      ],
+      "authority": "DATA_ONLY"
+    },
+    {
+      "id": "eliza_bias",
+      "path": "data/eliza-bias.gml",
+      "kind": "aiml_category_field_graph",
+      "use": [
+        "pattern-to-field candidate lookup",
+        "AIML source tracing"
+      ],
+      "authority": "DATA_ONLY"
+    },
+    {
+      "id": "continuation_bias",
+      "path": "data/continuation-bias.gml",
+      "kind": "static_continuation_prior",
+      "use": [
+        "read-only token continuation candidates"
+      ],
+      "authority": "projection_only",
+      "note": "Scores are candidate priors; they are not truth, calibrated confidence, permission, or optimizer gradients.",
+      "semantic_authority": false
+    },
+    {
+      "id": "bias",
+      "path": "data/bias.gml",
+      "kind": "bias_projection",
+      "use": [
+        "read-only bias candidate lookup"
+      ],
+      "authority": "projection_only",
+      "note": "Scores are candidate priors; they are not truth, calibrated confidence, permission, or optimizer gradients.",
+      "semantic_authority": false
+    },
+    {
+      "id": "entropy_gradient_field",
+      "path": "data/entropy_gradient_field.gml",
+      "kind": "field_parameter",
+      "use": [
+        "entropy field parameters"
+      ],
+      "authority": "projection_only",
+      "semantic_authority": false
+    },
+    {
+      "id": "euclidean_gradient_field",
+      "path": "data/euclidean_gradient_field.gml",
+      "kind": "field_parameter",
+      "use": [
+        "Euclidean field parameters"
+      ],
+      "authority": "projection_only",
+      "semantic_authority": false
+    },
+    {
+      "id": "tensor_field",
+      "path": "data/tensor_field.gml",
+      "kind": "field_parameter",
+      "use": [
+        "tensor field parameters"
+      ],
+      "authority": "projection_only",
+      "semantic_authority": false
+    },
+    {
+      "id": "quantum_field_boundaries",
+      "path": "data/quantum_field_boundaries.gml",
+      "kind": "field_parameter",
+      "use": [
+        "quantum field boundary parameters"
+      ],
+      "authority": "projection_only",
+      "semantic_authority": false
+    }
+  ],
+  "dictionary_relation_graph": {
+    "source": "english-dictionary.definition-relations.key-grammar.jsonl",
+    "builder": "tools/build_key_relation_graph.py",
+    "edge_semantics": "definition-derived lexical association evidence; not verified world truth",
+    "aiml_surface": "DEFINE * WITH RELATION KEYS *",
+    "embedding_policy": "embed query/definition records in the same aligned corpus pipeline as AIML A/B; retain source record IDs and provenance",
+    "authority": "DATA_ONLY"
+  }
+}

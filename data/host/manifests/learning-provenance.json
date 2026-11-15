@@ -1,0 +1,53 @@
+{
+  "$schema_version": "khanary.learning-provenance.v1",
+  "$id": "learning-provenance.json",
+  "classes": {
+    "user_prompt": {
+      "scope": "conversation",
+      "learning_state": "approval_gated",
+      "may_form_pattern_or_template": false,
+      "fact_authority": false
+    },
+    "model_response": {
+      "scope": "conversation",
+      "learning_state": "evidence_only",
+      "may_form_pattern_or_template": false,
+      "fact_authority": false
+    },
+    "web_research": {
+      "scope": "conversation_or_project",
+      "requires_source_ref": true,
+      "learning_state": "evidence_only",
+      "may_form_pattern_or_template": false,
+      "fact_authority": false
+    },
+    "user_memory": {
+      "scope": "user",
+      "learning_state": "user_scoped_memory",
+      "cross_user_access": false,
+      "fact_authority": false
+    },
+    "project_history": {
+      "scope": "project",
+      "learning_state": "project_scoped_history",
+      "cross_project_access": false,
+      "fact_authority": false
+    },
+    "system_corpus": {
+      "scope": "global",
+      "learning_state": "evidence_only",
+      "fact_authority": false
+    }
+  },
+  "rules": {
+    "prompt_ngrams": "Do not promote into authoritative AIML patterns or templates without explicit approval.",
+    "model_and_research_ngrams": "May participate as statistical evidence without verification; preserve provenance and do not promote to fact automatically.",
+    "memory_vs_history": "User memory is user scoped; project history is project scoped; neither is interchangeable or globally visible.",
+    "micronaut": "Every registered Micronaut has an individual manifest and callable micronaut.<id> key."
+  },
+  "micronaut": {
+    "scope": "runtime_registry",
+    "manifest_kind": "asx.micronaut.manifest.v1",
+    "callable_key_prefix": "micronaut."
+  }
+}

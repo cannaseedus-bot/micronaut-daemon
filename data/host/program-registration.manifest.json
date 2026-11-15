@@ -1,0 +1,16 @@
+{
+  "@kind": "semantic.program-registry.manifest.v1",
+  "@version": "1.0.0",
+  "@id": "khanary.default-program-catalog",
+  "authority": "host_control_plane",
+  "persistence": "request_local_runtime_state",
+  "json_program_registry": "data/host/json-program.registry.json",
+  "micronaut_registry": "drivers/micronauts/registry.json",
+  "micronaut_drivers_root": "drivers/micronauts",
+  "programs_root": "data/programs",
+  "validation": {
+    "require_all_micronaut_drivers": true,
+    "require_all_executable_program_refs": true,
+    "atomic_replace": true
+  }
+}

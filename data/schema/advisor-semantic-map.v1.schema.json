@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kuhul.dev/schema/advisor-semantic-map.v1.schema.json",
+  "title": "ADVISOR-µ Semantic Route Map v1",
+  "type": "object",
+  "required": ["schema", "value_model", "source_ref", "source_schema", "grammar_ref", "track_ref", "route_contract_ref", "callable_surface", "callable_surface_status", "route_contract_authority_boundary", "fact_authority", "card", "capabilities", "routing", "routes", "xcfe", "content_digest"],
+  "properties": {
+    "schema": { "const": "kuhul.advisor.semantic-map.v1" },
+    "value_model": { "const": "XPath31Map" },
+    "source_ref": { "const": "advisor-bootstrap.json" },
+    "source_schema": { "const": "key.grammar.advisor_bootstrap.v1" },
+    "grammar_ref": { "const": "micronaut.runtime-grammar.v2.ebnf#semantic_map_section" },
+    "track_ref": { "type": "string", "pattern": "^track:ADVISOR-µ$" },
+    "route_contract_ref": { "const": "MICRONAUT:ADVISOR:ROUTE" },
+    "callable_surface": {
+      "type": "object",
+      "required": ["schemes", "verbs", "aiml_patterns", "aiml_templates", "key_patterns", "key_templates", "key_grammar", "tokens"],
+      "properties": {
+        "schemes": { "type": "array", "items": { "type": "string" } },
+        "verbs": { "type": "array", "items": { "type": "string" } },
+        "aiml_patterns": { "type": "array", "items": { "type": "string" } },
+        "aiml_templates": { "type": "array", "items": { "type": "string" } },
+        "key_patterns": { "type": "array", "items": { "type": "string" } },
+        "key_templates": { "type": "array", "items": { "type": "string" } },
+        "key_grammar": { "type": "array", "items": { "type": "string" } },
+        "tokens": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "callable_surface_status": { "enum": ["not_declared", "partially_declared", "declared"] },
+    "route_contract_authority_boundary": { "const": "route_contract_declares_callable_surface_not_fact" },
+    "fact_authority": { "const": false },
+    "card": {
+      "type": "object",
+      "required": ["id", "label", "symbol", "fields", "authority_claim"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "symbol": { "type": "string", "minLength": 1 },
+        "fields": { "type": "array", "items": { "type": "string" } },
+        "authority_claim": { "const": "none" }
+      },
+      "additionalProperties": false
+    },
+    "capabilities": {
+      "type": "object",
+      "required": ["declared", "registered", "registered_status"],
+      "properties": {
+        "declared": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "registered": { "type": "array", "maxItems": 0 },
+        "registered_status": { "const": "not_verified_in_this_declarative_map" }
+      },
+      "additionalProperties": false
+    },
+    "routing": {
+      "type": "object",
+      "required": ["route_order", "precedence_rule", "fallback_route_ref", "assistant_generated_text_authorizes_dispatch"],
+      "properties": {
+        "route_order": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^advisor:route:[0-9]{3}$" } },
+        "precedence_rule": { "const": ["literal_token_count_desc", "wildcard_count_asc", "token_count_desc", "bootstrap_source_order"] },
+        "fallback_route_ref": { "type": "string", "pattern": "^advisor:route:[0-9]{3}$" },
+        "assistant_generated_text_authorizes_dispatch": { "const": false },
+        "projection_status": { "const": "generated_aiml_is_projection_runtime_track_router_authoritative" }
+      },
+      "additionalProperties": false
+    },
+    "routes": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^advisor:route:[0-9]{3}$" },
+      "additionalProperties": { "$ref": "#/$defs/route" }
+    },
+    "xcfe": {
+      "type": "object",
+      "required": ["admission_requirement", "dispatch_claim", "route_authority_claim", "registration_check_requirement", "eligibility_check_requirement", "phase_authorization_requirement"],
+      "properties": {
+        "admission_requirement": { "const": "required_before_dispatch" },
+        "dispatch_claim": { "const": "host_controlled" },
+        "route_authority_claim": { "const": "proposal_only" },
+        "registration_check_requirement": { "const": "required" },
+        "eligibility_check_requirement": { "const": "required" },
+        "phase_authorization_requirement": { "const": "required" }
+      },
+      "additionalProperties": false
+    },
+    "content_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  },
+  "$defs": {
+    "route": {
+      "type": "object",
+      "required": ["source_pattern", "normalized_pattern", "expert_ref", "phase_ref", "next_phase_ref", "projection_prefix", "precedence", "route_authority_claim", "registration_status", "dispatch_authority"],
+      "properties": {
+        "source_pattern": { "type": "string", "minLength": 1 },
+        "normalized_pattern": { "type": "string", "minLength": 1 },
+        "expert_ref": { "type": "string", "pattern": "^micronaut:.+$" },
+        "phase_ref": { "type": "string", "pattern": "^phase:(Pop|Wo|Yax|Sek|Ch'en|Xul)$" },
+        "next_phase_ref": { "type": "string", "pattern": "^phase:(Pop|Wo|Yax|Sek|Ch'en|Xul)$" },
+        "projection_prefix": { "type": "string", "minLength": 1 },
+        "precedence": {
+          "type": "object",
+          "required": ["rank", "literal_token_count", "wildcard_count", "token_count", "tie_break"],
+          "properties": {
+            "rank": { "type": "integer", "minimum": 1 },
+            "literal_token_count": { "type": "integer", "minimum": 0 },
+            "wildcard_count": { "type": "integer", "minimum": 0 },
+            "token_count": { "type": "integer", "minimum": 1 },
+            "tie_break": { "const": "bootstrap_source_order" }
+          },
+          "additionalProperties": false
+        },
+        "route_authority_claim": { "const": "proposal_only" },
+        "registration_status": { "const": "proposal_only_not_route_contract_registration" },
+        "dispatch_authority": { "const": "host_controlled" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

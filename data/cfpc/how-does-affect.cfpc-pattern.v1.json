@@ -1,0 +1,37 @@
+{
+  "@kind": "khanary.cfpc.pattern.v1",
+  "id": "how-does-affect",
+  "intent": "Causal or effect query — resolve how an action, process, or entity affects a related concept.",
+  "phase": "Ch'en",
+  "@captures": {
+    "verb": {
+      "wildcard": "*",
+      "strip_prefix": "how does "
+    }
+  },
+  "neighborhood_resolve": {
+    "from_captures": [
+      "verb"
+    ],
+    "max_hops": 2
+  },
+  "question_templates": [
+    "How does {verb} affect {neighbor}?",
+    "What did {verb} do to {neighbor}?",
+    "What can {verb} accomplish?",
+    "What are the downstream effects of {verb} on {neighbor}?",
+    "Under what conditions does {verb} produce the strongest effect on {neighbor}?"
+  ],
+  "context_template": "Action/process: {verb}\nSemantic field: {field_keys}\nRelated concepts: {neighbors}\nEpistemic state: UNKNOWN -- model verification required.",
+  "match": {
+    "rules": [
+      {
+        "prefix": "how does",
+        "contains_any": [
+          "affect",
+          "influence"
+        ]
+      }
+    ]
+  }
+}

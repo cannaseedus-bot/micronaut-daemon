@@ -1,0 +1,1034 @@
+{
+  "eliza": [
+    "intent-matching",
+    "pattern-response",
+    "ELIZA-operators",
+    "⟁Pop",
+    "⟁Xul"
+  ],
+  "ELIZA": [
+    "eliza"
+  ],
+  "ELIZA-1": [
+    "eliza",
+    "16-reasoning-operators",
+    "CAUSE",
+    "CONTRAST",
+    "DEPENDENCY",
+    "CONSTRAINT",
+    "EVIDENCE",
+    "SEQUENCE",
+    "BOUNDARY",
+    "STATE",
+    "CONFLICT",
+    "ALTERNATIVE",
+    "INVARIANT",
+    "TEST",
+    "RELATION",
+    "SUBSTITUTE",
+    "VERIFY",
+    "DIRECT",
+    "⟁Pop",
+    "⟁Sek"
+  ],
+  "factory": [
+    "create-micronaut",
+    "evolve-micronaut",
+    "delete-micronaut",
+    "list-micronauts",
+    "confidence_floor:0.7",
+    "⟁Wo",
+    "⟁Yax",
+    "⟁Xul"
+  ],
+  "Factory": [
+    "factory"
+  ],
+  "coordinator": [
+    "eliza",
+    "factory",
+    "routing",
+    "⟁Ch'en",
+    "orchestration"
+  ],
+  "librarian": [
+    "search",
+    "retrieval",
+    "knowledge-base",
+    "⟁Yax",
+    "intent:retrieve"
+  ],
+  "Librarian": [
+    "librarian"
+  ],
+  "coder": [
+    "code-generation",
+    "tool-calls",
+    "syntax-check",
+    "⟁Sek"
+  ],
+  "KNOWLED-1": [
+    "knowledge-distillation",
+    "semantic-graph",
+    "⟁Sek",
+    "⟁Ch'en"
+  ],
+  "mx2lm-graph-contract": [
+    "nodes=meaning",
+    "relations=association",
+    "association_weight:pattern_strength_only",
+    "relation_confidence:earned_signal"
+  ],
+  "mx2lm-reference-contract": [
+    "ngram_references",
+    "key_references",
+    "token->key",
+    "ngram->definition",
+    "@node/@phase anchors",
+    "deterministic-routing-support"
+  ],
+  "association-channels-contract": [
+    "assoc:char",
+    "assoc:morph",
+    "assoc:word",
+    "assoc:syntax",
+    "assoc:semantic",
+    "channel-separation-required"
+  ],
+  "fgp-contract": [
+    "recognition_only",
+    "XCFE_canonical_contract_only",
+    "atoms/relations/books/candidates/unresolved/provenance"
+  ],
+  "relation-confidence": [
+    "C_ij(F)",
+    "feedback-gated",
+    "Ch'en_pending",
+    "Xul_commit",
+    "separate-from-association_weight"
+  ],
+  "micronaut-confidence": [
+    "C_µ(F)",
+    "track_id-keyed",
+    "BAD_ANSWER",
+    "GOOD_ANSWER",
+    "Ch'en_pending",
+    "Xul_commit"
+  ],
+  "node-semantics-authority": [
+    "semantic_node",
+    "control_node",
+    "meaning_key",
+    "operator_anchor",
+    "book_anchor"
+  ],
+  "Mx2LM:": [
+    "@mx2lm",
+    "Mx2LM",
+    "ngram",
+    "micronaut-profile",
+    "⟁Sek"
+  ],
+  "@mx2lm": [
+    "@node:Mx2LM",
+    "Mx2LM:",
+    "mx2lm",
+    "ngram",
+    "bigrams",
+    "trigrams"
+  ],
+  "mx2lm": [
+    "Mx2LM",
+    "ngram",
+    "bigrams",
+    "trigrams",
+    "asx-ram",
+    "micronaut-profile",
+    "⟁Sek"
+  ],
+  "Mx2LM": [
+    "mx2lm",
+    "micronaut:stb-tensor-brains",
+    "micronaut:tensor-slots"
+  ],
+  "VECTOR:": [
+    "@vector",
+    "VECTOR-µ",
+    "geometry-sidekick",
+    "projection",
+    "semantic_authority:false",
+    "⟁Wo",
+    "⟁Yax"
+  ],
+  "@vector": [
+    "@node:VECTOR-µ",
+    "VECTOR:",
+    "vector:project",
+    "vector:similarity",
+    "vector:projection_container:v1"
+  ],
+  "vector": [
+    "VECTOR-µ",
+    "projection-only",
+    "derived-geometry",
+    "cosine",
+    "principal_direction",
+    "⟁Wo"
+  ],
+  "VECTOR-µ": [
+    "VECTOR:",
+    "@vector",
+    "geometric-projection-track",
+    "semantic_authority:false",
+    "micronaut:stb-tensor-brains",
+    "micronaut:tensor-slots"
+  ],
+  "BLOG:": [
+    "@blog",
+    "BLOG-µ",
+    "blog",
+    "post",
+    "publish",
+    "⟁Yax",
+    "⟁Sek"
+  ],
+  "@blog": [
+    "@node:BLOG-µ",
+    "BLOG:",
+    "post",
+    "publish",
+    "comment",
+    "moderate"
+  ],
+  "blog": [
+    "BLOG-µ",
+    "post-composition",
+    "publish-verification",
+    "comment-moderation",
+    "⟁Yax",
+    "⟁Ch'en"
+  ],
+  "BLOG": [
+    "blog"
+  ],
+  "BLOG-µ": [
+    "blog",
+    "@blog",
+    "BLOG:",
+    "application-track"
+  ],
+  "APP:": [
+    "@app",
+    "APP-WIZARD-µ",
+    "app",
+    "template",
+    "blueprint",
+    "⟁Wo",
+    "⟁Yax"
+  ],
+  "@app": [
+    "@node:APP-WIZARD-µ",
+    "APP:",
+    "app-type",
+    "catalog",
+    "build-blocks"
+  ],
+  "app wizard": [
+    "APP-WIZARD-µ",
+    "symbolic-recipes",
+    "template-selection",
+    "runtime-build"
+  ],
+  "APP-WIZARD-µ": [
+    "APP:",
+    "@app",
+    "dashboard",
+    "ecommerce",
+    "enterprise",
+    "social",
+    "blog"
+  ],
+  "dog-walking": [
+    "BLOG-µ",
+    "APP-WIZARD-µ",
+    "domain-overlay",
+    "route-map",
+    "scheduler"
+  ],
+  "SEARCH:": [
+    "@search",
+    "@research",
+    "WEB-RESEARCH-µ",
+    "research",
+    "citation",
+    "⟁Yax",
+    "⟁Ch'en"
+  ],
+  "@search": [
+    "@node:WEB-RESEARCH-µ",
+    "SEARCH:",
+    "query",
+    "sources",
+    "cite"
+  ],
+  "@research": [
+    "@node:WEB-RESEARCH-µ",
+    "SEARCH:",
+    "citation",
+    "verify_sources",
+    "commit_fact_candidate"
+  ],
+  "WEB-RESEARCH-µ": [
+    "SEARCH:",
+    "@search",
+    "@research",
+    "manifest-expansion",
+    "query-variants",
+    "fact-miss-recovery"
+  ],
+  "no_fact_found": [
+    "WEB-RESEARCH-µ",
+    "Librarian",
+    "knowledge-gap",
+    "replay-evolve"
+  ],
+  "fact_miss": [
+    "WEB-RESEARCH-µ",
+    "Librarian",
+    "candidate",
+    "citation_required"
+  ],
+  "SUMMARIZE:": [
+    "@summarize",
+    "reasoner",
+    "REASON-µ",
+    "summary",
+    "compression",
+    "⟁Yax",
+    "⟁Sek"
+  ],
+  "@summarize": [
+    "SUMMARIZE:",
+    "reasoner",
+    "Coordinator",
+    "key-points",
+    "brief"
+  ],
+  "EXPLAIN:": [
+    "@explain",
+    "reasoner",
+    "REASON-µ",
+    "clarify",
+    "walkthrough",
+    "⟁Yax",
+    "⟁Sek"
+  ],
+  "@explain": [
+    "EXPLAIN:",
+    "reasoner",
+    "Librarian",
+    "eli5",
+    "step-by-step"
+  ],
+  "REWRITE:": [
+    "@rewrite",
+    "CREATE-µ",
+    "editorial",
+    "tone-adjust",
+    "⟁Yax",
+    "⟁Sek"
+  ],
+  "@rewrite": [
+    "REWRITE:",
+    "CREATE-µ",
+    "paraphrase",
+    "rephrase",
+    "improve"
+  ],
+  "TRANSLATE:": [
+    "@translate",
+    "CREATE-µ",
+    "Librarian",
+    "language-transform",
+    "⟁Yax",
+    "⟁Sek"
+  ],
+  "@translate": [
+    "TRANSLATE:",
+    "CREATE-µ",
+    "translation",
+    "locale-style"
+  ],
+  "BRAINSTORM:": [
+    "@brainstorm",
+    "CREATE-µ",
+    "idea-generation",
+    "option-tree",
+    "⟁Yax"
+  ],
+  "@brainstorm": [
+    "BRAINSTORM:",
+    "CREATE-µ",
+    "Coordinator",
+    "ideas",
+    "variants"
+  ],
+  "PLAN:": [
+    "@plan",
+    "Coordinator",
+    "ORCH-µ",
+    "roadmap",
+    "milestones",
+    "⟁Wo",
+    "⟁Ch'en"
+  ],
+  "@plan": [
+    "PLAN:",
+    "Coordinator",
+    "ORCH-µ",
+    "decompose-task",
+    "timeline"
+  ],
+  "CODE:": [
+    "@code",
+    "coder",
+    "TOOL-µ",
+    "implement",
+    "refactor",
+    "⟁Sek"
+  ],
+  "@code": [
+    "CODE:",
+    "coder",
+    "tool-call",
+    "patch",
+    "compile"
+  ],
+  "DEBUG:": [
+    "@debug",
+    "coder",
+    "INFER-µ",
+    "TOOL-µ",
+    "diagnose",
+    "fix",
+    "⟁Sek",
+    "⟁Ch'en"
+  ],
+  "@debug": [
+    "DEBUG:",
+    "coder",
+    "error-trace",
+    "tests",
+    "verify"
+  ],
+  "EMAIL:": [
+    "@email",
+    "CREATE-µ",
+    "message-draft",
+    "tone",
+    "⟁Yax"
+  ],
+  "@email": [
+    "EMAIL:",
+    "CREATE-µ",
+    "reply",
+    "subject",
+    "format"
+  ],
+  "MEETING:": [
+    "@meeting",
+    "reasoner",
+    "Coordinator",
+    "summary",
+    "action-items",
+    "⟁Yax",
+    "⟁Xul"
+  ],
+  "@meeting": [
+    "MEETING:",
+    "reasoner",
+    "Coordinator",
+    "notes",
+    "tasks"
+  ],
+  "TOOLS:": [
+    "@tools",
+    "@status",
+    "TOOL-µ",
+    "command-center",
+    "<tools>{tool_calls}</tools>",
+    "⟁Sek"
+  ],
+  "@tools": [
+    "@node:TOOL-µ",
+    "TOOLS:",
+    "tool_calls",
+    "allowlist",
+    "automation"
+  ],
+  "STATUS:": [
+    "@status",
+    "TOOL-µ",
+    "world_state",
+    "sandbox_list",
+    "list_keys",
+    "snapshot",
+    "⟁Pop"
+  ],
+  "@status": [
+    "@node:TOOL-µ",
+    "STATUS:",
+    "runtime-status",
+    "tool-snapshot"
+  ],
+  "CUBE:": [
+    "@cube",
+    "TOOL-µ",
+    "world_state",
+    "field_dag",
+    "K-CUBE",
+    "⟁Pop",
+    "⟁Yax"
+  ],
+  "@cube": [
+    "@node:TOOL-µ",
+    "CUBE:",
+    "kcube-inspect",
+    "world+field"
+  ],
+  "WORLD:": [
+    "@world",
+    "TOOL-µ",
+    "world_state",
+    "Librarian",
+    "⟁Pop"
+  ],
+  "@world": [
+    "@node:TOOL-µ",
+    "WORLD:",
+    "world_state"
+  ],
+  "FIELD:": [
+    "@field",
+    "TOOL-µ",
+    "field_dag",
+    "Librarian",
+    "⟁Yax"
+  ],
+  "@field": [
+    "@node:TOOL-µ",
+    "FIELD:",
+    "field_dag"
+  ],
+  "FIELDSVG:": [
+    "@fieldsvg",
+    "TOOL-µ",
+    "field_dag_svg",
+    "⟁Yax"
+  ],
+  "@fieldsvg": [
+    "@node:TOOL-µ",
+    "FIELDSVG:",
+    "field_dag_svg"
+  ],
+  "RELGRAPH:": [
+    "@relgraph",
+    "TOOL-µ",
+    "relational_graph",
+    "ORCH-µ",
+    "relational:sdm-graph-rendering:v1",
+    "⟁Yax",
+    "micronaut:tensor-slots"
+  ],
+  "@relgraph": [
+    "@node:TOOL-µ",
+    "RELGRAPH:",
+    "relational_graph",
+    "relational:sdm-graph-rendering:v1",
+    "micronaut:tensor-slots"
+  ],
+  "relational:sdm-graph-rendering:v1": [
+    "manifest:data/manifest/relational.manifest.json",
+    "source:data/grammar/kuhul-relational-graph.xml",
+    "xsl:data/grammar/kuhul-relational.xsl",
+    "style:data/grammar/kuhul-relational.sdm.css",
+    "sdm:data/grammar/kuhul-relational.sdm.xml",
+    "key_grammar:data/grammar/kuhul-relational.key-grammar.jsonl",
+    "graph->relational_network",
+    "node->micronaut_instance",
+    "edge->relational_verb",
+    "nested_graph->sub_micronaut_cluster",
+    "rendering_projection_only",
+    "not_semantic_truth"
+  ],
+  "FOLD:": [
+    "@fold",
+    "Coordinator",
+    "fold_query",
+    "⟁Wo",
+    "⟁Ch'en"
+  ],
+  "@fold": [
+    "@node:Coordinator",
+    "FOLD:",
+    "fold_query"
+  ],
+  "FGP:": [
+    "@fgp",
+    "FGP-µ",
+    "fold_graph_parse",
+    "fold-parser",
+    "⟁Wo",
+    "⟁Yax",
+    "⟁Ch'en"
+  ],
+  "@fgp": [
+    "@node:FGP-µ",
+    "FGP:",
+    "call:fold_graph_parse",
+    "relation-typing",
+    "relation-phase-hints",
+    "provenance"
+  ],
+  "FGP-µ": [
+    "FGP:",
+    "@fgp",
+    "fold_graph_parse",
+    "fgp-contract",
+    "association-channels-contract"
+  ],
+  "SYNONYMIZE:": [
+    "@syn",
+    "Mx2LM",
+    "dictionary-lexical-equivalence",
+    "⟁Wo",
+    "⟁Yax",
+    "⟁Ch'en",
+    "⟁Xul"
+  ],
+  "@syn": [
+    "@node:Mx2LM",
+    "SYNONYMIZE:",
+    "call:synonymize",
+    "semantic_invariance_gate"
+  ],
+  "KEYQUERY:": [
+    "@keyquery",
+    "Coordinator",
+    "key_query",
+    "⟁Wo"
+  ],
+  "@keyquery": [
+    "@node:Coordinator",
+    "KEYQUERY:",
+    "key_query"
+  ],
+  "DISPATCH:": [
+    "@dispatch",
+    "ORCH-µ",
+    "micronaut_dispatch",
+    "⟁Wo"
+  ],
+  "@dispatch": [
+    "@node:ORCH-µ",
+    "DISPATCH:",
+    "micronaut_dispatch"
+  ],
+  "MANIFEST:": [
+    "@manifest_query",
+    "Coordinator",
+    "resolve_manifest",
+    "⟁Pop"
+  ],
+  "@manifest_query": [
+    "@node:Coordinator",
+    "MANIFEST:",
+    "resolve_manifest"
+  ],
+  "CONFIDENCE:": [
+    "@confidence",
+    "INFER-µ",
+    "confidence_get",
+    "C_µ(F)",
+    "⟁Ch'en"
+  ],
+  "@confidence": [
+    "@node:INFER-µ",
+    "CONFIDENCE:",
+    "confidence_get"
+  ],
+  "REPLAY:": [
+    "@replay",
+    "MEM-µ",
+    "jrom_replay",
+    "trace",
+    "⟁Xul"
+  ],
+  "@replay": [
+    "@node:MEM-µ",
+    "REPLAY:",
+    "jrom_replay"
+  ],
+  "SANDBOX:": [
+    "@sandbox",
+    "TOOL-µ",
+    "sandbox_query",
+    "sandbox_list",
+    "sandbox_violations",
+    "⟁Ch'en"
+  ],
+  "@sandbox": [
+    "@node:TOOL-µ",
+    "SANDBOX:",
+    "sandbox_inspect"
+  ],
+  "INFER:": [
+    "@infer",
+    "INFER-µ",
+    "infer",
+    "dds",
+    "⟁Sek"
+  ],
+  "@infer": [
+    "@node:INFER-µ",
+    "INFER:",
+    "infer"
+  ],
+  "LISTKEYS:": [
+    "@listkeys",
+    "Coordinator",
+    "list_keys",
+    "⟁Pop"
+  ],
+  "@listkeys": [
+    "@node:Coordinator",
+    "LISTKEYS:",
+    "list_keys"
+  ],
+  "LEXICON:": [
+    "@lexicon",
+    "Coordinator",
+    "key_query",
+    "⟁Wo"
+  ],
+  "@lexicon": [
+    "@node:Coordinator",
+    "LEXICON:",
+    "key_query",
+    "scope:lexicon"
+  ],
+  "USERMANIFEST:": [
+    "@user_manifest",
+    "Coordinator",
+    "key_query",
+    "⟁Ch'en"
+  ],
+  "@user_manifest": [
+    "@node:Coordinator",
+    "USERMANIFEST:",
+    "key_query",
+    "scope:user.manifest"
+  ],
+  "KEYENCODE:": [
+    "@keyencode",
+    "Coordinator",
+    "key_encode",
+    "⟁Wo"
+  ],
+  "@keyencode": [
+    "@node:Coordinator",
+    "KEYENCODE:",
+    "key_encode"
+  ],
+  "KEYDECODE:": [
+    "@keydecode",
+    "Coordinator",
+    "key_decode",
+    "⟁Wo"
+  ],
+  "@keydecode": [
+    "@node:Coordinator",
+    "KEYDECODE:",
+    "key_decode"
+  ],
+  "KEYSPACE:": [
+    "@keyspace",
+    "Coordinator",
+    "keyspace_status",
+    "⟁Pop",
+    "⟁Ch'en"
+  ],
+  "@keyspace": [
+    "@node:Coordinator",
+    "KEYSPACE:",
+    "keyspace_status"
+  ],
+  "semantic-slots": [
+    "title",
+    "meta_description",
+    "h1",
+    "h2",
+    "paragraphs",
+    "list_items",
+    "mx2lm:semantic-router"
+  ],
+  "royalty-free-media": [
+    "Librarian:search",
+    "license_gate",
+    "attribution_tracking",
+    "asset_slots"
+  ],
+  "atomic-block-routing": [
+    "Mx2LM",
+    "APP-WIZARD-µ",
+    "BLOG-µ",
+    "XCFE/K'UHUL"
+  ],
+  "GREETING:": [
+    "@greeting",
+    "GREETING-µ",
+    "greeting",
+    "salutation",
+    "hello",
+    "⟁Pop",
+    "⟁Wo",
+    "⟁Yax"
+  ],
+  "@greeting": [
+    "@node:GREETING-µ",
+    "GREETING:",
+    "salutation-detect",
+    "greeting-bank",
+    "reactive-mirror"
+  ],
+  "greeting": [
+    "GREETING-µ",
+    "salutation-detection",
+    "greeting-ngram-archive",
+    "lingo-absorption",
+    "reactive-greeting-mirror",
+    "associative-variant-synthesis",
+    "phase-greeting-bank",
+    "style-profile-persistence",
+    "⟁Pop",
+    "⟁Wo",
+    "⟁Yax",
+    "intent:salutation"
+  ],
+  "GREETING-µ": [
+    "greeting",
+    "@greeting",
+    "GREETING:",
+    "social-track"
+  ],
+  "CONTROL:": [
+    "@control",
+    "CONTROL-µ",
+    "control",
+    "if",
+    "then",
+    "else",
+    "⟁Pop",
+    "⟁Wo",
+    "⟁Yax"
+  ],
+  "@control": [
+    "@node:CONTROL-µ",
+    "CONTROL:",
+    "control-plan",
+    "xcfe-lowering"
+  ],
+  "control": [
+    "CONTROL-µ",
+    "control-flow",
+    "phase-bound-plan",
+    "XCFE-lowering",
+    "sugar-clause",
+    "⟁Pop",
+    "⟁Wo",
+    "⟁Yax",
+    "⟁Sek",
+    "⟁Ch'en",
+    "⟁Xul"
+  ],
+  "CONTROL-µ": [
+    "control",
+    "@control",
+    "CONTROL:",
+    "control-track"
+  ],
+  "gravity": [
+    "gravity-well-scoring",
+    "established_nodes/distance²",
+    "⟁Pop",
+    "MicronautAttraction",
+    "CaptureGate",
+    "WCRPrior"
+  ],
+  "intent-unresolved": [
+    "Factory:create",
+    "low-gravity-fallback",
+    "⟁Wo"
+  ],
+  "TENSOR:": [
+    "@tensor",
+    "TENSOR-µ",
+    "tensor-bundle",
+    "tensor:projection_container:v1",
+    "semantic_authority:false",
+    "⟁Wo",
+    "⟁Yax",
+    "tensor:micronaut_attraction:v1",
+    "tensor:stb_tensor_brains:v1"
+  ],
+  "@tensor": [
+    "@node:TENSOR-µ",
+    "TENSOR:",
+    "tensor:field",
+    "tensor:metric",
+    "tensor:transform",
+    "tensor:micronaut_attraction:v1",
+    "tensor:stb_tensor_brains:v1"
+  ],
+  "TENSOR-µ": [
+    "TENSOR:",
+    "@tensor",
+    "tensor-bundle-projection-track",
+    "VECTOR-µ:rank1-provider",
+    "semantic_authority:false",
+    "micronaut_attraction_provider",
+    "tensor:stb_tensor_brains:v1",
+    "micronaut:stb-tensor-brains",
+    "micronaut:tensor-slots"
+  ],
+  "tensor:projection_container:v1": [
+    "@type:tensor.projection_container.v1",
+    "owner:TENSOR-µ",
+    "legacy_container:vector:projection_container:v1",
+    "semantic_authority:false"
+  ],
+  "micronaut:attraction-capture": [
+    "phase_scoped_execution_container",
+    "semantic_attractor_basin",
+    "Phi_mu(Q)=Mass_mu*cos(Q,K_mu)*(W_mu*C_mu*R_mu)",
+    "governs_tokens=basin_neighborhood",
+    "capabilities_sandbox=execution_boundary",
+    "policy_ok AND capable AND xcfe_ok",
+    "capture_not_verification",
+    "Xul_commit_required_for_persistence"
+  ],
+  "micronaut:stb-tensor-brains": [
+    "registry:data/world/stb_tensor_brains.json",
+    "checker:tools/check_stb_tensor_brains.py",
+    "canonical_geometry_brain:brain4",
+    "projection_only:true",
+    "bindings:TENSOR-µ|VECTOR-µ|METRIC-µ|ADVISOR-µ|JOKE-µ|Mx2LM|PLAN-µ|POLITICS-µ",
+    "track_local_brains require gram_pool_registry evidence",
+    "not_MicronautEntry_promotion",
+    "not_semantic_truth",
+    "tensor_slot_registry:data/world/micronaut_tensor_slots.json"
+  ],
+  "micronaut:tensor-slots": [
+    "registry:data/world/micronaut_tensor_slots.json",
+    "checker:tools/check_micronaut_tensor_slots.py",
+    "coverage:24",
+    "stb_backed:8",
+    "shared_virtual:16",
+    "every_known_micronaut_has_slot",
+    "slot_is_projection_fiber_state",
+    "private_brain_requires_evidence",
+    "not_semantic_truth",
+    "not_Xul_commit",
+    "rpc:tensor_slot_materialize",
+    "slot_id->tensor_id",
+    "shape_required",
+    "tensor_info_reports_slot_metadata"
+  ],
+  "micronaut:runtime-grammar": [
+    "grammar:data/grammar/micronaut.runtime-grammar.ebnf",
+    "checker:tools/check_micronaut_grammar.py",
+    "declares:micronaut_decl+micronaut_profile_decl+route_contract_decl+semantic_envelope_decl+track_field_decl+micronaut_program_decl+micronaut_control_template_decl+verified_fold_delta_decl",
+    "profile_fields:brain_profile+personality+capability_grams+progression",
+    "authority_boundary:semantic_authority=false;topology_authority=false;verification_authority=false;commit_authority=false",
+    "epistemic_types:observation+preference+plan+generated_output+verified_fact+failed_retrieval+capability_metric+execution_trace",
+    "wildcards:typed+on_unresolved=defer",
+    "phase_gate:template.phases-is-hard-legality-set",
+    "admission:GOOD-FoldDelta.phase_position-ranks-or-narrows-only",
+    "invocation_boundary:required",
+    "projection_only:true"
+  ],
+  "micronaut:program": [
+    "program:data/micronaut/micronaut.program.v0.1.json",
+    "projection:data/micronaut/micronaut.programs.xsl",
+    "grammar:data/grammar/micronaut-program.runtime-grammar.ebnf",
+    "schema:data/schema/micronaut-program.schema.json",
+    "checker:tools/check_micronaut_program.py",
+    "law:single-program-orchestrates-all-micronaut-candidates",
+    "law:micronaut=pattern+guard+continuation+WCR+callable_edges",
+    "authority:projection-only",
+    "admission:external-XCFE-per-invocation"
+  ],
+  "micronaut:tables": [
+    "schema:data/host/manifests/micronauts.tables.json",
+    "keys:data/host/manifests/key.tables.json",
+    "controller:data/host/manifests/jrom.tables.json",
+    "authority:declarations-only"
+  ],
+  "ngram:key-grammar": [
+    "contract:data/grammar/ngram-key-grammar.contracts.json",
+    "grammar:data/grammar/ngram-key-grammar.runtime-grammar.ebnf",
+    "keys:data/grammar/ngram-key-grammar.key-grammar.jsonl",
+    "checker:tools/check_ngram_key_grammar.py",
+    "recognizer:aho-corasick",
+    "boundary:recognition-not-semantic-authority",
+    "routes:µ://ngram,µ://key,µ://pattern,µ://fold"
+  ],
+  "CODEGEN-µ": [
+    "code-generation",
+    "klsl",
+    "kuhul",
+    "cpp",
+    "python",
+    "typescript",
+    "javascript",
+    "emit",
+    "⟁Sek"
+  ],
+  "CODEGEN:": [
+    "@codegen",
+    "CODEGEN-µ",
+    "emit",
+    "implement",
+    "refactor",
+    "⟁Sek"
+  ],
+  "@codegen": [
+    "CODEGEN:",
+    "CODEGEN-µ",
+    "generate",
+    "emit",
+    "syntax-check"
+  ],
+  "codegen": [
+    "code-generation",
+    "CODEGEN-µ",
+    "implement",
+    "refactor",
+    "⟁Sek"
+  ],
+  "image-sampler": [
+    "explicit-gradient-footprint",
+    "mipmap-lod-estimate",
+    "forward_only",
+    "backward_not_implemented",
+    "xcfe_required",
+    "⟁Yax",
+    "⟁Ch'en",
+    "⟁Xul"
+  ],
+  "IMAGE-SAMPLER": [
+    "image-sampler",
+    "micronaut:IMAGE-SAMPLER",
+    "kernel:image-gradient-lod"
+  ]
+}

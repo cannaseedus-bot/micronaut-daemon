@@ -1,0 +1,208 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from cfpc-wildcards.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH CFPCWILDCARDGRAPH</pattern>
+    <template>source cfpc-wildcards.gml; label CFPCWildcardGraph; identity cfpc-wildcards; directed 1; nodes 17; edges 16. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE 1</pattern>
+    <template>Graph CFPCWildcardGraph; node 1; absorbs: remainder; id: 1; kind: wildcard; label: *. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE </pattern>
+    <template>Graph CFPCWildcardGraph; node 1; absorbs: remainder; id: 1; kind: wildcard; label: *. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE 11</pattern>
+    <template>Graph CFPCWildcardGraph; node 11; hops: 1; id: 11; kind: pattern; label: what-is; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE WHAT-IS</pattern>
+    <template>Graph CFPCWildcardGraph; node 11; hops: 1; id: 11; kind: pattern; label: what-is; phase: Wo. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE 12</pattern>
+    <template>Graph CFPCWildcardGraph; node 12; hops: 2; id: 12; kind: pattern; label: why-does; phase: Ch'en. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE WHY-DOES</pattern>
+    <template>Graph CFPCWildcardGraph; node 12; hops: 2; id: 12; kind: pattern; label: why-does; phase: Ch'en. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE 13</pattern>
+    <template>Graph CFPCWildcardGraph; node 13; hops: 2; id: 13; kind: pattern; label: how-to; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE HOW-TO</pattern>
+    <template>Graph CFPCWildcardGraph; node 13; hops: 2; id: 13; kind: pattern; label: how-to; phase: Yax. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE 14</pattern>
+    <template>Graph CFPCWildcardGraph; node 14; hops: 2; id: 14; kind: pattern; label: how-does-affect; phase: Ch'en. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE HOW-DOES-AFFECT</pattern>
+    <template>Graph CFPCWildcardGraph; node 14; hops: 2; id: 14; kind: pattern; label: how-does-affect; phase: Ch'en. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE 15</pattern>
+    <template>Graph CFPCWildcardGraph; node 15; hops: 2; id: 15; kind: pattern; label: how-does-relate; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE HOW-DOES-RELATE</pattern>
+    <template>Graph CFPCWildcardGraph; node 15; hops: 2; id: 15; kind: pattern; label: how-does-relate; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE 16</pattern>
+    <template>Graph CFPCWildcardGraph; node 16; hops: 2; id: 16; kind: pattern; label: what-is-the-difference; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE WHAT-IS-THE-DIFFERENCE</pattern>
+    <template>Graph CFPCWildcardGraph; node 16; hops: 2; id: 16; kind: pattern; label: what-is-the-difference; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE 17</pattern>
+    <template>Graph CFPCWildcardGraph; node 17; hops: 2; id: 17; kind: pattern; label: explain; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE EXPLAIN</pattern>
+    <template>Graph CFPCWildcardGraph; node 17; hops: 2; id: 17; kind: pattern; label: explain; phase: Sek. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE 18</pattern>
+    <template>Graph CFPCWildcardGraph; node 18; hops: 2; id: 18; kind: pattern; label: tell-me-about; phase: Pop. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE TELL-ME-ABOUT</pattern>
+    <template>Graph CFPCWildcardGraph; node 18; hops: 2; id: 18; kind: pattern; label: tell-me-about; phase: Pop. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE 21</pattern>
+    <template>Graph CFPCWildcardGraph; node 21; id: 21; kind: capture; label: what-is:subject; prefix: what is ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE WHAT-IS:SUBJECT</pattern>
+    <template>Graph CFPCWildcardGraph; node 21; id: 21; kind: capture; label: what-is:subject; prefix: what is ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE 22</pattern>
+    <template>Graph CFPCWildcardGraph; node 22; id: 22; kind: capture; label: why-does:subject; prefix: why does ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE WHY-DOES:SUBJECT</pattern>
+    <template>Graph CFPCWildcardGraph; node 22; id: 22; kind: capture; label: why-does:subject; prefix: why does ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE 23</pattern>
+    <template>Graph CFPCWildcardGraph; node 23; id: 23; kind: capture; label: how-to:subject; prefix: how to ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE HOW-TO:SUBJECT</pattern>
+    <template>Graph CFPCWildcardGraph; node 23; id: 23; kind: capture; label: how-to:subject; prefix: how to ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE 24</pattern>
+    <template>Graph CFPCWildcardGraph; node 24; id: 24; kind: capture; label: how-does-affect:verb; prefix: how does ; slot: verb. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE HOW-DOES-AFFECT:VERB</pattern>
+    <template>Graph CFPCWildcardGraph; node 24; id: 24; kind: capture; label: how-does-affect:verb; prefix: how does ; slot: verb. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE 25</pattern>
+    <template>Graph CFPCWildcardGraph; node 25; id: 25; kind: capture; label: how-does-relate:value; prefix: how does ; slot: value. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE HOW-DOES-RELATE:VALUE</pattern>
+    <template>Graph CFPCWildcardGraph; node 25; id: 25; kind: capture; label: how-does-relate:value; prefix: how does ; slot: value. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE 26</pattern>
+    <template>Graph CFPCWildcardGraph; node 26; id: 26; kind: capture; label: what-is-the-difference:subject; prefix: what is the difference between ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE WHAT-IS-THE-DIFFERENCE:SUBJECT</pattern>
+    <template>Graph CFPCWildcardGraph; node 26; id: 26; kind: capture; label: what-is-the-difference:subject; prefix: what is the difference between ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE 27</pattern>
+    <template>Graph CFPCWildcardGraph; node 27; id: 27; kind: capture; label: explain:subject; prefix: explain ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE EXPLAIN:SUBJECT</pattern>
+    <template>Graph CFPCWildcardGraph; node 27; id: 27; kind: capture; label: explain:subject; prefix: explain ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE 28</pattern>
+    <template>Graph CFPCWildcardGraph; node 28; id: 28; kind: capture; label: tell-me-about:subject; prefix: tell me about ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH NODE TELL-ME-ABOUT:SUBJECT</pattern>
+    <template>Graph CFPCWildcardGraph; node 28; id: 28; kind: capture; label: tell-me-about:subject; prefix: tell me about ; slot: subject. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH EDGE 11 CAPTURES 21</pattern>
+    <template>Graph CFPCWildcardGraph; edge 11 to 21; position: 0; relation: captures; source: 11; target: 21. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH EDGE 12 CAPTURES 22</pattern>
+    <template>Graph CFPCWildcardGraph; edge 12 to 22; position: 0; relation: captures; source: 12; target: 22. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH EDGE 13 CAPTURES 23</pattern>
+    <template>Graph CFPCWildcardGraph; edge 13 to 23; position: 0; relation: captures; source: 13; target: 23. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH EDGE 14 CAPTURES 24</pattern>
+    <template>Graph CFPCWildcardGraph; edge 14 to 24; position: 0; relation: captures; source: 14; target: 24. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH EDGE 15 CAPTURES 25</pattern>
+    <template>Graph CFPCWildcardGraph; edge 15 to 25; position: 0; relation: captures; source: 15; target: 25. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH EDGE 16 CAPTURES 26</pattern>
+    <template>Graph CFPCWildcardGraph; edge 16 to 26; position: 0; relation: captures; source: 16; target: 26. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH EDGE 17 CAPTURES 27</pattern>
+    <template>Graph CFPCWildcardGraph; edge 17 to 27; position: 0; relation: captures; source: 17; target: 27. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH EDGE 18 CAPTURES 28</pattern>
+    <template>Graph CFPCWildcardGraph; edge 18 to 28; position: 0; relation: captures; source: 18; target: 28. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH EDGE 21 BINDS 1</pattern>
+    <template>Graph CFPCWildcardGraph; edge 21 to 1; relation: binds; source: 21; target: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH EDGE 22 BINDS 1</pattern>
+    <template>Graph CFPCWildcardGraph; edge 22 to 1; relation: binds; source: 22; target: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH EDGE 23 BINDS 1</pattern>
+    <template>Graph CFPCWildcardGraph; edge 23 to 1; relation: binds; source: 23; target: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH EDGE 24 BINDS 1</pattern>
+    <template>Graph CFPCWildcardGraph; edge 24 to 1; relation: binds; source: 24; target: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH EDGE 25 BINDS 1</pattern>
+    <template>Graph CFPCWildcardGraph; edge 25 to 1; relation: binds; source: 25; target: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH EDGE 26 BINDS 1</pattern>
+    <template>Graph CFPCWildcardGraph; edge 26 to 1; relation: binds; source: 26; target: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH EDGE 27 BINDS 1</pattern>
+    <template>Graph CFPCWildcardGraph; edge 27 to 1; relation: binds; source: 27; target: 1. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH CFPCWILDCARDGRAPH EDGE 28 BINDS 1</pattern>
+    <template>Graph CFPCWildcardGraph; edge 28 to 1; relation: binds; source: 28; target: 1. Data-only graph record.</template>
+  </category>
+</aiml>

@@ -1,0 +1,320 @@
+{
+  "@no-eval": true,
+  "id": "DECISION-µ",
+
+  "schemes": ["decision"],
+  "description": "Typed decision-under-uncertainty resolver. Selects actions from explicit branches, outcomes, objectives, and constraints without collapsing UNKNOWN facts or fabricating probabilities.",
+  "phase": "Sek",
+  "category": "cognitive",
+  "intent": "define",
+  "confidence": 1.0,
+  "static_weight": 1.0,
+  "health": 1.0,
+  "governs": [
+    "decision",
+    "choose",
+    "select",
+    "action",
+    "actions",
+    "branches",
+    "outcomes",
+    "loss",
+    "risk",
+    "expected utility",
+    "expected_utility",
+    "maximin",
+    "minimax",
+    "constraints",
+    "decision:"
+  ],
+  "capabilities": [
+    "DECISION_EXPECTED_UTILITY",
+    "DECISION_MAXIMIN",
+    "DECISION_MINIMAX",
+    "DECISION_UNDER_UNCERTAINTY",
+    "BRANCH_PRESERVATION",
+    "ACTION_ONLY_COLLAPSE",
+    "NO_FABRICATED_PRIOR"
+  ],
+  "route_contract": {
+    "schemes": [
+      "decision"
+    ],
+    "verbs": [
+      "choose",
+      "select",
+      "evaluate",
+      "rank"
+    ],
+    "aiml_patterns": [
+      "decision *",
+      "choose *",
+      "select action *",
+      "expected utility *",
+      "minimax *",
+      "maximin *"
+    ],
+    "aiml_templates": [
+      "decision://choose",
+      "decision://select",
+      "decision://evaluate"
+    ],
+    "key_patterns": [
+      "decision:choose:*",
+      "decision:select:*",
+      "decision:evaluate:*"
+    ],
+    "key_templates": [
+      "decision:result:selected",
+      "decision:result:unknown"
+    ],
+    "key_grammar": [
+      "schema:scfml.branch.v1",
+      "schema:scfml.pattern_learning.v1",
+      "grammar:decision.action_only.v1"
+    ],
+    "tokens": [
+      "decision",
+      "decide",
+      "choose",
+      "select",
+      "evaluate",
+      "action",
+      "branch",
+      "outcome",
+      "objective",
+      "utility",
+      "loss",
+      "uncertainty",
+      "constraint",
+      "expected_utility",
+      "maximin",
+      "minimax"
+    ]
+  },
+  "relations": [],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "admit_decision_spec",
+      "key": "decision_request",
+      "weight": 1.0
+    },
+    {
+      "phase": "Wo",
+      "op": "normalize_branches_actions_objective",
+      "gate": "decision_spec_present",
+      "weight": 1.0
+    },
+    {
+      "phase": "Yax",
+      "op": "preserve_epistemic_branches",
+      "key": "branch:*",
+      "note": "UNKNOWN/MISS branches remain explicit; contradicted branches require typed negative authority.",
+      "weight": 1.0
+    },
+    {
+      "phase": "Sek",
+      "op": "evaluate_decision_model",
+      "gate": "objective_and_outcomes_present",
+      "note": "expected_utility requires explicit probabilities; unresolved probabilities route to maximin/minimax or decision_unknown.",
+      "weight": 1.0
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_decision_assumptions",
+      "note": "checks constraints, probability authority, and unresolved branch evidence before reporting action selection.",
+      "weight": 1.0
+    },
+    {
+      "phase": "Xul",
+      "op": "collapse_action_only",
+      "scope": "decision_action",
+      "note": "Xul may commit an action selection without committing UNKNOWN facts.",
+      "weight": 1.0
+    }
+  ],
+  "@neighborhood": {
+    "authoritative": true,
+    "nodes": [
+      {
+        "id": "n:decide",
+        "label": "decide",
+        "glyph": "⟁DECIDE",
+        "weight": 0.9,
+        "projects_to": [
+          "governs",
+          "tokens"
+        ]
+      },
+      {
+        "id": "n:evaluate",
+        "label": "evaluate",
+        "glyph": "⊕EVALUATE",
+        "weight": 0.85,
+        "projects_to": [
+          "governs",
+          "tokens"
+        ]
+      },
+      {
+        "id": "n:branch",
+        "label": "branch",
+        "glyph": "◈BRANCH",
+        "weight": 0.8,
+        "projects_to": [
+          "governs",
+          "tokens"
+        ]
+      },
+      {
+        "id": "n:outcome",
+        "label": "outcome",
+        "glyph": "◈OUTCOME",
+        "weight": 0.8,
+        "projects_to": [
+          "governs",
+          "tokens"
+        ]
+      },
+      {
+        "id": "n:objective",
+        "label": "objective",
+        "glyph": "◈OBJECTIVE",
+        "weight": 0.75,
+        "projects_to": [
+          "governs",
+          "tokens"
+        ]
+      },
+      {
+        "id": "n:utility",
+        "label": "utility",
+        "glyph": "◈UTILITY",
+        "weight": 0.75,
+        "projects_to": [
+          "governs",
+          "tokens"
+        ]
+      },
+      {
+        "id": "n:uncertainty",
+        "label": "uncertainty",
+        "glyph": "⊗UNCERTAINTY",
+        "weight": 0.7,
+        "projects_to": [
+          "governs",
+          "tokens"
+        ]
+      },
+      {
+        "id": "n:constraint",
+        "label": "constraint",
+        "glyph": "⊗CONSTRAINT",
+        "weight": 0.7,
+        "projects_to": [
+          "governs",
+          "tokens"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "from": "n:decide",
+        "to": "n:evaluate",
+        "verb": "@requires",
+        "directed": true,
+        "weight": 0.9
+      },
+      {
+        "from": "n:evaluate",
+        "to": "n:branch",
+        "verb": "@produces",
+        "directed": true,
+        "weight": 0.85
+      },
+      {
+        "from": "n:evaluate",
+        "to": "n:outcome",
+        "verb": "@produces",
+        "directed": true,
+        "weight": 0.85
+      },
+      {
+        "from": "n:outcome",
+        "to": "n:utility",
+        "verb": "@informs",
+        "directed": true,
+        "weight": 0.75
+      },
+      {
+        "from": "n:objective",
+        "to": "n:outcome",
+        "verb": "@informs",
+        "directed": true,
+        "weight": 0.7
+      },
+      {
+        "from": "n:decide",
+        "to": "n:constraint",
+        "verb": "@requires",
+        "directed": true,
+        "weight": 0.7
+      },
+      {
+        "from": "n:utility",
+        "to": "MATH-µ",
+        "verb": "@requires",
+        "directed": true,
+        "weight": 0.8,
+        "projects_to": [
+          "relations"
+        ]
+      },
+      {
+        "from": "n:decide",
+        "to": "REASON-µ",
+        "verb": "@supports",
+        "directed": false,
+        "weight": 0.75,
+        "projects_to": [
+          "relations"
+        ]
+      },
+      {
+        "from": "n:decide",
+        "to": "PLAN-µ",
+        "verb": "@supports",
+        "directed": false,
+        "weight": 0.7,
+        "projects_to": [
+          "relations"
+        ]
+      }
+    ]
+  },
+  "sandbox": {
+    "gram_ns": "DECISION-µ",
+    "manifest_access": [
+      "micronaut",
+      "kuhul"
+    ],
+    "effects": [
+      "decision:evaluate",
+      "decision:select",
+      "branch:preserve"
+    ],
+    "ports": [],
+    "coordinator": false
+  },
+  "memory_patterns": [
+    "decision:action:*",
+    "branch:UNKNOWN:*",
+    "branch:CONTRADICTED:*"
+  ],
+  "model": {
+    "gguf": "C:/Users/canna/.lmstudio/models/lmstudio-community/LFM2.5-1.2B-Instruct-GGUF/LFM2.5-1.2B-Instruct-Q8_0.gguf",
+    "template": "chatml",
+    "role": "instruction"
+  }
+}

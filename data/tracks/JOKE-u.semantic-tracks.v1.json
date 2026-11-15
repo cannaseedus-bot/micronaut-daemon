@@ -1,0 +1,247 @@
+{
+  "@no-eval": true,
+  "id": "JOKE-µ",
+
+  "schemes": ["joke"],
+  "schema": "semantic-tracks.v1",
+  "description": "First-class reusable humor-frame routing track for ambiguity permission, delivery-frame folds, pun bridges, metaphor routing, and punchline-compatible sense collapse. It does not perform freeform joke authorship.",
+  "phase": "Yax",
+  "category": "humor-frame-routing",
+  "confidence": 1.0,
+  "static_weight": 1.0,
+  "first_class": true,
+  "peers": [
+    "PLAN-µ",
+    "ADVISOR-µ"
+  ],
+  "availability": "all_domains",
+  "source_manifest": "data/manifest/joke.manifest.json",
+  "surface_projection": "data/alice/joke.aiml",
+  "governs": [
+    "joke",
+    "intent:joke",
+    "frame:delivery",
+    "frame:joke_setup",
+    "frame:timed_delivery",
+    "frame:collapse",
+    "frame:subverted",
+    "joke:pun_bridge",
+    "joke:answer_surface",
+    "wind-up",
+    "pitch",
+    "swing",
+    "stb_tensor_brain",
+    "data/world/stb_tensor_brains.json"
+  ],
+  "capabilities": [
+    "ambiguity_permission",
+    "pun_bridge_allowed",
+    "delivery_frame_routing",
+    "schema_overlap_resolution",
+    "surface_alias_filtering",
+    "punchline_compatible_sense_selection",
+    "collapse_verification",
+    "subverted_collapse_routing",
+    "wpf_card",
+    "consume-stb-tensor-brain-binding",
+    "consume-track-local-gram-tensor-brain"
+  ],
+  "relations": [
+    {
+      "target": "PLAN-µ",
+      "verb": "@related_to",
+      "directed": false
+    },
+    {
+      "target": "ADVISOR-µ",
+      "verb": "@related_to",
+      "directed": false
+    },
+    {
+      "target": "ELIZA-µ",
+      "verb": "@supports",
+      "directed": false
+    },
+    {
+      "target": "AIML-µ",
+      "verb": "@uses",
+      "directed": true
+    },
+    {
+      "target": "REASON-µ",
+      "verb": "@contradicts",
+      "directed": true
+    },
+    {
+      "target": "THOUGHT-OUTLINE-µ",
+      "verb": "@redirect",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "detect_joke_setup",
+      "key": "frame:joke_setup",
+      "gate": "declared_frame_alias_or_opener",
+      "note": "Open the premise/frame without selecting a surface topic as domain."
+    },
+    {
+      "phase": "Wo",
+      "op": "bind_delivery_roles",
+      "key": "frame:timed_delivery",
+      "gate": "setup_candidate_present",
+      "note": "Bind role slots and surface aliases."
+    },
+    {
+      "phase": "Yax",
+      "op": "crystallize_expectation",
+      "key": "frame:crystallized_expectation",
+      "scope": "joke.manifest",
+      "gate": "phase_typed_beats_present",
+      "note": "Crystallize dominant expectation as named SGSFG node (session-scoped, archived in JROM). Select frame route from declared manifest entries only."
+    },
+    {
+      "phase": "Sek",
+      "op": "execute_collapse_path",
+      "key": "frame:collapse",
+      "source": "frame:crystallized_expectation",
+      "verb": "@contradicts",
+      "gate": "selected_frame_route",
+      "note": "Traverse frame:crystallized_expectation @contradicts frame:collapse. Declared subversion redirects to frame:subverted at Ch'en."
+    },
+    {
+      "phase": "Chen",
+      "op": "verify_collapse_synonym",
+      "key": "collapse:verify:Chen",
+      "synonym_of": "Ch'en",
+      "note": "Synonym fold — Chen/Ch'en/Ch_en are the same C6 phase. No separate execution; structural check propagates from Ch'en."
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_collapse",
+      "key": "collapse:verify",
+      "gate": "structural_closure_or_declared_subversion",
+      "note": "Verify resolved, subverted, or failed collapse structurally."
+    },
+    {
+      "phase": "Ch_en",
+      "op": "verify_collapse_synonym",
+      "key": "collapse:verify:Ch_en",
+      "synonym_of": "Ch'en",
+      "note": "Synonym fold — Chen/Ch'en/Ch_en are the same C6 phase. No separate execution; structural check propagates from Ch'en."
+    },
+    {
+      "phase": "Xul",
+      "op": "commit_surface_and_semantic_key",
+      "scope": "joke_answer",
+      "gate": "semantic_key_and_surface_answer_present",
+      "note": "Commit selected semantic key separately from rendered surface answer."
+    }
+  ],
+  "aliases": [
+    {
+      "surface": "wind-up",
+      "maps_to": "frame:joke_setup",
+      "overlay": "baseball",
+      "domain_selected": false
+    },
+    {
+      "surface": "pitch",
+      "maps_to": "frame:timed_delivery",
+      "overlay": "baseball",
+      "domain_selected": false
+    },
+    {
+      "surface": "swing",
+      "maps_to": "frame:collapse",
+      "overlay": "baseball",
+      "domain_selected": false
+    }
+  ],
+  "boundary_rules": [
+    {
+      "id": "frames_declared_not_inferred",
+      "rule": "Frames are declared, not inferred from token co-occurrence."
+    },
+    {
+      "id": "beats_phase_typed",
+      "rule": "Beats are phase-typed before they are accepted as folds."
+    },
+    {
+      "id": "roles_schema_bound_not_token_bound",
+      "rule": "Roles bind to schema slots; surface tokens only fill or alias those slots."
+    },
+    {
+      "id": "collapse_must_be_verified",
+      "rule": "Ch'en verifies resolved, subverted, or failed collapse structurally."
+    },
+    {
+      "id": "subversion_declared_variant",
+      "rule": "Subversion is a declared variant, not an exception."
+    },
+    {
+      "id": "no_promotion_from_token_association_to_frame",
+      "rule": "Frequent token associations do not become frames without manifest declaration."
+    }
+  ],
+  "ui": {
+    "card": "⟁WIDGETCARD",
+    "label": "JOKE",
+    "fields": [
+      "prompt",
+      "surface_form",
+      "association_field",
+      "action_frame",
+      "candidate_senses",
+      "selected_semantic_key",
+      "punchline",
+      "authority",
+      "next"
+    ],
+    "activation_key": "track"
+  },
+  "sandbox": {
+    "gram_ns": "JOKE-µ",
+    "manifest_access": [
+      "words",
+      "aiml",
+      "joke",
+      "folds",
+      "kuhul"
+    ],
+    "effects": [
+      "gramRead",
+      "joke:route",
+      "collapse:verify",
+      "card:project",
+      "gramWrite"
+    ],
+    "ports": [],
+    "coordinator": false,
+    "cannot": [
+      "promote raw token co-occurrence into a frame",
+      "treat analogy overlay as selected domain without frame evidence",
+      "override manifest-declared role boundaries"
+    ]
+  },
+  "stb_tensor_brain": {
+    "@type": "khanary.stb_tensor_brain.track_binding_ref.v1",
+    "registry": "data/world/stb_tensor_brains.json",
+    "checker": "tools/check_stb_tensor_brains.py",
+    "binding_key": "JOKE-µ",
+    "binding_kind": "track_local_gram_tensor_brain",
+    "brain_run": "brain4",
+    "fallback_brain_run": "brain3",
+    "slug": "joke_mu",
+    "projection_only": true,
+    "semantic_authority": false,
+    "topology_authority": false,
+    "authority_boundary": "Track can consume the STB tensor brain as projection evidence only; Ch_en/Xul still verify and persist semantic state."
+  },
+  "model": {
+    "gguf": "C:/Users/canna/.lmstudio/models/lmstudio-community/LFM2.5-1.2B-Instruct-GGUF/LFM2.5-1.2B-Instruct-Q8_0.gguf",
+    "template": "chatml",
+    "role": "instruction"
+  }
+}

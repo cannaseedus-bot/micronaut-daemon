@@ -1,0 +1,57 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "khanary.structure.v1",
+    "title": "CFPC Structure Contract",
+    "description": "Composition contract. Declares document hierarchy (containment graph) and symbol references (dependency graph) as separate edge sets. Not an execution arm.",
+    "type": "object",
+    "required": ["@kind", "@id", "@template"],
+    "properties": {
+        "@kind": {
+            "type": "string",
+            "const": "semantic.structure.v1"
+        },
+        "@id": {
+            "type": "string",
+            "description": "Unique identifier for this structure contract."
+        },
+        "@template": {
+            "type": "string",
+            "description": "Template to validate against. Only 'article.v1' is registered at Stage 7.",
+            "enum": ["article.v1"]
+        },
+        "@sections": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["@id", "@role"],
+                "properties": {
+                    "@id":       { "type": "string" },
+                    "@role":     { "type": "string" },
+                    "@contains": {
+                        "type": "array",
+                        "items": { "type": "string" },
+                        "description": "Containment edges. Validated for cycles and role ordering."
+                    },
+                    "@depends": {
+                        "type": "array",
+                        "items": { "type": "string" },
+                        "description": "Dependency edges for symbol resolution. Carried for CFPC; never cycle-checked by structure validator."
+                    }
+                },
+                "additionalProperties": false
+            }
+        },
+        "@policy": {
+            "type": "object",
+            "description": "Policy block. containment_implies_dependency=true is rejected at parse time.",
+            "properties": {
+                "containment_implies_dependency": {
+                    "type": "boolean",
+                    "description": "MUST NOT be true. Rejected by Pattern Induction Guard."
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

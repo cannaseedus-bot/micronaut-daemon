@@ -1,0 +1,13 @@
+{
+  "@program": "webgl2.fieldgraph",
+  "@kind": "kuhul.webgl2.fieldgraph.v1",
+  "@backend": "webgl2",
+  "@source": "models/from_zero/fieldgraph/ast_fieldgraph_100d.s7",
+  "@manifest": "models/from_zero/fieldgraph/ast_fieldgraph_100d.manifest.json",
+  "@bridge": "drivers/webgl2/fieldgraph_100d.mjs",
+  "@shader": "drivers/webgl2/fieldgraph_100d.frag",
+  "dimensions": 100,
+  "dtype": "f16_source_f32_texture",
+  "transport": "WebView2 postMessage or WASM linear-memory copy",
+  "operations": ["upload_texture", "lookup_record", "project_scalar"]
+}

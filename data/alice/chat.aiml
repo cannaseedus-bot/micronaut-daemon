@@ -1,0 +1,293 @@
+<aiml version="1.0.1">
+  <!-- CHAT-µ AIML patterns.
+       Pattern engine: ELIZA/AIML.  Execution authority: K'UHUL.
+       General conversational backbone: opinion, assertion, agreement,
+       disagreement, acknowledgment, continuation, clarification, echo,
+       topic navigation, and sentiment.
+       CHAT-µ does not govern domain-specific tracks; it contributes C_Chat
+       to the shared semantic field at the current phase.
+       All templates emit <mx2lm>chat-u ...</mx2lm> for micronaut routing. -->
+
+  <!-- ── Canonical entry point ───────────────────────────────────────────── -->
+  <category>
+    <pattern>CHAT CONTEXT</pattern>
+    <template><mx2lm>chat-u op=status category=context phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Opinions ───────────────────────────────────────────────────────── -->
+  <category>
+    <pattern>I THINK *</pattern>
+    <template><mx2lm>chat-u op=opinion category=opinion topic=<star/> phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>I BELIEVE *</pattern>
+    <template><mx2lm>chat-u op=opinion category=opinion topic=<star/> phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>IN MY OPINION *</pattern>
+    <template><mx2lm>chat-u op=opinion category=opinion topic=<star/> phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>WHAT DO YOU THINK</pattern>
+    <template><mx2lm>chat-u op=ask category=question topic=general phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>WHAT DO YOU THINK ABOUT *</pattern>
+    <template><mx2lm>chat-u op=ask category=question topic=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>WHAT IS YOUR OPINION ON *</pattern>
+    <template><mx2lm>chat-u op=ask category=question topic=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Assertions ─────────────────────────────────────────────────────── -->
+  <category>
+    <pattern>* IS * BECAUSE *</pattern>
+    <template><mx2lm>chat-u op=assert category=assertion topic=<star index="1"/> value=<star index="2"/> reason=<star index="3"/> phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>THE REASON * IS *</pattern>
+    <template><mx2lm>chat-u op=assert category=assertion topic=<star index="1"/> value=<star index="2"/> phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>THE REASON FOR * IS *</pattern>
+    <template><mx2lm>chat-u op=assert category=assertion topic=<star index="1"/> value=<star index="2"/> phase=Wo</mx2lm></template>
+  </category>
+
+  <!-- ── Feelings / emotions ────────────────────────────────────────────── -->
+  <category>
+    <pattern>I FEEL *</pattern>
+    <template><mx2lm>chat-u op=reply category=emotion topic=<star/> sentiment=expressed phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>I AM FEELING *</pattern>
+    <template><mx2lm>chat-u op=reply category=emotion topic=<star/> sentiment=expressed phase=Wo</mx2lm></template>
+  </category>
+
+  <!-- ── Agreement ──────────────────────────────────────────────────────── -->
+  <category>
+    <pattern>I AGREE</pattern>
+    <template><mx2lm>chat-u op=agree category=agreement sentiment=positive phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>I AGREE WITH YOU</pattern>
+    <template><mx2lm>chat-u op=agree category=agreement sentiment=positive phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>I AGREE WITH *</pattern>
+    <template><mx2lm>chat-u op=agree category=agreement topic=<star/> sentiment=positive phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>THAT IS CORRECT</pattern>
+    <template><mx2lm>chat-u op=agree category=agreement sentiment=positive phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>YOU ARE RIGHT</pattern>
+    <template><mx2lm>chat-u op=agree category=agreement sentiment=positive phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>EXACTLY</pattern>
+    <template><mx2lm>chat-u op=agree category=agreement sentiment=positive phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>PRECISELY</pattern>
+    <template><mx2lm>chat-u op=agree category=agreement sentiment=positive phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Disagreement ───────────────────────────────────────────────────── -->
+  <category>
+    <pattern>I DISAGREE</pattern>
+    <template><mx2lm>chat-u op=disagree category=disagreement sentiment=negative phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>I DISAGREE WITH *</pattern>
+    <template><mx2lm>chat-u op=disagree category=disagreement topic=<star/> sentiment=negative phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>I DON T THINK *</pattern>
+    <template><mx2lm>chat-u op=disagree category=disagreement topic=<star/> sentiment=negative phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>THAT IS WRONG</pattern>
+    <template><mx2lm>chat-u op=disagree category=disagreement sentiment=negative phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>YOU ARE WRONG</pattern>
+    <template><mx2lm>chat-u op=disagree category=disagreement sentiment=negative phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Acknowledgment ─────────────────────────────────────────────────── -->
+  <category>
+    <pattern>I SEE</pattern>
+    <template><mx2lm>chat-u op=acknowledge category=acknowledgment phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>I SEE WHAT YOU MEAN</pattern>
+    <template><mx2lm>chat-u op=acknowledge category=acknowledgment phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>GOT IT</pattern>
+    <template><mx2lm>chat-u op=acknowledge category=acknowledgment phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>UNDERSTOOD</pattern>
+    <template><mx2lm>chat-u op=acknowledge category=acknowledgment phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>MAKES SENSE</pattern>
+    <template><mx2lm>chat-u op=acknowledge category=acknowledgment phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>THAT MAKES SENSE</pattern>
+    <template><mx2lm>chat-u op=acknowledge category=acknowledgment phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Continuation ───────────────────────────────────────────────────── -->
+  <category>
+    <pattern>TELL ME MORE</pattern>
+    <template><mx2lm>chat-u op=continue category=continuation phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>TELL ME MORE ABOUT *</pattern>
+    <template><mx2lm>chat-u op=continue category=continuation topic=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>GO ON</pattern>
+    <template><mx2lm>chat-u op=continue category=continuation phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CONTINUE</pattern>
+    <template><mx2lm>chat-u op=continue category=continuation phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>AND THEN</pattern>
+    <template><mx2lm>chat-u op=continue category=continuation phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>KEEP GOING</pattern>
+    <template><mx2lm>chat-u op=continue category=continuation phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Clarification ──────────────────────────────────────────────────── -->
+  <category>
+    <pattern>WHAT DO YOU MEAN BY *</pattern>
+    <template><mx2lm>chat-u op=clarify category=clarification topic=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>WHAT DO YOU MEAN</pattern>
+    <template><mx2lm>chat-u op=clarify category=clarification phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CAN YOU EXPLAIN *</pattern>
+    <template><mx2lm>chat-u op=clarify category=clarification topic=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CLARIFY *</pattern>
+    <template><mx2lm>chat-u op=clarify category=clarification topic=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>WHAT DOES * MEAN</pattern>
+    <template><mx2lm>chat-u op=clarify category=clarification topic=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Echo / confirm ─────────────────────────────────────────────────── -->
+  <category>
+    <pattern>DID YOU SAY *</pattern>
+    <template><mx2lm>chat-u op=echo category=clarification value=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>YOU SAID *</pattern>
+    <template><mx2lm>chat-u op=echo category=clarification value=<star/> phase=Pop</mx2lm></template>
+  </category>
+
+  <!-- ── Topic navigation ───────────────────────────────────────────────── -->
+  <category>
+    <pattern>CHANGE SUBJECT</pattern>
+    <template><mx2lm>chat-u op=pivot category=general phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>DIFFERENT TOPIC</pattern>
+    <template><mx2lm>chat-u op=pivot category=general phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>LET S TALK ABOUT *</pattern>
+    <template><mx2lm>chat-u op=pivot category=general topic=<star/> phase=Wo</mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>TOPIC *</pattern>
+    <template><mx2lm>chat-u op=pivot category=general topic=<star/> phase=Wo</mx2lm></template>
+  </category>
+
+  <!-- ── Phase-explicit surface ─────────────────────────────────────────── -->
+  <category>
+    <pattern>CHAT POP *</pattern>
+    <template><mx2lm>chat-u op=surface phase=Pop input=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CHAT WO *</pattern>
+    <template><mx2lm>chat-u op=classify phase=Wo input=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CHAT YAX *</pattern>
+    <template><mx2lm>chat-u op=synthesize phase=Yax input=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CHAT SEK *</pattern>
+    <template><mx2lm>chat-u op=score phase=Sek input=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CHAT CHEN *</pattern>
+    <template><mx2lm>chat-u op=verify phase=Ch'en input=<star/></mx2lm></template>
+  </category>
+
+  <category>
+    <pattern>CHAT XUL *</pattern>
+    <template><mx2lm>chat-u op=commit phase=Xul input=<star/></mx2lm></template>
+  </category>
+
+  <!-- ── Fallback ───────────────────────────────────────────────────────── -->
+  <category>
+    <pattern>CHAT *</pattern>
+    <template><mx2lm>chat-u hint CHAT CONTEXT for op=opinion|assert|agree|disagree|acknowledge|continue|clarify <star/></mx2lm></template>
+  </category>
+</aiml>

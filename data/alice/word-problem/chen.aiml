@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0">
+
+<!-- Ch'en phase bank: verify a Sek candidate before Xul may commit it.
+     Verification can return UNKNOWN or CONTRADICTED; it never fabricates a fill. -->
+
+<category>
+<pattern>IF * GOING * AND * GOING *</pattern>
+<template>
+<mx2lm>
+Ch'en verification contract for a relative-rate candidate.
+Check that both rates are numeric, use compatible units, and match the stated directions.
+Check that substituted values satisfy distance = rate × time and that the result is nonnegative.
+Epistemic state: UNKNOWN until the Sek result and its substitutions are present.
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>WORD PROBLEM RATE DISTANCE *</pattern>
+<template>
+<mx2lm>
+Ch'en verification contract for rate-distance-time: <star/>.
+Require stated givens, compatible units, equation substitution, arithmetic replay, and a reasonable result.
+Only a passing certificate may proceed to Xul; missing evidence remains UNKNOWN.
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>WHAT IS * PERCENT OF *</pattern>
+<template>
+<mx2lm>
+Ch'en verification contract: percent = <star index="1"/>; base = <star index="2"/>.
+Replay result = (percent ÷ 100) × base and check numeric substitution.
+Epistemic state: UNKNOWN until the Sek result is supplied.
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>COMPUTE PERCENT * OF *</pattern>
+<template>
+<mx2lm>
+Ch'en percentage verification: replay <star index="1"/> percent of <star index="2"/>.
+Verify arithmetic and preserve the units of the base value.
+Only a passing certificate may proceed to Xul.
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>WORD PROBLEM *</pattern>
+<template>
+<mx2lm>
+Ch'en generic verification pass for: <star/>.
+Check completeness of givens, governing-rule support, substitutions, units, contradictions, and reasonableness.
+Return SUPPORTED, MISS, UNKNOWN, or CONTRADICTED. Do not commit from this phase.
+</mx2lm>
+</template>
+</category>
+
+</aiml>

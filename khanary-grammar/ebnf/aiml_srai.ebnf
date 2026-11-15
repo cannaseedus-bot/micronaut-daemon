@@ -1,0 +1,52 @@
+(* AIML/SRAI reasoning authoring grammar, v1.1. XML element names are literal. *)
+document = { space }, aiml, { space } ;
+aiml = "<aiml>", { category }, "</aiml>" ;
+category = "<category>", pattern, [ that ], template, "</category>" ;
+pattern = "<pattern>", pattern-text, "</pattern>" ;
+that = "<that>", pattern-text, "</that>" ;
+template = "<template>", { template-item }, "</template>" ;
+template-item = text | star | thatstar | srai | set | get | condition | random ;
+srai = "<srai>", { text | star | get }, "</srai>" ;
+star = "<star/>" | "<star index=\"", positive-integer, "\"/>" ;
+thatstar = "<thatstar/>" | "<thatstar index=\"", positive-integer, "\"/>" ;
+set = "<set name=\"", name, "\">", { text | star | get }, "</set>" ;
+get = "<get name=\"", name, "\"/>" ;
+condition = "<condition name=\"", name, "\" value=\"", text, "\">", { template-item }, "</condition>" ;
+random = "<random>", li, { li }, "</random>" ;
+li = "<li>", { template-item }, "</li>" ;
+
+(* START and RESET initialize the three guard fields. *)
+session-initialization = start-category, reset-category ;
+start-category = "<category><pattern>START</pattern><template>", guard-initial-values, "</template></category>" ;
+reset-category = "<category><pattern>RESET</pattern><template>", guard-initial-values, "</template></category>" ;
+guard-initial-values = "<set name=\"reasoning.depth\">0</set>",
+                       "<set name=\"reasoning.visited\"></set>",
+                       "<set name=\"reasoning.guard\">open</set>" ;
+guard-field = "reasoning.depth" | "reasoning.visited" | "reasoning.guard" ;
+guard-state = "open" | "closed" ;
+
+(* A binary surface category binds the two AIML captures in order. *)
+unary-dispatch = "<category><pattern>REASON ", unary-operator, " *</pattern><template><srai>XCFE DISPATCH ", unary-operator, " <star index=\"1\"/></srai></template></category>" ;
+binary-dispatch = "<category><pattern>REASON ", binary-operator, " * AND *</pattern><template><srai>XCFE DISPATCH ", binary-operator, " <star index=\"1\"/> AND <star index=\"2\"/></srai></template></category>" ;
+unary-operator = "DEDUCTION" | "INDUCTION" | "ABDUCTION" ;
+binary-operator = "DEPENDENCY" | "CONTRAST" | "ANALOGY" ;
+reason-envelope = "<reason-envelope version=\"kuhul.srai.reasoning.v1\" operator=\"", operator,
+                  "\" arity=\"", arity, "\"><a>", text, "</a>", [ "<b>", text, "</b>" ], "</reason-envelope>" ;
+operator = unary-operator | binary-operator ;
+arity = "1" | "2" ;
+
+(* XUL owns terminal result and denial categories. *)
+closure = result-category, denied-category ;
+result-category = "<category><pattern>REASONING RESULT *</pattern><template>", { template-item }, "</template></category>" ;
+denied-category = "<category><pattern>REASONING DENIED *</pattern><template>", { template-item }, "</template></category>" ;
+
+pattern-text = pattern-char, { pattern-char } ;
+pattern-char = letter | digit | space | "*" | "_" | "^" | "#" | "-" | "." ;
+name = letter, { letter | digit | "." | "_" | "-" } ;
+text = text-char, { text-char } ;
+text-char = letter | digit | space | "." | "," | ":" | "-" | "_" | "/" ;
+positive-integer = nonzero-digit, { digit } ;
+digit = "0" | nonzero-digit ;
+nonzero-digit = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+letter = "A".."Z" | "a".."z" ;
+space = " " | "\t" | "\r" | "\n" ;

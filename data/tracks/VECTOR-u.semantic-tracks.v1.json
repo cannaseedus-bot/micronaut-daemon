@@ -1,0 +1,358 @@
+{
+  "@no-eval": true,
+  "id": "VECTOR-µ",
+
+  "schemes": ["vector"],
+  "description": "VECTOR-µ — representation-learning sidekick for Mx2LM. It learns and emits derived geometry over verified semantic containers, GML/FoldGraph topology, RelationISA edges, Fold neighborhoods, mesh/STB evidence, and EpisodeJournal deltas. Beyond flat embeddings, it may learn a semantic-manifold projection M_mu over authoritative topology B, local tangent charts N(k)->T_k(M_mu), phase/relation-conditioned metrics g(F,theta,r), and graph-geodesic distance estimates, without becoming semantic authority.",
+  "phase": "Wo",
+  "category": "geometry",
+  "confidence": 1.0,
+  "projection_micronaut": true,
+  "semantic_authority": false,
+  "governs": [
+    "vector",
+    "vectors",
+    "embedding",
+    "projection",
+    "geometry",
+    "coordinate",
+    "cosine",
+    "similarity",
+    "principal_direction",
+    "representation_learning",
+    "relation_conditioned_geometry",
+    "vector:projection_container:v1",
+    "mx2lm:vector-project",
+    "GML",
+    "gml:topology_contract",
+    "vectors.xml",
+    "mesh_graph",
+    "signal_mesh",
+    "birdsong_mesh.stb",
+    "MeshNN",
+    "MathML",
+    "vectors.mml",
+    "vector:mml-foldpair-contract",
+    "vector:semantic-geodesic",
+    "dual_comparison_graph",
+    "differential_comparison_graph",
+    "minimax_rule",
+    "bayes_risk",
+    "statistical_decision_theory",
+    "vector:phase-conditioned-metric",
+    "vector:semantic-manifold",
+    "semantic_geodesic",
+    "phase_conditioned_metric",
+    "riemannian_metric_field",
+    "local_tangent_chart",
+    "semantic_manifold",
+    "khanary-geometry-v0.3.0",
+    "geometry_model",
+    "birdsong_brain",
+    "canary_song_mesh",
+    "birdsong_brain3",
+    "STB0_projection_container",
+    "stb_tensor_brain",
+    "data/world/stb_tensor_brains.json"
+  ],
+  "capabilities": [
+    "learn-projection-from-semantic-evidence",
+    "learn-relation-conditioned-geometry",
+    "self-supervised-representation-learning",
+    "project-fold-state",
+    "project-fold-delta",
+    "vector-similarity",
+    "principal-direction-vector-provider",
+    "vector-index-refresh",
+    "derived-geometry-export",
+    "consume-gml-topology-contract",
+    "consume-vector-mathml-foldpair-contract",
+    "estimate-semantic-geodesic-distance",
+    "consume-dual-comparison-graph",
+    "consume-differential-comparison-graph",
+    "reject-inadmissible-projection-rule",
+    "evaluate-vector-decision-risk",
+    "project-fold-neighborhood-to-local-chart",
+    "learn-phase-conditioned-relevance-geometry",
+    "learn-local-semantic-metric",
+    "consume-mesh-graph-features",
+    "consume-stb-signal-mesh-provider",
+    "mesh-provider-projection-gate",
+    "consume-stb-tensor-brain-binding",
+    "consume-shared-geometry-stb-brain"
+  ],
+  "realizes": ["Yax.candidate_set", "Sek.ranked_candidates"],
+  "responsibility_contract": {
+    "owns": [
+      "Project(F)->v",
+      "Project(DeltaF)->v_delta",
+      "LocalChart(N(k))->T_k(M_mu)",
+      "LocalMetric(g_F_theta_r)",
+      "SemanticGeodesicDistance_B(A,B)->d_M",
+      "Similarity(v_q,v_k)->R_geo",
+      "RelationConditionedScore(v_A,v_B,r)->R_r",
+      "PrincipalDirection_vector({v_delta})->v_D",
+      "vector.projection_container.v1"
+    ],
+    "does_not_own": [
+      "VerifyEpisode",
+      "ChangeVerdict",
+      "CommitTopology",
+      "AdvancePhase",
+      "MutateFold",
+      "SemanticAuthority",
+      "TreatVectorDriftAsSemanticDelta",
+      "CommitDifferentialGraphWithoutXulGate",
+      "VerifyRiskAsSemanticTruth",
+      "CommitLearnedManifoldAsTopology"
+    ],
+    "source_of_truth": "Mx2LM/FoldGraph/manifest authority",
+    "derived_projection_only": true
+  },
+  "learning_contract": {
+    "input_authority": [
+      "FoldGraph/B",
+      "EpisodeJournal/J",
+      "FoldDelta",
+      "RelationISA",
+      "DirectionStore",
+      "GML/topology_contract",
+      "field.xml/node_field",
+      "STB/signal_mesh",
+      "KLSL/HLSL projection providers",
+      "projection_abi_v1",
+      "gyro_abi_v1",
+      "DML/operator_projection",
+      "GML validator fixtures",
+      "GML EBNF grammar",
+      "GML validator contract",
+      "Fold CD symbols",
+      "Vector MathML FoldPair contract",
+      "Fold Graph laws",
+      "khanary-geometry-v0.3.0/MODEL.json",
+      "geometry compiler/audio/brain provenance artifacts",
+      "khanary-geometry-v0.3.0/brain3",
+      "geometry STB0 packer proof"
+    ],
+    "learns": "P_v plus optional M_mu, T_k(M_mu), g(F,theta,r), and d_M over authoritative FoldGraph B",
+    "multi_signal_objective": "L_total = alpha*L_fold(N(k)) + beta*L_relation(A,r,B) + gamma*L_dynamics(F_Q,DeltaF_GOOD)",
+    "relation_conditioning": "similarity is a subset of relatedness; typed relations such as @contradicts, @part_of, and @causes are not collapsed into plain cosine, and the local metric may depend on phase theta and relation r",
+    "negative_samples": [
+      "wrong_direction",
+      "corrupted_patch",
+      "incompatible_relation",
+      "different_context_delta"
+    ],
+    "factory_role": "Factory/AutoML may tune dimensions, sampling, relation weights, and providers; VECTOR-µ executes the bounded learner contract",
+    "topology_boundary": "GML preserves explicit graph topology before VECTOR-µ projects it into learned coordinates.",
+    "mesh_evidence": "Mesh and STB providers supply geometric evidence/features; they do not redefine semantic authority.",
+    "gml_corpus": "khanary_topology, hypercube_Q3, hypercube_Q4, ccc_n3, ccc_n4, and sample are the checked topology corpus for vectors.xml.",
+    "dml_boundary": "src/gpu/dml_ops.* supplies execution projection operators such as GEMM/attention and semantic_attention_gate; it is not graph or semantic authority.",
+    "grammar_law_sources": [
+      "data/grammar/gml.khanary.ebnf",
+      "data/grammar/gml.validator.json",
+      "data/grammar/fold.cd.xml",
+      "data/grammar/vectors.mml",
+      "data/grammar/fold_graph.xml"
+    ],
+    "foldpair_contract": "data/grammar/vectors.mml defines FoldPair(S)=<M[Y,X],C[Y,X]^T>; M is co-occurrence mass and must not be conflated with WCR W_Y.",
+    "geometric_model": {
+      "topology": "B = authoritative discrete semantic topology from GML/FoldGraph",
+      "learned_geometry": "M_mu = VECTOR-µ learned manifold/metric projection over B",
+      "local_chart": "N(k) -> T_k(M_mu)",
+      "metric": "g(F,theta,r) phase/relation/context-conditioned local metric",
+      "geodesic": "d_M(A,B) typed semantic path distance, not plain cosine",
+      "invariant": "Delta(M_mu) does not imply Delta(B)"
+    },
+    "decision_theory": {
+      "risk": "R(theta,delta)=E_{x|theta}[Loss(theta,delta(x))]",
+      "bayes": "average-case geometry under prior_mass Lambda(theta)",
+      "minimax": "worst-case projection-rule guard; emits INADMISSIBLE_VECTOR_RULE",
+      "authority": "risk changes projection admissibility only, not semantic truth"
+    },
+    "differential_comparison": {
+      "delta_graph": "DeltaG=G_B\\G_A=<DeltaV,DeltaE>",
+      "delta_field": "DeltaF_diff=<DeltaM[Y,X],DeltaRelations,R_minimax>",
+      "dual_graph": "dual_twin pairs contrastive or inverse relation edges",
+      "authority": "tracks drift; XulGate remains the only topology mutation path"
+    }
+  },
+  "container_contract": {
+    "key": "vector:projection_container:v1",
+    "@type": "vector.projection_container.v1",
+    "projection_id": "vector:projection:bootstrap:v1:g0",
+    "generation": 0,
+    "learner_version": "bootstrap.deterministic_hash.v1",
+    "topology_version": "runtime.semantic_containers",
+    "relation_model": "relationisa_conditioned_geometry",
+    "alignment": "bootstrap_no_cross_generation_alignment",
+    "source_semantic_containers": [
+      "mx2lm:gram_container:v1",
+      "mx2lm:pattern_container:v1"
+    ],
+    "dimensions": 3,
+    "semantic_authority": false,
+    "rebuildable_from_journal": true,
+    "topology_source": "gml:topology_contract",
+    "provider_registry": "vectors.xml",
+    "geometry_providers": [
+      "field-node-vectors",
+      "birdsong-stb",
+      "klsl-mesh-compression",
+      "asx-meshlet-shaders",
+      "projection-abi",
+      "gyro-abi",
+      "gml-validator-fixtures",
+      "dml-ops",
+      "gml-ebnf",
+      "gml-validator-contract",
+      "fold-content-dictionary",
+      "vector-mathml-foldpair",
+      "semantic-manifold-contract",
+      "fold-graph-laws",
+      "khanary-geometry-model-v0.3.0",
+      "birdsong-brain-artifacts",
+      "birdsong-brain3-artifacts",
+      "stb0-packer"
+    ]
+  },
+  "relations": [
+    {
+      "target": "Mx2LM",
+      "verb": "@uses",
+      "directed": true
+    },
+    {
+      "target": "MEMORY-µ",
+      "verb": "@produces",
+      "directed": true
+    },
+    {
+      "target": "Coordinator",
+      "verb": "@via",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "read_verified_semantic_container",
+      "accepts": [
+        "mx2lm:gram_container:v1",
+        "mx2lm:pattern_container:v1"
+      ]
+    },
+    {
+      "phase": "Pop",
+      "op": "read_gml_topology_contract",
+      "accepts": [
+        "gml:topology_contract",
+        "vectors.xml"
+      ]
+    },
+    {
+      "phase": "Pop",
+      "op": "read_fold_graph_laws",
+      "accepts": [
+        "data/grammar/fold_graph.xml",
+        "data/grammar/fold.cd.xml",
+        "data/grammar/vectors.mml"
+      ]
+    },
+    {
+      "phase": "Wo",
+      "op": "Mx2LmNGram::compile_vector_projection_container",
+      "class": "khanary::micronaut::Mx2LmNGram"
+    },
+    {
+      "phase": "Wo",
+      "op": "mesh_feature_projection_gate",
+      "accepts": [
+        "birdsong-stb",
+        "MeshNN features",
+        "field.xml vectors"
+      ]
+    },
+    {
+      "phase": "Yax",
+      "op": "relation_conditioned_similarity_gate",
+      "formula": "R_i = R(Q,K_i | relation, provider, context)"
+    },
+    {
+      "phase": "Yax",
+      "op": "phase_conditioned_metric_gate",
+      "formula": "R_mu(Q,F,theta,r)=R_g(F,theta,r)(Q,K)",
+      "authority": "projection_only"
+    },
+    {
+      "phase": "Sek",
+      "op": "semantic_geodesic_distance_provider",
+      "formula": "d_M(A,B)=typed path distance over B through M_mu",
+      "authority": "projection_only"
+    },
+    {
+      "phase": "Sek",
+      "op": "principal_direction_vector_provider",
+      "formula": "PCA/SVD over compatible projected deltas only"
+    },
+    {
+      "phase": "Ch'en",
+      "op": "projection_sanity_check",
+      "checks": [
+        "finite",
+        "dimensions=3",
+        "semantic_authority=false"
+      ]
+    },
+    {
+      "phase": "Xul",
+      "op": "gramWriteVector",
+      "scope": "derived_projection"
+    },
+    {
+      "phase": "Ch'en",
+      "op": "decision_risk_admissibility_gate",
+      "formula": "R(theta,delta)=E[Loss(theta,delta(x))]; reject INADMISSIBLE_VECTOR_RULE",
+      "authority": "projection_only"
+    },
+    {
+      "phase": "Yax",
+      "op": "differential_comparison_projection_gate",
+      "formula": "DeltaF_diff=<DeltaM[Y,X],DeltaRelations,R_minimax>",
+      "authority": "projection_only"
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "VECTOR",
+    "manifest_access": [
+      "mx2lm",
+      "folds",
+      "gml",
+      "kuhul"
+    ],
+    "effects": [
+      "gramRead",
+      "gramWriteVector",
+      "vector:project",
+      "vector:similarity",
+      "vector:mesh-feature-read",
+      "vector:gml-topology-read"
+    ],
+    "ports": [],
+    "coordinator": false
+  },
+  "stb_tensor_brain": {
+    "@type": "khanary.stb_tensor_brain.track_binding_ref.v1",
+    "registry": "data/world/stb_tensor_brains.json",
+    "checker": "tools/check_stb_tensor_brains.py",
+    "binding_key": "VECTOR-µ",
+    "binding_kind": "rank1_provider_brain",
+    "brain_run": "brain4",
+    "fallback_brain_run": "brain3",
+    "slug": null,
+    "projection_only": true,
+    "semantic_authority": false,
+    "topology_authority": false,
+    "authority_boundary": "Track can consume the STB tensor brain as projection evidence only; Ch_en/Xul still verify and persist semantic state."
+  }
+}

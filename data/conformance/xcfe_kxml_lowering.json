@@ -1,0 +1,28 @@
+{
+  "@kind": "khanary.xcfe-kxml-lowering.fixtures.v1",
+  "cases": [
+    {"id": "valid_execution_add", "expect": "PASS", "class": "EXECUTION", "operator": "ADD", "authority_phase": "Sek"},
+    {"id": "valid_structure_marker", "expect": "PASS", "class": "STRUCTURE", "operator": "FOLD_ENTER", "authority_phase": "Wo"},
+    {"id": "valid_selection_pattern_bank", "expect": "PASS", "class": "SELECTION", "operator": "PATTERN_BANK", "authority_phase": "Yax"},
+    {"id": "valid_program_memory", "expect": "PASS", "class": "MEMORY", "operator": "SET", "authority_phase": "Pop", "memory_scope": "program"},
+    {"id": "not_admitted", "expect": "KXML_NODE_NOT_ADMITTED"},
+    {"id": "not_projection_safe", "expect": "KXML_NODE_NOT_PROJECTION_SAFE"},
+    {"id": "authority_phase_mismatch", "expect": "KXML_AUTHORITY_PHASE_MISMATCH"},
+    {"id": "phase_transition", "expect": "KXML_PHASE_TRANSITION_FORBIDDEN"},
+    {"id": "verification_unsupported", "expect": "KXML_UNSUPPORTED_NODE_CLASS"},
+    {"id": "operator_unsupported", "expect": "KXML_UNSUPPORTED_OPERATOR"},
+    {"id": "projection_op_mismatch", "expect": "KXML_OPERATOR_PROJECTION_MISMATCH"},
+    {"id": "call_not_allowlisted", "expect": "KXML_CALL_NOT_ALLOWLISTED"},
+    {"id": "commit_forbidden", "expect": "KXML_COMMIT_FORBIDDEN"},
+    {"id": "persistent_memory_forbidden", "expect": "KXML_PERSISTENT_MEMORY_FORBIDDEN"},
+    {"id": "external_tensor_descriptor", "expect": "PASS"},
+    {"id": "inline_value_binds_state", "expect": "PASS"},
+    {"id": "inline_value_state_collision", "expect": "KXML_PAYLOAD_STATE_COLLISION"},
+    {"id": "typed_symbol_table_resolves_descriptor", "expect": "PASS"},
+    {"id": "typed_symbol_bad_ref_prefix", "expect": "KXML_INVALID_PAYLOAD"},
+    {"id": "typed_symbol_collision", "expect": "KXML_SYMBOL_COLLISION"},
+    {"id": "inline_tensor_forbidden", "expect": "KXML_INLINE_TENSOR_FORBIDDEN"},
+    {"id": "database_executor_required", "expect": "KXML_PAYLOAD_EXECUTOR_REQUIRED"},
+    {"id": "compile_raw_graph", "expect": "KXML_LOWERING_REQUIRED"}
+  ]
+}

@@ -1,0 +1,29 @@
+<div id="plant-growers-bible" data-asx-key="⟁APP:PLANT_GROWERS_BIBLE/⟁ROOT:PLANT_GROWERS_BIBLE">
+  <header data-asx-key="⟁APP:PLANT_GROWERS_BIBLE/⟁WIDGET:PLANT_HEADER">
+    <h1>🌿 Plant Growers Bible</h1>
+    <input data-asx-key="⟁APP:PLANT_GROWERS_BIBLE/⟁INPUT:PLANT_SEARCH" type="search" placeholder="Search topics, symptoms, or terms" data-bind="state.search" />
+    <button data-asx-key="⟁APP:PLANT_GROWERS_BIBLE/⟁ACTION:PLANT_THEME" data-event="theme.toggle">Toggle theme</button>
+  </header>
+  <nav data-asx-key="⟁APP:PLANT_GROWERS_BIBLE/⟁NAV:PLANT_SECTIONS" data-bind="state.active_section" data-source="content.sections" role="tablist"></nav>
+  <main data-asx-key="⟁APP:PLANT_GROWERS_BIBLE/⟁WIDGET:PLANT_CONTENT" data-bind="state.active_section" data-source="content.sections">
+    <section data-asx-key="⟁APP:PLANT_GROWERS_BIBLE/⟁WIDGET:PLANT_ACCORDION" data-bind="state.open_panels"></section>
+    <section data-asx-key="⟁APP:PLANT_GROWERS_BIBLE/⟁WIDGET:PLANT_TABLE" data-source="content.tables"></section>
+    <section data-asx-key="⟁APP:PLANT_GROWERS_BIBLE/⟁WIDGET:PLANT_FAQ" data-source="content.faq"></section>
+  </main>
+  <footer data-asx-key="⟁APP:PLANT_GROWERS_BIBLE/⟁WIDGET:PLANT_FOOTER">
+    <span>General horticultural reference. Verify advice for your plant and conditions.</span>
+    <button data-asx-key="⟁APP:PLANT_GROWERS_BIBLE/⟁ACTION:PLANT_TOP" data-event="top.click">↑ Top</button>
+  </footer>
+</div>
+<script type="application/json" id="asx-json-runtime">
+{
+  "@kind":"asx.key-runtime.binding.v1",
+  "@app":"⟁APP:PLANT_GROWERS_BIBLE",
+  "@manifest":"data/host/apps/plant-growers-bible.asx-app.json",
+  "@executor":"mx.run",
+  "@authority":"projection_only",
+  "@state":"request_scoped",
+  "@semantic_commit":false,
+  "@events":{"search.input":"plant.search","section.select":"plant.select_section","theme.toggle":"plant.toggle_theme","panel.toggle":"plant.toggle_panel","top.click":"plant.scroll_top"}
+}
+</script>

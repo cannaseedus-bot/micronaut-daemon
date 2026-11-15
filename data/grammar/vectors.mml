@@ -1,0 +1,2128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       vectors.mml
+       Fold Graph — bidirectional co-occurrence provider.
+
+       Semantic contract:   FoldPair(S) = <M_{Y,X}, C_{Y,X}^T>
+                            with shared semantic axis X.
+
+       Physical lowering:   [ M ; C^T ]   (optional, backend-chosen)
+
+       NOTATION DISAMBIGUATION:
+         M_{Y,X}   co-occurrence/association mass — accumulated counts.
+                   This is the forward matrix produced by Direction A.
+                   M feeds semantic representation construction.
+         C_{Y,X}   reverse/context accumulation matrix (Direction B).
+                   C_X (single subscript) = context neighborhood at X.
+         W_Y       runtime selection weight (static_weight in WCR).
+                   W_Y is NOT a co-occurrence count.  It is the
+                   multiplicative prior in S = W * C * R * G.
+
+         M and W must not be conflated.  They feed different stages:
+           M_{Y,X} → representation → R_Y(Q)
+           W_Y, C_Y → candidate qualification
+         They meet only in S_Y = W_Y * C_Y * R_Y.
+
+       Content dictionary:  urn:kuhul:fold-graph:v1
+       CD declaration:      data/grammar/fold.cd.xml
+
+       AUTHORITY ANCHORS — this document renders the sources below; it does not
+       invent them. tools/check_vectors_xml.py enforces the two machine links
+       (symbol authority and registry closure), so a statement cannot appear
+       here unless one of these sources already declares it.
+
+         symbol authority   data/grammar/fold.cd.xml — every <csymbol> in this
+                            file is a CDDefinition there (104 declared symbols).
+         registry           vectors.xml — grammar `vector-mathml-foldpair`,
+                            pipeline stage 4 `tensor-projection`, and the
+                            decision / continuous-field / training-gradient /
+                            semantic-manifold contracts. Every symbol the
+                            registry attributes to this file must be rendered
+                            here as a csymbol.
+         law authority      data/grammar/gml.validator.json — S1-S4 decision,
+                            D1-D4 differential, Q1-Q14 continuous field,
+                            T1-T7 training, E1-E9 entropy/mesh, TB1-TB11
+                            tensor bundle, L1-L3 deductive, HE1-HE7 hyperbolic,
+                            LB1-LB3 Lorentz.
+         narrative          docs/SEMANTIC_FOLDS.md, docs/KUHUL_PHASE_ALGEBRA.md,
+                            GPU_FOLDS.md (S = W*C*R), and
+                            data/grammar/fold-space.contracts.json (FS16-FS19).
+
+       AUTHORITY BOUNDARY: everything here is TENSOR-µ/VECTOR-µ projection
+       geometry. Ch'en verifies, XCFE authorizes, Xul commits topology B.
+       ═══════════════════════════════════════════════════════════════════ -->
+
+  <!-- ── Contract ──────────────────────────────────────────────────── -->
+  <semantics>
+
+    <mrow>
+      <mi>FoldPair</mi>
+      <mo>(</mo>
+      <mi>S</mi>
+      <mo>)</mo>
+      <mo>=</mo>
+      <mo>&#x27E8;</mo>
+      <msub><mi>M</mi><mrow><mi>Y</mi><mo>,</mo><mi>X</mi></mrow></msub>
+      <mo>,</mo>
+      <msubsup><mi>C</mi><mrow><mi>Y</mi><mo>,</mo><mi>X</mi></mrow><mi>T</mi></msubsup>
+      <mo>&#x27E9;</mo>
+    </mrow>
+
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <csymbol cd="urn:kuhul:fold-graph:v1">FoldPair</csymbol>
+        <ci>S</ci>
+        <list>
+          <apply><selector/><ci>M</ci><ci>Y</ci><ci>X</ci></apply>
+          <apply><transpose/><apply><selector/><ci>C</ci><ci>Y</ci><ci>X</ci></apply></apply>
+        </list>
+      </apply>
+    </annotation-xml>
+
+    <annotation encoding="text/plain">
+FoldPair(S) = &lt; M[Y,X], C[Y,X]^T &gt;
+shared semantic axis: X
+M = co-occurrence mass (forward);  C^T = context accumulation (reverse)
+M != W_Y (runtime selection weight)
+cd: urn:kuhul:fold-graph:v1
+    </annotation>
+
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Direction A — membership (forward) ────────────────────────── -->
+  <semantics>
+
+    <mrow>
+      <mo>&#x2200;</mo>
+      <mi>X</mi>
+      <mo>&#x2208;</mo>
+      <mi>S</mi>
+      <mo>:</mo>
+      <mspace width="0.5em"/>
+      <msub><mi>M</mi><mrow><mi>Y</mi><mo>,</mo><mi>X</mi></mrow></msub>
+      <mo>&#x2190;</mo>
+      <msub><mi>M</mi><mrow><mi>Y</mi><mo>,</mo><mi>X</mi></mrow></msub>
+      <mo>+</mo>
+      <mrow>
+        <mo>{</mo>
+        <mtable columnalign="left left">
+          <mtr>
+            <mtd><mn>1</mn></mtd>
+            <mtd>
+              <mtext>if&#xA0;</mtext>
+              <mi>Y</mi>
+              <mo>&#x2208;</mo>
+              <msub><mi>C</mi><mi>X</mi></msub>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd><mn>0</mn></mtd>
+            <mtd><mtext>otherwise</mtext></mtd>
+          </mtr>
+        </mtable>
+      </mrow>
+    </mrow>
+
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <forall/>
+        <bvar><ci>X</ci></bvar>
+        <condition><apply><in/><ci>X</ci><ci>S</ci></apply></condition>
+        <apply>
+          <assign/>
+          <apply><selector/><ci>M</ci><ci>Y</ci><ci>X</ci></apply>
+          <apply>
+            <plus/>
+            <apply><selector/><ci>M</ci><ci>Y</ci><ci>X</ci></apply>
+            <piecewise>
+              <piece>
+                <cn>1</cn>
+                <apply>
+                  <in/>
+                  <ci>Y</ci>
+                  <apply><selector/><ci>C</ci><ci>X</ci></apply>
+                </apply>
+              </piece>
+              <otherwise><cn>0</cn></otherwise>
+            </piecewise>
+          </apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+
+    <annotation encoding="text/plain">
+for each X in S:
+    if Y in C[X]:
+        M[Y][X] += 1   # co-occurrence mass; not the WCR W
+    else:
+        M[Y][X] += 0
+# membership: A asks whether Y is in the neighborhood at X
+    </annotation>
+
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Direction B — traversal (reverse / context) ───────────────── -->
+  <semantics>
+
+    <mrow>
+      <mo>&#x2200;</mo>
+      <mi>X</mi>
+      <mo>&#x2208;</mo>
+      <mi>S</mi>
+      <mo>,</mo>
+      <mspace width="0.25em"/>
+      <mo>&#x2200;</mo>
+      <mi>Y</mi>
+      <mo>&#x2208;</mo>
+      <msub><mi>C</mi><mi>X</mi></msub>
+      <mo>:</mo>
+      <mspace width="0.5em"/>
+      <msub><mi>C</mi><mrow><mi>Y</mi><mo>,</mo><mi>X</mi></mrow></msub>
+      <mo>&#x2190;</mo>
+      <msub><mi>C</mi><mrow><mi>Y</mi><mo>,</mo><mi>X</mi></mrow></msub>
+      <mo>+</mo>
+      <mn>1</mn>
+    </mrow>
+
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <forall/>
+        <bvar><ci>X</ci></bvar>
+        <condition><apply><in/><ci>X</ci><ci>S</ci></apply></condition>
+        <apply>
+          <forall/>
+          <bvar><ci>Y</ci></bvar>
+          <condition>
+            <apply>
+              <in/>
+              <ci>Y</ci>
+              <apply><selector/><ci>C</ci><ci>X</ci></apply>
+            </apply>
+          </condition>
+          <apply>
+            <assign/>
+            <apply><selector/><ci>C</ci><ci>Y</ci><ci>X</ci></apply>
+            <apply>
+              <plus/>
+              <apply><selector/><ci>C</ci><ci>Y</ci><ci>X</ci></apply>
+              <cn>1</cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+
+    <annotation encoding="text/plain">
+for each X in S:
+    for each Y in C[X]:
+        C[Y][X] += 1
+# traversal: B walks the neighborhood rather than testing membership
+    </annotation>
+
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Statistical Decision Risk — representation admissibility ─────── -->
+  <semantics>
+
+    <mrow>
+      <mi>R</mi>
+      <mo>(</mo>
+      <mi>&#x03B8;</mi>
+      <mo>,</mo>
+      <mi>&#x03B4;</mi>
+      <mo>)</mo>
+      <mo>=</mo>
+      <munder>
+        <mo>&#x2211;</mo>
+        <mrow>
+          <mi>x</mi>
+          <mo>&#x2208;</mo>
+          <mi>S</mi>
+        </mrow>
+      </munder>
+      <mi>P</mi>
+      <mo>(</mo>
+      <mi>x</mi>
+      <mo>|</mo>
+      <mi>&#x03B8;</mi>
+      <mo>)</mo>
+      <mo>&#x22C5;</mo>
+      <mi>Loss</mi>
+      <mo>(</mo>
+      <mi>&#x03B8;</mi>
+      <mo>,</mo>
+      <mi>&#x03B4;</mi>
+      <mo>(</mo>
+      <mi>x</mi>
+      <mo>)</mo>
+      <mo>)</mo>
+    </mrow>
+
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">Risk</csymbol>
+          <ci>theta</ci>
+          <ci>delta</ci>
+        </apply>
+        <apply>
+          <sum/>
+          <bvar><ci>x</ci></bvar>
+          <condition><apply><in/><ci>x</ci><ci>S</ci></apply></condition>
+          <apply>
+            <times/>
+            <apply>
+              <csymbol cd="urn:kuhul:fold-graph:v1">Probability</csymbol>
+              <ci>x</ci>
+              <ci>theta</ci>
+            </apply>
+            <apply>
+              <csymbol cd="urn:kuhul:fold-graph:v1">Loss</csymbol>
+              <ci>theta</ci>
+              <apply>
+                <csymbol cd="urn:kuhul:fold-graph:v1">DecisionRule</csymbol>
+                <ci>delta</ci>
+                <ci>x</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+
+    <annotation encoding="text/plain">
+Risk(theta, delta) = sum_{x in S} P(x | theta) * Loss(theta, delta(x))
+Bayes path: minimize integrated risk against PriorDistribution Lambda(theta)
+Minimax path: minimize worst-case Risk; reject inadmissible VECTOR-mu projection rules
+authority: risk constrains representation geometry only; it does not verify relation truth
+    </annotation>
+
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Prior mass and integrated Bayes risk ─────────────────────────────
+       PriorDistribution(θ) = Λ(θ) is the antecedent density over latent
+       semantic states preserved by FoldGraph B. BayesRisk integrates the same
+       Risk under Λ. Law S1 bounds prior_mass to [0,1]; the prior orders
+       representation decisions and never verifies semantic truth. -->
+  <semantics>
+
+    <mrow>
+      <mi>BayesRisk</mi>
+      <mo>(</mo>
+      <mi>&#x039B;</mi>
+      <mo>,</mo>
+      <mi>&#x03B4;</mi>
+      <mo>)</mo>
+      <mo>=</mo>
+      <mo>&#x222B;</mo>
+      <mi>Risk</mi>
+      <mo>(</mo>
+      <mi>&#x03B8;</mi>
+      <mo>,</mo>
+      <mi>&#x03B4;</mi>
+      <mo>)</mo>
+      <mi>d</mi>
+      <mi>&#x039B;</mi>
+      <mo>(</mo>
+      <mi>&#x03B8;</mi>
+      <mo>)</mo>
+    </mrow>
+
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">BayesRisk</csymbol>
+          <ci>Lambda</ci>
+          <ci>delta</ci>
+        </apply>
+        <apply>
+          <int/>
+          <bvar>
+            <csymbol cd="urn:kuhul:fold-graph:v1">PriorDistribution</csymbol>
+            <ci>theta</ci>
+          </bvar>
+          <apply>
+            <csymbol cd="urn:kuhul:fold-graph:v1">Risk</csymbol>
+            <ci>theta</ci>
+            <ci>delta</ci>
+          </apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+
+    <annotation encoding="text/plain">
+BayesRisk(Lambda, delta) = integral Risk(theta, delta) d Lambda(theta)
+PriorDistribution(θ) = Λ(θ) is antecedent prior density over latent semantic state, not truth (S1: 0 &lt;= Λ(θ) &lt;= 1).
+The Bayes path minimizes integrated risk; it ranks representation decisions only.
+    </annotation>
+
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Minimax admissibility guard ──────────────────────────────────────
+       MinimaxRule selects the decision rule minimizing worst-case Risk.
+       Laws S2-S4 bound risk_bound to [0,1] and flag a rule inadmissible when
+       an incident loss_cost exceeds both endpoint risk_bounds. The flag is
+       rejection evidence for projection geometry; it is not topology
+       authority. -->
+  <semantics>
+
+    <mrow>
+      <mi>MinimaxRule</mi>
+      <mo>=</mo>
+      <munder>
+        <mi>argmin</mi>
+        <mi>&#x03B4;</mi>
+      </munder>
+      <munder>
+        <mi>max</mi>
+        <mi>&#x03B8;</mi>
+      </munder>
+      <mi>Risk</mi>
+      <mo>(</mo>
+      <mi>&#x03B8;</mi>
+      <mo>,</mo>
+      <mi>&#x03B4;</mi>
+      <mo>)</mo>
+    </mrow>
+
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <csymbol cd="urn:kuhul:fold-graph:v1">MinimaxRule</csymbol>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">MinimaxRiskBound</csymbol>
+        </apply>
+      </apply>
+    </annotation-xml>
+
+    <annotation encoding="text/plain">
+MinimaxRule = argmin_delta max_theta Risk(theta, delta)
+minimax admissibility: risk_bound(n) &lt; loss_cost(e) for an incident e =&gt; InadmissibleCandidate(e)
+S4 emits INADMISSIBLE_VECTOR_RULE and blocks the rule as admissible geometry; it cannot commit B.
+    </annotation>
+
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Differential comparison — graph/text drift under risk ─────────── -->
+  <semantics>
+
+    <mrow>
+      <mi>&#x0394;</mi>
+      <msub><mi>F</mi><mtext>diff</mtext></msub>
+      <mo>=</mo>
+      <mo>&#x27E8;</mo>
+      <mi>&#x0394;</mi>
+      <msub><mi>M</mi><mrow><mi>Y</mi><mo>,</mo><mi>X</mi></mrow></msub>
+      <mo>,</mo>
+      <mi>&#x0394;</mi>
+      <mi>Relations</mi>
+      <mo>,</mo>
+      <msub><mi>R</mi><mtext>minimax</mtext></msub>
+      <mo>&#x27E9;</mo>
+    </mrow>
+
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">DeltaFieldDiff</csymbol></apply>
+        <list>
+          <apply>
+            <csymbol cd="urn:kuhul:fold-graph:v1">DeltaCooccurrenceMass</csymbol>
+            <ci>Y</ci>
+            <ci>X</ci>
+          </apply>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">DeltaRelations</csymbol></apply>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">MinimaxRiskBound</csymbol></apply>
+        </list>
+      </apply>
+    </annotation-xml>
+
+    <annotation encoding="text/plain">
+DeltaF_diff = &lt; DeltaM[Y,X], DeltaRelations, R_minimax &gt;
+Differential comparison tracks text/graph drift while minimax risk bounds vector drift.
+It may reject an inadmissible projection rule; it cannot commit B.
+    </annotation>
+
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Quantum graph Hamiltonian over metric edges ─────────────────── -->
+  <semantics>
+    <mrow>
+      <mi>H</mi>
+      <msub><mi>&#x03C8;</mi><mi>e</mi></msub>
+      <mo>(</mo><mi>x</mi><mo>)</mo>
+      <mo>=</mo>
+      <mo>-</mo>
+      <mfrac>
+        <mrow><msup><mo>&#x2202;</mo><mn>2</mn></msup><msub><mi>&#x03C8;</mi><mi>e</mi></msub></mrow>
+        <mrow><mo>&#x2202;</mo><msup><mi>x</mi><mn>2</mn></msup></mrow>
+      </mfrac>
+      <mo>+</mo>
+      <msub><mi>U</mi><mi>e</mi></msub>
+      <mo>(</mo><mi>x</mi><mo>)</mo>
+      <msub><mi>&#x03C8;</mi><mi>e</mi></msub>
+      <mo>(</mo><mi>x</mi><mo>)</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">GraphHamiltonian</csymbol>
+          <apply><selector/><ci>psi</ci><ci>e</ci></apply>
+          <apply><selector/><ci>U</ci><ci>e</ci></apply>
+          <ci>x</ci>
+        </apply>
+        <apply>
+          <plus/>
+          <apply>
+            <minus/>
+            <apply>
+              <diff/>
+              <bvar><ci>x</ci><degree><cn>2</cn></degree></bvar>
+              <apply><selector/><ci>psi</ci><ci>e</ci><ci>x</ci></apply>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <apply><selector/><ci>U</ci><ci>e</ci><ci>x</ci></apply>
+            <apply><selector/><ci>psi</ci><ci>e</ci><ci>x</ci></apply>
+          </apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+GraphHamiltonian: H psi_e(x) = -d^2 psi_e/dx^2 + U_e(x) psi_e(x)
+Each edge e is a metric interval [0,L_e] with potential U_e.
+This is derived wave/relevance geometry only; it cannot redefine FoldGraph B.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Vertex flux conservation / boundary condition ───────────────── -->
+  <semantics>
+    <mrow>
+      <munder>
+        <mo>&#x2211;</mo>
+        <mrow><mi>e</mi><mo>&#x2208;</mo><mi>E</mi><mo>(</mo><mi>v</mi><mo>)</mo></mrow>
+      </munder>
+      <msub><mi>&#x2202;</mi><mi>v</mi></msub>
+      <msub><mi>&#x03C8;</mi><mi>e</mi></msub>
+      <mo>=</mo>
+      <msub><mi>W</mi><mi>v</mi></msub>
+      <mo>&#x22C5;</mo>
+      <msub><mi>&#x03C8;</mi><mi>v</mi></msub>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">FluxConservation</csymbol>
+          <ci>v</ci>
+        </apply>
+        <apply>
+          <sum/>
+          <bvar><ci>e</ci></bvar>
+          <condition>
+            <apply>
+              <in/>
+              <ci>e</ci>
+              <apply><csymbol cd="urn:kuhul:fold-graph:v1">IncidentEdges</csymbol><ci>v</ci></apply>
+            </apply>
+          </condition>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">DerivativeAtVertex</csymbol><ci>e</ci><ci>v</ci></apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+FluxConservation(v): sum_{e in E(v)} d psi_e/dx at v = W_v * psi_v.
+Kirchhoff sets W_v=0; Robin permits a localized vertex potential/selection term.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Forward/reverse plane-wave superposition ─────────────────────── -->
+  <semantics>
+    <mrow>
+      <msub><mi>&#x03C8;</mi><mi>e</mi></msub>
+      <mo>(</mo><mi>x</mi><mo>)</mo>
+      <mo>=</mo>
+      <msub><mi>A</mi><mi>e</mi></msub>
+      <msup><mi>e</mi><mrow><mi>i</mi><msub><mi>k</mi><mi>e</mi></msub><mi>x</mi></mrow></msup>
+      <mo>+</mo>
+      <msub><mi>B</mi><mi>e</mi></msub>
+      <msup><mi>e</mi><mrow><mo>-</mo><mi>i</mi><msub><mi>k</mi><mi>e</mi></msub><mi>x</mi></mrow></msup>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><selector/><ci>psi</ci><ci>e</ci><ci>x</ci></apply>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">PlaneWaveSuperposition</csymbol>
+          <ci>A_e</ci>
+          <ci>B_e</ci>
+          <ci>k_e</ci>
+          <ci>x</ci>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+PlaneWaveSuperposition: psi_e(x) = A_e * exp(i*k_e*x) + B_e * exp(-i*k_e*x)
+A_e is the forward traveling component; B_e is the reflected component.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Kirchhoff scattering matrix at a vertex ──────────────────────── -->
+  <semantics>
+    <mrow>
+      <msubsup><mi>S</mi><mrow><mi>m</mi><mi>j</mi></mrow><mrow><mo>(</mo><mi>v</mi><mo>)</mo></mrow></msubsup>
+      <mo>=</mo>
+      <mfrac><mn>2</mn><msub><mi>d</mi><mi>v</mi></msub></mfrac>
+      <mo>-</mo>
+      <msub><mi>&#x03B4;</mi><mrow><mi>m</mi><mi>j</mi></mrow></msub>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">ScatteringMatrix</csymbol><ci>v</ci><ci>m</ci><ci>j</ci></apply>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+            <cn>2</cn>
+            <apply><csymbol cd="urn:kuhul:fold-graph:v1">Degree</csymbol><ci>v</ci></apply>
+          </apply>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">KroneckerDelta</csymbol><ci>m</ci><ci>j</ci></apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+ScatteringMatrix(v,m,j) = 2/degree(v) - KroneckerDelta(m,j)
+The matrix distributes incoming semantic wave amplitude over admitted incident channels.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Gradient flow and Lie bracket for relation-conditioned fields ─── -->
+  <semantics>
+    <mrow>
+      <msup><mi>&#x03B3;</mi><mo>&#x2032;</mo></msup>
+      <mo>(</mo><mi>t</mi><mo>)</mo>
+      <mo>=</mo>
+      <mi>V</mi>
+      <mo>(</mo><mi>&#x03B3;</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>)</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">GradientFlow</csymbol><ci>gamma</ci><ci>V</ci><ci>t</ci></apply>
+        <apply><ci>V</ci><apply><ci>gamma</ci><ci>t</ci></apply></apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+GradientFlow: gamma'(t) = V(gamma(t)).
+VECTOR-mu may use this as a derived trajectory model over the learned metric field.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <semantics>
+    <mrow>
+      <mo>[</mo><mi>X</mi><mo>,</mo><mi>Y</mi><mo>]</mo>
+      <mo>(</mo><mi>f</mi><mo>)</mo>
+      <mo>=</mo>
+      <mi>X</mi><mo>(</mo><mi>Y</mi><mo>(</mo><mi>f</mi><mo>)</mo><mo>)</mo>
+      <mo>-</mo>
+      <mi>Y</mi><mo>(</mo><mi>X</mi><mo>(</mo><mi>f</mi><mo>)</mo><mo>)</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">LieBracket</csymbol><ci>X</ci><ci>Y</ci><ci>f</ci></apply>
+        <apply>
+          <minus/>
+          <apply><ci>X</ci><apply><ci>Y</ci><ci>f</ci></apply></apply>
+          <apply><ci>Y</ci><apply><ci>X</ci><ci>f</ci></apply></apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+LieBracket(X,Y,f) = X(Y(f)) - Y(X(f)).
+Non-zero bracket means relation-conditioned flows are order-sensitive.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Poincare-Hopf field-index consistency ────────────────────────── -->
+  <semantics>
+    <mrow>
+      <munder>
+        <mo>&#x2211;</mo>
+        <mrow><mi>z</mi><mo>&#x2208;</mo><mi>Zeros</mi><mo>(</mo><mi>V</mi><mo>)</mo></mrow>
+      </munder>
+      <msub><mi>Index</mi><mi>z</mi></msub>
+      <mo>(</mo><mi>V</mi><mo>)</mo>
+      <mo>=</mo>
+      <mi>&#x03C7;</mi>
+      <mo>(</mo><mi>M</mi><mo>)</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply>
+          <sum/>
+          <bvar><ci>z</ci></bvar>
+          <condition>
+            <apply>
+              <in/>
+              <ci>z</ci>
+              <apply><csymbol cd="urn:kuhul:fold-graph:v1">FieldZeroes</csymbol><ci>V</ci></apply>
+            </apply>
+          </condition>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">LocalIndex</csymbol><ci>z</ci><ci>V</ci></apply>
+        </apply>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">EulerCharacteristic</csymbol><ci>M</ci></apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+Poincare-Hopf: sum_{z in FieldZeroes(V)} LocalIndex(z,V) = EulerCharacteristic(M).
+This constrains continuous reparameterization; it does not mutate semantic topology B.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Structural n-gram boundary reset ─────────────────────────────── -->
+  <semantics>
+    <mrow>
+      <mi>P</mi>
+      <mo>(</mo>
+      <msub><mi>w</mi><mi>i</mi></msub>
+      <mo>|</mo>
+      <msub><mi>w</mi><mrow><mi>i</mi><mo>-</mo><mn>1</mn></mrow></msub>
+      <mo>,</mo>
+      <mi>Boundary</mi>
+      <mo>)</mo>
+      <mo>=</mo>
+      <mi>StructuralBoundaryReset</mi>
+      <mo>(</mo><mi>Boundary</mi><mo>,</mo><msub><mi>w</mi><mi>i</mi></msub><mo>)</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">ConditionalProbability</csymbol>
+          <ci>w_i</ci>
+          <list><ci>w_i_minus_1</ci><ci>Boundary</ci></list>
+        </apply>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">StructuralBoundaryReset</csymbol>
+          <ci>Boundary</ci>
+          <ci>w_i</ci>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+StructuralBoundaryReset: P(w_i | w_{i-1}, Boundary) resets to the admitted boundary context.
+sentence => P(w_i | ◄s►); paragraph => P(w_i | ◄par►); article => P(w_i | ◄art►).
+N-gram windows must not bleed across structural sinks without an admitted boundary transition.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Semantic trajectory as differentiable curve ─────────────────── -->
+  <semantics>
+    <mrow>
+      <mi>γ</mi><mo>:</mo><mi>I</mi><mo>→</mo><mi>X</mi>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <csymbol cd="urn:kuhul:fold-graph:v1">DifferentiableCurve</csymbol>
+        <ci>γ</ci>
+        <ci>I</ci>
+        <ci>X</ci>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+DifferentiableCurve: gamma:I-&gt;X maps a token, sentence, paragraph, or article stream to a derived one-dimensional trajectory over VECTOR-µ geometry.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Tangent velocity of the trajectory ───────────────────────────── -->
+  <semantics>
+    <mrow>
+      <mi>V</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo>
+      <mfrac>
+        <mrow><mi>d</mi><mi>γ</mi><mo>(</mo><mi>t</mi><mo>)</mo></mrow>
+        <mrow><mi>d</mi><mi>t</mi></mrow>
+      </mfrac>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><ci>V</ci><ci>t</ci></apply>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">TangentVelocity</csymbol><ci>γ</ci><ci>t</ci></apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+TangentVelocity: V(t)=d gamma(t)/dt lives in T_gamma(t)(M_mu) and describes projection-side semantic drift.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Semantic displacement as trajectory line integral ────────────── -->
+  <semantics>
+    <mrow>
+      <mi>Δ</mi><msub><mi>F</mi><mtext>curve</mtext></msub><mo>=</mo>
+      <msub><mo>∫</mo><mi>γ</mi></msub>
+      <mi>V</mi><mo>(</mo><mi>s</mi><mo>)</mo><mo>·</mo><mi>d</mi><mi>s</mi>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">SemanticDisplacement</csymbol></apply>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">TrajectoryLineIntegral</csymbol><ci>γ</ci><ci>V</ci></apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+DeltaF_curve = int_gamma V(s) dot ds. The curve displacement is derived geometry over B; it cannot verify relations or commit topology.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Curve curvature as structural-scale inflection ───────────────── -->
+  <semantics>
+    <mrow>
+      <mi>κ</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo>
+      <mi>CurveCurvature</mi><mo>(</mo><mi>γ</mi><mo>,</mo><mi>t</mi><mo>)</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><ci>κ</ci><ci>t</ci></apply>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">CurveCurvature</csymbol><ci>γ</ci><ci>t</ci></apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+CurveCurvature: kappa(t) marks structural inflection; sentences are low-variance arcs, paragraph boundaries are controlled bends, and article boundaries are terminal sinks.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Flat Euclidean gradient field fast path ──────────────────────── -->
+  <semantics>
+    <mrow>
+      <mi>V</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mo>∇</mo><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><ci>V</ci><ci>x</ci></apply>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">EuclideanGradient</csymbol><ci>f</ci><ci>x</ci></apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+EuclideanGradient: V(x)=grad f(x) in flat R^n where g_ij=delta_ij. GML vx/vy/vz are the projection-side partial derivatives for this provider.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Conservative line integral endpoint law ──────────────────────── -->
+  <semantics>
+    <mrow>
+      <msub><mo>∫</mo><mi>γ</mi></msub><mo>∇</mo><mi>f</mi><mo>·</mo><mi>d</mi><mi>s</mi>
+      <mo>=</mo>
+      <mi>f</mi><mo>(</mo><mi>γ</mi><mo>(</mo><mi>b</mi><mo>)</mo><mo>)</mo>
+      <mo>-</mo>
+      <mi>f</mi><mo>(</mo><mi>γ</mi><mo>(</mo><mi>a</mi><mo>)</mo><mo>)</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">ConservativeLineIntegral</csymbol><ci>γ</ci><ci>f</ci></apply>
+        <apply>
+          <minus/>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">ScalarPotential</csymbol><ci>f</ci><ci>γ_b</ci></apply>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">ScalarPotential</csymbol><ci>f</ci><ci>γ_a</ci></apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+ConservativeLineIntegral: int_gamma grad f dot ds = f(gamma(b))-f(gamma(a)); flat Euclidean trajectory cost depends only on endpoints.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Zero-curl constraint for Euclidean gradient fields ───────────── -->
+  <semantics>
+    <mrow>
+      <mfrac>
+        <mrow><mo>∂</mo><msub><mi>V</mi><mi>i</mi></msub></mrow>
+        <mrow><mo>∂</mo><msub><mi>x</mi><mi>j</mi></msub></mrow>
+      </mfrac>
+      <mo>=</mo>
+      <mfrac>
+        <mrow><mo>∂</mo><msub><mi>V</mi><mi>j</mi></msub></mrow>
+        <mrow><mo>∂</mo><msub><mi>x</mi><mi>i</mi></msub></mrow>
+      </mfrac>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <csymbol cd="urn:kuhul:fold-graph:v1">ZeroCurlConstraint</csymbol>
+        <ci>V</ci>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+ZeroCurlConstraint: partial V_i / partial x_j = partial V_j / partial x_i. Enforces curl(grad f)=0 for flat Euclidean gradient providers.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Training gradient over provider parameters ──────────────────── -->
+  <semantics>
+    <mrow>
+      <msub><mi>g</mi><mi>φ</mi></msub>
+      <mo>=</mo>
+      <msub><mo>∇</mo><mi>φ</mi></msub>
+      <msub><mi>L</mi><mtext>total</mtext></msub>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">TrainingGradient</csymbol><ci>φ</ci><ci>L_total</ci></apply>
+        <apply>
+          <partialdiff/>
+          <bvar><ci>φ</ci></bvar>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">ProjectionLoss</csymbol><ci>L_total</ci></apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+TrainingGradient: g_phi = grad_phi L_total tunes provider parameters for VECTOR-µ/METRIC-µ geometry. It is not FoldDelta and cannot commit B.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Clipped provider parameter update ───────────────────────────── -->
+  <semantics>
+    <mrow>
+      <msub><mi>φ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub>
+      <mo>=</mo>
+      <msub><mi>φ</mi><mi>t</mi></msub>
+      <mo>-</mo>
+      <mi>η</mi>
+      <mo>·</mo>
+      <mi>clip</mi><mo>(</mo><msub><mi>g</mi><mi>φ</mi></msub><mo>,</mo><mi>c</mi><mo>)</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">ProviderParameters</csymbol><ci>φ_next</ci></apply>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">ParameterUpdate</csymbol>
+          <ci>φ</ci>
+          <ci>η</ci>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">GradientClip</csymbol><ci>g_phi</ci><ci>c</ci></apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+ParameterUpdate: phi_next = phi - eta * clip(g_phi,c). Updates provider geometry only; Ch'en/Xul remain required for semantic topology changes.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Training gradient magnitude telemetry ───────────────────────── -->
+  <semantics>
+    <mrow>
+      <msub><mi>n</mi><mi>g</mi></msub>
+      <mo>=</mo>
+      <mo>||</mo><msub><mi>g</mi><mi>φ</mi></msub><mo>||</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <ci>grad_norm</ci>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">GradientNorm</csymbol><ci>g_phi</ci></apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+GradientNorm: grad_norm = ||g_phi|| is nonnegative training telemetry for projection-provider learning and clipping.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Local Shannon entropy over admitted token distribution ───────── -->
+  <semantics>
+    <mrow>
+      <mi>H</mi><mo>(</mo><mi>x</mi><mo>)</mo>
+      <mo>=</mo>
+      <mo>-</mo>
+      <munder><mo>∑</mo><mrow><mi>w</mi><mo>∈</mo><mi>Vocab</mi></mrow></munder>
+      <mi>P</mi><mo>(</mo><mi>w</mi><mo>|</mo><mi>x</mi><mo>)</mo>
+      <mi>log</mi>
+      <mi>P</mi><mo>(</mo><mi>w</mi><mo>|</mo><mi>x</mi><mo>)</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">ShannonEntropy</csymbol><ci>P</ci><ci>x</ci></apply>
+        <apply>
+          <minus/>
+          <apply>
+            <sum/>
+            <bvar><ci>w</ci></bvar>
+            <condition><apply><in/><ci>w</ci><ci>Vocab</ci></apply></condition>
+            <apply>
+              <times/>
+              <apply><csymbol cd="urn:kuhul:fold-graph:v1">Probability</csymbol><ci>w</ci><ci>x</ci></apply>
+              <apply><ln/><apply><csymbol cd="urn:kuhul:fold-graph:v1">Probability</csymbol><ci>w</ci><ci>x</ci></apply></apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+ShannonEntropy: H(x) = -sum_w P(w|x) log P(w|x). GML local_entropy stores this projection-side uncertainty measure.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Entropy gradient vector field ───────────────────────────────── -->
+  <semantics>
+    <mrow>
+      <mo>∇</mo><mi>H</mi><mo>(</mo><mi>x</mi><mo>)</mo>
+      <mo>=</mo>
+      <mo>(</mo>
+      <mfrac><mrow><mo>∂</mo><mi>H</mi></mrow><mrow><mo>∂</mo><msub><mi>x</mi><mn>1</mn></msub></mrow></mfrac>
+      <mo>,</mo>
+      <mo>…</mo>
+      <mo>,</mo>
+      <mfrac><mrow><mo>∂</mo><mi>H</mi></mrow><mrow><mo>∂</mo><msub><mi>x</mi><mi>n</mi></msub></mrow></mfrac>
+      <mo>)</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">EntropyGradient</csymbol><ci>H</ci><ci>x</ci></apply>
+        <apply><grad/><ci>H</ci><ci>x</ci></apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+EntropyGradient: grad H(x) points toward steepest uncertainty change. GML eh_x/eh_y/eh_z carry its projected components.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Free-energy projection flow: relevance drift plus entropy ────── -->
+  <semantics>
+    <mrow>
+      <mi>V</mi><mo>(</mo><mi>x</mi><mo>)</mo>
+      <mo>=</mo>
+      <mo>-</mo><mo>∇</mo><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo>
+      <mo>+</mo>
+      <msup><mi>β</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup>
+      <mo>∇</mo><mi>H</mi><mo>(</mo><mi>x</mi><mo>)</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><ci>V</ci><ci>x</ci></apply>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">FreeEnergyFlow</csymbol><ci>f</ci><ci>H</ci><ci>β</ci><ci>x</ci></apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+FreeEnergyFlow: V(x) = -grad f(x) + beta^(-1) * grad H(x). Balances relevance drift with entropy diffusion for projection routing only.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Fokker-Planck semantic diffusion surface ─────────────────────── -->
+  <semantics>
+    <mrow>
+      <mfrac><mrow><mo>∂</mo><mi>ρ</mi></mrow><mrow><mo>∂</mo><mi>t</mi></mrow></mfrac>
+      <mo>=</mo>
+      <mo>∇</mo><mo>·</mo><mo>(</mo><mi>ρ</mi><mo>∇</mo><mi>f</mi><mo>)</mo>
+      <mo>+</mo>
+      <msup><mi>β</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup>
+      <mi>Δ</mi><mi>ρ</mi>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">FokkerPlanckFlow</csymbol><ci>ρ</ci><ci>f</ci><ci>β</ci></apply>
+        <apply>
+          <plus/>
+          <apply><divergence/><apply><times/><ci>ρ</ci><apply><grad/><ci>f</ci></apply></apply></apply>
+          <apply><times/><apply><csymbol cd="urn:kuhul:fold-graph:v1">DiffusionScale</csymbol><ci>beta_inv</ci></apply><apply><laplacian/><ci>ρ</ci></apply></apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+FokkerPlanckFlow: partial_t rho = div(rho grad f) + beta^(-1) Delta rho. Entropy diffusion prevents rigid local loops in projection space.
+    </annotation>
+  </semantics>
+
+  <!-- ── Notes ─────────────────────────────────────────────────────────
+       • M_{Y,X} (forward matrix)   = co-occurrence/association mass.
+         M_{Y,X} += 1 each time Y appears in the context neighborhood C_X.
+         M is NOT the WCR static_weight W.  Conflating them hides the
+         two-stage pipeline:
+             M_{Y,X} -> representation -> R_Y(Q)      [evidence stage]
+             W_Y, C_Y -> candidate qualification      [selection stage]
+         They meet only in S_Y = W_Y * C_Y * R_Y.
+
+       • C_X  (capital, single subscript)  = context neighborhood at X.
+       • C_{Y,X} (capital, paired subscripts) = accumulated reverse matrix.
+
+       • FoldPair returns the logical pair <M, C^T>. Physical backends
+         may lower this to [M; C^T] if their storage requires it.
+
+       • Direction A asks membership; Direction B traverses membership.
+         The asymmetry is intentional and informative.
+
+       • Pattern count invariant (no-pattern-inflation):
+           |supp M[Y,·]| = #{X ∈ S : Y ∈ C_X}
+         FoldPair expands operator surface (forward + reverse readouts),
+         not pattern vocabulary. |X| is fixed by the semantic map.
+       ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- ── Geodesic Entropy ─────────────────────────────────────────────────
+       H_G(v) = -Σ_{u≠v} p(d(v,u)) log p(d(v,u))
+       where p(d) = |{u : d(v,u)=d}| / (|V|-1)
+       Low H_G → central hub: trajectory concentrates.
+       High H_G → scattered region: signal diffuses globally. -->
+  <semantics>
+    <mrow>
+      <msub><mi>H</mi><mi>G</mi></msub>
+      <mo>(</mo><mi>v</mi><mo>)</mo>
+      <mo>=</mo>
+      <mo>&#x2212;</mo>
+      <munder>
+        <mo>&#x2211;</mo>
+        <mrow><mi>u</mi><mo>&#x2260;</mo><mi>v</mi></mrow>
+      </munder>
+      <mi>p</mi><mo>(</mo><mi>d</mi><mo>(</mo><mi>v</mi><mo>,</mo><mi>u</mi><mo>)</mo><mo>)</mo>
+      <mo>&#x22C5;</mo>
+      <mi>log</mi>
+      <mi>p</mi><mo>(</mo><mi>d</mi><mo>(</mo><mi>v</mi><mo>,</mo><mi>u</mi><mo>)</mo><mo>)</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">GeodesicEntropy</csymbol><ci>v</ci></apply>
+        <apply>
+          <minus/>
+          <apply>
+            <sum/>
+            <bvar><ci>u</ci></bvar>
+            <condition><apply><neq/><ci>u</ci><ci>v</ci></apply></condition>
+            <apply>
+              <times/>
+              <apply><ci>p</ci><apply><ci>d</ci><ci>v</ci><ci>u</ci></apply></apply>
+              <apply><ln/><apply><ci>p</ci><apply><ci>d</ci><ci>v</ci><ci>u</ci></apply></apply></apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+      H_G(v) = -sum_{u != v} p(d(v,u)) * log(p(d(v,u)))
+      Geodesic entropy: Shannon uncertainty of the shortest-path distance distribution.
+    </annotation>
+  </semantics>
+
+  <!-- ── Raychaudhuri Geodesic Entropy Production Rate ─────────────────────
+       dH_G/dt = Σ_{e∈γ} (R_μν u^μ u^ν + ⅓θ²)
+       Ricci focusing + expansion squared drives finite-time concentration;
+       guards against infinite entropic diffusion along streamline γ. -->
+  <semantics>
+    <mrow>
+      <mfrac>
+        <mrow><mi>d</mi><msub><mi>H</mi><mi>G</mi></msub></mrow>
+        <mrow><mi>d</mi><mi>t</mi></mrow>
+      </mfrac>
+      <mo>=</mo>
+      <msub>
+        <mo>&#x2211;</mo>
+        <mrow><mi>e</mi><mo>&#x2208;</mo><mi>&#x03B3;</mi></mrow>
+      </msub>
+      <mfenced>
+        <mrow>
+          <msub><mi>R</mi><mrow><mi>&#x03BC;</mi><mi>&#x03BD;</mi></mrow></msub>
+          <msup><mi>u</mi><mi>&#x03BC;</mi></msup>
+          <msup><mi>u</mi><mi>&#x03BD;</mi></msup>
+          <mo>+</mo>
+          <mfrac><mn>1</mn><mn>3</mn></mfrac>
+          <msup><mi>&#x03B8;</mi><mn>2</mn></msup>
+        </mrow>
+      </mfenced>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><derivative/><apply><selector/><ci>H</ci><ci>G</ci></apply><ci>t</ci></apply>
+        <apply>
+          <sum/>
+          <bvar><ci>e</ci></bvar>
+          <condition><apply><in/><ci>e</ci><ci>&#x03B3;</ci></apply></condition>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply><selector/><ci>R</ci><ci>μ</ci><ci>ν</ci></apply>
+              <apply><power/><ci>u</ci><ci>μ</ci></apply>
+              <apply><power/><ci>u</ci><ci>ν</ci></apply>
+            </apply>
+            <apply>
+              <times/>
+              <apply><fraction/><cn>1</cn><cn>3</cn></apply>
+              <apply><power/><ci>θ</ci><cn>2</cn></apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+      dH_G / dt = sum_{e in gamma} (R_{mu nu} u^mu u^nu + (1/3)*theta^2)
+      Raychaudhuri-driven geodesic entropy production rate along streamline gamma.
+    </annotation>
+  </semantics>
+
+  <!-- ── Triangular / Simplicial Entropy ────────────────────────────────────
+       H_Δ(T) = -Σ_{σ∈T} w(σ) log w(σ)   where w(σ) = simplex_weight / Σ weights
+       Equilateral closed triangles (A→B→C→A) → low H_Δ.
+       Warped / asymmetric relation triangles → high H_Δ spike. -->
+  <semantics>
+    <mrow>
+      <msub><mi>H</mi><mi>&#x394;</mi></msub>
+      <mo>(</mo><mi>T</mi><mo>)</mo>
+      <mo>=</mo>
+      <mo>&#x2212;</mo>
+      <munder>
+        <mo>&#x2211;</mo>
+        <mrow><mi>&#x03C3;</mi><mo>&#x2208;</mo><mi>T</mi></mrow>
+      </munder>
+      <mi>w</mi><mo>(</mo><mi>&#x03C3;</mi><mo>)</mo>
+      <mo>&#x22C5;</mo>
+      <mi>log</mi>
+      <mi>w</mi><mo>(</mo><mi>&#x03C3;</mi><mo>)</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">TriangularEntropy</csymbol><ci>T</ci></apply>
+        <apply>
+          <minus/>
+          <apply>
+            <sum/>
+            <bvar><ci>σ</ci></bvar>
+            <condition><apply><in/><ci>σ</ci><ci>T</ci></apply></condition>
+            <apply>
+              <times/>
+              <apply><ci>w</ci><ci>σ</ci></apply>
+              <apply><ln/><apply><ci>w</ci><ci>σ</ci></apply></apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+      H_Delta(T) = -sum_{sigma in T} w(sigma) * log(w(sigma))
+      Simplicial entropy of a triangulated 2-complex T; low = stable mesh.
+    </annotation>
+  </semantics>
+
+
+  <!-- ── Holographic Mesh Boundary / Euler Triangle Inequality ─────────────
+       For every nondegenerate local semantic triangle T, the circumradius R
+       must bound the incircle radius r: R >= 2r. This keeps the local
+       holographic horizon from collapsing below the compression core. -->
+  <semantics>
+    <mrow>
+      <msub><mi>R</mi><mtext>circum</mtext></msub>
+      <mo>&#x2265;</mo>
+      <mn>2</mn>
+      <mo>&#x22C5;</mo>
+      <msub><mi>r</mi><mtext>in</mtext></msub>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <geq/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">Circumradius</csymbol><ci>T</ci></apply>
+        <apply>
+          <times/>
+          <cn>2</cn>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">Inradius</csymbol><ci>T</ci></apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+      EulerTriangleInequality: R_circum >= 2 * r_in.
+      Circumradius/Inradius/Circumcenter are dual-circle projection diagnostics over local simplicial mesh geometry; they cannot mutate semantic topology B.
+    </annotation>
+  </semantics>
+
+  <!-- ── Circumcenter drift as projection stress ──────────────────────────
+       Circumcenter(T) = O is the coordinate center of the circumcircle for the
+       local semantic triangle. Drift between O and the local mesh average
+       marks projection stress; it is a diagnostic, not a verified mutation. -->
+  <semantics>
+    <mrow>
+      <mi>Circumcenter</mi>
+      <mo>(</mo>
+      <mi>T</mi>
+      <mo>)</mo>
+      <mo>=</mo>
+      <mi>O</mi>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">Circumcenter</csymbol><ci>T</ci></apply>
+        <ci>O</ci>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+      Circumcenter(T) = O is the circumcircle center of the local semantic triangle.
+      Drift between O and the local mesh average indicates projection stress, not a verified semantic mutation.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Euler triangle inequality as mesh admissibility law ──────────────
+       Law E9 asks every nondegenerate local triangle for R >= 2r; a breach is
+       EULER_TRIANGLE_INEQUALITY_BREACH, i.e. warped mesh geometry. The law can
+       mask, rank or flag a projection neighborhood; it cannot authorize a
+       relation or mutate B. -->
+  <semantics>
+    <mrow>
+      <mi>EulerTriangleInequality</mi>
+      <mo>(</mo>
+      <mi>T</mi>
+      <mo>)</mo>
+      <mo>&#x21D4;</mo>
+      <mi>Circumradius</mi>
+      <mo>(</mo>
+      <mi>T</mi>
+      <mo>)</mo>
+      <mo>&#x2265;</mo>
+      <mn>2</mn>
+      <mo>&#x22C5;</mo>
+      <mi>Inradius</mi>
+      <mo>(</mo>
+      <mi>T</mi>
+      <mo>)</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <equivalent/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">EulerTriangleInequality</csymbol><ci>T</ci></apply>
+        <apply>
+          <geq/>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">Circumradius</csymbol><ci>T</ci></apply>
+          <apply>
+            <times/>
+            <cn>2</cn>
+            <apply><csymbol cd="urn:kuhul:fold-graph:v1">Inradius</csymbol><ci>T</ci></apply>
+          </apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+      EulerTriangleInequality(T) iff Circumradius(T) &gt;= 2 * Inradius(T) for a nondegenerate local triangle (E9).
+      A breach is EULER_TRIANGLE_INEQUALITY_BREACH: warped mesh geometry that cannot by itself alter FoldGraph B.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Parallel Propagator Kernel K(x,y;τ) ───────────────────────────────
+       K(x,y;τ) = Σ_{γ∈Paths} exp(-∫_0^τ (½ g_ij ẋ^i ẋ^j + U(x)) dt)
+       Feynman path-integral over curved metric; GPU threads each evaluate
+       one incident edge amplitude and reduce to node-level flux total. -->
+  <semantics>
+    <mrow>
+      <mi>K</mi>
+      <mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>;</mo><mi>&#x03C4;</mi><mo>)</mo>
+      <mo>=</mo>
+      <munder>
+        <mo>&#x2211;</mo>
+        <mrow><mi>&#x03B3;</mi><mo>&#x2208;</mo><mi>Paths</mi></mrow>
+      </munder>
+      <mi>exp</mi>
+      <mfenced>
+        <mrow>
+          <mo>&#x2212;</mo>
+          <msubsup>
+            <mo>&#x222B;</mo>
+            <mn>0</mn>
+            <mi>&#x03C4;</mi>
+          </msubsup>
+          <mfenced>
+            <mrow>
+              <mfrac><mn>1</mn><mn>2</mn></mfrac>
+              <msub><mi>g</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub>
+              <msup><mover><mi>x</mi><mo>&#x22C5;</mo></mover><mi>i</mi></msup>
+              <msup><mover><mi>x</mi><mo>&#x22C5;</mo></mover><mi>j</mi></msup>
+              <mo>+</mo>
+              <mi>U</mi><mo>(</mo><mi>x</mi><mo>)</mo>
+            </mrow>
+          </mfenced>
+          <mi>d</mi><mi>t</mi>
+        </mrow>
+      </mfenced>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">PropagatorKernel</csymbol><ci>x</ci><ci>y</ci><ci>&#x03C4;</ci></apply>
+        <apply>
+          <sum/>
+          <bvar><ci>&#x03B3;</ci></bvar>
+          <condition><apply><in/><ci>&#x03B3;</ci><ci>Paths</ci></apply></condition>
+          <apply>
+            <exp/>
+            <apply>
+              <minus/>
+              <apply>
+                <int/>
+                <bvar><ci>t</ci></bvar>
+                <lowlimit><cn>0</cn></lowlimit>
+                <uplimit><ci>&#x03C4;</ci></uplimit>
+                <apply>
+                  <plus/>
+                  <apply>
+                    <times/>
+                    <apply><fraction/><cn>1</cn><cn>2</cn></apply>
+                    <apply><selector/><ci>g</ci><ci>i</ci><ci>j</ci></apply>
+                    <apply><power/><apply><dot/><ci>x</ci></apply><ci>i</ci></apply>
+                    <apply><power/><apply><dot/><ci>x</ci></apply><ci>j</ci></apply>
+                  </apply>
+                  <apply><ci>U</ci><ci>x</ci></apply>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+      K(x, y; tau) = sum_{gamma in Paths} exp( -integral_0^tau (1/2 * g_ij * x_dot^i * x_dot^j + U(x)) dt )
+      Parallel GPU propagator kernel over the curved semantic metric manifold.
+    </annotation>
+  </semantics>
+
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Micronaut semantic attraction capture law ────────────────────────
+       A Micronaut is modeled as a phase-scoped execution container with a
+       derived attraction basin. The attraction score is projection geometry
+       over the current unfolded query state; it gates candidate capture only
+       and cannot prove, contradict, or commit FoldGraph topology B. -->
+  <semantics>
+    <mrow>
+      <msub><mi>&#x03A6;</mi><mi>&#x03BC;</mi></msub>
+      <mo>(</mo><mi>Q</mi><mo>)</mo>
+      <mo>=</mo>
+      <msub><mi>Mass</mi><mi>&#x03BC;</mi></msub>
+      <mo>&#x22C5;</mo>
+      <mi>cos</mi><mo>(</mo><mi>Q</mi><mo>,</mo><msub><mi>K</mi><mi>&#x03BC;</mi></msub><mo>)</mo>
+      <mo>&#x22C5;</mo>
+      <mo>(</mo>
+      <msub><mi>W</mi><mi>&#x03BC;</mi></msub>
+      <mo>&#x22C5;</mo>
+      <msub><mi>C</mi><mi>&#x03BC;</mi></msub>
+      <mo>&#x22C5;</mo>
+      <msub><mi>R</mi><mi>&#x03BC;</mi></msub>
+      <mo>)</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">MicronautAttraction</csymbol><ci>mu</ci><ci>Q</ci></apply>
+        <apply>
+          <times/>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">MicronautMass</csymbol><ci>mu</ci></apply>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">GeometricAlignment</csymbol><ci>Q</ci><apply><csymbol cd="urn:kuhul:fold-graph:v1">MicronautKeyVector</csymbol><ci>mu</ci></apply></apply>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">WCRPrior</csymbol><ci>mu</ci></apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+      MicronautAttraction: Phi_mu(Q) = Mass_mu * cos(Q, K_mu) * (W_mu * C_mu * R_mu).
+      Mass_mu is derived from co-occurrence/declared basin evidence; K_mu is vector_meta/coordinate anchor; WCR gates capture.
+      Capture enters the Micronaut sandbox only after policy_ok, capable, and xcfe_ok; attraction is not semantic proof and cannot mutate B.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Micronaut capture gate against entropy diffusion ─────────────────
+       Capture is admitted only when attraction overbalances local exploratory
+       entropy diffusion and the execution boundary has been authorized. -->
+  <semantics>
+    <mrow>
+      <mi>Capture</mi><mo>(</mo><mi>Q</mi><mo>,</mo><mi>&#x03BC;</mi><mo>)</mo>
+      <mo>&#x21D4;</mo>
+      <msub><mi>&#x03A6;</mi><mi>&#x03BC;</mi></msub><mo>(</mo><mi>Q</mi><mo>)</mo>
+      <mo>&#x2265;</mo>
+      <msub><mi>EntropyDiffusion</mi><mi>&#x03BC;</mi></msub>
+      <mo>&#x2227;</mo>
+      <mi>policy_ok</mi>
+      <mo>&#x2227;</mo>
+      <mi>capable</mi>
+      <mo>&#x2227;</mo>
+      <mi>xcfe_ok</mi>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <iff/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">CaptureGate</csymbol><ci>Q</ci><ci>mu</ci></apply>
+        <apply>
+          <and/>
+          <apply>
+            <geq/>
+            <apply><csymbol cd="urn:kuhul:fold-graph:v1">MicronautAttraction</csymbol><ci>mu</ci><ci>Q</ci></apply>
+            <apply><csymbol cd="urn:kuhul:fold-graph:v1">EntropyDiffusion</csymbol><ci>mu</ci></apply>
+          </apply>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">PolicyOk</csymbol><ci>mu</ci><ci>Q</ci></apply>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">CapabilityOk</csymbol><ci>mu</ci><ci>Q</ci></apply>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">XcfeOk</csymbol><ci>mu</ci><ci>Q</ci></apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+      CaptureGate(Q,mu) iff Phi_mu(Q) >= EntropyDiffusion_mu and policy_ok and capable and xcfe_ok.
+      The gate authorizes candidate entry into the Micronaut execution sandbox; Ch'en/Xul still decide verification and persistence.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Hyperbolic Key-Grammar Event Distance ─────────────────────────────
+       Key-grammar events may be projected onto the forward sheet of a local
+       Minkowski substrate. The bilinear form and hyperbolic distance guide
+       routing only; Ch'en remains the verification authority. -->
+  <semantics>
+    <mrow>
+      <mi>B</mi><mo>(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>)</mo>
+      <mo>=</mo>
+      <mo>&#x2212;</mo><msub><mi>u</mi><mn>0</mn></msub><msub><mi>v</mi><mn>0</mn></msub>
+      <mo>+</mo><msub><mi>u</mi><mn>1</mn></msub><msub><mi>v</mi><mn>1</mn></msub>
+      <mo>+</mo><msub><mi>u</mi><mn>2</mn></msub><msub><mi>v</mi><mn>2</mn></msub>
+      <mo>+</mo><msub><mi>u</mi><mn>3</mn></msub><msub><mi>v</mi><mn>3</mn></msub>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">MinkowskiBilinearForm</csymbol>
+          <ci>u</ci>
+          <ci>v</ci>
+        </apply>
+        <apply>
+          <plus/>
+          <apply><minus/><apply><times/><apply><selector/><ci>u</ci><cn>0</cn></apply><apply><selector/><ci>v</ci><cn>0</cn></apply></apply></apply>
+          <apply><times/><apply><selector/><ci>u</ci><cn>1</cn></apply><apply><selector/><ci>v</ci><cn>1</cn></apply></apply>
+          <apply><times/><apply><selector/><ci>u</ci><cn>2</cn></apply><apply><selector/><ci>v</ci><cn>2</cn></apply></apply>
+          <apply><times/><apply><selector/><ci>u</ci><cn>3</cn></apply><apply><selector/><ci>v</ci><cn>3</cn></apply></apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+      MinkowskiBilinearForm: B(u,v) = -u0*v0 + u1*v1 + u2*v2 + u3*v3.
+      This is projection geometry for key-grammar event routing; it is not semantic authority.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <semantics>
+    <mrow>
+      <mi>d</mi><mo>(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>)</mo>
+      <mo>=</mo>
+      <mi>arcosh</mi>
+      <mfenced>
+        <mrow>
+          <mo>&#x2212;</mo>
+          <mi>B</mi><mo>(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>)</mo>
+        </mrow>
+      </mfenced>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">HyperbolicDistance</csymbol>
+          <ci>u</ci>
+          <ci>v</ci>
+        </apply>
+        <apply>
+          <arcosh/>
+          <apply>
+            <minus/>
+            <apply>
+              <csymbol cd="urn:kuhul:fold-graph:v1">MinkowskiBilinearForm</csymbol>
+              <ci>u</ci>
+              <ci>v</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+      HyperbolicEventDistance: d(u,v) = arcosh(-B(u,v)).
+      Rapidity rho is additive event progression; interval_class gates routing but never verifies facts.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Deductive System Semantic Completeness Boundary ───────────────────
+       If the current verified Sigma entails phi, a phase-scoped proof trace
+       must exist before the claim can be exposed as SUPPORTED. This is a
+       validator/proof-trace contract; projection geometry can propose routes
+       but cannot create semantic truth. -->
+  <semantics>
+    <mrow>
+      <mi>&#x03A3;</mi>
+      <mo>&#x22A8;</mo>
+      <mi>&#x03D5;</mi>
+      <mo>&#x21D2;</mo>
+      <mi>&#x03A3;</mi>
+      <mo>&#x22A2;</mo>
+      <mi>&#x03D5;</mi>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <implies/>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">LogicalConsequence</csymbol>
+          <ci>Sigma</ci>
+          <ci>phi</ci>
+        </apply>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">DeductiveProofTrace</csymbol>
+          <ci>Sigma</ci>
+          <ci>phi</ci>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+      SemanticCompletenessBoundary: if Sigma entails phi inside the current verified Fold context,
+      a deductive proof trace must exist before phi can be exposed as SUPPORTED.
+      TENSOR/METRIC/GPU projections may rank or propose proof routes; they do not create truth.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Axiomatic Incompleteness / MISS Boundary ──────────────────────────
+       MISS is an observation or retrieval deficit. It preserves unresolved
+       alternatives and must not collapse into CONTRADICTED without actual
+       negative evidence. -->
+  <semantics>
+    <mrow>
+      <mi>MISS</mi>
+      <mo>(</mo><mi>&#x03A3;</mi><mo>,</mo><mi>&#x03D5;</mi><mo>)</mo>
+      <mo>&#x21D2;</mo>
+      <mo>&#x00AC;</mo>
+      <mo>(</mo><mi>&#x03A3;</mi><mo>&#x22A2;</mo><mi>&#x03D5;</mi><mo>)</mo>
+      <mo>&#x2227;</mo>
+      <mo>&#x00AC;</mo>
+      <mo>(</mo><mi>&#x03A3;</mi><mo>&#x22A2;</mo><mo>&#x00AC;</mo><mi>&#x03D5;</mi><mo>)</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <implies/>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">MissState</csymbol>
+          <ci>Sigma</ci>
+          <ci>phi</ci>
+        </apply>
+        <apply>
+          <and/>
+          <apply>
+            <not/>
+            <apply>
+              <csymbol cd="urn:kuhul:fold-graph:v1">DeductiveProofTrace</csymbol>
+              <ci>Sigma</ci>
+              <ci>phi</ci>
+            </apply>
+          </apply>
+          <apply>
+            <not/>
+            <apply>
+              <csymbol cd="urn:kuhul:fold-graph:v1">DeductiveProofTrace</csymbol>
+              <ci>Sigma</ci>
+              <apply><not/><ci>phi</ci></apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+      AxiomaticIncompletenessBoundary: MISS(Sigma,phi) means the current axiom base cannot prove phi
+      and cannot prove not-phi. MISS is not CONTRADICTED; Ch'en needs separate negative evidence.
+    </annotation>
+  </semantics>
+
+  <!-- ── Local covariant metric tensor ─────────────────────────────────────
+       MetricTensor(g_ij) is the local covariant bilinear form used to raise
+       and lower indices and to measure projection distance. Laws TB4-TB6
+       require numeric components, symmetry (g_01 = g_10) and nondegeneracy
+       (det(g) != 0); a degenerate metric is METRIC_TENSOR_DEGENERATE. It is a
+       projection metric, not RelationISA authority. -->
+  <semantics>
+    <mrow>
+      <msub>
+        <mi>g</mi>
+        <mrow><mi>i</mi><mi>j</mi></mrow>
+      </msub>
+      <mo>=</mo>
+      <mi>MetricTensor</mi>
+      <mo>(</mo>
+      <mi>T</mi>
+      <mo>)</mo>
+      <mo>,</mo>
+      <mspace width="0.5em"/>
+      <msub><mi>g</mi><mrow><mn>0</mn><mn>1</mn></mrow></msub>
+      <mo>=</mo>
+      <msub><mi>g</mi><mrow><mn>1</mn><mn>0</mn></mrow></msub>
+      <mo>,</mo>
+      <mspace width="0.5em"/>
+      <mi>det</mi>
+      <mo>(</mo>
+      <mi>g</mi>
+      <mo>)</mo>
+      <mo>&#x2260;</mo>
+      <mn>0</mn>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <and/>
+        <apply>
+          <eq/>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">MetricTensor</csymbol><ci>T</ci></apply>
+          <ci>g_ij</ci>
+        </apply>
+        <apply><eq/><ci>g_01</ci><ci>g_10</ci></apply>
+        <apply><neq/><apply><determinant/><ci>g</ci></apply><cn>0</cn></apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+      MetricTensor: g_ij in R, g_01 = g_10 (TB5), det(g) != 0 (TB6).
+      The local covariant bilinear form raises/lowers indices and measures projection distance over B.
+      TENSOR-µ metric geometry is projection-only and cannot manufacture semantic truth.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Tensor Bundle Coordinate Transformation ───────────────────────────
+       Type-(1,1) representative: upper indices transform by the Jacobian and
+       lower indices by the inverse Jacobian. This is projection geometry over
+       B; coordinate drift does not imply semantic topology mutation. -->
+  <semantics>
+    <mrow>
+      <msubsup>
+        <mi>T</mi>
+        <msup><mi>j</mi><mo>&#x2032;</mo></msup>
+        <msup><mi>i</mi><mo>&#x2032;</mo></msup>
+      </msubsup>
+      <mo>=</mo>
+      <msubsup><mi>T</mi><mi>j</mi><mi>i</mi></msubsup>
+      <mo>&#x22C5;</mo>
+      <mfrac>
+        <mrow><mo>&#x2202;</mo><msup><mi>x</mi><msup><mi>i</mi><mo>&#x2032;</mo></msup></msup></mrow>
+        <mrow><mo>&#x2202;</mo><msup><mi>x</mi><mi>i</mi></msup></mrow>
+      </mfrac>
+      <mo>&#x22C5;</mo>
+      <mfrac>
+        <mrow><mo>&#x2202;</mo><msup><mi>x</mi><mi>j</mi></msup></mrow>
+        <mrow><mo>&#x2202;</mo><msup><mi>x</mi><msup><mi>j</mi><mo>&#x2032;</mo></msup></msup></mrow>
+      </mfrac>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">TensorTransform</csymbol>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">TensorField</csymbol><ci>T</ci><ci>M</ci><ci>p</ci><ci>q</ci></apply>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">JacobianMatrix</csymbol><ci>J</ci></apply>
+          <apply><csymbol cd="urn:kuhul:fold-graph:v1">InverseJacobian</csymbol><ci>J_inv</ci></apply>
+        </apply>
+        <apply>
+          <times/>
+          <apply><selector/><ci>T_base</ci><ci>i</ci><ci>j</ci></apply>
+          <apply><selector/><apply><csymbol cd="urn:kuhul:fold-graph:v1">JacobianMatrix</csymbol><ci>J</ci></apply><ci>i_prime</ci><ci>i</ci></apply>
+          <apply><selector/><apply><csymbol cd="urn:kuhul:fold-graph:v1">InverseJacobian</csymbol><ci>J_inv</ci></apply><ci>j</ci><ci>j_prime</ci></apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+      TensorTransform: T^{i'}_{j'} = T^i_j * (d x^{i'} / d x^i) * (d x^j / d x^{j'}).
+      TENSOR-µ tensor-bundle geometry is projection-only and cannot mutate semantic topology B.
+    </annotation>
+  </semantics>
+
+  <semantics>
+    <mrow>
+      <msup><mi>u</mi><mi>i</mi></msup>
+      <mo>=</mo>
+      <msubsup><mi>L</mi><mi>j</mi><mi>i</mi></msubsup>
+      <msup><mi>v</mi><mi>j</mi></msup>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><selector/><ci>u</ci><ci>i</ci></apply>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">LorentzFrameTransition</csymbol>
+          <apply>
+            <csymbol cd="urn:kuhul:fold-graph:v1">LorentzBoostTensor</csymbol>
+            <ci>rho</ci>
+            <ci>n</ci>
+          </apply>
+          <apply>
+            <csymbol cd="urn:kuhul:fold-graph:v1">EinsteinContraction</csymbol>
+            <bvar><ci>j</ci></bvar>
+            <apply><selector/><ci>L</ci><ci>i</ci><ci>j</ci></apply>
+            <apply><selector/><ci>v</ci><ci>j</ci></apply>
+          </apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+      EinsteinContraction: u^i = L^i_j v^j.
+      LorentzBoostTensor(rho,n) constructs L from rapidity and direction before contraction.
+      Repeated index j is summed implicitly; shader lowering uses dot(boost_row_i, v).
+      This is a projection-side Lorentz frame transition and cannot establish semantic authority.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── K'UHUL Algebraic Catamorphism / Fold-Collapse Boundary ───────────
+       The semantic signature F stays invariant while an interpretation algebra
+       alpha folds a local neighborhood under phase theta. Xul collapse may
+       retain the interpreted target-domain result only through the verified
+       authority path. -->
+  <semantics>
+    <mrow>
+      <msub><mi>Fold</mi><mi>&#x03B1;</mi></msub>
+      <mo>(</mo>
+      <mi>N</mi>
+      <mo>(</mo><mi>k</mi><mo>)</mo>
+      <mo>,</mo>
+      <mi>&#x03B8;</mi>
+      <mo>)</mo>
+      <mover>
+        <mo>&#x2192;</mo>
+        <mi>Xul</mi>
+      </mover>
+      <msup><mi>k</mi><mo>&#x2032;</mo></msup>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">XulCollapse</csymbol>
+          <apply>
+            <csymbol cd="urn:kuhul:fold-graph:v1">AlgebraicFold</csymbol>
+            <ci>alpha</ci>
+            <apply>
+              <csymbol cd="urn:kuhul:fold-graph:v1">Neighborhood</csymbol>
+              <ci>k</ci>
+            </apply>
+            <ci>theta</ci>
+          </apply>
+        </apply>
+        <ci>k_prime</ci>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+      CatamorphicFoldLoop: Xul(Fold_alpha(N(k), theta)) -> k_prime.
+      Fold alpha interprets a semantic neighborhood over invariant signature F; phase theta selects the interpretation frame.
+      SignatureIsomorphism(F_base,F_transformed) and MatrixRank(T_transformed) == MatrixRank(T_substrate) guard algebraic variance.
+      Algebraic folds are projection/interpretation contracts and cannot mutate FoldGraph B without Ch'en/XCFE/Xul authority.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── FoldField Coordinate in Product Graph G_runtime ──────────────────
+       Each Micronaut µ_i is a vertex F_i = (N_i, θ_i, W_i, C_i, R_i)
+       in G_runtime = G_semantic □ G_phase.
+       S_i = W_i · C_i · R_i is the WCR score at that vertex.
+       @node is the root of the fold; the fold is the algebra applied there. -->
+  <semantics>
+    <mrow>
+      <msub><mi>F</mi><mi>i</mi></msub>
+      <mo>=</mo>
+      <mo>&#x27E8;</mo>
+      <msub><mi>N</mi><mi>i</mi></msub>
+      <mo>,</mo>
+      <msub><mi>&#x03B8;</mi><mi>i</mi></msub>
+      <mo>,</mo>
+      <msub><mi>W</mi><mi>i</mi></msub>
+      <mo>,</mo>
+      <msub><mi>C</mi><mi>i</mi></msub>
+      <mo>,</mo>
+      <msub><mi>R</mi><mi>i</mi></msub>
+      <mo>&#x27E9;</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply><csymbol cd="urn:kuhul:fold-graph:v1">FoldField</csymbol><ci>i</ci></apply>
+        <list>
+          <ci>N_i</ci>
+          <ci>theta_i</ci>
+          <ci>W_i</ci>
+          <ci>C_i</ci>
+          <ci>R_i</ci>
+        </list>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+FoldField: F_i = &lt;N_i, theta_i, W_i, C_i, R_i&gt;.
+Vertex in G_runtime = G_semantic □ G_phase.
+N_i = @node root (node_id) — NOT the fold operation itself.
+theta_i = phase angle in [0, 2pi); canonical values from phase_angle(Phase).
+S_i = W_i * C_i * R_i is the WCR score at this vertex.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Product Graph Edge Weight / FoldRelevance ────────────────────────
+       G_runtime = G_semantic □ G_phase.
+       Edge weight w(a,b) = W_arc(a,b) · cos(theta_b - theta_a).
+       Approximate form (when W_arc is unknown):
+         fold_relevance(a,b) = sqrt(Wa·Wb) · sqrt(Ca·Cb) · cos(Delta_theta). -->
+  <semantics>
+    <mrow>
+      <mi>fold_relevance</mi>
+      <mo>(</mo><msub><mi>F</mi><mi>a</mi></msub><mo>,</mo><msub><mi>F</mi><mi>b</mi></msub><mo>)</mo>
+      <mo>=</mo>
+      <msqrt>
+        <msub><mi>W</mi><mi>a</mi></msub>
+        <mo>&#x22C5;</mo>
+        <msub><mi>W</mi><mi>b</mi></msub>
+      </msqrt>
+      <mo>&#x22C5;</mo>
+      <msqrt>
+        <msub><mi>C</mi><mi>a</mi></msub>
+        <mo>&#x22C5;</mo>
+        <msub><mi>C</mi><mi>b</mi></msub>
+      </msqrt>
+      <mo>&#x22C5;</mo>
+      <mi>cos</mi>
+      <mo>(</mo>
+      <msub><mi>&#x03B8;</mi><mi>b</mi></msub>
+      <mo>-</mo>
+      <msub><mi>&#x03B8;</mi><mi>a</mi></msub>
+      <mo>)</mo>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">FoldRelevance</csymbol>
+          <ci>F_a</ci>
+          <ci>F_b</ci>
+        </apply>
+        <apply>
+          <times/>
+          <apply>
+            <times/>
+            <apply><root/><apply><times/><ci>W_a</ci><ci>W_b</ci></apply></apply>
+            <apply><root/><apply><times/><ci>C_a</ci><ci>C_b</ci></apply></apply>
+          </apply>
+          <apply>
+            <cos/>
+            <apply><minus/><ci>theta_b</ci><ci>theta_a</ci></apply>
+          </apply>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+fold_relevance(F_a, F_b) = sqrt(Wa*Wb) * sqrt(Ca*Cb) * cos(theta_b - theta_a).
+Approximate product-graph edge weight; range in [-1, 1] when W,C in [0,1].
+Self-relevance: fold_relevance(a,a) = Wa*Ca (cos(0)=1; this is the local self-score).
+Exact form when W_arc is known: fold_relevance(a,b,W_arc) = W_arc * sqrt(Ca*Cb) * cos(Delta_theta).
+fold_relevance is projection geometry over G_runtime; it cannot commit topology B.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Hylomorphism Identity Invariant ──────────────────────────────────
+       (Fold∘Unfold)(h) ≡ h.
+       One Micronaut cycle = hylomorphism step f = cata∘ana.
+       Under zero phase shift (Delta_phi = 0), the fold must round-trip
+       the handle h without drift. Violation drops sigma to UNBOUND. -->
+  <semantics>
+    <mrow>
+      <mo>(</mo>
+      <mi>Fold</mi>
+      <mo>&#x2218;</mo>
+      <mi>Unfold</mi>
+      <mo>)</mo>
+      <mo>(</mo><mi>h</mi><mo>)</mo>
+      <mo>&#x2261;</mo>
+      <mi>h</mi>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">IdentityInvariant</csymbol>
+          <ci>h</ci>
+        </apply>
+        <ci>h</ci>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+IdentityInvariant: (Fold∘Unfold)(h) ≡ h.
+f = cata∘ana is the hylomorphism step. Under Delta_phi=0, fold_distance(f(h),h) = 0.
+Any drift (fold_distance &gt; 0 at Delta_phi=0) means the Fold Field coordinate is fractured.
+Violation drops evolution status sigma to UNBOUND.
+This is the K'UHUL Radial Axis invariant:
+  Unfold(h) = ana(g)(h) = N(h) at s: 0-&gt;1
+  Fold(N(h)) = cata(f)(N(h)) = k' at s: 1-&gt;0
+Invariant requires k' = h when no phase transition was applied.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Kleene Convergence to Xul ─────────────────────────────────────────
+       The Micronaut cycle is the Kleene iteration f^n(query) of f = cata∘ana.
+       Xul is the least fixed point: Xul = lim_{n->inf} f^n(query).
+       Convergence criterion: fold_distance(f^n, f^(n+1)) < epsilon.
+       Banach contraction theorem: if k = d_n/d_{n-1} < 1 uniformly,
+       convergence to the unique Xul fixed point is guaranteed. -->
+  <semantics>
+    <mrow>
+      <mi>Xul</mi>
+      <mo>=</mo>
+      <munder>
+        <mo>lim</mo>
+        <mrow><mi>n</mi><mo>&#x2192;</mo><mi>&#x221E;</mi></mrow>
+      </munder>
+      <msup><mi>f</mi><mi>n</mi></msup>
+      <mo>(</mo><mi>query</mi><mo>)</mo>
+      <mspace width="1em"/>
+      <mtext>when</mtext>
+      <mspace width="0.5em"/>
+      <mi>d</mi>
+      <mo>(</mo>
+      <msup><mi>f</mi><mi>n</mi></msup><mo>,</mo>
+      <msup><mi>f</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msup>
+      <mo>)</mo>
+      <mo>&lt;</mo>
+      <mi>&#x03B5;</mi>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <eq/>
+        <ci>Xul</ci>
+        <apply>
+          <csymbol cd="urn:kuhul:fold-graph:v1">HylomorphismStep</csymbol>
+          <ci>f</ci>
+          <ci>query</ci>
+          <ci>n</ci>
+        </apply>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+KleeneConvergence: Xul = lim_{n-&gt;inf} f^n(query) when fold_distance(f^n, f^(n+1)) &lt; epsilon.
+HylomorphismStep(f, query, n) = f^n(query) is one Kleene iteration of f = cata∘ana over the Micronaut cycle.
+Banach contraction: k = d_n / d_{n-1} &lt; 1 guarantees convergence to the unique Xul.
+ConvergenceTest tracks d_n empirically; CONVERGED/DIVERGING/MAX_ITER status follows.
+fold_distance(a,b) = alpha*d_field(L1) + (1-alpha)*d_wcr; normalised to [0,1].
+Xul collapse is the CONVERGED terminal state; best_state() is the fallback under DIVERGING or MAX_ITER.
+    </annotation>
+  </semantics>
+
+  <mspace linebreak="newline" indentalign="center"/>
+
+  <!-- ── Convergence test status ───────────────────────────────────────────
+       ConvergenceTest(ε, k_max, max_iter, div_window) classifies the Kleene
+       iteration: ITERATING, CONVERGED (d_n < ε), MAX_ITER (hard stop), or
+       DIVERGING (k = d_n/d_{n-1} ≥ k_max for div_window steps). -->
+  <semantics>
+    <mrow>
+      <mi>ConvergenceTest</mi>
+      <mo>(</mo>
+      <mi>&#x03B5;</mi>
+      <mo>,</mo>
+      <msub><mi>k</mi><mtext>max</mtext></msub>
+      <mo>,</mo>
+      <msub><mi>n</mi><mtext>max</mtext></msub>
+      <mo>,</mo>
+      <msub><mi>w</mi><mtext>div</mtext></msub>
+      <mo>)</mo>
+      <mo>&#x2192;</mo>
+      <mtext>status</mtext>
+    </mrow>
+    <annotation-xml encoding="MathML-Content">
+      <apply>
+        <csymbol cd="urn:kuhul:fold-graph:v1">ConvergenceTest</csymbol>
+        <ci>epsilon</ci>
+        <ci>k_max</ci>
+        <ci>max_iter</ci>
+        <ci>div_window</ci>
+      </apply>
+    </annotation-xml>
+    <annotation encoding="text/plain">
+ConvergenceTest(epsilon, k_max, max_iter, div_window) yields ITERATING | CONVERGED | MAX_ITER | DIVERGING.
+CONVERGED when d_n &lt; epsilon; DIVERGING when k = d_n/d_{n-1} &gt;= k_max for div_window consecutive steps.
+The identity state gives d_last &lt; 1e-9 =&gt; k_last = 0, so a folded/unfolded round trip is CONVERGED immediately.
+    </annotation>
+  </semantics>
+
+</math>

@@ -1,0 +1,259 @@
+{
+  "@no-eval": true,
+  "id": "ANAMORPHISM-µ",
+
+  "schemes": ["anamorphism"],
+  "description": "Recursion schemes domain — anamorphism/unfold, catamorphism/fold duality, hylomorphism, paramorphism, apomorphism, zygomorphism, corecursion.",
+  "phase": "Sek",
+  "category": "structural",
+  "confidence": 0.8,
+  "static_weight": 0.85,
+  "health": 1.0,
+  "governs": [
+    "anamorphism",
+    "unfold",
+    "coalgebra",
+    "corecursion",
+    "coinduction",
+    "hylomorphism",
+    "paramorphism",
+    "apomorphism",
+    "zygomorphism",
+    "recursion scheme",
+    "recursion schemes",
+    "catamorphism",
+    "f-algebra",
+    "f-coalgebra",
+    "fixpoint",
+    "initial algebra",
+    "terminal coalgebra",
+    "stream",
+    "infinite structure",
+    "productive",
+    "guardedness",
+    "ana",
+    "cata",
+    "hylo",
+    "para",
+    "apo",
+    "zygo",
+    "@anamorphism",
+    "anamorphism:"
+  ],
+  "capabilities": [
+    "ANA_DEFINE",
+    "ANA_UNFOLD",
+    "ANA_PRODUCTIVITY",
+    "ANA_HYLOMORPHISM",
+    "ANA_PARAMORPHISM",
+    "ANA_APOMORPHISM",
+    "ANA_ZYGOMORPHISM",
+    "ANA_CORECURSION",
+    "ANA_CROSS_DOMAIN"
+  ],
+  "conformance": {
+    "questions": [
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is an anamorphism in category theory?",
+        "expected_key": "dual catamorphism coalgebra seed unfold recursive structure",
+        "gemma_answer": "A way to define a reverse operation on a category; creates functions that preserve data structure through transformations.",
+        "gemma_epistemic": "PARTIAL",
+        "canonical_answer": "The categorical dual of catamorphism — unfolds a seed A via coalgebra f:A→FA into a recursive structure.",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does an anamorphism use a coalgebra to unfold a seed?",
+        "expected_key": "coalgebra A→FA one layer at a time corecursive infinite structures",
+        "gemma_answer": "Utilizes coalgebra to represent seed as recursive structure where each node is a nested sub-value, building hierarchically.",
+        "gemma_epistemic": "PARTIAL",
+        "canonical_answer": "Coalgebra f:A→FA maps seed to one F-layer; anamorphism iterates f to build the full structure without storing it all.",
+        "delta_r": 0.07
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "How does anamorphism relate to catamorphism?",
+        "expected_key": "categorical dual initial algebra terminal coalgebra arrows reversed",
+        "gemma_answer": "Unfold creates a shape, fold compresses it — they represent variations of the same underlying shape.",
+        "gemma_epistemic": "PARTIAL",
+        "canonical_answer": "Categorical duals: cata is initial-algebra morphism, ana is terminal-coalgebra morphism. Same functor, reversed arrows.",
+        "relation_confirmed": "FOLD-HOF-µ",
+        "delta_w": 0.15
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is a hylomorphism?",
+        "expected_key": "anamorphism then catamorphism intermediate structure unfold then fold",
+        "gemma_answer": "Object undergoes anamorphism (inside transformation) and catamorphism (outside transformation) simultaneously.",
+        "gemma_epistemic": "PARTIAL",
+        "canonical_answer": "Composition ana then cata: unfold seed into intermediate structure, fold structure to result. Merge sort is a hylomorphism.",
+        "relation_confirmed": "FOLD-HOF-µ",
+        "delta_w": 0.12
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "Is an anamorphism always productive for infinite streams?",
+        "expected_key": "guardedness required not automatic Haskell diverge Coq Agda enforce",
+        "gemma_answer": "No, anamorphism is not guaranteed to be productive — it does not inherently ensure useful structures for further computation.",
+        "gemma_epistemic": "SUPPORTED",
+        "delta_c": 0.09
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does a paramorphism differ from an anamorphism in the context of recursion schemes?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "Can a catamorphism be seen as a dual operation to an anamorphism within this framework?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What role does hylomorphism play in defining the structure of unfolded and folded objects?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How might zygomorphism be applied to ensure compatibility between two recursive structures?",
+        "expected_key": "",
+        "delta_r": 0.08
+      }
+    ],
+    "jokes": [
+      {
+        "pattern": "WHY DID THE ANAMORPHISM BREAK UP WITH THE CATAMORPHISM",
+        "gemma_punchline": "Too much perspective — their relationship was a type mismatch.",
+        "canonical_punchline": "One kept building things up, the other kept tearing them down. They agreed it was an unhealthy fixpoint.",
+        "frame": "humor_frame",
+        "semantic_key": "ana_cata_breakup_fixpoint"
+      },
+      {
+        "pattern": "WHAT DO YOU CALL AN ANAMORPHISM THAT NEVER TERMINATES",
+        "gemma_punchline": "A glitch.",
+        "canonical_punchline": "Productive! In corecursion, never terminating while yielding values at every step is the correct behavior.",
+        "frame": "pun_naming_frame",
+        "semantic_key": "ana_productive_infinite"
+      },
+      {
+        "pattern": "TELL ME A JOKE ABOUT HYLOMORPHISM",
+        "canonical_punchline": "Like origami: unfold flat, fold meaningful. The intermediate structure is not an infinite stream.",
+        "frame": "pun_bridge",
+        "semantic_key": "hylo_origami_fold_unfold"
+      },
+      {
+        "pattern": "WHY DID THE CATAMORPHISM REFUSE TO FOLD ITS RECURSION",
+        "punchline": "Because it was trying to be a complete structure, not just a partial fold.",
+        "frame": "humor_frame",
+        "semantic_key": "why_did_the_catamorphism_refuse_to_fold_its_recurs"
+      },
+      {
+        "pattern": "HOW DOES HYLOMORPHISM HANDLE A PARADOX IN PARAMORPHISM",
+        "punchline": "It redefines the boundary, then folds it back into a coherent whole—like a well-designed anamorphism.",
+        "frame": "humor_frame",
+        "semantic_key": "how_does_hylomorphism_handle_a_paradox_in_paramorp"
+      },
+      {
+        "pattern": "WHAT HAPPENS WHEN A ZYGOMORPHISM MEETS APOMORPHISM",
+        "punchline": "It merges two structures into one, proving that duality can be folded elegantly.",
+        "frame": "humor_frame",
+        "semantic_key": "what_happens_when_a_zygomorphism_meets_apomorphism"
+      },
+      {
+        "pattern": "WHY DID THE CATAMORPHISM BREAK UP WITH THE CATAMORPHISM",
+        "punchline": "Because it found the fold too restrictive for its recursive needs.",
+        "frame": "humor_frame",
+        "semantic_key": "why_did_the_catamorphism_break_up_with_the_catamor"
+      }
+    ]
+  },
+  "relations": [
+    {
+      "target": "FOLD-HOF-µ",
+      "verb": "@related_to",
+      "directed": true
+    },
+    {
+      "target": "PI-PHASE-µ",
+      "verb": "@supports",
+      "directed": true
+    },
+    {
+      "target": "MATH-µ",
+      "verb": "@delegates_to",
+      "directed": true
+    },
+    {
+      "target": "INFER-µ",
+      "verb": "@delegates_to",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "gramRead",
+      "key": "ana_query",
+      "weight": 1.0
+    },
+    {
+      "phase": "Wo",
+      "op": "lower_ana_aiml",
+      "note": "L_A recursion ISA",
+      "weight": 1.0
+    },
+    {
+      "phase": "Yax",
+      "op": "derive_ana_pattern",
+      "note": "R coalgebra align",
+      "weight": 1.0
+    },
+    {
+      "phase": "Sek",
+      "op": "resolve_ana_relation",
+      "note": "W dual arc update",
+      "weight": 1.0
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_ana_confidence",
+      "note": "C productivity gate",
+      "weight": 1.0
+    },
+    {
+      "phase": "Xul",
+      "op": "emit_answer",
+      "scope": "local",
+      "weight": 1.0
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "ANAMORPHISM-µ",
+    "manifest_access": [
+      "words",
+      "micronaut",
+      "kuhul"
+    ],
+    "effects": [
+      "gramRead",
+      "gramWrite",
+      "recursion:query",
+      "recursion:unfold"
+    ],
+    "ports": [],
+    "coordinator": false
+  }
+}

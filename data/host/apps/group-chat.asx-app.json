@@ -1,0 +1,50 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "group-chat",
+  "@key": "⟁APP:GROUP_CHAT",
+  "@mount": "⟁ROOT:GROUP_CHAT",
+  "@theme": { "accent": "#2dd4bf", "bg": "#020f0e", "surface": "#031a18", "text": "#ccfbf1", "hero_phase": "Sek", "tagline": "One room, one conversation" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "rooms", "component": "⟁WIDGET:ROOMS", "position": "left" }, { "id": "messages", "component": "⟁WIDGET:MESSAGES", "position": "center" }, { "id": "members", "component": "⟁WIDGET:MEMBERS", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "active_room": null, "messages": [], "rooms": [], "status": "idle" },
+  "@components": {
+    "⟁ROOT:GROUP_CHAT": { "@type": "app", "@children": ["⟁WIDGET:PANELS"] },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:ROOMS", "⟁WIDGET:MESSAGES", "⟁WIDGET:MEMBERS"] },
+    "⟁WIDGET:ROOMS": { "@type": "navigation", "@bind": "state.rooms", "@on": { "select": "chat.select_room" } },
+    "⟁WIDGET:MESSAGES": { "@type": "feed", "@bind": "state.messages", "@children": ["⟁WIDGET:MESSAGE_BUBBLE", "⟁INPUT:COMPOSE"] },
+    "⟁WIDGET:MESSAGE_BUBBLE": { "@type": "content-card", "@bind": "message" },
+    "⟁INPUT:COMPOSE": { "@type": "input", "@input_type": "text", "@bind": "state.draft", "@on": { "submit": "chat.send" } },
+    "⟁WIDGET:MEMBERS": { "@type": "list", "@bind": "state.members" }
+  },
+  "@programs": {
+    "chat.select_room": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_room", "@out": "active_room" }] },
+    "chat.send": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "APPEND", "@in": "event_message", "@out": "messages" }] }
+  },
+  "@events": { "room.select": "chat.select_room", "message.send": "chat.send" },
+  "@imports": [{ "ref": "message", "mode": "schema_table" }, { "ref": "room", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "reactions", "name": "Message Reactions", "category": "community", "price": "free", "status": "available_unconfigured", "description": "React to messages with emoji." },
+      { "id": "search-history", "name": "Message Search", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Full-text search across all message history." },
+      { "id": "summary-bot", "name": "Thread Summary Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Auto-summarise a room's activity since your last visit." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "chat.new-room", "pattern": "CREATE ROOM|NEW ROOM|ADD CHANNEL", "intent": "open_compose" },
+      { "id": "chat.send", "pattern": "SEND MESSAGE|POST MESSAGE", "intent": "send" }
+    ]
+  },
+  "@data": {
+    "spotlight": [
+      { "id": "sp1", "title": "#general", "slug": "general", "badge": "Active", "excerpt": "The main room. 128 messages this week." },
+      { "id": "sp2", "title": "#builds", "slug": "builds", "badge": "Popular", "excerpt": "Share what you're working on." },
+      { "id": "sp3", "title": "#announcements", "slug": "announcements", "badge": "Read-only", "excerpt": "Official updates from the team." }
+    ],
+    "schema": {
+      "message": { "primaryKey": "message_id", "fields": { "message_id": { "type": "string" }, "room_id": { "type": "string", "required": true }, "user_id": { "type": "string" }, "body": { "type": "text", "required": true }, "created_at": { "type": "datetime" } } },
+      "room": { "primaryKey": "room_id", "fields": { "room_id": { "type": "string" }, "name": { "type": "string", "required": true }, "description": { "type": "text" }, "is_private": { "type": "bool" }, "created_at": { "type": "datetime" } } }
+    }
+  }
+}

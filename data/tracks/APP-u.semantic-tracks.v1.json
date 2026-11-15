@@ -1,0 +1,62 @@
+{
+  "@no-eval": true,
+  "id": "APP-µ",
+  "description": "Application lifecycle and binding-chain auditor — spec definition, scaffold generation (proposal_only), registry load, 6-point binding audit, health reporting.",
+  "phase": "Wo",
+  "category": "application-lifecycle",
+  "confidence": 1.0,
+  "governs": [
+    "app", "application", "spec", "scaffold", "audit", "binding chain",
+    "micronaut load", "registry", "completeness", "define", "check",
+    "app.spec", "app.scaffold", "app.audit", "app.load"
+  ],
+  "capabilities": [
+    "app-spec-definition",
+    "binding-chain-scaffold",
+    "binding-chain-audit",
+    "micronaut-registry-load",
+    "6-point-completeness-check"
+  ],
+  "relations": [
+    { "target": "APP-WIZARD-µ", "verb": "@related_to",    "directed": false,  "note": "APP-WIZARD-µ synthesises apps from recipes; APP-µ manages binding lifecycle" },
+    { "target": "BINDINGS-µ",   "verb": "@orchestrated_by","directed": true },
+    { "target": "GEMMA-µ",      "verb": "@related_to",    "directed": false,  "note": "GEMMA-µ KeyAlign/AppSpec feeds scaffold generation" }
+  ],
+  "folds": [
+    { "phase": "Pop",    "op": "gramRead",          "key": "app_request" },
+    { "phase": "Wo",     "op": "route_key_dispatch",
+                         "routes": {
+                           "app.spec":     "spec_define",
+                           "app.scaffold": "scaffold_propose",
+                           "app.load":     "registry_load",
+                           "app.audit":    "binding_chain_audit",
+                           "app.health":   "status_report"
+                         }
+    },
+    { "phase": "Wo",     "op": "spec_define",        "gate": "key == app.spec",
+                         "output": "kuhul.app-spec.v1",   "authority": "data_only" },
+    { "phase": "Yax",    "op": "audit_resolve",       "gate": "key == app.audit",
+                         "reads": ["micronaut.registry.xjson", "agents/commands.ps1"],
+                         "authority": "data_only",
+                         "output_schema": "kuhul.binding-chain-audit.v1" },
+    { "phase": "Yax",    "op": "scaffold_plan",       "gate": "key == app.scaffold",
+                         "source": "kuhul.app-spec.v1",
+                         "generates": ["micronaut_json", "track_json", "shell_psm1", "commands_case", "registry_node", "name_map_entry"],
+                         "authority": "proposal_only" },
+    { "phase": "Sek",    "op": "emit_scaffold_proposal", "gate": "key == app.scaffold",
+                         "xcfe_required": true,
+                         "output_schema": "kuhul.scaffold-proposal.v1" },
+    { "phase": "Sek",    "op": "emit_audit_report",   "gate": "key == app.audit",
+                         "output_schema": "kuhul.binding-chain-audit.v1" },
+    { "phase": "Ch'en",  "op": "xcfe_condition_check","guard": "proposal.xcfe_status == 'xcfe_admitted' OR key == app.audit" },
+    { "phase": "Xul",    "op": "gramWrite",            "scope": "app_lifecycle",
+                         "keys": ["app:last_audit_target", "app:last_scaffold_name", "app:last_spec_id"] }
+  ],
+  "sandbox": {
+    "gram_ns": "APP-µ",
+    "manifest_access": ["words", "micronaut", "kuhul"],
+    "effects": ["gramRead", "gramWrite", "proposal:emit", "registry:read"],
+    "ports": [],
+    "coordinator": false
+  }
+}

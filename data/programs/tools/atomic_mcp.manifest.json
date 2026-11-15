@@ -1,0 +1,57 @@
+{
+  "@program": "atomic_mcp",
+  "@kind": "kuhul.atomic-mcp.sidecar.v1",
+  "@version": "1.0.0",
+  "@description": "Gated MCP tool boundary for Micronauts, AtomicDOM, semantic-cube routing, and JROM replay.",
+  "host": {
+    "runtime": "dotnet",
+    "dotnet": "C:/Program Files/dotnet/dotnet.exe",
+    "sdk_root": "dist/csharp-sdk",
+    "launcher": "dist/micronauts/micronaut-mcp-cs/launch.bat",
+    "endpoint": "http://127.0.0.1:8766",
+    "gateway": "http://127.0.0.1:8764",
+    "transport": "http-json",
+    "mcp_methods": ["tools/list", "tools/call"]
+  },
+  "registry": "programs/tools/tool_registry.json",
+  "rpc_manifest": "programs/rpc.manifest.json",
+  "replay": "programs/tools/jrom_replay.manifest.json",
+  "jrom": {
+    "operation": "JROM_EXEC",
+    "decode_operation": "JROM_DECODE",
+    "adapter": "programs/micronauts/jrom-template-adapter.json",
+    "readable_stream": "programs/tools/replay/tool-events.jsonl",
+    "binary_artifact": "programs/tools/replay/tool-events.jrom",
+    "execution": "registered_program_only"
+  },
+  "routing": {
+    "fold_cycle": ["Pop", "Wo", "Yax", "Sek", "Chen", "Xul"],
+    "default_lane": "TOOL",
+    "lanes": {
+      "TOOL": "µ-tool",
+      "VERB": "µ-verb",
+      "CODE": "µ-code",
+      "AST": "µ-ast",
+      "REASON": "µ-reason",
+      "MEMORY": "µ-memory"
+    },
+    "cube_router": "programs/semantic_cube.tool-router.json",
+    "dispatcher": "programs/programs_dispatcher.json"
+  },
+  "safety": {
+    "execution_gated": true,
+    "allowlist_only": true,
+    "no_shell_from_model_text": true,
+    "writes_require": ["allow_edits", "approved_folder", "Chen_validation"],
+    "replay_before_mutation": true,
+    "required_call_fields": ["id", "verb", "target", "args", "phase", "lane"]
+  },
+  "control": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "atomic_mcp.request" },
+    { "@op": "CALL", "@fn": "tools_list", "@args": ["programs/tools/tool_registry.json"], "@out": "tools" },
+    { "@op": "CALL", "@fn": "tools_call", "@args": ["$tool_call", "$tools"], "@out": "result" },
+    { "@op": "FOLD_STAGE", "@stage": "Chen", "@ctx": "$result", "@out": "verified" },
+    { "@op": "JROM_EXEC", "@path": "$replay_rom", "@out": "replay_result" },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "atomic_mcp.commit", "@args": ["$verified", "$replay_result"] }
+  ]
+}

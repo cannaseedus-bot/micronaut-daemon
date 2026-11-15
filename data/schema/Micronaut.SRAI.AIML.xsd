@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="unqualified"
+           attributeFormDefault="unqualified">
+  <xs:annotation>
+    <xs:documentation>
+      Micronaut.SRAI.AIML profile v1. Structural validation only. SRAI is a
+      bounded route description; no template tag grants execution authority.
+      The compiler rejects remote, mutation, and shell/script operations.
+    </xs:documentation>
+  </xs:annotation>
+
+  <xs:complexType name="TextContainer" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="star" type="IndexRef" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="thatstar" type="IndexRef" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="topicstar" type="IndexRef" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="srai" type="TextContainer" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="sr" type="EmptyTag" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="get" type="NamedTag" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="set" type="NamedTextContainer" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="think" type="TextContainer" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="random" type="RandomType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="condition" type="ConditionType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="formal" type="TextContainer" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="uppercase" type="TextContainer" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="lowercase" type="TextContainer" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="person" type="TextContainer" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="person2" type="TextContainer" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="gender" type="TextContainer" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="sraix" type="TextContainer" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="learn" type="TextContainer" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="learnf" type="TextContainer" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="system" type="TextContainer" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="javascript" type="TextContainer" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="IndexRef">
+    <xs:attribute name="index" type="xs:positiveInteger" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="EmptyTag"/>
+  <xs:complexType name="NamedTag">
+    <xs:attribute name="name" type="xs:string" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="NamedTextContainer" mixed="true">
+    <xs:complexContent mixed="true">
+      <xs:extension base="TextContainer">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ListType">
+    <xs:sequence>
+      <xs:element name="li" type="TextContainer" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RandomType">
+    <xs:complexContent>
+      <xs:extension base="ListType"/>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ConditionType" mixed="true">
+    <xs:sequence>
+      <xs:element name="li" type="TextContainer" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="optional"/>
+    <xs:attribute name="value" type="xs:string" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="CategoryType">
+    <xs:sequence>
+      <xs:element name="pattern" type="xs:string"/>
+      <xs:element name="that" type="xs:string" minOccurs="0"/>
+      <xs:element name="template" type="TextContainer"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="TopicType">
+    <xs:sequence>
+      <xs:element name="category" type="CategoryType" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+  </xs:complexType>
+  <xs:element name="aiml">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice minOccurs="1" maxOccurs="unbounded">
+          <xs:element name="category" type="CategoryType"/>
+          <xs:element name="topic" type="TopicType"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="version" type="xs:string" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

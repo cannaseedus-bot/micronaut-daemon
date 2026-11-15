@@ -1,0 +1,132 @@
+(* ================================================================ *)
+(* ADVISOR-µ — Advice and Route Proposal Grammar                    *)
+(* Individual Micronaut domain language                             *)
+(* Role: route-map                                                  *)
+(* Owns: advice selection, routing proposals, priority ordering     *)
+(* Does NOT own: execution dispatch, capability invocation, commits *)
+(*                                                                  *)
+(* ADVISOR-µ produces ActionProposals. Proposals are not invocations.*)
+(* Route declarations with MODE XCFE_GATED require XCFE admission   *)
+(* before the route may be followed; this grammar declares the gate *)
+(* requirement but does not grant permission to cross it.           *)
+(* ================================================================ *)
+
+
+(* ---- Part I: Program Surface Syntax ---- *)
+
+program       = { advice_rule | route_decl | type_decl
+               | operation_contract_decl | comment } ;
+
+(* ADVISE — select an advice route based on condition and priority *)
+(* Higher PRIORITY integer wins when multiple rules match.
+   PROPOSE names a route_id declared elsewhere; it does not invoke it. *)
+advice_rule   = "ADVISE" identifier "{"
+                  "PRIORITY" integer
+                  "WHEN" condition
+                  "PROPOSE" route_id
+                  [ "REASON" string ]
+                "}" ;
+
+(* ROUTE — declare a named routing target with its capability and mode *)
+(* MODE PROPOSAL_ONLY: the route reference is informational only.
+   MODE XCFE_GATED: the route may not be followed without XCFE admission;
+   XCFE REQUIRED is mandatory syntax for XCFE_GATED routes. *)
+route_decl    = "ROUTE" route_id "{"
+                  "TARGET" capability_id
+                  "MODE" route_mode
+                  "XCFE" "REQUIRED"
+                "}" ;
+
+condition     = "EXACT" string
+              | "WILDCARD" string
+              | "INTENT" identifier
+              | "GAP" identifier ;
+
+route_mode    = "PROPOSAL_ONLY"
+              | "XCFE_GATED" ;
+
+route_id      = identifier ;
+capability_id = identifier ;
+integer       = digit { digit } ;
+
+(* TYPE declarations make the type inventory machine-readable. *)
+type_decl               = "TYPE" type_id ":" string
+                          [ "requires_xcfe" ":" bool_lit ] ;
+type_id                 = identifier ;
+bool_lit                = true_lit | false_lit ;
+true_lit                = "true" ;
+false_lit               = "false" ;
+
+(* CONTRACT declarations make operation signatures machine-readable. *)
+operation_contract_decl = "CONTRACT" identifier
+                          "INPUT" type_id
+                          "OUTPUT" type_id
+                          "PHASE" phase_name
+                          [ "xcfe" ":" "required" ] ;
+
+(* ---- Shared terminals ---- *)
+phase_name  = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Chen" | "Ch_en" | "Xul" ;
+identifier  = letter { letter | digit | "_" | "-" | "." } ;
+string      = '"' { string_char } '"' ;
+string_char = ? any character except unescaped '"' or newline ? ;
+digit       = "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9" ;
+letter      = ? Unicode letter or underscore ? ;
+whitespace  = ? space, tab, CR, LF ? ;
+comment     = "#" { ? any character except newline ? } newline ;
+
+
+(* ================================================================ *)
+(* Part II: Static Signatures for ADVISOR-µ                         *)
+(* ================================================================ *)
+
+(*
+  Operation contracts
+  ┌──────────────────┬──────────────────────────────┬────────────────┬───────┐
+  │ Operation        │ Input                        │ Output         │ Phase │
+  ├──────────────────┼──────────────────────────────┼────────────────┼───────┤
+  │ ADVISE/select    │ IntentResolution × condition │ ActionProposal │ Sek   │
+  │ ROUTE declare    │ capability_id × route_mode   │ RouteDescriptor│ Sek   │
+  └──────────────────┴──────────────────────────────┴────────────────┴───────┘
+
+  Output type definitions
+  ─────────────────────────────────────────────────────────────────────
+  IntentResolution — classified intent from CFPC-µ or equivalent; read-only
+  ActionProposal   — priority-ordered advice with proposed route_id;
+                     NOT an invocation; must pass XCFE before dispatch
+  RouteDescriptor  — named route with TARGET and MODE declared;
+                     XCFE_GATED routes require admission before use
+
+  Proposal invariants
+  ─────────────────────────────────────────────────────────────────────
+  PROPOSE names a route_id; it does not invoke the route's TARGET
+  PRIORITY ordering determines which ADVISE rule produces the proposal;
+       equal priorities are a static error
+  MODE PROPOSAL_ONLY: ActionProposal is advisory; no route crossing permitted
+  MODE XCFE_GATED: ActionProposal carries the gate requirement; XCFE
+       admission by the orchestration layer is required before dispatch
+
+  Phase legality
+  ─────────────────────────────────────────────────────────────────────
+  ADVISE/select: Sek  (W-phase: priority selection; outputs ActionProposal)
+  ROUTE declare: Sek  (declarative; no execution; XCFE_GATED routes
+                        require external XCFE admission for dispatch)
+
+  Static errors
+  ─────────────────────────────────────────────────────────────────────
+  - advice_duplicate_id
+  - route_duplicate_id
+  - propose_references_undeclared_route
+  - xcfe_gated_route_without_xcfe_required_keyword
+  - priority_collision (two advice rules with equal PRIORITY)
+  - route_missing_mode
+
+  Authority
+  ─────────────────────────────────────────────────────────────────────
+  grammar_grants_execution: false
+  propose_grants_invocation: false
+  xcfe_gated_requires_external_admission: true
+  route_requires_xcfe_admission: true
+  persistence_requires_verified_authorized_fold: true
+  semantic_authority: false
+  commit_authority: false
+*)

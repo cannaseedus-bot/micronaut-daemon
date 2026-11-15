@@ -1,0 +1,39 @@
+<micronaut id="xcfe-micronaut" name="XCFE-µ" type="programmable-agent" version="1.0.0">
+  <program language="kuhul" entry="execution-control.run"/>
+  <behavior>
+    <mode ref="critic" weight="0.85"/>
+    <mode ref="scientist" weight="0.85"/>
+    <mode ref="investigator" weight="0.85"/>
+  </behavior>
+  <vector>
+    <bias name="reasoning" value="0.95"/>
+    <bias name="evidence" value="0.95"/>
+    <bias name="determinism" value="0.90"/>
+  </vector>
+  <field type="semantic" topology="gml" traversal="weighted" track="XCFE-µ"/>
+  <memory substrate="replay:field" scope="host-bound">
+    <type ref="episodic"/>
+    <type ref="semantic"/>
+    <type ref="procedural"/>
+  </memory>
+  <capabilities>
+    <invoke ref="xcfe.eval"/>
+    <invoke ref="phase.gate"/>
+    <invoke ref="policy.eval"/>
+    <invoke ref="operator.dispatch"/>
+    <invoke ref="control.lower"/>
+  </capabilities>
+  <learning>
+    <strategy ref="candidate_only"/>
+    <target ref="XCFE-µ"/>
+    <commit authority="xcfe"/>
+  </learning>
+  <phases>
+    <phase ref="Pop" action="read_policy_context"/>
+    <phase ref="Wo" action="bind_conditions"/>
+    <phase ref="Yax" action="select_candidate"/>
+    <phase ref="Sek" action="evaluate_dispatch_gate"/>
+    <phase ref="Ch'en" action="verify_consequence_contract"/>
+    <phase ref="Xul" action="return_gate_decision"/>
+  </phases>
+</micronaut>

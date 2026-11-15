@@ -1,0 +1,69 @@
+{
+  "@kind": "kuhul.model.manifest.v1",
+  "default": "micronaut-coder",
+  "models": [
+    {
+      "id": "generated-models",
+      "name": "Generated Expert/MoE Program",
+      "type": "generated_variant",
+      "description": "Manifest-selected FusedAttention, MoE, and wave-MoE generated artifacts",
+      "runtime": "json-runtime",
+      "program": "programs/generated-models.program.json"
+    },
+    {
+      "id": "scx-expert-8",
+      "name": "SCX-EXPERT-8 MoE",
+      "type": "scx_reasoning_adapter",
+      "description": "Mixture-of-experts with 8 experts",
+      "runtime": "llama-server",
+      "program": "programs/scx8.local-agent.json",
+      "endpoint": "http://127.0.0.1:9010/v1/chat/completions",
+      "model_alias": "scx-expert-8",
+      "weights": "E:/models/GPT2/mini-GPT/gpt2_small_lite_tool_g003_q8.gguf",
+      "geodesic_cache": "programs/geodesic_cache_jrom.json",
+      "tool_contract": "single-command-atomic-dom"
+    },
+    {
+      "id": "micronaut-coder",
+      "name": "Micronaut Coder",
+      "type": "coder",
+      "description": "Coder micronaut: parse/compile/generate/API-write/todos (native C++ pipeline)",
+      "runtime": "native-cpp",
+      "pipeline": "dist/micronaut-coder/micronaut_coder_pipeline.exe",
+      "helpers": "dist/micronaut-coder/code-micronaut/micronaut_coder_helpers.exe",
+      "grammars": ["c", "cpp", "python", "typescript", "javascript", "rust", "go", "kuhul"]
+    },
+    {
+      "id": "daemon-bot-xcfe-v1",
+      "name": "Daemon Bot XCFE Bootstrap",
+      "type": "xcfe_model_profile",
+      "description": "Local grammar, AIML, evidence, phase-gated routes, and append-only observation learning; LLM routes are excluded.",
+      "runtime": "local-xcfe-pattern-runtime",
+      "program": "programs/micronauts/daemon-bot.xcfe-model.json",
+      "default": false
+    },
+    {
+      "id": "mini",
+      "name": "Mini (GPT-2)",
+      "type": "mini",
+      "description": "mini as the factory model (GPU-resident, 128MB VRAM)",
+      "runtime": "json-runtime",
+      "residency": "HOT"
+    },
+    {
+      "id": "dolphin",
+      "name": "Dolphin 3B",
+      "type": "gguf",
+      "description": "Reasoning + tool calls (production tool-caller)",
+      "runtime": "llama-server",
+      "model_path": "E:/models/lmstudio/TheBloke/dolphin-2_6-phi-2-GGUF/dolphin-2_6-phi-2.Q5_K_S.gguf"
+    },
+    {
+      "id": "gpt-oss",
+      "name": "GPT-OSS 20B",
+      "type": "moe",
+      "description": "Planner (semantic address space, DDS)",
+      "runtime": "scxqdds"
+    }
+  ]
+}

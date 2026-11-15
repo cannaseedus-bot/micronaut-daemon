@@ -1,0 +1,57 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "portfolio",
+  "@key": "⟁APP:PORTFOLIO",
+  "@mount": "⟁ROOT:PORTFOLIO",
+  "@theme": { "accent": "#a78bfa", "bg": "#0d0f1a", "surface": "#1a1630", "text": "#f0eeff", "hero_phase": "Pop", "tagline": "Work that speaks for itself" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "primary_feed", "component": "⟁WIDGET:PROJECTS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null, "username": null }, "projects": [], "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:PORTFOLIO": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:ADD_PROJECT"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:ADD_PROJECT": { "@type": "button", "@text": "Add Project", "@on": { "click": "portfolio.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:PROJECTS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:PROJECTS": { "@type": "grid", "@bind": "state.projects", "@children": ["⟁WIDGET:PROJECT_CARD"] },
+    "⟁WIDGET:PROJECT_CARD": { "@type": "media-card", "@bind": "project", "@on": { "view": "portfolio.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:SKILLS", "⟁WIDGET:CONTACT"] },
+    "⟁WIDGET:SKILLS": { "@type": "tag-cloud", "@bind": "data.skills" },
+    "⟁WIDGET:CONTACT": { "@type": "cta", "@bind": "data.contact" }
+  },
+  "@programs": {
+    "portfolio.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "portfolio.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "portfolio.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "project.view": "portfolio.view", "compose.open": "portfolio.open_compose", "search.input": "portfolio.search" },
+  "@imports": [{ "ref": "project", "mode": "schema_table" }, { "ref": "testimonial", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "testimonials", "name": "Testimonials", "category": "community", "price": "free", "status": "available_unconfigured", "description": "Let clients leave public testimonials on your portfolio." },
+      { "id": "contact-form", "name": "Contact Form", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Receive inbound project inquiries directly." },
+      { "id": "case-study-bot", "name": "Case Study Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Auto-generate a case study write-up from a project brief." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "portfolio.add", "pattern": "ADD PROJECT|NEW PROJECT|UPLOAD PROJECT", "intent": "open_compose" },
+      { "id": "portfolio.search", "pattern": "SEARCH *", "intent": "filter_projects" }
+    ]
+  },
+  "@data": {
+    "skills": ["React", "TypeScript", "Figma", "Node.js", "KHANARY"],
+    "contact": { "email": "hello@example.com", "cta": "Let's work together" },
+    "spotlight": [
+      { "id": "sp1", "title": "E-commerce Redesign", "slug": "ecommerce-redesign", "badge": "Featured", "excerpt": "Full redesign of a 50k-user storefront, reducing checkout drop-off by 32%." },
+      { "id": "sp2", "title": "Real-time Dashboard", "slug": "realtime-dashboard", "badge": "Case Study", "excerpt": "Low-latency analytics panel for a logistics startup." },
+      { "id": "sp3", "title": "Brand Identity", "slug": "brand-identity", "badge": "Design", "excerpt": "Complete visual identity for a SaaS product launch." }
+    ],
+    "schema": {
+      "project": { "primaryKey": "project_id", "fields": { "project_id": { "type": "string" }, "title": { "type": "string", "required": true }, "slug": { "type": "string", "required": true }, "description": { "type": "textarea" }, "tags": { "type": "json" }, "image_url": { "type": "uri" }, "url": { "type": "uri" }, "year": { "type": "integer" } } },
+      "testimonial": { "primaryKey": "testimonial_id", "fields": { "testimonial_id": { "type": "string" }, "author": { "type": "string", "required": true }, "role": { "type": "string" }, "body": { "type": "textarea", "required": true }, "rating": { "type": "integer" } } }
+    }
+  }
+}

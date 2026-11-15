@@ -1,0 +1,57 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "code-snippets",
+  "@key": "⟁APP:CODE_SNIPPETS",
+  "@mount": "⟁ROOT:CODE_SNIPPETS",
+  "@theme": { "accent": "#22d3ee", "bg": "#030b0f", "surface": "#04141a", "text": "#cffafe", "hero_phase": "Sek", "tagline": "Your personal code library" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "snippets", "component": "⟁WIDGET:SNIPPETS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "snippets": [], "search": "", "filter_lang": null, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:CODE_SNIPPETS": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:ADD_SNIPPET"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:ADD_SNIPPET": { "@type": "button", "@text": "Add Snippet", "@on": { "click": "snippets.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:SNIPPETS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:SNIPPETS": { "@type": "feed", "@bind": "state.snippets", "@children": ["⟁WIDGET:SNIPPET_CARD"] },
+    "⟁WIDGET:SNIPPET_CARD": { "@type": "code-card", "@bind": "snippet", "@on": { "copy": "snippets.copy", "view": "snippets.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:LANGUAGES", "⟁WIDGET:STARS"] },
+    "⟁WIDGET:LANGUAGES": { "@type": "tag-cloud", "@bind": "data.languages" },
+    "⟁WIDGET:STARS": { "@type": "list", "@bind": "data.starred" }
+  },
+  "@programs": {
+    "snippets.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "snippets.copy": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "ADD", "@in": ["event_copies", "1"], "@out": "event_copies" }] },
+    "snippets.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "snippets.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "snippet.copy": "snippets.copy", "snippet.view": "snippets.view", "compose.open": "snippets.open_compose", "search.input": "snippets.search" },
+  "@imports": [{ "ref": "snippet", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "syntax-highlight", "name": "Syntax Highlighting", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Full syntax highlighting for 40+ languages." },
+      { "id": "public-share", "name": "Public Snippet Share", "category": "community", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Publish snippets with a shareable public URL." },
+      { "id": "explain-bot", "name": "Code Explain Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Auto-generate a plain-English explanation for any snippet." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "snippets.add", "pattern": "ADD SNIPPET|SAVE CODE|NEW SNIPPET", "intent": "open_compose" },
+      { "id": "snippets.search", "pattern": "FIND SNIPPET *|SEARCH CODE *", "intent": "filter_snippets" }
+    ]
+  },
+  "@data": {
+    "languages": ["TypeScript", "Python", "Go", "C++", "HLSL", "JSON"],
+    "starred": ["Debounce hook (React)", "Retry with backoff (Go)", "Phase arc_weight (C++)"],
+    "spotlight": [
+      { "id": "sp1", "title": "arc_weight(from, to) — C++", "language": "cpp", "badge": "Starred", "copies": 34, "excerpt": "cos(angle_to - angle_from) for K'UHUL phase scoring." },
+      { "id": "sp2", "title": "Retry with exponential backoff — Go", "language": "go", "badge": "Popular", "copies": 62, "excerpt": "Context-aware retry with jitter. Drop-in for any HTTP call." },
+      { "id": "sp3", "title": "useDebounce — React/TS", "language": "typescript", "badge": "Utility", "copies": 48, "excerpt": "300ms default. Type-safe with generics." }
+    ],
+    "schema": {
+      "snippet": { "primaryKey": "snippet_id", "fields": { "snippet_id": { "type": "string" }, "title": { "type": "string", "required": true }, "language": { "type": "string", "required": true }, "code": { "type": "textarea", "required": true }, "description": { "type": "text" }, "tags": { "type": "json" }, "starred": { "type": "bool" }, "copy_count": { "type": "integer" }, "created_at": { "type": "datetime" } } }
+    }
+  }
+}

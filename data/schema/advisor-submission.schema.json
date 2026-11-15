@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:khanary:schema:advisor-submission:1",
+  "title": "Advisor Distilled Submission",
+  "type": "object",
+  "required": ["status", "source", "authority", "keys", "ngrams", "typed_grams", "tracks", "micronauts", "provenance"],
+  "properties": {
+    "status": {"const": "proposed"},
+    "source": {"const": "ADVISOR-µ"},
+    "authority": {"const": "none"},
+    "keys": {"type": "array", "items": {"type": "string"}},
+    "ngrams": {
+      "type": "object",
+      "required": ["unigram", "bigram", "trigram"],
+      "properties": {
+        "unigram": {"type": "array", "items": {"type": "string"}},
+        "bigram": {"type": "array", "items": {"type": "string"}},
+        "trigram": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "typed_grams": {
+      "type": "object",
+      "required": ["unigram", "bigram", "trigram", "coarse_gram", "tool_gram"],
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["gram", "count", "width", "role", "phase", "provenance"],
+          "properties": {
+            "gram": {"type": "string", "minLength": 1},
+            "count": {"type": "integer", "minimum": 1},
+            "width": {"type": "integer", "minimum": 1, "maximum": 4},
+            "role": {"type": "string", "minLength": 1},
+            "phase": {"enum": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"]},
+            "position": {"type": "integer", "minimum": 0},
+            "provenance": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": true
+        }
+      }
+    },
+    "tracks": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "micronauts": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "provenance": {
+      "type": "object",
+      "required": ["model", "action", "request"],
+      "properties": {
+        "model": {"type": "string"},
+        "action": {"type": "string"},
+        "request": {"type": "string"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}

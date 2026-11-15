@@ -1,0 +1,110 @@
+{
+  "@type": "khanary.operator_algebra.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "operators_declare_xcfe_admits_xul_commits",
+  "lane": "KHANARY_OPERATOR_ALGEBRA_TEST",
+  "owner": "tools/check_operator_algebra.py",
+  "grammars": {
+    "map": "data/grammar/map.ebnf",
+    "filter": "data/grammar/filter.ebnf",
+    "reduce": "data/grammar/reduce.ebnf",
+    "graph_transition": "data/grammar/graph-transition.ebnf"
+  },
+  "why": "map, filter and reduce are the composable operator core (Fold→Fold, FoldSet→FoldSet, FoldSet→Fold) and graph-transition is what makes data/unfold-graph.gml addressable. None of them exists as a repo authority yet: the phase surface is owned by data/grammar/kuhul.runtime-grammar.ebnf plus data/drivers/phases/*.json, and the fold structure by data/grammar/foldgraph.ebnf. This contract binds the four operator grammars to those existing authorities instead of publishing a second, competing copy of the phase or fold grammar.",
+  "authorities": {
+    "phase_surface": {
+      "owned_by": ["data/grammar/kuhul.runtime-grammar.ebnf", "data/drivers/phases/*.json"],
+      "not_duplicated_by": ["data/grammar/map.ebnf", "data/grammar/filter.ebnf", "data/grammar/reduce.ebnf", "data/grammar/graph-transition.ebnf"],
+      "operator_grammars_may_reference": ["PhaseName"]
+    },
+    "fold_structure": {
+      "owned_by": ["data/grammar/foldgraph.ebnf", "data/grammar/fold-kernel.ebnf"],
+      "not_duplicated_by": ["data/grammar/map.ebnf", "data/grammar/filter.ebnf", "data/grammar/reduce.ebnf"],
+      "operator_grammars_may_reference": ["fold_adt", "identity", "incidence"]
+    },
+    "operator_semantics": {
+      "owned_by": ["data/grammar/map.ebnf", "data/grammar/filter.ebnf", "data/grammar/reduce.ebnf"],
+      "algebra_reference": "data/grammar/algebra-isa.contracts.json",
+      "fold_algebra_reference": "data/grammar/kuhul-fold-algebra.contracts.json"
+    },
+    "movement": {
+      "owned_by": ["data/grammar/graph-transition.ebnf"],
+      "topology": "data/unfold-graph.gml",
+      "runtime": "src/world/runtime_graph.cpp",
+      "contract": "data/grammar/runtime-graph.contracts.json"
+    }
+  },
+  "algebra": {
+    "signatures": {
+      "map": "Fold → Fold",
+      "filter": "FoldSet → FoldSet",
+      "reduce": "FoldSet → Fold"
+    },
+    "composition": "Reduce(Filter(Map(F)))",
+    "law": "the three operators compose; none of them admits, and the composition still needs XCFE admission before anything executes",
+    "type_safety": "each operator preserves the carrier kind: map maps one fold to one fold, filter yields a subset of its input set, reduce yields exactly one fold"
+  },
+  "determinism": {
+    "law": "every operator declares a determinism mode; a non-deterministic mode must record what makes it reproducible",
+    "modes": ["deterministic", "seeded", "observational", "stochastic"],
+    "non_deterministic_requires": {
+      "seeded": ["record_seed"],
+      "observational": ["record_inputs", "record_external_observations"],
+      "stochastic": ["record_inputs", "record_seed"]
+    }
+  },
+  "reduce": {
+    "accumulators": ["sum", "product", "mean", "max", "min", "count", "concat", "merge", "custom"],
+    "initial_required": true,
+    "order_independent": ["mean", "max", "min", "count"],
+    "order_sensitive": ["sum", "product", "concat", "merge"],
+    "float_note": "a float sum is not associative, so sum over a float carrier declares order_sensitive: true even though the mathematical sum is associative",
+    "source_immutability": "reduce never mutates its source folds; it produces a new fold carrying the aggregated result",
+    "empty_set": "reduce over an empty set yields the declared initial value, which is why initial is not optional",
+    "algebra_reference": "data/grammar/kuhul-fold-algebra.contracts.json declares REDUCE as the reducer family; this contract declares the accumulator semantics the reducer implements"
+  },
+  "movement": {
+    "kinds": ["semantic_step", "phase_step", "composite"],
+    "terminal_scope": "terminality is scoped to ONE execution: Xul ends it, and the Xul→Pop edge is the boundary that starts the next one",
+    "phase_identity": "Chen / Ch_en / Ch'en are one phase, canonicalised at the parser boundary (world::canonical_phase_name)",
+    "admission_owner": "XCFE",
+    "runtime_python": "tools/kuhul_world.py",
+    "topology_grants_permission": false
+  },
+  "boundary": {
+    "operators_declare": true,
+    "operators_execute": false,
+    "xcfe_admits": true,
+    "ch_en_verifies": true,
+    "xul_commits": true,
+    "operator_may_write_topology": false
+  },
+  "trace": {
+    "contract": "data/grammar/daemon-bot.trace.contracts.json",
+    "contributes": ["xcfe", "steps"],
+    "law": "operators declare and are recorded; no recorded dispatch admits or commits, and no trace field may be read as OA6 authorization",
+    "fields": {
+      "xcfe": "one {op, admitted, authority, dispatch} per operator node",
+      "steps": "the ordered operator and phase events"
+    }
+  },
+  "status_vocabulary": [
+    "ok",
+    "unknown_operator",
+    "unknown_accumulator",
+    "initial_required",
+    "order_sensitive_undeclared",
+    "determinism_undeclared",
+    "source_mutated",
+    "carrier_mismatch"
+  ],
+  "invariants": {
+    "OA1": "map, filter and reduce each declare their declared type signature and the composition Reduce(Filter(Map(F))) is stated",
+    "OA2": "no operator grammar redefines the phase surface or the fold structure; those stay owned by the runtime grammar, the phase drivers and foldgraph.ebnf",
+    "OA3": "every operator declares a determinism mode, and a non-deterministic mode names what makes it reproducible",
+    "OA4": "reduce requires an initial value, declares which accumulators are order independent, and never mutates its sources",
+    "OA5": "a movement declares its guard (hamming distance 1 for semantic, |Δphase| = 1 with forward-only inside an execution for phase) and its admission owner",
+    "OA6": "no operator and no transition may write topology; only a verified, XCFE-authorized Xul commits"
+  }
+}

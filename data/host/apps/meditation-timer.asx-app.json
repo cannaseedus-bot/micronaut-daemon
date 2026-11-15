@@ -1,0 +1,53 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "meditation-timer",
+  "@key": "⟁APP:MEDITATION_TIMER",
+  "@mount": "⟁ROOT:MEDITATION_TIMER",
+  "@theme": { "accent": "#a78bfa", "bg": "#050410", "surface": "#0a081e", "text": "#ede9fe", "hero_phase": "Pop", "tagline": "Sit. Breathe. Be." },
+  "@layout": { "mode": "single", "regions": [{ "id": "main", "component": "⟁WIDGET:MAIN", "position": "center" }], "responsive": { "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "sessions": [], "running": false, "elapsed_sec": 0, "target_sec": 600, "status": "idle" },
+  "@components": {
+    "⟁ROOT:MEDITATION_TIMER": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:MAIN"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:HISTORY"] },
+    "⟁ACTION:HISTORY": { "@type": "button", "@text": "History", "@on": { "click": "med.open_history" } },
+    "⟁WIDGET:MAIN": { "@type": "layout", "@children": ["⟁WIDGET:TIMER_RING", "⟁WIDGET:CONTROLS", "⟁WIDGET:DURATION_SELECT"] },
+    "⟁WIDGET:TIMER_RING": { "@type": "progress-ring", "@bind": "state.elapsed_sec", "@max": "state.target_sec" },
+    "⟁WIDGET:CONTROLS": { "@type": "button-group", "@children": ["⟁ACTION:START_STOP", "⟁ACTION:RESET"] },
+    "⟁ACTION:START_STOP": { "@type": "button", "@text": "Begin", "@bind": "state.running", "@on": { "click": "med.toggle" } },
+    "⟁ACTION:RESET": { "@type": "button", "@text": "Reset", "@on": { "click": "med.reset" } },
+    "⟁WIDGET:DURATION_SELECT": { "@type": "button-group", "@options": ["5 min", "10 min", "20 min", "30 min"], "@on": { "click": "med.set_duration" } }
+  },
+  "@programs": {
+    "med.toggle": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_running", "@out": "running" }] },
+    "med.reset": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "0", "@out": "elapsed_sec" }] },
+    "med.set_duration": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_sec", "@out": "target_sec" }] },
+    "med.open_history": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "timer.toggle": "med.toggle", "timer.reset": "med.reset", "duration.set": "med.set_duration", "history.open": "med.open_history" },
+  "@imports": [{ "ref": "session", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "ambient-sounds", "name": "Ambient Sounds", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Play rain, forest, or brown noise during sessions." },
+      { "id": "streak-tracker", "name": "Streak Tracker", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Track consecutive meditation days." },
+      { "id": "breath-guide", "name": "Breath Guide", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Visual breath-pacing guide synced to the timer." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "med.start", "pattern": "MEDITATE|START MEDITATION|BEGIN SESSION", "intent": "toggle_start" },
+      { "id": "med.set", "pattern": "SET TIMER * MINUTES|MEDITATE FOR *", "intent": "set_duration" }
+    ]
+  },
+  "@data": {
+    "spotlight": [
+      { "id": "sp1", "title": "10-min Morning Session", "duration_min": 10, "badge": "Daily Habit", "streak": 22, "excerpt": "Before coffee, after waking. 22-day streak." },
+      { "id": "sp2", "title": "30-min Deep Focus", "duration_min": 30, "badge": "Weekend", "streak": null, "excerpt": "Full body scan followed by open awareness." },
+      { "id": "sp3", "title": "5-min Reset", "duration_min": 5, "badge": "Micro-Session", "streak": null, "excerpt": "Mid-afternoon reset. Works every time." }
+    ],
+    "schema": {
+      "session": { "primaryKey": "session_id", "fields": { "session_id": { "type": "string" }, "duration_sec": { "type": "integer", "required": true }, "technique": { "type": "string" }, "note": { "type": "text" }, "date": { "type": "datetime", "required": true } } }
+    }
+  }
+}

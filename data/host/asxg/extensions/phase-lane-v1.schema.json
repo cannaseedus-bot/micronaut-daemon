@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "asx://schema/phase-lane-v1",
+  "title": "ASXG PhaseLane v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "@id",
+    "@type",
+    "@phase",
+    "@step_ref",
+    "@micronaut_ref",
+    "@program_ref",
+    "@requires_admission"
+  ],
+  "properties": {
+    "@id": {
+      "type": "string",
+      "pattern": "^lane\\.[a-z0-9_.-]+$"
+    },
+    "@type": {
+      "const": "PhaseLane"
+    },
+    "@phase": {
+      "enum": [
+        "Pop",
+        "Wo",
+        "Yax",
+        "Sek",
+        "Ch'en",
+        "Xul"
+      ]
+    },
+    "@step_ref": {
+      "type": "string",
+      "pattern": "^step:[0-9]+$"
+    },
+    "@micronaut_ref": {
+      "type": "string",
+      "pattern": "^micronaut\\.[a-z0-9_-]+$"
+    },
+    "@program_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "@requires_admission": {
+      "const": true
+    },
+    "@state": {
+      "type": "object"
+    }
+  }
+}

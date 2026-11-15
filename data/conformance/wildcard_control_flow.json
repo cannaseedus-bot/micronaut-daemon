@@ -1,0 +1,174 @@
+{
+  "description": "Conformance fixtures for the Q-Prime wildcard control-flow family. Each case gives a pattern, the expected parse, and the gap the analysis must route. Contract authority: data/grammar/wildcard-control-flow.contracts.json and data/grammar/wildcard-control-flow.ebnf.",
+
+  "parse_ok": [
+    {
+      "id": "wcf-001",
+      "description": "THEN: consequence with a conjunctive continuation.",
+      "pattern": "* IF * OR * THEN * AND *",
+      "marker": "THEN",
+      "condition_op": "OR",
+      "continuation_op": "AND",
+      "captures": 5,
+      "has_srai": false,
+      "gap": "NONE"
+    },
+    {
+      "id": "wcf-002",
+      "description": "ELSE with no known THEN is a question, not a branch: QUERY_GAP.",
+      "pattern": "* IF * OR * ELSE * AND *",
+      "marker": "ELSE",
+      "condition_op": "OR",
+      "continuation_op": "AND",
+      "captures": 5,
+      "has_srai": false,
+      "then_branch_known": false,
+      "gap": "QUERY_GAP"
+    },
+    {
+      "id": "wcf-003",
+      "description": "ELSE with a known THEN is an alternative branch: no gap.",
+      "pattern": "* IF * OR * ELSE * AND *",
+      "marker": "ELSE",
+      "condition_op": "OR",
+      "continuation_op": "AND",
+      "captures": 5,
+      "has_srai": false,
+      "then_branch_known": true,
+      "gap": "NONE"
+    },
+    {
+      "id": "wcf-004",
+      "description": "BUT is a contrast, not an alias for ELSE: INTENT_GAP until resolved.",
+      "pattern": "* IF * OR * BUT * AND *",
+      "marker": "BUT",
+      "condition_op": "OR",
+      "continuation_op": "AND",
+      "captures": 5,
+      "has_srai": false,
+      "gap": "INTENT_GAP"
+    },
+    {
+      "id": "wcf-005",
+      "description": "<srai> inside the condition is its own AST node with a target.",
+      "pattern": "* IF * OR <srai>candidate B</srai> THEN * AND *",
+      "marker": "THEN",
+      "condition_op": "OR",
+      "continuation_op": "AND",
+      "captures": 4,
+      "has_srai": true,
+      "srai_target": "candidate B",
+      "gap": "NONE"
+    },
+    {
+      "id": "wcf-006",
+      "description": "A self-closing <srai/> has no target: KNOWLEDGE_GAP.",
+      "pattern": "* IF * OR <srai/> THEN * AND *",
+      "marker": "THEN",
+      "condition_op": "OR",
+      "continuation_op": "AND",
+      "captures": 4,
+      "has_srai": true,
+      "srai_target": "",
+      "gap": "KNOWLEDGE_GAP"
+    },
+    {
+      "id": "wcf-007",
+      "description": "Underscore wildcards count the same as asterisks.",
+      "pattern": "_ IF _ OR _ THEN _ AND _",
+      "marker": "THEN",
+      "condition_op": "OR",
+      "continuation_op": "AND",
+      "captures": 5,
+      "has_srai": false,
+      "gap": "NONE"
+    },
+    {
+      "id": "wcf-008",
+      "description": "A conjunctive condition is recorded as AND, not normalised to OR.",
+      "pattern": "* IF * AND * THEN * AND *",
+      "marker": "THEN",
+      "condition_op": "AND",
+      "continuation_op": "AND",
+      "captures": 5,
+      "has_srai": false,
+      "gap": "NONE"
+    }
+  ],
+
+  "parse_errors": [
+    {
+      "id": "wcf-e01",
+      "description": "No IF: the pattern is not a control-flow production.",
+      "pattern": "* THEN *",
+      "error": "MISSING_IF"
+    },
+    {
+      "id": "wcf-e02",
+      "description": "The condition operator is missing between the operands.",
+      "pattern": "* IF * * THEN * AND *",
+      "error": "MISSING_OPERATOR"
+    },
+    {
+      "id": "wcf-e03",
+      "description": "No THEN/ELSE/BUT marker.",
+      "pattern": "* IF * OR * * AND *",
+      "error": "MISSING_MARKER"
+    },
+    {
+      "id": "wcf-e04",
+      "description": "An unterminated <srai> element.",
+      "pattern": "* IF <srai>broken OR * THEN * AND *",
+      "error": "UNBALANCED_SRAI"
+    },
+    {
+      "id": "wcf-e05",
+      "description": "A literal word cannot lead the pattern: leading captures are wildcards only.",
+      "pattern": "hello IF * OR * THEN * AND *",
+      "error": "UNEXPECTED_TOKEN"
+    },
+    {
+      "id": "wcf-e06",
+      "description": "Trailing tokens after the continuation are not part of the production.",
+      "pattern": "* IF * OR * THEN * AND * extra",
+      "error": "UNEXPECTED_TOKEN"
+    }
+  ],
+
+  "legality": [
+    {
+      "id": "wcf-l01",
+      "description": "A proposed branch that does not pass KFA is refused before any branch is taken.",
+      "pattern": "* IF * OR * THEN * AND *",
+      "proposed_operators": ["SCORE", "TRAIN"],
+      "gap": "XCFE_REJECT",
+      "refusal_code": "REQUIRES_VERIFICATION"
+    },
+    {
+      "id": "wcf-l02",
+      "description": "A proposed branch that KFA admits raises no refusal: the legality question stays open.",
+      "pattern": "* IF * OR * THEN * AND *",
+      "proposed_operators": ["VERIFY", "TRAIN"],
+      "gap": "NONE"
+    }
+  ],
+
+  "xor": [
+    {
+      "id": "wcf-x01",
+      "description": "Two patterns with the same capture arity differ in no slot.",
+      "a": "* IF * OR * THEN * AND *",
+      "b": "* IF * OR * ELSE * AND *",
+      "width": 5,
+      "expect_popcount": 0
+    },
+    {
+      "id": "wcf-x02",
+      "description": "A self-closing SRAI occupies a slot that a wildcard would have taken, so exactly one slot differs.",
+      "a": "* IF * OR <srai/> THEN * AND *",
+      "b": "* IF * OR * THEN * AND *",
+      "width": 5,
+      "expect_popcount": 1
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+(* KHANARY N-Gram Key Grammar Runtime *)
+ngram_key_grammar       = recognizer_section dictionary_section output_section interpretation_section higher_order_section authority_boundary_section [ phase_key_extension ] ;
+recognizer_section      = "recognizer" "{" "algorithm" ":" "aho_corasick" "," trie_goto failure_links output_sets exhaustive_output "}" ;
+trie_goto               = "trie_goto" ":" true_lit ;
+failure_links           = "failure_links" ":" true_lit ;
+output_sets             = "output_sets" ":" true_lit ;
+exhaustive_output       = "emits_overlapping_matches" ":" true_lit ;
+dictionary_section      = "dictionary" "{" { ngram_key_decl } "}" ;
+ngram_key_decl          = key_id key_order key_surface semantic_book_ref ;
+key_id                  = "key" ":" string ;
+key_order               = "order" ":" ( "1" | "2" | "3" | "4" | "n" ) ;
+key_surface             = "surface" ":" string ;
+semantic_book_ref       = "book" ":" string ;
+output_section          = "output" "{" "bag_of_keys" ":" true_lit "," "overlap_allowed" ":" true_lit "}" ;
+interpretation_section  = "interpretation" "{" manifest_neighborhood geometry_neighborhood phase_arbitration fold_learning "}" ;
+manifest_neighborhood   = "N_M" "(" key_id ")" ;
+geometry_neighborhood   = "N_I" "(" key_id ")" ;
+phase_arbitration       = "phase_arbitration" ":" "WoYaxSekChenXul" ;
+fold_learning           = "learned_fold_algebra" ":" "phi_t" "," "psi_t" "," "WCR_t" ;
+higher_order_section    = "higher_order" "{" { hof_operation } "}" ;
+hof_operation           = "Map" | "Filter" | "Fold" | "Unfold" | "Ana" | "Cata" | "Hylo" | "Meta" ;
+(* Phase and higher-order operation are orthogonal: Sek[Filter] does not mean Sek=Filter. *)
+(* Aho-Corasick recognizes keys. K'UHUL interprets, verifies, and collapses them. *)
+
+(* Bag of n-gram keys is the exhaustive Aho-Corasick output surface before K'UHUL phase-bound interpretation. *)
+
+
+(* ================================================================ *)
+(* v2 OPTIONAL PHASE-KEY / FOLD-FIELD EXTENSION                     *)
+(* Existing recognizer, dictionary, output and HOF rules retained.  *)
+(* ================================================================ *)
+phase_key_extension     = "phase_key_extension" "{" track_field_section context_activation_section
+                          unigram_field_section bigram_field_section trigram_fold_section
+                          key_template_section binding_field_section phase_pipeline_section
+                          compression_contract_section "}" ;
+
+(* A track bounds the semantic field of play. Context is a query-local
+   activation, not the track itself. Neither grants execution authority. *)
+track_field_section     = "track_field" "{" "id" ":" string "," "grammar_ref" ":" string
+                          [ "," "vector_field_ref" ":" string ] "}" ;
+context_activation_section = "active_context" "{" "query" ":" string
+                          [ "," "capture_refs" ":" ngram_string_list ]
+                          [ "," "candidate_refs" ":" ngram_string_list ] "}" ;
+
+(* Unigrams carry immutable corpus priors; learning is a separate layer. *)
+unigram_field_section   = "unigrams" "{" { unigram_field_row } "}" ;
+unigram_field_row       = "unigram" "(" string "," ngram_number ")" ;
+
+(* Bigrams are ordered relational keys with vector-geometry references.
+   A semantic relation is not implicitly a numeric tensor contract. *)
+bigram_field_section    = "bigrams" "{" { bigram_field_row } "}" ;
+bigram_field_row        = "bigram" "(" string "," string "," "vector_ref" "(" string ")" ")" ;
+
+(* Each trigram stores its OWN phase and executable fold reference. *)
+trigram_fold_section    = "trigrams" "{" { trigram_fold_row } "}" ;
+trigram_fold_row        = "trigram" "(" ngram_triple "," ngram_phase ","
+                          "fold_ref" "(" string ")"
+                          [ "," "binding_ref" "(" string ")" ]
+                          [ "," "template_ref" "(" string ")" ] ")" ;
+ngram_triple            = "[" ngram_atom "," ngram_atom "," ngram_atom "]" ;
+ngram_atom              = string | "*" | "?" ;
+ngram_phase             = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul" ;
+
+(* Pattern is the key FORMAT; instantiated keys are not authority grants. *)
+key_template_section    = "key_templates" "{" { phase_key_template } "}" ;
+phase_key_template      = "key_template" "(" string "," string "," string ")" ;
+
+binding_field_section   = "bindings" "{" { ngram_binding } "}" ;
+ngram_binding           = "bind" "(" string "," ngram_binding_source "," string ")" ;
+ngram_binding_source    = "capture" | "lm_chain" | "char_overlap" | "explicit" ;
+
+(* Collection Fold and K'UHUL phase execution are distinct operations. *)
+phase_pipeline_section  = "pipeline" "{" "Match" "Bind" "Filter" "Map" "Score"
+                          [ "Fold" ] "PhaseExecute" "}" ;
+
+(* These describe encoding intent, not a serializer implementation. *)
+compression_contract_section = "encoding" "{" "symbol_table" ":" string ","
+                          "container" ":" ngram_container ","
+                          "preserve" ":" "key_value_phase_fold_binding" "}" ;
+ngram_container         = "BSON" | "CBOR" | "SCXQ2" ;
+ngram_string_list       = "[" [ string { "," string } ] "]" ;
+ngram_number            = ? finite numeric literal ? ;
+
+(* HOST VALIDATION / SEMANTIC INVARIANTS:
+  1. Trigram identity includes track + ordered pattern + stored phase + fold ref.
+  2. A template must NEVER infer or overwrite a trigram's phase.
+  3. All fold, vector, pattern, template and binding references must resolve.
+  4. Wildcard arity and capture slots must agree with matched patterns.
+  5. Unigram corpus priors remain immutable; learned weights are separate.
+  6. Filter/Map/Fold are collection operations, orthogonal to K'UHUL phases.
+  7. XCFE admission and phase legality precede execution; Ch'en observes,
+     Xul commits only with the existing authorization gate.
+  8. BSON/CBOR must preserve logical record identity on round-trip; SCXQ2
+     optional field-chunk and executable-lane paths require distinct tests.
+  9. No implicit conversion of semantic geometry into tensor authority.
+ 10. EBNF cannot enforce reference integrity or execution semantics alone.
+*)

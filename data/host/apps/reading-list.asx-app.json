@@ -1,0 +1,59 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "reading-list",
+  "@key": "⟁APP:READING_LIST",
+  "@mount": "⟁ROOT:READING_LIST",
+  "@theme": { "accent": "#f59e0b", "bg": "#0e0900", "surface": "#1c1400", "text": "#fef3c7", "hero_phase": "Yax", "tagline": "Read more of what matters" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "books", "component": "⟁WIDGET:BOOKS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "books": [], "search": "", "filter_status": "all", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:READING_LIST": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:ADD_BOOK", "⟁WIDGET:FILTER"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:ADD_BOOK": { "@type": "button", "@text": "Add Book", "@on": { "click": "reading.open_compose" } },
+    "⟁WIDGET:FILTER": { "@type": "select", "@bind": "state.filter_status", "@options": ["all", "to-read", "reading", "done"] },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:BOOKS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:BOOKS": { "@type": "grid", "@bind": "state.books", "@children": ["⟁WIDGET:BOOK_CARD"] },
+    "⟁WIDGET:BOOK_CARD": { "@type": "media-card", "@bind": "book", "@on": { "update": "reading.update", "view": "reading.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:STATS", "⟁WIDGET:GENRE_SPLIT"] },
+    "⟁WIDGET:STATS": { "@type": "stat", "@bind": "data.stats" },
+    "⟁WIDGET:GENRE_SPLIT": { "@type": "chart", "@bind": "data.genres" }
+  },
+  "@programs": {
+    "reading.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "reading.update": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "reading.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "reading.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "book.update": "reading.update", "book.view": "reading.view", "compose.open": "reading.open_compose", "search.input": "reading.search" },
+  "@imports": [{ "ref": "book", "mode": "schema_table" }, { "ref": "reading_note", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "goodreads-import", "name": "Goodreads Import", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Import your Goodreads shelf in one click." },
+      { "id": "year-review", "name": "Year in Books", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Auto-generate an annual reading wrap-up." },
+      { "id": "recommend-bot", "name": "Recommendation Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Suggest next reads based on what you've loved." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "reading.add", "pattern": "ADD BOOK|SAVE BOOK|WANT TO READ *", "intent": "open_compose" },
+      { "id": "reading.finish", "pattern": "FINISHED *|MARK AS READ|COMPLETED BOOK *", "intent": "update_status_done" }
+    ]
+  },
+  "@data": {
+    "stats": { "books_read": 18, "pages_read": 5200, "avg_per_month": 1.8 },
+    "genres": [{ "name": "Non-fiction", "count": 9 }, { "name": "Fiction", "count": 6 }, { "name": "Technical", "count": 3 }],
+    "spotlight": [
+      { "id": "sp1", "title": "The Mom Test", "author": "Rob Fitzpatrick", "badge": "Currently Reading", "status": "reading", "excerpt": "On customer discovery conversations done right." },
+      { "id": "sp2", "title": "Deep Work", "author": "Cal Newport", "badge": "Finished", "status": "done", "rating": 5, "excerpt": "Changed how I think about focus and distractions." },
+      { "id": "sp3", "title": "Thinking, Fast and Slow", "author": "Daniel Kahneman", "badge": "Up Next", "status": "to-read", "excerpt": "On the dual-process theory of cognition." }
+    ],
+    "schema": {
+      "book": { "primaryKey": "book_id", "fields": { "book_id": { "type": "string" }, "title": { "type": "string", "required": true }, "author": { "type": "string", "required": true }, "status": { "type": "string", "required": true }, "genre": { "type": "string" }, "rating": { "type": "integer" }, "pages": { "type": "integer" }, "added_at": { "type": "datetime" }, "finished_at": { "type": "datetime" } } },
+      "reading_note": { "primaryKey": "note_id", "fields": { "note_id": { "type": "string" }, "book_id": { "type": "string", "required": true }, "body": { "type": "textarea", "required": true }, "page": { "type": "integer" }, "created_at": { "type": "datetime" } } }
+    }
+  }
+}

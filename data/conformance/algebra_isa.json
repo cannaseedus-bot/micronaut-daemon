@@ -1,0 +1,1432 @@
+{
+  "description": "Conformance fixtures for the Algebraic Operator ISA. Positive cases pin the derived permission and rewrite vectors; negative cases pin the typed violation code. Contract authority: data/grammar/algebra-isa.contracts.json and data/grammar/algebra-isa.ebnf.",
+  "positive": [
+    {
+      "id": "aoi-pos-001",
+      "description": "Float32 score sum: associative and commutative mathematically, regrouped only into the canonical balanced tree, never reordered.",
+      "algebra": {
+        "structure": "commutative_monoid",
+        "carrier": "float32",
+        "scalar_field": null,
+        "binary_operation": "add",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "0",
+        "associative": true,
+        "commutative": true,
+        "idempotent": false,
+        "invertible": true,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "deterministic_grouping",
+        "canonical_grouping": {
+          "kind": "balanced",
+          "chunk": 64
+        }
+      },
+      "expect": "valid",
+      "expect_policy": {
+        "mathematically_associative": true,
+        "executable_associative": true,
+        "regroup": true,
+        "reorder": false,
+        "parallel": true,
+        "grouping": "balanced",
+        "carrier_exact": false,
+        "rewrites": {
+          "distribute": false,
+          "swap_with_sign": false,
+          "elide_unit": true
+        }
+      }
+    },
+    {
+      "id": "aoi-pos-002",
+      "description": "Semilattice join over scores (max): grouping-exact even on float32, so full tree reduction and reordering are licensed.",
+      "algebra": {
+        "structure": "semilattice_join",
+        "carrier": "float32",
+        "scalar_field": null,
+        "binary_operation": "max",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "-inf",
+        "associative": true,
+        "commutative": true,
+        "idempotent": true,
+        "invertible": false,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      },
+      "expect": "valid",
+      "expect_policy": {
+        "regroup": true,
+        "reorder": true,
+        "repeat": true,
+        "grouping": "free"
+      }
+    },
+    {
+      "id": "aoi-pos-003",
+      "description": "Gram event append: associative but not commutative. Chunked regrouping is legal; permutation is not, because the event order is the payload.",
+      "algebra": {
+        "structure": "monoid",
+        "carrier": "gram_event_list",
+        "scalar_field": null,
+        "binary_operation": "append",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "[]",
+        "associative": true,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      },
+      "expect": "valid",
+      "expect_policy": {
+        "regroup": true,
+        "reorder": false,
+        "parallel": true,
+        "grouping": "balanced",
+        "rewrites": {
+          "elide_unit": true,
+          "distribute": false
+        }
+      }
+    },
+    {
+      "id": "aoi-pos-004",
+      "description": "Sequential state update: function composition IS associative and unital (id), yet regroup is withheld on impurity. Associativity and permission are different questions.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "state",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": "no_op",
+        "associative": true,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": null,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": false,
+        "deterministic": false,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "unspecified"
+      },
+      "expect": "valid",
+      "expect_policy": {
+        "mathematically_associative": true,
+        "executable_associative": false,
+        "regroup": false,
+        "reorder": false,
+        "unital": true,
+        "grouping": "sequential",
+        "rewrites": {
+          "elide_unit": false
+        }
+      }
+    },
+    {
+      "id": "aoi-pos-005",
+      "description": "SCORE is a unary evaluation: no binary law is applicable. Associativity belongs to the combiner, so it is null here, not false and not true.",
+      "algebra": {
+        "structure": "scalar_arithmetic",
+        "carrier": "float32",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "scalar",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "unspecified"
+      },
+      "expect": "valid",
+      "expect_policy": {
+        "mathematically_associative": false,
+        "regroup": false,
+        "grouping": "sequential"
+      }
+    },
+    {
+      "id": "aoi-pos-006",
+      "description": "Matrix multiplication: bilinear, associative, unital, and NOT commutative. Unitality gives the identity matrix as the unit; order remains semantic.",
+      "algebra": {
+        "structure": "unital_associative_algebra",
+        "carrier": "square_matrix_n",
+        "scalar_field": "real",
+        "binary_operation": "matmul",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "identity_matrix",
+        "associative": true,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": true,
+        "unital": true,
+        "bilinear": true,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "deterministic_grouping"
+      },
+      "expect": "valid",
+      "expect_policy": {
+        "mathematically_associative": true,
+        "regroup": true,
+        "reorder": false,
+        "unital": true,
+        "grouping": "balanced",
+        "rewrites": {
+          "distribute": true,
+          "elide_unit": true,
+          "swap_with_sign": false
+        }
+      }
+    },
+    {
+      "id": "aoi-pos-007",
+      "description": "Cross product: bilinear and distributive, anticommutative, nonassociative, and not unital. Swapping is licensed only with a sign flip; regrouping never.",
+      "algebra": {
+        "structure": "nonassociative_algebra",
+        "carrier": "vector3",
+        "scalar_field": "real",
+        "binary_operation": "cross",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": null,
+        "associative": false,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": null,
+        "distributive": true,
+        "unital": false,
+        "bilinear": true,
+        "anticommutative": true,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      },
+      "expect": "valid",
+      "expect_policy": {
+        "mathematically_associative": false,
+        "regroup": false,
+        "reorder": false,
+        "unital": false,
+        "rewrites": {
+          "swap_with_sign": true,
+          "distribute": true,
+          "elide_unit": false
+        }
+      }
+    },
+    {
+      "id": "aoi-pos-008",
+      "description": "Evidence meet over the effect lattice: associative, commutative, idempotent, unital (the universe is the unit). P_effective = P_phase & P_track & P_executor never widens authority.",
+      "algebra": {
+        "structure": "semilattice_meet",
+        "carrier": "effect_set",
+        "scalar_field": null,
+        "binary_operation": "intersect",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "universe",
+        "associative": true,
+        "commutative": true,
+        "idempotent": true,
+        "invertible": false,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      },
+      "expect": "valid",
+      "expect_policy": {
+        "regroup": true,
+        "reorder": true,
+        "repeat": true,
+        "grouping": "free"
+      }
+    },
+    {
+      "id": "aoi-pos-009",
+      "description": "The inner product is bilinear; cosine similarity is the same operation after normalization and is therefore not. A derived metric does not inherit the algebra of what it normalizes.",
+      "algebra": {
+        "structure": "inner_product_space",
+        "carrier": "vector",
+        "scalar_field": "real",
+        "binary_operation": "cosine",
+        "product_image": "scalar",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": true,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": false,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "implementation_defined"
+      },
+      "expect": "valid",
+      "expect_policy": {
+        "rewrites": {
+          "distribute": false
+        }
+      }
+    },
+    {
+      "id": "aoi-pos-010",
+      "description": "IDENTITY_STATE is the unit of the endomorphism monoid over FoldState. Pure, idempotent, and phase-preserving: a no-op inside a phase is not a phase transition.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "state",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": true,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "preserve",
+        "reproducibility": "exact"
+      },
+      "expect": "valid",
+      "expect_policy": {
+        "repeat": true,
+        "phase_same": {
+          "allowed": true,
+          "code": "phase_preserved"
+        },
+        "phase_cross": {
+          "allowed": false,
+          "code": "identity_cannot_advance_phase"
+        }
+      }
+    },
+    {
+      "id": "aoi-pos-011",
+      "description": "ADVANCE_PHASE is the only operator with phase authority, and it is impure and not idempotent: advancing twice does not return to the start. Declaring the policy is not the authorization; XCFE admission still applies.",
+      "algebra": {
+        "structure": "none",
+        "carrier": "state",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": false,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": false,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "advance",
+        "reproducibility": "unspecified"
+      },
+      "expect": "valid",
+      "expect_policy": {
+        "phase_cross": {
+          "allowed": true,
+          "code": "phase_advance_declared"
+        }
+      }
+    },
+    {
+      "id": "aoi-pos-012",
+      "description": "INCIDENCE_PRODUCT: A = B W_E Bᵀ. Pure measurement layer, no phase authority, not bilinear in the whole-matrix sense (full map B→BWBᵀ is quadratic in B), no identity, not closed (output shape differs from input).",
+      "algebra": {
+        "structure": "none",
+        "carrier": "rectangular_matrix",
+        "scalar_field": "real",
+        "binary_operation": "incidence_gram",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": false,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "implementation_defined"
+      },
+      "expect": "valid",
+      "expect_policy": {
+        "regroup": false,
+        "reorder": false,
+        "repeat": false,
+        "phase_same": {
+          "allowed": true,
+          "code": "phase_preserved"
+        },
+        "phase_cross": {
+          "allowed": false,
+          "code": "no_phase_authority"
+        }
+      }
+    }
+  ],
+  "negative": [
+    {
+      "id": "aoi-neg-001",
+      "description": "commutative_monoid binds associativity; declaring it not applicable is a contradiction.",
+      "expect_code": "LAW_DECLARED_NOT_APPLICABLE",
+      "algebra": {
+        "structure": "commutative_monoid",
+        "carrier": "float32",
+        "scalar_field": null,
+        "binary_operation": "add",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "0",
+        "associative": null,
+        "commutative": true,
+        "idempotent": false,
+        "invertible": true,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "id": "aoi-neg-002",
+      "description": "A monoid that denies associativity is not a monoid.",
+      "expect_code": "LAW_REQUIRED_TRUE",
+      "algebra": {
+        "structure": "monoid",
+        "carrier": "gram_event_list",
+        "scalar_field": null,
+        "binary_operation": "append",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "[]",
+        "associative": false,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "id": "aoi-neg-003",
+      "description": "A generic algebra has a product, so associativity is applicable and may not be null.",
+      "expect_code": "LAW_APPLICABILITY_REQUIRED",
+      "algebra": {
+        "structure": "algebra",
+        "carrier": "vector",
+        "scalar_field": "real",
+        "binary_operation": "compose",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": null,
+        "associative": null,
+        "commutative": false,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": true,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "implementation_defined"
+      }
+    },
+    {
+      "id": "aoi-neg-004",
+      "description": "A nonassociative algebra must declare the law false. null would hide a known failure behind 'not applicable'.",
+      "expect_code": "NONASSOCIATIVE_MUST_DECLARE_FALSE",
+      "algebra": {
+        "structure": "nonassociative_algebra",
+        "carrier": "vector3",
+        "scalar_field": "real",
+        "binary_operation": "cross",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": null,
+        "associative": null,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": null,
+        "distributive": true,
+        "unital": false,
+        "bilinear": true,
+        "anticommutative": true,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "id": "aoi-neg-005",
+      "description": "A commutative operation cannot also claim operand-order sensitivity.",
+      "expect_code": "COMMUTATIVE_IMPLIES_ORDER_FREE",
+      "algebra": {
+        "structure": "semilattice_join",
+        "carrier": "float32",
+        "scalar_field": null,
+        "binary_operation": "max",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "-inf",
+        "associative": true,
+        "commutative": true,
+        "idempotent": true,
+        "invertible": false,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "id": "aoi-neg-006",
+      "description": "A product that closes on the carrier makes associativity applicable; null is not available as an answer.",
+      "expect_code": "CARRIER_PRODUCT_NEEDS_ASSOCIATIVITY",
+      "algebra": {
+        "structure": "none",
+        "carrier": "vector",
+        "scalar_field": "real",
+        "binary_operation": "compose",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": null,
+        "associative": null,
+        "commutative": false,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": true,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "implementation_defined"
+      }
+    },
+    {
+      "id": "aoi-neg-007",
+      "description": "An inner product space is not an algebra: the product image must be scalar.",
+      "expect_code": "INNER_PRODUCT_MUST_NOT_BE_ALGEBRA",
+      "algebra": {
+        "structure": "inner_product_space",
+        "carrier": "vector",
+        "scalar_field": "real",
+        "binary_operation": "inner_product",
+        "product_image": "carrier",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": true,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": true,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "implementation_defined"
+      }
+    },
+    {
+      "id": "aoi-neg-008",
+      "description": "Declaring unital without naming the identity element is an incomplete contract: the law and the element are one fact.",
+      "expect_code": "IDENTITY_MISSING",
+      "algebra": {
+        "structure": "monoid",
+        "carrier": "gram_event_list",
+        "scalar_field": null,
+        "binary_operation": "append",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": null,
+        "associative": true,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "id": "aoi-neg-009",
+      "description": "Naming an identity element while denying unitality is contradictory.",
+      "expect_code": "IDENTITY_UNEXPECTED",
+      "algebra": {
+        "structure": "none",
+        "carrier": "record",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": "0",
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "id": "aoi-neg-010",
+      "description": "A canonical regrouping over float32 with no reproducibility policy claims a permission it cannot honour.",
+      "expect_code": "REGROUP_NOT_LICENSED",
+      "algebra": {
+        "structure": "commutative_monoid",
+        "carrier": "float32",
+        "scalar_field": null,
+        "binary_operation": "add",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "0",
+        "associative": true,
+        "commutative": true,
+        "idempotent": false,
+        "invertible": true,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "unspecified",
+        "canonical_grouping": {
+          "kind": "balanced",
+          "chunk": 64
+        }
+      }
+    },
+    {
+      "id": "aoi-neg-011",
+      "description": "A structure family is not a structure.",
+      "expect_code": "UNKNOWN_STRUCTURE",
+      "algebra": {
+        "structure": "ring_like",
+        "carrier": "integer",
+        "scalar_field": "real",
+        "binary_operation": "add",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "0",
+        "associative": true,
+        "commutative": true,
+        "idempotent": false,
+        "invertible": true,
+        "distributive": true,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "id": "aoi-neg-012",
+      "description": "A law value outside {true, false, null} is not three-valued.",
+      "expect_code": "UNKNOWN_LAW_STATE",
+      "algebra": {
+        "structure": "commutative_monoid",
+        "carrier": "integer",
+        "scalar_field": null,
+        "binary_operation": "add",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "0",
+        "associative": "probably",
+        "commutative": true,
+        "idempotent": false,
+        "invertible": true,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "id": "aoi-neg-013",
+      "description": "Purity is part of the contract; omitting it silently grants regroup and distribution.",
+      "expect_code": "MISSING_FIELD",
+      "algebra": {
+        "structure": "commutative_monoid",
+        "carrier": "integer",
+        "scalar_field": null,
+        "binary_operation": "add",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "0",
+        "associative": true,
+        "commutative": true,
+        "idempotent": false,
+        "invertible": true,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "id": "aoi-neg-014",
+      "description": "Carrier exactness is what decides whether regrouping is value-preserving; an unknown carrier cannot be given the benefit of the doubt.",
+      "expect_code": "UNKNOWN_CARRIER",
+      "algebra": {
+        "structure": "commutative_monoid",
+        "carrier": "quadratic",
+        "scalar_field": null,
+        "binary_operation": "add",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "0",
+        "associative": true,
+        "commutative": true,
+        "idempotent": false,
+        "invertible": true,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "id": "aoi-neg-015",
+      "description": "Reproducibility is a closed vocabulary, not free text.",
+      "expect_code": "UNKNOWN_REPRODUCIBILITY",
+      "algebra": {
+        "structure": "commutative_monoid",
+        "carrier": "float32",
+        "scalar_field": null,
+        "binary_operation": "add",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "0",
+        "associative": true,
+        "commutative": true,
+        "idempotent": false,
+        "invertible": true,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "probably_fine"
+      }
+    },
+    {
+      "id": "aoi-neg-016",
+      "description": "A meet semilattice must lower information; union belongs to the join, not the meet.",
+      "expect_code": "BINARY_OPERATION_NOT_ALLOWED",
+      "algebra": {
+        "structure": "semilattice_meet",
+        "carrier": "effect_set",
+        "scalar_field": null,
+        "binary_operation": "union",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "universe",
+        "associative": true,
+        "commutative": true,
+        "idempotent": true,
+        "invertible": false,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "id": "aoi-neg-017",
+      "description": "A monoid's operation closes on the carrier; an open operation is not a monoid.",
+      "expect_code": "STRUCTURAL_REQUIRED",
+      "algebra": {
+        "structure": "monoid",
+        "carrier": "gram_event_list",
+        "scalar_field": null,
+        "binary_operation": "append",
+        "product_image": "carrier",
+        "closed": false,
+        "identity": "[]",
+        "associative": true,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "id": "aoi-neg-018",
+      "description": "A grouping shape outside the closed vocabulary cannot be planned.",
+      "expect_code": "UNKNOWN_GROUPING",
+      "algebra": {
+        "structure": "commutative_monoid",
+        "carrier": "integer",
+        "scalar_field": null,
+        "binary_operation": "add",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "0",
+        "associative": true,
+        "commutative": true,
+        "idempotent": false,
+        "invertible": true,
+        "distributive": null,
+        "unital": true,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "exact",
+        "canonical_grouping": {
+          "kind": "zigzag",
+          "chunk": 4
+        }
+      }
+    },
+    {
+      "id": "aoi-neg-019",
+      "description": "A unital associative algebra must carry its product image on the carrier: an algebra that yields a scalar is an inner product space.",
+      "expect_code": "PRODUCT_IMAGE_REQUIRED",
+      "algebra": {
+        "structure": "unital_associative_algebra",
+        "carrier": "square_matrix_n",
+        "scalar_field": "real",
+        "binary_operation": "matmul",
+        "product_image": "scalar",
+        "closed": true,
+        "identity": "identity_matrix",
+        "associative": true,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": true,
+        "unital": true,
+        "bilinear": true,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "deterministic_grouping"
+      }
+    },
+    {
+      "id": "aoi-neg-020",
+      "description": "A module or algebra multiplies vectors by scalars from some field; the scalar field is part of the contract, not an implementation detail.",
+      "expect_code": "SCALAR_FIELD_REQUIRED",
+      "algebra": {
+        "structure": "unital_associative_algebra",
+        "carrier": "square_matrix_n",
+        "scalar_field": null,
+        "binary_operation": "matmul",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "identity_matrix",
+        "associative": true,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": true,
+        "unital": true,
+        "bilinear": true,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "deterministic_grouping"
+      }
+    },
+    {
+      "id": "aoi-neg-021",
+      "description": "An operator that is a stable fixed point (idempotent, pure, deterministic) may not also be the thing that moves the phase. That is the silent XCFE bypass.",
+      "expect_code": "IDENTITY_OPERATOR_MUST_PRESERVE_PHASE",
+      "algebra": {
+        "structure": "none",
+        "carrier": "state",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": true,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "advance",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "id": "aoi-neg-022",
+      "description": "Phase authority is a closed vocabulary: none, preserve, advance.",
+      "expect_code": "UNKNOWN_PHASE_POLICY",
+      "algebra": {
+        "structure": "none",
+        "carrier": "state",
+        "scalar_field": null,
+        "binary_operation": "none",
+        "product_image": "none",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": null,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "sometimes",
+        "reproducibility": "exact"
+      }
+    },
+    {
+      "id": "aoi-neg-023",
+      "description": "An algebra is bilinear by definition. Declaring an algebra whose product is not bilinear is not an algebra.",
+      "expect_code": "LAW_REQUIRED_TRUE",
+      "algebra": {
+        "structure": "associative_algebra",
+        "carrier": "square_matrix_n",
+        "scalar_field": "real",
+        "binary_operation": "matmul",
+        "product_image": "carrier",
+        "closed": true,
+        "identity": "identity_matrix",
+        "associative": true,
+        "commutative": false,
+        "idempotent": false,
+        "invertible": false,
+        "distributive": true,
+        "unital": true,
+        "bilinear": false,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": true,
+        "phase_policy": "none",
+        "reproducibility": "deterministic_grouping"
+      }
+    },
+    {
+      "id": "aoi-neg-024",
+      "description": "INCIDENCE_PRODUCT with an unknown carrier name fails the shape check before any law check.",
+      "expect_code": "UNKNOWN_CARRIER",
+      "algebra": {
+        "structure": "none",
+        "carrier": "incidence_matrix_typo",
+        "scalar_field": "real",
+        "binary_operation": "incidence_gram",
+        "product_image": "carrier",
+        "closed": false,
+        "identity": null,
+        "associative": null,
+        "commutative": null,
+        "idempotent": null,
+        "invertible": null,
+        "distributive": null,
+        "unital": null,
+        "bilinear": false,
+        "anticommutative": null,
+        "pure": true,
+        "deterministic": true,
+        "order_sensitive": false,
+        "phase_policy": "none",
+        "reproducibility": "implementation_defined"
+      }
+    }
+  ],
+  "lattice": {
+    "description": "A18: combining authorities by meet cannot grant an effect that none of them permitted.",
+    "authorities": {
+      "phase": [
+        "read",
+        "measure",
+        "order"
+      ],
+      "track": [
+        "read",
+        "measure"
+      ],
+      "executor": [
+        "read",
+        "measure",
+        "gate"
+      ]
+    },
+    "order": [
+      "phase",
+      "track",
+      "executor"
+    ],
+    "expect_effective": [
+      "read",
+      "measure"
+    ],
+    "expect_join": [
+      "read",
+      "measure",
+      "order",
+      "gate"
+    ]
+  },
+  "square_zero": {
+    "description": "A_mu = K + V_mu, the square-zero extension. (a,v)(b,w) = (ab, aw+bv) with v.w = 0. Checked on exact integer coordinates so every equality below is a statement about the algebra and not about floating point.",
+    "dimension": 3,
+    "compartments": {
+      "evidence": [
+        0
+      ],
+      "candidate": [
+        1
+      ],
+      "uncertainty": [
+        2
+      ]
+    },
+    "identity": {
+      "scalar": 1,
+      "vector": [
+        0,
+        0,
+        0
+      ]
+    },
+    "sample_pairs": [
+      {
+        "scalar": 2,
+        "vector": [
+          1,
+          0,
+          0
+        ]
+      },
+      {
+        "scalar": 3,
+        "vector": [
+          0,
+          1,
+          2
+        ]
+      },
+      {
+        "scalar": -1,
+        "vector": [
+          4,
+          0,
+          1
+        ]
+      }
+    ],
+    "zero_vectors": [
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        4,
+        5,
+        6
+      ]
+    ],
+    "expect_external_inner_product": 32,
+    "expect_square_zero": true,
+    "ideals": [
+      {
+        "id": "evidence",
+        "coordinates": [
+          0
+        ],
+        "description": "The evidence compartment alone: a submodule of V, hence an ideal of A contained in V."
+      },
+      {
+        "id": "candidate",
+        "coordinates": [
+          1
+        ],
+        "description": "The candidate-feature compartment alone."
+      },
+      {
+        "id": "uncertainty",
+        "coordinates": [
+          2
+        ],
+        "description": "The uncertainty compartment alone."
+      },
+      {
+        "id": "evidence-candidate",
+        "coordinates": [
+          0,
+          1
+        ],
+        "description": "Evidence plus candidate features: an inclusion the embedding preserves."
+      },
+      {
+        "id": "all",
+        "coordinates": [
+          0,
+          1,
+          2
+        ],
+        "description": "The whole of V, which is itself an ideal: the maximal one contained in V."
+      }
+    ],
+    "inclusions": [
+      {
+        "smaller": "evidence",
+        "larger": "evidence-candidate"
+      },
+      {
+        "smaller": "candidate",
+        "larger": "evidence-candidate"
+      },
+      {
+        "smaller": "evidence-candidate",
+        "larger": "all"
+      },
+      {
+        "smaller": "evidence",
+        "larger": "all"
+      },
+      {
+        "smaller": "uncertainty",
+        "larger": "all"
+      }
+    ],
+    "operations": [
+      {
+        "op": "sum",
+        "a": "evidence",
+        "b": "candidate",
+        "expect_coordinates": [
+          0,
+          1
+        ]
+      },
+      {
+        "op": "sum",
+        "a": "evidence",
+        "b": "uncertainty",
+        "expect_coordinates": [
+          0,
+          2
+        ]
+      },
+      {
+        "op": "sum",
+        "a": "evidence-candidate",
+        "b": "uncertainty",
+        "expect_coordinates": [
+          0,
+          1,
+          2
+        ]
+      },
+      {
+        "op": "intersection",
+        "a": "evidence-candidate",
+        "b": "candidate",
+        "expect_coordinates": [
+          1
+        ]
+      },
+      {
+        "op": "intersection",
+        "a": "evidence",
+        "b": "candidate",
+        "expect_coordinates": []
+      },
+      {
+        "op": "intersection",
+        "a": "evidence-candidate",
+        "b": "all",
+        "expect_coordinates": [
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "clifford": {
+    "description": "Cl(2,0) — 2D Euclidean Geometric Algebra. Basis {1, e1, e2, e12} with e1²=+1, e2²=+1, e12²=-1. Multivector format: {s, x(e1), y(e2), b(e12)}. Basis products checked with exact integer arithmetic.",
+    "basis_products": [
+      {
+        "id": "cl20-basis-e1e1",
+        "description": "e1*e1 = 1. e1²=+1 is the signature.",
+        "a": {"s": 0, "x": 1, "y": 0, "b": 0},
+        "b": {"s": 0, "x": 1, "y": 0, "b": 0},
+        "expect": {"s": 1, "x": 0, "y": 0, "b": 0}
+      },
+      {
+        "id": "cl20-basis-e2e2",
+        "description": "e2*e2 = 1. e2²=+1 is the signature.",
+        "a": {"s": 0, "x": 0, "y": 1, "b": 0},
+        "b": {"s": 0, "x": 0, "y": 1, "b": 0},
+        "expect": {"s": 1, "x": 0, "y": 0, "b": 0}
+      },
+      {
+        "id": "cl20-basis-e12e12",
+        "description": "e12*e12 = -1. The pseudoscalar squares to -1.",
+        "a": {"s": 0, "x": 0, "y": 0, "b": 1},
+        "b": {"s": 0, "x": 0, "y": 0, "b": 1},
+        "expect": {"s": -1, "x": 0, "y": 0, "b": 0}
+      },
+      {
+        "id": "cl20-basis-e1e2",
+        "description": "e1*e2 = e12.",
+        "a": {"s": 0, "x": 1, "y": 0, "b": 0},
+        "b": {"s": 0, "x": 0, "y": 1, "b": 0},
+        "expect": {"s": 0, "x": 0, "y": 0, "b": 1}
+      },
+      {
+        "id": "cl20-basis-e2e1",
+        "description": "e2*e1 = -e12. Non-commutativity witness: e1*e2 != e2*e1.",
+        "a": {"s": 0, "x": 0, "y": 1, "b": 0},
+        "b": {"s": 0, "x": 1, "y": 0, "b": 0},
+        "expect": {"s": 0, "x": 0, "y": 0, "b": -1}
+      },
+      {
+        "id": "cl20-unitality",
+        "description": "1_A * e1 = e1 (left identity check).",
+        "a": {"s": 1, "x": 0, "y": 0, "b": 0},
+        "b": {"s": 0, "x": 1, "y": 0, "b": 0},
+        "expect": {"s": 0, "x": 1, "y": 0, "b": 0}
+      },
+      {
+        "id": "cl20-associativity",
+        "description": "(e1*e2)*e1 == e1*(e2*e1): both paths give (0,0,-1,0).",
+        "op": "associativity_check",
+        "a": {"s": 0, "x": 1, "y": 0, "b": 0},
+        "b": {"s": 0, "x": 0, "y": 1, "b": 0},
+        "c": {"s": 0, "x": 1, "y": 0, "b": 0},
+        "expect_ab_c": {"s": 0, "x": 0, "y": -1, "b": 0},
+        "expect_a_bc": {"s": 0, "x": 0, "y": -1, "b": 0}
+      }
+    ],
+    "phase_products": [
+      {
+        "id": "cl20-phase-pop-to-wo",
+        "description": "Phase product Pop(0)→Wo(1): Δθ=π/3. scalar=cos(π/3)=0.5 == arc_weight. This is the FULL-ANGLE product — not a rotation rotor.",
+        "from_phase": 0,
+        "to_phase": 1,
+        "expect_scalar": 0.5,
+        "expect_bivector": -0.8660254037844387
+      },
+      {
+        "id": "cl20-phase-pop-to-sek",
+        "description": "Phase product Pop(0)→Sek(3): Δθ=π. scalar=cos(π)=-1 == arc_weight for opposing phases.",
+        "from_phase": 0,
+        "to_phase": 3,
+        "expect_scalar": -1.0,
+        "expect_bivector": 0.0
+      }
+    ],
+    "phase_rotors": [
+      {
+        "id": "cl20-rotor-pop-to-wo",
+        "description": "Half-angle rotor Pop(0)→Wo(1): Δθ/2=π/6. Sandwich rotor*e0*reverse(rotor) rotates e0=(0,1,0,0) to e1=(0,0.5,0.866,0).",
+        "from_phase": 0,
+        "to_phase": 1,
+        "input_vector": {"s": 0, "x": 1, "y": 0, "b": 0},
+        "expect_rotated_x": 0.5,
+        "expect_rotated_y": 0.8660254037844387,
+        "note": "GA_PHASE_PRODUCT(0,1) in a sandwich would rotate by 2π/3, not π/3 — they are different operators."
+      }
+    ],
+    "orientation": [
+      {
+        "id": "cl20-orient-ccw",
+        "description": "e1 ^ e2: outer_b = 1*1 - 0*0 = +1 (CCW). Telemetry only — not routing authority.",
+        "a": {"s": 0, "x": 1, "y": 0, "b": 0},
+        "b": {"s": 0, "x": 0, "y": 1, "b": 0},
+        "expect_outer_b": 1.0
+      },
+      {
+        "id": "cl20-orient-cw",
+        "description": "e2 ^ e1: outer_b = 0*0 - 1*1 = -1 (CW).",
+        "a": {"s": 0, "x": 0, "y": 1, "b": 0},
+        "b": {"s": 0, "x": 1, "y": 0, "b": 0},
+        "expect_outer_b": -1.0
+      }
+    ],
+    "encode_twist": [
+      {
+        "id": "cl20-encode-twist-non-isometric",
+        "description": "cl20_encode_twist(1,0,1)→(0,1,0,1). NOT norm-preserving: M²=x²+y²-b²=1+0-1=0 (scalar part), not a simple squared magnitude. cl20_vector_norm_sq must NOT be applied to this output.",
+        "input": {"vx": 1, "vy": 0, "vz": 1},
+        "expect_encoded": {"s": 0, "x": 1, "y": 0, "b": 1},
+        "not_isometric": true
+      },
+      {
+        "id": "cl20-encode-twist-pure-grade1",
+        "description": "cl20_encode_twist(0.91,0.34,0)→(0,0.91,0.34,0). z=0 gives pure grade-1; cl20_vector_norm_sq applies: 0.91²+0.34²≈0.9437.",
+        "input": {"vx": 0.91, "vy": 0.34, "vz": 0},
+        "expect_encoded": {"s": 0, "x": 0.91, "y": 0.34, "b": 0},
+        "norm_sq_valid": true,
+        "expect_norm_sq": 0.9437
+      }
+    ]
+  }
+}

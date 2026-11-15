@@ -1,0 +1,348 @@
+{
+  "@no-eval": true,
+  "id": "SNOBOL-µ",
+  "schemes": [
+    "snobol"
+  ],
+  "description": "SNOBOL ancestry — §60: pattern as first-class composable runtime value, grammar lineage regex→SNOBOL→BNF/EBNF→FoldGraph, WCR departure from first-match-greedy, Execute-as-Data = K'UHUL symbol→structure→operation.",
+  "phase": "Wo",
+  "category": "structural",
+  "confidence": 0.88,
+  "static_weight": 0.84,
+  "health": 1.0,
+  "vector": {
+    "x": 0.91,
+    "y": 0.34,
+    "z": 0.24
+  },
+  "governs": [
+    "snobol",
+    "snobol4",
+    "snobol pattern",
+    "snobol match",
+    "first class pattern",
+    "pattern as value",
+    "pattern as data",
+    "pattern assignment",
+    "arb",
+    "arbn",
+    "bal",
+    "rem",
+    "fence",
+    "pattern concat",
+    "pattern alternation",
+    "pattern alt",
+    "execute as data",
+    "string as program",
+    "data is program",
+    "possibility language",
+    "possibility law",
+    "grammar lineage",
+    "pattern lineage",
+    "ancestor pattern language",
+    "regex ancestor",
+    "bnf predecessor",
+    "snobol bnf",
+    "snobol grammar",
+    "first match greedy",
+    "greedy match",
+    "first match wins",
+    "snobol aiml",
+    "aiml snobol",
+    "aiml ancestor",
+    "pattern hierarchy ancestor",
+    "pattern value composable",
+    "yes snobol uses grammar",
+    "snobol grammar lineage"
+  ],
+  "sub_micronauts": [
+    "NGRAM-KEY-µ",
+    "FOLDGRAPH-µ",
+    "KUHUL-GLYPH-µ",
+    "ADAPTIVE-FOLD-µ"
+  ],
+  "capabilities": [
+    "SNOBOL_IDENTIFY",
+    "SNOBOL_LINEAGE",
+    "PATTERN_AS_VALUE",
+    "EXECUTE_AS_DATA",
+    "GRAMMAR_ANCESTRY",
+    "WCR_DEPARTURE_EXPLAIN",
+    "AIML_BRIDGE_ANCESTRY",
+    "GRAMMAR_LAYER_ORCHESTRATE"
+  ],
+  "conformance": {
+    "questions": [
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What makes SNOBOL patterns different from regex patterns?",
+        "expected_key": "first class value composable assignable executable runtime object not string syntax",
+        "delta_r": 0.1
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What does ARB match in SNOBOL4?",
+        "expected_key": "zero or more arbitrary characters first class wildcard analogous to SC-37 retained_wildcard",
+        "delta_r": 0.09
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is the grammar lineage from SNOBOL to FoldGraph?",
+        "expected_key": "regex predicate SNOBOL first-class value BNF possibility space FoldGraph graph-generating constraint",
+        "delta_r": 0.11
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "How does SNOBOL relate to AIML and FoldGraph?",
+        "expected_key": "AIML equals SNOBOL plus SC-37 FoldGraph equals AIML plus WCR SNOBOL templates AIML templates",
+        "relation_confirmed": "SEMANTIC-FOLD-µ",
+        "delta_w": 0.13
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is the WCR departure from SNOBOL matching?",
+        "expected_key": "SNOBOL first match greedy FoldGraph best match WCR scored SNOBOL equals FoldGraph tau 1 argmax first",
+        "relation_confirmed": "SEMANTIC-FOLD-µ",
+        "delta_w": 0.12
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is Execute-as-Data in K'UHUL?",
+        "expected_key": "SNOBOL strings as programs K'UHUL symbol structure operation pattern is grammar grammar is constraint constraint is program",
+        "relation_confirmed": "ANAMORPHISM-µ",
+        "delta_w": 0.1
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "Does SNOBOL's grammar system match the way K'UHUL uses grammar?",
+        "expected_key": "yes both use grammar as executable description of possible structure SNOBOL patterns BNF productions EBNF K'UHUL grammar same idea different eras",
+        "delta_c": 0.09
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "What is BAL in SNOBOL and what does it correspond to in FoldGraph?",
+        "expected_key": "balanced brackets context-free not regular recursive Ana expansion corresponds to FoldGraph recursive Ana step coalgebra seed context-free production",
+        "delta_c": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does SNOBOL's grammar lineage transform according to the regex pattern into the FoldGraph structure?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What specific operation in the SNOBOL grammar corresponds to the WCR departure from the first-match-greedy rule?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "Can you identify which K'UHUL constructs are directly derived from the SNOBOL grammar lineage?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What role does BAL play in SNOBOL, and how is it mapped in the FoldGraph representation?",
+        "expected_key": "",
+        "delta_r": 0.08
+      }
+    ],
+    "jokes": [
+      {
+        "pattern": "WHY IS SNOBOL A GOOD ANCESTOR FOR KHANARY",
+        "punchline": "Because SNOBOL already knew the secret: a pattern is not syntax — it is a first-class citizen that runs, matches, composes, and assigns. KHANARY just added WCR so the best match wins instead of the first.",
+        "frame": "humor_frame",
+        "semantic_key": "snobol_pattern_first_class_khanary_wcr"
+      },
+      {
+        "pattern": "WHAT DID SNOBOL SAY WHEN IT MET FOLDGRAPH",
+        "punchline": "I taught your parent AIML everything it knows about wildcards. You added WCR and called it intelligence. I am not offended — ARB was always good enough for me.",
+        "frame": "delivery_frame",
+        "semantic_key": "snobol_arb_wildcard_wcr_heir"
+      },
+      {
+        "pattern": "WHY DOES ARB EQUAL SC-37",
+        "punchline": "Both say the same thing in different eras: I do not know what goes here, but that is not a failure — that is a wildcard, and a wildcard is a valid solution.",
+        "frame": "pun_bridge",
+        "semantic_key": "arb_sc37_retained_wildcard_analogy"
+      },
+      {
+        "pattern": "WHY DOES SNOBOL ANCESTRY ALWAYS SEEM TO PRIORITIZE PATTERN RECOGNITION OVER SYNT",
+        "punchline": "Because the lineage is structured like a fold graph, and the grammar lineage is a first-class composable runtime value.",
+        "frame": "humor_frame",
+        "semantic_key": "why_does_snobol_ancestry_always_seem_to_prioritize"
+      },
+      {
+        "pattern": "WHAT HAPPENS WHEN YOU TRY TO PARSE A WCR SYMBOL IN A GRAMMAR LINEAGE",
+        "punchline": "It reveals the operation is executed as data, not just a rule.",
+        "frame": "humor_frame",
+        "semantic_key": "what_happens_when_you_try_to_parse_a_wcr_symbol_in"
+      },
+      {
+        "pattern": "WHY DOES THE SNOBOL-Μ FEEL LIKE IT KNOWS ITS OWN ANCESTRY",
+        "punchline": "Because it’s a first-class composable runtime value in the BNF hierarchy.",
+        "frame": "humor_frame",
+        "semantic_key": "why_does_the_snobol_µ_feel_like_it_knows_its_own_a"
+      },
+      {
+        "pattern": "HOW DOES SNOBOL HANDLE A WCR DEPARTURE FROM THE FIRST-MATCH GREEDY",
+        "punchline": "It rewrites the structure like a UHUL symbol redefining its own shape.",
+        "frame": "humor_frame",
+        "semantic_key": "how_does_snobol_handle_a_wcr_departure_from_the_fi"
+      }
+    ]
+  },
+  "relations": [
+    {
+      "target": "NGRAM-KEY-µ",
+      "verb": "@delegates_to",
+      "directed": true
+    },
+    {
+      "target": "FOLDGRAPH-µ",
+      "verb": "@delegates_to",
+      "directed": true
+    },
+    {
+      "target": "KUHUL-GLYPH-µ",
+      "verb": "@delegates_to",
+      "directed": true
+    },
+    {
+      "target": "ADAPTIVE-FOLD-µ",
+      "verb": "@delegates_to",
+      "directed": true
+    },
+    {
+      "target": "SEMANTIC-FOLD-µ",
+      "verb": "@informs",
+      "directed": true
+    },
+    {
+      "target": "FOLD-HOF-µ",
+      "verb": "@informs",
+      "directed": true
+    },
+    {
+      "target": "ANAMORPHISM-µ",
+      "verb": "@related_to",
+      "directed": false
+    },
+    {
+      "target": "MICRONAUT-PROGRAM-µ",
+      "verb": "@informs",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "gramRead",
+      "key": "snobol_ancestry_query",
+      "weight": 1.0
+    },
+    {
+      "phase": "Wo",
+      "op": "lower_snobol_aiml",
+      "note": "L_A §60 grammar lineage",
+      "weight": 1.0
+    },
+    {
+      "phase": "Yax",
+      "op": "derive_ancestry_pattern",
+      "note": "R pattern-as-value match",
+      "weight": 1.0
+    },
+    {
+      "phase": "Sek",
+      "op": "resolve_lineage_arc",
+      "note": "W ancestry chain confirm",
+      "weight": 1.0
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_wcr_departure",
+      "note": "C first-match vs best-match",
+      "weight": 1.0
+    },
+    {
+      "phase": "Xul",
+      "op": "emit_answer",
+      "scope": "local",
+      "weight": 1.0
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "SNOBOL-µ",
+    "manifest_access": [
+      "words",
+      "kuhul",
+      "fold_graph"
+    ],
+    "effects": [
+      "gramRead",
+      "gramWrite",
+      "fold:ancestry_query"
+    ],
+    "ports": [],
+    "coordinator": false
+  },
+  "model": {
+    "gguf": "C:/Users/canna/.lmstudio/models/lmstudio-community/gemma-3-1B-it-QAT-GGUF/gemma-3-1B-it-QAT-Q4_0.gguf",
+    "template": "gemma",
+    "role": "code-generation"
+  },
+  "tooling_contract": {
+    "reference_base": "repository_root",
+    "codegen_catalog_ref": "micronaut/micronaut-coder/code-micronaut/tool-catalog.jsonl",
+    "codegen_permitted_set_ref": "micronaut/micronaut-coder/code-micronaut/tools-permitted.v1.json",
+    "declaration_validation": {
+      "tool_ref": "tool:MCDR-1:phase-contract-validator",
+      "provider_ref": "bus.code-micronaut-worker.validate-contract",
+      "source_ref": "vendor/key-grammar-kit/data/micronauts/snobol-mu.kl",
+      "format": "kl",
+      "scope": "structural_contract_validation_only",
+      "dispatch_path": [
+        "CODEGEN-µ",
+        "TOOL-µ",
+        "bus.code-micronaut-worker.validate-contract"
+      ],
+      "status": "catalog_reference_only"
+    },
+    "snobol_source_runtime": {
+      "status": "not_registered",
+      "wasm_grammar": "not_available",
+      "execution": "not_implied"
+    },
+    "xcfe_admission": "external_per_invocation",
+    "metadata_authority": false
+  },
+  "grammar_files": [
+    "snobol-mu.kgf",
+    "snobol-mu.runtime-grammar.ebnf"
+  ],
+  "grammar_contract": {
+    "package_root": "vendor/key-grammar-kit",
+    "kgf_ref": "snobol-mu.kgf",
+    "ebnf_ref": "snobol-mu.runtime-grammar.ebnf",
+    "version": "2.0",
+    "scope": "full_program_syntax_and_static_type_rules",
+    "role": "parse",
+    "authority": "syntax_and_static_signatures_only",
+    "runtime_implementation": "not_registered"
+  }
+}

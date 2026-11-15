@@ -1,0 +1,332 @@
+{
+  "@no-eval": true,
+  "id": "FIXED-POINT-µ",
+
+  "schemes": ["fixed-point"],
+  "description": "Fixed point theory — f(x)=x, Y combinator, Banach/Brouwer/Kleene/Lawvere theorems, least/greatest fixpoints, recursive types Fix F, mu/nu types, typeability in STLC.",
+  "phase": "Sek",
+  "category": "structural",
+  "confidence": 0.82,
+  "static_weight": 0.86,
+  "health": 1.0,
+  "governs": [
+    "fixed point",
+    "fixpoint",
+    "fix point",
+    "f(x)=x",
+    "Y combinator",
+    "fixed-point combinator",
+    "lambda calculus recursion",
+    "banach fixed point",
+    "banach theorem",
+    "contraction mapping",
+    "brouwer fixed point",
+    "brouwer theorem",
+    "compact convex",
+    "kleene fixed point",
+    "kleene theorem",
+    "scott continuous",
+    "complete partial order",
+    "CPO",
+    "lawvere fixed point",
+    "lawvere theorem",
+    "diagonal argument",
+    "least fixed point",
+    "lfp",
+    "mu type",
+    "mu F",
+    "inductive type",
+    "greatest fixed point",
+    "gfp",
+    "nu type",
+    "nu F",
+    "coinductive type",
+    "Fix F",
+    "recursive type",
+    "initial algebra",
+    "terminal coalgebra",
+    "simply typed lambda calculus",
+    "STLC",
+    "typeable",
+    "@fixpoint",
+    "fixpoint:",
+    "fixed_point:"
+  ],
+  "capabilities": [
+    "FP_DEFINE",
+    "FP_Y_COMBINATOR",
+    "FP_BANACH",
+    "FP_BROUWER",
+    "FP_KLEENE",
+    "FP_LAWVERE",
+    "FP_MU_NU",
+    "FP_FIX_F",
+    "FP_TYPEABILITY",
+    "FP_CROSS_DOMAIN"
+  ],
+  "conformance": {
+    "questions": [
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is a fixed point of a function?",
+        "expected_key": "f(x)=x function maps point to itself Brouwer contraction Banach",
+        "gemma_answer": "A value x where f(x) = x — the function maps that value to itself.",
+        "gemma_epistemic": "SUPPORTED",
+        "delta_r": 0.07
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is the Y combinator and what does it compute?",
+        "expected_key": "Y=λf.(λx.f(xx))(λx.f(xx)) Y f=f(Y f) fixed point enables recursion",
+        "gemma_answer": "A higher-order function in lambda calculus that enables recursion by finding the fixed point of a function.",
+        "gemma_epistemic": "SUPPORTED",
+        "delta_r": 0.07
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is Banach's fixed point theorem?",
+        "expected_key": "contraction mapping complete metric space unique fixed point iterate from any point converges",
+        "gemma_answer": "States that sequences of functions defined on a compact metric space converge to limits that are fixed points.",
+        "gemma_epistemic": "PARTIAL",
+        "canonical_answer": "Every contraction mapping f on a non-empty complete metric space has a unique fixed point, reachable by iterating f from any starting point. A contraction satisfies d(f(x),f(y)) ≤ k·d(x,y) for k<1.",
+        "delta_r": 0.08,
+        "delta_c_correction": -0.05
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is Brouwer's fixed point theorem?",
+        "expected_key": "continuous map compact convex set to itself has fixed point disk ball topological",
+        "gemma_answer": "Every continuous function from a compact convex set to itself has at least one fixed point — e.g., if you stir coffee, one point ends up where it started.",
+        "gemma_epistemic": "SUPPORTED",
+        "delta_r": 0.07
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is the difference between the least and greatest fixed points?",
+        "expected_key": "mu=lfp iterate from bottom inductive finite nu=gfp coinductive infinite streams",
+        "gemma_answer": "Least fixed point is the one closest to zero; greatest is furthest from zero in the ordering.",
+        "gemma_epistemic": "MISS",
+        "canonical_answer": "µF = least fixpoint: built by iterating F from ⊥ upward — inductive, finite, base of catamorphisms. νF = greatest fixpoint: defined coinductively from ⊤ — supports infinite structures like streams via anamorphisms.",
+        "relation_confirmed": "ANAMORPHISM-µ",
+        "delta_w": 0.15,
+        "delta_c_correction": -0.07
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "How does Fix F give recursive data types?",
+        "expected_key": "Fix F≅F(Fix F) in out morphisms F-algebra F-coalgebra list tree",
+        "gemma_answer": "Fix F represents the recursive type that is the fixed point of functor F — it satisfies Fix F ≅ F(Fix F).",
+        "gemma_epistemic": "SUPPORTED",
+        "relation_confirmed": "MORPHISM-µ",
+        "delta_w": 0.13
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "How does Kleene's fixed point theorem build the least fixed point?",
+        "expected_key": "Scott-continuous CPO bottom iterate f^n(⊥) chain supremum denotational semantics",
+        "gemma_answer": "Iterates the function from a bottom element on a partially ordered set, building up through the chain to the least fixed point.",
+        "gemma_epistemic": "PARTIAL",
+        "canonical_answer": "For Scott-continuous f on a CPO with ⊥: µf = ⊔{f^n(⊥) | n≥0} — the sup of iterating f from bottom. Used in denotational semantics to give meaning to recursive programs.",
+        "relation_confirmed": "MORPHISM-µ",
+        "delta_w": 0.12,
+        "delta_c_correction": -0.04
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is Lawvere's fixed point theorem?",
+        "expected_key": "cartesian closed category surjective transpose every endomorphism has fixed point diagonal Cantor Gödel halting",
+        "gemma_answer": "In category theory, if there is a surjective map from a set to its own function space, every self-map has a fixed point.",
+        "gemma_epistemic": "PARTIAL",
+        "canonical_answer": "In a CCC, if ε:A×A→Y has a point-surjective transpose then every f:Y→Y has a fixed point. Unifies Cantor's theorem, Gödel's incompleteness, and undecidability of halting — all diagonal arguments.",
+        "relation_confirmed": "MORPHISM-µ",
+        "delta_w": 0.13,
+        "delta_c_correction": -0.04
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "Is the Y combinator typeable in the simply typed lambda calculus?",
+        "expected_key": "NO requires T=T→T impossible STLC strongly normalising no general recursion",
+        "gemma_answer": "No, because the Y combinator requires a type that is equal to its own function type, which STLC forbids.",
+        "gemma_epistemic": "PARTIAL",
+        "canonical_answer": "No — λx.f(x x) requires x:τ and x:τ→σ simultaneously, which is impossible in STLC. This is why STLC is strongly normalising: every program terminates. General recursion requires recursive types or untyped λ-calculus.",
+        "delta_c": 0.07
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "How do morphisms in a category relate to fixed points of endofunctors?",
+        "expected_key": "Fix F initial algebra cata unique morphism from Fix F terminal coalgebra ana unique morphism to Fix F",
+        "gemma_answer": "Fixed points of endofunctors give the carriers of initial algebras and terminal coalgebras; morphisms out/into them are the unique fold/unfold maps.",
+        "gemma_epistemic": "SUPPORTED",
+        "delta_c": 0.09
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How can the Y combinator be used to construct recursive data types within the fixed point framework?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What role do least and greatest fixed points play in the analysis of recursive functions?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "Can Banach's fixed point theorem be applied to prove the existence of solutions in certain fixed point constructions?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does the Kleene's fixed point theorem contribute to the development of recursive type theory?",
+        "expected_key": "",
+        "delta_r": 0.08
+      }
+    ],
+    "jokes": [
+      {
+        "pattern": "WHY DID THE FIXED POINT REFUSE TO MOVE",
+        "gemma_punchline": "Because by definition it always maps to itself.",
+        "canonical_punchline": "Because it was already exactly where the function needed it to be. Moving would make it a non-fixed point — and then it would cease to exist as the thing it was.",
+        "frame": "humor_frame",
+        "semantic_key": "fixed_point_refuse_move"
+      },
+      {
+        "pattern": "WHAT DID F OF X SAY WHEN X EQUALLED F OF X",
+        "gemma_punchline": "I found my match — no more searching.",
+        "canonical_punchline": "f(x) said: I am perfectly happy. x replied: that is literally the definition of me. They stayed there forever — a fixed point of the conversation.",
+        "frame": "delivery_frame",
+        "semantic_key": "fx_equals_x_conversation"
+      },
+      {
+        "pattern": "WHY IS THE Y COMBINATOR BAD AT THERAPY",
+        "gemma_punchline": "It keeps applying itself recursively to every problem without finding resolution.",
+        "canonical_punchline": "It keeps applying itself recursively without reaching a base case. The therapist asked: how does that make you feel? The Y combinator said: how does that make you feel? how does that make you feel? how does—",
+        "frame": "pun_bridge",
+        "semantic_key": "Y_combinator_therapy_recursion"
+      },
+      {
+        "pattern": "WHAT DID BROUWER SAY TO THE FUNCTION WITH NO FIXED POINT",
+        "gemma_punchline": "You are topologically impossible on a compact convex domain.",
+        "canonical_punchline": "You cannot exist. If you are continuous and you map this compact convex set to itself, you must fix at least one point. The function argued it was a counterexample. Brouwer said: then you are not continuous. The function had to admit it had a hole.",
+        "frame": "delivery_frame",
+        "semantic_key": "brouwer_counterexample_hole"
+      },
+      {
+        "pattern": "WHY DOES THE FIXED POINT THEORY REFUSE TO MOVE WHEN FACED WITH ITS OWN DEFINITIO",
+        "punchline": "Because it’s stuck in a loop tighter than a Banach set in a Banach space.",
+        "frame": "humor_frame",
+        "semantic_key": "why_does_the_fixed_point_theory_refuse_to_move_whe"
+      },
+      {
+        "pattern": "WHEN THE Y COMBINATOR MEETS A FUNCTION THAT DOESN’T EQUAL ITSELF, WHAT DOES IT S",
+        "punchline": "It whispers, “I’m not a loop, I’m a paradox wrapped in a function.”",
+        "frame": "humor_frame",
+        "semantic_key": "when_the_y_combinator_meets_a_function_that_doesn_"
+      },
+      {
+        "pattern": "IN THE REALM OF LEAST AND GREATEST FIXPOINTS, WHAT HAPPENS WHEN YOU ASK A TYPE A",
+        "punchline": "It gets confused, like a Kleene’s theorem trying to parse a mu-notation.",
+        "frame": "humor_frame",
+        "semantic_key": "in_the_realm_of_least_and_greatest_fixpoints_what_"
+      },
+      {
+        "pattern": "WHY DID THE RECURSIVE TYPE GET NERVOUS WHEN IT ENCOUNTERED A MU-TYPE",
+        "punchline": "Because it realized it was being type-checked by the Lawvere theorem—don’t you want to be type-safe?",
+        "frame": "humor_frame",
+        "semantic_key": "why_did_the_recursive_type_get_nervous_when_it_enc"
+      }
+    ]
+  },
+  "relations": [
+    {
+      "target": "MORPHISM-µ",
+      "verb": "@informs",
+      "directed": true
+    },
+    {
+      "target": "ANAMORPHISM-µ",
+      "verb": "@informs",
+      "directed": true
+    },
+    {
+      "target": "FOLD-HOF-µ",
+      "verb": "@informs",
+      "directed": true
+    },
+    {
+      "target": "MATH-µ",
+      "verb": "@delegates_to",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "gramRead",
+      "key": "fixpoint_query",
+      "weight": 1.0
+    },
+    {
+      "phase": "Wo",
+      "op": "lower_fixpoint_aiml",
+      "note": "L_A fixpoint ISA",
+      "weight": 1.0
+    },
+    {
+      "phase": "Yax",
+      "op": "derive_fixpoint_pattern",
+      "note": "R contraction align",
+      "weight": 1.0
+    },
+    {
+      "phase": "Sek",
+      "op": "resolve_fixpoint_arc",
+      "note": "W mu nu Fix F arc",
+      "weight": 1.0
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_fixpoint_stlc",
+      "note": "C Y typeability gate",
+      "weight": 1.0
+    },
+    {
+      "phase": "Xul",
+      "op": "emit_answer",
+      "scope": "local",
+      "weight": 1.0
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "FIXED-POINT-µ",
+    "manifest_access": [
+      "words",
+      "micronaut",
+      "kuhul"
+    ],
+    "effects": [
+      "gramRead",
+      "gramWrite",
+      "fixpoint:query",
+      "fixpoint:define"
+    ],
+    "ports": [],
+    "coordinator": false
+  }
+}

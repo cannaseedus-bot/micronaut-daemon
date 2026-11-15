@@ -1,0 +1,26 @@
+{
+  "id": "phase-driver.wo.v2",
+  "phase": "Wo",
+  "phase_order": 1,
+  "profile": "default",
+  "driver_weight": 1.0,
+  "ops": [
+    "state_and_constraints",
+    "unfold_linguistic_resolution",
+    "decompose_task",
+    "plan_task",
+    "xcfe_auth_check",
+    "srai_recursion_guard_init"
+  ],
+  "semantic_channels": {},
+  "emits": {
+    "data": true,
+    "next_phase_hint": true,
+    "verb": true,
+    "noun": true,
+    "opcode": true,
+    "confidence_delta": true
+  },
+  "default_verb": "@delegate",
+  "terminal": false
+}

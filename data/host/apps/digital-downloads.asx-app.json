@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "digital-downloads",
+  "@key": "⟁APP:DIGITAL_DOWNLOADS",
+  "@mount": "⟁ROOT:DIGITAL_DOWNLOADS",
+  "@theme": { "accent": "#8b5cf6", "bg": "#07040f", "surface": "#10071e", "text": "#ede9fe", "hero_phase": "Sek", "tagline": "Create once. Sell forever." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "products", "component": "⟁WIDGET:PRODUCTS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "products": [], "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:DIGITAL_DOWNLOADS": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:ADD_PRODUCT"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:ADD_PRODUCT": { "@type": "button", "@text": "Add Product", "@on": { "click": "downloads.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:PRODUCTS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:PRODUCTS": { "@type": "grid", "@bind": "state.products", "@children": ["⟁WIDGET:PRODUCT_CARD"] },
+    "⟁WIDGET:PRODUCT_CARD": { "@type": "media-card", "@bind": "product", "@on": { "buy": "downloads.buy", "view": "downloads.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:REVENUE", "⟁WIDGET:BESTSELLERS"] },
+    "⟁WIDGET:REVENUE": { "@type": "stat", "@bind": "data.revenue" },
+    "⟁WIDGET:BESTSELLERS": { "@type": "list", "@bind": "data.bestsellers" }
+  },
+  "@programs": {
+    "downloads.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "downloads.buy": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "downloads.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "downloads.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "product.buy": "downloads.buy", "product.view": "downloads.view", "compose.open": "downloads.open_compose", "search.input": "downloads.search" },
+  "@imports": [{ "ref": "product", "mode": "schema_table" }, { "ref": "purchase", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "license-keys", "name": "License Keys", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Auto-generate license keys delivered with each purchase." },
+      { "id": "stripe-payments", "name": "Stripe Payments", "category": "payments", "price": "membership", "status": "setup_required", "requires_subscription": true, "description": "Accept card payments and handle download delivery." },
+      { "id": "bundle-bot", "name": "Bundle Suggester Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Auto-suggest product bundles based on purchase history." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "downloads.add", "pattern": "ADD PRODUCT|UPLOAD FILE|NEW DOWNLOAD", "intent": "open_compose" },
+      { "id": "downloads.search", "pattern": "FIND * DOWNLOAD|SEARCH PRODUCTS", "intent": "filter_products" }
+    ]
+  },
+  "@data": {
+    "revenue": { "total": 8240, "this_month": 1340, "downloads_sold": 212 },
+    "bestsellers": ["UI Kit Pro — 84 sales", "KHANARY Starter Pack — 61 sales", "Icon Set Vol.2 — 47 sales"],
+    "spotlight": [
+      { "id": "sp1", "title": "UI Kit Pro (Figma + Framer)", "slug": "ui-kit-pro", "badge": "Best Seller", "price": 49, "excerpt": "240 components, dark and light modes, responsive." },
+      { "id": "sp2", "title": "KHANARY Starter Pack", "slug": "khanary-starter", "badge": "New Release", "price": 29, "excerpt": "Boilerplate manifests, templates, and a 30-min setup guide." },
+      { "id": "sp3", "title": "Icon Set Vol. 2 — 800 SVGs", "slug": "icon-set-v2", "badge": "Popular", "price": 19, "excerpt": "Line-style, consistent stroke weight, MIT licence." }
+    ],
+    "schema": {
+      "product": { "primaryKey": "product_id", "fields": { "product_id": { "type": "string" }, "title": { "type": "string", "required": true }, "slug": { "type": "string", "required": true }, "description": { "type": "textarea" }, "price": { "type": "float", "required": true }, "file_url": { "type": "uri", "required": true }, "file_size_kb": { "type": "integer" }, "category": { "type": "string" }, "download_count": { "type": "integer" } } },
+      "purchase": { "primaryKey": "purchase_id", "fields": { "purchase_id": { "type": "string" }, "product_id": { "type": "string", "required": true }, "user_id": { "type": "string" }, "email": { "type": "email", "required": true }, "amount": { "type": "float" }, "purchased_at": { "type": "datetime" }, "download_token": { "type": "string" } } }
+    }
+  }
+}

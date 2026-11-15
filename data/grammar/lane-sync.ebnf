@@ -1,0 +1,135 @@
+(* ========================================================================== *)
+(* K'UHUL LANE SYNC GRAMMAR (EBNF)                                          *)
+(* Version: 1.0                                                             *)
+(* Defines: the lane descriptor that XCFE compares, and the comparison      *)
+(*          guard. Descriptor-level only: no node classes are added.        *)
+(* Contract: data/grammar/lane-sync.contracts.json                          *)
+(* Runtime:  src/kuhul/lane_sync.cpp                                        *)
+(* ========================================================================== *)
+
+(* Grammar describes the lane. Binary carries the lane. XCFE judges the lane.
+   The existing executor runs it only when separately authorized.
+   Admitted = ExistingXCFEAuthority AND LaneCompatible. *)
+
+(* ── 1. Canonical lane descriptor ─────────────────────────────────────────── *)
+
+LaneSyncDescriptor  ::= "{" LaneDescriptorBody "}" ;
+
+LaneDescriptorBody  ::= GrammarVersionKey "," LaneTypeKey "," PhaseKey ","
+                        ModeKey "," EffectKey "," DeterminismKey
+                        ("," RequiredEffectKey)?
+                        ("," ForbiddenEffectKey)?
+                        ("," LabelKey)? ;
+
+GrammarVersionKey   ::= '"grammar_version"' ":" Integer ;
+LaneTypeKey         ::= '"lane_type"'      ":" LaneType ;
+PhaseKey            ::= '"phase"'          ":" PhaseName ;
+ModeKey             ::= '"mode"'           ":" ModeRef ;
+EffectKey           ::= '"effects"'        ":" EffectMask ;
+DeterminismKey      ::= '"determinism"'    ":" DeterminismFlags ;
+RequiredEffectKey   ::= '"required_effects"'  ":" EffectMask ;
+ForbiddenEffectKey  ::= '"forbidden_effects"' ":" EffectMask ;
+LabelKey            ::= '"label"'          ":" String ;
+
+(* ── 2. Typed vocabulary (stable ids; see lane-sync.contracts.json) ──────── *)
+
+LaneType            ::= "semantic" | "geometric" | "algebraic" | "tensor"
+                      | "phase" | "verification" | "routing" | "memory"
+                      | "execution" | "commit" ;
+
+PhaseName           ::= "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul" ;
+                        (* C6 index 0..5; `Chen`/`Ch_en` are accepted aliases,
+                           canonicalised at the parser boundary *)
+
+ModeRef             ::= ModeDomain ":" ModeValue ;
+
+ModeDomain          ::= "determinism" | "output" | "ordering" | "response" ;
+
+ModeValue           ::= (* determinism *) "deterministic" | "seeded"
+                      | "observational" | "stochastic"
+                      | (* output *) "keep" | "drop" | "new_fold" | "in_place"
+                      | (* ordering *) "structural" | "phase" | "incidence" | "confidence"
+                      | (* response *) "neutral" | "reset" | "explicit" ;
+
+EffectMask          ::= Effect ("|" Effect)* | "none" ;
+
+Effect              ::= "read" | "write" | "delete" | "propose_delta" | "filter"
+                      | "order" | "measure" | "verify" | "commit" ;
+
+DeterminismFlags    ::= Flag ("|" Flag)* | "none" ;
+
+Flag                ::= "reproducible" | "records_seed" | "records_inputs"
+                      | "records_external_observations" ;
+
+(* ── 3. Mode descriptor (one entry per declared mode) ────────────────────── *)
+
+ModeDescriptor      ::= "{" ModeDescriptorBody "}" ;
+
+ModeDescriptorBody  ::= "domain" ":" ModeDomain ","
+                        "value" ":" ModeValue ","
+                        "mode_id" ":" Integer ","
+                        "determinism_flags" ":" DeterminismFlags ","
+                        "implies_effects" ":" EffectMask
+                        ("," "allowed_phase_mask" ":" PhaseMask)?
+                        ("," "forbidden_effect_mask" ":" EffectMask)? ;
+
+PhaseMask           ::= PhaseName ("|" PhaseName)* | "none" ;
+
+(* ── 4. The comparison guard ─────────────────────────────────────────────── *)
+
+LaneSyncGuard       ::= "{" LaneGuardBody "}" ;
+
+LaneGuardBody       ::= "required" ":" LaneSyncDescriptor ","
+                        "lane" ":" LaneSyncDescriptor ","
+                        "result" ":" LaneGuardResult ;
+
+LaneGuardResult     ::= "{" GuardResultBody "}" ;
+
+GuardResultBody     ::= "compatible" ":" Boolean ","
+                        "type_match" ":" Boolean ","
+                        "phase_match" ":" Boolean ","
+                        "mode_match" ":" Boolean ","
+                        "effects_match" ":" Boolean ","
+                        "determinism_match" ":" Boolean ","
+                        "reason_code" ":" ReasonCode ","
+                        "descriptor_ref" ":" HashHex ;
+
+ReasonCode          ::= "compatible" | "type_mismatch" | "phase_not_allowed"
+                      | "mode_domain_mismatch" | "mode_not_allowed"
+                      | "missing_required_effect" | "forbidden_effect_present"
+                      | "determinism_requirement_unmet" | "grammar_version_mismatch" ;
+
+(* ── 5. Constraints ──────────────────────────────────────────────────────── *)
+
+(*
+   LS1  A descriptor is closed: its fields are the typed set above, and every
+        integer field is bounded by its declared width.
+
+   LS2  The binary form is canonical: fixed little-endian layout, no padding
+        bytes, no optional fields — an optional field is encoded as its neutral
+        value (0), so one descriptor has exactly one byte string.
+
+   LS3  Comparison reads typed fields, not strings. A descriptor is never
+        reconstructed from a lane's prose, and a lane's source text is never
+        re-interpreted to decide compatibility.
+
+   LS4  Determinism compatibility is requirement-driven, not name-based:
+        a mode is refused only when the requirement asks for a determinism flag
+        the lane does not carry. A `stochastic` lane is compatible wherever the
+        requirement does not demand reproducible evidence.
+
+   LS5  Effect compatibility is symmetric: every required effect must be present
+        (missing_required_effect) and no forbidden effect may be present
+        (forbidden_effect_present).
+
+   LS6  Admitted = ExistingXCFEAuthority AND LaneCompatible. The guard can turn
+        an authorized candidate into a rejection; it can never turn an
+        unauthorized candidate into an admitted one.
+
+   LS7  A decoded descriptor is evidence, not permission: unpacking an ASXG /
+        SCXQ2 payload never grants admission, and the guard never sets
+        commit_authorized.
+
+   LS8  The lane descriptor stays authoritative; the guard result is derived
+        evidence with a reference to the descriptor it judged.
+*)

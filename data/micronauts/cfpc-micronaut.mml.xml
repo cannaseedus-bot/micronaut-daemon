@@ -1,0 +1,39 @@
+<micronaut id="cfpc-micronaut" name="CFPC-µ" type="programmable-agent" version="1.0.0">
+  <program language="kuhul" entry="context-field-classification.run"/>
+  <behavior>
+    <mode ref="investigator" weight="0.85"/>
+    <mode ref="researcher" weight="0.85"/>
+    <mode ref="socratic" weight="0.85"/>
+  </behavior>
+  <vector>
+    <bias name="reasoning" value="0.95"/>
+    <bias name="evidence" value="0.95"/>
+    <bias name="determinism" value="0.90"/>
+  </vector>
+  <field type="semantic" topology="gml" traversal="weighted" track="CFPC-µ"/>
+  <memory substrate="replay:field" scope="host-bound">
+    <type ref="episodic"/>
+    <type ref="semantic"/>
+    <type ref="procedural"/>
+  </memory>
+  <capabilities>
+    <invoke ref="cfpc.classify"/>
+    <invoke ref="intent.field"/>
+    <invoke ref="context.pattern"/>
+    <invoke ref="gap.route"/>
+    <invoke ref="query.generate"/>
+  </capabilities>
+  <learning>
+    <strategy ref="candidate_only"/>
+    <target ref="CFPC-µ"/>
+    <commit authority="xcfe"/>
+  </learning>
+  <phases>
+    <phase ref="Pop" action="recognize_intent"/>
+    <phase ref="Wo" action="bind_context"/>
+    <phase ref="Yax" action="classify_gap"/>
+    <phase ref="Sek" action="propose_gap_route"/>
+    <phase ref="Ch'en" action="verify_classification"/>
+    <phase ref="Xul" action="return_classification"/>
+  </phases>
+</micronaut>

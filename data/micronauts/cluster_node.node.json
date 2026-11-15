@@ -1,0 +1,163 @@
+{
+  "@program": "cluster_node",
+  "@kind": "kuhul.xcfe.cluster-node.v1",
+  "@namespace": "https://kuhul.dev/",
+  "@stack": ["xjson", "xcfe", "scxq2", "kuhul"],
+  "@state": {
+    "type": "xcfe_cluster_node",
+    "cluster_port": 8788,
+    "kuhul_port": 17474,
+    "gossip_interval_ms": 500,
+    "phase": "Yax",
+    "node_state": null,
+    "peer_list": [],
+    "health_result": null
+  },
+  "@fold_map": {
+    "join": "Yax",
+    "gossip": "Wo",
+    "dispatch": "Sek",
+    "heartbeat": "Pop",
+    "leave": "Xul"
+  },
+  "@methods": {
+    "join": {
+      "@phase": "Yax",
+      "@args": ["cluster_id"],
+      "@control": [
+        {
+          "@op": "LOG",
+          "@args": ["node joining cluster $cluster_id on port 8788"],
+          "@level": "info"
+        },
+        {
+          "@op": "AGENT_TASK",
+          "@action": "register_node",
+          "@cluster": "$cluster_id",
+          "@priority": "high",
+          "@out": "registration"
+        }
+      ]
+    },
+    "gossip": {
+      "@phase": "Wo",
+      "@control": [
+        {
+          "@op": "PARALLEL",
+          "@tasks": [
+            {
+              "@name": "broadcast_state",
+              "@op": "CLUSTER_CALL",
+              "@nodes": 4,
+              "@operation": "gossip_state_broadcast",
+              "@input": "$node_state"
+            },
+            {
+              "@name": "collect_peers",
+              "@op": "CLUSTER_CALL",
+              "@nodes": 4,
+              "@operation": "gossip_peer_collect",
+              "@input": "$peer_list"
+            }
+          ]
+        },
+        {
+          "@op": "LOG",
+          "@args": ["gossip round complete @Wo"],
+          "@level": "info"
+        }
+      ]
+    },
+    "dispatch_work": {
+      "@phase": "Sek",
+      "@args": ["task_id", "payload"],
+      "@control": [
+        {
+          "@op": "CLUSTER_CALL",
+          "@nodes": 4,
+          "@operation": "tensor_convolution",
+          "@input": "$payload",
+          "@out": "dispatch_result"
+        },
+        {
+          "@op": "LOG",
+          "@args": ["work dispatched $task_id @Sek"],
+          "@level": "info"
+        }
+      ]
+    },
+    "heartbeat": {
+      "@phase": "Pop",
+      "@control": [
+        {
+          "@op": "SEMANTIC_QUERY",
+          "@query": "cluster health check — all nodes responding",
+          "@store": "health_result"
+        },
+        {
+          "@op": "IF",
+          "@cond": "$health_result.all_healthy",
+          "@then": {
+            "@op": "LOG",
+            "@args": ["cluster healthy — 4 nodes active"],
+            "@level": "info"
+          },
+          "@else": {
+            "@op": "SEQUENCE",
+            "@steps": [
+              {
+                "@op": "LOG",
+                "@args": ["cluster degraded — initiating recovery"],
+                "@level": "warn"
+              },
+              {
+                "@op": "AGENT_TASK",
+                "@action": "recover_node",
+                "@priority": "critical",
+                "@out": "recovery"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "leave": {
+      "@phase": "Xul",
+      "@control": [
+        {
+          "@op": "LOG",
+          "@args": ["node leaving cluster — flushing state @Xul"],
+          "@level": "info"
+        },
+        {
+          "@op": "AGENT_TASK",
+          "@action": "deregister_node",
+          "@priority": "high",
+          "@out": "deregistration"
+        }
+      ]
+    }
+  },
+  "@live": {
+    "on_read": {
+      "@op": "LOG",
+      "@args": ["cluster_node state read @Pop"]
+    },
+    "on_write": {
+      "@op": "LOG",
+      "@args": ["cluster_node state updated @Yax"]
+    },
+    "on_gc": {
+      "@op": "LOG",
+      "@args": ["cluster_node evicted — graceful leave @Xul"]
+    }
+  },
+  "@invariants": {
+    "cluster_port": 8788,
+    "kuhul_port": 17474,
+    "gossip_interval_ms": 500,
+    "phase_routes_are_explicit": true,
+    "execution_backend": "xcfe",
+    "compression": "scxq2"
+  }
+}

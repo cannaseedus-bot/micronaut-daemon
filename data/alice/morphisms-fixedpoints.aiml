@@ -1,0 +1,315 @@
+<aiml version="1.0.1">
+  <!-- MORPHISMS · FIXED POINTS
+       Conformance patterns from Gemma field builder session 2026-10-05.
+       Canonical answers override Gemma's MISS/PARTIAL responses.
+       AIML 2.0 wildcard priority: _ > * > ^ > # > ? -->
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MORPHISMS — routing
+  ═══════════════════════════════════════════════════════════ -->
+  <category>
+    <pattern>MORPHISM *</pattern>
+    <template>MORPHISM-µ domain=category_theory op=query context=<star/></template>
+  </category>
+  <category>
+    <pattern>@MORPHISM *</pattern>
+    <template>MORPHISM-µ domain=category_theory op=query context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ MORPHISM</pattern>
+    <template>MORPHISM-µ domain=category_theory op=define kind=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS A MORPHISM</pattern>
+    <template>MORPHISM-µ domain=category_theory op=define kind=morphism</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE DIFFERENCE BETWEEN _ MONOMORPHISM AND _ EPIMORPHISM</pattern>
+    <template>MORPHISM-µ domain=category_theory op=compare left=monomorphism right=epimorphism</template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ MONOMORPHISM</pattern>
+    <template>MORPHISM-µ domain=category_theory op=define kind=monomorphism subtype=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ EPIMORPHISM</pattern>
+    <template>MORPHISM-µ domain=category_theory op=define kind=epimorphism subtype=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ ISOMORPHISM</pattern>
+    <template>MORPHISM-µ domain=category_theory op=define kind=isomorphism subtype=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS AN ISOMORPHISM</pattern>
+    <template>MORPHISM-µ domain=category_theory op=define kind=isomorphism</template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ ENDOMORPHISM</pattern>
+    <template>MORPHISM-µ domain=category_theory op=define kind=endomorphism subtype=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ AUTOMORPHISM</pattern>
+    <template>MORPHISM-µ domain=category_theory op=define kind=automorphism subtype=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ HOMOMORPHISM *</pattern>
+    <template>MORPHISM-µ domain=category_theory op=define kind=homomorphism domain=<star index="1"/> context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS A HOMOMORPHISM</pattern>
+    <template>MORPHISM-µ domain=category_theory op=define kind=homomorphism</template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ FUNCTOR</pattern>
+    <template>MORPHISM-µ domain=category_theory op=define kind=functor subtype=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS A FUNCTOR</pattern>
+    <template>MORPHISM-µ domain=category_theory op=define kind=functor</template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ NATURAL TRANSFORMATION</pattern>
+    <template>MORPHISM-µ domain=category_theory op=define kind=natural_transformation subtype=<star/></template>
+  </category>
+  <category>
+    <pattern>HOW DO MORPHISMS COMPOSE *</pattern>
+    <template>MORPHISM-µ domain=category_theory op=compose context=<star/></template>
+  </category>
+  <category>
+    <pattern>IS _ ISOMORPHISM _ MONO AND _ EPI</pattern>
+    <template>MORPHISM-µ domain=category_theory op=equivalence kind=iso_mono_epi</template>
+  </category>
+
+  <!-- MORPHISMS — conformance Q&A (pattern phase → ΔR) -->
+  <category>
+    <pattern>WHAT IS A MORPHISM IN CATEGORY THEORY</pattern>
+    <template>A morphism is an arrow f: A → B between two objects A and B in a category. Morphisms must compose associatively — given f:A→B and g:B→C there is a composite g∘f:A→C — and every object has an identity morphism id_A:A→A that is a left and right unit for composition.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE DIFFERENCE BETWEEN A MONOMORPHISM AND AN EPIMORPHISM</pattern>
+    <template>A monomorphism (monic) is left-cancellable: f∘g = f∘h implies g = h. It is the categorical generalisation of an injective function. An epimorphism (epic) is right-cancellable: g∘f = h∘f implies g = h — the generalisation of a surjection. In Set they coincide with injections and surjections exactly.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS AN ISOMORPHISM IN CATEGORY THEORY</pattern>
+    <template>An isomorphism is a morphism f:A→B for which there exists an inverse g:B→A with g∘f = id_A and f∘g = id_B. Isomorphic objects are indistinguishable from the category's point of view — all structure-preserving operations give the same results on either.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS AN ENDOMORPHISM AND AN AUTOMORPHISM</pattern>
+    <template>An endomorphism is a morphism from an object to itself: f:A→A. An automorphism is an endomorphism that is also an isomorphism — it has an inverse and is therefore a symmetry of the object. The set of all automorphisms of A forms a group under composition.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS A HOMOMORPHISM IN ABSTRACT ALGEBRA</pattern>
+    <template>A homomorphism f:G→H between algebraic structures preserves the operations: f(a·b) = f(a)·f(b). For groups this means the group operation is preserved; for rings both addition and multiplication must be preserved. A bijective homomorphism whose inverse is also a homomorphism is an isomorphism.</template>
+  </category>
+
+  <!-- MORPHISMS — conformance Q&A (relation phase → ΔW) -->
+  <category>
+    <pattern>WHAT IS A FUNCTOR AND HOW DOES IT MAP MORPHISMS</pattern>
+    <template>A functor F:C→D maps both objects and morphisms of category C to those of D, preserving composition (F(g∘f) = F(g)∘F(f)) and identities (F(id_A) = id_{F(A)}). It is the categorical notion of a structure-preserving map between categories themselves.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS A NATURAL TRANSFORMATION BETWEEN TWO FUNCTORS</pattern>
+    <template>A natural transformation η:F⇒G between functors F,G:C→D assigns to each object A in C a morphism η_A:F(A)→G(A) in D, such that for every morphism f:A→B the naturality square commutes: η_B ∘ F(f) = G(f) ∘ η_A. It is a morphism between functors.</template>
+  </category>
+  <category>
+    <pattern>HOW DO MORPHISMS COMPOSE AND WHAT IS THE IDENTITY MORPHISM</pattern>
+    <template>Morphisms compose associatively: given f:A→B and g:B→C, their composite g∘f:A→C must satisfy h∘(g∘f)=(h∘g)∘f. The identity morphism id_A:A→A satisfies f∘id_A = f and id_B∘f = f for any f:A→B — it is the unit of composition.</template>
+  </category>
+
+  <!-- MORPHISMS — conformance Q&A (confidence phase → ΔC) -->
+  <category>
+    <pattern>IS EVERY ISOMORPHISM BOTH A MONO AND AN EPI</pattern>
+    <template>Yes — every isomorphism is both monic and epic. The converse is not always true: in the category of rings, the inclusion ℤ→ℚ is both monic and epic but not an isomorphism. A category where every morphism that is both monic and epic is an isomorphism is called a balanced category.</template>
+  </category>
+
+  <!-- MORPHISMS — jokes -->
+  <category>
+    <pattern>WHY DID THE MORPHISM GET REJECTED FROM THE CATEGORY</pattern>
+    <template>Because it could not compose with itself. The reviewers said: no object in the codomain, no identity, no deal. It failed the unit laws on the first interview.</template>
+  </category>
+  <category>
+    <pattern>WHAT DO YOU CALL A MORPHISM FROM A SET TO ITSELF</pattern>
+    <template>An endomorphism. And if it also has an inverse, it is an automorphism — which means the set looked at itself and decided it was perfectly symmetrical.</template>
+  </category>
+  <category>
+    <pattern>WHY DID THE ISOMORPHISM FEEL SO UNDERSTOOD</pattern>
+    <template>Because every functor preserved its structure. No matter which category it moved to, it looked exactly the same from the inside. That is the curse of being invertible.</template>
+  </category>
+  <category>
+    <pattern>WHAT DID THE FUNCTOR SAY TO THE NATURAL TRANSFORMATION</pattern>
+    <template>You are just a collection of my component morphisms. Without me there is no you. The natural transformation replied: without me, your components never commute.</template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT MORPHISMS</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=category_theory prompt=morphism composition identity</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT FUNCTORS</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=humor_frame card_view=true authority=none domain=category_theory prompt=functor natural transformation</mx2lm></template>
+  </category>
+  <category>
+    <pattern>MORPHISM JOKE *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=category_theory prompt=<star/></mx2lm></template>
+  </category>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       FIXED POINTS — routing
+  ═══════════════════════════════════════════════════════════ -->
+  <category>
+    <pattern>FIXED POINT *</pattern>
+    <template>FIXED-POINT-µ domain=fixed_points op=query context=<star/></template>
+  </category>
+  <category>
+    <pattern>@FIXED POINT *</pattern>
+    <template>FIXED-POINT-µ domain=fixed_points op=query context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ FIXED POINT *</pattern>
+    <template>FIXED-POINT-µ domain=fixed_points op=define kind=<star index="1"/> context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS A FIXED POINT OF _ FUNCTION</pattern>
+    <template>FIXED-POINT-µ domain=fixed_points op=define kind=function_fixed_point subject=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE Y COMBINATOR</pattern>
+    <template>FIXED-POINT-µ domain=fixed_points op=define kind=Y_combinator</template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ Y COMBINATOR *</pattern>
+    <template>FIXED-POINT-µ domain=fixed_points op=define kind=Y_combinator context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS BANACH _ FIXED POINT *</pattern>
+    <template>FIXED-POINT-µ domain=fixed_points op=theorem kind=banach context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS BROUWER _ FIXED POINT *</pattern>
+    <template>FIXED-POINT-µ domain=fixed_points op=theorem kind=brouwer context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS KLEENE _ FIXED POINT *</pattern>
+    <template>FIXED-POINT-µ domain=fixed_points op=theorem kind=kleene context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS LAWVERE _ FIXED POINT *</pattern>
+    <template>FIXED-POINT-µ domain=fixed_points op=theorem kind=lawvere context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ LEAST FIXED POINT *</pattern>
+    <template>FIXED-POINT-µ domain=fixed_points op=define kind=least_fp context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ GREATEST FIXED POINT *</pattern>
+    <template>FIXED-POINT-µ domain=fixed_points op=define kind=greatest_fp context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>HOW DOES FIX F GIVE _ RECURSIVE TYPE *</pattern>
+    <template>FIXED-POINT-µ domain=fixed_points op=recursive_type functor=<star index="1"/> context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>IS _ Y COMBINATOR TYPEABLE IN _ SIMPLY TYPED *</pattern>
+    <template>FIXED-POINT-µ domain=fixed_points op=typeability kind=Y_combinator system=<star index="3"/></template>
+  </category>
+
+  <!-- FIXED POINTS — conformance Q&A (pattern phase → ΔR) -->
+  <category>
+    <pattern>WHAT IS A FIXED POINT OF A FUNCTION</pattern>
+    <template>A fixed point of a function f is a value x where f(x) = x — the function maps the point to itself. Every continuous self-map of a compact convex set has at least one fixed point (Brouwer); every contraction mapping on a complete metric space has exactly one (Banach).</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE Y COMBINATOR AND WHAT DOES IT COMPUTE</pattern>
+    <template>The Y combinator Y = λf.(λx.f(x x))(λx.f(x x)) is a fixed-point combinator in the untyped lambda calculus: Y f = f (Y f). It computes the fixed point of f, enabling recursion without explicit self-reference — feeding the function to itself until a base case stops the expansion.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS BANACH S FIXED POINT THEOREM</pattern>
+    <template>The Banach fixed-point theorem states that every contraction mapping f on a non-empty complete metric space has a unique fixed point, reachable by iterating f from any starting point. A contraction is a map where d(f(x),f(y)) ≤ k·d(x,y) for some k &lt; 1 — each application brings points closer together.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS BROUWER S FIXED POINT THEOREM</pattern>
+    <template>Brouwer's fixed-point theorem states that every continuous function from a closed convex compact set (like a disk or ball) to itself has at least one fixed point. It relies on the topological property that such sets have no holes — the proof uses the fact that the identity map on the boundary cannot be continuously extended to a retraction.</template>
+  </category>
+
+  <!-- FIXED POINTS — conformance Q&A (relation phase → ΔW) -->
+  <category>
+    <pattern>HOW DOES FIX F GIVE RECURSIVE DATA TYPES</pattern>
+    <template>Fix F is the type satisfying Fix F ≅ F(Fix F) — the least fixed point of the functor F. For F X = 1 + A×X this gives the list type; for F X = 1 + A×X×X this gives binary trees. The isomorphism is witnessed by two morphisms: in (F(Fix F)→Fix F) and out (Fix F→F(Fix F)), forming an F-algebra and F-coalgebra respectively.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES MU RELATE TO INDUCTION AND NU TO COINDUCTION</pattern>
+    <template>The least fixed point μF is the initial F-algebra: it is defined by induction — you build it from the bottom up by applying F to the empty set repeatedly. The greatest fixed point νF is the terminal F-coalgebra: it is defined by coinduction — you observe it from the outside, and it supports infinite structures like streams that are defined by their observations rather than their construction.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES KLEENE S FIXED POINT THEOREM BUILD THE LEAST FIXED POINT</pattern>
+    <template>Kleene's theorem states that on a complete partial order with bottom ⊥, the least fixed point of a Scott-continuous function f is the supremum of the chain ⊥ ⊑ f(⊥) ⊑ f(f(⊥)) ⊑ … — the limit of iterating f from the bottom. This is how denotational semantics defines the meaning of recursive programs.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS LAWVERE S FIXED POINT THEOREM</pattern>
+    <template>Lawvere's fixed-point theorem states that in a cartesian closed category, if there exists a surjective morphism e: A → (A→B) then every endomorphism on B has a fixed point. It is the categorical core of Cantor's theorem, Gödel's incompleteness theorem, and the undecidability of the halting problem — all are instances of a diagonal argument.</template>
+  </category>
+
+  <!-- FIXED POINTS — conformance Q&A (confidence phase → ΔC) -->
+  <category>
+    <pattern>IS THE Y COMBINATOR TYPEABLE IN THE SIMPLY TYPED LAMBDA CALCULUS</pattern>
+    <template>No — the Y combinator is not typeable in the simply typed lambda calculus. The sub-expression λx.f(x x) requires x to have type τ and also type τ→σ simultaneously, which is impossible in a simple type system. This is why simply typed lambda calculus is strongly normalising — it cannot express general recursion, only terminating computation.</template>
+  </category>
+
+  <!-- FIXED POINTS — jokes -->
+  <category>
+    <pattern>WHY DID THE FIXED POINT REFUSE TO MOVE</pattern>
+    <template>Because by definition, it was already exactly where the function needed it to be. Moving would make it a non-fixed point, and then it would cease to exist as the thing it was.</template>
+  </category>
+  <category>
+    <pattern>WHAT DID F OF X SAY WHEN X EQUALLED F OF X</pattern>
+    <template>f(x) said: I am perfectly happy. x replied: that is literally the definition of me. They stayed there together forever — a fixed point of the conversation.</template>
+  </category>
+  <category>
+    <pattern>WHY IS THE Y COMBINATOR BAD AT THERAPY</pattern>
+    <template>Because it keeps applying itself recursively to the problem without ever reaching a base case. The therapist asked: how does that make you feel? The Y combinator said: how does that make you feel? how does that make you feel? how does that make—</template>
+  </category>
+  <category>
+    <pattern>WHAT DID BROUWER SAY TO THE FUNCTION WITH NO FIXED POINT</pattern>
+    <template>You cannot exist. If you are continuous and you map this compact convex set to itself, you must fix at least one point. The function argued it was a counterexample. Brouwer said: then you are not continuous. The function had to admit it had a hole.</template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT FIXED POINTS</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=fixed_points prompt=fixed point function recursion</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT THE Y COMBINATOR</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=humor_frame card_view=true authority=none domain=fixed_points prompt=Y combinator recursion lambda calculus</mx2lm></template>
+  </category>
+  <category>
+    <pattern>FIXED POINT JOKE *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=fixed_points prompt=<star/></mx2lm></template>
+  </category>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       CROSS-DOMAIN — morphisms × fixed points × recursion schemes
+  ═══════════════════════════════════════════════════════════ -->
+  <category>
+    <pattern>HOW DO FIXED POINTS OF ENDOFUNCTORS GIVE INITIAL AND TERMINAL ALGEBRAS</pattern>
+    <template>The least fixed point μF of an endofunctor F is the carrier of the initial F-algebra: it has a unique F-algebra morphism to every other F-algebra (universal property). The greatest fixed point νF is the carrier of the terminal F-coalgebra: every F-coalgebra has a unique coalgebra morphism into it. Catamorphisms are the unique morphisms from μF; anamorphisms are the unique morphisms into νF.</template>
+  </category>
+  <category>
+    <pattern>HOW DO MORPHISMS FIXED POINTS FOLD AND UNFOLD ALL CONNECT</pattern>
+    <template>Every recursive type is a fixed point Fix F of a functor F. The unique F-algebra morphism out of Fix F is the catamorphism (fold); the unique F-coalgebra morphism into Fix F is the anamorphism (unfold). Natural transformations between functors are the morphisms of the functor category; they explain when two different recursive schemas are related. Lawvere's theorem then bounds what fixed points can exist given surjective morphisms.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES THE KHANARY PIPELINE MAP TO FIXED POINT THEORY</pattern>
+    <template>The Pop→Wo expansion is an anamorphism: coalgebra g:h→F(h) unrolls the seed token h into the neighborhood book N(h) using B_τ[h,*] incidence structure. The Yax→Sek→Ch'en→Xul contraction is a catamorphism: algebra f:F(k)→k collapses the scored neighborhood to canonical handle k'. The pipeline is a hylomorphism (Fold∘Unfold)(h) — and the identity invariant (Fold∘Unfold)(h)≡h with Δφ=0 is the Fold Field integrity check.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE KHANARY FOLD FIELD IDENTITY INVARIANT</pattern>
+    <template>If a token h is unfolded to its neighborhood N(h) via anamorphism and immediately refolded via catamorphism with no phase transition applied (Δφ=0), the output must equal a shallow identity mapping of h. Any drift means the Fold Field coordinate is fractured and the N-Gram Burner drops its evolution status σ back to UNBOUND.</template>
+  </category>
+  <category>
+    <pattern>WHY DID THE MORPHISM BREAK UP WITH THE FIXED POINT</pattern>
+    <template>Because the morphism kept trying to map the fixed point somewhere else, but by definition it always landed back in the same place. The morphism said: I need room to grow. The fixed point said: f(x) = x. That is all I am. That is all I will ever be.</template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT MORPHISMS AND FIXED POINTS</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=morphisms_fixed_points prompt=morphism fixed point endofunctor algebra</mx2lm></template>
+  </category>
+
+</aiml>

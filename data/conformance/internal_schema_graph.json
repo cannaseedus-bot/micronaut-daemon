@@ -1,0 +1,1900 @@
+{
+  "@kind": "khanary.conformance.boot_gate_fixtures.v1",
+  "cases": [
+    {
+      "expect": "PASS",
+      "expect_cases": [
+        "declared_asset_in_root",
+        "declared_assets_exist",
+        "graph_parse",
+        "graph_present",
+        "imports_acyclic",
+        "imports_in_root",
+        "imports_resolve",
+        "module_fields_complete",
+        "module_has_role",
+        "module_name_unique",
+        "module_path_in_root",
+        "module_schema_exists",
+        "module_schema_file_unique",
+        "module_schema_id_unique",
+        "module_schema_parses",
+        "modules_present",
+        "required_modules_declared",
+        "required_modules_runtime_critical",
+        "runtime_contract_declared",
+        "runtime_critical_reachable",
+        "stack_root_declared",
+        "target_glob_matches"
+      ],
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md"
+                ]
+              },
+              {
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "canonical_graph"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "graph_present",
+      "files": {
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "graph_missing"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "graph_parse",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "text": "{ \"modules\": "
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "graph_unparseable"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "modules_present",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "modules_empty"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "module_fields_complete",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md"
+                ]
+              },
+              {
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "module_missing_name"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "module_has_role",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md"
+                ]
+              },
+              {
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              },
+              {
+                "name": "empty",
+                "schema_id": "urn:khanary:schema:empty:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "module_without_role"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "module_name_unique",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md"
+                ]
+              },
+              {
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "leaf",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "duplicate_module_name"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "module_schema_id_unique",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md"
+                ]
+              },
+              {
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "duplicate_schema_id"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "module_schema_file_unique",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md"
+                ]
+              },
+              {
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "duplicate_schema_file"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "module_path_in_root",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md"
+                ]
+              },
+              {
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "../outside/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "schema_path_escape"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "module_schema_exists",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md"
+                ]
+              },
+              {
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "schema_file_missing"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "module_schema_parses",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md"
+                ]
+              },
+              {
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "text": "{ not json"
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "schema_unparseable"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "imports_in_root",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md",
+                  "../outside/x.schema.json"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md"
+                ]
+              },
+              {
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "import_path_escape"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "imports_resolve",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md",
+                  "data/schema/absent.schema.json"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md"
+                ]
+              },
+              {
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "dangling_internal_import"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "imports_resolve",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md",
+                  "docs/ABSENT.md"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md"
+                ]
+              },
+              {
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "dangling_external_import"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "imports_acyclic",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md"
+                ]
+              },
+              {
+                "imports": [
+                  "data/schema/root.schema.json"
+                ],
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "import_cycle"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "stack_root_declared",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md"
+                ]
+              },
+              {
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf"
+              ],
+              "stack_root": "data/schema/nope.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "stack_root_undeclared"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "required_modules_declared",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md"
+                ]
+              },
+              {
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf",
+                "ghost"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "required_module_unknown"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "required_modules_runtime_critical",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md"
+                ]
+              },
+              {
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf",
+                "track"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "required_module_not_critical"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "runtime_critical_reachable",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md"
+                ]
+              },
+              {
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              },
+              {
+                "name": "orphan",
+                "runtime_critical": true,
+                "schema_file": "data/schema/orphan.schema.json",
+                "schema_id": "urn:khanary:schema:orphan:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "runtime_critical_unreachable"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "declared_assets_exist",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md",
+                  "docs/ABSENT.md"
+                ]
+              },
+              {
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "declared_asset_missing"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "declared_asset_in_root",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md",
+                  "../outside.md"
+                ]
+              },
+              {
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "declared_asset_path_escape"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "runtime_contract_declared",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md"
+                ]
+              },
+              {
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.semantic-tracks.v1.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              }
+            ]
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "runtime_contract_missing"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "target_glob_matches",
+      "files": {
+        "data/schema/internal-schema-graph.json": {
+          "json": {
+            "id": "khanary-internal-schema-graph-fixture",
+            "modules": [
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json",
+                  "docs/NOTES.md"
+                ],
+                "name": "root",
+                "runtime_critical": true,
+                "schema_file": "data/schema/root.schema.json",
+                "schema_id": "urn:khanary:schema:root:1",
+                "targets": [
+                  "docs/NOTES.md"
+                ]
+              },
+              {
+                "name": "leaf",
+                "runtime_critical": true,
+                "schema_file": "data/schema/leaf.schema.json",
+                "schema_id": "urn:khanary:schema:leaf:1"
+              },
+              {
+                "imports": [
+                  "data/schema/leaf.schema.json"
+                ],
+                "name": "track",
+                "schema_file": "data/schema/track.schema.json",
+                "schema_id": "urn:khanary:schema:track:1",
+                "target_glob": "data/tracks/*.nothing.json"
+              },
+              {
+                "name": "spec-xsd",
+                "schema_file": "data/schema/spec.xsd",
+                "schema_id": "urn:khanary:schema:spec-xsd:1"
+              }
+            ],
+            "runtime_contract_resolution": {
+              "required_for_runtime_execution": [
+                "root",
+                "leaf"
+              ],
+              "stack_root": "data/schema/root.schema.json"
+            }
+          }
+        },
+        "data/schema/leaf.schema.json": {
+          "json": {
+            "title": "leaf",
+            "type": "object"
+          }
+        },
+        "data/schema/root.schema.json": {
+          "json": {
+            "title": "root",
+            "type": "object"
+          }
+        },
+        "data/schema/spec.xsd": {
+          "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"/>"
+        },
+        "data/schema/track.schema.json": {
+          "json": {
+            "title": "track",
+            "type": "object"
+          }
+        },
+        "data/tracks/one.semantic-tracks.v1.json": {
+          "json": {
+            "id": "one"
+          }
+        },
+        "docs/NOTES.md": {
+          "text": "# notes\n"
+        }
+      },
+      "id": "target_glob_no_match"
+    }
+  ],
+  "gate": "internal_schema_graph",
+  "note": "Shared fixture matrix: executed by tools/boot_gate.py and by src/tests/test_schema_stack.cpp. Positive fixtures pin the full case-id set so native/Python divergence is detectable (GAP-013)."
+}

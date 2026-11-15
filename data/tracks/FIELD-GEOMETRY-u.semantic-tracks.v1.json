@@ -1,0 +1,276 @@
+{
+  "@no-eval": true,
+  "id": "FIELD-GEOMETRY-µ",
+
+  "schemes": ["field-geometry"],
+  "description": "Field geometry domain — F_Q perception field, WCR scoring, cosine similarity, ΔR refinement, 3D/256D projection, blend_field.",
+  "phase": "Yax",
+  "category": "perceptual",
+  "confidence": 0.82,
+  "static_weight": 0.88,
+  "health": 1.0,
+  "governs": [
+    "field",
+    "field geometry",
+    "perception field",
+    "field vector",
+    "f_q",
+    "f q",
+    "embed",
+    "embedding",
+    "field embed",
+    "wcr",
+    "wcr score",
+    "wcr delta",
+    "w c r",
+    "w·c·r",
+    "cosine",
+    "cosine similarity",
+    "dot product",
+    "relevance",
+    "perception",
+    "perceive",
+    "perceptual",
+    "delta r",
+    "delta_r",
+    "refined field",
+    "refined_field_vec",
+    "blend field",
+    "blend_field",
+    "vector field",
+    "field dimension",
+    "l1 normalize",
+    "sin hash",
+    "hash projection",
+    "@field",
+    "field:"
+  ],
+  "capabilities": [
+    "FIELD_DEFINE",
+    "FIELD_EMBED",
+    "FIELD_COSINE",
+    "FIELD_WCR_SCORE",
+    "FIELD_WCR_DELTA",
+    "FIELD_BLEND",
+    "FIELD_CROSS_DOMAIN",
+    "FIELD_PERCEPTION"
+  ],
+  "conformance": {
+    "questions": [
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is a perception field in KHANARY?",
+        "expected_key": "F_Q ephemeral 256D sin-hash L1-normalized Pop Xul",
+        "delta_r": 0.1
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does F_Q embed a query into a field vector?",
+        "expected_key": "canonicalize hash sin projection confidence blend L1",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What is cosine similarity in the context of semantic fields?",
+        "expected_key": "R_µ = clamp01((dot/|F_Q||K_µ| + 1)/2) direction alignment",
+        "delta_r": 0.07
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "How does a 3D field vector relate to a 256D perception field?",
+        "expected_key": "refined_field_vec sin-basis projection blend alpha=delta_r",
+        "relation_confirmed": "GRAPH-THEORY-µ",
+        "delta_w": 0.09
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "What is the relation between the WCR score and the semantic field?",
+        "expected_key": "S = W·C·R F_Q determines R shifts ranking simultaneously",
+        "relation_confirmed": "SEMANTIC-FOLD-µ",
+        "delta_w": 0.14
+      },
+      {
+        "phase": "Sek",
+        "wcr_component": "W",
+        "question": "How does delta_r refine the perception field toward a micronaut?",
+        "expected_key": "blend_field (1-a)*F + a*T L1-renorm alpha capped 0.15",
+        "relation_confirmed": "GRAPH-THEORY-µ",
+        "delta_w": 0.08
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "Is the L1-normalized field a valid probability distribution proxy?",
+        "expected_key": "signed measure negative values cosine uses direction only",
+        "delta_c": 0.08
+      },
+      {
+        "phase": "Ch'en",
+        "wcr_component": "C",
+        "question": "Does blending refined_field_vec improve cosine similarity with the target micronaut?",
+        "expected_key": "blend moves F_Q toward id hash increases dot product R cap 0.15",
+        "delta_c": 0.11
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How does the ΔR refinement process adjust the field vector to achieve micron-scale precision?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "Can the blend_field be optimized to enhance semantic coherence between the query and perception domain?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "What role does the 3D/256D projection play in preserving semantic relationships during refinement?",
+        "expected_key": "",
+        "delta_r": 0.08
+      },
+      {
+        "phase": "Yax",
+        "wcr_component": "R",
+        "question": "How can the cosine similarity metric be applied to evaluate alignment between the refined field and the target micronaut?",
+        "expected_key": "",
+        "delta_r": 0.08
+      }
+    ],
+    "jokes": [
+      {
+        "pattern": "WHY DID THE VECTOR FIELD CROSS THE ROAD",
+        "punchline": "To prove it was curl-free on the other side.",
+        "frame": "pun_bridge",
+        "semantic_key": "vector_curl_free"
+      },
+      {
+        "pattern": "WHAT DO YOU CALL A PERCEPTION FIELD THAT CANNOT DECIDE ITS DIRECTION",
+        "punchline": "Zero divergence — everywhere and nowhere.",
+        "frame": "pun_naming_frame",
+        "semantic_key": "field_zero_divergence"
+      },
+      {
+        "pattern": "WHY DID F Q GET REJECTED BY THE MICRONAUT",
+        "punchline": "Their cosine similarity was nearly orthogonal. R_µ = 0.51.",
+        "frame": "delivery_frame",
+        "semantic_key": "fq_orthogonal_rejection"
+      },
+      {
+        "pattern": "WHAT DID W C R SAY TO THE RELEVANCE SCORE",
+        "punchline": "Without me multiplying you, you are just a lonely dot product.",
+        "frame": "humor_frame",
+        "semantic_key": "wcr_product_commitment"
+      },
+      {
+        "pattern": "WHY DID THE VECTOR FIELD CROSS THE ROAD TO PROVE IT WAS CURL-FREE ON THE OTHER S",
+        "punchline": "Because it wanted to avoid the tangled mess of WCR scoring.",
+        "frame": "humor_frame",
+        "semantic_key": "why_did_the_vector_field_cross_the_road_to_prove_i"
+      },
+      {
+        "pattern": "IN THE WORLD OF F_Q PERCEPTION FIELDS, WHAT HAPPENS WHEN ΔR REFINEMENT MEETS 3D/",
+        "punchline": "It creates a seamless blend_field that makes even the most complex geometry feel smooth.",
+        "frame": "humor_frame",
+        "semantic_key": "in_the_world_of_f_q_perception_fields_what_happens"
+      },
+      {
+        "pattern": "WHY DID THE COSINE SIMILARITY SCORE ALMOST REACH ZERO WITH THE MICRONAUT",
+        "punchline": "Because their alignment was so orthogonal, it felt like a flat map in a curved space.",
+        "frame": "humor_frame",
+        "semantic_key": "why_did_the_cosine_similarity_score_almost_reach_z"
+      },
+      {
+        "pattern": "WHAT DID W SAY TO THE RELEVANCE SCORE WHEN YOU ASKED IT WITHOUT MULTIPLYING",
+        "punchline": "I’m just a lonely dot product—no need for a cross-check.",
+        "frame": "humor_frame",
+        "semantic_key": "what_did_w_say_to_the_relevance_score_when_you_ask"
+      }
+    ]
+  },
+  "relations": [
+    {
+      "target": "GRAPH-THEORY-µ",
+      "verb": "@requires",
+      "directed": true
+    },
+    {
+      "target": "SEMANTIC-FOLD-µ",
+      "verb": "@extends",
+      "directed": true
+    },
+    {
+      "target": "INFER-µ",
+      "verb": "@delegates_to",
+      "directed": true
+    },
+    {
+      "target": "MATH-µ",
+      "verb": "@delegates_to",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "gramRead",
+      "key": "field_query",
+      "weight": 1.0
+    },
+    {
+      "phase": "Wo",
+      "op": "lower_field_aiml",
+      "note": "L_A field ISA",
+      "weight": 1.0
+    },
+    {
+      "phase": "Yax",
+      "op": "derive_field_pattern",
+      "note": "R cosine alignment",
+      "weight": 1.0
+    },
+    {
+      "phase": "Sek",
+      "op": "resolve_field_relation",
+      "note": "W blend arc",
+      "weight": 1.0
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_field_confidence",
+      "note": "C authority gate",
+      "weight": 1.0
+    },
+    {
+      "phase": "Xul",
+      "op": "emit_answer",
+      "scope": "local",
+      "weight": 1.0
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "FIELD-GEOMETRY-µ",
+    "manifest_access": [
+      "words",
+      "micronaut",
+      "kuhul"
+    ],
+    "effects": [
+      "gramRead",
+      "gramWrite",
+      "field:embed",
+      "field:cosine",
+      "field:wcr"
+    ],
+    "ports": [],
+    "coordinator": false
+  }
+}

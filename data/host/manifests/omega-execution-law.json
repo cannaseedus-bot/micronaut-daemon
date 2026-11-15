@@ -1,0 +1,11 @@
+{
+  "@context":"asx://kuhul/xcfe/execution/law/omega",
+  "@version":"Ω.1.0.0",
+  "@law":"ASX = XCFE = XJSON = KUHUL = AST",
+  "@authority":"governance",
+  "@control_vectors":["@if","@then","@else","@loop","@break","@continue","@dispatch","@route","@return"],
+  "@pipeline":{"stages":["@Pop","@Wo","@Sek","@Xul","@Ch'en"],"mandatory":true},
+  "@rules":{"control_required":true,"enter_at":"@Pop","execute_at":"@Sek","mutation_gate":"@Xul","output_gate":"@Ch'en","registered_variables_only":true,"branching":"@if/@then/@else","repetition":"@loop"},
+  "@dom_legal_operations":["@dom.get","@dom.set","@dom.render","@dom.append","@dom.remove","@dom.class","@dom.style"],
+  "@fixed_point":{"recursion":"U(n+1) = Ω(U(n))","property":"representable_executable_transformable"}
+}

@@ -1,0 +1,22 @@
+{
+  "@type": "khanary.xcfe_program.v1",
+  "@no-eval": true,
+  "id": "xcfe.transform",
+  "program_class": "TRANSFORM",
+  "phase": "Sek",
+  "input_role": "source_tensor",
+  "output_role": "transformed_tensor",
+  "admission": "explicit",
+  "description": "Applies a structural transformation to a tensor or gram value at Sek. TRANSFORM class — canonical authority phase Sek.",
+  "steps": [
+    { "phase": "Pop",   "op": "gramRead",   "id": "xcfe_source" },
+    { "phase": "Sek",   "op": "dispatch",   "id": "transform_op" },
+    { "phase": "Ch'en", "op": "verify",     "id": "transform_valid" },
+    { "phase": "Xul",   "op": "gramWrite",  "id": "transformed_tensor" }
+  ],
+  "authority": {
+    "semantic_authority": false,
+    "topology_mutation": false,
+    "commit_authorized": false
+  }
+}

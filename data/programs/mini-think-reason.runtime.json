@@ -1,0 +1,58 @@
+{
+  "$schema": "kuhul.dev/runtime-model/v1",
+  "id": "pi-kuhul-think-reason-mini",
+  "status": "training",
+  "backend": "pi-kuhul",
+  "checkpoint": "models/from_zero/trained/pi-kuhul-think-reason-mini/final.pt",
+  "checkpoint_format": "torch_checkpoint_wrapped",
+  "architecture": {
+    "parameters": "53M",
+    "shards": 6,
+    "hidden": 768,
+    "layers": 6,
+    "vocab_size": 1024,
+    "max_block": 128
+  },
+  "tokenizer": {
+    "kind": "utf8-glyph",
+    "vocab_size": 1024,
+    "reversible": true,
+    "contract": "programs/glyph.tokens.json",
+    "input_encoding": "UTF-8"
+  },
+  "lanes": {
+    "THINK": { "micronaut": "µ-think", "fold": "Wo" },
+    "REASON": { "micronaut": "µ-reason", "fold": "Chen" }
+  },
+  "training_feed": {
+    "staged_directory": "artifacts/response-lanes/mini-think-reason",
+    "sources": [
+      "artifacts/response-lanes/think.jsonl",
+      "artifacts/response-lanes/reason.jsonl"
+    ],
+    "record_format": "{lane,micronaut,fold,input,output}",
+    "lane_conditioning": true,
+    "source_files_unchanged": true
+  },
+  "semantic_runtime": {
+    "backend": "opencl_1_2",
+    "dispatch": "opencl_1_2.matrix5x4_matmul[x6]",
+    "every_steps": 50,
+    "loss_weight": 0.000001,
+    "gradient_authority": "pytorch"
+  },
+  "prompt_contract": {
+    "template": "<LANE:{lane}> <FOLD:{fold}> <MICRONAUT:{micronaut}> {input} {output}",
+    "inference_prefixes": {
+      "THINK": "<LANE:THINK> <FOLD:Wo> <MICRONAUT:µ-think>",
+      "REASON": "<LANE:REASON> <FOLD:Chen> <MICRONAUT:µ-reason>"
+    },
+    "output": "UTF-8 text decoded from glyph token IDs"
+  },
+  "serve": {
+    "command": "python tools/pi_kuhul_serve.py --ckpt models/from_zero/trained/pi-kuhul-think-reason-mini/final.pt --tokenizer utf8-glyph --semantic-backend opencl --semantic-every 1",
+    "endpoint": "/",
+    "request": "{prompt,temperature,top_k}",
+    "response": "{ok,text,tokens,token_ids,tokenizer,backend}"
+  }
+}

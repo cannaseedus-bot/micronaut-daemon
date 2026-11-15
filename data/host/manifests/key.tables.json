@@ -1,0 +1,142 @@
+{
+  "schema": "kuhul.key-tables.v1",
+  "description": "K'UHUL key-grammar-aware table extension. Each ⟁KEY identifier maps a semantic address to a physical table, declares a phase binding, and sets JROM recording policy. Inline schemas are provided for runtime tables not in tables.json.",
+  "source_manifest": "vendor/key-grammar-kit/data/host/manifests/tables.json",
+  "tables": {
+    "⟁DB:USER_PROFILE": {
+      "table_id": "user_profile",
+      "phase": "Pop",
+      "jrom_record": "read_only",
+      "capability": "db:query"
+    },
+    "⟁DB:USER_POST": {
+      "table_id": "user_post",
+      "phase": "Wo",
+      "jrom_record": "append_event",
+      "capability": "db:query"
+    },
+    "⟁DB:POST_REPLY": {
+      "table_id": "post_reply",
+      "phase": "Wo",
+      "jrom_record": "append_event",
+      "capability": "db:query"
+    },
+    "⟁DB:SESSION": {
+      "table_id": "session",
+      "phase": "Pop",
+      "jrom_record": "read_only",
+      "capability": "db:query"
+    },
+    "⟁DB:AUDIT_LOG": {
+      "table_id": "audit_log",
+      "phase": "Ch'en",
+      "jrom_record": "always",
+      "capability": "db:query",
+      "append_only": true
+    },
+    "⟁DB:MEDIA_ASSET": {
+      "table_id": "media_asset",
+      "phase": "Yax",
+      "jrom_record": "append_event",
+      "capability": "db:query"
+    },
+    "⟁DB:NGRAM_BIGRAM": {
+      "table_id": "ngram_bigram",
+      "phase": "Yax",
+      "jrom_record": "evidence_only",
+      "capability": "db:query",
+      "learning_state": "evidence_only"
+    },
+    "⟁DB:NGRAM_TRIGRAM": {
+      "table_id": "ngram_trigram",
+      "phase": "Yax",
+      "jrom_record": "evidence_only",
+      "capability": "db:query",
+      "learning_state": "evidence_only"
+    },
+    "⟁DB:JROM_EVENT": {
+      "table_id": "jrom_event",
+      "phase": "Ch'en",
+      "jrom_record": "always",
+      "capability": "db:query",
+      "append_only": true,
+      "schema_inline": {
+        "event_id":           {"type": "uuid",    "primary_key": true,  "required": true},
+        "sequence":           {"type": "integer",                        "required": true},
+        "timestamp":          {"type": "text",                           "required": true},
+        "tool_id":            {"type": "text",                           "required": true},
+        "verb":               {"type": "text",                           "required": true},
+        "target":             {"type": "text",                           "required": true},
+        "args":               {"type": "json"},
+        "phase":              {"type": "text",                           "required": true},
+        "lane":               {"type": "text",                           "required": true},
+        "status":             {"type": "text",                           "required": true},
+        "result":             {"type": "json"},
+        "event_hash":         {"type": "text",                           "required": true},
+        "previous_event_hash":{"type": "text"}
+      }
+    },
+    "⟁DB:ELIZA_TRACE": {
+      "table_id": "eliza_trace",
+      "phase": "Sek",
+      "jrom_record": "evidence_only",
+      "capability": "db:query",
+      "append_only": true,
+      "schema_inline": {
+        "trace_id":       {"type": "uuid",    "primary_key": true,  "required": true},
+        "timestamp":      {"type": "text",                           "required": true},
+        "query":          {"type": "text",                           "required": true},
+        "gap_type":       {"type": "text"},
+        "operator":       {"type": "text"},
+        "operator_family":{"type": "text"},
+        "field_key":      {"type": "text"},
+        "source":         {"type": "text"},
+        "template_hash":  {"type": "text"},
+        "fact_key":       {"type": "text"},
+        "proposal_id":    {"type": "text"}
+      }
+    },
+    "⟁DB:FIELD_PROPOSAL": {
+      "table_id": "field_proposal",
+      "phase": "Yax",
+      "jrom_record": "evidence_only",
+      "capability": "db:query",
+      "append_only": false,
+      "schema_inline": {
+        "proposal_id":   {"type": "text",    "primary_key": true,  "required": true},
+        "prompt":        {"type": "text",                           "required": true},
+        "field_count":   {"type": "integer"},
+        "keys_per_field":{"type": "integer"},
+        "eliza_operator":{"type": "text"},
+        "eliza_family":  {"type": "text"},
+        "eliza_phase":   {"type": "text"},
+        "created_at":    {"type": "text"},
+        "candidate_file":{"type": "text"}
+      }
+    },
+    "⟁DB:MICRONAUT_REGISTRY_ENTRY": {
+      "table_id": "micronaut_registry_entry",
+      "phase": "Wo",
+      "jrom_record": "read_only",
+      "capability": "db:query",
+      "source_manifest": "vendor/key-grammar-kit/data/host/manifests/micronauts.tables.json",
+      "authority": "declaration_only"
+    },
+    "⟁DB:MICRONAUT_PROGRAM": {
+      "table_id": "micronaut_program",
+      "phase": "Wo",
+      "jrom_record": "read_only",
+      "capability": "db:query",
+      "source_manifest": "vendor/key-grammar-kit/data/host/manifests/micronauts.tables.json",
+      "authority": "declaration_only"
+    },
+    "⟁DB:MICRONAUT_ROUTE_CONTRACT": {
+      "table_id": "micronaut_route_contract",
+      "phase": "Wo",
+      "jrom_record": "read_only",
+      "capability": "db:query",
+      "source_manifest": "vendor/key-grammar-kit/data/host/manifests/micronauts.tables.json",
+      "authority": "declaration_only"
+    }
+  }
+}

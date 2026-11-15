@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from khanary_topology.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH </pattern>
+    <template>source khanary_topology.gml; label KHANARY_TOPOLOGY; identity 100; directed 0; nodes 10; edges 15. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 0</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 0; id: 0; label: REASON-µ; x: -1.0; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE REASON-Μ</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 0; id: 0; label: REASON-µ; x: -1.0; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 1</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 1; id: 1; label: CREATE-µ; x: 1.0; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE CREATE-Μ</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 1; id: 1; label: CREATE-µ; x: 1.0; y: -1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 2</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 2; id: 2; label: INFER-µ; x: -1.0; y: 1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE INFER-Μ</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 2; id: 2; label: INFER-µ; x: -1.0; y: 1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 3</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 3; id: 3; label: ELIZA; x: 1.0; y: 1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ELIZA</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 3; id: 3; label: ELIZA; x: 1.0; y: 1.0; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 4</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 4; id: 4; label: TOOL-µ; x: -1.0; y: -1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE TOOL-Μ</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 4; id: 4; label: TOOL-µ; x: -1.0; y: -1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 5</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 5; id: 5; label: ORCH-µ; x: 1.0; y: -1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE ORCH-Μ</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 5; id: 5; label: ORCH-µ; x: 1.0; y: -1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 6</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 6; id: 6; label: MEM-µ; x: -1.0; y: 1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE MEM-Μ</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 6; id: 6; label: MEM-µ; x: -1.0; y: 1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 7</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 7; id: 7; label: Coordinator; x: 1.0; y: 1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE COORDINATOR</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 7; id: 7; label: Coordinator; x: 1.0; y: 1.0; z: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 8</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 8; category: structural; id: 8; label: MORPHISM-µ; x: -1.0; y: -1.0; z: 1.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE MORPHISM-Μ</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 8; category: structural; id: 8; label: MORPHISM-µ; x: -1.0; y: -1.0; z: 1.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 9</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 9; category: structural; id: 9; label: FIXED-POINT-µ; x: 0.0; y: -1.0; z: 1.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE FIXED-POINT-Μ</pattern>
+    <template>Graph KHANARY_TOPOLOGY; node 9; category: structural; id: 9; label: FIXED-POINT-µ; x: 0.0; y: -1.0; z: 1.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 0 BIT0:ANALYSIS-GENERATION 1</pattern>
+    <template>Graph KHANARY_TOPOLOGY; edge 0 to 1; label: bit0:analysis-generation; source: 0; target: 1; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 2 BIT0:ANALYSIS-GENERATION 3</pattern>
+    <template>Graph KHANARY_TOPOLOGY; edge 2 to 3; label: bit0:analysis-generation; source: 2; target: 3; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 4 BIT0:ANALYSIS-GENERATION 5</pattern>
+    <template>Graph KHANARY_TOPOLOGY; edge 4 to 5; label: bit0:analysis-generation; source: 4; target: 5; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 6 BIT0:ANALYSIS-GENERATION 7</pattern>
+    <template>Graph KHANARY_TOPOLOGY; edge 6 to 7; label: bit0:analysis-generation; source: 6; target: 7; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 0 BIT1:ACTIVE-MEMORY 2</pattern>
+    <template>Graph KHANARY_TOPOLOGY; edge 0 to 2; label: bit1:active-memory; source: 0; target: 2; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1 BIT1:ACTIVE-MEMORY 3</pattern>
+    <template>Graph KHANARY_TOPOLOGY; edge 1 to 3; label: bit1:active-memory; source: 1; target: 3; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 4 BIT1:ACTIVE-MEMORY 6</pattern>
+    <template>Graph KHANARY_TOPOLOGY; edge 4 to 6; label: bit1:active-memory; source: 4; target: 6; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 5 BIT1:ACTIVE-MEMORY 7</pattern>
+    <template>Graph KHANARY_TOPOLOGY; edge 5 to 7; label: bit1:active-memory; source: 5; target: 7; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 0 BIT2:OBJECT-META 4</pattern>
+    <template>Graph KHANARY_TOPOLOGY; edge 0 to 4; label: bit2:object-meta; source: 0; target: 4; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 1 BIT2:OBJECT-META 5</pattern>
+    <template>Graph KHANARY_TOPOLOGY; edge 1 to 5; label: bit2:object-meta; source: 1; target: 5; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 2 BIT2:OBJECT-META 6</pattern>
+    <template>Graph KHANARY_TOPOLOGY; edge 2 to 6; label: bit2:object-meta; source: 2; target: 6; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 3 BIT2:OBJECT-META 7</pattern>
+    <template>Graph KHANARY_TOPOLOGY; edge 3 to 7; label: bit2:object-meta; source: 3; target: 7; verb: @related_to; weight: 1.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 0  8</pattern>
+    <template>Graph KHANARY_TOPOLOGY; edge 0 to 8; label: bit_morphism; source: 0; target: 8; verb: @informs; weight: 0.85. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 8 MORPHISM-FIXPT 9</pattern>
+    <template>Graph KHANARY_TOPOLOGY; edge 8 to 9; label: morphism-fixpt; source: 8; target: 9; verb: @informs; weight: 0.90. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 9 FIXPT-MORPHISM 8</pattern>
+    <template>Graph KHANARY_TOPOLOGY; edge 9 to 8; label: fixpt-morphism; source: 9; target: 8; verb: @informs; weight: 0.90. Data-only graph record.</template>
+  </category>
+</aiml>

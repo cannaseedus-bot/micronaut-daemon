@@ -1,0 +1,60 @@
+{
+  "$schema_version": "khanary.tables.v1",
+  "$id": "micronauts.tables.json",
+  "$loaded_at": "2026-11-04T00:00:00Z",
+  "$description": "SQLite schema for Micronaut declarations, program descriptors, and route-contract projections. Rows describe registry data and never grant runtime registration or XCFE admission.",
+  "database": {
+    "name": "KhanaryDB",
+    "version": 2,
+    "backend": "sqlite3"
+  },
+  "tables": {
+    "micronaut_registry_entry": {
+      "id": "micronaut_registry_entry",
+      "primary_key": "micronaut_id",
+      "fields": {
+        "micronaut_id": { "type": "string", "required": true },
+        "track_id": { "type": "string", "required": true },
+        "program_ref": { "type": "string" },
+        "route_contract_ref": { "type": "string" },
+        "descriptor_state": {
+          "type": "enum", "required": true,
+          "options": ["declared"], "closed": true, "unknown_policy": "reject"
+        },
+        "authority_boundary": { "type": "json", "required": true },
+        "source_ref": { "type": "string", "required": true },
+        "recorded_at": { "type": "timestamp", "required": true }
+      }
+    },
+    "micronaut_program": {
+      "id": "micronaut_program",
+      "primary_key": "program_ref",
+      "fields": {
+        "program_ref": { "type": "string", "required": true },
+        "schema_id": { "type": "string", "required": true },
+        "version": { "type": "string", "required": true },
+        "no_eval": { "type": "boolean", "required": true },
+        "topology": { "type": "json", "required": true },
+        "runtime_stages": { "type": "json", "required": true },
+        "authority_boundary": { "type": "json", "required": true },
+        "source_hash": { "type": "string", "required": true },
+        "source_ref": { "type": "string", "required": true }
+      }
+    },
+    "micronaut_route_contract": {
+      "id": "micronaut_route_contract",
+      "primary_key": "route_contract_id",
+      "fields": {
+        "route_contract_id": { "type": "string", "required": true },
+        "micronaut_id": { "type": "string", "required": true },
+        "track_id": { "type": "string", "required": true },
+        "phase": { "type": "string", "required": true },
+        "surface_counts": { "type": "json", "required": true },
+        "callable_surface_declared": { "type": "boolean", "required": true },
+        "route_contract_required": { "type": "boolean", "required": true },
+        "authority_boundary": { "type": "string", "required": true },
+        "source_ref": { "type": "string", "required": true }
+      }
+    }
+  }
+}

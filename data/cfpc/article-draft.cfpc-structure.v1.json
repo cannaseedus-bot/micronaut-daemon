@@ -1,0 +1,26 @@
+{
+    "@kind": "semantic.structure.v1",
+    "@id": "S-ARTICLE-DRAFT-001",
+    "@template": "article.v1",
+    "@sections": [
+        {
+            "@id": "S-TITLE",
+            "@role": "title"
+        },
+        {
+            "@id": "S-INTRO",
+            "@role": "introduction",
+            "@depends": ["S-TITLE"]
+        },
+        {
+            "@id": "S-BODY",
+            "@role": "body",
+            "@depends": ["S-INTRO"]
+        },
+        {
+            "@id": "S-CONC",
+            "@role": "conclusion",
+            "@depends": ["S-BODY"]
+        }
+    ]
+}

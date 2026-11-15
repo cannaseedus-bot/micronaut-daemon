@@ -1,0 +1,51 @@
+{
+  "schema": "kuhul.jrom.table-manifest.v1",
+  "description": "Master JROM table controller. The single file that lists all table manifests, declares per-table JROM recording policy, and specifies the SQLite database target. sql-tables.py reads this file to discover and create all tables. The always-policy event stream also records completed, phase-gated daemon response runs as replay evidence.",
+  "database": {
+    "path": ".kuhul-data/khanary.db",
+    "backend": "sqlite3",
+    "schema_version": 2,
+    "note": "Path is relative to repo root. Created by sql-tables.py --create."
+  },
+  "jrom": {
+    "stream": ".kuhul-data/jrom/table-events.jsonl",
+    "binary": ".kuhul-data/jrom/table-events.jrom",
+    "record_phase": "Ch'en",
+    "commit_phase": "Xul",
+    "replay_phase": "Pop",
+    "tool_ref": "vendor/key-grammar-kit/data/programs/tools/jrom_replay.py"
+  },
+  "manifests": [
+    {
+      "id": "host-tables",
+      "path": "vendor/key-grammar-kit/data/host/manifests/tables.json",
+      "schema": "khanary.tables.v1",
+      "description": "Canonical KHANARY schema: app tables, ngram tables, intent tables, probability layers"
+    },
+    {
+      "id": "micronaut-tables",
+      "path": "vendor/key-grammar-kit/data/host/manifests/micronauts.tables.json",
+      "schema": "khanary.tables.v1",
+      "description": "Declared Micronaut identities, program descriptors, and route-contract projections; metadata only"
+    },
+    {
+      "id": "key-tables",
+      "path": "vendor/key-grammar-kit/data/host/manifests/key.tables.json",
+      "schema": "kuhul.key-tables.v1",
+      "description": "K'UHUL key-grammar extension: ⟁KEY semantic addresses, phase bindings, JROM recording policy, inline schemas for JROM/ELIZA/field-proposal runtime tables"
+    }
+  ],
+  "recording_policy": {
+    "always":       "Record every mutation event and completed daemon phase-run evidence event to the JROM stream (append_only tables: audit_log, jrom_event)",
+    "append_event": "Record create/insert events only (user_post, post_reply, media_asset)",
+    "evidence_only":"Record as evidence candidate; requires Ch'en verification before admission (ngram_*, eliza_trace, field_proposal)",
+    "read_only":    "No JROM recording; table is read-only from JROM perspective (user_profile, session)"
+  },
+  "authority": {
+    "semantic": false,
+    "xcfe_admission": "not_run",
+    "execution": false,
+    "commit": false,
+    "note": "Table mutations are DATA_ONLY until Ch'en verification and Xul fold closure."
+  }
+}

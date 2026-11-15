@@ -1,0 +1,99 @@
+(* ============================================================ *)
+(* Regex -> K'UHUL Runtime Grammar                              *)
+(* Maps regular-language algebra into semantic fold phases.      *)
+(* ============================================================ *)
+
+RegexKuhulMap ::= LanguageSet RegexOperator PhaseProjection FoldRoute ;
+
+LanguageSet    ::= LiteralSet | UnionSet | ProductSet | ClosureSet | WildcardSet ;
+LiteralSet     ::= "literal" ":" Singleton ;
+UnionSet       ::= LanguageSet "|" LanguageSet ;
+ProductSet     ::= LanguageSet "," LanguageSet ;
+ClosureSet     ::= LanguageSet ( "*" | "+" | Quantifier ) ;
+WildcardSet    ::= "." | ".*" ;
+Singleton      ::= Token ;
+Quantifier     ::= "{" Number [ "," Number ] "}" ;
+
+RegexOperator  ::= LiteralOp | AlternationOp | ConcatenationOp | OptionalOp | RepetitionOp | WildcardOp | AnchorOp | GroupOp ;
+LiteralOp      ::= "literal" ;
+AlternationOp  ::= "alternation" ;
+ConcatenationOp ::= "concatenation" ;
+OptionalOp     ::= "optional" ;
+RepetitionOp   ::= "kleene_star" | "one_or_more" | "bounded_quantifier" ;
+WildcardOp     ::= "wildcard_dot" | "wildcard_sequence" ;
+AnchorOp       ::= "anchor_start" | "anchor_end" ;
+GroupOp        ::= "group" ;
+
+PhaseProjection ::= PopProjection WoProjection YaxProjection SekProjection ChenProjection XulProjection ;
+PopProjection  ::= "Pop" ":" "literal_activation" | "Pop" ":" "root_anchor" ;
+WoProjection   ::= "Wo" ":" "mask_constraint" | "Wo" ":" "sequence_binding" ;
+YaxProjection  ::= "Yax" ":" "candidate_expansion" | "Yax" ":" "possibility_graph" ;
+SekProjection  ::= "Sek" ":" "matcher_execution" | "Sek" ":" "automaton_step" ;
+ChenProjection ::= "Ch'en" ":" "state_set_observation" | "Ch'en" ":" "match_evidence" ;
+XulProjection  ::= "Xul" ":" "accept_collapse" | "Xul" ":" "canonical_language_key" ;
+
+FoldRoute      ::= "Pop" "->" "Wo" "->" "Yax" "->" "Sek" "->" "Ch'en" "->" "Xul" ;
+
+Token          ::= [A-Za-z0-9_:-]+ ;
+Number         ::= [0-9]+ ;
+
+
+(* =================================================================== *)
+(* v2 OPTIONAL GRAMMAR-DIRECTED PHASE-FOLD EXTENSION                    *)
+(* Original RegexKuhulMap and all existing productions remain intact.  *)
+(* =================================================================== *)
+
+RegexPhaseProgram ::= "regex_phase_program" "{" RegexTrack RegexContext RegexPatternBank
+                      RegexUnigramBank RegexBigramBank RegexTrigramBank
+                      RegexBindingBank RegexPipeline RegexEncoding "}" ;
+
+(* Track is the bounded field of play; context is invocation-local. *)
+RegexTrack        ::= "track" "(" QuotedText "," "grammar_ref" "(" QuotedText ")" ")" ;
+RegexContext      ::= "context" "(" "query" "=" QuotedText [ "," "captures" "=" QuotedText ] ")" ;
+RegexPatternBank  ::= "patterns" "{" { RegexPatternTemplate } "}" ;
+RegexPatternTemplate ::= "pattern" "(" QuotedText "," QuotedText ")" ;
+
+(* Static unigram corpus priors are not updated by runtime learning. *)
+RegexUnigramBank  ::= "unigrams" "{" { RegexUnigram } "}" ;
+RegexUnigram      ::= "unigram" "(" QuotedText "," WeightLiteral ")" ;
+
+(* Ordered bigram addresses refer to vector geometry, not implicitly tensors. *)
+RegexBigramBank   ::= "bigrams" "{" { RegexBigram } "}" ;
+RegexBigram       ::= "bigram" "(" QuotedText "," QuotedText ","
+                      "vector_ref" "(" QuotedText ")" ")" ;
+
+(* Every trigram explicitly stores phase + executable fold reference. *)
+RegexTrigramBank  ::= "trigrams" "{" { RegexTrigram } "}" ;
+RegexTrigram      ::= "trigram" "(" RegexTriple "," RegexStoredPhase ","
+                      "fold_ref" "(" QuotedText ")"
+                      [ "," "binding_ref" "(" QuotedText ")" ]
+                      [ "," "template_ref" "(" QuotedText ")" ] ")" ;
+RegexTriple       ::= "[" RegexAtom "," RegexAtom "," RegexAtom "]" ;
+RegexAtom         ::= QuotedText | "*" | "?" ;
+RegexStoredPhase  ::= "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul" ;
+
+(* Regex groups and wildcard matches may populate typed binding slots. *)
+RegexBindingBank  ::= "bindings" "{" { RegexBinding } "}" ;
+RegexBinding      ::= "bind" "(" QuotedText "," RegexBindingSource "," QuotedText ")" ;
+RegexBindingSource ::= "capture" | "lm_chain" | "char_overlap" | "explicit" ;
+
+(* Functional Fold is distinct from K'UHUL phase execution. *)
+RegexPipeline     ::= "pipeline" "(" "Match" "," "Bind" "," "Filter" ","
+                      "Map" "," "Score" [ "," "Fold" ] "," "PhaseExecute" ")" ;
+RegexEncoding     ::= "encoding" "(" "container" "=" RegexContainer ","
+                      "preserve" "=" "key_value_phase_fold_binding" ")" ;
+RegexContainer    ::= "BSON" | "CBOR" | "SCXQ2" ;
+QuotedText        ::= '"' { ? Unicode character except unescaped double quote ? } '"' ;
+WeightLiteral     ::= ? finite numeric literal; lexical parsing by host ? ;
+
+(* HOST-ENFORCED INVARIANTS:
+   - Original regex phase projections are descriptive; a trigram's stored
+     phase is authoritative for that trigram and cannot be overwritten.
+   - Regex captures/groups, wildcard arity, and binding references must validate.
+   - Regex matching and vector similarity do not grant XCFE execution authority.
+   - Ch'en observations and Xul commits respect existing authority gates.
+   - Keep static corpus weights separate from learned evidence.
+   - BSON/CBOR are optional document encodings; SCXQ2 field chunks and
+     executable lanes have separate round-trip/equivalence obligations.
+   - No regex-to-fold transformation is executed by EBNF alone.
+*)

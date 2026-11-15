@@ -1,0 +1,129 @@
+{
+  "@kind": "semantic.json-program.registry.v1",
+  "@version": "1.0.0",
+  "routes": [
+    {
+      "route": "xaiml.unresolved",
+      "verbs": [
+        "POST"
+      ],
+      "operations": [
+        "resolve",
+        "inspect"
+      ],
+      "roots": [],
+      "authority": "observation_only",
+      "write_requires_approval": true
+    },
+    {
+      "route": "micronaut.program",
+      "verbs": [
+        "POST"
+      ],
+      "operations": [
+        "list",
+        "inspect",
+        "run"
+      ],
+      "roots": [],
+      "authority": "observation_only",
+      "write_requires_approval": true
+    },
+    {
+      "route": "json.ui",
+      "verbs": [
+        "POST"
+      ],
+      "operations": [
+        "compile",
+        "inspect",
+        "call"
+      ],
+      "roots": [
+        "data/host/examples"
+      ],
+      "authority": "observation_only",
+      "write_requires_approval": true
+    },
+    {
+      "route": "json.app",
+      "verbs": [
+        "POST"
+      ],
+      "operations": [
+        "compile",
+        "inspect",
+        "call"
+      ],
+      "roots": [
+        "data/host/apps"
+      ],
+      "authority": "observation_only",
+      "write_requires_approval": true
+    },
+    {
+      "route": "cdata.store",
+      "verbs": ["POST"],
+      "operations": ["init", "put", "get_all"],
+      "roots": [],
+      "authority": "observation_only",
+      "write_requires_approval": true
+    },
+    {
+      "route": "semantic.fieldgraph",
+      "verbs": [
+        "GET",
+        "POST",
+        "READ",
+        "PATCH"
+      ],
+      "operations": [
+        "compose",
+        "inspect"
+      ],
+      "roots": [
+        "data"
+      ],
+      "authority": "observation_only",
+      "write_requires_approval": true
+    },
+    {
+      "route": "graphscript.codegen",
+      "verbs": [
+        "GET",
+        "POST",
+        "READ"
+      ],
+      "operations": [
+        "project",
+        "inspect"
+      ],
+      "roots": [
+        "data",
+        "tests/graphscript"
+      ],
+      "authority": "observation_only",
+      "write_requires_approval": true
+    },
+    {
+      "route": "json.document",
+      "verbs": [
+        "GET",
+        "POST",
+        "READ",
+        "PATCH",
+        "WRITE"
+      ],
+      "operations": [
+        "inspect",
+        "validate"
+      ],
+      "roots": [
+        "data",
+        "tests"
+      ],
+      "authority": "observation_only",
+      "write_requires_approval": true
+    }
+  ]
+}

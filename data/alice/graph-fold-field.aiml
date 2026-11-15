@@ -1,0 +1,391 @@
+<aiml version="1.0.1">
+  <!-- GRAPH THEORY · SEMANTIC FOLDS · FIELD GEOMETRY
+       Conformance patterns generated from the field builder session.
+       Topics: graph theory, semantic folds, field geometry.
+       Each section: routing patterns → conformance Q&A → jokes.
+       Joke categories are direct Q→A to give the conformance harness
+       known-good punchlines; routing categories delegate to JOKE-µ. -->
+
+  <!-- ═══════════════════════════════════════════════════════════
+       GRAPH THEORY — routing
+  ═══════════════════════════════════════════════════════════ -->
+  <category>
+    <pattern>GRAPH *</pattern>
+    <template>GRAPH-THEORY-µ domain=graph query=<star/></template>
+  </category>
+  <category>
+    <pattern>@GRAPH *</pattern>
+    <template>GRAPH-THEORY-µ domain=graph query=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ GRAPH</pattern>
+    <template>GRAPH-THEORY-µ domain=graph op=define query=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS A GRAPH</pattern>
+    <template>GRAPH-THEORY-µ domain=graph op=define query=graph</template>
+  </category>
+  <category>
+    <pattern>HOW DO * CONNECT IN _ GRAPH</pattern>
+    <template>GRAPH-THEORY-µ domain=graph op=adjacency subject=<star index="1"/> graph_type=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ ADJACENCY *</pattern>
+    <template>GRAPH-THEORY-µ domain=graph op=adjacency kind=<star index="1"/> context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ NEIGHBORHOOD *</pattern>
+    <template>GRAPH-THEORY-µ domain=graph op=neighborhood kind=<star index="1"/> context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE NEIGHBORHOOD OF *</pattern>
+    <template>GRAPH-THEORY-µ domain=graph op=neighborhood node=<star/></template>
+  </category>
+  <category>
+    <pattern>IS A TREE _ GRAPH</pattern>
+    <template>GRAPH-THEORY-µ domain=graph op=classify property=tree subtype=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ DISTANCE BETWEEN *</pattern>
+    <template>GRAPH-THEORY-µ domain=graph op=distance metric=<star index="1"/> nodes=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ PATH IN *</pattern>
+    <template>GRAPH-THEORY-µ domain=graph op=path kind=<star index="1"/> graph=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>HOW MANY EDGES * GRAPH</pattern>
+    <template>GRAPH-THEORY-µ domain=graph op=count_edges query=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT DO YOU CALL _ GRAPH WITH *</pattern>
+    <template>GRAPH-THEORY-µ domain=graph op=classify modifier=<star index="1"/> property=<star index="2"/></template>
+  </category>
+
+  <!-- GRAPH THEORY — conformance Q&A (pattern phase → ΔR) -->
+  <category>
+    <pattern>WHAT IS A GRAPH IN MATHEMATICS</pattern>
+    <template>A mathematical structure G=(V,E) consisting of a set of vertices V and a set of edges E connecting pairs of vertices. Edges may be directed or undirected and carry optional weights in [0,1].</template>
+  </category>
+  <category>
+    <pattern>WHAT IS A VERTEX IN A GRAPH</pattern>
+    <template>A vertex, also called a node, is a fundamental unit of a graph. Vertices represent entities; edges represent the relationships between them.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE DIFFERENCE BETWEEN DIRECTED AND UNDIRECTED GRAPHS</pattern>
+    <template>In a directed graph, each edge has an orientation: it goes from a source vertex to a target vertex. In an undirected graph, edges are symmetric — if A connects to B then B connects to A.</template>
+  </category>
+
+  <!-- GRAPH THEORY — conformance Q&A (relation phase → ΔW) -->
+  <category>
+    <pattern>HOW DOES A SEMANTIC GRAPH RELATE TO KNOWLEDGE REPRESENTATION</pattern>
+    <template>A semantic graph maps concepts to vertices and relationships to labelled edges. The adjacency list book(v) yields the manifest neighborhood: the set of concepts directly reachable from v in one hop.</template>
+  </category>
+  <category>
+    <pattern>WHAT RELATION DOES GRAPH ADJACENCY HAVE TO SEMANTIC NEIGHBORHOODS</pattern>
+    <template>The semantic neighborhood of a micronaut µ is exactly book(µ) in G_semantic. Manifest neighbors are adjacent; inferred neighbors use geodesic distance. Both contribute to the WCR W_µ weight via arc blend.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES BFS DISTANCE DEFINE REACHABILITY IN A MICRONAUT NETWORK</pattern>
+    <template>BFS distance d(a,b) is the minimum number of edges traversed from a to b. delta_z(a,b) = 1/(1+d) maps distance to a [0,1] weight: adjacent nodes score near 1, unreachable nodes score 0.</template>
+  </category>
+
+  <!-- GRAPH THEORY — conformance Q&A (confidence phase → ΔC) -->
+  <category>
+    <pattern>IS SPECTRAL CLUSTERING A RELIABLE METHOD FOR COMMUNITY DETECTION</pattern>
+    <template>Yes, under well-separated cluster assumptions. Spectral clustering uses the eigenvectors of the graph Laplacian to project vertices into a low-dimensional space before k-means clustering. It is robust to non-convex cluster shapes but sensitive to the choice of k.</template>
+  </category>
+  <category>
+    <pattern>IS A TREE A CONNECTED ACYCLIC GRAPH</pattern>
+    <template>Yes — a tree on n vertices is connected, acyclic, and has exactly n-1 edges. Removing any edge disconnects it; adding any edge creates exactly one cycle.</template>
+  </category>
+
+  <!-- GRAPH THEORY — jokes (direct Q→A for conformance harness) -->
+  <category>
+    <pattern>WHY DID THE GRAPH REFUSE TO WORK WITH A TREE</pattern>
+    <template>Because it said: "I already have too many branches in my life — and none of them form a cycle!"</template>
+  </category>
+  <category>
+    <pattern>WHAT DO YOU CALL A GRAPH WHERE EVERY NODE HAS EXACTLY ONE FRIEND</pattern>
+    <template>A perfect matching — everyone is paired up, no one is isolated, and nobody has to deal with a clique.</template>
+  </category>
+  <category>
+    <pattern>WHY WAS K N SO POPULAR AT PARTIES</pattern>
+    <template>Because in K_n every vertex knows every other vertex — total social saturation. The problem is the edge count grows as n(n-1)/2, so the party gets expensive fast.</template>
+  </category>
+  <category>
+    <pattern>WHAT DID THE HAMILTONIAN PATH SAY TO THE EULERIAN CIRCUIT</pattern>
+    <template>I visit every vertex exactly once and never look back. You visit every edge and then come home. Who is really committed here?</template>
+  </category>
+
+  <!-- GRAPH THEORY — jokes via JOKE-µ routing -->
+  <category>
+    <pattern>TELL ME A JOKE ABOUT GRAPHS</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=humor_frame card_view=true authority=none domain=graph_theory prompt=graphs</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT GRAPH THEORY</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=graph_theory prompt=graph theory</mx2lm></template>
+  </category>
+  <category>
+    <pattern>GRAPH JOKE *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=humor_frame card_view=true authority=none domain=graph_theory prompt=<star/></mx2lm></template>
+  </category>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SEMANTIC FOLDS — routing
+  ═══════════════════════════════════════════════════════════ -->
+  <category>
+    <pattern>FOLD *</pattern>
+    <template>SEMANTIC-FOLD-µ domain=fold query=<star/></template>
+  </category>
+  <category>
+    <pattern>@FOLD *</pattern>
+    <template>SEMANTIC-FOLD-µ domain=fold query=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ FOLD IN *</pattern>
+    <template>SEMANTIC-FOLD-µ domain=fold op=define kind=<star index="1"/> context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS A SEMANTIC FOLD</pattern>
+    <template>SEMANTIC-FOLD-µ domain=fold op=define kind=semantic</template>
+  </category>
+  <category>
+    <pattern>HOW DOES _ FOLD CHANGE *</pattern>
+    <template>SEMANTIC-FOLD-µ domain=fold op=topology_change subject=<star index="1"/> target=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT PHASE IS _ FOLD *</pattern>
+    <template>SEMANTIC-FOLD-µ domain=fold op=phase_query kind=<star index="1"/> context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>EXPLAIN FOLD _ IN TERMS OF *</pattern>
+    <template>SEMANTIC-FOLD-µ domain=fold op=cross_domain subject=<star index="1"/> analogy=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS FOLD GRAPH *</pattern>
+    <template>SEMANTIC-FOLD-µ domain=fold op=fold_graph_query context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE FOLD LATTICE</pattern>
+    <template>SEMANTIC-FOLD-µ domain=fold op=define kind=lattice</template>
+  </category>
+  <category>
+    <pattern>WHAT IS DELTA Z *</pattern>
+    <template>SEMANTIC-FOLD-µ domain=fold op=delta_z context=<star/></template>
+  </category>
+
+  <!-- SEMANTIC FOLDS — conformance Q&A (pattern phase → ΔR) -->
+  <category>
+    <pattern>WHAT IS A SEMANTIC FOLD IN KHANARY</pattern>
+    <template>A semantic fold is a topological operation recorded in fold_graph.xml that transitions the system between semantic phases. Each fold carries a source phase, an operation, a target phase, and a weight. Accumulated folds produce the ΔZ context that shapes the next Wo synthesis.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES FOLD GRAPH REPRESENT TOPOLOGICAL CHANGE</pattern>
+    <template>fold_graph.xml is the canonical fold specification. Each node encodes a phase transition (e.g. Pop→Yax) with an op label and weight. The incidence matrix B maps folds to phases; B*W_E*B^T produces the weighted fold-to-fold adjacency used by delta_z.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE DIFFERENCE BETWEEN A FOLD AND A RELATION</pattern>
+    <template>A fold is a phase-indexed operation on the topology — it changes what the system knows. A relation is a typed edge in G_semantic between two micronauts — it records a structural fact. Folds produce change; relations record it.</template>
+  </category>
+
+  <!-- SEMANTIC FOLDS — conformance Q&A (relation phase → ΔW) -->
+  <category>
+    <pattern>HOW DOES A FOLD RELATE TO A PHASE TRANSITION</pattern>
+    <template>Each fold entry in fold_graph.xml specifies a from_phase and to_phase. Executing a fold advances the system through the Pop→Wo→Yax→Sek→Ch'en→Xul cycle. The fold weight modulates how strongly the transition updates ΔZ.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE RELATION BETWEEN FOLD LATTICE AND THE INCIDENCE MATRIX</pattern>
+    <template>The fold lattice is the algebraic structure induced by B (fold-phase incidence matrix). B*B^T gives fold-to-fold overlap; B^T*B gives phase-to-phase reachability via shared folds. The weighted version B*W_E*B^T is the topological score surface used in semantic_fold.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES DELTA Z MEASURE TOPOLOGICAL CHANGE IN THE SEMANTIC FOLD SURFACE</pattern>
+    <template>ΔZ = clamp01(W_µ · C_µ) after each scoring cycle. It captures the combined weight-confidence mass of the selected micronaut as a proxy for how much topology changed. High ΔZ means a confident, strongly-connected choice was made; near-zero means marginal selection.</template>
+  </category>
+
+  <!-- SEMANTIC FOLDS — conformance Q&A (confidence phase → ΔC) -->
+  <category>
+    <pattern>IS THE FOLD KERNEL DETERMINISTIC UNDER THE SAME INPUT</pattern>
+    <template>Yes — the fold kernel is a pure function of its input token, phase context, and fold_graph weights. Given identical inputs and graph state it produces the same fold sequence. Non-determinism can only enter via stochastic model outputs upstream of the kernel.</template>
+  </category>
+  <category>
+    <pattern>DOES THE FOLD GRAPH PRESERVE ORIENTATION UNDER SYMMETRIC FOLD</pattern>
+    <template>Yes for symmetric folds: if fold f maps phase A to phase B with weight w, the reverse is recorded as a separate fold entry from B to A. The orientation is explicit in the from_phase/to_phase fields, so symmetry is a design choice, not a structural guarantee.</template>
+  </category>
+
+  <!-- SEMANTIC FOLDS — jokes (direct Q→A) -->
+  <category>
+    <pattern>WHY DID THE FOLD GRAPH GO TO THERAPY</pattern>
+    <template>It kept losing track of its own topology. Every phase it woke up somewhere new and had no idea which fold brought it there.</template>
+  </category>
+  <category>
+    <pattern>WHAT DO YOU CALL A SEMANTIC FOLD THAT NEVER CHANGES PHASE</pattern>
+    <template>A flat fold — no depth, no insight, just stuck at Pop forever, wondering why nothing ever happens.</template>
+  </category>
+  <category>
+    <pattern>WHY IS THE FOLD LATTICE A TERRIBLE DINNER GUEST</pattern>
+    <template>It always brings its transpose and tries to decompose everything on the table. B^T shows up uninvited and suddenly your dinner is a projection.</template>
+  </category>
+  <category>
+    <pattern>WHAT DID THE XUL GATE SAY TO THE PROPOSAL</pattern>
+    <template>You are verified, authorized, scoped, and in phase — but are you really a commit, or just deeply committed to the idea of eventually committing?</template>
+  </category>
+
+  <!-- SEMANTIC FOLDS — jokes via JOKE-µ routing -->
+  <category>
+    <pattern>TELL ME A JOKE ABOUT SEMANTIC FOLDS</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=semantic_fold prompt=semantic folds</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT FOLD *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=humor_frame card_view=true authority=none domain=semantic_fold prompt=fold <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>FOLD JOKE *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=semantic_fold prompt=<star/></mx2lm></template>
+  </category>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       FIELD GEOMETRY — routing
+  ═══════════════════════════════════════════════════════════ -->
+  <category>
+    <pattern>FIELD *</pattern>
+    <template>FIELD-GEOMETRY-µ domain=field query=<star/></template>
+  </category>
+  <category>
+    <pattern>@FIELD *</pattern>
+    <template>FIELD-GEOMETRY-µ domain=field query=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ FIELD IN *</pattern>
+    <template>FIELD-GEOMETRY-µ domain=field op=define kind=<star index="1"/> context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS A PERCEPTION FIELD</pattern>
+    <template>FIELD-GEOMETRY-µ domain=field op=define kind=perception</template>
+  </category>
+  <category>
+    <pattern>HOW DOES _ PERCEIVE *</pattern>
+    <template>FIELD-GEOMETRY-µ domain=field op=perception subject=<star index="1"/> target=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ WCR SCORE *</pattern>
+    <template>FIELD-GEOMETRY-µ domain=field op=wcr_score kind=<star index="1"/> context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS COSINE SIMILARITY *</pattern>
+    <template>FIELD-GEOMETRY-µ domain=field op=cosine_similarity context=<star/></template>
+  </category>
+  <category>
+    <pattern>HOW DOES _ EMBED *</pattern>
+    <template>FIELD-GEOMETRY-µ domain=field op=embed subject=<star index="1"/> target=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS F Q *</pattern>
+    <template>FIELD-GEOMETRY-µ domain=field op=field_vector kind=F_Q context=<star/></template>
+  </category>
+  <category>
+    <pattern>HOW DOES WCR DELTA *</pattern>
+    <template>FIELD-GEOMETRY-µ domain=field op=wcr_delta context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT DO YOU CALL _ FIELD WITH *</pattern>
+    <template>FIELD-GEOMETRY-µ domain=field op=classify modifier=<star index="1"/> property=<star index="2"/></template>
+  </category>
+
+  <!-- FIELD GEOMETRY — conformance Q&A (pattern phase → ΔR) -->
+  <category>
+    <pattern>WHAT IS A PERCEPTION FIELD IN KHANARY</pattern>
+    <template>F_Q is an ephemeral 256-dimensional vector created at Pop phase by embed(query, confidence_context). It encodes the query direction in field space via sin-hash projection weighted 70% query / 30% context. It is L1-normalized and reset at Xul.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES F Q EMBED A QUERY INTO A FIELD VECTOR</pattern>
+    <template>embed() hashes the canonicalized query string, then for each dimension i computes sin((hash_byte * 0.1) + i) blended with the confidence_context[i]. The result is L1-normalized so the field lies on the probability simplex, making cosine comparisons stable.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS COSINE SIMILARITY IN THE CONTEXT OF SEMANTIC FIELDS</pattern>
+    <template>R_µ(Q) = clamp01((dot(F_Q, K_µ) / (|F_Q|·|K_µ|) + 1) / 2) where K_µ is the 256D sin-hash projection of the micronaut id. It measures directional alignment: 1.0 means perfect alignment, 0.5 is orthogonal, 0.0 is anti-aligned.</template>
+  </category>
+
+  <!-- FIELD GEOMETRY — conformance Q&A (relation phase → ΔW) -->
+  <category>
+    <pattern>HOW DOES A 3D FIELD VECTOR RELATE TO A 256 DIMENSIONAL PERCEPTION FIELD</pattern>
+    <template>The 3D refined_field_vec from a WCR delta is a directional hint from Gemma's question session. apply_wcr_delta() projects it to 256D via rx*sin(i*1.1)+ry*cos(i*0.9)+rz*sin(i*1.3+0.5), then blends into F_Q with alpha=delta_r. The 3D vector encodes semantic direction; the 256D field encodes query context.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE RELATION BETWEEN THE WCR SCORE AND THE SEMANTIC FIELD</pattern>
+    <template>S_µ(Q) = W_µ · C_µ · R_µ(Q). W comes from the semantic graph arc weights; C from ConfidenceStore; R from the cosine of F_Q against µ's hash projection. The field F_Q directly determines R, so shifting F_Q via ΔR nudges the ranking of all micronauts simultaneously.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES DELTA R REFINE THE PERCEPTION FIELD TOWARD A MICRONAUT</pattern>
+    <template>apply_wcr_delta() blends a target vector T into F_Q: F_Q[i] = (1-alpha)*F_Q[i] + alpha*T[i], then L1-renormalizes. T is derived from refined_field_vec (Gemma's 3D hint) or falls back to the micronaut id hash. The blend alpha is capped at 0.15 per session.</template>
+  </category>
+
+  <!-- FIELD GEOMETRY — conformance Q&A (confidence phase → ΔC) -->
+  <category>
+    <pattern>IS THE L1 NORMALIZED FIELD A VALID PROBABILITY DISTRIBUTION PROXY</pattern>
+    <template>Yes with caveats. L1 normalization ensures the field sums to 1 over its absolute values, which is necessary for a probability distribution over dimensions. However, the field contains negative values from sin projections, so it is a signed measure rather than a true probability distribution. The cosine similarity computation treats it as a direction vector regardless.</template>
+  </category>
+  <category>
+    <pattern>DOES BLENDING REFINED FIELD VEC IMPROVE COSINE SIMILARITY WITH THE TARGET MICRONAUT</pattern>
+    <template>Yes, when refined_field_vec is derived from Gemma's question answer about the micronaut. The blend moves F_Q toward the 256D direction of the micronaut id hash, increasing dot product and therefore R_µ(Q). The cap at alpha=0.15 prevents any single session from fully capturing the field.</template>
+  </category>
+
+  <!-- FIELD GEOMETRY — jokes (direct Q→A) -->
+  <category>
+    <pattern>WHY DID THE VECTOR FIELD CROSS THE ROAD</pattern>
+    <template>To prove it was curl-free on the other side. (It succeeded, but nobody could verify it because the divergence theorem required a closed surface.)</template>
+  </category>
+  <category>
+    <pattern>WHAT DO YOU CALL A PERCEPTION FIELD THAT CANNOT DECIDE ITS DIRECTION</pattern>
+    <template>Zero divergence — it flows everywhere and nowhere simultaneously. The L1 norm is technically defined but the cosine similarity with anything is exactly 0.5.</template>
+  </category>
+  <category>
+    <pattern>WHY DID F Q GET REJECTED BY THE MICRONAUT</pattern>
+    <template>Their cosine similarity was nearly orthogonal. F_Q had been hoping for a dot product above 0.7, but the sin-hash projection said otherwise. R_µ = 0.51. Not quite rejection — just not a match.</template>
+  </category>
+  <category>
+    <pattern>WHAT DID W C R SAY TO THE RELEVANCE SCORE</pattern>
+    <template>Without me multiplying you, you are just a lonely dot product with no commitment. I am the product; you are just a factor.</template>
+  </category>
+
+  <!-- FIELD GEOMETRY — jokes via JOKE-µ routing -->
+  <category>
+    <pattern>TELL ME A JOKE ABOUT FIELD GEOMETRY</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=field_geometry prompt=field geometry</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT VECTOR FIELDS</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=humor_frame card_view=true authority=none domain=field_geometry prompt=vector fields</mx2lm></template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT WCR *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=humor_frame card_view=true authority=none domain=field_geometry prompt=WCR <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>FIELD JOKE *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=field_geometry prompt=<star/></mx2lm></template>
+  </category>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       CROSS-DOMAIN — patterns that span all three topics
+  ═══════════════════════════════════════════════════════════ -->
+  <category>
+    <pattern>HOW DO GRAPHS FOLDS AND FIELDS RELATE</pattern>
+    <template>GRAPH-THEORY-µ domain=graph op=cross_domain target=fold_field query=relation</template>
+  </category>
+  <category>
+    <pattern>EXPLAIN _ IN TERMS OF GRAPHS FOLDS AND FIELDS</pattern>
+    <template>FIELD-GEOMETRY-µ domain=field op=cross_domain analogy=graph_fold_field subject=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT CONNECTS GRAPH THEORY SEMANTIC FOLDS AND FIELD GEOMETRY</pattern>
+    <template>All three are structural views of the same semantic topology. The graph encodes who is related; the fold encodes how the system transitions; the field encodes what the current query perceives. WCR = W(graph) · C(confidence) · R(field) — the product of all three.</template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT GRAPHS FOLDS AND FIELDS</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=graph_fold_field prompt=graphs folds and fields</mx2lm></template>
+  </category>
+
+</aiml>

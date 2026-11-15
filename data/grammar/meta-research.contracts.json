@@ -1,0 +1,73 @@
+{
+  "@type": "khanary.meta_research.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "research_learns_how_to_research_the_strategy_graph_is_the_target",
+  "lane": "KHANARY_META_RESEARCH_TEST",
+  "owner": "src/micronaut/meta_research.cpp",
+  "why": "Research was a static tool call: it accumulated facts and learned nothing about how it found them. Two coupled lanes are needed — L1 learns from retrieved knowledge, L2 learns how to retrieve better knowledge — and the second one evaluates the performance of the first. Without that, the optimizer learns only to issue narrow queries that return easily verifiable facts, which looks like precision while the hard gaps stay open forever.",
+  "lanes": {
+    "L1": {
+      "learns": "facts, relationships, concepts, n-grams",
+      "target": "knowledge graph / corpus weights",
+      "contract": "LearningDelta with a knowledge substrate"
+    },
+    "L2": {
+      "learns": "query patterns, source selection, extraction methods, search efficiency",
+      "target": "strategy graph (GML edges)",
+      "contract": "LearningDelta with substrate graph_edge on the strategy graph",
+      "relationship": "L2 evaluates how well L1 performed; it never writes knowledge directly"
+    }
+  },
+  "meta_search_delta": {
+    "fields": [
+      "strategy_id", "query_template_id", "intent_class", "domain_context", "source_ids",
+      "retrieval_count", "verified_fact_count", "contradiction_count", "duplicate_count",
+      "latency_ms", "retrieval_cost", "evidence_quality", "knowledge_gap_coverage",
+      "strategy_reward", "proposed_weight_delta", "provenance", "verification_status"
+    ],
+    "law": "the delta records what actually happened during retrieval, so verification can judge the search rather than the answer"
+  },
+  "reward": {
+    "formula": "R = alpha*P + beta*V + gamma*Y - delta*C - epsilon*D",
+    "terms": {
+      "P": "evidence precision: verified_fact_count / retrieval_count",
+      "V": "independent verification rate: verified / (verified + contradiction)",
+      "Y": "useful yield: verified facts against the declared target, saturating at 1",
+      "C": "normalized retrieval cost in [0, 1]",
+      "D": "redundancy: duplicate_count / retrieval_count"
+    },
+    "defaults": { "alpha": 0.4, "beta": 0.3, "gamma": 0.3, "delta": 0.2, "epsilon": 0.1 },
+    "volume_is_not_precision": "a search that retrieves 100 pages and verifies one fact must not outrank a search that retrieves five pages and verifies four; the precision and redundancy terms are what enforce that",
+    "coverage_guard": {
+      "law": "reward is gated on coverage, not only on the score",
+      "reason": "otherwise the optimizer learns to issue only easy, narrow queries that return highly verifiable facts and systematically ignores difficult gaps",
+      "rule": "a strategy whose knowledge_gap_coverage is below the declared floor is not eligible for reward, however high its score",
+      "objective": "verified information gained per unit cost, subject to adequate coverage"
+    }
+  },
+  "authority_of_sources": {
+    "law": "source authority is contextual, scoped by intent class",
+    "example": "a code host is excellent for repository structure and inappropriate as the primary authority for a clinical recommendation",
+    "rule": "an authority score observed under one intent class does not transfer to another",
+    "priors": "example weights are priors until verified observations accumulate; they become empirical only past a declared observation threshold"
+  },
+  "trajectory": {
+    "law": "the research trajectory is a first-class object: the chain of questions, selected strategies, tool calls, evidence, verification outcomes and resulting deltas",
+    "why": "the final facts and the reward are not enough to reproduce the decision, so the chain is what makes Learning^2 reproducible, auditable and transferable",
+    "digest": "a trajectory has a stable digest over its ordered chain, so two runs that made the same decisions are provably the same research",
+    "transfer": "a trajectory may be shared with other Micronauts, but a strategy delta targets the strategy graph only: it never rewrites unrelated behavioural weights"
+  },
+  "invariants": {
+    "MR1": "there are exactly two lanes: L1 learns knowledge and L2 learns search strategy, and L2 evaluates L1 rather than writing knowledge itself",
+    "MR2": "a MetaSearchDelta records the retrieval facts — counts, cost, duplicates, coverage, provenance, verification status — so the search can be judged separately from the answer",
+    "MR3": "the reward follows R = alpha*P + beta*V + gamma*Y - delta*C - epsilon*D with the terms as declared, and no term may be silently dropped",
+    "MR4": "volume is not precision: a high-retrieval low-yield search scores below a low-retrieval high-yield one",
+    "MR5": "reward is gated on coverage: a strategy below the declared coverage floor is not eligible however high it scores",
+    "MR6": "source authority is scoped by intent class and does not transfer across classes",
+    "MR7": "authority values are priors until a declared number of verified observations makes them empirical",
+    "MR8": "a research trajectory is a first-class ordered object with a stable digest, so identical decisions are provably the same research",
+    "MR9": "strategy learning targets the strategy graph only; a strategy delta never rewrites unrelated behavioural weights",
+    "MR10": "L2 output goes through the LearningDelta contract, so it is admitted, deferred, rejected or no-change like any other proposal"
+  }
+}

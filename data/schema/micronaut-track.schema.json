@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:khanary:schema:micronaut-track:1",
+  "title": "KHANARY Micronaut Semantic Track",
+  "description": "Schema for data/tracks/*.semantic-tracks.v1.json. References shared track types like TypeScript imports.",
+  "type": "object",
+  "required": ["@no-eval", "id", "phase", "governs"],
+  "properties": {
+    "@no-eval": { "const": true },
+    "id": { "type": "string", "minLength": 1 },
+    "schema": { "enum": ["v1", "semantic-tracks.v1", "semantic-tracks.v1.json"] },
+    "description": { "type": "string" },
+    "phase": { "$ref": "micronaut-track-types.schema.json#/$defs/PhaseName" },
+    "category": { "type": "string" },
+    "aiml_entropy_coupling": {
+      "type": "object",
+      "description": "Entropy-coupled delegation. delegate_verb is a RelationVerb (same closed vocabulary as relations[].verb) and is TYPED BUT INERT: typing asserts one thing only — if this field holds a relation verb it must come from the Relation ISA. It implies nothing about runtime use.",
+      "properties": {
+        "delegate_verb": {
+          "$ref": "micronaut-track-types.schema.json#/$defs/RelationVerb"
+        }
+      }
+    },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "static_weight": { "type": "number", "minimum": 0, "maximum": 1 },
+    "health": { "type": "number", "minimum": 0, "maximum": 1 },
+    "governs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "capabilities": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "realizes": {
+      "type": "array",
+      "description": "Executor capabilities this micronaut claims to realize, as \"<Phase>.<operation>\" (GAP-091 E8). A claim, not authority: the fold binding registry must be able to answer it or consuming the declaration yields a typed declination.",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 3 }
+    },
+    "schemes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "verbs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "aiml_patterns": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "aiml_templates": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "key_patterns": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "key_templates": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "key_grammar": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "tokens": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "route_contract": {
+      "type": "object",
+      "properties": {
+        "schemes": { "type": "array", "items": { "type": "string" } },
+        "verbs": { "type": "array", "items": { "type": "string" } },
+        "aiml_patterns": { "type": "array", "items": { "type": "string" } },
+        "aiml_templates": { "type": "array", "items": { "type": "string" } },
+        "key_patterns": { "type": "array", "items": { "type": "string" } },
+        "key_templates": { "type": "array", "items": { "type": "string" } },
+        "key_grammar": { "type": "array", "items": { "type": "string" } },
+        "tokens": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "address": {
+      "type": "object",
+      "properties": {
+        "schemes": { "type": "array", "items": { "type": "string" } },
+        "verbs": { "type": "array", "items": { "type": "string" } },
+        "aiml_patterns": { "type": "array", "items": { "type": "string" } },
+        "aiml_templates": { "type": "array", "items": { "type": "string" } },
+        "key_patterns": { "type": "array", "items": { "type": "string" } },
+        "key_templates": { "type": "array", "items": { "type": "string" } },
+        "key_grammar": { "type": "array", "items": { "type": "string" } },
+        "tokens": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "uri": {
+      "type": "object",
+      "properties": {
+        "schemes": { "type": "array", "items": { "type": "string" } },
+        "verbs": { "type": "array", "items": { "type": "string" } },
+        "aiml_patterns": { "type": "array", "items": { "type": "string" } },
+        "aiml_templates": { "type": "array", "items": { "type": "string" } },
+        "key_patterns": { "type": "array", "items": { "type": "string" } },
+        "key_templates": { "type": "array", "items": { "type": "string" } },
+        "key_grammar": { "type": "array", "items": { "type": "string" } },
+        "tokens": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "callable": {
+      "type": "object",
+      "properties": {
+        "schemes": { "type": "array", "items": { "type": "string" } },
+        "verbs": { "type": "array", "items": { "type": "string" } },
+        "aiml_patterns": { "type": "array", "items": { "type": "string" } },
+        "aiml_templates": { "type": "array", "items": { "type": "string" } },
+        "key_patterns": { "type": "array", "items": { "type": "string" } },
+        "key_templates": { "type": "array", "items": { "type": "string" } },
+        "key_grammar": { "type": "array", "items": { "type": "string" } },
+        "tokens": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "brain_profile": { "$ref": "micronaut-track-types.schema.json#/$defs/ProjectionOnlyObject" },
+    "personality": { "$ref": "micronaut-track-types.schema.json#/$defs/ProjectionOnlyObject" },
+    "capability_grams": { "$ref": "micronaut-track-types.schema.json#/$defs/ProjectionOnlyObject" },
+    "progression": { "$ref": "micronaut-track-types.schema.json#/$defs/ProjectionOnlyObject" },
+    "sub_micronauts": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "relations": {
+      "type": "array",
+      "items": { "$ref": "micronaut-track-types.schema.json#/$defs/RelationEdge" }
+    },
+    "has_a_hierarchy": {
+      "type": "array",
+      "items": { "$ref": "micronaut-track-types.schema.json#/$defs/HasARelation" }
+    },
+    "truth_semantics": {
+      "type": "array",
+      "items": { "$ref": "micronaut-track-types.schema.json#/$defs/TruthConditionalRule" }
+    },
+    "qa_profile": {
+      "$ref": "micronaut-track-types.schema.json#/$defs/QASemanticsProfile"
+    },
+    "folds": {
+      "type": "array",
+      "items": { "$ref": "micronaut-track-types.schema.json#/$defs/FoldEntry" }
+    },
+    "contrast_sets": {
+      "type": "array",
+      "items": { "$ref": "micronaut-track-types.schema.json#/$defs/ContrastSet" }
+    },
+    "sandbox": { "$ref": "micronaut-track-types.schema.json#/$defs/Sandbox" },
+    "@glyph": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Identity glyph for this micronaut (e.g. a Unicode symbol). Unique within the pattern namespace."
+    },
+    "@patterns": {
+      "type": "array",
+      "description": "Glyph-pattern grammar owned by this micronaut. Each entry is a compiled sequence matcher with an associated fold program.",
+      "items": { "$ref": "micronaut-track-types.schema.json#/$defs/GlyphPattern" }
+    },
+    "@field": {
+      "$ref": "micronaut-track-types.schema.json#/$defs/PatternField",
+      "description": "Semantic field binding: shared canonical glyph namespace + local WCR weights."
+    },
+    "@selection": {
+      "type": "string",
+      "description": "Pattern selection algorithm. 'WCR' = WCR-weighted selection (default)."
+    },
+    "@neighborhood": {
+      "$ref": "micronaut-track-types.schema.json#/$defs/Neighborhood",
+      "description": "Intra-micronaut semantic graph. Stage 1: parsed and stored only. Stage 2: nodes with projects_to=[\"governs\"] auto-extend entry.governs; edges with projects_to=[\"relations\"] auto-extend entry.relations."
+    }
+  },
+  "additionalProperties": true
+}

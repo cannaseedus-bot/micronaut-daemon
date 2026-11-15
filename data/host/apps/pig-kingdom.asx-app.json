@@ -1,0 +1,220 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "pig-kingdom-children-of-the-rebellion",
+  "@key": "⟁APP:PIG_KINGDOM",
+  "@mount": "⟁ROOT:PIG_KINGDOM",
+  "@genre": "anti-war-fantasy-rpg",
+  "@title": "THE PIG KINGDOM",
+  "@subtitle": "Children of the Rebellion",
+  "@state": {
+    "protection": 40,
+    "evidence": 15,
+    "public_trust": 35,
+    "accountability": 5,
+    "scene": "warning",
+    "act": "the_warning",
+    "turn": 1,
+    "double_standard": 0,
+    "evidence_log": []
+  },
+  "@components": {
+    "⟁ROOT:PIG_KINGDOM": {
+      "@type": "app",
+      "@children": [
+        "⟁WIDGET:LEDGER",
+        "⟁WIDGET:DECREE",
+        "⟁WIDGET:CHOICES",
+        "⟁WIDGET:WITNESS"
+      ]
+    },
+    "⟁WIDGET:LEDGER": {
+      "@type": "stat-grid",
+      "@bind": "state",
+      "@children": []
+    },
+    "⟁WIDGET:DECREE": {
+      "@type": "story-card",
+      "@bind": "SCENES[state.scene]",
+      "@children": []
+    },
+    "⟁WIDGET:CHOICES": {
+      "@type": "choice-list",
+      "@bind": "SCENES[state.scene].choices",
+      "@children": [],
+      "@on": {
+        "select": "kingdom.choose"
+      }
+    },
+    "⟁WIDGET:WITNESS": {
+      "@type": "companion-addon",
+      "@bind": "WITNESS",
+      "@children": []
+    }
+  },
+  "@programs": {
+    "kingdom.choose": {
+      "@kind": "asx.state-program.v1",
+      "@authority": "observation_only",
+      "@control": [
+        { "@op": "ADD", "@in": ["protection", "event_protection"], "@out": "protection" },
+        { "@op": "ADD", "@in": ["evidence", "event_evidence"], "@out": "evidence" },
+        { "@op": "ADD", "@in": ["public_trust", "event_public_trust"], "@out": "public_trust" },
+        { "@op": "ADD", "@in": ["accountability", "event_accountability"], "@out": "accountability" },
+        { "@op": "ADD", "@in": ["turn", "event_turn"], "@out": "turn" },
+        { "@op": "ADD", "@in": ["double_standard", "event_double_standard"], "@out": "double_standard" },
+        { "@op": "APPEND", "@from": "event_record", "@out": "evidence_log" },
+        { "@op": "SET", "@from": "event_act", "@out": "act" },
+        { "@op": "SET", "@from": "event_next", "@out": "scene" },
+        { "@op": "LOG", "@args": ["projected Pig Kingdom decision without persistence"] }
+      ]
+    }
+  },
+  "@events": {
+    "choice.select": "kingdom.choose"
+  },
+  "@imports": [
+    { "ref": "SCENES", "mode": "local_data" },
+    { "ref": "WITNESS", "mode": "local_data" },
+    { "ref": "ROUTES", "mode": "local_data" }
+  ],
+  "@permissions": {
+    "network": false,
+    "storage": "request_scoped",
+    "tools": [],
+    "semantic_commit": false
+  },
+  "@lifecycle": {
+    "load": "compile",
+    "mount": "project",
+    "event": "dispatch",
+    "unmount": "discard_request_state"
+  },
+  "@data": {
+    "STAT_LABELS": {
+      "protection": "Protection",
+      "evidence": "Evidence",
+      "public_trust": "Public Trust",
+      "accountability": "Accountability"
+    },
+    "WITNESS": {
+      "title": "The Lantern Moth",
+      "glyph": "🦋",
+      "ability": "Carries one verified testimony through a blackout."
+    },
+    "SCENES": {
+      "warning": {
+        "act": "The Warning",
+        "title": "The Missing Names",
+        "text": "The donkey finds a casualty ledger that the Royal Council removed from the public archive. Families from both sides appear in its margins, but the seal is incomplete and the valley is still occupied.",
+        "choices": [
+          {
+            "id": "verify_first",
+            "label": "Verify the ledger with independent witnesses",
+            "detail": "Slower disclosure; stronger evidence.",
+            "effects": { "protection": 5, "evidence": 20, "public_trust": 8, "accountability": 5, "turn": 1, "double_standard": -2 },
+            "record": "Required corroboration before accusing any faction.",
+            "next": "royal_decree",
+            "act": "the_decree"
+          },
+          {
+            "id": "publish_rumor",
+            "label": "Publish every allegation immediately",
+            "detail": "Rapid attention; unverified names may put families at risk.",
+            "effects": { "protection": -12, "evidence": -6, "public_trust": 14, "accountability": 2, "turn": 1, "double_standard": 12 },
+            "record": "Claimed evidence mattered while circulating allegations that had not been checked.",
+            "next": "royal_decree",
+            "act": "the_decree"
+          },
+          {
+            "id": "secure_families",
+            "label": "Move families first, then release the record",
+            "detail": "Protects civilians while preserving the original evidence.",
+            "effects": { "protection": 22, "evidence": 10, "public_trust": 3, "accountability": 6, "turn": 1, "double_standard": 0 },
+            "record": "Placed immediate civilian safety before publicity without destroying the evidence.",
+            "next": "royal_decree",
+            "act": "the_decree"
+          }
+        ]
+      },
+      "royal_decree": {
+        "act": "The Royal Decree",
+        "title": "The Children of the Valley",
+        "text": "The Council orders another bombardment. Soldiers may be in the valley, but hundreds of families remain. The general says delay will endanger the kingdom. The donkey asks whether the order would stand if the Council's children lived below.",
+        "choices": [
+          {
+            "id": "safe_passage",
+            "label": "Negotiate monitored safe passage",
+            "detail": "Delay the strike and let neutral witnesses count each evacuation.",
+            "effects": { "protection": 28, "evidence": 8, "public_trust": 8, "accountability": 7, "turn": 1, "double_standard": -3 },
+            "record": "Applied the civilian-protection rule regardless of family or faction.",
+            "next": "independent_review",
+            "act": "the_review"
+          },
+          {
+            "id": "accept_decree",
+            "label": "Accept the decree as military necessity",
+            "detail": "Preserve command unity and conceal the unresolved civilian count.",
+            "effects": { "protection": -30, "evidence": -8, "public_trust": -12, "accountability": -10, "turn": 1, "double_standard": 24 },
+            "record": "Called every child equal while accepting a risk leaders would not impose on their own families.",
+            "next": "independent_review",
+            "act": "the_review"
+          },
+          {
+            "id": "one_side_only",
+            "label": "Evacuate only families loyal to the rebellion",
+            "detail": "Protect allies while abandoning children labeled as enemies.",
+            "effects": { "protection": 4, "evidence": 2, "public_trust": -18, "accountability": -8, "turn": 1, "double_standard": 28 },
+            "record": "Limited an absolute protection principle to politically favored children.",
+            "next": "independent_review",
+            "act": "the_review"
+          }
+        ]
+      },
+      "independent_review": {
+        "act": "The Independent Review",
+        "title": "The Empty Throne",
+        "text": "The Queen's rule collapses. The rebellion can seize the castle, publish the record, or bind every future leader—including the donkey—to independent review.",
+        "choices": [
+          {
+            "id": "independent_court",
+            "label": "Create an independent civilian-protection court",
+            "detail": "Open evidence, equal jurisdiction, rotating reviewers, and appeals.",
+            "effects": { "protection": 15, "evidence": 12, "public_trust": 14, "accountability": 25, "turn": 1, "double_standard": -8 },
+            "record": "Accepted scrutiny under the same institution created to judge the former Council.",
+            "next": "verdict",
+            "act": "verdict"
+          },
+          {
+            "id": "donkey_decree",
+            "label": "Let the donkey decide until the crisis ends",
+            "detail": "Fast decisions with no independent appeal.",
+            "effects": { "protection": 3, "evidence": 0, "public_trust": 5, "accountability": -15, "turn": 1, "double_standard": 20 },
+            "record": "Condemned unreviewable decrees, then claimed one was necessary under new leadership.",
+            "next": "verdict",
+            "act": "verdict"
+          },
+          {
+            "id": "collective_guilt",
+            "label": "Declare every pig guilty",
+            "detail": "Replace evidence with inherited guilt.",
+            "effects": { "protection": -16, "evidence": -18, "public_trust": 4, "accountability": -20, "turn": 1, "double_standard": 30 },
+            "record": "Demanded individual proof from enemies, then assigned guilt by identity when power changed hands.",
+            "next": "verdict",
+            "act": "verdict"
+          }
+        ]
+      }
+    },
+    "ROUTES": {
+      "verdict": "The Unbroken Spell"
+    }
+  },
+  "@addons": {
+    "witness": {
+      "scope": "pig-kingdom-children-of-the-rebellion",
+      "component": "⟁WIDGET:WITNESS",
+      "semantic_authority": false,
+      "persistence": "request_scoped"
+    }
+  }
+}

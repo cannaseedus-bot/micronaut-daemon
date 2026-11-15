@@ -1,0 +1,90 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "socialsphere",
+  "@key": "⟁APP:SOCIALSPHERE",
+  "@mount": "⟁ROOT:SOCIALSPHERE",
+  "@layout": {
+    "mode": "panels",
+    "regions": [
+      { "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" },
+      { "id": "primary_feed", "component": "⟁WIDGET:FEED", "position": "center" },
+      { "id": "trending", "component": "⟁WIDGET:TRENDING", "position": "right_top" },
+      { "id": "suggestions", "component": "⟁WIDGET:SUGGESTIONS", "position": "right_bottom" }
+    ],
+    "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" }
+  },
+  "@state": {
+    "auth": { "user_id": null, "username": null, "handle": null, "email": null },
+    "posts": [],
+    "search": "",
+    "modal": null,
+    "status": "idle"
+  },
+  "@components": {
+    "⟁ROOT:SOCIALSPHERE": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS", "⟁WIDGET:AUTH_MODAL", "⟁WIDGET:COMPOSE_MODAL"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:AUTH", "⟁ACTION:POST"], "@on": { "search.input": "socialsphere.search", "auth.open": "socialsphere.open_auth", "post.open": "socialsphere.open_compose" } },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:AUTH": { "@type": "button", "@text": "Login", "@on": { "click": "socialsphere.open_auth" } },
+    "⟁ACTION:POST": { "@type": "button", "@text": "Post", "@on": { "click": "socialsphere.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:FEED", "⟁WIDGET:TRENDING", "⟁WIDGET:SUGGESTIONS"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:FEED": { "@type": "feed", "@bind": "state.posts", "@children": ["⟁WIDGET:POST"] },
+    "⟁WIDGET:POST": { "@type": "post-card", "@bind": "post", "@on": { "like": "socialsphere.like", "upvote": "socialsphere.upvote", "read": "socialsphere.read" } },
+    "⟁WIDGET:TRENDING": { "@type": "trend-list", "@bind": "data.trending" },
+    "⟁WIDGET:SUGGESTIONS": { "@type": "suggestion-list", "@bind": "data.suggestions" },
+    "⟁WIDGET:AUTH_MODAL": { "@type": "modal", "@bind": "state.modal", "@on": { "submit": "socialsphere.auth_submit", "close": "socialsphere.close_modal" } },
+    "⟁WIDGET:COMPOSE_MODAL": { "@type": "modal", "@bind": "state.modal", "@on": { "submit": "socialsphere.post_submit", "close": "socialsphere.close_modal" } }
+  },
+  "@programs": {
+    "socialsphere.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] },
+    "socialsphere.open_auth": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "socialsphere.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "socialsphere.close_modal": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "socialsphere.auth_submit": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_auth", "@out": "auth" }, { "@op": "SET", "@from": "event_status", "@out": "status" }] },
+    "socialsphere.post_submit": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "APPEND", "@from": "event_post", "@out": "posts" }, { "@op": "SET", "@from": "event_status", "@out": "status" }] },
+    "socialsphere.like": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "ADD", "@in": ["event_likes", "event_delta"], "@out": "event_likes" }] },
+    "socialsphere.upvote": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "ADD", "@in": ["event_upvotes", "event_delta"], "@out": "event_upvotes" }] },
+    "socialsphere.read": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": {
+    "search.input": "socialsphere.search", "auth.open": "socialsphere.open_auth", "post.open": "socialsphere.open_compose", "auth.submit": "socialsphere.auth_submit", "post.submit": "socialsphere.post_submit", "post.like": "socialsphere.like", "post.upvote": "socialsphere.upvote", "post.read": "socialsphere.read", "modal.close": "socialsphere.close_modal"
+  },
+  "@imports": [{ "ref": "user_profile", "mode": "schema_table" }, { "ref": "post", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [],
+    "@selected": [],
+    "@available": [
+      { "id": "comments", "name": "Comments", "category": "community", "price": "free", "status": "available_unconfigured", "description": "Comments and replies for posts and stories." },
+      { "id": "reply-bots", "name": "Reply Bots", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Turn established agents into pattern-driven comment reply bots and build additional named bots." },
+      { "id": "membership-page", "name": "Membership page", "category": "community", "price": "optional", "status": "setup_required", "requires": ["stripe-payments"], "billing": "monthly_subscription", "description": "Member-only areas and a monthly subscription signup page configured through Stripe in App Hub." },
+      { "id": "store", "name": "Store", "category": "commerce", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Storefront, product pages, and inventory fields for subscribed app owners." },
+      { "id": "stripe-payments", "name": "Stripe payments", "category": "payments", "price": "optional", "status": "setup_required", "requires": ["payments.stripe.checkout.v1"], "credentials": "server_only", "description": "Payment and monthly subscription support through a configured server-side Stripe checkout." },
+      { "id": "forum", "name": "Forum", "category": "community", "price": "optional", "status": "available_unconfigured", "description": "Topic boards and threaded discussions." },
+      { "id": "bot-agent-store", "name": "Bot Agent Store", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "A catalog for registered daemon bots and Micronaut agents." },
+      { "id": "custom-bot", "name": "Custom Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "An app-specific bot manifest with prompt patterns and permitted capabilities." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "socialsphere.add-comments", "pattern": "ADD COMMENTS|INSTALL COMMENTS|ENABLE COMMENTS", "intent": "install_free_plugin", "plugin_ref": "comments" },
+      { "id": "socialsphere.add-reply-bots", "pattern": "ADD REPLY BOTS|MAKE AMY AND BOB REPLY BOTS|ENABLE COMMENT BOTS", "intent": "install_membership_plugin", "plugin_ref": "reply-bots", "requires_subscription": true },
+      { "id": "socialsphere.create-bot", "pattern": "BUILD A BOT|CREATE A BOT|ADD A REPLY BOT", "intent": "open_custom_bot_form", "plugin_ref": "reply-bots" },
+      { "id": "socialsphere.define-bot-pattern", "pattern": "PATTERN * TEMPLATE *", "intent": "define_reply_bot", "plugin_ref": "reply-bots" },
+      { "id": "socialsphere.add-store", "pattern": "ADD STORE|INSTALL STORE|CREATE A STORE", "intent": "install_membership_plugin", "plugin_ref": "store", "requires_subscription": true },
+      { "id": "socialsphere.membership", "pattern": "SUBSCRIBE|ADD MEMBERSHIP|ENABLE MEMBERSHIP", "intent": "open_membership_setup", "plugin_ref": "membership-page", "provider": "stripe" }
+    ]
+  },
+  "@data": {
+    "trending": ["#SocialSphere", "#LocalFirst", "#WebDev", "#OpenSource"],
+    "suggestions": ["Amy", "Bob"],
+    "reply_bots": [
+      { "id": "amy", "name": "Amy", "pattern": "*", "template": "Thanks for sharing that, <star/>! What do you think about it?", "source": "established_agent" },
+      { "id": "bob", "name": "Bob", "pattern": "*", "template": "Interesting point, <star/>. What inspired it?", "source": "established_agent" }
+    ],
+    "schema": {
+      "user_profile": { "primaryKey": "user_id", "fields": { "user_id": { "type": "string" }, "username": { "type": "string", "required": true }, "handle": { "type": "string", "required": true }, "email": { "type": "email", "required": true }, "password": { "type": "password", "required": true } } },
+      "post": { "primaryKey": "post_id", "fields": { "post_id": { "type": "string" }, "user_id": { "type": "string" }, "author_name": { "type": "string" }, "author_handle": { "type": "string" }, "content": { "type": "textarea", "required": true, "maxLength": 500 }, "image_url": { "type": "uri" }, "likes": { "type": "integer" }, "upvotes": { "type": "integer" }, "created_at": { "type": "datetime" } } }
+    }
+  }
+}

@@ -1,0 +1,136 @@
+(* ========================================================================== *)
+(* K'UHUL MAP OPERATOR GRAMMAR (EBNF) — v2.0                                  *)
+(* Operator algebra: map : Fold → Fold                                        *)
+(* Contract: data/grammar/operator-algebra.contracts.json                    *)
+(* ========================================================================== *)
+
+(* ── Map contract ───────────────────────────────────────────────────────── *)
+
+MapContract         ::= "{" MapMembers "}"
+
+MapMembers          ::= MapId "," MapSource "," MapTarget
+                      "," MapTransform
+                      ("," MapConditions)?
+                      ("," MapDeterminism)?
+                      ("," MapMetadata)?
+
+(* ── Identity ───────────────────────────────────────────────────────────── *)
+
+MapId               ::= "id" ":" String
+
+(* ── Source: a combination of selectors ─────────────────────────────────── *)
+
+MapSource           ::= "source" ":" "{" SourceBody "}"
+
+SourceBody          ::= SourceProp ("," SourceProp)*
+
+SourceProp          ::= "fold_id" ":" String
+                      | "fold_ref" ":" String
+                      | "fold_set" ":" String
+                      | "phase" ":" PhaseName
+                      | "stream" ":" String
+                      | "all_folds" ":" Boolean
+
+(* ── Target ─────────────────────────────────────────────────────────────── *)
+
+MapTarget           ::= "target" ":" "{" TargetBody "}"
+
+TargetBody          ::= TargetProp ("," TargetProp)*
+
+TargetProp          ::= "fold_id" ":" String
+                      | "new_fold" ":" Boolean
+                      | "in_place" ":" Boolean
+                      | "preserve_identity" ":" Boolean
+
+(* ── Transform: the type is required ────────────────────────────────────── *)
+
+MapTransform        ::= "transform" ":" "{" TransformBody "}"
+
+TransformBody       ::= "type" ":" TransformType ","
+                        "ops" ":" OpList
+                        ("," "params" ":" ParamSet)?
+
+TransformType       ::= "semantic"
+                      | "geometric"
+                      | "algebraic"
+                      | "tensor"
+                      | "phase"
+
+OpList              ::= "[" (OpName ("," OpName)*)? "]"
+
+OpName              ::= String
+
+ParamSet            ::= "{" (Param ("," Param)*)? "}"
+
+Param               ::= String ":" Value
+
+Value               ::= String | Number | Boolean | Array | Object | Null
+
+(* ── Determinism contract ───────────────────────────────────────────────── *)
+
+MapDeterminism      ::= "determinism" ":" "{" DeterminismBody "}"
+
+DeterminismBody     ::= "mode" ":" DeterminismMode
+                        ("," "record_inputs" ":" Boolean)?
+                        ("," "record_operator_version" ":" Boolean)?
+                        ("," "record_seed" ":" Boolean)?
+                        ("," "record_external_observations" ":" Boolean)?
+
+DeterminismMode     ::= "deterministic"      (* same input → same output *)
+                      | "seeded"             (* deterministic given seed *)
+                      | "observational"      (* records external observations *)
+                      | "stochastic"         (* not reproducible without records *)
+
+(* ── Conditions ─────────────────────────────────────────────────────────── *)
+
+MapConditions       ::= "conditions" ":" "[" (Condition ("," Condition)*)? "]"
+
+Condition           ::= "{" ConditionBody "}"
+
+ConditionBody       ::= "if" ":" Expression
+                      | "unless" ":" Expression
+                      | "when_phase" ":" PhaseName
+
+(* ── Metadata ───────────────────────────────────────────────────────────── *)
+
+MapMetadata         ::= "metadata" ":" "{" (MetadataField ("," MetadataField)*)? "}"
+
+MetadataField       ::= String ":" Value
+
+(* ── Phase names (canonical C6 identity: world::canonical_phase_name) ───── *)
+
+PhaseName           ::= "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul"
+
+(* ── Expression (shared with filter.ebnf; see that file for the full grammar) *)
+
+Expression          ::= String
+
+(* ── Constraints ────────────────────────────────────────────────────────── *)
+
+(*
+   CONSTRAINT 1: Source must have at least one selector
+     |source.props ∩ {fold_id, fold_ref, fold_set, phase, stream, all_folds}| >= 1
+
+   CONSTRAINT 2: Target must have fold_id OR new_fold OR in_place
+     target.fold_id OR target.new_fold OR target.in_place
+
+   CONSTRAINT 3: Transform type is required
+     transform.type ∈ {semantic, geometric, algebraic, tensor, phase}
+
+   CONSTRAINT 4: In-place maps preserve structural identity
+     If target.in_place = true:
+       target.fold_id = source.fold_id (if set)
+       structural fields remain immutable
+
+   CONSTRAINT 5: Determinism contract is declared
+     determinism.mode is required
+     If mode != "deterministic", record_inputs must be true
+
+   CONSTRAINT 6: Phase-bound maps only apply during that phase
+     If source.phase specified:
+       map executes only when current phase = source.phase
+
+   CONSTRAINT 7: A map produces a fold; it does not admit one
+     map : Fold → Fold is a proposal. XCFE admits execution and only a verified,
+     authorized Xul may commit the result (no map may write topology).
+*)

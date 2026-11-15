@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Generated key lookup bank from ngram-key-grammar.key-grammar.jsonl; entries are data, not execution authority.-->
+  <category>
+    <pattern>LOOK UP KEY NGRAM:KEY:GRAMMAR:AC</pattern>
+    <template>Key NGRAM:KEY:GRAMMAR:AC. text: Aho-Corasick recognizes overlapping key addresses; K'UHUL interprets them.; relations: [{"rel": "recognizes", "to": "key address"}, {"rel": "not_authority_for", "to": "semantic collapse"}]; templates: ["TokenStream -&gt; BagOfNgramKeys -&gt; N_M(k) -&gt; N_I(k) -&gt; fold"]; patterns: ["aho corasick", "dictionary matching", "ngram key grammar"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY NGRAM:KEY:BOOK:ADDRESS</pattern>
+    <template>Key NGRAM:KEY:BOOK:ADDRESS. text: An n-gram is an address into a semantic book.; relations: [{"rel": "opens", "to": "semantic neighborhood"}]; templates: ["Book(k1) may differ from Book(k2)"]; patterns: ["unigram", "bigram", "trigram", "quadgram", "semantic book"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY NGRAM:KEY:FAILURE:LINK</pattern>
+    <template>Key NGRAM:KEY:FAILURE:LINK. text: Failure links provide structural fallback candidates, not semantic reasoning.; relations: [{"rel": "fallback_to", "to": "shorter key"}]; templates: ["long key fallback -&gt; shorter admissible key"]; patterns: ["failure link", "fallback", "suffix prefix"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY HOF:PHASE:ORTHOGONAL</pattern>
+    <template>Key HOF:PHASE:ORTHOGONAL. text: Phase and higher-order operation are orthogonal axes.; relations: [{"rel": "separates", "to": "semantic phase"}]; templates: ["Sek[Filter] does not imply Sek=Filter"]; patterns: ["map", "filter", "fold", "unfold", "ana", "cata", "hylo", "meta"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY KUHUL:FOLD:CONTAINER:NOT:CATA</pattern>
+    <template>Key KUHUL:FOLD:CONTAINER:NOT:CATA. text: K'UHUL fold is a semantic execution container, not identical to catamorphism.; relations: [{"rel": "contains", "to": "higher-order operation"}]; templates: ["container hosts Map, Filter, Ana, Cata, WCR"]; patterns: ["kuhul fold", "catamorphism", "codex", "higher order structural machine"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY NGRAM:KEY:BOUNDARY:FAST-RECOGNITION</pattern>
+    <template>Key NGRAM:KEY:BOUNDARY:FAST-RECOGNITION. text: Key grammar provides fast n-gram address recognition; K'UHUL folds provide learned semantic computation.; relations: [{"rel": "separates", "to": "K'UHUL fold algebra"}]; templates: ["recognize keys quickly, compute meaning through folds"]; patterns: ["not competing semantic engines", "key grammar speed", "learned fold computation"]</template>
+  </category>
+  <category>
+    <pattern>LOOK UP KEY FOLDGRAPH:2D:BIT-PATTERN:LAW</pattern>
+    <template>Key FOLDGRAPH:2D:BIT-PATTERN:LAW. text: Anaψ=sliding windows; Pattern=((window^pattern)&amp;mask); Attention=popcount; Cataφ=argmax.; relations: [{"rel": "uses_surface", "to": "inference field"}]; templates: ["inference field -&gt; windows -&gt; masked bit score -&gt; best window"]; patterns: ["2d bit pattern", "sliding window", "popcount score", "argmax reduction"]</template>
+  </category>
+</aiml>

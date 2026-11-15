@@ -1,0 +1,32 @@
+{
+  "@kind": "astronomy.system-infographic-data.v1",
+  "system": {
+    "id": "saturn-system",
+    "name": "The Saturn System",
+    "parent": "Solar System",
+    "description": "A nested planetary system of Saturn, its rings, moons, and active environments.",
+    "scale_note": "Orbit spacing, moon size, and rings are diagrammatic and not to scale.",
+    "as_of": "2026-11-14"
+  },
+  "atmosphere_classes": [
+    {"id":"substantial","label":"Substantial atmosphere","description":"A persistent, globally significant atmosphere."},
+    {"id":"exosphere","label":"Tenuous exosphere","description":"An extremely sparse envelope of particles around a moon."},
+    {"id":"plume","label":"Plume-sourced gas","description":"Transient gas and vapor supplied by active jets; not equivalent to a thick global atmosphere."}
+  ],
+  "objects": [
+    {"id":"saturn","name":"Saturn","kind":"planet","orbit":0,"visual_class":"planet","summary":"Parent world of this system. Its rings and moons form a complex local environment.","classifications":[],"source_ids":["nasa-saturn-facts"]},
+    {"id":"mimas","name":"Mimas","kind":"moon","orbit":1,"visual_class":"icy","summary":"Small icy moon included as a system landmark. No atmosphere classification is asserted here.","classifications":[],"source_ids":["nasa-moon-facts"]},
+    {"id":"enceladus","name":"Enceladus","kind":"moon","orbit":2,"visual_class":"active","summary":"Jets at the south pole send water vapor and ice into space. Cassini sampled the plume gases.","classifications":["plume"],"source_ids":["nasa-enceladus"]},
+    {"id":"tethys","name":"Tethys","kind":"moon","orbit":3,"visual_class":"icy","summary":"Icy moon shown for orientation within Saturn's inner satellite system.","classifications":[],"source_ids":["nasa-moon-facts"]},
+    {"id":"dione","name":"Dione","kind":"moon","orbit":4,"visual_class":"exosphere","summary":"Cassini detected a very thin atmosphere, around five trillion times less dense than Earth's surface atmosphere.","classifications":["exosphere"],"source_ids":["nasa-saturn-facts"]},
+    {"id":"rhea","name":"Rhea","kind":"moon","orbit":5,"visual_class":"exosphere","summary":"Cassini detected a very thin exosphere containing oxygen and carbon dioxide.","classifications":["exosphere"],"source_ids":["nasa-rhea"]},
+    {"id":"titan","name":"Titan","kind":"moon","orbit":6,"visual_class":"substantial","summary":"The only moon known to have a substantial atmosphere; its surface pressure is about 60% greater than Earth's.","classifications":["substantial"],"source_ids":["nasa-titan"]}
+  ],
+  "sources": [
+    {"id":"nasa-saturn-facts","label":"NASA Saturn moons facts","url":"https://science.nasa.gov/saturn/moons/facts/","supports":"Titan's substantial atmosphere; very thin atmospheres around Dione and Rhea."},
+    {"id":"nasa-titan","label":"NASA Titan facts","url":"https://science.nasa.gov/saturn/moons/titan/facts/","supports":"Titan's dense atmosphere and surface pressure."},
+    {"id":"nasa-rhea","label":"NASA Rhea","url":"https://science.nasa.gov/saturn/moons/rhea/","supports":"Rhea's thin exosphere with oxygen and carbon dioxide."},
+    {"id":"nasa-enceladus","label":"NASA Enceladus","url":"https://science.nasa.gov/saturn/moons/enceladus/","supports":"South-polar plumes, water vapor, ice, and sampled plume gases."},
+    {"id":"nasa-moon-facts","label":"NASA Saturn moons facts","url":"https://science.nasa.gov/saturn/moons/facts/","supports":"Saturn moon system context."}
+  ]
+}

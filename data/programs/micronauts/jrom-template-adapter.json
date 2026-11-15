@@ -1,0 +1,60 @@
+{
+  "@program": "micronaut.jrom_template_adapter",
+  "@kind": "kuhul.jrom.adapter.v1",
+  "@namespace": "https://kuhul.dev/",
+  "purpose": "Adapt universal KXML micronaut blocks to a model's native conversation template before JROM execution.",
+  "formats": {
+    "source": ["kxml", "jinja", "chatml", "role_messages"],
+    "canonical": "kxml",
+    "compiled": "jrom_atomicdom",
+    "wire": "JROM+CBOR"
+  },
+  "rule": "Never replace a target model's chat template. Normalize into KXML, then render using the target's native block contract.",
+  "template_dialects": {
+    "kxml": {
+      "role_blocks": { "system": "I_EXPLAIN", "user": "I_QUESTION", "assistant": "I_ANSWER", "tool": "TOOL_RESULT" },
+      "turn_end": "SEP",
+      "tool_call": { "open": "TOOL_CALL", "name": "T_<NAME>", "close": "TOOL_RESULT" },
+      "renderer": "tools/kxml_chat_template.py"
+    },
+    "jinja": {
+      "input": "model metadata tokenizer.chat_template",
+      "renderer": "tools/kxml_stock_adapter.py::render_for_gguf",
+      "preserve": ["role blocks", "generation prompt", "bos token", "eos token", "tool-call branch"]
+    },
+    "chatml": {
+      "role_blocks": { "system": "<|im_start|>system", "user": "<|im_start|>user", "assistant": "<|im_start|>assistant", "tool": "<|im_start|>tool" },
+      "turn_end": "<|im_end|>",
+      "generation_prompt": "<|im_start|>assistant",
+      "renderer": "target_template_or_explicit_chatml_block_map"
+    },
+    "role_messages": {
+      "normalizer": "tools/kxml_stock_adapter.py::kxml_to_messages",
+      "fallback": "inline_tool_blocks"
+    }
+  },
+  "pipeline": [
+    { "phase": "Pop", "op": "TEMPLATE_DETECT", "inputs": ["model_metadata", "chat_template"] },
+    { "phase": "Wo", "op": "BLOCK_MAP_SELECT", "inputs": ["dialect", "special_tokens"] },
+    { "phase": "Yax", "op": "KXML_NORMALIZE", "inputs": ["micronaut_events", "messages", "tool_calls"] },
+    { "phase": "Sek", "op": "TEMPLATE_RENDER", "renderer": "target_native_renderer" },
+    { "phase": "Chen", "op": "BLOCK_VERIFY", "checks": ["role_order", "tool_pairing", "generation_prompt"] },
+    { "phase": "Xul", "op": "JROM_ENCODE", "format": "JROM_v1_CBOR" }
+  ],
+  "jrom_adapter_state": {
+    "target_model": "model://target",
+    "source_dialect": "kxml",
+    "target_dialect": "jinja|chatml|kxml",
+    "block_map": "object",
+    "special_tokens": "object",
+    "generation_prompt": "string_or_null",
+    "tool_style": "inline|openai|native"
+  },
+  "invariants": [
+    "KXML remains the universal semantic layer.",
+    "Jinja and ChatML are target rendering dialects, not competing semantic authorities.",
+    "JROM is the compiled AtomicDOM adapter/container.",
+    "A model-specific adapter must preserve its native block delimiters and special tokens.",
+    "No invented bytecode format replaces JROM."
+  ]
+}

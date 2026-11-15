@@ -1,0 +1,31 @@
+{
+  "@program": "opencl.training",
+  "@schema": "kuhul.opencl.training.v1",
+  "backend": "opencl_1_2",
+  "registry": "programs/opencl.kernel.json",
+  "shader_source": "drivers/opencl_1_2/training.cl",
+  "hardware_policy": {
+    "device": "Intel HD 4600",
+    "language": "OpenCL C 1.2",
+    "cpu_fallback": false,
+    "readback": "only at Ch'en/Xul"
+  },
+  "phases": {
+    "Pop": "allocate_context_and_buffers",
+    "Wo": "bind_tensor_buffers",
+    "Yax": "compile_and_select_kernel",
+    "Sek": "enqueue_ndrange_kernel",
+    "Chen": "finish_and_validate",
+    "Xul": "commit_device_state"
+  },
+  "pipeline": [
+    { "stage": "forward", "kernels": ["swiglu_forward", "rms_norm_forward", "softmax_forward"] },
+    { "stage": "loss_backward", "kernels": ["cross_entropy_loss_back", "rms_norm_back", "silu_back", "gelu_back"] },
+    { "stage": "optimizer", "kernels": ["adamw_step", "sgd_step"] }
+  ],
+  "limitations": [
+    "matmul and attention remain separate registry contracts",
+    "row reductions use one work-item per row and are correctness-first",
+    "performance claims require hardware benchmarking"
+  ]
+}

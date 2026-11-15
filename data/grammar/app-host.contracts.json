@@ -1,0 +1,187 @@
+{
+  "@type": "khanary.app_host_contracts.v1",
+  "semantic_authority": false,
+  "topology_mutation": false,
+  "commit_authorized": false,
+  "apps_are_mcp": false,
+  "mcp_is_apps": false,
+  "canonical_output_dir": "bin",
+  "host_layer": {
+    "id": "apps_host",
+    "path": "src/host",
+    "role": "user_session_apps",
+    "ui_substrate": "atomic_dom",
+    "widget_substrate": "atomic_dom",
+    "ghost_html_host": {
+      "role": "hosted_browser_projection",
+      "renderer": "browser_dom",
+      "app_html_route": "GET /apps/{app_id}",
+      "app_contract_route": "GET /apps/{app_id}.asx-app.json",
+      "app_html_root": "data/host/apps",
+      "layout_policy": "app_shape_and_css_first_atomic_dom_assist_optional",
+      "authority": "projection_only",
+      "semantic_execution": false
+    },
+    "widget_surfaces": [
+      "atomic_dom_widgets",
+      "typescript_mu_playground",
+      "kuhul_mu_playground"
+    ],
+    "atomic_dom": {
+      "purpose": [
+        "remove_redundant_ui_declarations",
+        "provide_user_specific_option_slots",
+        "project_key_grammar_tokens_to_widgets"
+      ],
+      "declares": [
+        "asx_blocks",
+        "atomic_css_key_grammar"
+      ],
+      "css_key_grammar_manifest": "data/manifest/css.manifest.json",
+      "key_grammar_anchor": "\u27c1KEYGRAMMAR",
+      "unit_kinds_key": "\u27c1SYNTAXUNITKINDS",
+      "required_unit_kinds": [
+        "Block",
+        "Component"
+      ],
+      "required_widget_keys": [
+        "\u27c1WIDGET",
+        "\u27c1WIDGETCARD",
+        "\u27c1HTMLBIND"
+      ],
+      "callable_api": {
+        "file": "src/host/AtomicDOM.js",
+        "style": [
+          "react_like_create",
+          "ajax_like_call"
+        ],
+        "returns": [
+          "atomic_dom_record",
+          "key_grammar_tokens"
+        ]
+      },
+      "provides": [
+        "key_grammar_tokens",
+        "asx_block_tokens",
+        "atomic_css_tokens",
+        "theme_palette_options",
+        "branding_slots",
+        "user_config_bindings"
+      ],
+      "user_option_slots": [
+        "branding",
+        "api_token_secret_ref",
+        "runtime_config",
+        "color_switcher",
+        "palette_choice"
+      ],
+      "stores_secret_values": false,
+      "chooses_palette_defaults": true,
+      "allowed_palette_source": "data/manifest/css.manifest.json",
+      "semantic_authority": false,
+      "topology_mutation": false,
+      "commit_authorized": false
+    },
+    "playgrounds": [
+      "TYPESCRIPT-\u00b5",
+      "KUHUL-\u00b5"
+    ],
+    "protocols": [
+      "rest",
+      "webview",
+      "json",
+      "jrom"
+    ],
+    "owns": [
+      "app_user_sessions",
+      "ui_routes",
+      "app_state",
+      "user_scoped_kql_tables",
+      "gas_drive_sheet_bridges"
+    ],
+    "may_call": [
+      "json_rpc",
+      "completion_gateway",
+      "kql"
+    ],
+    "advisor_help_route": {
+      "entry": "ADVISOR-\u00b5",
+      "helper_tracks": [
+        "DESIGN-\u00b5",
+        "ENGINEER-\u00b5"
+      ],
+      "backend_bindings": [
+        "Gemma",
+        "Qwen"
+      ],
+      "semantic_authority": false,
+      "topology_mutation": false,
+      "commit_authorized": false,
+      "next_gate": "Ch'en/XCFE/Xul"
+    },
+    "must_not_expose": [
+      "raw_mcp_tool_call",
+      "mcp_resource_template",
+      "mcp_prompt_surface"
+    ],
+    "authority": {
+      "semantic_authority": false,
+      "topology_mutation": false,
+      "commit_authorized": false,
+      "next_gate": "Ch'en/XCFE/Xul"
+    }
+  },
+  "mcp_layer": {
+    "id": "mcp",
+    "path": "src/io/mcp_server.cpp",
+    "role": "model_tool_protocol",
+    "protocols": [
+      "mcp"
+    ],
+    "owns": [
+      "tool_invocation",
+      "resource_invocation",
+      "allowlisted_runtime_calls"
+    ],
+    "must_not_own": [
+      "app_user_sessions",
+      "ui_routes",
+      "user_scoped_kql_tables",
+      "gas_drive_sheet_bridges"
+    ],
+    "authority": {
+      "semantic_authority": false,
+      "topology_mutation": false,
+      "commit_authorized": false,
+      "next_gate": "Ch'en/XCFE/Xul"
+    }
+  },
+  "invariants": {
+    "APP1": "Apps host and MCP are distinct lanes.",
+    "APP2": "Apps host may call runtime APIs but must not expose raw MCP tool semantics.",
+    "APP3": "MCP may expose tools/resources but must not own app login or user app data.",
+    "APP4": "Both lanes remain projection/request surfaces with semantic_authority:false.",
+    "APP5": "Persistent topology commits still require Ch'en/XCFE/Xul.",
+    "APP6": "Optional app-host executables must emit to bin/.",
+    "APP7": "Atomic DOM is the Apps widget substrate and remains a UI projection with no semantic or commit authority.",
+    "APP8": "Atomic DOM declares ASX Blocks through the Atomic CSS key grammar manifest at data/manifest/css.manifest.json.",
+    "APP9": "AtomicDOM.js removes UI redundancy and exposes user-specific option slots such as branding, secret references, config, and palette choices without storing secret values or becoming authority."
+  },
+  "asx_app_key_authority": {
+    "permitted": [
+      "projection_only",
+      "observation_only"
+    ],
+    "meaning": {
+      "projection_only": "may bias routing and presentation; never truth or commit",
+      "observation_only": "records an observation; never truth or commit"
+    },
+    "forbidden": [
+      "semantic_authority",
+      "commit_authorized",
+      "topology_mutation"
+    ],
+    "executor": "mx.run",
+    "rule": "every ASX app key is executed by mx.run and is non-authoritative; route rows in the same book follow the same non-authority rule"
+  }
+}

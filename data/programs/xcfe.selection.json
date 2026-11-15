@@ -1,0 +1,23 @@
+{
+  "@type": "khanary.xcfe_program.v1",
+  "@no-eval": true,
+  "id": "xcfe.selection",
+  "program_class": "SELECTION",
+  "phase": "Yax",
+  "input_role": "candidate_set",
+  "output_role": "selected_candidate",
+  "admission": "explicit",
+  "description": "Selects a candidate from an active fold graph using W·C·R scoring. SELECTION class — canonical authority phase Yax.",
+  "steps": [
+    { "phase": "Pop",  "op": "gramRead",   "id": "xcfe_candidates" },
+    { "phase": "Wo",   "op": "bind",       "id": "candidate_set" },
+    { "phase": "Yax",  "op": "select",     "id": "wcr_score" },
+    { "phase": "Sek",  "op": "dispatch",   "id": "selected" },
+    { "phase": "Xul",  "op": "gramWrite",  "id": "selected_candidate" }
+  ],
+  "authority": {
+    "semantic_authority": false,
+    "topology_mutation": false,
+    "commit_authorized": false
+  }
+}

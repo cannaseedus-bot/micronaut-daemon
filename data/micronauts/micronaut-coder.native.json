@@ -1,0 +1,148 @@
+{
+  "schema": "kuhul.micronaut.native-coder.v1",
+  "identity": {
+    "id": "CODER-µ",
+    "name": "CODER",
+    "version": "1.0.0",
+    "authority_claim": "xcfe_gated_read_only"
+  },
+  "descriptor_status": "declarative_proposal",
+  "registered": false,
+  "registered_status": "unregistered; call register_micronaut() to activate",
+  "track_ref": "data/tracks/coder.semantic-tracks.v1.json",
+  "bindings_ref": "shell/coder.bindings.psm1",
+  "manifest": {
+    "display_name": "Native Coder",
+    "tagline": "AST corpus, GPT2 weights, SCXQ2/XSHARD residency, KXML execution",
+    "color": "#ff6600",
+    "icon_svg": "data/micronauts/assets/coder.svg",
+    "animated_svg": "data/micronauts/assets/coder.animated.svg",
+    "profile_card": {
+      "widget": "data/host/apps/micronaut-card.asx-app.json",
+      "props": { "id": "CODER-µ", "phase": "Sek", "category": "tool-dispatch" }
+    }
+  },
+  "api": {
+    "namespace": "coder",
+    "atomic_keys": ["coder.match", "coder.query", "coder.tool_plan", "coder.health"],
+    "rest_routes": [
+      { "method": "POST", "path": "/api/atomic/call", "key": "coder.match" },
+      { "method": "POST", "path": "/api/atomic/call", "key": "coder.tool_plan" },
+      { "method": "GET",  "path": "/api/health",      "key": "coder.health" }
+    ]
+  },
+  "cache": {
+    "object": "coder-cache",
+    "ttl": 1800,
+    "schema": {
+      "last_ast":       "string",
+      "last_tool_plan": "string",
+      "session_topic":  "string",
+      "confidence":     "float",
+      "weight_source":  "string"
+    }
+  },
+  "capabilities": [
+    "source_to_ast",
+    "kxml_fold_planning",
+    "ebnf_guided_parse",
+    "single_command_tool_plan",
+    "format_preserving_writer"
+  ],
+  "srai": {
+    "mode": "bounded_redirect_only",
+    "cycle_detection": true,
+    "max_depth": 16
+  },
+  "xcfe": {
+    "required_for_tool_dispatch": true,
+    "required_for_mutation": true
+  },
+  "program_contract": {
+    "format": "kuhul.micronaut-program/1",
+    "program_model": "typed_python_runtime",
+    "role": ["tool-dispatch", "ast_planning", "code_generation"],
+    "grammar_refs": [
+      "data/grammar/cpp.code-grammar.ebnf",
+      "data/grammar/cpp.code-grammar.json",
+      "data/grammar/typescript.code-grammar.json",
+      "data/grammar/codegen-mu.runtime.ebnf",
+      "data/micronauts/Micronaut.SRAI.AIML.ebnf",
+      "data/micronauts/aiml_srai_authority.ebnf",
+      "data/micronauts/srai_route.ebnf"
+    ],
+    "contract_refs": ["data/tracks/coder.semantic-tracks.v1.json"],
+    "entry_points": ["micronaut.coder.execute_tool_plan"],
+    "bindings": {
+      "inputs": [
+        { "name": "text",    "type": "string", "resolution_status": "user_input" },
+        { "name": "topic",   "type": "string", "resolution_status": "optional" },
+        { "name": "ast_ctx", "type": "string", "resolution_status": "optional" }
+      ],
+      "output": {
+        "type": "ToolPlanResult",
+        "authority": "DATA_ONLY",
+        "direct_dispatch": false
+      }
+    },
+    "interaction": { "host_binding_required": true, "direct_user_io": false },
+    "sandbox": {
+      "filesystem": "allowlisted_aiml_bank_read_only",
+      "network": "none",
+      "process": "none",
+      "effects": ["gramRead", "cache_write", "emit_tool_plan"],
+      "admission": "xcfe_gated"
+    },
+    "learning": { "mode": "proposal_only", "commit_requirement": "xul_verified" },
+    "implementation": {
+      "source_status": "source_present",
+      "runtime_registration": "pending",
+      "validation_status": "pending"
+    },
+    "drivers": [
+      "Micronaut.Grammar.dll",
+      "Micronaut.Patterns.dll",
+      "Micronaut.Compute.dll",
+      "NeuralGrammar.Core.dll"
+    ]
+  },
+  "model": {
+    "architecture": "gpt2",
+    "role": "source-to-kuhul-ast-and-tool-plan",
+    "chat_template": "chatml-compatible-adapter",
+    "weights": {
+      "preferred": "E:/models/GPT2/coder_micronaut/coder_ast_json_fp16.safetensors",
+      "serving_gguf": "E:/models/GPT2/coder_micronaut/ultrachat_coder_skeleton_slerp_0p40.gguf",
+      "trained_lineage": "E:/models/GPT2/coder_micronaut/coder_ast_json_fp16_step4800.safetensors",
+      "training_checkpoint": "E:/models/GPT2/layered_ckpts/layered_code.safetensors",
+      "large_checkpoint": "E:/models/GPT2/lg-GPT2/model.safetensors",
+      "native_rule": "Prefer the AST-trained SafeTensors checkpoint in the native coder/trainer. Use serving_gguf only for a llama/Khanary ChatML endpoint after an explicit export and hash record. Do not silently substitute weights."
+    }
+  },
+  "pipeline": [
+    { "phase": "Pop",   "name": "prepare_ast_corpus",    "tool": "tools/prep_ast_corpus.py" },
+    { "phase": "Wo",    "name": "select_weight_source",  "tool": "tools/gpt2_safetensors_to_gguf.py" },
+    { "phase": "Yax",   "name": "plan_scxq2_residency",  "tools": ["tools/safetensors_to_xshard.py", "tools/scxq2_tiles.py", "tools/smgm_address.py"] },
+    { "phase": "Sek",   "name": "native_inference",      "runtime": "tools/scxqdds_runtime.py", "adapter": "tools/scxq2_adapter.py" },
+    { "phase": "Ch'en", "name": "verify_artifacts",      "tools": ["tools/stb.py", "tools/safetensors_to_stb.py", "tools/safetensors_to_model_stb.py"] },
+    { "phase": "Xul",   "name": "commit_jrom_adapter",   "tools": ["tools/pi_kuhul_adapter_to_scxq2.py", "tools/pi_kuhul_adapter_mutate.py"] }
+  ],
+  "formats": {
+    "source_weights": ["safetensors", "gguf"],
+    "native_residency": ["xshard", "dds", "scxq2"],
+    "model_container": "stb",
+    "semantic_program": "kxml",
+    "compiled_plan": "kbc1"
+  },
+  "tools": {
+    "moe_server": "tools/scx_moe_serve.py",
+    "tensor_conversion": ["tools/safetensors_to_xshard.py", "tools/safetensors_to_stb.py", "tools/safetensors_to_model_stb.py", "tools/scxq2_tiles.py", "tools/scxq2_adapter.py"],
+    "model_conversion": ["tools/gpt2_safetensors_to_gguf.py", "tools/make_gguf.py", "tools/gguf_to_safetensors.py"]
+  },
+  "constraints": [
+    "GGUF is a model container, not an AST compiler.",
+    "The coder model proposes AST or one tool command; the host parser, EBNF grammar, and AtomicDOM validate it.",
+    "Existing SMGM DDS preview packs must pass full-payload and source-hash verification before production inference.",
+    "safetensors_to_model_stb.py currently uses an 8-bit tensor id and requires a format-v2 extension above 256 tensors."
+  ]
+}

@@ -1,0 +1,238 @@
+{
+  "schema": "kuhul.micronaut.atomic.v1",
+  "identity": {
+    "id": "TENSOR-µ",
+    "name": "TensorContract",
+    "version": "1.0.0",
+    "authority_claim": "xcfe_gated_read_only"
+  },
+  "descriptor_status": "declarative_proposal",
+  "registered": false,
+  "registered_status": "unregistered; call register_micronaut() to activate",
+  "track_ref": "data/tracks/TENSOR-u.semantic-tracks.v1.json",
+  "bindings_ref": "shell/tensor_bindings.psm1",
+  "manifest": {
+    "display_name": "Tensor Contract µ",
+    "tagline": "xcfe_gl_ops op-code dispatch — MAP/FILTER/FOLD/REDUCE/STACK over OpenCL/D3D11/DirectML kernels",
+    "color": "#ff6d00",
+    "icon_svg": "data/micronauts/assets/tensor.svg",
+    "animated_svg": "data/micronauts/assets/tensor.animated.svg",
+    "profile_card": {
+      "widget": "data/host/apps/micronaut-card.asx-app.json",
+      "props": { "id": "TENSOR-µ", "phase": "Wo", "category": "compute" }
+    }
+  },
+  "api": {
+    "namespace": "tensor",
+    "base": "http://127.0.0.1:17885",
+    "khanary_base": "http://127.0.0.1:9000",
+    "atomic_keys": [
+      { "key": "tensor.op",             "description": "xcfe_gl_ops named dispatch — invoke op by op_code name against registered shader/kernel" },
+      { "key": "tensor.fold",           "description": "fold-operator dispatch — MAP/FILTER/FOLD/REDUCE/STACK from tensor_contract.psm1 operator table" },
+      { "key": "tensor.contract",       "description": "validate and execute a full tensor contract object: operator + input tensors + output binding" },
+      { "key": "tensor.shape_contract", "description": "read and validate tensor.shape.json against a live tensor shape claim" },
+      { "key": "tensor.gguf_map",       "description": "invoke gguf_reader.py via gguf-py subprocess — return tensor names, shapes, dtypes, offsets" },
+      { "key": "tensor.health",         "description": "xcfe_gl_ops DLL load status, DirectML device, OpenCL platform, Khanary ping" }
+    ],
+    "rest_routes": [
+      { "method": "POST", "path": "/api/atomic/call", "key": "tensor.op"             },
+      { "method": "POST", "path": "/api/atomic/call", "key": "tensor.fold"           },
+      { "method": "POST", "path": "/api/atomic/call", "key": "tensor.contract"       },
+      { "method": "POST", "path": "/api/atomic/call", "key": "tensor.shape_contract" },
+      { "method": "POST", "path": "/api/atomic/call", "key": "tensor.gguf_map"       },
+      { "method": "GET",  "path": "/api/health",      "key": "tensor.health"         }
+    ]
+  },
+  "operators": {
+    "schema": "tensor_contract.psm1 $domOperatorMap",
+    "note": "dominant_operator enum values used in routing schema",
+    "MAP":    { "dominant_operator": "map",        "xcfe_phase": "Yax", "gram_key": "binding:tensor" },
+    "FILTER": { "dominant_operator": "map",        "xcfe_phase": "Yax", "gram_key": "binding:tensor" },
+    "FOLD":   { "dominant_operator": "accumulate", "xcfe_phase": "Sek", "gram_key": "binding:tensor" },
+    "REDUCE": { "dominant_operator": "reduce",     "xcfe_phase": "Sek", "gram_key": "binding:tensor" },
+    "STACK":  { "dominant_operator": "stack",      "xcfe_phase": "Wo",  "gram_key": "binding:tensor" }
+  },
+  "xcfe_gl_ops": {
+    "dll": "xcfe_gl_ops.dll",
+    "init_function": "Initialize-XcfeTensorBindings",
+    "pre_registered_ops": [
+      {
+        "op_code": "tensor_gemm",
+        "shader": "opencl_1_2/matrix5x4.cl",
+        "backend": "opencl_1_2",
+        "fallback": "directml",
+        "fold": "Sek",
+        "reads": ["input_a", "input_b"],
+        "writes": ["output_c"]
+      },
+      {
+        "op_code": "tensor_slot_materialize",
+        "shader": "data/shaders/attention.hlsl",
+        "backend": "d3d11",
+        "fold": "Wo",
+        "reads": ["slot_key"],
+        "writes": ["slot_tensor"]
+      },
+      {
+        "op_code": "attention_shader_tensor_slot_modifier",
+        "shader": "src/gpu/gram_gpu_scorer.cpp",
+        "backend": "d3d11",
+        "fold": "Sek",
+        "reads": ["query_tensor", "key_tensor"],
+        "writes": ["attention_weights"]
+      },
+      {
+        "op_code": "cs_bone_argsort",
+        "shader": "opencl_1_2/kson_fold_node_expert.cl",
+        "backend": "opencl_1_2",
+        "fold": "Yax",
+        "reads": ["score_tensor"],
+        "writes": ["sorted_indices"]
+      },
+      {
+        "op_code": "cs_fold_kernel_compute",
+        "shader": "opencl_1_2/matrix5x4.cl",
+        "backend": "opencl_1_2",
+        "fold": "Sek",
+        "reads": ["fold_input"],
+        "writes": ["fold_output"]
+      },
+      {
+        "op_code": "cs_fold_route_matmul",
+        "shader": "opencl_1_2/training.cl",
+        "backend": "opencl_1_2",
+        "fold": "Sek",
+        "reads": ["route_weights", "fold_state"],
+        "writes": ["route_scores"]
+      },
+      {
+        "op_code": "kson_expert_correction_webgl2",
+        "shader": "drivers/webgl2/kson_expert_correction.frag",
+        "backend": "webgl2",
+        "fold": "Ch'en",
+        "reads": ["expert_logits"],
+        "writes": ["corrected_logits"]
+      },
+      {
+        "op_code": "semantic_cube",
+        "shader": "dist/GPU-TRAINER/semantic_cube.cso",
+        "backend": "d3d11",
+        "fold": "Yax",
+        "reads": ["semantic_input"],
+        "writes": ["cube_embedding"]
+      }
+    ]
+  },
+  "static_config": {
+    "fold_tensor_map":   "kuhul.fold-tensor-map.json",
+    "shape_contract":    "data/programs/tensor.shape.json",
+    "manifest":          "tensor.manifest.json",
+    "slot_registry":     "micronaut_tensor_slots.json"
+  },
+  "gguf": {
+    "py_dir":        "tools/gguf-py",
+    "reader_script": "tools/gguf-py/gguf_reader.py",
+    "magic_check":   "local — no Python; magic bytes 0x47475546",
+    "output": {
+      "tensor_names": "string[]",
+      "shapes":       "int[][]",
+      "dtypes":       "string[]",
+      "offsets":      "int[]"
+    }
+  },
+  "cache": {
+    "object": "tensor-op-cache",
+    "ttl": 1800,
+    "schema": {
+      "last_op_code":   "string",
+      "last_operator":  "string",
+      "last_shape":     "int[]",
+      "session_phase":  "string",
+      "confidence":     "float"
+    }
+  },
+  "capabilities": [
+    "xcfe_op_code_dispatch",
+    "tensor_fold_operators",
+    "tensor_contract_validation",
+    "gguf_tensor_map_read",
+    "shape_contract_validation",
+    "opencl_kernel_dispatch",
+    "directml_fallback",
+    "d3d11_shader_dispatch",
+    "webgl2_kernel_dispatch",
+    "khanary_inference_bridge"
+  ],
+  "srai": {
+    "mode": "bounded_redirect_only",
+    "cycle_detection": true,
+    "max_depth": 2
+  },
+  "xcfe": {
+    "authority": "xcfe_gated_read_only",
+    "required_for_tool_dispatch": true,
+    "required_for_mutation": true,
+    "forbidden": [
+      "emit_response",
+      "write_state",
+      "redirect_srai",
+      "mutate_topology",
+      "commit_patterns"
+    ]
+  },
+  "program_contract": {
+    "format": "kuhul.micronaut-program/1",
+    "program_model": "typed_opencl_d3d11_runtime",
+    "phase": "Wo",
+    "role": ["tensor_op_dispatch", "fold_operator_routing", "gguf_tensor_read"],
+    "grammar_refs": [
+      "data/grammar/Bindings.gram",
+      "data/micronauts/Micronaut.SRAI.AIML.ebnf"
+    ],
+    "contract_refs": [
+      "data/tracks/Bindings.xjson",
+      "shell/tensor_bindings.psm1",
+      "shell/tensor_contract.psm1"
+    ],
+    "entry_points": [
+      "tensor_bindings.Invoke-XcfeOp",
+      "tensor_bindings.Read-GgufTensorMap",
+      "tensor_bindings.Get-TensorShapeContract"
+    ],
+    "effects": ["gramRead"],
+    "bindings": {
+      "inputs": [
+        { "name": "op_code",  "type": "string",  "resolution_status": "required" },
+        { "name": "tensor_a", "type": "tensor",  "resolution_status": "op_dependent" },
+        { "name": "tensor_b", "type": "tensor",  "resolution_status": "op_dependent" },
+        { "name": "params",   "type": "object",  "resolution_status": "optional" }
+      ],
+      "output": {
+        "type": "TensorOpResult",
+        "authority": "DATA_ONLY",
+        "direct_dispatch": false
+      }
+    },
+    "interaction": { "host_binding_required": true, "direct_user_io": false },
+    "sandbox": {
+      "filesystem": "allowlisted_tensor_assets_read_only",
+      "network": "loopback_khanary_only",
+      "process": "gguf_py_subprocess",
+      "effects": ["gramRead", "invoke_opencl_kernel", "invoke_d3d11_shader"],
+      "admission": "xcfe_gated"
+    },
+    "learning": { "mode": "none", "note": "read_only — tensor ops are stateless kernel invocations" },
+    "implementation": {
+      "source_status": "source_present",
+      "runtime_registration": "pending",
+      "validation_status": "pending"
+    },
+    "drivers": [
+      "xcfe_gl_ops.dll",
+      "dml_gemm.dll",
+      "DirectML.dll",
+      "d3d11_infer.dll",
+      "json_runtime_lib.dll"
+    ]
+  }
+}

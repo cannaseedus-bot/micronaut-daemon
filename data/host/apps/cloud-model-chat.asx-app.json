@@ -1,0 +1,38 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "cloud-model-chat",
+  "@key": "⟁APP:CLOUD_MODEL_CHAT",
+  "@mount": "⟁ROOT:CLOUD_MODEL_CHAT",
+  "@state": { "model": "qwen3-1.7b-chat", "messages": [], "input": "", "typing": false, "status": "idle" },
+  "@components": {
+    "⟁ROOT:CLOUD_MODEL_CHAT": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:MESSAGES", "⟁WIDGET:INPUT"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁SELECT:MODEL", "⟁ACTION:CLEAR"], "@on": { "model.change": "cloud.select_model", "chat.clear": "cloud.clear" } },
+    "⟁SELECT:MODEL": { "@type": "select", "@bind": "state.model", "@options": ["qwen3-1.7b-chat"] },
+    "⟁ACTION:CLEAR": { "@type": "button", "@text": "Clear", "@on": { "click": "cloud.clear" } },
+    "⟁WIDGET:MESSAGES": { "@type": "chat-feed", "@bind": "state.messages", "@children": ["⟁WIDGET:MESSAGE"] },
+    "⟁WIDGET:MESSAGE": { "@type": "message", "@bind": "message" },
+    "⟁WIDGET:INPUT": { "@type": "chat-input", "@bind": "state.input", "@on": { "submit": "cloud.send" } }
+  },
+  "@programs": {
+    "cloud.select_model": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_model", "@out": "model" }] },
+    "cloud.clear": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_messages", "@out": "messages" }, { "@op": "SET", "@from": "event_status", "@out": "status" }] },
+    "cloud.send": {
+      "@kind": "semantic.json-program.v1",
+      "@route": "model.chat",
+      "@verb": "POST",
+      "@operation": "completion",
+      "@authority": "observation_only",
+      "@model": "state.model",
+      "@input": "state.input",
+      "@messages": "state.messages",
+      "@output": "assistant.message",
+      "@promote": false
+    },
+    "cloud.receive": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "APPEND", "@from": "event_message", "@out": "messages" }, { "@op": "SET", "@from": "event_status", "@out": "status" }] }
+  },
+  "@events": { "model.change": "cloud.select_model", "chat.clear": "cloud.clear", "chat.send": "cloud.send", "chat.receive": "cloud.receive" },
+  "@imports": [{ "ref": "model-host", "mode": "loopback_registry" }],
+  "@permissions": { "network": "loopback_model_only", "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@data": { "disclaimer": "Model output is a generated finding and is not semantic authority.", "model_host": "http://127.0.0.1:17885/v1/chat/completions" }
+}

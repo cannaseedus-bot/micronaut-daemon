@@ -1,0 +1,29 @@
+{
+  "runtime_mods": {
+    "port": 8787,
+    "host": "127.0.0.1",
+    "api_prefix": "/api"
+  },
+  "interface_mods": {
+    "api_prefix": "/api",
+    "title": "Micronaut UI — Chat + Coder",
+    "theme": "dark"
+  },
+  "models": {
+    "default": "micronaut-coder",
+    "available": ["scx-expert-8", "micronaut-coder", "mini"],
+    "scx_expert_8": {
+      "endpoint": "http://127.0.0.1:9010/v1/chat/completions",
+      "program": "programs/scx8.local-agent.json",
+      "weights": "E:/models/GPT2/mini-GPT/gpt2_small_lite_tool_g003_q8.gguf",
+      "geodesic_cache": "programs/geodesic_cache_jrom.json",
+      "tool_contract": "single-command-atomic-dom"
+    }
+  },
+  "coder": {
+    "pipeline_exe": "dist/micronaut-coder/micronaut_coder_pipeline.exe",
+    "helpers_exe": "dist/micronaut-coder/code-micronaut/micronaut_coder_helpers.exe",
+    "grammars": ["c", "cpp", "python", "typescript", "javascript", "rust", "go", "kuhul"]
+  },
+  "note": "Runtime config for micronaut-ui-chat-app.ps1. The UI reads runtime_mods.port + interface_mods.api_prefix to reach the JSON Runtime."
+}

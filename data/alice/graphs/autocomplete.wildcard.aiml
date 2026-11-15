@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from autocomplete.wildcard.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH AUTOCOMPLETE.WILDCARD</pattern>
+    <template>source autocomplete.wildcard.gml; label autocomplete.wildcard; identity autocomplete.wildcard; directed 1; nodes 14; edges 12. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE 1</pattern>
+    <template>Graph autocomplete.wildcard; node 1; id: 1; kind: wildcard_pattern; label: how to *. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE </pattern>
+    <template>Graph autocomplete.wildcard; node 1; id: 1; kind: wildcard_pattern; label: how to *. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE 2</pattern>
+    <template>Graph autocomplete.wildcard; node 2; id: 2; kind: ngram; label: how to grow tomatoes. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE HOW TO GROW TOMATOES</pattern>
+    <template>Graph autocomplete.wildcard; node 2; id: 2; kind: ngram; label: how to grow tomatoes. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE 3</pattern>
+    <template>Graph autocomplete.wildcard; node 3; id: 3; kind: ngram; label: how to grow peppers. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE HOW TO GROW PEPPERS</pattern>
+    <template>Graph autocomplete.wildcard; node 3; id: 3; kind: ngram; label: how to grow peppers. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE 10</pattern>
+    <template>Graph autocomplete.wildcard; node 10; id: 10; kind: wildcard_pattern; label: grow *. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE </pattern>
+    <template>Graph autocomplete.wildcard; node 10; id: 10; kind: wildcard_pattern; label: grow *. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE 11</pattern>
+    <template>Graph autocomplete.wildcard; node 11; id: 11; kind: ngram; label: grow fruit. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE GROW FRUIT</pattern>
+    <template>Graph autocomplete.wildcard; node 11; id: 11; kind: ngram; label: grow fruit. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE 12</pattern>
+    <template>Graph autocomplete.wildcard; node 12; id: 12; kind: ngram; label: grow vegetable. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE GROW VEGETABLE</pattern>
+    <template>Graph autocomplete.wildcard; node 12; id: 12; kind: ngram; label: grow vegetable. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE 13</pattern>
+    <template>Graph autocomplete.wildcard; node 13; id: 13; kind: ngram; label: grow mushrooms. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE GROW MUSHROOMS</pattern>
+    <template>Graph autocomplete.wildcard; node 13; id: 13; kind: ngram; label: grow mushrooms. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE 14</pattern>
+    <template>Graph autocomplete.wildcard; node 14; id: 14; kind: ngram; label: grow herbs. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE GROW HERBS</pattern>
+    <template>Graph autocomplete.wildcard; node 14; id: 14; kind: ngram; label: grow herbs. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE 15</pattern>
+    <template>Graph autocomplete.wildcard; node 15; id: 15; kind: ngram; label: grow cactus. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE GROW CACTUS</pattern>
+    <template>Graph autocomplete.wildcard; node 15; id: 15; kind: ngram; label: grow cactus. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE 16</pattern>
+    <template>Graph autocomplete.wildcard; node 16; id: 16; kind: ngram; label: grow tree. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE GROW TREE</pattern>
+    <template>Graph autocomplete.wildcard; node 16; id: 16; kind: ngram; label: grow tree. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE 17</pattern>
+    <template>Graph autocomplete.wildcard; node 17; id: 17; kind: ngram; label: grow hemp. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE GROW HEMP</pattern>
+    <template>Graph autocomplete.wildcard; node 17; id: 17; kind: ngram; label: grow hemp. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE 18</pattern>
+    <template>Graph autocomplete.wildcard; node 18; id: 18; kind: ngram; label: grow cotton. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE GROW COTTON</pattern>
+    <template>Graph autocomplete.wildcard; node 18; id: 18; kind: ngram; label: grow cotton. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE 19</pattern>
+    <template>Graph autocomplete.wildcard; node 19; id: 19; kind: ngram; label: grow wealth. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE GROW WEALTH</pattern>
+    <template>Graph autocomplete.wildcard; node 19; id: 19; kind: ngram; label: grow wealth. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE 20</pattern>
+    <template>Graph autocomplete.wildcard; node 20; id: 20; kind: ngram; label: grow up. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD NODE GROW UP</pattern>
+    <template>Graph autocomplete.wildcard; node 20; id: 20; kind: ngram; label: grow up. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD EDGE 1 MATCHES 2</pattern>
+    <template>Graph autocomplete.wildcard; edge 1 to 2; relation: matches; source: 1; strength: 0.55; target: 2. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD EDGE 1 MATCHES 3</pattern>
+    <template>Graph autocomplete.wildcard; edge 1 to 3; relation: matches; source: 1; strength: 0.45; target: 3. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD EDGE 10 MATCHES 11</pattern>
+    <template>Graph autocomplete.wildcard; edge 10 to 11; relation: matches; source: 10; target: 11. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD EDGE 10 MATCHES 12</pattern>
+    <template>Graph autocomplete.wildcard; edge 10 to 12; relation: matches; source: 10; target: 12. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD EDGE 10 MATCHES 13</pattern>
+    <template>Graph autocomplete.wildcard; edge 10 to 13; relation: matches; source: 10; target: 13. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD EDGE 10 MATCHES 14</pattern>
+    <template>Graph autocomplete.wildcard; edge 10 to 14; relation: matches; source: 10; target: 14. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD EDGE 10 MATCHES 15</pattern>
+    <template>Graph autocomplete.wildcard; edge 10 to 15; relation: matches; source: 10; target: 15. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD EDGE 10 MATCHES 16</pattern>
+    <template>Graph autocomplete.wildcard; edge 10 to 16; relation: matches; source: 10; target: 16. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD EDGE 10 MATCHES 17</pattern>
+    <template>Graph autocomplete.wildcard; edge 10 to 17; relation: matches; source: 10; target: 17. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD EDGE 10 MATCHES 18</pattern>
+    <template>Graph autocomplete.wildcard; edge 10 to 18; relation: matches; source: 10; target: 18. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD EDGE 10 MATCHES 19</pattern>
+    <template>Graph autocomplete.wildcard; edge 10 to 19; relation: matches; source: 10; target: 19. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH AUTOCOMPLETE.WILDCARD EDGE 10 MATCHES 20</pattern>
+    <template>Graph autocomplete.wildcard; edge 10 to 20; relation: matches; source: 10; target: 20. Data-only graph record.</template>
+  </category>
+</aiml>

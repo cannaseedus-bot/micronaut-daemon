@@ -1,0 +1,348 @@
+{
+  "@kind": "asxg.lane-descriptor.fixtures.v1",
+  "schema": "data/host/asxg/extensions/asxg-lane-descriptors.v1.schema.json",
+  "valid": [
+    {
+      "id": "ngram_and_phase",
+      "descriptor": {
+        "@contract": "asxg.lanes.v1",
+        "@container": "ASXG/1",
+        "@interpreted": false,
+        "@lanes": [
+          {
+            "@id": "lane.ngram.0",
+            "@type": "NGramLane",
+            "@phase": "Yax",
+            "@field": "aiml.reasoning",
+            "@source_class": "model_response",
+            "@scope_id": "conversation:fixture-1",
+            "@learning_state": "evidence_only",
+            "@ngram": {
+              "@probability_orders": [
+                1,
+                2,
+                3
+              ],
+              "@retrieval_min_order": 4,
+              "@key_refs": [
+                {
+                  "@key_ref": "gram://reason/what_causes",
+                  "@order": 2,
+                  "@sequence_length": 2,
+                  "@layer": "probability",
+                  "@measure_ref": "mu_bigram",
+                  "@bandwidth": 0.1
+                },
+                {
+                  "@key_ref": "gram://reason/what_causes_rain",
+                  "@order": 4,
+                  "@sequence_length": 4,
+                  "@layer": "retrieval",
+                  "@key_type": "exact_hash",
+                  "@store_ref": "gramstore://reason",
+                  "@backoff": "probability_layer"
+                }
+              ]
+            }
+          },
+          {
+            "@id": "lane.phase.0",
+            "@type": "PhaseLane",
+            "@phase": "Yax",
+            "@step_ref": "step:0",
+            "@micronaut_ref": "micronaut.reason",
+            "@program_ref": "reason.expand",
+            "@requires_admission": true
+          }
+        ],
+        "@edges": [
+          {
+            "@source": "lane.ngram.0",
+            "@target": "lane.phase.0",
+            "@relation": "provides_evidence"
+          }
+        ]
+      }
+    },
+    {
+      "id": "retrieval_only",
+      "descriptor": {
+        "@contract": "asxg.lanes.v1",
+        "@container": "ASXG/1",
+        "@interpreted": false,
+        "@lanes": [
+          {
+            "@id": "lane.ngram.1",
+            "@type": "NGramLane",
+            "@phase": "Sek",
+            "@field": "forum.search",
+            "@source_class": "user_prompt",
+            "@scope_id": "conversation:fixture-2",
+            "@learning_state": "approval_gated",
+            "@ngram": {
+              "@probability_orders": [
+                1,
+                2,
+                3
+              ],
+              "@retrieval_min_order": 4,
+              "@key_refs": [
+                {
+                  "@key_ref": "gram://forum/abc",
+                  "@order": 5,
+                  "@sequence_length": 5,
+                  "@layer": "retrieval",
+                  "@key_type": "rolling_hash",
+                  "@store_ref": "gramstore://forum",
+                  "@backoff": "probability_layer"
+                }
+              ]
+            }
+          }
+        ],
+        "@edges": []
+      }
+    }
+  ],
+  "invalid": [
+    {
+      "id": "probability_order_four",
+      "expected_error": "probability_order_out_of_range",
+      "descriptor": {
+        "@contract": "asxg.lanes.v1",
+        "@container": "ASXG/1",
+        "@interpreted": false,
+        "@lanes": [
+          {
+            "@id": "lane.ngram.bad",
+            "@type": "NGramLane",
+            "@phase": "Yax",
+            "@field": "aiml.reasoning",
+            "@source_class": "model_response",
+            "@scope_id": "conversation:x",
+            "@learning_state": "evidence_only",
+            "@ngram": {
+              "@probability_orders": [
+                1,
+                2,
+                3
+              ],
+              "@retrieval_min_order": 4,
+              "@key_refs": [
+                {
+                  "@key_ref": "gram://bad",
+                  "@order": 4,
+                  "@sequence_length": 4,
+                  "@layer": "probability",
+                  "@measure_ref": "mu_bad",
+                  "@bandwidth": 0.1
+                }
+              ]
+            }
+          }
+        ],
+        "@edges": []
+      }
+    },
+    {
+      "id": "unresolved_lane_edge",
+      "expected_error": "lane_edge_endpoint_unresolved",
+      "descriptor": {
+        "@contract": "asxg.lanes.v1",
+        "@container": "ASXG/1",
+        "@interpreted": false,
+        "@lanes": [
+          {
+            "@id": "lane.phase.0",
+            "@type": "PhaseLane",
+            "@phase": "Yax",
+            "@step_ref": "step:0",
+            "@micronaut_ref": "micronaut.reason",
+            "@program_ref": "reason.expand",
+            "@requires_admission": true
+          }
+        ],
+        "@edges": [
+          {
+            "@source": "lane.phase.0",
+            "@target": "lane.missing",
+            "@relation": "transitions_to"
+          }
+        ]
+      }
+    },
+    {
+      "id": "phase_without_admission",
+      "expected_error": "phase_lane_requires_admission",
+      "descriptor": {
+        "@contract": "asxg.lanes.v1",
+        "@container": "ASXG/1",
+        "@interpreted": false,
+        "@lanes": [
+          {
+            "@id": "lane.phase.0",
+            "@type": "PhaseLane",
+            "@phase": "Yax",
+            "@step_ref": "step:0",
+            "@micronaut_ref": "micronaut.reason",
+            "@program_ref": "reason.expand",
+            "@requires_admission": false
+          }
+        ],
+        "@edges": []
+      }
+    },
+    {
+      "id": "retrieval_must_not_carry_density",
+      "expected_error": "retrieval_order_contract_invalid",
+      "descriptor": {
+        "@contract": "asxg.lanes.v1",
+        "@container": "ASXG/1",
+        "@interpreted": false,
+        "@lanes": [
+          {
+            "@id": "lane.ngram.bad",
+            "@type": "NGramLane",
+            "@phase": "Yax",
+            "@field": "aiml.reasoning",
+            "@source_class": "model_response",
+            "@scope_id": "conversation:fixture-1",
+            "@learning_state": "evidence_only",
+            "@ngram": {
+              "@probability_orders": [
+                1,
+                2,
+                3
+              ],
+              "@retrieval_min_order": 4,
+              "@key_refs": [
+                {
+                  "@key_ref": "gram://bad/retrieval-density",
+                  "@order": 4,
+                  "@sequence_length": 4,
+                  "@layer": "retrieval",
+                  "@key_type": "exact_hash",
+                  "@store_ref": "gramstore://bad",
+                  "@backoff": "probability_layer",
+                  "@bandwidth": 0.1
+                }
+              ]
+            }
+          }
+        ],
+        "@edges": []
+      }
+    },
+    {
+      "id": "phase_edge_wrong_lane_types",
+      "expected_error": "lane_edge_type_mismatch",
+      "descriptor": {
+        "@contract": "asxg.lanes.v1",
+        "@container": "ASXG/1",
+        "@interpreted": false,
+        "@lanes": [
+          {
+            "@id": "lane.ngram.0",
+            "@type": "NGramLane",
+            "@phase": "Yax",
+            "@field": "aiml.reasoning",
+            "@source_class": "model_response",
+            "@scope_id": "conversation:fixture-1",
+            "@learning_state": "evidence_only",
+            "@ngram": {
+              "@probability_orders": [
+                1,
+                2,
+                3
+              ],
+              "@retrieval_min_order": 4,
+              "@key_refs": [
+                {
+                  "@key_ref": "gram://reason/what_causes",
+                  "@order": 2,
+                  "@sequence_length": 2,
+                  "@layer": "probability",
+                  "@measure_ref": "mu_bigram",
+                  "@bandwidth": 0.1
+                },
+                {
+                  "@key_ref": "gram://reason/what_causes_rain",
+                  "@order": 4,
+                  "@sequence_length": 4,
+                  "@layer": "retrieval",
+                  "@key_type": "exact_hash",
+                  "@store_ref": "gramstore://reason",
+                  "@backoff": "probability_layer"
+                }
+              ]
+            }
+          },
+          {
+            "@id": "lane.phase.0",
+            "@type": "PhaseLane",
+            "@phase": "Yax",
+            "@step_ref": "step:0",
+            "@micronaut_ref": "micronaut.reason",
+            "@program_ref": "reason.expand",
+            "@requires_admission": true
+          }
+        ],
+        "@edges": [
+          {
+            "@source": "lane.phase.0",
+            "@target": "lane.ngram.0",
+            "@relation": "transitions_to"
+          }
+        ]
+      }
+    },
+    {
+      "id": "provenance_state_mismatch",
+      "expected_error": "ngram_lane_provenance_invalid",
+      "descriptor": {
+        "@contract": "asxg.lanes.v1",
+        "@container": "ASXG/1",
+        "@interpreted": false,
+        "@lanes": [
+          {
+            "@id": "lane.ngram.bad",
+            "@type": "NGramLane",
+            "@phase": "Yax",
+            "@field": "aiml.reasoning",
+            "@source_class": "user_prompt",
+            "@scope_id": "conversation:fixture-1",
+            "@learning_state": "evidence_only",
+            "@ngram": {
+              "@probability_orders": [
+                1,
+                2,
+                3
+              ],
+              "@retrieval_min_order": 4,
+              "@key_refs": [
+                {
+                  "@key_ref": "gram://reason/what_causes",
+                  "@order": 2,
+                  "@sequence_length": 2,
+                  "@layer": "probability",
+                  "@measure_ref": "mu_bigram",
+                  "@bandwidth": 0.1
+                },
+                {
+                  "@key_ref": "gram://reason/what_causes_rain",
+                  "@order": 4,
+                  "@sequence_length": 4,
+                  "@layer": "retrieval",
+                  "@key_type": "exact_hash",
+                  "@store_ref": "gramstore://reason",
+                  "@backoff": "probability_layer"
+                }
+              ]
+            }
+          }
+        ],
+        "@edges": []
+      }
+    }
+  ]
+}

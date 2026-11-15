@@ -1,0 +1,27 @@
+{
+  "schema": "micronaut.aiml.jinja-manifest.v1",
+  "aiml_version": "2.0",
+  "brains": [
+    {
+      "id": "core",
+      "categories": [
+        {"pattern": "HELLO", "template": [{"tag": "random", "content": [{"tag": "li", "content": ["Hello." ]}, {"tag": "li", "content": ["Hi there!"]}]}]},
+        {"pattern": "HI", "template": [{"tag": "srai", "content": ["HELLO"]}]},
+        {"pattern": "TELL ME ABOUT *", "template": ["You asked about ", {"tag": "star"}, "."]},
+        {"pattern": "MY NAME IS *", "template": [{"tag": "think", "content": [{"tag": "set", "attrs": {"name": "name"}, "content": [{"tag": "star"}]}]}, "Nice to meet you, ", {"tag": "get", "attrs": {"name": "name"}}, "."]},
+        {"pattern": "WHAT DID I JUST SAY", "template": ["You said: ", {"tag": "that"}]},
+        {"pattern": "WHAT IS YOUR NAME", "template": ["My name is ", {"tag": "bot", "attrs": {"name": "name"}}, "."]},
+        {"pattern": "SET CODER TOPIC", "template": [{"tag": "set", "attrs": {"name": "topic"}, "content": ["coder"]}, "Coder topic enabled."]}
+      ],
+      "topics": [
+        {
+          "name": "coder",
+          "categories": [
+            {"pattern": "WRITE A SRAI EXAMPLE", "template": ["Use ", {"tag": "srai", "content": ["HELLO"]}, " to route to another pattern."]},
+            {"pattern": "SHOW MY NAME", "template": ["Your name is ", {"tag": "get", "attrs": {"name": "name"}}, "."]}
+          ]
+        }
+      ]
+    }
+  ]
+}

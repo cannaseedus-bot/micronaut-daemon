@@ -1,0 +1,30 @@
+{
+  "id": "vite-react-ts",
+  "name": "Vite + React + TypeScript",
+  "description": "Single-page app shell with Tailwind, dark mode, and KHANARY RPC client stub.",
+  "version": "1.0",
+  "slots": {
+    "app_name":       { "type": "string",  "default": "MyApp",   "description": "Application display name" },
+    "brand_color":    { "type": "string",  "default": "#6366f1", "description": "Primary brand color (hex)" },
+    "brand_dark":     { "type": "string",  "default": "#1e1b4b", "description": "Dark-mode background color (hex)" },
+    "description":    { "type": "string",  "default": "A KHANARY-connected app.", "description": "Short app description" },
+    "rpc_port":       { "type": "number",  "default": 8787,      "description": "KHANARY RPC port" },
+    "features":       { "type": "array",   "default": [],        "description": "Extra feature labels to list in README" }
+  },
+  "files": [
+    "package.json",
+    "vite.config.ts",
+    "tsconfig.json",
+    "tailwind.config.js",
+    "postcss.config.js",
+    "index.html",
+    "src/main.tsx",
+    "src/App.tsx",
+    "src/index.css",
+    "src/khanary.ts",
+    "src/components/DarkModeToggle.tsx",
+    "README.md"
+  ],
+  "governs": ["vite", "react", "typescript", "tailwind", "dark-mode"],
+  "phase": "Yax"
+}

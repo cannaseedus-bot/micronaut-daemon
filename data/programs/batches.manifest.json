@@ -1,0 +1,17 @@
+{
+  "@kind": "kuhul.batches.manifest.v1",
+  "batch_size": 4,
+  "top_k": 4,
+  "experts_per_batch": 4,
+  "layers": 24,
+  "pipeline": {
+    "per_batch": ["dequant top-4 planes", "router", "expert matvec", "merge"],
+    "note": "top-4 expert working set (~132MB) fits 128MB VRAM HOT tier"
+  },
+  "streaming": {
+    "source": "tensor_map data_offsets -> canonical payload (D020)",
+    "read_unit": "tensor (experts interleaved, not contiguous slices)",
+    "verified": "459/459 tensors resolve, 96/96 streamed experts match 005C"
+  },
+  "note": "Batch config for the MoE forward. Each batch = top-4 experts per layer."
+}

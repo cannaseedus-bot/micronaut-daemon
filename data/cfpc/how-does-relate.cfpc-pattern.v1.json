@@ -1,0 +1,36 @@
+{
+  "@kind": "khanary.cfpc.pattern.v1",
+  "id": "how-does-relate",
+  "intent": "Relational query — resolve how a concept or value relates to other concepts in the semantic field.",
+  "phase": "Sek",
+  "@captures": {
+    "value": {
+      "wildcard": "*",
+      "strip_prefix": "how does "
+    }
+  },
+  "neighborhood_resolve": {
+    "from_captures": [
+      "value"
+    ],
+    "max_hops": 2
+  },
+  "question_templates": [
+    "How does {value} relate to {neighbor}?",
+    "What is the relationship between {value} and {neighbor}?",
+    "In what way does {value} depend on {neighbor}?",
+    "What properties does {value} share with {neighbor}?",
+    "How does {value} differ from {neighbor}?"
+  ],
+  "context_template": "Relational value: {value}\nSemantic field: {field_keys}\nRelated concepts: {neighbors}\nEpistemic state: UNKNOWN -- model verification required.",
+  "match": {
+    "rules": [
+      {
+        "prefix": "how does"
+      },
+      {
+        "prefix": "how is"
+      }
+    ]
+  }
+}

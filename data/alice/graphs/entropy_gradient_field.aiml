@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<aiml version="1.0">
+  <!--Graph lookup export from entropy_gradient_field.gml. Metadata is not execution authority.-->
+  <category>
+    <pattern>DESCRIBE GRAPH </pattern>
+    <template>source entropy_gradient_field.gml; label Entropy_Gradient_Manifold; identity 1402; directed 1; nodes 2; edges 1. Data-only graph export.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 10</pattern>
+    <template>Graph Entropy_Gradient_Manifold; node 10; diffusion_beta_inv: 0.25; entropy_bound: 4.00; entropy_spike: 0.00; id: 10; label: The verified user authenticated successfully.; local_entropy: 0.15; x: -1.0; y: 0.5; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE THE VERIFIED USER AUTHENTICATED SUCCESSFULLY.</pattern>
+    <template>Graph Entropy_Gradient_Manifold; node 10; diffusion_beta_inv: 0.25; entropy_bound: 4.00; entropy_spike: 0.00; id: 10; label: The verified user authenticated successfully.; local_entropy: 0.15; x: -1.0; y: 0.5; z: 0.0. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE 20</pattern>
+    <template>Graph Entropy_Gradient_Manifold; node 20; diffusion_beta_inv: 0.25; entropy_bound: 4.00; entropy_spike: 3.67; id: 20; label: Initiate conditional multi-task system response pathways.; local_entropy: 3.82; x: 1.5; y: -0.5; z: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  NODE INITIATE CONDITIONAL MULTI-TASK SYSTEM RESPONSE PATHWAYS.</pattern>
+    <template>Graph Entropy_Gradient_Manifold; node 20; diffusion_beta_inv: 0.25; entropy_bound: 4.00; entropy_spike: 3.67; id: 20; label: Initiate conditional multi-task system response pathways.; local_entropy: 3.82; x: 1.5; y: -0.5; z: 0.5. Data-only graph record.</template>
+  </category>
+  <category>
+    <pattern>GRAPH  EDGE 10  20</pattern>
+    <template>Graph Entropy_Gradient_Manifold; edge 10 to 20; diffusion_beta_inv: 0.25; eh_x: 2.50; eh_y: -1.00; eh_z: 0.50; entropy_delta: 3.67; field_kind: entropy_gradient; label: divergent_trajectory_line; source: 10; target: 20; verb: @delegates_to; weight: 0.75. Data-only graph record.</template>
+  </category>
+</aiml>

@@ -1,0 +1,30 @@
+{
+  "@type":         "khanary.xcfe_program.v1",
+  "@no-eval":      true,
+  "id":            "xcfe.lane-dispatch",
+  "program_class": "ROUTE",
+  "phase":         "Yax",
+  "input_role":    "lane_payload",
+  "output_role":   "dispatch_result",
+  "admission":     "xcfe_authorized",
+  "description":   "Typed lane admission and dispatch. Binds lane type, grammar, and capability from the registry at Wo; gates on W·C·R capability admission at Yax; validates grammar + verifies capability + phase legality at Sek; dispatches if admitted, returns DATA_ONLY if rejected. Typed admission is not OS-level sandboxing: the shared VM enforces boundaries through grammar validation and capability checks, not process isolation.",
+  "steps": [
+    { "phase": "Pop",  "op": "gramRead",         "id": "xcfe_lane_dispatch" },
+    { "phase": "Wo",   "op": "bind",             "id": "incoming_lane" },
+    { "phase": "Wo",   "op": "bind",             "id": "grammar_ref",         "type": "registry_lookup", "args": ["incoming_lane.type", "ebnf"] },
+    { "phase": "Wo",   "op": "bind",             "id": "capability_ref",      "type": "registry_lookup", "args": ["incoming_lane.type", "capability"] },
+    { "phase": "Yax",  "op": "gate",             "id": "lane_admission",      "type": "wcr_capability_check" },
+    { "phase": "Sek",  "op": "validate",         "id": "lane_payload" },
+    { "phase": "Sek",  "op": "parse",            "id": "grammar_ref" },
+    { "phase": "Sek",  "op": "verify",           "id": "capability_ref" },
+    { "phase": "Sek",  "op": "verify",           "id": "phase_legality" },
+    { "phase": "Sek",  "op": "dispatch",         "id": "capability_ref",      "type": "admitted" },
+    { "phase": "Sek",  "op": "return",           "id": "DATA_ONLY",           "type": "rejected" },
+    { "phase": "Xul",  "op": "gramWrite",        "id": "lane_dispatch_result" }
+  ],
+  "authority": {
+    "semantic_authority": false,
+    "topology_mutation":  false,
+    "commit_authorized":  false
+  }
+}

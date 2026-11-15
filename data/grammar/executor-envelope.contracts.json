@@ -1,0 +1,98 @@
+{
+  "@type": "khanary.executor_envelope_contracts.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority": "executor_surface_only_not_semantic_authority",
+  "lane": "KHANARY_EXECUTOR_ENVELOPE_TEST",
+  "owner": "src/micronaut/executor_envelope.cpp",
+  "doc": "docs/KUHUL_PHASE_ALGEBRA.md",
+  "envelopes": {
+    "request": {
+      "kind": "khanary.executor.request.v1",
+      "schema": "data/schema/executor-request.schema.json"
+    },
+    "result": {
+      "kind": "khanary.executor.result.v1",
+      "schema": "data/schema/executor-result.schema.json"
+    }
+  },
+  "law": {
+    "shape": "E_theta(contract, input, context) -> (result, evidence, status)",
+    "invariant": "Executor implements contract; contract does not implement executor.",
+    "binding_source": "data/grammar/fold-bindings.contracts.json",
+    "correlation": "echo the declared correlation_id, otherwise exec-<fnv1a64 of (fold, phase, semantic, backend, capability, track)>",
+    "authority": "the authority block is stamped on every record and always denies semantic_authority and fact_commit; commit_authorized stays false because an executor cannot grant a commit"
+  },
+  "status_vocabulary": [
+    "ok",
+    "request_invalid",
+    "no_binding",
+    "MISS_capability",
+    "model_cannot_verify",
+    "track_does_not_realize",
+    "envelope_contradiction"
+  ],
+  "invariants": {
+    "E1": "a request declares fold, phase, semantic and a correlation identity; an incomplete request is request_invalid",
+    "E2": "the phase is one of Pop, Wo, Yax, Sek, Ch'en, Xul",
+    "E3": "the (fold, phase, backend) triple resolves in the fold binding registry; an unresolvable triple is a typed no_binding and never a silent default",
+    "E4": "no model backend may answer a Ch'en or Xul envelope",
+    "E5": "a capability <Phase>.<operation> resolves only against a binding of that phase that realizes the operation, and against a track whose realizes declaration covers it",
+    "E6": "an envelope claiming commit_authorized or semantic_authority is refused with envelope_contradiction:<field>; only XCFE-authorized Xul may commit, and not through an executor envelope",
+    "E7": "the result always echoes correlation_id and phase and names the one binding that answered; a refusal names its typed status instead of an empty success",
+    "E8": "a track realizes declaration the registry cannot answer is recorded as a typed declination, never silently dropped"
+  },
+  "phase_gates": {
+    "terminal_phases": ["Ch'en", "Xul"],
+    "model_backends_refused": ["model", "llm", "gguf", "sidecar"],
+    "commit_phase": "Xul",
+    "commit_requires": "XCFE authorization outside the executor envelope"
+  },
+  "realizes": {
+    "declaration_field": "realizes",
+    "form": "<Phase>.<operation>",
+    "consumed_by": "micronaut::ExecutorEnvelope::declare_track()",
+    "claim_not_authority": true,
+    "pending": [
+      {
+        "track": "CFPC-µ",
+        "capability": "Pop.context_field",
+        "status": "MISS_capability",
+        "reason": "the shipped Pop binding declares @resources [input_tensor, neighborhood_index]; CFPC-µ's context-field operator is not a declared resource of that binding",
+        "decision": "either declare Pop.context_field as a Pop binding resource (the CFPC collector does read the context field) or downgrade the track claim"
+      },
+      {
+        "track": "CFPC-µ",
+        "capability": "Sek.gap_route",
+        "status": "MISS_capability",
+        "reason": "the shipped Sek binding declares @resources [ranked_candidates, comparison_report]; gap routing is a control-flow outcome, not a declared Sek resource",
+        "decision": "decide whether gap routing is a Sek executor resource or a CONTROL-µ claim"
+      },
+      {
+        "track": "XCFE-µ",
+        "capability": "Wo.policy_bind",
+        "status": "MISS_capability",
+        "reason": "the shipped Wo binding declares @resources [candidate_set, evidence_pool]",
+        "decision": "the policy bind belongs to XCFE execution, which is not one of the six shipped hlsl bindings; either add an XCFE backend binding or re-point the claim"
+      },
+      {
+        "track": "XCFE-µ",
+        "capability": "Ch'en.verify_gate",
+        "status": "MISS_capability",
+        "reason": "the shipped Ch'en binding declares @resources [input_tensor]",
+        "decision": "Ch'en verification is XCFE-owned (V7: an executor is not the semantic law), so this claim must be modelled as an XCFE authority declaration, not an executor capability"
+      },
+      {
+        "track": "XCFE-µ",
+        "capability": "Xul.commit_authority",
+        "status": "MISS_capability",
+        "reason": "the shipped Xul binding declares @resources [verified_outcome, weight_delta]; commit authority is minted by XulGate, never by an executor envelope (E6)",
+        "decision": "this name reads as an authority grant; either rename it to the Xul executor operation it means or drop it, because a realized capability must never imply commit authority"
+      }
+    ]
+  },
+  "consumers": [
+    "src/io/request_router.cpp",
+    "src/decision/decision_mu.cpp"
+  ]
+}

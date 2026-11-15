@@ -1,0 +1,97 @@
+{
+  "@kind": "khanary.ngram_key_grammar.contract.v0.1",
+  "@no-eval": true,
+  "version": "0.1",
+  "name": "K'UHUL N-Gram Key Grammar",
+  "recognizer": {
+    "algorithm": "aho_corasick",
+    "role": "lexical_key_addressing_automaton",
+    "trie_goto": true,
+    "failure_links": true,
+    "output_sets": true,
+    "emits_overlapping_matches": true,
+    "complexity": "O(n+m+z)",
+    "recognition_authority": false,
+    "semantic_authority": false,
+    "collapse_authority": false
+  },
+  "pipeline": [
+    "TokenStream",
+    "AhoCorasickDictionaryScan",
+    "BagOfNgramKeys",
+    "ManifestNeighborhood_NM",
+    "GeometryNeighborhood_NI",
+    "WoYax_ActiveNeighborhood",
+    "Sek_FrontierCandidates",
+    "Chen_Verification",
+    "Xul_CollapseOrCommit"
+  ],
+  "key_orders": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "key_types": [
+    "word",
+    "unigram",
+    "bigram",
+    "trigram",
+    "quadgram",
+    "ngram",
+    "definition_relation",
+    "semantic_book"
+  ],
+  "laws": {
+    "recognition_boundary": "Aho-Corasick finds keys; K'UHUL interprets keys.",
+    "exhaustive_before_collapse": "Recognition may emit overlapping matches; semantic collapse remains phase-bound.",
+    "ngram_address_book": "An n-gram is an address into a semantic book, not only a probability feature.",
+    "failure_link_boundary": "Failure links provide structural fallback candidates, not semantic reasoning.",
+    "learned_fold_algebra": "The fold can carry learned combining algebra phi_t and update future behavior through feedback.",
+    "hof_orthogonality": "Phase and higher-order operation are orthogonal axes.",
+    "kuhul_fold_container": "K'UHUL fold is a semantic execution container, not identical to catamorphism.",
+    "non_competing_engines": "Key grammar and K'UHUL folds are not competing semantic engines; key grammar is fast n-gram key addressing, while folds are learned computational semantic algebra.",
+    "speed_vs_computation": "Key grammar provides speed through n-gram dictionary matching; K'UHUL folds require computation over active/inference fields.",
+    "inference_field_2d_surface": "The inference field provides the graph/matrix surface for FoldGraph 2D bit-pattern matching."
+  },
+  "semantic_interpretation": {
+    "matched_key": "k",
+    "manifest_neighborhood": "N_M(k)",
+    "geometry_neighborhood": "N_I(k)",
+    "score": "S(k)=W_k+sum_NM(W_u*R_sym(k,u))+sum_NI(W_u*R_geo(k,u))",
+    "fold_loop": "B,Q -> Ana_psi_t -> F_Q -> WCR_t -> F*_Q -> Cata_phi_t -> C_Q -> Reward -> delta(psi,W,C,R,g,phi)"
+  },
+  "higher_order_family": {
+    "map": "A* -> B*; transform structure",
+    "filter": "A* -> A*; select structure",
+    "fold": "F(A) -> A; collapse structure",
+    "unfold": "A -> F(A); generate structure",
+    "ana": "one to many possibility generation",
+    "cata": "many to one canonical reduction",
+    "hylo": "ana then cata; generate then reduce",
+    "meta": "cata then ana; fold then unfold"
+  },
+  "phase_hof_examples": [
+    "Wo[Map]",
+    "Yax[Ana]",
+    "Sek[Filter]",
+    "Chen[Verify]",
+    "Xul[Cata]"
+  ],
+  "authority_boundary": {
+    "recognition_authority": false,
+    "semantic_authority": false,
+    "topology_authority": false,
+    "verification_authority": false,
+    "commit_authority": false,
+    "xul_required_for_commit": true
+  },
+  "foldgraph_2d_bit_pattern_law": {
+    "surface": "inference_field",
+    "anamorphism": "sliding_window_generation",
+    "pattern_layer": "((window ^ pattern) & mask)",
+    "attention": "popcount_score",
+    "catamorphism": "argmax_reduction",
+    "boundary": "2D bit-pattern matching is projection/inference over a field surface, not semantic authority by itself."
+  }
+}

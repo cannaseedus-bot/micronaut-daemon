@@ -1,0 +1,87 @@
+{
+  "⟁FACTS": [
+    "kind:semantic_fact_key_book",
+    "format:kuhul.facts-manifest.v1",
+    "role:key_to_fact_binding_projection",
+    "authority:reference_only",
+    "verification:required_before_answer_selection",
+    "source:data/facts/saturn-moon-count.json"
+  ],
+  "entity:KUHUL_RUNTIME": [
+    "kind:entity_key",
+    "canonical:K'UHUL runtime",
+    "alias:Kuhul",
+    "alias:K-UHUL",
+    "domain:runtime_architecture"
+  ],
+  "fact:KUHUL_RUNTIME_DEFINITION": [
+    "kind:stable_repository_fact",
+    "subject:entity:KUHUL_RUNTIME",
+    "record:data/facts/kuhul-runtime.json",
+    "temporal_class:STABLE_REPOSITORY_DEFINITION",
+    "verified:true",
+    "authority:descriptive_reference_only"
+  ],
+  "entity:SATURN": [
+    "kind:entity_key",
+    "canonical:Saturn",
+    "alias:saturn",
+    "domain:astronomy"
+  ],
+  "quantity:MOON_COUNT": [
+    "kind:quantity_key",
+    "canonical:moon_count",
+    "alias:moon",
+    "alias:moons",
+    "alias:satellite",
+    "alias:satellites",
+    "alias:natural satellite",
+    "alias:natural satellites",
+    "unit:count",
+    "value_type:integer"
+  ],
+  "fact:SATURN_MOONS": [
+    "kind:temporal_fact_key",
+    "subject:entity:SATURN",
+    "quantity:quantity:MOON_COUNT",
+    "record:data/facts/saturn-moon-count.json",
+    "temporal_class:MUTABLE",
+    "freshness_required:true",
+    "verified_observations_only:true",
+    "current_state:verified_unresolved",
+    "current_state_verified:true",
+    "current_value:null",
+    "current_state_effective:2026-11-14",
+    "candidate_observation:fact:SATURN_2025_03",
+    "candidate_observation:fact:SATURN_2026_06",
+    "authority:identity_candidate_evidence_and_verified_repository_knowledge_state"
+  ],
+  "fact:SATURN_2025_03": [
+    "kind:observation_candidate",
+    "fact:fact:SATURN_MOONS",
+    "value:274",
+    "effective:2025-03",
+    "source:source:NASA",
+    "verified:false",
+    "status:superseded_candidate"
+  ],
+  "fact:SATURN_2026_06": [
+    "kind:observation_candidate",
+    "fact:fact:SATURN_MOONS",
+    "value:293",
+    "effective:2026-06",
+    "source:source:WIKIPEDIA",
+    "verified:false",
+    "status:current_candidate"
+  ],
+  "source:NASA": [
+    "kind:source_key",
+    "canonical:NASA",
+    "alias:nasa"
+  ],
+  "source:WIKIPEDIA": [
+    "kind:source_key",
+    "canonical:Wikipedia",
+    "alias:wikipedia"
+  ]
+}

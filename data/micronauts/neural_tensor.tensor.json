@@ -1,0 +1,192 @@
+{
+  "@program": "neural_tensor",
+  "@kind": "kuhul.xcfe.neural-tensor.v1",
+  "@namespace": "https://kuhul.dev/",
+  "@stack": ["xjson", "xcfe", "scxq2", "kuhul"],
+  "@state": {
+    "type": "neural_float32",
+    "dimensions": [768, 768],
+    "dtype": "float32",
+    "phase": "Pop",
+    "kuhul_port": 17474,
+    "neural_tensor_data": null,
+    "forward_output": null,
+    "gradient_norm": null,
+    "loss": null,
+    "checkpoint_path": null
+  },
+  "@fold_map": {
+    "load": "Pop",
+    "compute": "Sek",
+    "checkpoint": "Xul",
+    "verify": "Chen"
+  },
+  "@methods": {
+    "init": {
+      "@phase": "Pop",
+      "@control": [
+        {
+          "@op": "TENSOR_CREATE",
+          "@type": "matrix",
+          "@dimensions": [768, 768],
+          "@dtype": "float32",
+          "@store": "neural_tensor_data"
+        },
+        {
+          "@op": "LOG",
+          "@args": ["neural_tensor initialized 768x768 float32"],
+          "@level": "info"
+        },
+        {
+          "@op": "SET",
+          "@key": "phase",
+          "@args": ["Pop"]
+        }
+      ]
+    },
+    "forward": {
+      "@phase": "Sek",
+      "@args": ["input_tensor"],
+      "@control": [
+        {
+          "@op": "SEMANTIC_QUERY",
+          "@query": "compute attention over input_tensor with neural_tensor_data weights",
+          "@input": "$input_tensor",
+          "@weights": "$neural_tensor_data",
+          "@store": "forward_output"
+        },
+        {
+          "@op": "LOG",
+          "@args": ["forward pass complete"],
+          "@level": "info"
+        },
+        {
+          "@op": "RETURN",
+          "@args": ["$forward_output"]
+        }
+      ]
+    },
+    "save_checkpoint": {
+      "@phase": "Xul",
+      "@args": ["path"],
+      "@control": [
+        {
+          "@op": "SET",
+          "@key": "checkpoint_path",
+          "@args": ["$path"]
+        },
+        {
+          "@op": "LOG",
+          "@args": ["checkpoint -> kuhul_engine:17474/checkpoint"],
+          "@level": "info"
+        },
+        {
+          "@op": "AGENT_TASK",
+          "@action": "save_safetensors",
+          "@path": "$path",
+          "@priority": "high",
+          "@out": "checkpoint"
+        },
+        {
+          "@op": "FOLD_EXIT",
+          "@fold": "Xul",
+          "@node": "neural_tensor",
+          "@args": ["$checkpoint"]
+        }
+      ]
+    },
+    "load_checkpoint": {
+      "@phase": "Pop",
+      "@args": ["path"],
+      "@control": [
+        {
+          "@op": "AGENT_TASK",
+          "@action": "load_safetensors",
+          "@path": "$path",
+          "@priority": "high",
+          "@out": "loaded"
+        },
+        {
+          "@op": "LOG",
+          "@args": ["checkpoint loaded"],
+          "@level": "info"
+        }
+      ]
+    },
+    "verify": {
+      "@phase": "Chen",
+      "@control": [
+        {
+          "@op": "TENSOR_VERIFY",
+          "@tensor": "$neural_tensor_data",
+          "@shape": [768, 768],
+          "@dtype": "float32",
+          "@out": "verified"
+        },
+        {
+          "@op": "LOG",
+          "@args": ["neural_tensor checkpoint verified @Chen"],
+          "@level": "info"
+        }
+      ]
+    }
+  },
+  "@live": {
+    "on_read": {
+      "@op": "LOG",
+      "@args": ["neural_tensor read @Pop"]
+    },
+    "on_write": {
+      "@op": "LOG",
+      "@args": ["neural_tensor updated @Sek"]
+    },
+    "on_gc": {
+      "@op": "LOG",
+      "@args": ["neural_tensor evicted — hot-swap eligible"]
+    }
+  },
+  "@self_aware": {
+    "gradient_spike": {
+      "@monitor": "gradient_norm > 10.0",
+      "@control": [
+        {
+          "@op": "LOG",
+          "@args": ["gradient spike detected — clipping"],
+          "@level": "warn"
+        },
+        {
+          "@op": "TENSOR_CLIP_GRADIENT",
+          "@tensor": "$neural_tensor_data",
+          "@max_norm": 10.0
+        }
+      ]
+    },
+    "converged": {
+      "@monitor": "loss < 0.02",
+      "@phase": "Chen",
+      "@control": [
+        {
+          "@op": "LOG",
+          "@args": ["convergence threshold reached @Chen"],
+          "@level": "high"
+        },
+        {
+          "@op": "AGENT_TASK",
+          "@action": "promote_checkpoint",
+          "@priority": "critical",
+          "@out": "promotion"
+        }
+      ]
+    }
+  },
+  "@invariants": {
+    "kuhul_port": 17474,
+    "forbidden_port": 8080,
+    "shape": [768, 768],
+    "dtype": "float32",
+    "checkpoint_format": "safetensors",
+    "checkpoint_commit_phase": "Xul",
+    "verification_phase": "Chen",
+    "compression": "scxq2"
+  }
+}

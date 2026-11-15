@@ -1,0 +1,192 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@version": "0.1.0",
+  "@id": "kuhul-atomic-studio",
+  "@key": "⟁APP:KUHUL_ATOMIC_STUDIO",
+  "@mount": "⟁ROOT:KUHUL_ATOMIC_STUDIO",
+  "@theme": {
+    "accent":     "#55e3ad",
+    "bg":         "#0b1017",
+    "surface":    "#121b26",
+    "line":       "#2a3b4d",
+    "text":       "#e5f1f3",
+    "muted":      "#8ca4b4",
+    "hero_phase": "Wo",
+    "tagline":    "workflow · pipeline · blocks · canvas"
+  },
+  "@layout": {
+    "mode": "three-column",
+    "regions": [
+      { "id": "palette_panel",  "component": "⟁WIDGET:PALETTE",    "position": "left",   "width": "230px" },
+      { "id": "canvas_panel",   "component": "⟁WIDGET:CANVAS",     "position": "center"              },
+      { "id": "editor_panel",   "component": "⟁WIDGET:JSON_EDITOR", "position": "right",  "width": "350px" }
+    ],
+    "responsive": {
+      "tablet": "collapse_editor_to_bottom",
+      "mobile": "single_column"
+    }
+  },
+  "@state": {
+    "graph": {
+      "version":  "kuhul.atomic/1",
+      "workflow": { "id": "hello-flow", "name": "Atomic Demo", "mode": "data-only", "entry": "start" },
+      "blocks":   [],
+      "edges":    []
+    },
+    "selected":   null,
+    "connecting": false,
+    "status":     "Ready · data-only · no execution",
+    "status_ok":  true,
+    "json_text":  ""
+  },
+  "@components": {
+    "⟁ROOT:KUHUL_ATOMIC_STUDIO": {
+      "@type": "app",
+      "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:WORKSPACE"]
+    },
+    "⟁WIDGET:HEADER": {
+      "@type": "toolbar",
+      "@title": "⟁ K'UHUL Atomic Studio",
+      "@subtitle": "workflow · pipeline · blocks · canvas",
+      "@children": ["⟁ACTION:RESET", "⟁ACTION:EXPORT"]
+    },
+    "⟁WIDGET:WORKSPACE": {
+      "@type": "split-layout",
+      "@children": ["⟁WIDGET:PALETTE", "⟁WIDGET:CANVAS", "⟁WIDGET:JSON_EDITOR"]
+    },
+    "⟁WIDGET:PALETTE": {
+      "@type": "palette-panel",
+      "@title": "Atomic blocks",
+      "@bind": "state.selected",
+      "@children": ["⟁WIDGET:BLOCK_TYPES", "⟁WIDGET:CONNECTIONS", "⟁WIDGET:AUTHORITY_NOTE"],
+      "@on": { "add_block": "studio.add_block" }
+    },
+    "⟁WIDGET:BLOCK_TYPES": {
+      "@type": "button-list",
+      "@items": ["trigger","map","filter","fold","reduce","micronaut","verify","close"],
+      "@on": { "click": "studio.add_block" }
+    },
+    "⟁WIDGET:CONNECTIONS": {
+      "@type": "action-group",
+      "@title": "Connections",
+      "@children": ["⟁ACTION:CONNECT", "⟁ACTION:DELETE"]
+    },
+    "⟁WIDGET:AUTHORITY_NOTE": {
+      "@type": "note",
+      "@text": "This is a visual editor and JSON graph validator. It does not execute blocks or bypass XCFE admission."
+    },
+    "⟁WIDGET:CANVAS": {
+      "@type": "graph-canvas",
+      "@bind": "state.graph,state.selected,state.connecting",
+      "@dot_grid": true,
+      "@on": {
+        "node.select":    "studio.select_block",
+        "node.drag":      "studio.move_block",
+        "node.connect":   "studio.finish_connect"
+      }
+    },
+    "⟁WIDGET:JSON_EDITOR": {
+      "@type": "json-editor-panel",
+      "@title": "Simple JSON graph",
+      "@bind": "state.json_text,state.status,state.status_ok",
+      "@children": ["⟁INPUT:JSON", "⟁WIDGET:EDITOR_ACTIONS", "⟁WIDGET:STATUS", "⟁WIDGET:SCHEMA_NOTE"],
+      "@on": { "change": "studio.update_json_text" }
+    },
+    "⟁INPUT:JSON": {
+      "@type": "textarea",
+      "@bind": "state.json_text",
+      "@mono": true,
+      "@spellcheck": false
+    },
+    "⟁WIDGET:EDITOR_ACTIONS": {
+      "@type": "button-row",
+      "@children": ["⟁ACTION:APPLY", "⟁ACTION:FORMAT", "⟁ACTION:IMPORT"]
+    },
+    "⟁WIDGET:STATUS": {
+      "@type": "status-bar",
+      "@bind": "state.status,state.status_ok"
+    },
+    "⟁WIDGET:SCHEMA_NOTE": {
+      "@type": "note",
+      "@text": "Schema: version, workflow, blocks[], edges[]. Nodes use id, type, phase, x, y. Edges use from and to."
+    },
+    "⟁ACTION:RESET":   { "@type": "button", "@text": "Reset example",  "@on": { "click": "studio.reset"       } },
+    "⟁ACTION:EXPORT":  { "@type": "button", "@text": "Export JSON",    "@on": { "click": "studio.export"      }, "@variant": "primary" },
+    "⟁ACTION:CONNECT": { "@type": "button", "@text": "Connect from selected", "@on": { "click": "studio.start_connect" } },
+    "⟁ACTION:DELETE":  { "@type": "button", "@text": "Delete selected", "@on": { "click": "studio.delete_block" } },
+    "⟁ACTION:APPLY":   { "@type": "button", "@text": "Apply JSON",     "@on": { "click": "studio.apply_json"  }, "@variant": "primary" },
+    "⟁ACTION:FORMAT":  { "@type": "button", "@text": "Format",          "@on": { "click": "studio.format_json" } },
+    "⟁ACTION:IMPORT":  { "@type": "button", "@text": "Import file",     "@on": { "click": "studio.import_file" } }
+  },
+  "@programs": {
+    "studio.add_block":    { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "PUSH_BLOCK",   "@from": "event.type",  "@out": "graph.blocks" }, { "@op": "SET", "@from": "new_id", "@out": "selected" }] },
+    "studio.select_block": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET",          "@from": "event.id",    "@out": "selected"     }] },
+    "studio.move_block":   { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "PATCH_BLOCK",  "@from": "event.pos",   "@out": "graph.blocks" }] },
+    "studio.start_connect":{ "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET",          "@value": true,         "@out": "connecting"   }] },
+    "studio.finish_connect":{"@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "PUSH_EDGE",    "@from": "event.edge",  "@out": "graph.edges"  }, { "@op": "SET", "@value": false, "@out": "connecting" }] },
+    "studio.delete_block": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "REMOVE_BLOCK", "@from": "selected",    "@out": "graph"        }, { "@op": "SET", "@value": null, "@out": "selected"    }] },
+    "studio.apply_json":   { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "PARSE_AND_VALIDATE", "@from": "json_text", "@out": "graph", "@schema": "kuhul.atomic.graph.v1" }] },
+    "studio.format_json":  { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "FORMAT_JSON",  "@from": "json_text",   "@out": "json_text"    }] },
+    "studio.export":       { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "DOWNLOAD",     "@from": "graph",       "@filename": "kuhul.atomic.workflow.json" }] },
+    "studio.import_file":  { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "UPLOAD_AND_PARSE", "@out": "graph",    "@schema": "kuhul.atomic.graph.v1" }] },
+    "studio.reset":        { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET",          "@from": "example",     "@out": "graph"        }, { "@op": "SET", "@value": null, "@out": "selected" }] },
+    "studio.update_json_text": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event.value", "@out": "json_text" }] }
+  },
+  "@events": {
+    "palette.add_block":    "studio.add_block",
+    "canvas.node_select":   "studio.select_block",
+    "canvas.node_drag":     "studio.move_block",
+    "canvas.node_connect":  "studio.finish_connect",
+    "toolbar.reset":        "studio.reset",
+    "toolbar.export":       "studio.export",
+    "editor.apply":         "studio.apply_json",
+    "editor.format":        "studio.format_json",
+    "editor.import":        "studio.import_file",
+    "editor.connect":       "studio.start_connect",
+    "editor.delete":        "studio.delete_block"
+  },
+  "@permissions": {
+    "network":           false,
+    "storage":           "request_scoped",
+    "tools":             [],
+    "semantic_commit":   false,
+    "execution":         false,
+    "xcfe_admission":    "none",
+    "note":              "Studio is a graph validator and JSON editor. No blocks are executed. XCFE is not invoked."
+  },
+  "@lifecycle": {
+    "mount":    "projection_only",
+    "event":    "dispatch",
+    "unmount":  "discard_state"
+  },
+  "@schema": {
+    "graph": {
+      "version":  "string — kuhul.atomic/1",
+      "workflow": { "id": "string", "name": "string?", "mode": "string", "entry": "string" },
+      "blocks":   [{ "id": "string", "type": "trigger|map|filter|fold|reduce|micronaut|verify|close", "phase": "Pop|Wo|Yax|Sek|Ch'en|Xul", "x": "number", "y": "number" }],
+      "edges":    [{ "from": "string (block.id)", "to": "string (block.id)" }]
+    }
+  },
+  "@extensions": {
+    "@enabled": [],
+    "@available": [
+      { "id": "xcfe-preview",    "name": "XCFE Admission Preview",  "category": "tools",   "price": "free",       "description": "Show which blocks would require XCFE admission before a real dispatch." },
+      { "id": "phase-lanes",     "name": "Phase Lane View",         "category": "layout",  "price": "free",       "description": "Group nodes into C6 phase swim-lanes on the canvas." },
+      { "id": "bindings-import", "name": "Bindings.gram Importer",  "category": "tools",   "price": "free",       "description": "Import gram entries from Bindings.gram and auto-populate the block palette." },
+      { "id": "export-xjson",    "name": "Export as .xjson fold",   "category": "export",  "price": "membership", "description": "Export the workflow graph as an atomic_block_fold .xjson for Bindings track." }
+    ],
+    "@assistant_patterns": [
+      { "id": "studio.add",    "pattern": "ADD BLOCK *|NEW * BLOCK",        "intent": "add_block"    },
+      { "id": "studio.connect","pattern": "CONNECT * TO *|LINK * TO *",     "intent": "start_connect" },
+      { "id": "studio.export", "pattern": "EXPORT GRAPH|DOWNLOAD WORKFLOW", "intent": "export"       },
+      { "id": "studio.reset",  "pattern": "RESET STUDIO|RESTORE EXAMPLE",  "intent": "reset"        }
+    ]
+  },
+  "@refs": {
+    "blocks_module":   "data/programs/kuhul.atomic.blocks.json",
+    "pipeline_module": "data/programs/kuhul.atomic.pipeline.json",
+    "workflow_module": "data/programs/kuhul.atomic.workflow.json",
+    "canvas_module":   "data/programs/kuhul.atomic.canvas.json",
+    "html_example":    "data/host/examples/kuhul-atomic-studio.html"
+  }
+}

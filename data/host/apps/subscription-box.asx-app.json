@@ -1,0 +1,57 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "subscription-box",
+  "@key": "⟁APP:SUBSCRIPTION_BOX",
+  "@mount": "⟁ROOT:SUBSCRIPTION_BOX",
+  "@theme": { "accent": "#d97706", "bg": "#0a0500", "surface": "#180e00", "text": "#fef3c7", "hero_phase": "Xul", "tagline": "Curated. Delivered. Loved." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "boxes", "component": "⟁WIDGET:BOXES", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "boxes": [], "subscriptions": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:SUBSCRIPTION_BOX": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:ADD_BOX", "⟁ACTION:MANAGE_SUBS"] },
+    "⟁ACTION:ADD_BOX": { "@type": "button", "@text": "Create Box", "@on": { "click": "sub.open_compose" } },
+    "⟁ACTION:MANAGE_SUBS": { "@type": "button", "@text": "Subscriptions", "@on": { "click": "sub.open_subs" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:BOXES", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:BOXES": { "@type": "grid", "@bind": "state.boxes", "@children": ["⟁WIDGET:BOX_CARD"] },
+    "⟁WIDGET:BOX_CARD": { "@type": "media-card", "@bind": "box", "@on": { "view": "sub.view_box", "subscribe": "sub.subscribe" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:STATS", "⟁WIDGET:ACTIVE_SUBS"] },
+    "⟁WIDGET:STATS": { "@type": "stat", "@bind": "data.stats" },
+    "⟁WIDGET:ACTIVE_SUBS": { "@type": "list", "@bind": "state.subscriptions" }
+  },
+  "@programs": {
+    "sub.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "sub.open_subs": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "sub.view_box": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "sub.subscribe": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "APPEND", "@from": "event_sub", "@out": "subscriptions" }] }
+  },
+  "@events": { "box.create": "sub.open_compose", "subs.manage": "sub.open_subs", "box.view": "sub.view_box", "box.subscribe": "sub.subscribe" },
+  "@imports": [{ "ref": "box", "mode": "schema_table" }, { "ref": "subscription", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "box-builder", "name": "Visual Box Builder", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Drag-and-drop product layout tool for building each box." },
+      { "id": "recurring-billing", "name": "Recurring Billing", "category": "commerce", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Automated monthly/quarterly billing via Stripe." },
+      { "id": "unbox-page", "name": "Unboxing Page", "category": "content", "price": "optional", "status": "available_unconfigured", "description": "Beautiful reveal page for subscribers each delivery cycle." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "sub.create", "pattern": "CREATE BOX|NEW SUBSCRIPTION BOX|BUILD BOX", "intent": "open_compose" },
+      { "id": "sub.manage", "pattern": "MANAGE SUBSCRIPTIONS|VIEW SUBSCRIBERS", "intent": "open_subs" }
+    ]
+  },
+  "@data": {
+    "stats": { "boxes": 4, "active_subscribers": 214, "mrr_usd": 4280 },
+    "spotlight": [
+      { "id": "sp1", "title": "Monthly Makers Box", "subscribers": 128, "price_usd": 29, "badge": "Best Seller", "excerpt": "Artisan craft supplies. New theme each month." },
+      { "id": "sp2", "title": "Coffee Explorer", "subscribers": 61, "price_usd": 24, "badge": "Growing", "excerpt": "Single-origin roasts from 3 countries per box." },
+      { "id": "sp3", "title": "Book + Snack Bundle", "subscribers": 25, "price_usd": 34, "badge": "Premium", "excerpt": "One curated novel + matching regional snacks." }
+    ],
+    "schema": {
+      "box": { "primaryKey": "box_id", "fields": { "box_id": { "type": "string" }, "name": { "type": "string", "required": true }, "description": { "type": "text" }, "price_usd": { "type": "float", "required": true }, "cadence": { "type": "string" }, "items": { "type": "json" }, "image_url": { "type": "string" }, "created_at": { "type": "datetime" } } },
+      "subscription": { "primaryKey": "sub_id", "fields": { "sub_id": { "type": "string" }, "box_id": { "type": "string", "required": true }, "user_id": { "type": "string", "required": true }, "status": { "type": "string" }, "started_at": { "type": "datetime" }, "next_billing": { "type": "datetime" } } }
+    }
+  }
+}

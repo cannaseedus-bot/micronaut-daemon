@@ -1,0 +1,62 @@
+{
+  "schema": "kuhul.micronaut.semantic-router.v1",
+  "identity": {
+    "id": "AIML-SRAI-ROUTER-µ",
+    "role": "semantic_pattern_router",
+    "version": "1.0.0",
+    "lineage": []
+  },
+  "rule_bank": {
+    "format": "BSON",
+    "authority": "DATA_ONLY",
+    "categories_are_data": true,
+    "per_category_micronaut": false,
+    "lookup": "exact-hash-then-wildcard-specificity"
+  },
+  "authority": {
+    "aiml": "match_only",
+    "srai": "redirect_only",
+    "pi": "rank_only",
+    "xcfe": "admission_only",
+    "xul": "close_only",
+    "learning": "proposal_only"
+  },
+  "phases": [
+    { "name": "Pop", "responsibility": "capture surface and explicit context" },
+    { "name": "Wo", "responsibility": "normalize, match registered rules, bind wildcard captures" },
+    { "name": "Yax", "responsibility": "expand bounded SRAI redirects and semantic candidates" },
+    { "name": "Sek", "responsibility": "rank candidates and form a route proposal" },
+    { "name": "Ch'en", "responsibility": "verify phase order, captures, cycles, and XCFE admission requirements" },
+    { "name": "Xul", "responsibility": "close the verified data route; no executable commit in this API" }
+  ],
+  "constraints": {
+    "srai_max_depth": 16,
+    "cycle_policy": "reject",
+    "capture_index_base": 1,
+    "require_pure_redirect_template": true,
+    "matcher_selection": "explicit-specificity-score",
+    "wildcard_priority": ["exact", "_", "*"]
+  },
+  "vector_ranker": {
+    "authority": "rank_only",
+    "requires_query_vector": true,
+    "model": "google/embeddinggemma-2",
+    "prompt_name": "Document",
+    "artifact": "io/aiml-grams/aiml-relations-grams.json"
+  },
+  "xcfe": {
+    "admission_required_for_dispatch": true,
+    "default_status": "DATA_ONLY",
+    "dispatch_in_api": false
+  },
+  "xul": {
+    "close_after_verification": true,
+    "commit_executable_candidate": false
+  },
+  "learning": {
+    "event_log": "io/aiml-grams/aiml-router-events.jsonl",
+    "append_only": true,
+    "writes_rule_bank": false,
+    "promotes_candidates": false
+  }
+}

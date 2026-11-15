@@ -1,0 +1,388 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kuhul:xcfe:aiml:1.0:contract",
+  "@kind": "semantic.xaiml.contract.v1",
+  "@version": "1.0.0",
+  "@status": "review",
+  "@owner": "XAIML-µ",
+  "namespace": "urn:kuhul:xcfe:aiml:1.0",
+  "aiml_version_required": "2.0",
+  "extension_prefix": "xcfe",
+  "output_contract": "semantic.fieldgraph.v1",
+  "ir_target": "kast.v1",
+  "execution_target": "kuhul.vm.v1",
+  "phases": {
+    "order": [
+      "Pop",
+      "Wo",
+      "Yax",
+      "Sek",
+      "Chen",
+      "Xul"
+    ],
+    "mandatory": true,
+    "default": null
+  },
+  "operators": {
+    "Pop": {
+      "ops": [
+        "MATCH",
+        "CAPTURE",
+        "DETECT",
+        "RECALL"
+      ],
+      "produces": [
+        "capture_binding",
+        "field_signal"
+      ],
+      "consumes": [
+        "utterance"
+      ]
+    },
+    "Wo": {
+      "ops": [
+        "DEFINE",
+        "TYPE",
+        "BIND",
+        "REQUIRE"
+      ],
+      "produces": [
+        "typed_binding",
+        "constraint"
+      ],
+      "consumes": [
+        "capture_binding"
+      ]
+    },
+    "Yax": {
+      "ops": [
+        "GENERATE",
+        "RELATE",
+        "INFER",
+        "PROJECT"
+      ],
+      "produces": [
+        "candidate",
+        "candidate_edge",
+        "question_candidate"
+      ],
+      "consumes": [
+        "typed_binding",
+        "constraint"
+      ]
+    },
+    "Sek": {
+      "ops": [
+        "COMPARE",
+        "GUARD",
+        "VERIFY",
+        "SELECT"
+      ],
+      "produces": [
+        "finding",
+        "conflict",
+        "selection"
+      ],
+      "consumes": [
+        "candidate",
+        "candidate_edge"
+      ]
+    },
+    "Chen": {
+      "ops": [
+        "OBSERVE",
+        "MEASURE",
+        "ATTRIBUTE"
+      ],
+      "produces": [
+        "coverage",
+        "gap"
+      ],
+      "consumes": [
+        "finding",
+        "selection"
+      ]
+    },
+    "Xul": {
+      "ops": [
+        "COLLAPSE",
+        "REVISE",
+        "STORE",
+        "EMIT"
+      ],
+      "produces": [
+        "composed_result",
+        "fieldgraph_delta"
+      ],
+      "consumes": [
+        "coverage",
+        "gap"
+      ]
+    }
+  },
+  "binding_types": {
+    "text": {
+      "resolver_required": false,
+      "domain_key_required": false
+    },
+    "entity": {
+      "resolver_required": true,
+      "domain_key_required": true
+    },
+    "relation": {
+      "resolver_required": true,
+      "domain_key_required": true
+    },
+    "property": {
+      "resolver_required": true,
+      "domain_key_required": true
+    },
+    "question": {
+      "resolver_required": false,
+      "domain_key_required": false
+    },
+    "program": {
+      "resolver_required": true,
+      "domain_key_required": false
+    }
+  },
+  "wildcard": {
+    "on_unresolved_allowed": [
+      "defer"
+    ],
+    "on_unresolved_extension": {
+      "allowed_if": "resolver_registered_with_default",
+      "values": [
+        "default"
+      ]
+    },
+    "confidence_min_range": [
+      0.0,
+      1.0
+    ],
+    "output_when_unresolved": {
+      "kind": "wildcard",
+      "gram": "wildcard",
+      "domainKey": null,
+      "consumed": false,
+      "priority": 9,
+      "binding": {
+        "type": "<declared type>",
+        "resolver": "<declared resolver>",
+        "required": "<declared required>",
+        "confidence_min": "<declared threshold>",
+        "on_unresolved": "defer"
+      }
+    }
+  },
+  "inherited_invariants": {
+    "I1": {
+      "name": "Declared role != verified authority",
+      "enforced_by": [
+        "resolver lookup via host MicronautRegistry",
+        "trusted attribute forbidden"
+      ],
+      "violation_code": "SELF_DECLARED_AUTHORITY"
+    },
+    "I2": {
+      "name": "Schema authority != instance evidence authority",
+      "enforced_by": [
+        "emit is restricted to pre-fact kinds"
+      ],
+      "violation_code": "EMIT_KIND_FORBIDDEN"
+    },
+    "I3": {
+      "name": "Composed != promoted",
+      "enforced_by": [
+        "fold output is fieldgraph_delta",
+        "promote_generated_facts is false"
+      ],
+      "violation_code": "PROMOTION_WITHOUT_APPROVAL"
+    },
+    "I4": {
+      "name": "Referenced != copied",
+      "enforced_by": [
+        "invoke output is a named reference"
+      ],
+      "violation_code": "INLINE_DECLARATION"
+    },
+    "I5": {
+      "name": "Bias reorders legal, never expands it",
+      "enforced_by": [
+        "guards cannot remove legal candidates"
+      ],
+      "violation_code": "GUARD_REMOVES_LEGAL"
+    },
+    "I6": {
+      "name": "Wildcard defers, never defaults",
+      "enforced_by": [
+        "default requires registered resolver default",
+        "unresolved domainKey is null"
+      ],
+      "violation_code": "WILDCARD_DEFAULTED"
+    },
+    "I7": {
+      "name": "Validation boundary is singular",
+      "enforced_by": [
+        "invoke lowers to shared InvocationExecutor",
+        "no capability validation in XAIML"
+      ],
+      "violation_code": "DUPLICATE_VALIDATION"
+    },
+    "I8": {
+      "name": "Stage 3 gates authority, not observation",
+      "enforced_by": [
+        "store and revise require approval-ref"
+      ],
+      "violation_code": "STORE_WITHOUT_APPROVAL"
+    }
+  },
+  "xaiml_rules": {
+    "X1_mandatory_phase": {
+      "rule": "fold declares phase",
+      "violation_code": "MISSING_PHASE"
+    },
+    "X2_three_way_validation": {
+      "validators": [
+        "operator_for_phase",
+        "resolver_registered",
+        "phase_admitted"
+      ],
+      "must_not_collapse": true,
+      "violation_codes": {
+        "operator_for_phase": "UNDECLARED_OPERATOR",
+        "resolver_registered": "UNKNOWN_RESOLVER",
+        "phase_admitted": "PHASE_NOT_ADMITTED"
+      }
+    },
+    "X3_template_authoritative": {
+      "precedence": "template-is-authoritative",
+      "on_failure": {
+        "route": "local-fallback",
+        "logging": "required"
+      }
+    },
+    "X4_capture_equals_wildcard": {
+      "shared_contract_ref": "common.schema.json#/$defs/wildcard_field",
+      "identical_fields": [
+        "kind",
+        "gram",
+        "domainKey",
+        "consumed",
+        "priority"
+      ]
+    }
+  },
+  "trace": {
+    "contract": "data/grammar/daemon-bot.trace.contracts.json",
+    "contributes": ["phases", "admission", "commit", "conditions"],
+    "law": "the pattern engine has no XCFE callback, so admission.admitted and commit.authorized stay false; a recorded Ch'en entry is not verification and a recorded Xul entry is not a commit",
+    "fields": {
+      "phases": "the mandatory phase order is recorded per reply, including skipped phases with a reason",
+      "admission": "constant {owner: XCFE, admitted: false, reason: pattern_match_only}",
+      "commit": "constant {authorized: false, phase: Xul, reason: trace_is_observation_only}",
+      "conditions": "one {name, value, matched, fallback} per evaluated condition"
+    }
+  },
+  "validation_boundaries": {
+    "structural": {
+      "owner": "XAIML",
+      "artifact": "xcfe-aiml.xsd"
+    },
+    "semantic": {
+      "owner": "XAIML",
+      "artifact": "xcfe-aiml.ebnf"
+    },
+    "invocation": {
+      "owner": "KHANARY (shared)",
+      "artifact": "src/micronaut/cfpc_invocation.h::InvocationExecutor"
+    },
+    "authority": {
+      "owner": "KHANARY (shared)",
+      "artifact": "stage3_approval_gate"
+    }
+  },
+  "error_codes": {
+    "MISSING_PHASE": {
+      "layer": "structural",
+      "severity": "fatal"
+    },
+    "UNDECLARED_OPERATOR": {
+      "layer": "semantic",
+      "severity": "fatal"
+    },
+    "UNKNOWN_RESOLVER": {
+      "layer": "semantic",
+      "severity": "fatal"
+    },
+    "PHASE_NOT_ADMITTED": {
+      "layer": "semantic",
+      "severity": "fatal"
+    },
+    "BINDING_TYPE_MISMATCH": {
+      "layer": "semantic",
+      "severity": "fatal"
+    },
+    "UNDECLARED_RELATION": {
+      "layer": "semantic",
+      "severity": "fatal"
+    },
+    "SELF_DECLARED_AUTHORITY": {
+      "layer": "structural",
+      "severity": "fatal"
+    },
+    "EMIT_KIND_FORBIDDEN": {
+      "layer": "structural",
+      "severity": "fatal"
+    },
+    "INLINE_DECLARATION": {
+      "layer": "structural",
+      "severity": "fatal"
+    },
+    "GUARD_REMOVES_LEGAL": {
+      "layer": "runtime",
+      "severity": "fatal"
+    },
+    "WILDCARD_DEFAULTED": {
+      "layer": "semantic",
+      "severity": "fatal"
+    },
+    "DUPLICATE_VALIDATION": {
+      "layer": "runtime",
+      "severity": "fatal"
+    },
+    "STORE_WITHOUT_APPROVAL": {
+      "layer": "authority",
+      "severity": "fatal"
+    },
+    "PROMOTION_WITHOUT_APPROVAL": {
+      "layer": "authority",
+      "severity": "fatal"
+    }
+  },
+  "conformance": {
+    "required_tests": [
+      "missing_phase_rejected",
+      "operator_not_in_phase_rejected",
+      "unknown_resolver_rejected",
+      "phase_not_admitted_rejected",
+      "binding_type_mismatch_rejected",
+      "wildcard_unresolved_emits_defer_shape",
+      "wildcard_default_without_registered_default_rejected",
+      "guard_cannot_remove_legal_candidate",
+      "inline_invoke_output_rejected",
+      "emit_kind_fact_rejected",
+      "self_declared_trusted_rejected",
+      "store_without_approval_rejected",
+      "template_fallback_on_any_error",
+      "capture_shape_equals_sag_wildcard"
+    ],
+    "harness": "xcfe_aiml_conformance_test",
+    "fixtures_dir": "tests/xaiml/fixtures/",
+    "static_error_checks": {
+      "UNDECLARED_RELATION": "delegated to RelationRegistry::validate_usage",
+      "DUPLICATE_VALIDATION": "validator source contains exactly one InvocationExecutor boundary and no capability validator",
+      "PROMOTION_WITHOUT_APPROVAL": "contract fixes fold output to fieldgraph_delta; fixture 12 verifies authority gate"
+    }
+  }
+}

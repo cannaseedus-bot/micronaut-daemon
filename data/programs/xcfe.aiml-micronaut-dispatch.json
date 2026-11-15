@@ -1,0 +1,31 @@
+{
+  "@type":         "khanary.xcfe_program.v1",
+  "@no-eval":      true,
+  "id":            "xcfe.aiml-micronaut-dispatch",
+  "program_class": "ROUTE",
+  "phase":         "Yax",
+  "input_role":    "aiml_match_result",
+  "output_role":   "micronaut_invocation_result",
+  "admission":     "xcfe_authorized",
+  "description":   "AIML pattern → Micronaut routing. Wo binds the matched AIML pattern, the resolved Micronaut, and wildcard capture bindings. Yax gates on W·C·R capability admission. Sek validates bindings, resolves capabilities, and synchronizes typed lanes. Ch'en requires semantic_admission before invocation. Sek dispatches the Micronaut or returns DATA_ONLY on rejection. The AIML wildcard becomes a typed input binding, not an unrestricted instruction.",
+  "steps": [
+    { "phase": "Pop",   "op": "gramRead",            "id": "xcfe_aiml_micronaut_dispatch" },
+    { "phase": "Wo",    "op": "bind",                "id": "aiml_pattern",       "type": "aiml_match",      "args": ["input"] },
+    { "phase": "Wo",    "op": "bind",                "id": "target_micronaut",   "type": "pattern_resolve" },
+    { "phase": "Wo",    "op": "bind",                "id": "capture_bindings",   "type": "wildcard_typed" },
+    { "phase": "Wo",    "op": "bind",                "id": "lane_set",            "type": "pattern_sync_decls", "args": ["aiml_pattern"] },
+    { "phase": "Yax",   "op": "gate",                "id": "micronaut_admission","type": "wcr_capability_check" },
+    { "phase": "Sek",   "op": "validate",            "id": "capture_bindings" },
+    { "phase": "Sek",   "op": "resolve",             "id": "target_micronaut",   "type": "capabilities" },
+    { "phase": "Sek",   "op": "sync",                "id": "lane_set" },
+    { "phase": "Sek",   "op": "dispatch",            "id": "target_micronaut",   "type": "admitted",  "args": ["capture_bindings"] },
+    { "phase": "Sek",   "op": "return",              "id": "DATA_ONLY",          "type": "rejected" },
+    { "phase": "Ch'en", "op": "require",             "id": "semantic_admission" },
+    { "phase": "Xul",   "op": "gramWrite",           "id": "micronaut_invocation_result" }
+  ],
+  "authority": {
+    "semantic_authority": false,
+    "topology_mutation":  false,
+    "commit_authorized":  false
+  }
+}

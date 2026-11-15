@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kuhul:word-domain-tree:1",
+  "title": "K'UHUL Word Domain Tree v1",
+  "type": "object",
+  "required": ["schema", "version", "grammar", "authority", "source", "roots", "nodes", "wildcards", "stats", "embedding_index"],
+  "properties": {
+    "schema": { "const": "kuhul.word-domain-tree.v1" },
+    "version": { "type": "string" },
+    "grammar": { "const": "⟁" },
+    "authority": { "const": "DATA_ONLY" },
+    "source": { "type": "string", "minLength": 1 },
+    "roots": { "type": "array", "items": { "type": "string" } },
+    "nodes": { "type": "object", "additionalProperties": { "$ref": "#/$defs/node" } },
+    "wildcards": { "type": "array", "items": { "type": "object" } },
+    "stats": {
+      "type": "object",
+      "required": ["domain_count", "member_count", "associated_count", "exclusion_count"],
+      "properties": {
+        "domain_count": { "type": "integer", "minimum": 0 },
+        "member_count": { "type": "integer", "minimum": 0 },
+        "associated_count": { "type": "integer", "minimum": 0 },
+        "exclusion_count": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "embedding_index": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["available", "schema", "json", "matrix", "matrix_shape", "dtype", "sha256", "authority"],
+          "properties": {
+            "available": { "const": true },
+            "schema": { "const": "micronaut.aiml.relation-grams.v1" },
+            "json": { "type": "string", "minLength": 1 },
+            "matrix": { "type": "string", "minLength": 1 },
+            "matrix_shape": { "type": "array", "prefixItems": [{ "type": "integer", "minimum": 0 }, { "type": "integer", "minimum": 1 }], "minItems": 2, "maxItems": 2 },
+            "dtype": { "type": "string" },
+            "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            "authority": { "const": "DATA_ONLY" }
+          }
+        },
+        { "type": "object", "required": ["available", "reason"], "properties": { "available": { "const": false }, "reason": { "type": "string" } } }
+      ]
+    }
+  },
+  "$defs": {
+    "radius": {
+      "type": "object",
+      "required": ["depth", "max_depth", "radians", "angle", "degrees", "domain", "relation", "depth_prior", "depth_prior_is_calibrated_confidence"],
+      "properties": {
+        "depth": { "type": "integer", "minimum": 0, "maximum": 10 },
+        "max_depth": { "type": "integer", "minimum": 1 },
+        "radians": { "type": "number" },
+        "angle": { "type": "string" },
+        "degrees": { "type": "number" },
+        "domain": { "type": "string" },
+        "relation": { "type": "string" },
+        "depth_prior": { "type": "number", "minimum": 0, "maximum": 1 },
+        "depth_prior_is_calibrated_confidence": { "const": false }
+      }
+    },
+    "node": {
+      "type": "object",
+      "required": ["id", "kind", "pi_radius", "authority"],
+      "properties": {
+        "id": { "type": "string" },
+        "kind": { "enum": ["domain", "member", "associated"] },
+        "parent": { "type": ["string", "null"] },
+        "members": { "type": "array", "items": { "type": "string" } },
+        "associated": { "type": "array", "items": { "type": "string" } },
+        "excludes": { "type": "array", "items": { "type": "string" } },
+        "pi_radius": { "oneOf": [{ "$ref": "#/$defs/radius" }, { "type": "array", "items": { "$ref": "#/$defs/radius" } }] },
+        "authority": { "const": "DATA_ONLY" }
+      }
+    }
+  },
+  "additionalProperties": true
+}

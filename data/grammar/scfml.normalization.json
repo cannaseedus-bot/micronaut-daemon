@@ -1,0 +1,39 @@
+{
+  "schema": "scfml.normalization.v1",
+  "name": "SCFML Semantic Control Flow Machine Learning",
+  "canonical_order": ["if", "then", "else", "unknown"],
+  "surface_roles": {
+    "if/pattern": "condition",
+    "then/template": "then_action",
+    "else/template": "else_action",
+    "unknown": "unknown_handler",
+    "then/pattern": "then_pattern_candidate",
+    "else/pattern": "else_pattern_candidate",
+    "else/if/then": "nested_else_if"
+  },
+  "epistemic_laws": [
+    "SUPPORTED(P)=>then",
+    "CONTRADICTED(P)=>else_as_complement",
+    "MISS(P)!=CONTRADICTED(P)",
+    "UNKNOWN(P)!=else",
+    "else!=not",
+    "contradicting_one_candidate_does_not_prove_another"
+  ],
+  "pattern_learning": {
+    "source_events": ["memory:event:*", "aiml.semantic_branch:*", "prompt:*"],
+    "candidate_kinds": ["aiml_pattern", "aiml_template", "semantic_branch", "key_grammar", "route_pattern"],
+    "promotion_requires": "SUPPORTED_or_user_verified",
+    "fact_authority_default": false
+  },
+  "trace": {
+    "contract": "data/grammar/daemon-bot.trace.contracts.json",
+    "contributes": ["input.raw", "input.normalized", "input.substitutions"],
+    "law": "the trace records the epistemic outcome as a reply status (ok or no_match); MISS is never recorded as a contradicted condition and UNKNOWN is never recorded as else",
+    "fields": {
+      "input.raw": "the utterance as received",
+      "input.normalized": "the normalised form the matcher used",
+      "input.substitutions": "one {find, replace} per rule that fired"
+    }
+  },
+  "projection_boundary": "SCFML -> epistemic_resolution -> XCFE"
+}

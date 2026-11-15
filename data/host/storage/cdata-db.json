@@ -1,0 +1,47 @@
+{
+  "@kind": "asx.cdata.store.v1",
+  "tables": {
+    "ngram_bigram": [
+      {
+        "count": 1,
+        "learning_state": "approval_gated",
+        "ngram_id": "test:2:nba_news",
+        "pair": [
+          "nba",
+          "news"
+        ],
+        "scope_id": "test-scope",
+        "sequence": [
+          "nba",
+          "news"
+        ],
+        "source_class": "user_prompt"
+      }
+    ],
+    "ngram_trigram": [
+      {
+        "count": 1,
+        "domain_key": "nba",
+        "learning_state": "approval_gated",
+        "ngram_id": "test:3:nba_news_app",
+        "scope_id": "test-scope",
+        "sequence": [
+          "nba",
+          "news",
+          "app"
+        ],
+        "source_class": "user_prompt"
+      }
+    ],
+    "ngram_unigram": [
+      {
+        "count": 1,
+        "learning_state": "approval_gated",
+        "ngram_id": "test:1:nba",
+        "scope_id": "test-scope",
+        "source_class": "user_prompt",
+        "token": "nba"
+      }
+    ]
+  }
+}

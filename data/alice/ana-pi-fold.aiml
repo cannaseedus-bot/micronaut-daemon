@@ -1,0 +1,363 @@
+<aiml version="1.0.1">
+  <!-- ANAMORPHISM · PI PHASES · FOLD (higher-order function)
+       Conformance patterns from Gemma field builder session 2026-10-05.
+       Sections: routing → conformance Q&A → follow-up questions → jokes → cross-domain.
+       AIML 2.0 wildcard priority: _ > * > ^ > # > ? -->
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ANAMORPHISM — routing
+  ═══════════════════════════════════════════════════════════ -->
+  <category>
+    <pattern>ANAMORPHISM *</pattern>
+    <template>ANAMORPHISM-µ domain=recursion_schemes op=query context=<star/></template>
+  </category>
+  <category>
+    <pattern>@ANAMORPHISM *</pattern>
+    <template>ANAMORPHISM-µ domain=recursion_schemes op=query context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ ANAMORPHISM</pattern>
+    <template>ANAMORPHISM-µ domain=recursion_schemes op=define kind=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS AN ANAMORPHISM</pattern>
+    <template>ANAMORPHISM-µ domain=recursion_schemes op=define kind=anamorphism</template>
+  </category>
+  <category>
+    <pattern>HOW DOES _ ANAMORPHISM UNFOLD *</pattern>
+    <template>ANAMORPHISM-µ domain=recursion_schemes op=unfold subject=<star index="1"/> target=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ HYLOMORPHISM</pattern>
+    <template>ANAMORPHISM-µ domain=recursion_schemes op=define kind=hylomorphism subtype=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS A HYLOMORPHISM</pattern>
+    <template>ANAMORPHISM-µ domain=recursion_schemes op=define kind=hylomorphism</template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ PARAMORPHISM</pattern>
+    <template>ANAMORPHISM-µ domain=recursion_schemes op=define kind=paramorphism subtype=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ APOMORPHISM</pattern>
+    <template>ANAMORPHISM-µ domain=recursion_schemes op=define kind=apomorphism subtype=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ ZYGOMORPHISM</pattern>
+    <template>ANAMORPHISM-µ domain=recursion_schemes op=define kind=zygomorphism subtype=<star/></template>
+  </category>
+  <category>
+    <pattern>HOW DOES _ ANAMORPHISM RELATE TO *</pattern>
+    <template>ANAMORPHISM-µ domain=recursion_schemes op=relate subject=<star index="1"/> target=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>IS _ ANAMORPHISM PRODUCTIVE *</pattern>
+    <template>ANAMORPHISM-µ domain=recursion_schemes op=productivity kind=<star index="1"/> context=<star index="2"/></template>
+  </category>
+
+  <!-- ANAMORPHISM — conformance Q&A (pattern phase → ΔR) -->
+  <category>
+    <pattern>WHAT IS AN ANAMORPHISM IN CATEGORY THEORY</pattern>
+    <template>An anamorphism is the categorical dual of a catamorphism — where a catamorphism folds a structure down to a value, an anamorphism unfolds a seed value upward into a recursive data structure. It is defined by a coalgebra f: A → F A that describes how to expand one step at a time.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES AN ANAMORPHISM USE A COALGEBRA TO UNFOLD A SEED</pattern>
+    <template>A coalgebra f: A → F A maps a seed value to one layer of structure. The anamorphism repeatedly applies f, building the full recursive structure layer by layer without storing it all at once — this is what makes it well-suited for corecursive (potentially infinite) structures like streams.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE DIFFERENCE BETWEEN ANAMORPHISM AND CATAMORPHISM</pattern>
+    <template>A catamorphism (fold) consumes a recursive structure to produce a single value; an anamorphism (unfold) produces a recursive structure from a single seed value. They are categorical duals: catamorphism is an algebra morphism from the initial algebra, anamorphism is a coalgebra morphism to the terminal coalgebra.</template>
+  </category>
+
+  <!-- ANAMORPHISM — conformance Q&A (relation phase → ΔW) -->
+  <category>
+    <pattern>WHAT IS A HYLOMORPHISM AND HOW DOES IT COMBINE UNFOLD AND FOLD</pattern>
+    <template>A hylomorphism is the composition of an anamorphism followed by a catamorphism: first unfold a seed into an intermediate structure, then fold that structure into a result. It represents any recursive algorithm that builds up and then tears down a structure — like merge sort (unfold into halves, fold by merging).</template>
+  </category>
+  <category>
+    <pattern>HOW DOES ANAMORPHISM RELATE TO CORECURSION IN TYPE THEORY</pattern>
+    <template>Anamorphism formalizes corecursion: a corecursive definition produces structure incrementally from a seed without requiring the full output to be known in advance. In type theory, corecursive types (coinductive types) are exactly the types inhabited by anamorphisms — streams and infinite trees are canonical examples.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS A PARAMORPHISM IN RECURSION SCHEMES</pattern>
+    <template>A paramorphism extends a catamorphism by giving the algebra access to both the recursive result AND the original sub-structure at each step. This lets you express operations like tails (which needs both the folded result and the remaining list) that a plain catamorphism cannot express directly.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS AN APOMORPHISM IN RECURSION SCHEMES</pattern>
+    <template>An apomorphism extends an anamorphism by allowing the coalgebra to short-circuit at any step: instead of always producing a new seed to unfold further, it can return a fully-formed sub-structure directly. This makes it the dual of a paramorphism.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS A ZYGOMORPHISM IN RECURSION SCHEMES</pattern>
+    <template>A zygomorphism is a catamorphism that uses a second auxiliary catamorphism to compute a helper value at each step. It allows mutual recursion to be expressed as a single structured recursion — the name comes from Greek "zygo" meaning paired or yoked.</template>
+  </category>
+
+  <!-- ANAMORPHISM — conformance Q&A (confidence phase → ΔC) -->
+  <category>
+    <pattern>IS AN ANAMORPHISM ALWAYS PRODUCTIVE FOR INFINITE STREAMS</pattern>
+    <template>Productivity (guardedness) is not guaranteed automatically — the coalgebra must be guarded to ensure each recursive call is wrapped in at least one constructor. In total functional languages like Coq or Agda, the type system enforces guardedness. In Haskell, an unguarded anamorphism can diverge.</template>
+  </category>
+
+  <!-- ANAMORPHISM — jokes -->
+  <category>
+    <pattern>WHY DID THE ANAMORPHISM BREAK UP WITH THE CATAMORPHISM</pattern>
+    <template>Because their relationship had too much perspective — one kept building things up and the other kept tearing them down. They agreed it was an unhealthy fixpoint.</template>
+  </category>
+  <category>
+    <pattern>WHAT DO YOU CALL AN ANAMORPHISM THAT NEVER TERMINATES</pattern>
+    <template>Productive! (In corecursion, an infinite anamorphism that yields a value at every step is called productive — it never terminates, and that is exactly the point.)</template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT HYLOMORPHISM</pattern>
+    <template>A hylomorphism is like origami: first you unfold the paper into a flat structure, then you fold it back into something meaningful. The only difference is that with origami, the intermediate flat structure is not an infinite stream.</template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT ANAMORPHISM</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=recursion_schemes prompt=anamorphism unfold corecursion</mx2lm></template>
+  </category>
+  <category>
+    <pattern>ANAMORPHISM JOKE *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=humor_frame card_view=true authority=none domain=recursion_schemes prompt=<star/></mx2lm></template>
+  </category>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       PI PHASES — routing
+  ═══════════════════════════════════════════════════════════ -->
+  <category>
+    <pattern>PI PHASE *</pattern>
+    <template>PI-PHASE-µ domain=phase_geometry op=query context=<star/></template>
+  </category>
+  <category>
+    <pattern>@PI PHASE *</pattern>
+    <template>PI-PHASE-µ domain=phase_geometry op=query context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ PI PHASE *</pattern>
+    <template>PI-PHASE-µ domain=phase_geometry op=define kind=<star index="1"/> context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS A PI PHASE</pattern>
+    <template>PI-PHASE-µ domain=phase_geometry op=define kind=pi_phase</template>
+  </category>
+  <category>
+    <pattern>HOW DOES E I PI THETA *</pattern>
+    <template>PI-PHASE-µ domain=phase_geometry op=euler kind=rotation context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS EULER _ FORMULA</pattern>
+    <template>PI-PHASE-µ domain=phase_geometry op=euler kind=formula subtype=<star/></template>
+  </category>
+  <category>
+    <pattern>HOW DO PI PHASES RELATE TO *</pattern>
+    <template>PI-PHASE-µ domain=phase_geometry op=relate target=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS PHASE SYNCHRONIZATION *</pattern>
+    <template>PI-PHASE-µ domain=phase_geometry op=synchronization context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS PHASE COHERENCE *</pattern>
+    <template>PI-PHASE-µ domain=phase_geometry op=coherence context=<star/></template>
+  </category>
+  <category>
+    <pattern>IS _ PI PHASE SHIFT _ SIGN INVERSION</pattern>
+    <template>PI-PHASE-µ domain=phase_geometry op=equivalence kind=pi_shift_vs_sign_inversion</template>
+  </category>
+  <category>
+    <pattern>HOW DOES PHASE APPEAR IN QUANTUM MECHANICS *</pattern>
+    <template>PI-PHASE-µ domain=phase_geometry op=quantum context=<star/></template>
+  </category>
+
+  <!-- PI PHASES — conformance Q&A (pattern phase → ΔR) -->
+  <category>
+    <pattern>WHAT IS A PI PHASE IN MATHEMATICS</pattern>
+    <template>A π phase (pi phase) is a phase shift of exactly π radians (180°) applied to a signal or complex number. In signal theory it represents a half-period delay; in complex analysis it corresponds to multiplication by e^(iπ) = −1, which is a sign inversion of the amplitude.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES E TO THE I PI THETA ENCODE A PHASE ROTATION</pattern>
+    <template>The complex exponential e^(iπθ) traces a point on the unit circle in the complex plane at angle πθ radians from the positive real axis. As θ increases from 0 to 2, the point completes a full rotation: at θ=1 it reaches −1 (a π-phase inversion); this is the geometric meaning of Euler's formula.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE ARGUMENT OF A COMPLEX NUMBER</pattern>
+    <template>The argument (phase angle) of a complex number z = a + bi is φ = atan2(b, a) — the angle between the positive real axis and the vector (a, b) in the complex plane. It satisfies z = |z| · e^(iφ), so the modulus encodes magnitude and the argument encodes phase.</template>
+  </category>
+
+  <!-- PI PHASES — conformance Q&A (relation phase → ΔW) -->
+  <category>
+    <pattern>HOW DO PI PHASES RELATE TO FOURIER TRANSFORMS</pattern>
+    <template>In a Fourier transform, each frequency component carries both a magnitude and a phase angle. A π-phase shift in a component flips its sign, causing destructive interference with an identical in-phase component. Fourier analysis decomposes a signal into these magnitude-phase pairs across all frequencies.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES PHASE SYNCHRONIZATION RELATE TO MANIFOLD GEOMETRY</pattern>
+    <template>Phase synchronization between coupled oscillators can be understood as the convergence of trajectories on a torus (the product of circles). The winding number of the synchronized orbit on that torus is a topological invariant — phase locking corresponds to a rational winding number, characterizing the geometry of the synchronization manifold.</template>
+  </category>
+  <category>
+    <pattern>HOW DO PI PHASES APPEAR IN QUANTUM MECHANICS</pattern>
+    <template>In quantum mechanics, a π-phase shift appears in spin-1/2 systems: rotating a spin-1/2 particle by 2π returns it to the same physical state but with a global phase factor of −1 (a π phase). This phase difference becomes observable in interference experiments and underlies the Aharonov–Bohm effect.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS PHASE COHERENCE BETWEEN SIGNALS</pattern>
+    <template>Phase coherence means two signals maintain a fixed phase relationship over time. In quantum mechanics, coherence between states allows constructive/destructive interference — decoherence (loss of phase coherence) is what makes quantum systems behave classically. In signal processing, coherence is required for beamforming and interferometry.</template>
+  </category>
+
+  <!-- PI PHASES — conformance Q&A (confidence phase → ΔC) -->
+  <category>
+    <pattern>IS A PI PHASE SHIFT THE SAME AS SIGN INVERSION</pattern>
+    <template>For a real sinusoidal signal, yes: a π-phase shift of sin(ωt + π) = −sin(ωt) is exactly a sign inversion. For a general complex signal, e^(iπ)·z = −z is also a sign inversion. The equivalence holds because e^(iπ) = −1, so multiplication by e^(iπ) negates both real and imaginary parts.</template>
+  </category>
+
+  <!-- PI PHASES — jokes -->
+  <category>
+    <pattern>WHY DID PI GO TO THERAPY</pattern>
+    <template>Because it had too many problems with its irrational digits — it could never reach a conclusion, and its therapist kept running out of paper.</template>
+  </category>
+  <category>
+    <pattern>WHAT DID THE PI PHASE SHIFT SAY TO THE SIGNAL</pattern>
+    <template>You and I are completely opposite — but together we achieve perfect cancellation. That is not a breakup. That is destructive interference.</template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT EULER _ FORMULA</pattern>
+    <template>Euler's formula e^(iπ) + 1 = 0 walks into a bar. The bartender says "We don't serve transcendental numbers here." Euler's formula replies: "That is irrational. I am complex."</template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT EULER S FORMULA</pattern>
+    <template>Euler's formula e^(iπ) + 1 = 0 walks into a bar. The bartender says "We don't serve transcendental numbers here." Euler's formula replies: "That is irrational. I am complex."</template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT PI PHASES</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=phase_geometry prompt=pi phase shift inversion</mx2lm></template>
+  </category>
+  <category>
+    <pattern>PI PHASE JOKE *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=humor_frame card_view=true authority=none domain=phase_geometry prompt=<star/></mx2lm></template>
+  </category>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       FOLD (HIGHER-ORDER FUNCTION) — routing
+  ═══════════════════════════════════════════════════════════ -->
+  <category>
+    <pattern>FOLD FUNCTION *</pattern>
+    <template>FOLD-HOF-µ domain=higher_order_functions op=query context=<star/></template>
+  </category>
+  <category>
+    <pattern>CATAMORPHISM *</pattern>
+    <template>FOLD-HOF-µ domain=higher_order_functions op=catamorphism context=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ FOLD FUNCTION</pattern>
+    <template>FOLD-HOF-µ domain=higher_order_functions op=define kind=<star/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS FOLD AS A HIGHER ORDER FUNCTION</pattern>
+    <template>FOLD-HOF-µ domain=higher_order_functions op=define kind=fold</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE DIFFERENCE BETWEEN FOLDR AND FOLDL</pattern>
+    <template>FOLD-HOF-µ domain=higher_order_functions op=compare left=foldl right=foldr</template>
+  </category>
+  <category>
+    <pattern>HOW DOES FOLD IMPLEMENT *</pattern>
+    <template>FOLD-HOF-µ domain=higher_order_functions op=implement target=<star/></template>
+  </category>
+  <category>
+    <pattern>HOW IS FOLD _ CATAMORPHISM *</pattern>
+    <template>FOLD-HOF-µ domain=higher_order_functions op=catamorphism kind=<star index="1"/> context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>WHAT IS _ SCAN *</pattern>
+    <template>FOLD-HOF-µ domain=higher_order_functions op=scan kind=<star index="1"/> context=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>IS FOLDL _ STRICT *</pattern>
+    <template>FOLD-HOF-µ domain=higher_order_functions op=strictness kind=foldl context=<star index="2"/></template>
+  </category>
+
+  <!-- FOLD — conformance Q&A (pattern phase → ΔR) -->
+  <category>
+    <pattern>WHAT IS FOLD AS A HIGHER ORDER FUNCTION IN FUNCTIONAL PROGRAMMING</pattern>
+    <template>Fold (also called reduce or catamorphism) is a higher-order function that reduces a recursive data structure to a single value by applying a combining function to each element together with an accumulator. It is the canonical way to consume a list: foldr f z [a,b,c] = f a (f b (f c z)).</template>
+  </category>
+  <category>
+    <pattern>WHAT IS THE DIFFERENCE BETWEEN RIGHT FOLD AND LEFT FOLD</pattern>
+    <template>Right fold (foldr) associates to the right: f a (f b (f c z)), consuming from the tail first, and is lazy — it can short-circuit on infinite lists. Left fold (foldl) associates to the left: f (f (f z a) b) c, consuming from the head first, and builds a thunk chain that causes stack overflow unless forced strictly (foldl').</template>
+  </category>
+  <category>
+    <pattern>HOW DOES FOLD IMPLEMENT SUM AND PRODUCT AND LIST REVERSAL</pattern>
+    <template>Sum: foldl (+) 0 xs — accumulates the running total. Product: foldl (*) 1 xs — accumulates the running product. Reversal: foldl (flip (:)) [] xs — prepends each element to the accumulator, reversing order. All three are specializations of the same fold pattern with different combining functions and zero values.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS A SCAN AND HOW DOES IT DIFFER FROM FOLD</pattern>
+    <template>A scan (scanl/scanr) is like fold but it returns all intermediate accumulator values instead of just the final result: scanl f z [a,b,c] = [z, f z a, f (f z a) b, ...]. It is useful for running totals, prefix sums, and anywhere you need the history of a fold, not just its final answer.</template>
+  </category>
+
+  <!-- FOLD — conformance Q&A (relation phase → ΔW) -->
+  <category>
+    <pattern>HOW IS FOLD A CATAMORPHISM OVER A LIST</pattern>
+    <template>The list type is the initial algebra of the functor F X = 1 + A × X (empty list or head-cons-tail). A catamorphism over this algebra replaces the Nil constructor with a zero value z and the Cons constructor with the combining function f — that is exactly foldr f z. Any fold is a catamorphism for the appropriate F-algebra.</template>
+  </category>
+  <category>
+    <pattern>HOW ARE FOLD AND UNFOLD DUAL TO EACH OTHER</pattern>
+    <template>Catamorphism (fold) is a morphism from the initial algebra of a functor F; anamorphism (unfold) is a morphism to the terminal coalgebra of F. They are dual by reversing the direction of all arrows in their universal properties. Every recursive algorithm can be decomposed into one or both.</template>
+  </category>
+
+  <!-- FOLD — conformance Q&A (confidence phase → ΔC) -->
+  <category>
+    <pattern>IS FOLDL ALWAYS STRICT AND FOLDR ALWAYS LAZY IN HASKELL</pattern>
+    <template>No — foldl is lazy by default (it builds a thunk, not a strict accumulation); foldl' from Data.List is the strict version that forces evaluation at each step. foldr is lazy and can handle infinite lists when the combining function is non-strict in its second argument, like (&&) or (:).</template>
+  </category>
+
+  <!-- FOLD — jokes -->
+  <category>
+    <pattern>WHY DID FOLDL BREAK UP WITH FOLDR</pattern>
+    <template>Because foldr was always building things up from the right and foldl was accumulating grievances from the left — and in the end the whole relationship was just one big unevaluated thunk that blew the stack.</template>
+  </category>
+  <category>
+    <pattern>WHAT DO YOU CALL A FOLD THAT NEVER FINISHES</pattern>
+    <template>A fold-out — it keeps unfolding and never commits to a final value. (Also known as an infinite corecursive stream when it is well-behaved, and a stack overflow when it is not.)</template>
+  </category>
+  <category>
+    <pattern>WHY IS FOLD THE MOST PHILOSOPHICAL HIGHER ORDER FUNCTION</pattern>
+    <template>Because it looks at every element of the universe, reduces everything to a single value, and then asks: was this accumulator worth it? Fold is the catamorphism of meaning itself.</template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT FOLD *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=higher_order_functions prompt=fold catamorphism <star/></mx2lm></template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT CATAMORPHISM</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=humor_frame card_view=true authority=none domain=higher_order_functions prompt=catamorphism fold reduce</mx2lm></template>
+  </category>
+  <category>
+    <pattern>FOLD HOF JOKE *</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=higher_order_functions prompt=<star/></mx2lm></template>
+  </category>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       CROSS-DOMAIN — anamorphism × pi phases × fold
+  ═══════════════════════════════════════════════════════════ -->
+  <category>
+    <pattern>HOW DO ANAMORPHISM PI PHASES AND FOLD CONNECT</pattern>
+    <template>An anamorphism can unfold a seed into a sequence of pi-phase increments (corecursively generating a phase-advancing signal); a fold (catamorphism) over that phase-encoded sequence reconstructs the Fourier components; together they form a hylomorphism where the intermediate structure is a list of complex phase values. This is the discrete Fourier transform as a hylomorphism.</template>
+  </category>
+  <category>
+    <pattern>HOW DOES FOLD OVER _ PHASE ENCODED LIST RELATE TO FOURIER *</pattern>
+    <template>FOLD-HOF-µ domain=higher_order_functions op=cross_domain target=fourier context=<star index="1"/> detail=<star index="2"/></template>
+  </category>
+  <category>
+    <pattern>CAN AN ANAMORPHISM GENERATE _ PI PHASE SIGNAL</pattern>
+    <template>ANAMORPHISM-µ domain=recursion_schemes op=cross_domain target=pi_phase kind=<star/></template>
+  </category>
+  <category>
+    <pattern>HOW DO RECURSION SCHEMES RELATE TO THE KHANARY FOLD PIPELINE</pattern>
+    <template>In KHANARY, anamorphism maps to the Pop→Wo expansion (unfolding a query token into a semantic neighborhood); catamorphism maps to the Sek→Xul reduction (folding scored micronauts into a ranked result); pi-phase synchronization maps to the Ch'en gate (ensuring phase coherence between the proposal and the authorized commit before Xul).</template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE ABOUT ANAMORPHISM PI PHASES AND FOLD</pattern>
+    <template>Why did the fractal get rejected from the art gallery? It kept trying to unfold into a pi phase, but it just couldn't fold — it was stuck in an infinite hylomorphism and the gallery closed before it reached a fixpoint.</template>
+  </category>
+  <category>
+    <pattern>TELL ME A JOKE SPANNING ALL THREE TOPICS</pattern>
+    <template><mx2lm>joke: track=JOKE-µ phase=Yax next=Ch'en frame=pun_bridge card_view=true authority=none domain=recursion_fold_phase prompt=anamorphism pi phase fold catamorphism hylomorphism</mx2lm></template>
+  </category>
+
+</aiml>

@@ -1,0 +1,54 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "kanban",
+  "@key": "⟁APP:KANBAN",
+  "@mount": "⟁ROOT:KANBAN",
+  "@theme": { "accent": "#38bdf8", "bg": "#030a10", "surface": "#06121c", "text": "#e0f2fe", "hero_phase": "Sek", "tagline": "Move the card. Ship the thing." },
+  "@layout": { "mode": "columns", "regions": [{ "id": "todo_col", "component": "⟁WIDGET:TODO_COL", "position": "left" }, { "id": "doing_col", "component": "⟁WIDGET:DOING_COL", "position": "center" }, { "id": "done_col", "component": "⟁WIDGET:DONE_COL", "position": "right" }], "responsive": { "tablet": "stack_columns", "mobile": "stack_columns" } },
+  "@state": { "auth": { "user_id": null }, "cards": [], "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:KANBAN": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:BOARD"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:ADD_CARD"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:ADD_CARD": { "@type": "button", "@text": "Add Card", "@on": { "click": "kanban.open_compose" } },
+    "⟁WIDGET:BOARD": { "@type": "layout", "@children": ["⟁WIDGET:TODO_COL", "⟁WIDGET:DOING_COL", "⟁WIDGET:DONE_COL"] },
+    "⟁WIDGET:TODO_COL": { "@type": "column", "@title": "To Do", "@bind": "state.cards_todo", "@children": ["⟁WIDGET:CARD"] },
+    "⟁WIDGET:DOING_COL": { "@type": "column", "@title": "In Progress", "@bind": "state.cards_doing", "@children": ["⟁WIDGET:CARD"] },
+    "⟁WIDGET:DONE_COL": { "@type": "column", "@title": "Done", "@bind": "state.cards_done", "@children": ["⟁WIDGET:CARD"] },
+    "⟁WIDGET:CARD": { "@type": "drag-card", "@bind": "card", "@on": { "move": "kanban.move_card", "view": "kanban.view" } }
+  },
+  "@programs": {
+    "kanban.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "kanban.move_card": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_card_status", "@out": "event_card.status" }] },
+    "kanban.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "kanban.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "card.move": "kanban.move_card", "card.view": "kanban.view", "compose.open": "kanban.open_compose", "search.input": "kanban.search" },
+  "@imports": [{ "ref": "card", "mode": "schema_table" }, { "ref": "board", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "due-dates", "name": "Due Dates & Alerts", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Add due dates to cards and get overdue alerts." },
+      { "id": "time-estimate", "name": "Time Estimates", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Estimate and track time per card." },
+      { "id": "velocity-bot", "name": "Velocity Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Track and report throughput velocity for your board." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "kanban.add", "pattern": "ADD CARD|NEW TASK|CREATE CARD", "intent": "open_compose" },
+      { "id": "kanban.move", "pattern": "MOVE * TO DONE|MOVE * TO DOING|COMPLETE CARD *", "intent": "move_card" }
+    ]
+  },
+  "@data": {
+    "spotlight": [
+      { "id": "sp1", "title": "Launch v1.0", "status": "todo", "badge": "High Priority", "excerpt": "Ship the public release. All blockers resolved." },
+      { "id": "sp2", "title": "Refactor auth module", "status": "doing", "badge": "In Progress", "excerpt": "Breaking the monolith into separate auth service." },
+      { "id": "sp3", "title": "Write API docs", "status": "done", "badge": "Done", "excerpt": "Completed and reviewed by the team." }
+    ],
+    "schema": {
+      "card": { "primaryKey": "card_id", "fields": { "card_id": { "type": "string" }, "board_id": { "type": "string", "required": true }, "title": { "type": "string", "required": true }, "description": { "type": "textarea" }, "status": { "type": "string", "required": true }, "tags": { "type": "json" }, "due_at": { "type": "datetime" }, "created_at": { "type": "datetime" } } },
+      "board": { "primaryKey": "board_id", "fields": { "board_id": { "type": "string" }, "name": { "type": "string", "required": true }, "description": { "type": "text" }, "columns": { "type": "json" }, "created_at": { "type": "datetime" } } }
+    }
+  }
+}

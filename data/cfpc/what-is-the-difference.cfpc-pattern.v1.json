@@ -1,0 +1,33 @@
+{
+  "@kind": "khanary.cfpc.pattern.v1",
+  "id": "what-is-the-difference",
+  "intent": "Comparison query — resolve the semantic distinction between two concepts.",
+  "phase": "Sek",
+  "@captures": {
+    "subject": {
+      "wildcard": "*",
+      "strip_prefix": "what is the difference between "
+    }
+  },
+  "neighborhood_resolve": {
+    "from_captures": [
+      "subject"
+    ],
+    "max_hops": 2
+  },
+  "question_templates": [
+    "What distinguishes {subject} from related concepts?",
+    "In what way does {subject} differ from {neighbor}?",
+    "What properties are shared between the terms in {subject}?",
+    "What properties are exclusive to each term in {subject}?",
+    "How do the governing domains of {subject} contrast?"
+  ],
+  "context_template": "Comparison subject: {subject}\nSemantic field: {field_keys}\nRelated domains: {neighbors}\nEpistemic state: UNKNOWN -- model verification required.",
+  "match": {
+    "rules": [
+      {
+        "prefix": "what is the difference"
+      }
+    ]
+  }
+}

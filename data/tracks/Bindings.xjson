@@ -1,0 +1,333 @@
+{
+  "@meta": {
+    "id": "BINDINGS-001-TRACK-1",
+    "name": "BindingsTrack",
+    "description": "Fold-bearing track for the KUHUL binding module system. Orchestrates all *.bindings.psm1 modules: CM-1-µ, GEMMA-µ, GRAPH-THEORY-µ, USER-µ, XJSON-ML-µ, CODER-µ, TENSOR-µ. Routes verb surface (11), delta surface (8), atomic keys, driver lifecycle, and phase-explicit ops through the C6 fold wheel.",
+    "version": "1.0",
+    "format": "atomic_block_fold",
+    "schema": "data/schema/Bindings.xsd",
+    "aiml": "data/alice/Bindings.aiml",
+    "µ_definition": "data/micronauts/bindings.micronaut.json"
+  },
+
+  "@lanes": {
+    "agent": {
+      "@dict": 0,
+      "@role": "BINDINGS-µ orchestrator — routes binding ops to the correct module expert",
+      "@bus": "cognition"
+    },
+    "skills": {
+      "@dict": 1,
+      "@role": "verb surface (match/agent/call/think/…) + delta surface (read/write/list/…) triggers",
+      "@bus": "intent"
+    },
+    "experts": {
+      "@dict": 2,
+      "@role": "per-module binding experts: CM-1-µ | GEMMA-µ | GRAPH-THEORY-µ | USER-µ | XJSON-ML-µ | CODER-µ | TENSOR-µ",
+      "@bus": "execution"
+    },
+    "runtime": {
+      "@dict": 3,
+      "@role": "micronaut bus (port 17885) + AIML daemon (port 3217) + driver loader",
+      "@bus": "hardware"
+    },
+    "router": {
+      "@dict": 4,
+      "@role": "fold-phase dispatch — resolves id attribute to expert lane",
+      "@bus": "control",
+      "@kernel": "implicit"
+    }
+  },
+
+  "@phases": {
+    "Pop": {
+      "@op": "receive",
+      "@desc": "receive binding request; resolve micronaut id from input; load driver registry"
+    },
+    "Wo": {
+      "@op": "bind",
+      "@desc": "bind request to target module contract; validate verb or delta name; wire bus endpoint"
+    },
+    "Yax": {
+      "@op": "prepare",
+      "@desc": "initialize verb payload; resolve atomic key; check driver load status"
+    },
+    "Sek": {
+      "@op": "dispatch",
+      "@desc": "require_authorization; dispatch verb/delta/key to target module via bus; phase-gate atomic keys"
+    },
+    "Ch'en": {
+      "@op": "verify",
+      "@desc": "verify response shape from module; confirm no cross-module privilege leak; validate delta result"
+    },
+    "Xul": {
+      "@op": "emit",
+      "@desc": "emit binding result; write pattern log entry; update driver load state"
+    }
+  },
+
+  "@variables": {
+    "binding_id": {
+      "@mutability": "MUTABLE",
+      "@update": "resolved from input pattern or explicit id= param",
+      "@persist": "request context"
+    },
+    "verb": {
+      "@mutability": "MUTABLE",
+      "@update": "matched from verb surface (match/agent/call/…)",
+      "@persist": "request context"
+    },
+    "delta": {
+      "@mutability": "MUTABLE",
+      "@update": "matched from delta surface (read/write/list/…)",
+      "@persist": "request context"
+    },
+    "atomic_key": {
+      "@mutability": "MUTABLE",
+      "@update": "resolved at Yax from domain-specific key declaration",
+      "@persist": "request context"
+    },
+    "phase_gate": {
+      "@mutability": "MUTABLE",
+      "@update": "set at Wo from allowed_phases contract in Bindings.xsd",
+      "@persist": "request context"
+    },
+    "driver_state": {
+      "@mutability": "MUTABLE",
+      "@update": "updated when Import-*Drivers runs",
+      "@persist": "session"
+    },
+    "bus_base": {
+      "@mutability": "IMMUTABLE",
+      "@value": "http://127.0.0.1:17885",
+      "@note": "AppHostBase — primary bus endpoint for all binding ops"
+    },
+    "aiml_base": {
+      "@mutability": "IMMUTABLE",
+      "@value": "http://127.0.0.1:3217",
+      "@note": "AimlApiBase — AIML/GEMMA inference endpoint"
+    }
+  },
+
+  "@edges": [
+    {
+      "from": "skills.verb",
+      "to": "router",
+      "weight": 1.0,
+      "@mutability": "MUTABLE",
+      "@desc": "verb surface trigger -> fold router for id resolution"
+    },
+    {
+      "from": "skills.delta",
+      "to": "router",
+      "weight": 1.0,
+      "@mutability": "MUTABLE",
+      "@desc": "delta surface trigger -> fold router"
+    },
+    {
+      "from": "skills.atomic_key",
+      "to": "router",
+      "weight": 1.0,
+      "@desc": "atomic key dispatch -> fold router (phase=Sek gate)"
+    },
+    {
+      "from": "router",
+      "to": "experts",
+      "weight": 1.0,
+      "@desc": "router resolves binding_id -> expert lane"
+    },
+    {
+      "from": "experts",
+      "to": "runtime",
+      "weight": 1.0,
+      "@desc": "expert -> bus HTTP call or driver invoke"
+    },
+    {
+      "from": "runtime",
+      "to": "agent",
+      "weight": 1.0,
+      "@desc": "bus response -> BINDINGS-µ orchestrator for verification and emit"
+    }
+  ],
+
+  "@agent.main": {
+    "@lane": 0,
+    "@dict": 0,
+    "@kind": "atomic_block",
+    "@phase": "Pop",
+    "id": "agent-bindings-001",
+    "name": "BINDINGS-µ",
+    "fold": "Sek",
+    "persona": "Binding module orchestrator. Receives a binding op (verb/delta/key/lifecycle), resolves the target micronaut id, routes to the correct module expert via the bus, verifies the response at Ch'en, and emits the result at Xul. Does not execute business logic — it wires and delegates.",
+    "system_prompt": null,
+    "temperature": 0.1,
+    "max_tokens": 256
+  },
+
+  "@skills": {
+    "verb": {
+      "@lane": 1,
+      "@dict": 0,
+      "@kind": "atomic_block",
+      "@phase": "Pop",
+      "id": "skill-verb",
+      "trigger": "binding op is a verb surface call (match / agent / call / topic / condition / think / remember / recall / learn / decide / eval)",
+      "action": "route_verb(binding_id, verb, payload)",
+      "payload_schema": {
+        "binding_id": "string",
+        "verb": "match | agent | call | topic | condition | think | remember | recall | learn | decide | eval",
+        "text": "string",
+        "topic": "string?",
+        "that": "string?",
+        "key": "string?",
+        "value": "string?",
+        "options": "array?"
+      }
+    },
+    "delta": {
+      "@lane": 1,
+      "@dict": 1,
+      "@kind": "atomic_block",
+      "@phase": "Wo",
+      "id": "skill-delta",
+      "trigger": "binding op is a delta surface call (read / get / list / write / patch / post / delete / save)",
+      "action": "route_delta(binding_id, delta, resource, body)",
+      "payload_schema": {
+        "binding_id": "string",
+        "delta": "read | get | list | write | patch | post | delete | save",
+        "resource": "string?",
+        "body": "object?",
+        "method": "GET | POST | PUT | PATCH | DELETE"
+      }
+    },
+    "atomic_key": {
+      "@lane": 1,
+      "@dict": 2,
+      "@kind": "atomic_block",
+      "@phase": "Sek",
+      "id": "skill-atomic-key",
+      "trigger": "binding op is a domain atomic key invocation (dispatch_phase=Sek required)",
+      "action": "invoke_atomic_key(binding_id, key, payload)",
+      "payload_schema": {
+        "binding_id": "string",
+        "key": "string",
+        "payload": "object?"
+      }
+    },
+    "lifecycle": {
+      "@lane": 1,
+      "@dict": 3,
+      "@kind": "atomic_block",
+      "@phase": "Pop",
+      "id": "skill-lifecycle",
+      "trigger": "binding op is lifecycle (register / health / identity / load_drivers / import_driver)",
+      "action": "invoke_lifecycle(binding_id, op)",
+      "payload_schema": {
+        "binding_id": "string",
+        "op": "register | health | identity | load_drivers | import_driver",
+        "driver": "string?"
+      }
+    },
+    "refine": {
+      "@lane": 1,
+      "@dict": 4,
+      "@kind": "atomic_block",
+      "@phase": "Ch'en",
+      "id": "skill-refine",
+      "trigger": "user correction or corroboration of a binding response",
+      "action": "adjust_confidence(binding_id, signal)",
+      "payload_schema": {
+        "binding_id": "string",
+        "signal": "contradiction | corroboration"
+      }
+    }
+  },
+
+  "@experts": {
+    "CM-1-µ": {
+      "@lane": 2,
+      "@dict": 0,
+      "@kind": "atomic_block",
+      "@phase": "Pop",
+      "id": "expert-cm1",
+      "domain": "CM-1-µ",
+      "bridge_path": "data/micronauts/control-micronaut-1.json",
+      "drivers": ["Micronaut.Core.dll", "Sheogorath.Daemon.dll", "micronaut_factory_core.dll", "micronaut_factory_bridge.dll", "Pattern.Log.dll", "micronaut_evolution.dll"],
+      "atomic_keys": [],
+      "bus_port": 17885
+    },
+    "GEMMA-µ": {
+      "@lane": 2,
+      "@dict": 1,
+      "@kind": "atomic_block",
+      "@phase": "Pop",
+      "id": "expert-gemma",
+      "domain": "GEMMA-µ",
+      "bridge_path": "data/micronauts/gemma.micronaut.json",
+      "drivers": ["dxcompiler.dll", "NeuralGrammar.Core.dll", "json_runtime_lib.dll", "qwen_infer_driver.dll", "d3d11_infer.dll", "dag.dll", "xcfe_gl_ops.dll", "dml_gemm.dll", "DirectML.dll", "dxcompiler.dll", "d3d11_infer.dll", "xcfe_gl_ops.dll"],
+      "atomic_keys": [],
+      "inference_port": 3217,
+      "bus_port": 17885
+    },
+    "GRAPH-THEORY-µ": {
+      "@lane": 2,
+      "@dict": 2,
+      "@kind": "atomic_block",
+      "@phase": "Wo",
+      "id": "expert-graph-theory",
+      "domain": "micronaut:GRAPH-THEORY",
+      "bridge_path": "data/micronauts/graph-theory-micronaut.v1.json",
+      "drivers": ["dag.dll", "NeuralGrammar.Core.dll", "Micronaut.Core.dll", "Micronaut.Patterns.dll", "Micronaut.Grammar.dll", "CFPC.Patterns.dll", "Field.Patterns.dll"],
+      "atomic_keys": ["graph-theory.query"],
+      "bus_port": 17885
+    },
+    "USER-µ": {
+      "@lane": 2,
+      "@dict": 3,
+      "@kind": "atomic_block",
+      "@phase": "Wo",
+      "id": "expert-user",
+      "domain": "USER-µ",
+      "bridge_path": "data/micronauts/user.micronaut.json",
+      "drivers": ["MongoDB.Bson.dll", "dag.dll", "json_runtime_lib.dll", "Pattern.Log.dll"],
+      "atomic_keys": ["user.log", "user.memory", "user.role", "user.profile", "user.session"],
+      "bus_port": 17885
+    },
+    "XJSON-ML-µ": {
+      "@lane": 2,
+      "@dict": 4,
+      "@kind": "atomic_block",
+      "@phase": "Sek",
+      "id": "expert-xjson-ml",
+      "domain": "XJSON-ML-µ",
+      "bridge_path": "data/micronauts/xjson-ml.json",
+      "drivers": ["DirectML.dll", "dml_gemm.dll", "dxcompiler.dll", "xcfe_gl_ops.dll", "d3d11_infer.dll", "gl_infer_driver.dll", "Micronaut.Core.dll", "Micronaut.Compute.dll", "json_runtime_lib.dll", "qwen_infer_driver.dll"],
+      "atomic_keys": ["xjson-ml.op", "xjson-ml.tensor", "xjson-ml.infer"],
+      "bus_port": 17885
+    },
+    "CODER-µ": {
+      "@lane": 2,
+      "@dict": 5,
+      "@kind": "atomic_block",
+      "@phase": "Sek",
+      "id": "expert-coder",
+      "domain": "CODER-µ",
+      "bridge_path": "data/micronauts/micronaut-coder.native.json",
+      "drivers": ["Micronaut.Core.dll", "Micronaut.Grammar.dll", "Micronaut.Patterns.dll", "Micronaut.Compute.dll", "NeuralGrammar.Core.dll", "Sheogorath.Patterns.dll", "native_glyph_engine.dll"],
+      "atomic_keys": [],
+      "bus_port": 17885
+    },
+    "TENSOR-µ": {
+      "@lane": 2,
+      "@dict": 6,
+      "@kind": "atomic_block",
+      "@phase": "Wo",
+      "id": "expert-tensor",
+      "domain": "TENSOR-µ",
+      "bridge_path": "data/micronauts/tensor.micronaut.json",
+      "drivers": ["xcfe_gl_ops.dll", "dml_gemm.dll", "DirectML.dll", "d3d11_infer.dll", "json_runtime_lib.dll"],
+      "atomic_keys": ["tensor.op", "tensor.fold", "tensor.contract"],
+      "bus_port": 17885
+    }
+  }
+}

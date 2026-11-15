@@ -1,0 +1,326 @@
+{
+  "@type": "khanary.api_gateway_contracts.v1",
+  "semantic_authority": false,
+  "public_origin": "https://api.kuhul.dev",
+  "public_host": "api.kuhul.dev",
+  "public_scheme": "https",
+  "public_port": 443,
+  "public_endpoint": "https://api.kuhul.dev:443",
+  "launcher": "KHANARY.bat",
+  "ports_registry": "data/ports.json",
+  "local_gateway": "tools/khanary_completion_api.py",
+  "local_default_url": "http://127.0.0.1:17892",
+  "local_default_port": 17892,
+  "learning_status": "learning_commenced",
+  "flow": [
+    "api.kuhul.dev:443",
+    "session/auth",
+    "user_scoped_mesh_kql",
+    "khanary_runtime",
+    "jrom_evidence",
+    "Ch'en/XCFE/Xul"
+  ],
+  "authority_boundary": {
+    "completion_is_authority": false,
+    "code_patch_is_commit": false,
+    "image_generation_is_semantic_truth": false,
+    "learning_event_is_topology_mutation": false,
+    "semantic_authority": false,
+    "topology_mutation": false,
+    "commit_authorized": false,
+    "next_gate": "Ch'en/XCFE/Xul"
+  },
+  "endpoints": [
+    {
+      "id": "root_info",
+      "method": "GET",
+      "path": "/",
+      "surface": "service_info",
+      "requires_session": false,
+      "semantic_authority": false
+    },
+    {
+      "id": "v1_info",
+      "method": "GET",
+      "path": "/v1",
+      "surface": "service_info",
+      "requires_session": false,
+      "semantic_authority": false
+    },
+    {
+      "id": "models",
+      "method": "GET",
+      "path": "/v1/models",
+      "surface": "model_list",
+      "requires_session": false,
+      "semantic_authority": false
+    },
+    {
+      "id": "text_completions",
+      "method": "POST",
+      "path": "/v1/chat/completions",
+      "surface": "text_completions",
+      "operation": "key_query",
+      "requires_session": true,
+      "emits_learning_event": true,
+      "semantic_authority": false,
+      "topology_mutation": false,
+      "commit_authorized": false,
+      "next_gate": "Ch'en/XCFE/Xul"
+    },
+    {
+      "id": "code_modification",
+      "method": "POST",
+      "path": "/v1/code/modify",
+      "surface": "code_modification",
+      "object": "code.modification.proposal",
+      "requires_session": true,
+      "emits_learning_event": true,
+      "applies_patch": false,
+      "semantic_authority": false,
+      "topology_mutation": false,
+      "commit_authorized": false,
+      "next_gate": "Ch'en/XCFE/Xul"
+    },
+    {
+      "id": "image_generation",
+      "method": "POST",
+      "path": "/v1/images/generations",
+      "surface": "image_generation",
+      "object": "image.generation.request",
+      "requires_session": true,
+      "emits_learning_event": true,
+      "semantic_authority": false,
+      "topology_mutation": false,
+      "commit_authorized": false,
+      "next_gate": "Ch'en/XCFE/Xul"
+    },
+    {
+      "id": "learning_events",
+      "method": "POST",
+      "path": "/v1/learn/events",
+      "surface": "learning_events",
+      "object": "learning.event",
+      "requires_session": true,
+      "status": "learning_commenced",
+      "semantic_authority": false,
+      "topology_mutation": false,
+      "commit_authorized": false,
+      "next_gate": "Ch'en/XCFE/Xul"
+    },
+    {
+      "id": "rpc_bridge",
+      "method": "POST",
+      "path": "/rpc",
+      "surface": "json_rpc_bridge",
+      "requires_session": true,
+      "allowlisted_only": true,
+      "semantic_authority": false,
+      "topology_mutation": false,
+      "commit_authorized": false,
+      "next_gate": "Ch'en/XCFE/Xul"
+    }
+  ],
+  "rpc_bridge": {
+    "local_rpc": "http://127.0.0.1:8787/rpc",
+    "allowlist": [
+      "key_query",
+      "resolve_manifest",
+      "fold_query",
+      "fold_graph_parse",
+      "micronaut_dispatch",
+      "micronaut_transpile",
+      "journal_semantic_envelope",
+      "journal_hyperbolic_event",
+      "tensor_register",
+      "tensor_info",
+      "tensor_list",
+      "tensor_stats",
+      "tensor_gemm",
+      "list_keys",
+      "record_key",
+      "infer"
+    ]
+  },
+  "security": {
+    "auth_scheme": "bearer",
+    "auth_header": "Authorization",
+    "token_env": "KHANARY_GATEWAY_TOKEN",
+    "token_flag": "--auth-token",
+    "open_paths": [
+      "/healthz",
+      "/readyz"
+    ],
+    "protected_when_configured": true,
+    "non_loopback_requires_token": true,
+    "fail_closed_on_bind": true,
+    "unauthorized_status": 401,
+    "challenge_header": "WWW-Authenticate",
+    "wildcard_cors_permitted": false,
+    "allowed_origins_env": "KHANARY_GATEWAY_ALLOW_ORIGINS",
+    "allowed_origins_flag": "--allow-origin",
+    "default_allowed_origins": [
+      "https://api.kuhul.dev"
+    ],
+    "loopback_dev_origins_allowed": true,
+    "disallowed_origin_status": 403,
+    "vary_origin": true
+  },
+  "streaming": {
+    "mode": "buffered_sse",
+    "incremental_transport": true,
+    "incremental_upstream": false,
+    "cancellation_propagates": false,
+    "mode_header": "X-KHANARY-Streaming",
+    "chunk_framing": "data_lines",
+    "terminator": "[DONE]",
+    "authority_boundary": "streaming mode describes transport only; it is not a semantic guarantee"
+  },
+  "observability": {
+    "completion_id": "uuid4",
+    "event_id": "uuid4",
+    "metrics_path": "/metrics",
+    "metrics_kind": "khanary.gateway.metrics.v1",
+    "metrics_fields": [
+      "requests",
+      "errors",
+      "total_ms",
+      "mean_ms",
+      "max_ms"
+    ],
+    "prompt_content_logged": false,
+    "usage_reported_when_available": true,
+    "usage_estimate_labelled": true
+  },
+  "history": {
+    "supports_roles": [
+      "assistant",
+      "developer",
+      "system",
+      "tool",
+      "user"
+    ],
+    "supports_text_parts": true,
+    "rejects_unsupported_parts": true,
+    "forwards_full_conversation": true,
+    "forwards_system_prompt": true,
+    "latest_user_turn_is_query": true
+  },
+  "contributors": {
+    "states": [
+      "degraded",
+      "disabled",
+      "failed",
+      "ready",
+      "unavailable"
+    ],
+    "names": [
+      "chat_mu",
+      "dds",
+      "gyro",
+      "khanary_rpc",
+      "tool_mu"
+    ],
+    "advertised_at": "/readyz",
+    "dds_and_gyro_are_runtime_reported": true
+  },
+  "port_resolution": {
+    "resolver": "tools/resolve_completion_port.py",
+    "registry": "data/ports.json",
+    "registry_keys": [
+      "completion",
+      "concrete_ports.completion",
+      "completion_resolution"
+    ],
+    "default_policy": "scan_forward",
+    "strict_env": "KHANARY_COMPLETION_STRICT_PORT",
+    "strict_policy": "refuse",
+    "scan_span_default": 64,
+    "resolved_port_is_authoritative": true,
+    "requested_port_is_never_assumed_by_consumers": true,
+    "gateway_reports_bound_port": true,
+    "authority": "routing/configuration only; not semantic authority"
+  },
+  "invariants": {
+    "API1": {
+      "name": "public_edge_is_https_443",
+      "check": "public_scheme == https AND public_host == api.kuhul.dev AND public_port == 443"
+    },
+    "API2": {
+      "name": "local_gateway_can_remain_non_443",
+      "check": "local_default_port == 17892 AND public_port == 443"
+    },
+    "API3": {
+      "name": "text_completions_route_through_khanary",
+      "check": "text endpoint operation == key_query"
+    },
+    "API4": {
+      "name": "code_modify_is_proposal_only",
+      "check": "code_modification.applies_patch == false AND commit_authorized == false"
+    },
+    "API5": {
+      "name": "image_generation_is_not_semantic_truth",
+      "check": "image_generation.semantic_authority == false"
+    },
+    "API6": {
+      "name": "learning_event_status_is_learning_commenced",
+      "check": "learning_events.status == learning_commenced"
+    },
+    "API7": {
+      "name": "learning_event_is_evidence_not_topology_mutation",
+      "check": "learning_events.topology_mutation == false"
+    },
+    "API8": {
+      "name": "rpc_bridge_is_allowlisted",
+      "check": "rpc_bridge.allowlisted_only == true"
+    },
+    "API9": {
+      "name": "public_mutation_surfaces_are_session_scoped",
+      "check": "POST public endpoints require session"
+    },
+    "API10": {
+      "name": "completion_code_image_can_emit_learning_events",
+      "check": "text/code/image endpoints emit learning events"
+    },
+    "API11": {
+      "name": "commit_gate_remains_chen_xcfe_xul",
+      "check": "next_gate == Ch'en/XCFE/Xul"
+    },
+    "API12": {
+      "name": "api_projection_never_claims_semantic_authority",
+      "check": "all endpoint semantic_authority fields are false"
+    },
+    "API13": {
+      "name": "non_loopback_bind_requires_a_token",
+      "check": "security.non_loopback_requires_token == true AND security.fail_closed_on_bind == true"
+    },
+    "API14": {
+      "name": "health_probes_stay_open",
+      "check": "security.open_paths == [/healthz, /readyz]"
+    },
+    "API15": {
+      "name": "cors_is_an_allowlist_never_a_wildcard",
+      "check": "security.wildcard_cors_permitted == false AND disallowed_origin_status == 403"
+    },
+    "API16": {
+      "name": "streaming_mode_is_declared_not_implied",
+      "check": "streaming.mode == buffered_sse AND incremental_upstream == false AND cancellation_propagates == false"
+    },
+    "API17": {
+      "name": "metrics_never_record_prompt_content",
+      "check": "observability.prompt_content_logged == false AND metrics_path == /metrics"
+    },
+    "API18": {
+      "name": "usage_is_reported_or_labelled_as_estimated",
+      "check": "observability.usage_reported_when_available == true AND usage_estimate_labelled == true"
+    },
+    "API19": {
+      "name": "full_conversation_is_forwarded",
+      "check": "history.forwards_full_conversation == true AND forwards_system_prompt == true"
+    },
+    "API20": {
+      "name": "contributor_capability_states_are_advertised",
+      "check": "contributors.states == [disabled, unavailable, ready, degraded, failed] AND advertised_at == /readyz"
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "volunteer",
+  "@key": "⟁APP:VOLUNTEER",
+  "@mount": "⟁ROOT:VOLUNTEER",
+  "@theme": { "accent": "#2dd4bf", "bg": "#000c0a", "surface": "#001814", "text": "#ccfbf1", "hero_phase": "Sek", "tagline": "Give time. Change things." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "opportunities", "component": "⟁WIDGET:OPPS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "opportunities": [], "my_hours": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:VOLUNTEER": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:ADD_OPP", "⟁ACTION:LOG_HOURS"] },
+    "⟁ACTION:ADD_OPP": { "@type": "button", "@text": "Add Opportunity", "@on": { "click": "vol.open_compose" } },
+    "⟁ACTION:LOG_HOURS": { "@type": "button", "@text": "Log Hours", "@on": { "click": "vol.log_hours" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:OPPS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:OPPS": { "@type": "feed", "@bind": "state.opportunities", "@children": ["⟁WIDGET:OPP_CARD"] },
+    "⟁WIDGET:OPP_CARD": { "@type": "content-card", "@bind": "opp", "@on": { "view": "vol.view", "signup": "vol.signup" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:HOURS_STAT", "⟁WIDGET:CAUSES"] },
+    "⟁WIDGET:HOURS_STAT": { "@type": "stat", "@bind": "data.hours" },
+    "⟁WIDGET:CAUSES": { "@type": "tag-cloud", "@bind": "data.causes" }
+  },
+  "@programs": {
+    "vol.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "vol.log_hours": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "vol.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "vol.signup": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "APPEND", "@from": "event_opp", "@out": "my_hours" }] }
+  },
+  "@events": { "opp.add": "vol.open_compose", "hours.log": "vol.log_hours", "opp.view": "vol.view", "opp.signup": "vol.signup" },
+  "@imports": [{ "ref": "opportunity", "mode": "schema_table" }, { "ref": "hour_log", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "hour-certificate", "name": "Hour Certificate", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Generate an official-looking volunteer hours certificate." },
+      { "id": "team-board", "name": "Team Board", "category": "community", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Coordinate multiple volunteers on the same opportunity." },
+      { "id": "skill-match", "name": "Skill Matching", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Suggest opportunities that match your listed skills." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "vol.find", "pattern": "FIND VOLUNTEER *|VOLUNTEERING NEAR *|OPPORTUNITIES FOR *", "intent": "open_compose" },
+      { "id": "vol.log", "pattern": "LOG VOLUNTEER HOURS|I VOLUNTEERED * HOURS|LOG TIME", "intent": "log_hours" }
+    ]
+  },
+  "@data": {
+    "hours": { "total_hr": 142, "this_month_hr": 18, "orgs": 5 },
+    "causes": ["Environment", "Education", "Food Bank", "Animal Shelter", "Tech Access"],
+    "spotlight": [
+      { "id": "sp1", "title": "Park Cleanup — Nov 8", "cause": "Environment", "badge": "Upcoming", "slots": 12, "filled": 9, "excerpt": "3 slots remaining. Join the Green Block team at Cedar Park." },
+      { "id": "sp2", "title": "Code Tutoring — Youth Centre", "cause": "Education", "badge": "Ongoing", "hours_per_week": 2, "excerpt": "Weekly 2-hour session. Teaching Python to 12–16 year olds." },
+      { "id": "sp3", "title": "Food Bank — Saturday Sort", "cause": "Food Bank", "badge": "Regular", "total_hrs_logged": 48, "excerpt": "48 hours logged here. Most impactful single cause." }
+    ],
+    "schema": {
+      "opportunity": { "primaryKey": "opp_id", "fields": { "opp_id": { "type": "string" }, "title": { "type": "string", "required": true }, "org": { "type": "string" }, "cause": { "type": "string" }, "description": { "type": "text" }, "date": { "type": "datetime" }, "hours": { "type": "float" }, "slots": { "type": "integer" } } },
+      "hour_log": { "primaryKey": "log_id", "fields": { "log_id": { "type": "string" }, "opp_id": { "type": "string" }, "hours": { "type": "float", "required": true }, "note": { "type": "text" }, "logged_at": { "type": "datetime", "required": true } } }
+    }
+  }
+}

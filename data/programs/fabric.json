@@ -1,0 +1,41 @@
+{
+  "@program": "fabric",
+  "@fold": "Pop",
+  "@node": "fabric-root",
+  "@state": {
+    "model": "E:/models/GPT2/coder_micronaut/ultrachat_coder_slerp_0p35.webgl2.dashboard.safetensors",
+    "token_bin": "E:/models/GPT2/coder_micronaut/coder_ast_json_seq256_tokens.bin",
+    "output": "E:/models/GPT2/micronaut_four_lanes_v2",
+    "backend": "xvm_fiber",
+    "model_format": "safetensors",
+    "result": null,
+    "verified": false
+  },
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "fabric-observe" },
+    { "@op": "CALL", "@fn": "validate_safetensors", "@args": ["$model"], "@out": "model_valid" },
+    { "@op": "CALL", "@fn": "validate_token_bin", "@args": ["$token_bin"], "@out": "dataset_valid" },
+    { "@op": "LOG", "@args": ["[fabric] safetensors + packed token bin validated"] },
+    { "@op": "FOLD_EXIT", "@fold": "Wo", "@node": "fabric-observe", "@args": ["$model_valid", "$dataset_valid"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Wo", "@node": "fabric-route" },
+    { "@op": "CALL", "@fn": "route_backend", "@args": ["$backend", "$model_format"], "@out": "route" },
+    { "@op": "LOG", "@args": ["[fabric] routed backend=$route"] },
+    { "@op": "FOLD_EXIT", "@fold": "Yax", "@node": "fabric-route", "@args": ["$route"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Yax", "@node": "fabric-train" },
+    { "@op": "CALL", "@fn": "train_fiber_chain", "@args": ["$model", "$token_bin", "$output"], "@out": "result" },
+    { "@op": "LOG", "@args": ["[fabric] XVM Fiber training dispatched"] },
+    { "@op": "FOLD_EXIT", "@fold": "Sek", "@node": "fabric-train", "@args": ["$result"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Sek", "@node": "fabric-verify" },
+    { "@op": "CALL", "@fn": "verify_safetensors_output", "@args": ["$result", "$output"], "@out": "verified" },
+    { "@op": "LOG", "@args": ["[fabric] output verified=$verified"] },
+    { "@op": "FOLD_EXIT", "@fold": "Chen", "@node": "fabric-verify", "@args": ["$result", "$verified"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Chen", "@node": "fabric-emit" },
+    { "@op": "SET", "@key": "result", "@args": ["$result"] },
+    { "@op": "LOG", "@args": ["[fabric] emitted result=$result"] },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "fabric-emit", "@args": ["$result", "$verified"] }
+  ]
+}

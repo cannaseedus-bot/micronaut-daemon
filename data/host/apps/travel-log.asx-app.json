@@ -1,0 +1,57 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "travel-log",
+  "@key": "⟁APP:TRAVEL_LOG",
+  "@mount": "⟁ROOT:TRAVEL_LOG",
+  "@theme": { "accent": "#22d3ee", "bg": "#030d16", "surface": "#071624", "text": "#e0f7fa", "hero_phase": "Pop", "tagline": "Go everywhere. Forget nothing." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "trips", "component": "⟁WIDGET:TRIPS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "trips": [], "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:TRAVEL_LOG": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:NEW_TRIP"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:NEW_TRIP": { "@type": "button", "@text": "New Trip", "@on": { "click": "travel.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:TRIPS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:TRIPS": { "@type": "grid", "@bind": "state.trips", "@children": ["⟁WIDGET:TRIP_CARD"] },
+    "⟁WIDGET:TRIP_CARD": { "@type": "media-card", "@bind": "trip", "@on": { "view": "travel.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:STATS", "⟁WIDGET:RECENT_PLACES"] },
+    "⟁WIDGET:STATS": { "@type": "stat", "@bind": "data.stats" },
+    "⟁WIDGET:RECENT_PLACES": { "@type": "list", "@bind": "data.recent_places" }
+  },
+  "@programs": {
+    "travel.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "travel.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "travel.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "trip.view": "travel.view", "compose.open": "travel.open_compose", "search.input": "travel.search" },
+  "@imports": [{ "ref": "trip", "mode": "schema_table" }, { "ref": "place", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "map-widget", "name": "Map Widget", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Visualise your trips on an interactive map." },
+      { "id": "packing-bot", "name": "Packing List Bot", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Auto-generate a packing list based on destination and duration." },
+      { "id": "budget-summary", "name": "Trip Budget Summary", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Track per-trip spending across categories." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "travel.new-trip", "pattern": "NEW TRIP|LOG TRIP|START TRIP", "intent": "open_compose" },
+      { "id": "travel.search", "pattern": "FIND TRIP *|SEARCH *", "intent": "filter_trips" }
+    ]
+  },
+  "@data": {
+    "stats": { "trips": 14, "countries": 11, "days_traveled": 87 },
+    "recent_places": ["Tokyo, Japan", "Lisbon, Portugal", "Oaxaca, Mexico"],
+    "spotlight": [
+      { "id": "sp1", "title": "Tokyo in 7 Days", "slug": "tokyo-7-days", "badge": "Featured", "excerpt": "A first-timer's route from Shinjuku to Shimokitazawa." },
+      { "id": "sp2", "title": "Weekend in Lisbon", "slug": "lisbon-weekend", "badge": "Quick Trip", "excerpt": "Pastéis de nata, tram 28, and a sunset from the castle." },
+      { "id": "sp3", "title": "Oaxaca Food Trail", "slug": "oaxaca-food", "badge": "Food Focus", "excerpt": "Mezcal, mole negro, and the morning market." }
+    ],
+    "schema": {
+      "trip": { "primaryKey": "trip_id", "fields": { "trip_id": { "type": "string" }, "destination": { "type": "string", "required": true }, "start_date": { "type": "datetime", "required": true }, "end_date": { "type": "datetime" }, "notes": { "type": "textarea" }, "tags": { "type": "json" }, "cover_image_url": { "type": "uri" } } },
+      "place": { "primaryKey": "place_id", "fields": { "place_id": { "type": "string" }, "trip_id": { "type": "string", "required": true }, "name": { "type": "string", "required": true }, "category": { "type": "string" }, "rating": { "type": "integer" }, "notes": { "type": "text" } } }
+    }
+  }
+}

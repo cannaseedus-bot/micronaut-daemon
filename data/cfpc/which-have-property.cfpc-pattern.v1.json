@@ -1,0 +1,41 @@
+{
+  "@kind": "khanary.cfpc.pattern.v1",
+  "id": "which-have-property",
+  "intent": "Find entities that have a requested property; return only an evidence-backed list and preserve unknown coverage.",
+  "phase": "Yax",
+  "@captures": {
+    "entities": {
+      "wildcard": "*",
+      "capture_group": "entities",
+      "type": "entity_class"
+    },
+    "property": {
+      "wildcard": "*",
+      "capture_group": "property",
+      "type": "mutable_property"
+    }
+  },
+  "neighborhood_resolve": {
+    "from_captures": ["entities", "property"],
+    "max_hops": 1
+  },
+  "question_templates": [
+    "Which {entities} have {property}?",
+    "Do any {entities} have {property}?",
+    "Which {entities} are known to have {property}?"
+  ],
+  "context_template": "Parent system: resolve the entity class within its stated parent (for example, moons within Saturn's system). Entity class: {entities}\nProperty: {property}\nEpistemic state: UNKNOWN -- provide only entities supported by verified observations; distinguish a partial list from an exhaustive list. For atmosphere queries, distinguish a substantial persistent atmosphere from a tenuous exosphere and transient plume gas.",
+  "match": {"rules": [{"prefix": "which"}, {"prefix": "do any"}]},
+  "capture_patterns": [
+    "^which (?P<entities>.+?) have (?P<property>.+?)\\??$",
+    "^which (?P<entities>.+?) are known to have (?P<property>.+?)\\??$",
+    "^do any (?P<entities>.+?) have (?P<property>.+?)\\??$"
+  ],
+  "temporal_contract": {
+    "classification": "MUTABLE",
+    "freshness_required": true,
+    "answer_requires_verified_observations": true,
+    "list_completeness_must_be_declared": true,
+    "learning_write": "separate_xcfe_admission_required"
+  }
+}

@@ -1,0 +1,239 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "war-pigs",
+  "@key": "⟁APP:WAR_PIGS",
+  "@mount": "⟁ROOT:WAR_PIGS",
+  "@genre": "anti-war-political-satire-rpg",
+  "@title": "WAR PIGS",
+  "@subtitle": "The generals declare the wars. The children live with the consequences.",
+  "@state": {
+    "treasury_integrity": 20,
+    "communications": 25,
+    "civilian_safety": 35,
+    "accountability": 5,
+    "scene": "the_switch",
+    "act": "the_switch",
+    "turn": 1,
+    "war_pig_index": 0,
+    "evidence_log": []
+  },
+  "@components": {
+    "⟁ROOT:WAR_PIGS": {
+      "@type": "app",
+      "@children": [
+        "⟁WIDGET:WAR_MAP",
+        "⟁WIDGET:TREASURY",
+        "⟁WIDGET:EVIDENCE",
+        "⟁WIDGET:CIVILIANS",
+        "⟁WIDGET:TRIBUNAL"
+      ]
+    },
+    "⟁WIDGET:WAR_MAP": { "@type": "map", "@bind": "SCENES[state.scene]", "@children": [] },
+    "⟁WIDGET:TREASURY": { "@type": "ledger", "@bind": "state.treasury_integrity", "@children": [] },
+    "⟁WIDGET:EVIDENCE": { "@type": "evidence-log", "@bind": "state.evidence_log", "@children": [] },
+    "⟁WIDGET:CIVILIANS": { "@type": "protection-status", "@bind": "state.civilian_safety", "@children": [] },
+    "⟁WIDGET:TRIBUNAL": {
+      "@type": "choice-list",
+      "@bind": "SCENES[state.scene].choices",
+      "@children": [],
+      "@on": { "select": "war.choose" }
+    }
+  },
+  "@programs": {
+    "war.choose": {
+      "@kind": "asx.state-program.v1",
+      "@authority": "observation_only",
+      "@control": [
+        { "@op": "ADD", "@in": ["treasury_integrity", "event_treasury_integrity"], "@out": "treasury_integrity" },
+        { "@op": "ADD", "@in": ["communications", "event_communications"], "@out": "communications" },
+        { "@op": "ADD", "@in": ["civilian_safety", "event_civilian_safety"], "@out": "civilian_safety" },
+        { "@op": "ADD", "@in": ["accountability", "event_accountability"], "@out": "accountability" },
+        { "@op": "ADD", "@in": ["turn", "event_turn"], "@out": "turn" },
+        { "@op": "ADD", "@in": ["war_pig_index", "event_war_pig_index"], "@out": "war_pig_index" },
+        { "@op": "APPEND", "@from": "event_record", "@out": "evidence_log" },
+        { "@op": "SET", "@from": "event_act", "@out": "act" },
+        { "@op": "SET", "@from": "event_next", "@out": "scene" },
+        { "@op": "LOG", "@args": ["projected War Pigs decision without promotion"] }
+      ]
+    },
+    "war.trace_contract": {
+      "@kind": "asx.state-program.v1",
+      "@authority": "observation_only",
+      "@control": [
+        { "@op": "ADD", "@in": ["treasury_integrity", "event_treasury_integrity"], "@out": "treasury_integrity" },
+        { "@op": "APPEND", "@from": "event_record", "@out": "evidence_log" }
+      ]
+    },
+    "war.verify_evidence": {
+      "@kind": "asx.state-program.v1",
+      "@authority": "observation_only",
+      "@control": [
+        { "@op": "ADD", "@in": ["accountability", "event_accountability"], "@out": "accountability" },
+        { "@op": "APPEND", "@from": "event_record", "@out": "evidence_log" }
+      ]
+    },
+    "war.protect_civilians": {
+      "@kind": "asx.state-program.v1",
+      "@authority": "observation_only",
+      "@control": [
+        { "@op": "ADD", "@in": ["civilian_safety", "event_civilian_safety"], "@out": "civilian_safety" },
+        { "@op": "ADD", "@in": ["communications", "event_communications"], "@out": "communications" }
+      ]
+    },
+    "war.investigate_orders": {
+      "@kind": "asx.state-program.v1",
+      "@authority": "observation_only",
+      "@control": [
+        { "@op": "ADD", "@in": ["accountability", "event_accountability"], "@out": "accountability" },
+        { "@op": "APPEND", "@from": "event_record", "@out": "evidence_log" }
+      ]
+    },
+    "war.evaluate_accountability": {
+      "@kind": "asx.state-program.v1",
+      "@authority": "observation_only",
+      "@control": [
+        { "@op": "ADD", "@in": ["accountability", "event_accountability"], "@out": "accountability" },
+        { "@op": "ADD", "@in": ["war_pig_index", "event_war_pig_index"], "@out": "war_pig_index" }
+      ]
+    }
+  },
+  "@events": {
+    "choice.select": "war.choose",
+    "treasury.trace": "war.trace_contract",
+    "evidence.verify": "war.verify_evidence",
+    "civilian.protect": "war.protect_civilians",
+    "orders.investigate": "war.investigate_orders",
+    "accountability.evaluate": "war.evaluate_accountability"
+  },
+  "@imports": [
+    { "ref": "SCENES", "mode": "local_data" },
+    { "ref": "ROUTES", "mode": "local_data" }
+  ],
+  "@permissions": {
+    "network": false,
+    "storage": "request_scoped",
+    "tools": [],
+    "semantic_commit": false
+  },
+  "@lifecycle": {
+    "load": "compile",
+    "mount": "project",
+    "event": "dispatch",
+    "unmount": "discard_request_state"
+  },
+  "@data": {
+    "STAT_LABELS": {
+      "treasury_integrity": "Treasury",
+      "communications": "Communications",
+      "civilian_safety": "Civilian Safety",
+      "accountability": "Accountability"
+    },
+    "SCENES": {
+      "the_switch": {
+        "act": "Chapter I · The Switch",
+        "title": "Classified Transmission",
+        "text": "A satellite network serving a war-torn valley has gone offline. The Council blames a technical failure. A whistleblower alleges a deliberate shutdown. You have one verified outage report, one anonymous accusation, and a closing evacuation window.",
+        "choices": [
+          {
+            "id": "restore_comms",
+            "label": "Restore emergency communications",
+            "detail": "Protect civilians while preserving the outage logs.",
+            "effects": { "treasury_integrity": 0, "communications": 30, "civilian_safety": 22, "accountability": 5, "turn": 1, "war_pig_index": -2 },
+            "record": "Restored emergency access without erasing the logs needed to establish responsibility.",
+            "next": "the_contract",
+            "act": "the_contract"
+          },
+          {
+            "id": "trace_authorization",
+            "label": "Trace the shutdown authorization",
+            "detail": "Preserve records and identify the actual decision-maker.",
+            "effects": { "treasury_integrity": 8, "communications": 5, "civilian_safety": 5, "accountability": 20, "turn": 1, "war_pig_index": 0 },
+            "record": "Distinguished a verified outage from an unverified accusation and preserved the authorization chain.",
+            "next": "the_contract",
+            "act": "the_contract"
+          },
+          {
+            "id": "publish_accusation",
+            "label": "Publish the anonymous accusation",
+            "detail": "Generate pressure before independently confirming it.",
+            "effects": { "treasury_integrity": 0, "communications": -5, "civilian_safety": -10, "accountability": -8, "turn": 1, "war_pig_index": 14 },
+            "record": "Presented an allegation as a finding because outrage offered immediate influence.",
+            "next": "the_contract",
+            "act": "the_contract"
+          }
+        ]
+      },
+      "the_contract": {
+        "act": "Chapter II · The Treasury",
+        "title": "The Golden Ammunition",
+        "text": "The restored logs point to a contractor owned through three shell companies. The same ministers demanding sacrifice approved emergency prices and exempted the contract from audit.",
+        "choices": [
+          {
+            "id": "open_ledger",
+            "label": "Publish the contract, owners, and audit trail",
+            "detail": "Release verified records with source boundaries intact.",
+            "effects": { "treasury_integrity": 28, "communications": 0, "civilian_safety": 5, "accountability": 18, "turn": 1, "war_pig_index": -4 },
+            "record": "Exposed the profit chain with documents that separated verified ownership from inference.",
+            "next": "the_offer",
+            "act": "the_offer"
+          },
+          {
+            "id": "trade_silence",
+            "label": "Trade silence for control of the network",
+            "detail": "Gain emergency access by burying the profiteering evidence.",
+            "effects": { "treasury_integrity": -20, "communications": 25, "civilian_safety": 8, "accountability": -16, "turn": 1, "war_pig_index": 22 },
+            "record": "Condemned secret bargains until secrecy transferred infrastructure power to the investigator.",
+            "next": "the_offer",
+            "act": "the_offer"
+          },
+          {
+            "id": "accuse_every_supplier",
+            "label": "Accuse every supplier of war profiteering",
+            "detail": "Treat association as proof and skip individual review.",
+            "effects": { "treasury_integrity": -8, "communications": 0, "civilian_safety": -4, "accountability": -12, "turn": 1, "war_pig_index": 18 },
+            "record": "Demanded proof for official claims, then replaced proof with collective accusation.",
+            "next": "the_offer",
+            "act": "the_offer"
+          }
+        ]
+      },
+      "the_offer": {
+        "act": "Chapter III · The Offer",
+        "title": "The Kill Switch",
+        "text": "The War Pigs fall. The donkey is offered sole control of the military network and its kill switch. Supporters insist the power is safe now because the right animal holds it.",
+        "choices": [
+          {
+            "id": "dismantle_switch",
+            "label": "Dismantle unilateral control",
+            "detail": "Require independent authorization, public logs, and emergency civilian access.",
+            "effects": { "treasury_integrity": 8, "communications": 12, "civilian_safety": 18, "accountability": 28, "turn": 1, "war_pig_index": -10 },
+            "record": "Applied oversight to the rebellion and removed the power it had condemned in its enemies.",
+            "next": "tribunal",
+            "act": "tribunal"
+          },
+          {
+            "id": "keep_switch",
+            "label": "Keep emergency control temporarily",
+            "detail": "Promise responsible use without an external review path.",
+            "effects": { "treasury_integrity": 0, "communications": 10, "civilian_safety": 2, "accountability": -18, "turn": 1, "war_pig_index": 24 },
+            "record": "Called unchecked authority intolerable until the same authority became personally available.",
+            "next": "tribunal",
+            "act": "tribunal"
+          },
+          {
+            "id": "private_council",
+            "label": "Give the switch to a loyal private council",
+            "detail": "Distribute control among allies without public scrutiny.",
+            "effects": { "treasury_integrity": -5, "communications": 8, "civilian_safety": 0, "accountability": -12, "turn": 1, "war_pig_index": 18 },
+            "record": "Renamed concentrated power as collective power because loyal allies shared it.",
+            "next": "tribunal",
+            "act": "tribunal"
+          }
+        ]
+      }
+    },
+    "ROUTES": {
+      "tribunal": "The Accountability Engine"
+    }
+  }
+}

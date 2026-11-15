@@ -1,0 +1,7 @@
+<div id="forum-widget" data-asx-key="⟁APP:COMMUNITY_FORUM/⟁ROOT:COMMUNITY_FORUM">
+  <header data-asx-key="⟁APP:COMMUNITY_FORUM/⟁WIDGET:FW_HEADER"><input type="search" name="search" placeholder="Search topics, authors, or content..." data-bind="state.search" data-event="search.input" /><button data-event="feed.refresh">Refresh</button><button data-event="topic.open">Create</button></header>
+  <nav data-asx-key="⟁APP:COMMUNITY_FORUM/⟁WIDGET:FW_CATEGORIES" data-source="categories" data-bind="state.category" data-event="category.select"></nav>
+  <main data-asx-key="⟁APP:COMMUNITY_FORUM/⟁WIDGET:FW_POST_GROUPS" data-source="blogger.feed" data-bind="state.search,state.category,state.collapsed"></main>
+  <form data-asx-key="⟁APP:COMMUNITY_FORUM/⟁WIDGET:FW_CREATE" data-event="topic.submit"><input name="title" required placeholder="Topic title" /><input name="author" placeholder="Website" /><textarea name="body" required placeholder="Share your thoughts..."></textarea><select name="labels" required data-source="categories"></select><button type="submit">Post Topic</button></form>
+</div>
+<script type="application/json" id="asx-json-runtime">{"@kind":"asx.key-runtime.binding.v1","@app":"⟁APP:COMMUNITY_FORUM","@manifest":"data/host/apps/community-forum.asx-app.json","@executor":"mx.run","@authority":"projection_only","@state":"request_scoped","@semantic_commit":false}</script>

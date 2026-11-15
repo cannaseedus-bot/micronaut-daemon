@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kuhul:daemon-bot:local-turn:v1",
+  "title": "Daemon Bot local turn observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "id", "occurredAt", "authority", "input", "route", "output", "learning"],
+  "properties": {
+    "schema": { "const": "daemon-bot.local-turn.v1" },
+    "id": { "type": "string", "pattern": "^[a-f0-9]{32}$" },
+    "occurredAt": { "type": "string", "format": "date-time" },
+    "authority": { "const": "observation_only" },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["raw", "normalized"],
+      "properties": { "raw": { "type": "string" }, "normalized": { "type": "string" } }
+    },
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selected", "pattern", "confidence"],
+      "properties": {
+        "selected": { "enum": ["exact", "wildcard", "below_threshold", "no_match", "bank_unavailable"] },
+        "pattern": { "type": ["string", "null"] },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "text"],
+      "properties": {
+        "source": { "enum": ["aiml", "none"] },
+        "text": { "type": ["string", "null"] }
+      }
+    },
+    "learning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "candidate", "candidateStatus", "promotionAllowed", "policy"],
+      "properties": {
+        "state": { "enum": ["observed_reply", "observed_miss"] },
+        "candidate": { "type": "boolean" },
+        "candidateStatus": { "enum": ["not_applicable", "observed_unverified", "below_threshold", "bank_unavailable"] },
+        "promotionAllowed": { "const": false },
+        "policy": { "type": "string" }
+      }
+    }
+  }
+}

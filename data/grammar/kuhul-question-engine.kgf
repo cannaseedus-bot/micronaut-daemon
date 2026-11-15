@@ -1,0 +1,100 @@
+keygraph "kuhul-question-engine" version "2.0";
+namespace question:core domain custom;
+namespace fold:core domain fold;
+namespace gram:core domain gram;
+namespace track:core domain track;
+namespace micro:core domain micro;
+namespace xcfe:core domain xcfe;
+key question:DISCOVER kind pattern value "what exists or is missing";
+key question:DEFINE kind pattern value "what does it mean or require";
+key question:HYPOTHESIZE kind pattern value "what could be true";
+key question:SELECT kind pattern value "which candidate survives";
+key question:OBSERVE kind pattern value "what evidence changed";
+key question:CONCLUDE kind pattern value "what should persist";
+key micro:QUESTION_ENGINE kind program;
+key xcfe:QUESTION_ADMISSION kind contract;
+template fold:DISCOVER domain fold { operator DETECT; input subject; output observations; };
+template fold:DEFINE domain fold { operator DEFINE; input subject; output constraints; };
+template fold:HYPOTHESIZE domain fold { operator GENERATE; input subject; output candidates; };
+template fold:SELECT domain fold { operator SELECT; input candidates; output finding; };
+template fold:OBSERVE domain fold { operator VERIFY; input finding; output evidence; };
+template fold:CONCLUDE domain fold { operator CONCLUDE; input evidence; output result; };
+template fold:PROPOSE domain fold { operator PROPOSE; input constraints; output candidates; };
+template fold:RANK_PROPOSALS domain fold { operator RANK; input candidates; output ranked_candidates; };
+trigram gram:DISCOVER_POP ("what",*,*) phase Pop fold fold:DISCOVER bindings [subject:capture];
+trigram gram:DEFINE_WO ("define",*,*) phase Wo fold fold:DEFINE bindings [subject:capture];
+trigram gram:HYPOTHESIZE_YAX ("could",*,*) phase Yax fold fold:HYPOTHESIZE bindings [subject:capture];
+trigram gram:SELECT_SEK ("which",*,*) phase Sek fold fold:SELECT bindings [candidates:capture];
+trigram gram:OBSERVE_CHEN ("verify",*,*) phase Ch'en fold fold:OBSERVE bindings [finding:capture];
+trigram gram:CONCLUDE_XUL ("conclude",*,*) phase Xul fold fold:CONCLUDE bindings [evidence:capture];
+trigram gram:PROPOSE_WO ("propose",*,*) phase Wo fold fold:PROPOSE bindings [constraints:capture];
+trigram gram:RANK_PROPOSALS_SEK ("rank",*,*) phase Sek fold fold:RANK_PROPOSALS bindings [candidates:capture];
+track track:QUESTION_ENGINE { include micro:QUESTION_ENGINE; include gram:DISCOVER_POP; include gram:DEFINE_WO; include gram:PROPOSE_WO; include gram:HYPOTHESIZE_YAX; include gram:SELECT_SEK; include gram:RANK_PROPOSALS_SEK; include gram:OBSERVE_CHEN; include gram:CONCLUDE_XUL; };
+context question:ACTIVE track track:QUESTION_ENGINE { query "resolve the current uncertainty"; };
+policy xcfe:QUESTION_POLICY { score wcr; admission xcfe:QUESTION_ADMISSION; max_depth 4; allow_cycle false; commit_phase Xul; };
+resolver micro:QUESTION_EXEC domain micro mode execute policy xcfe:QUESTION_POLICY;
+vector2 micro:QUESTION_ENGINE (0.7,0.7);
+micronaut micro:QUESTION_ENGINE track track:QUESTION_ENGINE resolver micro:QUESTION_EXEC vector micro:QUESTION_ENGINE;
+program question:DISCOVER track track:QUESTION_ENGINE entry fold:DISCOVER phase Pop micronaut micro:QUESTION_ENGINE;
+program question:PROPOSE track track:QUESTION_ENGINE entry fold:PROPOSE phase Wo micronaut micro:QUESTION_ENGINE;
+program question:RANK_PROPOSALS track track:QUESTION_ENGINE entry fold:RANK_PROPOSALS phase Sek micronaut micro:QUESTION_ENGINE;
+program question:DEFINE track track:QUESTION_ENGINE entry fold:DEFINE phase Wo micronaut micro:QUESTION_ENGINE;
+program question:HYPOTHESIZE track track:QUESTION_ENGINE entry fold:HYPOTHESIZE phase Yax micronaut micro:QUESTION_ENGINE;
+program question:SELECT track track:QUESTION_ENGINE entry fold:SELECT phase Sek micronaut micro:QUESTION_ENGINE;
+program question:OBSERVE track track:QUESTION_ENGINE entry fold:OBSERVE phase Ch'en micronaut micro:QUESTION_ENGINE;
+program question:CONCLUDE track track:QUESTION_ENGINE entry fold:CONCLUDE phase Xul micronaut micro:QUESTION_ENGINE;
+
+(* ELIZA-µ semantic bindings. Keys are identities, not labels: the runtime
+   resolves an utterance to eliza:MEMORY_FAILURE and follows declared edges,
+   so it never infers meaning from English text.
+
+   Each cfpc gap key carries its specific identity in the name and its gap type
+   in the value. cfpc:KNOWLEDGE_GAP is only the family they specialize, and no
+   question is bound to the family, so a new gap cannot silently inherit an
+   existing question. *)
+namespace eliza:core domain custom;
+namespace aiml:core domain custom;
+namespace srai:core domain custom;
+namespace cfpc:core domain cfpc;
+key eliza:MEMORY_FAILURE kind semantic_key value "the model keeps forgetting";
+key aiml:FORGETTING_PATTERN kind pattern value "MY MODEL KEEPS FORGETTING *";
+key srai:DIAGNOSE_MEMORY kind canonical_intent value "diagnose memory";
+key cfpc:KNOWLEDGE_GAP kind gap_family value "missing_information";
+key cfpc:MEMORY_FAILURE_MECHANISM kind gap value "KNOWLEDGE_GAP_NO_VALUES";
+key cfpc:RETENTION_SCOPE kind gap value "KNOWLEDGE_GAP_NO_KEYS";
+key question:STORAGE_OR_RETRIEVAL kind question value "Is the information lost from storage, or is retrieval failing?";
+key question:WHICH_SESSION kind question value "Does it fail across sessions, or only within one?";
+edge eliza:MEMORY_FAILURE -> aiml:FORGETTING_PATTERN type matched_by;
+edge aiml:FORGETTING_PATTERN -> srai:DIAGNOSE_MEMORY type redirects_to;
+edge srai:DIAGNOSE_MEMORY -> cfpc:MEMORY_FAILURE_MECHANISM type suggests_gap;
+edge srai:DIAGNOSE_MEMORY -> cfpc:RETENTION_SCOPE type suggests_gap;
+edge cfpc:MEMORY_FAILURE_MECHANISM -> cfpc:KNOWLEDGE_GAP type specializes;
+edge cfpc:RETENTION_SCOPE -> cfpc:KNOWLEDGE_GAP type specializes;
+edge cfpc:MEMORY_FAILURE_MECHANISM -> question:STORAGE_OR_RETRIEVAL type proposes;
+edge cfpc:RETENTION_SCOPE -> question:WHICH_SESSION type proposes;
+
+(* ELIZA-µ semantic bindings, installed by tools/install_question_bindings.py.
+   Keys are identities; edges carry the typed relationships. A gap key holds
+   its concrete identity and its CFPC gap type separately, and only a specific
+   gap may propose a question. *)
+namespace eliza:core domain custom;
+namespace aiml:core domain custom;
+namespace srai:core domain custom;
+namespace cfpc:core domain custom;
+namespace fact:core domain custom;
+key fact:SATURN_MOONS kind semantic_key value "confirmed_saturnian_satellites";
+key fact:SATURN_2025_03 kind observation_candidate value "274|effective=2025-03|source=NASA|verified=false";
+edge fact:SATURN_MOONS -> fact:SATURN_2025_03 type candidate_historical_observation;
+
+(* ELIZA-µ semantic bindings, installed by tools/install_question_bindings.py.
+   Keys are identities; edges carry the typed relationships. A gap key holds
+   its concrete identity and its CFPC gap type separately, and only a specific
+   gap may propose a question. *)
+namespace eliza:core domain custom;
+namespace aiml:core domain custom;
+namespace srai:core domain custom;
+namespace cfpc:core domain custom;
+namespace fact:core domain custom;
+key fact:SATURN_2026_06 kind observation_candidate value "293|effective=2026-06|source=WIKIPEDIA|verified=false";
+edge fact:SATURN_MOONS -> fact:SATURN_2026_06 type candidate_historical_observation;
+edge fact:SATURN_2026_06 -> fact:SATURN_2025_03 type candidate_supersedes;

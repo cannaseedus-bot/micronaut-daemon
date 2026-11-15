@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:khanary:schema:xcfe-program:1",
+  "title": "KHANARY XCFE Program Descriptor",
+  "description": "Schema for individual XCFE program descriptor files (data/programs/<id>.json). ProgramLoader compiles these to KuhulVM bracket instructions. The descriptor is data — not semantic authority. The authority block enforces this: all three flags are invariantly false.",
+  "type": "object",
+  "required": [
+    "@type",
+    "id",
+    "program_class",
+    "phase",
+    "steps"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "@type": {
+      "const": "khanary.xcfe_program.v1",
+      "description": "Document type sentinel."
+    },
+    "@no-eval": {
+      "const": true,
+      "description": "Prevents XCFE from treating the descriptor itself as an executable node."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^xcfe\\.[a-z][a-z0-9._-]*$",
+      "description": "Dot-namespaced program identifier. ProgramLoader resolves to data/programs/<id>.json."
+    },
+    "program_class": {
+      "$ref": "#/$defs/ProgramClass"
+    },
+    "phase": {
+      "$ref": "#/$defs/Phase",
+      "description": "Canonical entry phase for this program."
+    },
+    "input_role": {
+      "type": "string",
+      "minLength": 1
+    },
+    "output_role": {
+      "type": "string",
+      "minLength": 1
+    },
+    "admission": {
+      "$ref": "#/$defs/AdmissionKind"
+    },
+    "executor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Hint only — XCFE remains route authority."
+    },
+    "description": {
+      "type": "string"
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/Step" },
+      "description": "Ordered bracket instructions. Forward-only C6 phase sequence enforced at runtime by the FoldGate."
+    },
+    "authority": {
+      "$ref": "#/$defs/Authority"
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "Phase": {
+      "enum": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"]
+    },
+    "ProgramClass": {
+      "description": "10-value program-descriptor class. CONDITION/SELECTION/CAUSAL/TRANSFORM/VERIFICATION map to the 14-class node ISA. ITERATION/COMPOSITION/ROUTE/LEARNING/RETURN are program-descriptor level only — not in xcfe_node_class.h.",
+      "enum": [
+        "CONDITION",
+        "SELECTION",
+        "CAUSAL",
+        "TRANSFORM",
+        "ITERATION",
+        "COMPOSITION",
+        "VERIFICATION",
+        "LEARNING",
+        "ROUTE",
+        "RETURN"
+      ]
+    },
+    "AdmissionKind": {
+      "type": "string",
+      "enum": [
+        "explicit",
+        "verified_outcome_required",
+        "xcfe_authorized",
+        "xul_only"
+      ]
+    },
+    "Step": {
+      "type": "object",
+      "required": ["phase"],
+      "properties": {
+        "phase": {
+          "$ref": "#/$defs/Phase",
+          "description": "Maps to Instruction.phase + Instruction.opcode."
+        },
+        "op": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Documentation label only — not compiled into the Instruction. The gram key or operand goes in 'id'."
+        },
+        "id": {
+          "type": "string",
+          "description": "First operand: gram key for Pop/Xul, variable name, or other identifier. Maps to Instruction.id."
+        },
+        "type": {
+          "type": "string",
+          "description": "Second operand. Maps to Instruction.type."
+        },
+        "args": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Additional string arguments. Maps to Instruction.args."
+        }
+      },
+      "additionalProperties": false
+    },
+    "Authority": {
+      "type": "object",
+      "description": "Invariant authority boundary. Policy != Control != Execution. A descriptor cannot be semantic or commit authority.",
+      "required": [
+        "semantic_authority",
+        "topology_mutation",
+        "commit_authorized"
+      ],
+      "properties": {
+        "semantic_authority": {
+          "const": false,
+          "description": "A descriptor cannot grant semantic authority."
+        },
+        "topology_mutation": {
+          "const": false,
+          "description": "delta_B != 0 commits only under Verified ∧ Authorized ∧ Fresh ∧ Xul."
+        },
+        "commit_authorized": {
+          "const": false,
+          "description": "Commit authority belongs to Xul alone."
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

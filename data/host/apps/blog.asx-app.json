@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "blog",
+  "@key": "⟁APP:BLOG",
+  "@mount": "⟁ROOT:BLOG",
+  "@theme": { "accent": "#6366f1", "bg": "#0f172a", "surface": "#1e1b4b", "text": "#e2e8f0", "hero_phase": "Pop", "tagline": "Words that matter" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "primary_feed", "component": "⟁WIDGET:FEED", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null, "username": null }, "posts": [], "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:BLOG": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:COMPOSE"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:COMPOSE": { "@type": "button", "@text": "New Post", "@on": { "click": "blog.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:FEED", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:FEED": { "@type": "feed", "@bind": "state.posts", "@children": ["⟁WIDGET:POST_CARD"] },
+    "⟁WIDGET:POST_CARD": { "@type": "content-card", "@bind": "post", "@on": { "like": "blog.like", "read": "blog.read" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:RECENT", "⟁WIDGET:TAGS"] },
+    "⟁WIDGET:RECENT": { "@type": "list", "@bind": "data.recent" },
+    "⟁WIDGET:TAGS": { "@type": "tag-cloud", "@bind": "data.tags" }
+  },
+  "@programs": {
+    "blog.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "blog.like": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "ADD", "@in": ["event_likes", "event_delta"], "@out": "event_likes" }] },
+    "blog.read": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "blog.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "compose.open": "blog.open_compose", "post.like": "blog.like", "post.read": "blog.read", "search.input": "blog.search" },
+  "@imports": [{ "ref": "post", "mode": "schema_table" }, { "ref": "user_profile", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "comments", "name": "Comments", "category": "community", "price": "free", "status": "available_unconfigured", "description": "Threaded reader comments on posts." },
+      { "id": "newsletter-bot", "name": "Newsletter Bot", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Auto-draft a newsletter issue from recent posts." },
+      { "id": "seo-meta", "name": "SEO Meta Generator", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Generate open-graph and meta tags for each post." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "blog.new-post", "pattern": "NEW POST|CREATE POST|WRITE POST", "intent": "open_compose" },
+      { "id": "blog.search", "pattern": "SEARCH *", "intent": "filter_feed" }
+    ]
+  },
+  "@data": {
+    "recent": ["Getting Started", "My Workflow", "Year in Review"],
+    "tags": ["writing", "code", "life", "tutorials"],
+    "spotlight": [
+      { "id": "sp1", "title": "Getting Started with KHANARY", "slug": "getting-started", "badge": "Featured", "excerpt": "A walkthrough of the core concepts." },
+      { "id": "sp2", "title": "My 2025 Dev Workflow", "slug": "dev-workflow-2025", "badge": "Popular", "excerpt": "The tools and habits that changed how I work." },
+      { "id": "sp3", "title": "Year in Review", "slug": "year-review", "badge": "Latest", "excerpt": "Lessons from the past 12 months." }
+    ],
+    "schema": {
+      "post": { "primaryKey": "post_id", "fields": { "post_id": { "type": "string" }, "user_id": { "type": "string" }, "title": { "type": "string", "required": true }, "slug": { "type": "string", "required": true }, "body": { "type": "textarea", "required": true }, "tags": { "type": "json" }, "published_at": { "type": "datetime" }, "likes": { "type": "integer" } } },
+      "user_profile": { "primaryKey": "user_id", "fields": { "user_id": { "type": "string" }, "username": { "type": "string", "required": true }, "handle": { "type": "string", "required": true }, "email": { "type": "email", "required": true } } }
+    }
+  }
+}

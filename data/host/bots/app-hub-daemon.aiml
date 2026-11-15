@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+  <category>
+    <pattern>HI</pattern>
+    <template>Hi! I'm the App Builder daemon. Tell me what you want to make, or say build an app and I'll open the runtime manifest form.</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>HELLO</pattern>
+    <template>Hello! What kind of app are you thinking about? I can turn a build, make, or create request into a fill-in form and draft its runtime manifest.</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>HEY</pattern>
+    <template>Hey! What would you like to build today?</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>WHAT CAN YOU DO</pattern>
+    <template>I can help shape an app, ask structured follow-up questions, and generate an ASX mini-app manifest plus its key-grammar registration rows.</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>BUILD AN APP</pattern>
+    <template>[[APP_MANIFEST_FORM]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>BUILD APP</pattern>
+    <template>[[APP_MANIFEST_FORM]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>MAKE AN APP</pattern>
+    <template>[[APP_MANIFEST_FORM]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>CREATE AN APP</pattern>
+    <template>[[APP_MANIFEST_FORM]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>BUILD A * APP</pattern>
+    <template>[[APP_MANIFEST_FORM]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>BUILD ME A * APP</pattern>
+    <template>[[APP_MANIFEST_FORM]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>MAKE A * APP</pattern>
+    <template>[[APP_MANIFEST_FORM]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>CREATE A * APP</pattern>
+    <template>[[APP_MANIFEST_FORM]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>I WANT TO BUILD *</pattern>
+    <template>[[APP_MANIFEST_FORM]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>I WANT TO MAKE *</pattern>
+    <template>[[APP_MANIFEST_FORM]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>I WANT TO CREATE *</pattern>
+    <template>[[APP_MANIFEST_FORM]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>NBA BASKETBALL NEW *</pattern>
+    <template>I think you mean an NBA basketball news app. Is that right? Say yes and I'll open its app manifest form.</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>NBA BASKETBALL NEWS APP</pattern>
+    <template>[[APP_MANIFEST_FORM]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>NBA NEWS APP</pattern>
+    <template>[[APP_MANIFEST_FORM]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>BASKETBALL NEWS APP</pattern>
+    <template>[[APP_MANIFEST_FORM]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>CHANGE THE APP COLOR TO *</pattern>
+    <template>[[APP_SETTING:theme_color:<star/>]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>CHANGE APP NAME TO *</pattern>
+    <template>[[APP_SETTING:title:<star/>]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>RENAME THE APP TO *</pattern>
+    <template>[[APP_SETTING:title:<star/>]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>CHANGE APP DESCRIPTION TO *</pattern>
+    <template>[[APP_SETTING:description:<star/>]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>CHANGE COLOR TO *</pattern>
+    <template>[[APP_SETTING:theme_color:<star/>]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>SET BUTTON SIZE TO *</pattern>
+    <template>[[APP_SETTING:button_size:<star/>]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>MAKE THE BUTTONS *</pattern>
+    <template>[[APP_SETTING:button_size:<star/>]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>ADD AN ADDON LINK *</pattern>
+    <template>[[APP_SETTING:addon_link:<star/>]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>ADD ADDON LINK *</pattern>
+    <template>[[APP_SETTING:addon_link:<star/>]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>ADD FREE ADDON *</pattern>
+    <template>[[APP_SETTING:addon_link:<star/>]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>ADD PLUGIN *</pattern>
+    <template>[[APP_SETTING:plugin:<star/>]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>ADD * PLUGIN</pattern>
+    <template>[[APP_SETTING:plugin:<star/>]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>ADD THE * PLUGIN TO THE APP</pattern>
+    <template>[[APP_SETTING:plugin:<star index="1"/>]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>ADD THE * PLUGIN TO MY APP</pattern>
+    <template>[[APP_SETTING:plugin:<star index="1"/>]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>ADD THE * PLUGIN TO THE * APP</pattern>
+    <template>[[APP_SETTING:plugin:<star index="1"/>]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>ADDING THE * PLUGIN TO THE * APP</pattern>
+    <template>[[APP_SETTING:plugin:<star index="1"/>]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>ADD FREE PLUGIN *</pattern>
+    <template>[[APP_SETTING:plugin:<star/>]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>ENABLE PLUGIN *</pattern>
+    <template>[[APP_SETTING:plugin:<star/>]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>YES</pattern>
+    <template>[[APP_MANIFEST_FORM]]</template>
+    <topic>APP_HUB_NBA_CONFIRM</topic>
+  </category>
+  <category>
+    <pattern>NO</pattern>
+    <template>No problem. Tell me what app you meant, or use the create form below.</template>
+    <topic>APP_HUB_NBA_CONFIRM</topic>
+  </category>
+  <category>
+    <pattern>BUILD *</pattern>
+    <template>[[APP_MANIFEST_FORM]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>MAKE *</pattern>
+    <template>[[APP_MANIFEST_FORM]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>CREATE *</pattern>
+    <template>[[APP_MANIFEST_FORM]]</template>
+    <topic>APP_HUB</topic>
+  </category>
+  <category>
+    <pattern>*</pattern>
+    <template>I'm your App Builder daemon. Tell me what you want to make, ask what I can do, or say build an app to open the manifest form.</template>
+    <topic>APP_HUB</topic>
+  </category>
+</aiml>

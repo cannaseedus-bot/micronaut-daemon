@@ -1,0 +1,237 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kuhul.dev/schema/typed-query.v1.schema.json",
+  "title": "K'UHUL Typed Semantic Query Protocol v1",
+  "description": "Structural contracts for typed query requests, immutable retrieval results, non-authorizing action proposals, host action decisions, and authorized commit records. Schema validation does not perform static type resolution, retrieval, XCFE admission, or commit authorization.",
+  "oneOf": [
+    { "$ref": "#/$defs/queryRequest" },
+    { "$ref": "#/$defs/retrievalResult" },
+    { "$ref": "#/$defs/actionProposal" },
+    { "$ref": "#/$defs/actionResult" },
+    { "$ref": "#/$defs/commitRecord" }
+  ],
+  "$defs": {
+    "queryId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9._:-]+$"
+    },
+    "semanticKey": { "type": "string", "minLength": 1 },
+    "provenanceRef": { "type": "string", "minLength": 1 },
+    "queryRequest": {
+      "type": "object",
+      "required": ["@kind", "query_id", "intent", "query"],
+      "properties": {
+        "@kind": { "const": "kuhul.typed-query.v1" },
+        "query_id": { "$ref": "#/$defs/queryId" },
+        "intent": { "type": "string", "minLength": 1 },
+        "contract": { "const": "kuhul.typed-query.v1" },
+        "query": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["type", "key"],
+              "properties": {
+                "type": { "const": "KeyQuery" },
+                "key": { "$ref": "#/$defs/semanticKey" }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "required": ["type", "text"],
+              "properties": {
+                "type": { "const": "TextQuery" },
+                "text": { "type": "string", "minLength": 1 }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "required": ["type", "left", "right"],
+              "properties": {
+                "type": { "const": "RelationQuery" },
+                "left": { "$ref": "#/$defs/semanticKey" },
+                "right": { "$ref": "#/$defs/semanticKey" }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "required": ["type", "pattern"],
+              "properties": {
+                "type": { "const": "PatternQuery" },
+                "pattern": { "type": "string", "minLength": 1 }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "required": ["type", "capability"],
+              "properties": {
+                "type": { "const": "CapabilityQuery" },
+                "capability": { "type": "string", "minLength": 1 }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "evidenceItem": {
+      "type": "object",
+      "required": ["candidate_id", "value", "evidence"],
+      "properties": {
+        "candidate_id": { "type": "string", "minLength": 1 },
+        "value": {},
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/provenanceRef" }
+        },
+        "wcr": {
+          "type": "object",
+          "properties": {
+            "weight": { "type": "number" },
+            "confidence": { "type": "number" },
+            "relativity": { "type": "number" },
+            "score": { "type": "number" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": true
+    },
+    "diagnostic": {
+      "type": "object",
+      "required": ["stage", "code"],
+      "properties": {
+        "stage": {
+          "enum": ["parse", "static_semantics", "binding", "retrieval", "admission", "verification", "commit"]
+        },
+        "code": { "type": "string", "minLength": 1 },
+        "message": { "type": "string" },
+        "expected": { "type": "string" },
+        "received": { "type": "string" },
+        "capability": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "retrievalResult": {
+      "type": "object",
+      "required": ["@kind", "result_id", "query_id", "status", "result_type", "items", "searched", "provenance"],
+      "properties": {
+        "@kind": { "const": "kuhul.retrieval-result.v1" },
+        "result_id": { "$ref": "#/$defs/queryId" },
+        "query_id": { "$ref": "#/$defs/queryId" },
+        "supersedes": { "$ref": "#/$defs/queryId" },
+        "status": { "enum": ["FOUND", "UNRESOLVED", "REJECTED"] },
+        "result_type": {
+          "enum": ["SemanticField", "SearchResults", "RelationshipCandidates", "PatternMatches", "CapabilityDescriptors"]
+        },
+        "items": { "type": "array", "items": { "$ref": "#/$defs/evidenceItem" } },
+        "searched": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "provenance": { "type": "array", "items": { "$ref": "#/$defs/provenanceRef" } },
+        "diagnostic": { "$ref": "#/$defs/diagnostic" },
+        "created_at": { "type": "string", "format": "date-time" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "FOUND" } }, "required": ["status"] },
+          "then": { "properties": { "items": { "minItems": 1 } } }
+        },
+        {
+          "if": { "properties": { "status": { "const": "UNRESOLVED" } }, "required": ["status"] },
+          "then": { "properties": { "items": { "maxItems": 0 } }, "not": { "required": ["diagnostic"] } }
+        },
+        {
+          "if": { "properties": { "status": { "const": "REJECTED" } }, "required": ["status"] },
+          "then": { "properties": { "items": { "maxItems": 0 } }, "required": ["diagnostic"] }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "actionProposal": {
+      "type": "object",
+      "required": ["@kind", "proposal_id", "query_id", "retrieval_ref", "capability", "status"],
+      "properties": {
+        "@kind": { "const": "kuhul.action-proposal.v1" },
+        "proposal_id": { "$ref": "#/$defs/queryId" },
+        "query_id": { "$ref": "#/$defs/queryId" },
+        "retrieval_ref": { "$ref": "#/$defs/queryId" },
+        "capability": { "type": "string", "minLength": 1 },
+        "target": { "type": "string", "minLength": 1 },
+        "input": { "type": "object" },
+        "status": { "const": "PROPOSED" },
+        "authority": {
+          "type": "object",
+          "properties": {
+            "dispatch": { "const": false },
+            "mutation": { "const": false }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "actionResult": {
+      "type": "object",
+      "required": ["@kind", "action_id", "proposal_id", "query_id", "status", "decision_ref"],
+      "properties": {
+        "@kind": { "const": "kuhul.action-result.v1" },
+        "action_id": { "$ref": "#/$defs/queryId" },
+        "proposal_id": { "$ref": "#/$defs/queryId" },
+        "query_id": { "$ref": "#/$defs/queryId" },
+        "status": { "enum": ["ADMITTED", "REJECTED", "COMPLETED", "FAILED"] },
+        "decision_ref": { "$ref": "#/$defs/provenanceRef", "description": "Reference to the host/XCFE decision or result record; this document cannot self-authorize." },
+        "diagnostic": { "$ref": "#/$defs/diagnostic" },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/provenanceRef" } },
+        "created_at": { "type": "string", "format": "date-time" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "REJECTED" } }, "required": ["status"] },
+          "then": { "required": ["diagnostic"] }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "commitRecord": {
+      "type": "object",
+      "required": ["@kind", "commit_id", "query_id", "action_id", "target_ref", "verification", "authorization_ref", "status"],
+      "properties": {
+        "@kind": { "const": "kuhul.commit-record.v1" },
+        "commit_id": { "$ref": "#/$defs/queryId" },
+        "query_id": { "$ref": "#/$defs/queryId" },
+        "action_id": { "$ref": "#/$defs/queryId" },
+        "target_ref": { "$ref": "#/$defs/provenanceRef" },
+        "verification": {
+          "type": "object",
+          "required": ["phase", "status", "certificate_ref"],
+          "properties": {
+            "phase": { "const": "Ch'en" },
+            "status": { "const": "VERIFIED" },
+            "certificate_ref": { "$ref": "#/$defs/provenanceRef" }
+          },
+          "additionalProperties": false
+        },
+        "authorization_ref": { "$ref": "#/$defs/provenanceRef", "description": "Reference to independently issued XCFE authorization; the commit record itself grants no authority." },
+        "status": { "const": "COMMITTED" },
+        "phase": { "const": "Xul" },
+        "created_at": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "x-kuhul-invariants": [
+    "RetrievalResult is immutable; new retrieval creates a new result_id and may cite supersedes.",
+    "FOUND requires at least one evidence-backed item.",
+    "UNRESOLVED means no adequate evidence was retrieved; it does not mean false.",
+    "WCR may rank candidates but cannot change evidence, verification, or admission state.",
+    "ActionProposal does not authorize dispatch or mutation; ActionResult records an external host decision.",
+    "A rejected follow-up action does not overwrite its referenced RetrievalResult.",
+    "CommitRecord is emitted only after independent XCFE authorization and Ch'en verification; it records but does not grant either."
+  ]
+}

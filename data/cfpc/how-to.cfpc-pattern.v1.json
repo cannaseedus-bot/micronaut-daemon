@@ -1,0 +1,33 @@
+{
+  "@kind": "khanary.cfpc.pattern.v1",
+  "id": "how-to",
+  "intent": "Resolve a procedural or mechanism query — how to do something or how something works.",
+  "phase": "Yax",
+  "@captures": {
+    "subject": {
+      "wildcard": "*",
+      "strip_prefix": "how to "
+    }
+  },
+  "neighborhood_resolve": {
+    "from_captures": [
+      "subject"
+    ],
+    "max_hops": 2
+  },
+  "question_templates": [
+    "How do you {subject}?",
+    "What are the steps to {subject}?",
+    "What mechanism enables {subject}?",
+    "How does {subject} relate to {neighbor}?",
+    "What preconditions are required before {subject}?"
+  ],
+  "context_template": "Procedure/mechanism: {subject}\nSemantic field: {field_keys}\nRelated domains: {neighbors}\nEpistemic state: UNKNOWN -- model verification required.",
+  "match": {
+    "rules": [
+      {
+        "prefix": "how to"
+      }
+    ]
+  }
+}

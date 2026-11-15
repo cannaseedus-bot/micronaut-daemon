@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  METRIC-µ metric-graph MathML contract.
+
+  This document is the MathML rendering of `data/manifest/metric.manifest.json`.
+  Every statement below names the manifest key it renders, so the manifest stays the
+  authority and this file cannot quietly disagree with it. METRIC-µ derives
+  relevance and traversal geometry inside an admitted track compartment; it holds no
+  semantic or topology authority.
+-->
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <title>KHANARY metric graph contract (urn:kuhul:metric-graph:v1)</title>
+
+  <!-- metric:track-compartment, metric:graph:v1 -->
+  <semantics>
+    <mrow>
+      <msub>
+        <mi>M</mi>
+        <mi>τ</mi>
+      </msub>
+      <mo>=</mo>
+      <mrow>
+        <csymbol cd="urn:kuhul:metric-graph:v1">TrackMetric</csymbol>
+        <mo>(</mo>
+        <mrow>
+          <mi>Track</mi>
+          <mo>⁡</mo>
+          <mi>τ</mi>
+        </mrow>
+        <mo>)</mo>
+      </mrow>
+    </mrow>
+    <annotation encoding="text/plain">M_tau = METRIC_mu(Track_tau)</annotation>
+  </semantics>
+  <semantics>
+    <mrow>
+      <mi>Track</mi>
+      <mo>⁡</mo>
+      <mi>τ</mi>
+      <mo>=</mo>
+      <mo>⟨</mo>
+      <msub><mi>G</mi><mi>τ</mi></msub>
+      <mo>,</mo>
+      <msub><mi>N</mi><mi>τ</mi></msub>
+      <mo>,</mo>
+      <msub><mi>R</mi><mi>τ</mi></msub>
+      <mo>⟩</mo>
+    </mrow>
+    <annotation encoding="text/plain">Track_tau = &lt;G_tau, N_tau, R_tau&gt;: track_owned_grams, track_local_neighborhoods, track_local_relation_structure</annotation>
+  </semantics>
+  <annotation encoding="text/plain">A metric is derived inside one admitted track compartment: there is no required global semantic metric, and local metric search only. Declared by metric:track-compartment (M_tau = METRIC_mu(Track_tau), local_metric_search_only, no_global_union_metric).</annotation>
+
+  <!-- metric:cross-track-bridge -->
+  <semantics>
+    <mrow>
+      <mi>R</mi>
+      <mo>=</mo>
+      <mrow>
+        <csymbol cd="urn:kuhul:metric-graph:v1">TrackRelevanceSwitch</csymbol>
+        <mo>(</mo>
+        <mi>Q</mi>
+        <mo>,</mo>
+        <mi>K</mi>
+        <mo>)</mo>
+      </mrow>
+    </mrow>
+    <annotation encoding="text/plain">R = R_tau(Q,K) inside one admitted track</annotation>
+  </semantics>
+  <annotation encoding="text/plain">R = 0/NA when no track bridge exists: no_bridge =&gt; not_comparable, and a cross-track relation must be declared or verified before R is defined. Declared by metric:cross-track-bridge.</annotation>
+
+  <!-- metric:graph:v1, metric:cannot -->
+  <semantics>
+    <mrow>
+      <mi>B</mi>
+      <mo>=</mo>
+      <mtext>authoritative FoldGraph topology</mtext>
+    </mrow>
+    <annotation encoding="text/plain">B is the authoritative FoldGraph topology; M_tau is derived geometry inside Track_tau and is rebuildable.</annotation>
+  </semantics>
+  <semantics>
+    <mrow>
+      <mrow>
+        <csymbol cd="urn:kuhul:metric-graph:v1">DeltaMetric</csymbol>
+        <mo>≠</mo>
+        <csymbol cd="urn:kuhul:metric-graph:v1">DeltaTopology</csymbol>
+      </mrow>
+    </mrow>
+    <annotation encoding="text/plain">DeltaMetric != DeltaTopology</annotation>
+  </semantics>
+  <annotation encoding="text/plain">Only Proposal -&gt; Ch'en -&gt; XCFE -&gt; Xul may commit topology B. METRIC-µ cannot commit_topology, verify GOOD/BAD, authorize XCFE, or change relation type (metric:cannot).</annotation>
+
+  <!-- metric:contrastive-loss -->
+  <semantics>
+    <mrow>
+      <msub>
+        <mi>L</mi>
+        <mtext>contrast</mtext>
+      </msub>
+      <mo>=</mo>
+      <mo>-</mo>
+      <mi>log</mi>
+      <mo>⁡</mo>
+      <mfrac>
+        <mrow>
+          <mi>exp</mi>
+          <mo>⁡</mo>
+          <mo>(</mo>
+          <msub>
+            <mi>score</mi>
+            <mtext>pos</mtext>
+          </msub>
+          <mo>)</mo>
+        </mrow>
+        <mrow>
+          <mi>exp</mi>
+          <mo>⁡</mo>
+          <mo>(</mo>
+          <msub>
+            <mi>score</mi>
+            <mtext>pos</mtext>
+          </msub>
+          <mo>)</mo>
+          <mo>+</mo>
+          <msub>
+            <mo>∑</mo>
+            <mtext>neg</mtext>
+          </msub>
+          <mi>exp</mi>
+          <mo>⁡</mo>
+          <mo>(</mo>
+          <msub>
+            <mi>score</mi>
+            <mtext>neg</mtext>
+          </msub>
+          <mo>)</mo>
+        </mrow>
+      </mfrac>
+    </mrow>
+    <annotation encoding="text/plain">L_contrast = -log(exp(score_pos) / (exp(score_pos) + sum exp(score_neg)))</annotation>
+  </semantics>
+  <semantics>
+    <mrow>
+      <mi>score</mi>
+      <mo>=</mo>
+      <csymbol cd="urn:kuhul:metric-graph:v1">MetricScore</csymbol>
+      <mo>(</mo>
+      <mi>Q</mi>
+      <mo>,</mo>
+      <mi>K</mi>
+      <mo>|</mo>
+      <mi>τ</mi>
+      <mo>,</mo>
+      <mi>r</mi>
+      <mo>,</mo>
+      <mi>F</mi>
+      <mo>,</mo>
+      <mi>θ</mi>
+      <mo>,</mo>
+      <mtext>provider</mtext>
+      <mo>)</mo>
+    </mrow>
+    <annotation encoding="text/plain">Pos_tau = GOOD_FoldDelta | admitted_RelationISA_edge | declared_key_book_neighborhood; Neg_tau = same_track_hard_negatives. There is no global all-grams negative pool.</annotation>
+  </semantics>
+  <annotation encoding="text/plain">MetricContrastiveLoss is declared by metric:contrastive-loss; negatives are drawn from the same track, never from a global all-grams pool.</annotation>
+
+  <!-- metric:bridge-loss, metric:differential-risk-loss, metric:training-gradient -->
+  <semantics>
+    <mrow>
+      <msub>
+        <mi>L</mi>
+        <mtext>bridge</mtext>
+      </msub>
+      <mo>=</mo>
+      <mo>-</mo>
+      <mi>log</mi>
+      <mo>⁡</mo>
+      <mi>exp</mi>
+      <mo>⁡</mo>
+      <mo>(</mo>
+      <mo>-</mo>
+      <mfrac>
+        <msub>
+          <mi>d</mi>
+          <mtext>αβ</mtext>
+        </msub>
+        <msub>
+          <mi>T</mi>
+          <mtext>bridge</mtext>
+        </msub>
+      </mfrac>
+      <mo>)</mo>
+    </mrow>
+    <annotation encoding="text/plain">d_alpha_beta(Q,K) = d_alpha(Q,m) + L_m + d_beta(m,K)</annotation>
+  </semantics>
+  <semantics>
+    <mrow>
+      <msub>
+        <mi>L</mi>
+        <mtext>diff</mtext>
+      </msub>
+      <mo>=</mo>
+      <mo>‖</mo>
+      <mi>Projection</mi>
+      <mo>⁡</mo>
+      <mo>(</mo>
+      <mi>ΔG</mi>
+      <mo>)</mo>
+      <mo>-</mo>
+      <mi>ΔF</mi>
+      <msup>
+        <mo>‖</mo>
+        <mn>2</mn>
+      </msup>
+    </mrow>
+    <annotation encoding="text/plain">L_diff = ||Projection(DeltaG) - DeltaF||^2</annotation>
+  </semantics>
+  <semantics>
+    <mrow>
+      <msub>
+        <mi>L</mi>
+        <mtext>risk</mtext>
+      </msub>
+      <mo>=</mo>
+      <msup>
+        <mrow>
+          <mo>max</mo>
+          <mo>⁡</mo>
+          <mo>(</mo>
+          <mn>0</mn>
+          <mo>,</mo>
+          <mi>Risk</mi>
+          <mo>⁡</mo>
+          <mo>(</mo>
+          <mi>θ</mi>
+          <mo>,</mo>
+          <mi>δ</mi>
+          <mo>)</mo>
+          <mo>-</mo>
+          <mi>risk_bound</mi>
+          <mo>)</mo>
+        </mrow>
+        <mn>2</mn>
+      </msup>
+    </mrow>
+    <annotation encoding="text/plain">L_risk = max(0, Risk(theta, delta) - risk_bound)^2</annotation>
+  </semantics>
+  <semantics>
+    <mrow>
+      <msub>
+        <mi>L</mi>
+        <mtext>total</mtext>
+      </msub>
+      <mo>=</mo>
+      <mi>α</mi>
+      <msub>
+        <mi>L</mi>
+        <mtext>contrast</mtext>
+      </msub>
+      <mo>+</mo>
+      <mi>β</mi>
+      <msub>
+        <mi>L</mi>
+        <mtext>bridge</mtext>
+      </msub>
+      <mo>+</mo>
+      <mi>γ</mi>
+      <msub>
+        <mi>L</mi>
+        <mtext>diff</mtext>
+      </msub>
+      <mo>+</mo>
+      <mi>η</mi>
+      <msub>
+        <mi>L</mi>
+        <mtext>risk</mtext>
+      </msub>
+    </mrow>
+    <annotation encoding="text/plain">L_total = alpha*L_contrast + beta*L_bridge + gamma*L_diff + eta*L_risk</annotation>
+  </semantics>
+  <semantics>
+    <mrow>
+      <msub>
+        <mi>g</mi>
+        <mi>φ</mi>
+      </msub>
+      <mo>=</mo>
+      <msub>
+        <mo>∇</mo>
+        <mi>φ</mi>
+      </msub>
+      <msub>
+        <mi>L</mi>
+        <mtext>total</mtext>
+      </msub>
+    </mrow>
+    <annotation encoding="text/plain">TrainingGradient: g_phi = grad_phi L_total; provider_parameter_update_only</annotation>
+  </semantics>
+  <annotation encoding="text/plain">BridgeTraversalCost, DifferentialDriftLoss, RiskPenalty and MetricTotalLoss are declared by metric:bridge-loss and metric:differential-risk-loss. L_bridge requires Bridge_alpha_beta_required admission; DeltaG is the differential comparison graph and DeltaF the verified FoldDelta.</annotation>
+
+  <!-- provider surfaces: METRIC-µ is not semantic authority -->
+  <annotation encoding="text/plain">Providers: metric_graph_provider, vector_provider, sdr_provider, graph_provider, scx_keybook_provider. METRIC-µ may learn_edge_costs, rank_candidate_relevance and estimate_typed_path_distance; it may not change_relation_type, verify_GOOD_BAD, authorize_XCFE, commit_topology, perform_Xul, or mutate_B (metric:can / metric:cannot).</annotation>
+
+  <!-- Objective terms as named symbols: each is the csymbol for the loss term above
+       and is declared by the manifest key named in its annotation. -->
+  <semantics>
+    <mrow>
+      <csymbol cd="urn:kuhul:metric-graph:v1">MetricContrastiveLoss</csymbol>
+      <mo>=</mo>
+      <msub><mi>L</mi><mtext>contrast</mtext></msub>
+    </mrow>
+    <annotation encoding="text/plain">MetricContrastiveLoss is the term L_contrast, declared by metric:contrastive-loss (same-track negatives only).</annotation>
+  </semantics>
+  <semantics>
+    <mrow>
+      <csymbol cd="urn:kuhul:metric-graph:v1">BridgeTraversalCost</csymbol>
+      <mo>=</mo>
+      <msub><mi>d</mi><mtext>alpha_beta</mtext></msub>
+    </mrow>
+    <annotation encoding="text/plain">BridgeTraversalCost is d_alpha_beta, declared by metric:bridge-loss; it exists only for an admitted Bridge_alpha_beta.</annotation>
+  </semantics>
+  <semantics>
+    <mrow>
+      <csymbol cd="urn:kuhul:metric-graph:v1">DifferentialDriftLoss</csymbol>
+      <mo>=</mo>
+      <msub><mi>L</mi><mtext>diff</mtext></msub>
+    </mrow>
+    <annotation encoding="text/plain">DifferentialDriftLoss is the term L_diff, declared by metric:differential-risk-loss.</annotation>
+  </semantics>
+  <semantics>
+    <mrow>
+      <csymbol cd="urn:kuhul:metric-graph:v1">RiskPenalty</csymbol>
+      <mo>=</mo>
+      <msub><mi>L</mi><mtext>risk</mtext></msub>
+    </mrow>
+    <annotation encoding="text/plain">RiskPenalty is the term L_risk, declared by metric:differential-risk-loss (bounded by risk_bound).</annotation>
+  </semantics>
+  <semantics>
+    <mrow>
+      <csymbol cd="urn:kuhul:metric-graph:v1">MetricTotalLoss</csymbol>
+      <mo>=</mo>
+      <msub><mi>L</mi><mtext>total</mtext></msub>
+    </mrow>
+    <annotation encoding="text/plain">MetricTotalLoss is the term L_total, declared by metric:training-gradient; METRIC-mu supplies the loss geometry only.</annotation>
+  </semantics>
+</math>

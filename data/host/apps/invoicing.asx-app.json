@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "invoicing",
+  "@key": "⟁APP:INVOICING",
+  "@mount": "⟁ROOT:INVOICING",
+  "@theme": { "accent": "#6366f1", "bg": "#04050f", "surface": "#080a1c", "text": "#e0e7ff", "hero_phase": "Xul", "tagline": "Send. Get paid. Move on." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "invoices", "component": "⟁WIDGET:INVOICES", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "invoices": [], "search": "", "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:INVOICING": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:NEW_INVOICE"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:NEW_INVOICE": { "@type": "button", "@text": "New Invoice", "@on": { "click": "invoicing.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:INVOICES", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:INVOICES": { "@type": "feed", "@bind": "state.invoices", "@children": ["⟁WIDGET:INVOICE_CARD"] },
+    "⟁WIDGET:INVOICE_CARD": { "@type": "content-card", "@bind": "invoice", "@on": { "send": "invoicing.send", "view": "invoicing.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:SUMMARY", "⟁WIDGET:OVERDUE"] },
+    "⟁WIDGET:SUMMARY": { "@type": "stat", "@bind": "data.summary" },
+    "⟁WIDGET:OVERDUE": { "@type": "list", "@bind": "data.overdue" }
+  },
+  "@programs": {
+    "invoicing.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "invoicing.send": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "invoicing.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "invoicing.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "invoice.send": "invoicing.send", "invoice.view": "invoicing.view", "compose.open": "invoicing.open_compose", "search.input": "invoicing.search" },
+  "@imports": [{ "ref": "invoice", "mode": "schema_table" }, { "ref": "client", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "pdf-export", "name": "PDF Export", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Export any invoice as a branded PDF." },
+      { "id": "stripe-payments", "name": "Stripe Pay Link", "category": "payments", "price": "membership", "status": "setup_required", "requires_subscription": true, "description": "Add a payment link to each invoice." },
+      { "id": "overdue-bot", "name": "Overdue Reminder Bot", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Auto-send a polite follow-up for overdue invoices." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "invoicing.create", "pattern": "NEW INVOICE|CREATE INVOICE|INVOICE *", "intent": "open_compose" },
+      { "id": "invoicing.overdue", "pattern": "SHOW OVERDUE|UNPAID INVOICES", "intent": "filter_overdue" }
+    ]
+  },
+  "@data": {
+    "summary": { "total_outstanding": 4850, "paid_this_month": 12400, "overdue_count": 2 },
+    "overdue": ["INV-008 — Acme Corp — $1,200", "INV-011 — Beta LLC — $850"],
+    "spotlight": [
+      { "id": "sp1", "title": "INV-012 — Craft Studio", "invoice_num": "INV-012", "badge": "Draft", "amount": 3200, "excerpt": "Web design retainer for November. Ready to send." },
+      { "id": "sp2", "title": "INV-008 — Acme Corp", "invoice_num": "INV-008", "badge": "Overdue", "amount": 1200, "excerpt": "30 days overdue. Reminder sent once." },
+      { "id": "sp3", "title": "INV-010 — Byte Labs", "invoice_num": "INV-010", "badge": "Paid", "amount": 5600, "excerpt": "Project complete. Payment received 2025-10-15." }
+    ],
+    "schema": {
+      "invoice": { "primaryKey": "invoice_id", "fields": { "invoice_id": { "type": "string" }, "invoice_num": { "type": "string", "required": true }, "client_id": { "type": "string", "required": true }, "line_items": { "type": "json", "required": true }, "total": { "type": "float", "required": true }, "status": { "type": "string" }, "due_date": { "type": "datetime" }, "paid_at": { "type": "datetime" }, "issued_at": { "type": "datetime" } } },
+      "client": { "primaryKey": "client_id", "fields": { "client_id": { "type": "string" }, "name": { "type": "string", "required": true }, "email": { "type": "email", "required": true }, "company": { "type": "string" }, "address": { "type": "text" } } }
+    }
+  }
+}

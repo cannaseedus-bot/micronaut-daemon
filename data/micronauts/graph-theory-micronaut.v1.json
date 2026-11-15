@@ -1,0 +1,120 @@
+{
+  "schema": "kuhul.micronaut.graph-theory.v1",
+  "identity": {
+    "id": "micronaut:GRAPH-THEORY",
+    "name": "GRAPH-THEORY-µ",
+    "version": "1.0.0",
+    "authority_claim": "xcfe_gated_read_only"
+  },
+  "descriptor_status": "declarative_proposal",
+  "registered": true,
+  "registered_status": "verified_in_local_tool_and_executor_registries; invocation_still_requires_XCFE_admission",
+  "track_ref": "data/tracks/GRAPH-THEORY-u.semantic-tracks.v1.json",
+  "bindings_ref": "shell/graph-theory.bindings.psm1",
+  "manifest": {
+    "display_name": "Graph Theory",
+    "tagline": "Topology queries — neighborhoods, paths, weighted graphs, spectral structure",
+    "color": "#00aaff",
+    "icon_svg": "data/micronauts/assets/graph-theory.svg",
+    "animated_svg": "data/micronauts/assets/graph-theory.animated.svg",
+    "profile_card": {
+      "widget": "data/host/apps/micronaut-card.asx-app.json",
+      "props": { "id": "GRAPH-THEORY-µ", "phase": "Sek", "category": "structural" }
+    }
+  },
+  "api": {
+    "namespace": "graph-theory",
+    "atomic_keys": ["graph-theory.match", "graph-theory.query", "graph-theory.health"],
+    "rest_routes": [
+      { "method": "POST", "path": "/api/atomic/call", "key": "graph-theory.match" },
+      { "method": "POST", "path": "/api/atomic/call", "key": "graph-theory.query" },
+      { "method": "GET",  "path": "/api/health",      "key": "graph-theory.health" }
+    ]
+  },
+  "cache": {
+    "object": "graph-theory-cache",
+    "ttl": 3600,
+    "schema": {
+      "last_query":     "string",
+      "last_graph_id":  "string",
+      "session_topic":  "string",
+      "confidence":     "float",
+      "template_key":   "string"
+    }
+  },
+  "capabilities": [
+    "read_graph_inventory",
+    "propose_neighborhood_query",
+    "propose_path_query",
+    "propose_dictionary_relation_query",
+    "rank_graph_candidates"
+  ],
+  "graph_bindings_ref": "data/micronauts/graph-lane-bindings.v1.json",
+  "srai": {
+    "mode": "bounded_redirect_only",
+    "cycle_detection": true,
+    "max_depth": 16
+  },
+  "xcfe": {
+    "required_for_tool_dispatch": true,
+    "required_for_mutation": true
+  },
+  "program_contract": {
+    "format": "kuhul.micronaut-program/1",
+    "program_model": "typed_python_runtime",
+    "role": [
+      "graph_inventory_read",
+      "topology_query_proposal",
+      "semantic_candidate_ranking"
+    ],
+    "grammar_refs": [
+      "data/micronauts/Micronaut.SRAI.AIML.ebnf",
+      "data/grammar/gml.khanary.ebnf",
+      "data/grammar/runtime-graph.contracts.json"
+    ],
+    "contract_refs": [
+      "data/micronauts/graph-lane-bindings.v1.json",
+      "data/alice/graph-fold-field.aiml",
+      "data/tracks/GRAPH-THEORY-u.semantic-tracks.v1.json"
+    ],
+    "entry_points": [
+      "micronaut.graph_executor.execute_graph_query"
+    ],
+    "bindings": {
+      "inputs": [
+        { "name": "graph_id", "type": "GraphId",    "resolution_status": "host_binding_required" },
+        { "name": "query",    "type": "GraphQuery",  "resolution_status": "host_binding_required" }
+      ],
+      "output": {
+        "type": "GraphQueryProposal",
+        "authority": "DATA_ONLY",
+        "direct_dispatch": false
+      }
+    },
+    "interaction": {
+      "host_binding_required": true,
+      "direct_user_io": false
+    },
+    "sandbox": {
+      "filesystem": "allowlisted_graph_assets_read_only",
+      "network": "none",
+      "process": "none",
+      "effects": ["read_graph_inventory", "emit_graph_query_proposal"],
+      "admission": "host_policy"
+    },
+    "learning": {
+      "mode": "disabled",
+      "commit_requirement": "not_applicable"
+    },
+    "implementation": {
+      "source_status": "source_present",
+      "runtime_registration": "verified",
+      "validation_status": "passed"
+    },
+    "drivers": [],
+    "program_refs": [
+      "micronaut/graph_executor.py",
+      "tools/query_micronaut_graphs.py"
+    ]
+  }
+}

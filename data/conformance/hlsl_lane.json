@@ -1,0 +1,55 @@
+{
+  "@type": "khanary.hlsl_lane.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority": "shader_compile_and_execution_evidence_not_semantic_authority",
+  "lane": "KHANARY_HLSL_LANE_TEST",
+  "why": "HLSL was shipped but not a required root conformance lane: no lane compiled the shaders the runtime loads from disk, and no lane executed one and compared its output with a reference. This contract declares which shader roots are required, which files are excluded and why, and the laws the lane enforces.",
+  "roots": [
+    {
+      "path": "data/shaders",
+      "role": "runtime_shader",
+      "required": true,
+      "why": "loaded from disk by the runtime (svg_compute.hlsl, geodesic_propagator.hlsl) or embedded verbatim (attention.hlsl); a file here that does not compile is a runtime defect, not a documentation issue"
+    },
+    {
+      "path": "drivers/shaders/fold_space",
+      "role": "fold_space_kernel",
+      "required": true,
+      "why": "fold-space gate/GEMM/score kernels shipped for the fold binding registry's hlsl backend"
+    },
+    {
+      "path": "drivers/klsl/xvm_d3d12/shaders",
+      "role": "experimental_d3d12",
+      "required": false,
+      "why": "the D3D12 XVM lane is not built or dispatched by this runtime, so its files are compiled and accounted for by name but do not gate the root claim; an excluded file that starts compiling fails the lane until the exclusion is removed"
+    }
+  ],
+  "default_target": "cs_5_0",
+  "overrides": [],
+  "excluded": [
+    {
+      "path": "drivers/klsl/xvm_d3d12/shaders/xvm_attention_shared.hlsl",
+      "reason": "X4026: GroupMemoryBarrierWithGroupSync sits inside divergent flow guarded by q_idx; the D3D12 XVM lane is unbuilt, so this is a recorded defect instead of a silent pass"
+    },
+    {
+      "path": "drivers/klsl/xvm_d3d12/shaders/xvm_fused_qkv_attention.hlsl",
+      "reason": "X4026: the same divergent-barrier defect on the fused QKV path"
+    }
+  ],
+  "laws": {
+    "H1": "every entry point discovered in a shader of a required root compiles under the declared target profile",
+    "H2": "every .hlsl file under a declared root is either compiled or excluded by name; an unaccounted file fails the lane",
+    "H3": "an excluded file that compiles is a stale exclusion and fails the lane until it is promoted back into the required set",
+    "H4": "a compile failure names the shader, entry point and target, and is never reported as a shape pass",
+    "H5": "the execution case compiles a shipped shader from disk, dispatches it on the available device and matches an independently computed CPU reference; with no device the lane reports UNAVAILABLE rather than PASS",
+    "H6": "the lane compiles with the in-process compiler (d3dcompiler) and cross-checks with fxc when it is installed; a disagreement fails the lane"
+  },
+  "execution": {
+    "shader": "data/shaders/fold_compute.hlsl",
+    "entry": "main",
+    "target": "cs_5_0",
+    "domain": "result[i] = arc_weight * (node_a[i] + node_b[i]) over 16 elements, dispatch(1,1,1) with [numthreads(64,1,1)]",
+    "tolerance": 1e-4
+  }
+}

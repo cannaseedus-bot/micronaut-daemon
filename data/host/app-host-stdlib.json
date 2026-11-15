@@ -1,0 +1,11 @@
+{
+  "@kind": "khanary.app_host.stdlib.v1",
+  "role": "Named aliases over the MicroXcfe builtin functions. Declared names extend the CALL allow-list; '@fn' must be one of add|mul|square|sub|div.",
+  "@ops": [
+    { "name": "sum",       "@fn": "add" },
+    { "name": "product",   "@fn": "mul" },
+    { "name": "pow2",      "@fn": "square" },
+    { "name": "difference","@fn": "sub" },
+    { "name": "ratio",     "@fn": "div" }
+  ]
+}

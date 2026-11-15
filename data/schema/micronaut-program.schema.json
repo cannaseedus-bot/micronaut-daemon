@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:khanary:schema:micronaut-program:0.1",
+  "title": "KHANARY Micronaut Program",
+  "type": "object",
+  "required": [
+    "$schema",
+    "@type",
+    "@no-eval",
+    "version",
+    "topology",
+    "runtime",
+    "authority_boundary",
+    "registry",
+    "edges",
+    "learning",
+    "domainFields"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "urn:khanary:schema:micronaut-program:0.1"
+    },
+    "@type": {
+      "const": "khanary.micronaut_program.v0.1"
+    },
+    "@no-eval": {
+      "const": true
+    },
+    "version": {
+      "const": "0.1"
+    },
+    "topology": {
+      "type": "object"
+    },
+    "runtime": {
+      "type": "object"
+    },
+    "authority_boundary": {
+      "type": "object"
+    },
+    "registry": {
+      "type": "object"
+    },
+    "edges": {
+      "type": "object"
+    },
+    "learning": {
+      "type": "object"
+    },
+    "domainFields": {
+      "type": "array"
+    }
+  }
+}

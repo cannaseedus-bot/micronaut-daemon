@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0">
+<!--
+  tool.aiml — TOOL-µ dispatch corpus
+  8 operators: SEARCH, FETCH, RUN, CALL, LIST, CREATE, UPDATE, DELETE
+  Each operator maps to a route_hint:tool_gram:<gram> key-store address.
+  Phase: Sek (OP_SEK_GLYPH), T=0.4
+  Output is evidence (OP_CHEN_STORE), never a commit.
+  DELETE requires commit-auth gate (features[15]=0xC0 must be granted externally).
+  Content dictionary: urn:kuhul:daemon-tool:v1
+-->
+
+<!-- ── SEARCH ────────────────────────────────────────────────────────────── -->
+<category><pattern>SEARCH FOR _</pattern>
+<template><think><set name="tool_op">SEARCH</set><set name="tool_target"><star/></set></think>Dispatching search for: <star/>.</template>
+</category>
+<category><pattern>SEARCH _</pattern>
+<template><think><set name="tool_op">SEARCH</set><set name="tool_target"><star/></set></think>Dispatching search: <star/>.</template>
+</category>
+<category><pattern>FIND _</pattern>
+<template><think><set name="tool_op">SEARCH</set><set name="tool_target"><star/></set></think>Dispatching find: <star/>.</template>
+</category>
+<category><pattern>LOOK UP _</pattern>
+<template><think><set name="tool_op">SEARCH</set><set name="tool_target"><star/></set></think>Dispatching lookup: <star/>.</template>
+</category>
+<category><pattern>QUERY _</pattern>
+<template><think><set name="tool_op">SEARCH</set><set name="tool_target"><star/></set></think>Dispatching query: <star/>.</template>
+</category>
+
+<!-- ── FETCH ─────────────────────────────────────────────────────────────── -->
+<category><pattern>FETCH _</pattern>
+<template><think><set name="tool_op">FETCH</set><set name="tool_target"><star/></set></think>Dispatching fetch: <star/>.</template>
+</category>
+<category><pattern>GET _</pattern>
+<template><think><set name="tool_op">FETCH</set><set name="tool_target"><star/></set></think>Dispatching get: <star/>.</template>
+</category>
+<category><pattern>RETRIEVE _</pattern>
+<template><think><set name="tool_op">FETCH</set><set name="tool_target"><star/></set></think>Dispatching retrieve: <star/>.</template>
+</category>
+<category><pattern>DOWNLOAD _</pattern>
+<template><think><set name="tool_op">FETCH</set><set name="tool_target"><star/></set></think>Dispatching download: <star/>.</template>
+</category>
+<category><pattern>LOAD _</pattern>
+<template><think><set name="tool_op">FETCH</set><set name="tool_target"><star/></set></think>Dispatching load: <star/>.</template>
+</category>
+
+<!-- ── RUN ───────────────────────────────────────────────────────────────── -->
+<category><pattern>RUN _</pattern>
+<template><think><set name="tool_op">RUN</set><set name="tool_target"><star/></set></think>Dispatching run: <star/>.</template>
+</category>
+<category><pattern>EXECUTE _</pattern>
+<template><think><set name="tool_op">RUN</set><set name="tool_target"><star/></set></think>Dispatching execute: <star/>.</template>
+</category>
+<category><pattern>INVOKE _</pattern>
+<template><think><set name="tool_op">RUN</set><set name="tool_target"><star/></set></think>Dispatching invoke: <star/>.</template>
+</category>
+<category><pattern>LAUNCH _</pattern>
+<template><think><set name="tool_op">RUN</set><set name="tool_target"><star/></set></think>Dispatching launch: <star/>.</template>
+</category>
+<category><pattern>START _</pattern>
+<template><think><set name="tool_op">RUN</set><set name="tool_target"><star/></set></think>Dispatching start: <star/>.</template>
+</category>
+
+<!-- ── CALL ──────────────────────────────────────────────────────────────── -->
+<category><pattern>CALL _</pattern>
+<template><think><set name="tool_op">CALL</set><set name="tool_target"><star/></set></think>Dispatching call: <star/>.</template>
+</category>
+<category><pattern>USE TOOL _</pattern>
+<template><think><set name="tool_op">CALL</set><set name="tool_target"><star/></set></think>Dispatching tool call: <star/>.</template>
+</category>
+<category><pattern>INVOKE TOOL _</pattern>
+<template><think><set name="tool_op">CALL</set><set name="tool_target"><star/></set></think>Dispatching tool call: <star/>.</template>
+</category>
+<category><pattern>USE _</pattern>
+<template><think><set name="tool_op">CALL</set><set name="tool_target"><star/></set></think>Dispatching use: <star/>.</template>
+</category>
+<category><pattern>APPLY _</pattern>
+<template><think><set name="tool_op">CALL</set><set name="tool_target"><star/></set></think>Dispatching apply: <star/>.</template>
+</category>
+
+<!-- ── LIST ──────────────────────────────────────────────────────────────── -->
+<category><pattern>LIST _</pattern>
+<template><think><set name="tool_op">LIST</set><set name="tool_target"><star/></set></think>Dispatching list: <star/>.</template>
+</category>
+<category><pattern>SHOW ALL _</pattern>
+<template><think><set name="tool_op">LIST</set><set name="tool_target"><star/></set></think>Dispatching show all: <star/>.</template>
+</category>
+<category><pattern>ENUMERATE _</pattern>
+<template><think><set name="tool_op">LIST</set><set name="tool_target"><star/></set></think>Dispatching enumerate: <star/>.</template>
+</category>
+<category><pattern>SHOW _</pattern>
+<template><think><set name="tool_op">LIST</set><set name="tool_target"><star/></set></think>Dispatching show: <star/>.</template>
+</category>
+<category><pattern>DISPLAY _</pattern>
+<template><think><set name="tool_op">LIST</set><set name="tool_target"><star/></set></think>Dispatching display: <star/>.</template>
+</category>
+
+<!-- ── CREATE ────────────────────────────────────────────────────────────── -->
+<category><pattern>CREATE _</pattern>
+<template><think><set name="tool_op">CREATE</set><set name="tool_target"><star/></set></think>Dispatching create: <star/>.</template>
+</category>
+<category><pattern>MAKE _</pattern>
+<template><think><set name="tool_op">CREATE</set><set name="tool_target"><star/></set></think>Dispatching make: <star/>.</template>
+</category>
+<category><pattern>BUILD _</pattern>
+<template><think><set name="tool_op">CREATE</set><set name="tool_target"><star/></set></think>Dispatching build: <star/>.</template>
+</category>
+<category><pattern>ADD _</pattern>
+<template><think><set name="tool_op">CREATE</set><set name="tool_target"><star/></set></think>Dispatching add: <star/>.</template>
+</category>
+<category><pattern>NEW _</pattern>
+<template><think><set name="tool_op">CREATE</set><set name="tool_target"><star/></set></think>Dispatching new: <star/>.</template>
+</category>
+
+<!-- ── UPDATE ────────────────────────────────────────────────────────────── -->
+<category><pattern>UPDATE _</pattern>
+<template><think><set name="tool_op">UPDATE</set><set name="tool_target"><star/></set></think>Dispatching update: <star/>.</template>
+</category>
+<category><pattern>MODIFY _</pattern>
+<template><think><set name="tool_op">UPDATE</set><set name="tool_target"><star/></set></think>Dispatching modify: <star/>.</template>
+</category>
+<category><pattern>CHANGE _</pattern>
+<template><think><set name="tool_op">UPDATE</set><set name="tool_target"><star/></set></think>Dispatching change: <star/>.</template>
+</category>
+<category><pattern>EDIT _</pattern>
+<template><think><set name="tool_op">UPDATE</set><set name="tool_target"><star/></set></think>Dispatching edit: <star/>.</template>
+</category>
+<category><pattern>SET _</pattern>
+<template><think><set name="tool_op">UPDATE</set><set name="tool_target"><star/></set></think>Dispatching set: <star/>.</template>
+</category>
+
+<!-- ── DELETE ────────────────────────────────────────────────────────────── -->
+<!--
+  DELETE requires commit-auth gate: features[15]=0xC0 must be externally granted.
+  tool-daemon.js enforces this: without the gate the evidence is flagged as
+  REJECTED and xcfe_move is set to "guard" (blocked).
+-->
+<category><pattern>DELETE _</pattern>
+<template><think><set name="tool_op">DELETE</set><set name="tool_target"><star/></set></think>Delete requested for: <star/>. Commit-auth gate required.</template>
+</category>
+<category><pattern>REMOVE _</pattern>
+<template><think><set name="tool_op">DELETE</set><set name="tool_target"><star/></set></think>Remove requested for: <star/>. Commit-auth gate required.</template>
+</category>
+<category><pattern>DROP _</pattern>
+<template><think><set name="tool_op">DELETE</set><set name="tool_target"><star/></set></think>Drop requested for: <star/>. Commit-auth gate required.</template>
+</category>
+<category><pattern>PURGE _</pattern>
+<template><think><set name="tool_op">DELETE</set><set name="tool_target"><star/></set></think>Purge requested for: <star/>. Commit-auth gate required.</template>
+</category>
+<category><pattern>DESTROY _</pattern>
+<template><think><set name="tool_op">DELETE</set><set name="tool_target"><star/></set></think>Destroy requested for: <star/>. Commit-auth gate required.</template>
+</category>
+
+<!-- ── Fallback ───────────────────────────────────────────────────────────── -->
+<category><pattern>TOOL *</pattern>
+<template><think><set name="tool_op">CALL</set><set name="tool_target"><star/></set></think>Dispatching tool: <star/>.</template>
+</category>
+<category><pattern>_ WITH TOOL _</pattern>
+<template><think><set name="tool_op">CALL</set><set name="tool_target"><star index="2"/></set></think>Dispatching <star/> with tool: <star index="2"/>.</template>
+</category>
+
+</aiml>

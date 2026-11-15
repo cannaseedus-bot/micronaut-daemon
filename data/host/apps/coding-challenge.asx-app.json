@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "coding-challenge",
+  "@key": "⟁APP:CODING_CHALLENGE",
+  "@mount": "⟁ROOT:CODING_CHALLENGE",
+  "@theme": { "accent": "#22d3ee", "bg": "#000a10", "surface": "#001422", "text": "#cffafe", "hero_phase": "Sek", "tagline": "Code daily. Get sharper." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "challenges", "component": "⟁WIDGET:CHALLENGES", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "challenges": [], "active": null, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:CODING_CHALLENGE": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:NEW_CHALLENGE", "⟁ACTION:LEADERBOARD"] },
+    "⟁ACTION:NEW_CHALLENGE": { "@type": "button", "@text": "New Challenge", "@on": { "click": "cc.open_compose" } },
+    "⟁ACTION:LEADERBOARD": { "@type": "button", "@text": "Leaderboard", "@on": { "click": "cc.open_leaderboard" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:CHALLENGES", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:CHALLENGES": { "@type": "feed", "@bind": "state.challenges", "@children": ["⟁WIDGET:CHALLENGE_CARD"] },
+    "⟁WIDGET:CHALLENGE_CARD": { "@type": "content-card", "@bind": "challenge", "@on": { "solve": "cc.solve", "view": "cc.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:PROGRESS", "⟁WIDGET:TAGS"] },
+    "⟁WIDGET:PROGRESS": { "@type": "stat", "@bind": "data.progress" },
+    "⟁WIDGET:TAGS": { "@type": "tag-cloud", "@bind": "data.tags" }
+  },
+  "@programs": {
+    "cc.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "cc.open_leaderboard": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "cc.solve": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_challenge", "@out": "active" }] },
+    "cc.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "challenge.new": "cc.open_compose", "leaderboard.open": "cc.open_leaderboard", "challenge.solve": "cc.solve", "challenge.view": "cc.view" },
+  "@imports": [{ "ref": "challenge", "mode": "schema_table" }, { "ref": "submission", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "code-runner", "name": "In-App Code Runner", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Run your solution directly in the browser against test cases." },
+      { "id": "daily-challenge", "name": "Daily Challenge", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "One new challenge every day. Streak tracking included." },
+      { "id": "hint-system", "name": "Hint System", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Progressive hints that nudge without spoiling the solution." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "cc.new", "pattern": "NEW CHALLENGE|CREATE CHALLENGE|ADD PROBLEM", "intent": "open_compose" },
+      { "id": "cc.solve", "pattern": "SOLVE *|START CHALLENGE *|PRACTICE CODING", "intent": "solve" }
+    ]
+  },
+  "@data": {
+    "progress": { "solved": 48, "streak_days": 11, "rank": "Intermediate" },
+    "tags": ["Arrays", "Trees", "DP", "Graphs", "Strings", "Math", "KUHUL"],
+    "spotlight": [
+      { "id": "sp1", "title": "Fold Adjacency — Hard", "category": "Graphs", "badge": "Hardest Solved", "difficulty": "hard", "excerpt": "Compute semantic neighbors in a Q3×C6 graph. 2 optimal solutions found." },
+      { "id": "sp2", "title": "Phase Cycle Validator", "category": "KUHUL", "badge": "Original", "difficulty": "medium", "excerpt": "Given a sequence of phase transitions, determine if it's legal." },
+      { "id": "sp3", "title": "Binary Vector XOR Walk", "category": "Math", "badge": "Recent", "difficulty": "easy", "excerpt": "Count distinct positions reachable in n XOR steps on F2^3." }
+    ],
+    "schema": {
+      "challenge": { "primaryKey": "challenge_id", "fields": { "challenge_id": { "type": "string" }, "title": { "type": "string", "required": true }, "description": { "type": "text", "required": true }, "difficulty": { "type": "string" }, "tags": { "type": "json" }, "test_cases": { "type": "json" }, "created_at": { "type": "datetime" } } },
+      "submission": { "primaryKey": "sub_id", "fields": { "sub_id": { "type": "string" }, "challenge_id": { "type": "string", "required": true }, "user_id": { "type": "string" }, "code": { "type": "text" }, "language": { "type": "string" }, "passed": { "type": "boolean" }, "runtime_ms": { "type": "integer" }, "submitted_at": { "type": "datetime" } } }
+    }
+  }
+}

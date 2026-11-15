@@ -1,0 +1,71 @@
+{
+  "@program": "brain2.birdsong.tensor",
+  "@kind": "kuhul.tensor.source.v1",
+  "@description": "Khanary geometric-sound brain: STB tensor storage, spectral graph features, and GPU-safe geometry transforms for canary birds and electric guitars.",
+  "@source": {
+    "root": "brain2",
+    "container": "brain2/khanary_brain.stb",
+    "container_magic": "STB0",
+    "graph": "brain2/graph.json",
+    "mesh": "brain2/mesh.svg",
+    "tensor_header": "brain2/tensor_header.bin"
+  },
+  "@tensor": {
+    "node_count": 30628,
+    "edge_count": 91863,
+    "csr_flat_length": 183726,
+    "expert_count": 61,
+    "feature_dim": 3,
+    "features": ["time", "frequency", "energy"],
+    "dtype": "f32",
+    "layout": "soa",
+    "semantic_role": "audio.birdsong.spectral_ridge"
+  },
+  "@sidecars": {
+    "time": "brain2/nodes_time.bin",
+    "frequency": "brain2/nodes_freq.bin",
+    "energy": "brain2/nodes_energy.bin",
+    "routing": "brain2/routing.bin",
+    "experts": "brain2/experts_kuhul.bin",
+    "csr_index": "brain2/csr_index.bin",
+    "csr_neighbors": "brain2/csr_neighbors.bin"
+  },
+  "@operations": {
+    "load": { "phase": "Pop", "backend": "stb_reader" },
+    "route": { "phase": "Wo", "backend": "kuhul.expert_router" },
+    "spectral_transform": { "phase": "Sek", "backend": "d3d11_cs5", "shader": "scratch/knu_xform.hlsl" },
+    "spherical_projection": { "phase": "Sek", "backend": "d3d11_cs5", "adapter": "DirectXSHD3D11" },
+    "triangle_wave_step": { "phase": "Sek", "backend": "d3d12_compute", "shader": "dist/v3.5.0-WebX/native/d3d12_compute/triangle.hlsl", "glyph": "Sek.triangle_step" },
+    "verify": { "phase": "Chen", "backend": "cpu_reference", "criterion": "max_abs_error <= 1e-4" },
+    "checkpoint": { "phase": "Xul", "backend": "stb_writer" }
+  },
+  "@audio": {
+    "domain": "geometric_sound",
+    "current_source": "canary_bird",
+    "source_profiles": {
+      "canary_bird": {
+        "signal": "natural_vocalization",
+        "geometry": "ornamented_frequency_ridges",
+        "features": ["pitch_contour", "harmonic_spacing", "amplitude_envelope", "time"]
+      },
+      "electric_guitar": {
+        "signal": "string_pickup_waveform",
+        "geometry": "triangle_mesh_wave_with_attack_decay",
+        "primitive": "triangle",
+        "compute_shader": "dist/v3.5.0-WebX/native/d3d12_compute/triangle.hlsl",
+        "dispatch_glyph": "Sek.triangle_step",
+        "features": ["fundamental", "overtones", "pick_attack", "sustain", "distortion_energy"]
+      }
+    },
+    "representation": "spectrogram_ridge_graph",
+    "tensor_inputs": ["time", "frequency", "energy"],
+    "spherical_harmonics": true,
+    "adapter": "dist/fabric-engine/DirectXMath/brain-integration/kuhul-directxmath-audio-adapter.kuhul"
+  },
+  "@validation": {
+    "header_matches_sidecars": true,
+    "stb_magic_required": true,
+    "gpu_reference_check": "scratch/brain_xform_run.exe",
+    "expected_result": "PASS"
+  }
+}

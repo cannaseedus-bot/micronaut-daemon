@@ -1,0 +1,36 @@
+{
+  "@kind": "khanary.cfpc.pattern.v1",
+  "id": "why-does",
+  "intent": "Causal or motivational query — resolve why something happens or is the case.",
+  "phase": "Ch'en",
+  "@captures": {
+    "subject": {
+      "wildcard": "*",
+      "strip_prefix": "why does "
+    }
+  },
+  "neighborhood_resolve": {
+    "from_captures": [
+      "subject"
+    ],
+    "max_hops": 2
+  },
+  "question_templates": [
+    "What causes {subject}?",
+    "What conditions produce {subject}?",
+    "How does {neighbor} contribute to {subject}?",
+    "What would happen if the cause of {subject} were removed?",
+    "Is the relationship between {subject} and {neighbor} causal or correlational?"
+  ],
+  "context_template": "Causal subject: {subject}\nSemantic field: {field_keys}\nRelated domains: {neighbors}\nEpistemic state: UNKNOWN -- model verification required.",
+  "match": {
+    "rules": [
+      {
+        "prefix": "why does"
+      },
+      {
+        "prefix": "why is"
+      }
+    ]
+  }
+}

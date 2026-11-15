@@ -1,0 +1,258 @@
+{
+  "schema": "kuhul.micronaut.atomic.v1",
+  "identity": {
+    "id": "BINDINGS-µ",
+    "name": "BindingsOrchestrator",
+    "version": "1.0.0",
+    "authority_claim": "xcfe_gated_orchestrator"
+  },
+  "descriptor_status": "declarative_proposal",
+  "registered": false,
+  "registered_status": "unregistered; call register_micronaut() to activate",
+  "track_ref": "data/tracks/Bindings.xjson",
+  "bindings_ref": "data/grammar/Bindings.gram",
+  "manifest": {
+    "display_name": "Bindings Orchestrator µ",
+    "tagline": "C6 fold-wheel binding orchestrator — routes verb/delta/key surface across all module experts",
+    "color": "#7c4dff",
+    "icon_svg": "data/micronauts/assets/bindings.svg",
+    "animated_svg": "data/micronauts/assets/bindings.animated.svg",
+    "profile_card": {
+      "widget": "data/host/apps/micronaut-card.asx-app.json",
+      "props": { "id": "BINDINGS-µ", "phase": "Pop", "category": "orchestrator" }
+    }
+  },
+  "api": {
+    "namespace": "bindings",
+    "base": "http://127.0.0.1:17885",
+    "atomic_keys": [
+      { "key": "binding.dispatch",  "description": "route verb/delta/key op to target module expert; phase=Sek required" },
+      { "key": "binding.health",    "description": "check driver load and bus health for all registered modules" },
+      { "key": "binding.drivers",   "description": "return driver load state for a named binding_id" },
+      { "key": "binding.register",  "description": "register a new module contract in the binding registry" },
+      { "key": "binding.identity",  "description": "return id, bridge_path, and phase_affinity for a binding_id" }
+    ],
+    "rest_routes": [
+      { "method": "POST", "path": "/api/atomic/call", "key": "binding.dispatch"  },
+      { "method": "GET",  "path": "/api/health",      "key": "binding.health"    },
+      { "method": "POST", "path": "/api/atomic/call", "key": "binding.drivers"   },
+      { "method": "POST", "path": "/api/atomic/call", "key": "binding.register"  },
+      { "method": "POST", "path": "/api/atomic/call", "key": "binding.identity"  }
+    ]
+  },
+  "gram": {
+    "schema": "kuhul.micronaut.gram.v1",
+    "gram_file":   "data/grammar/Bindings.gram",
+    "ingest_file": "data/ingest/Bindings.gram",
+    "book": "BINDINGS-1",
+    "entry_count": 45,
+    "classes": [
+      "DEPENDENCY", "EXECUTION", "STRUCTURE", "TRANSFORM",
+      "SELECTION", "MEMORY", "CONDITION", "CONSEQUENCE",
+      "VERIFICATION", "PHASE"
+    ],
+    "operators": [
+      "DEPENDENCY", "DIRECT", "RELATION", "SUBSTITUTE",
+      "ALTERNATIVE", "STATE", "SEQUENCE", "VERIFY", "PHASE"
+    ],
+    "xcfe_ops": [
+      "@bind", "@dispatch", "@route", "@direct",
+      "@as", "@if", "@then", "@node", "@or", "@op"
+    ],
+    "phase_affinity": {
+      "Pop":    ["binding:bind","binding:match","binding:agent","binding:topic","binding:read","binding:get","binding:list","binding:register","binding:health","binding:identity","binding:load","binding:import","binding:pop","binding:cm1","binding:gemma"],
+      "Wo":     ["binding:dispatch","binding:route","binding:wire","binding:condition","binding:write","binding:patch","binding:post","binding:wo","binding:graph-theory","binding:user","binding:tensor"],
+      "Yax":    ["binding:resolve","binding:think","binding:remember","binding:recall","binding:yax"],
+      "Sek":    ["binding:invoke","binding:orchestrate","binding:call","binding:decide","binding:eval","binding:delete","binding:sek","binding:xjson-ml","binding:coder"],
+      "Ch'en":  ["binding:learn","binding:ch'en"],
+      "Xul":    ["binding:emit","binding:save","binding:xul"]
+    },
+    "pattern_induction_guard": {
+      "promote_generated_facts": false,
+      "note": "Grammar invariant: Bindings.gram entries declare callable surface; they do not assert facts. authority_boundary = route_contract_declares_callable_surface_not_fact"
+    }
+  },
+  "modules": {
+    "CM-1-µ": {
+      "bridge_path": "data/micronauts/control-micronaut-1.json",
+      "phase": "Pop",
+      "action": "cm1",
+      "gram_key": "binding:cm1",
+      "bus_port": 17885
+    },
+    "GEMMA-µ": {
+      "bridge_path": "data/micronauts/gemma.micronaut.json",
+      "phase": "Pop",
+      "action": "gemma",
+      "gram_key": "binding:gemma",
+      "inference_port": 3217,
+      "bus_port": 17885
+    },
+    "GRAPH-THEORY-µ": {
+      "bridge_path": "data/micronauts/graph-theory-micronaut.v1.json",
+      "phase": "Wo",
+      "action": "graph_theory",
+      "gram_key": "binding:graph-theory",
+      "bus_port": 17885
+    },
+    "USER-µ": {
+      "bridge_path": "data/micronauts/user.micronaut.json",
+      "phase": "Wo",
+      "action": "user_binding",
+      "gram_key": "binding:user",
+      "bus_port": 17885
+    },
+    "XJSON-ML-µ": {
+      "bridge_path": "data/micronauts/xjson-ml.json",
+      "phase": "Sek",
+      "action": "xjson_ml",
+      "gram_key": "binding:xjson-ml",
+      "bus_port": 17885
+    },
+    "CODER-µ": {
+      "bridge_path": "data/micronauts/micronaut-coder.native.json",
+      "phase": "Sek",
+      "action": "coder",
+      "gram_key": "binding:coder",
+      "bus_port": 17885
+    },
+    "TENSOR-µ": {
+      "bridge_path": "data/micronauts/tensor.micronaut.json",
+      "phase": "Wo",
+      "action": "tensor_binding",
+      "gram_key": "binding:tensor",
+      "bus_port": 17885
+    }
+  },
+  "verb_surface": {
+    "count": 11,
+    "verbs": ["match","agent","call","topic","condition","think","remember","recall","learn","decide","eval"],
+    "gram_keys": [
+      "binding:match","binding:agent","binding:call","binding:topic","binding:condition",
+      "binding:think","binding:remember","binding:recall","binding:learn","binding:decide","binding:eval"
+    ]
+  },
+  "delta_surface": {
+    "count": 8,
+    "ops": ["read","get","list","write","patch","post","delete","save"],
+    "gram_keys": [
+      "binding:read","binding:get","binding:list","binding:write",
+      "binding:patch","binding:post","binding:delete","binding:save"
+    ]
+  },
+  "lifecycle": {
+    "ops": ["register","health","identity","load","import"],
+    "gram_keys": ["binding:register","binding:health","binding:identity","binding:load","binding:import"]
+  },
+  "phase_ops": {
+    "count": 6,
+    "gram_keys": ["binding:pop","binding:wo","binding:yax","binding:sek","binding:ch'en","binding:xul"]
+  },
+  "cache": {
+    "object": "bindings-dispatch-cache",
+    "ttl": 1800,
+    "schema": {
+      "last_binding_id": "string",
+      "last_verb":       "string",
+      "last_delta":      "string",
+      "last_key":        "string",
+      "phase_gate":      "string",
+      "confidence":      "float"
+    }
+  },
+  "capabilities": [
+    "verb_surface_routing",
+    "delta_surface_routing",
+    "atomic_key_dispatch",
+    "driver_lifecycle_management",
+    "module_health_check",
+    "phase_gate_enforcement",
+    "binding_id_resolution",
+    "gram_corpus_indexing"
+  ],
+  "srai": {
+    "mode": "delegate",
+    "max_depth": 1,
+    "note": "BINDINGS-µ does not recurse; it delegates one level to target module experts"
+  },
+  "xcfe": {
+    "authority": "xcfe_gated_orchestrator",
+    "permitted": [
+      "gramRead",
+      "emit_response",
+      "route_to_module",
+      "invoke_atomic_key"
+    ],
+    "forbidden": [
+      "write_state",
+      "mutate_topology",
+      "commit_patterns",
+      "emit_facts",
+      "redirect_srai_unbounded"
+    ]
+  },
+  "program_contract": {
+    "format": "kuhul.micronaut-program/1",
+    "program_model": "orchestrator_dispatch",
+    "phase": "Pop",
+    "role": [
+      "binding_id_resolution",
+      "verb_delta_key_routing",
+      "module_lifecycle_coordination"
+    ],
+    "grammar_refs": [
+      "data/grammar/Bindings.gram",
+      "data/ingest/Bindings.gram",
+      "data/schema/Bindings.xsd",
+      "data/micronauts/Micronaut.SRAI.AIML.ebnf"
+    ],
+    "contract_refs": [
+      "data/tracks/Bindings.xjson",
+      "data/alice/Bindings.aiml",
+      "data/alice/Bindings.alice"
+    ],
+    "entry_points": [
+      "micronaut.bindings.dispatch_binding_op",
+      "micronaut.bindings.resolve_binding_id"
+    ],
+    "effects": ["gramRead", "route_to_module", "emit_response"],
+    "bindings": {
+      "inputs": [
+        { "name": "binding_id", "type": "string",  "resolution_status": "required; resolved at Pop from input pattern or explicit param" },
+        { "name": "op",         "type": "string",  "resolution_status": "required; verb | delta | atomic_key | lifecycle" },
+        { "name": "text",       "type": "string",  "resolution_status": "optional" },
+        { "name": "payload",    "type": "object",  "resolution_status": "optional" }
+      ],
+      "output": {
+        "type": "BindingDispatchResult",
+        "authority": "DATA_ONLY",
+        "direct_dispatch": false
+      }
+    },
+    "interaction": {
+      "host_binding_required": true,
+      "direct_user_io": false
+    },
+    "sandbox": {
+      "filesystem": "allowlisted_binding_grammar_read_only",
+      "network": "loopback_bus_only",
+      "process": "none",
+      "effects": ["gramRead", "route_to_module", "emit_response"],
+      "admission": "xcfe_gated"
+    },
+    "learning": {
+      "mode": "none",
+      "note": "orchestrator — no learning authority; routes LEARN verb to target module"
+    },
+    "implementation": {
+      "source_status": "source_pending",
+      "runtime_registration": "pending",
+      "validation_status": "pending"
+    },
+    "drivers": [
+      "Micronaut.Core.dll",
+      "json_runtime_lib.dll",
+      "Pattern.Log.dll"
+    ]
+  }
+}

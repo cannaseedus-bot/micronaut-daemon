@@ -1,0 +1,208 @@
+{
+  "@program": "kuhul.atomic.blocks",
+  "@kind": "kuhul.atomic.blocks.v1",
+  "@version": "1.0.0",
+  "@authority": "XCFE",
+  "@execution_default": "DATA_ONLY",
+  "@identity_model": "atomic_id",
+  "@role": "Reusable atomic operations, Micronaut contracts, and capability declarations. Blocks declare.",
+  "@phase_order": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"],
+
+  "@module_contract": {
+    "schema": "kuhul.atomic.blocks.v1",
+    "shared_identity": "atomic_id",
+    "note": "atomic_id is the shared key across all four modules. Canvas nodes, pipeline stages, and workflow nodes all reference blocks by atomic_id. The block is the single source of semantic truth.",
+    "phase_hooks": {
+      "Pop":   "receive block contract declaration; parse atomic_id",
+      "Wo":    "register atomic_id in block registry; wire executor reference",
+      "Yax":   "validate port types; resolve executor capability claims",
+      "Ch'en": "validate block contract: operator ↔ port types ↔ phase ↔ executor authority",
+      "Xul":   "return updated block registry; emit registration result"
+    },
+    "xcfe": {
+      "authority": "xcfe_gated_read_only",
+      "forbidden": ["execute_block_directly", "write_state", "emit_facts"],
+      "note": "Blocks declare capability contracts. XCFE admission is required at Sek when a pipeline or workflow triggers block execution."
+    }
+  },
+
+  "@types": {
+    "BlockId":    { "base": "string", "pattern": "^block\\." },
+    "BlockKind":  { "enum": ["transform", "filter", "fold", "reduce", "accumulate", "dispatch", "verify", "emit"] },
+    "BlockOperator": { "enum": ["MAP", "FILTER", "FOLD", "REDUCE", "STACK", "VERIFY", "EMIT"] },
+    "BlockPhase": { "enum": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"] },
+    "BlockAuthority": { "enum": ["proposal_only", "xcfe_gated", "write_state", "read_only"] },
+    "BlockPort":     { "name": "string", "type": "string" },
+    "BlockContract": {
+      "atomic_id":  "BlockId",
+      "kind":       "BlockKind",
+      "operator":   "BlockOperator",
+      "phase":      "BlockPhase",
+      "executor":   "string",
+      "authority":  "BlockAuthority",
+      "input":      "string | object",
+      "output":     "string | object",
+      "ports":      { "in": "BlockPort[]", "out": "BlockPort[]" }
+    }
+  },
+
+  "@state": {
+    "registry":   {},
+    "last_block": null,
+    "phase":      "Pop"
+  },
+
+  "@control": [
+    {
+      "@phase": "Pop",
+      "@op": "FOLD_ENTER",
+      "@fold": "Pop",
+      "@node": "blocks-receive",
+      "@desc": "receive block contract declaration; parse and normalize atomic_id"
+    },
+    {
+      "@phase": "Wo",
+      "@op": "SEQUENCE",
+      "@steps": [
+        { "@op": "ASSIGN",    "@key": "last_block", "@from": "$input.block.contract" },
+        { "@op": "CALL",      "@fn": "register_block", "@in": ["last_block"], "@out": "registry" },
+        { "@op": "LOG",       "@args": ["Wo: block registered — id=$last_block.atomic_id kind=$last_block.kind"] }
+      ]
+    },
+    {
+      "@phase": "Yax",
+      "@op": "CALL",
+      "@fn": "validate_ports",
+      "@in":  ["last_block.ports", "last_block.input", "last_block.output"],
+      "@out": "port_validation",
+      "@desc": "confirm in/out port types are consistent with declared input/output types"
+    },
+    {
+      "@phase": "Ch'en",
+      "@op": "CALL",
+      "@fn": "validate_block_contract",
+      "@in":  ["last_block", "port_validation"],
+      "@out": "contract_result",
+      "@desc": "operator ↔ phase contract; executor authority claim; port type consistency"
+    },
+    {
+      "@phase": "Xul",
+      "@op": "FOLD_EXIT",
+      "@fold": "Xul",
+      "@node": "blocks-emit",
+      "@args": ["registry", "contract_result"],
+      "@desc": "emit updated block registry; return registration result"
+    }
+  ],
+
+  "@builtin_blocks": {
+    "block.echo": {
+      "atomic_id": "block.echo",
+      "kind":      "transform",
+      "operator":  "MAP",
+      "phase":     "Yax",
+      "executor":  "micronaut.echo",
+      "authority": "proposal_only",
+      "input":     "text",
+      "output":    "text",
+      "ports": {
+        "in":  [{ "name": "text", "type": "text" }],
+        "out": [{ "name": "text", "type": "text" }]
+      }
+    },
+    "block.filter_empty": {
+      "atomic_id": "block.filter_empty",
+      "kind":      "filter",
+      "operator":  "FILTER",
+      "phase":     "Yax",
+      "executor":  "native.filter_empty",
+      "authority": "read_only",
+      "input":     "text",
+      "output":    "text",
+      "ports": {
+        "in":  [{ "name": "text", "type": "text" }],
+        "out": [{ "name": "text", "type": "text" }]
+      }
+    },
+    "block.fold_sum": {
+      "atomic_id": "block.fold_sum",
+      "kind":      "fold",
+      "operator":  "FOLD",
+      "phase":     "Sek",
+      "executor":  "micronaut.tensor:tensor.fold",
+      "authority": "xcfe_gated",
+      "input":     "number[]",
+      "output":    "number",
+      "ports": {
+        "in":  [{ "name": "values", "type": "number[]" }],
+        "out": [{ "name": "sum",    "type": "number"   }]
+      }
+    },
+    "block.reduce_max": {
+      "atomic_id": "block.reduce_max",
+      "kind":      "reduce",
+      "operator":  "REDUCE",
+      "phase":     "Sek",
+      "executor":  "micronaut.tensor:tensor.fold",
+      "authority": "xcfe_gated",
+      "input":     "number[]",
+      "output":    "number",
+      "ports": {
+        "in":  [{ "name": "values", "type": "number[]" }],
+        "out": [{ "name": "max",    "type": "number"   }]
+      }
+    },
+    "block.stack_texts": {
+      "atomic_id": "block.stack_texts",
+      "kind":      "accumulate",
+      "operator":  "STACK",
+      "phase":     "Wo",
+      "executor":  "micronaut.tensor:tensor.fold",
+      "authority": "xcfe_gated",
+      "input":     "text",
+      "output":    "text[]",
+      "ports": {
+        "in":  [{ "name": "text",  "type": "text"   }],
+        "out": [{ "name": "stack", "type": "text[]" }]
+      }
+    },
+    "block.verify_shape": {
+      "atomic_id": "block.verify_shape",
+      "kind":      "verify",
+      "operator":  "VERIFY",
+      "phase":     "Ch'en",
+      "executor":  "micronaut.tensor:tensor.shape_contract",
+      "authority": "read_only",
+      "input":     "tensor",
+      "output":    "bool",
+      "ports": {
+        "in":  [{ "name": "tensor", "type": "tensor" }],
+        "out": [{ "name": "valid",  "type": "bool"   }]
+      }
+    }
+  },
+
+  "@example": {
+    "block.contract": {
+      "atomic_id": "block.echo",
+      "kind":      "transform",
+      "input":     "text",
+      "output":    "text",
+      "operator":  "MAP",
+      "phase":     "Yax",
+      "executor":  "micronaut.echo",
+      "authority": "proposal_only"
+    },
+    "block.ports": {
+      "in":  ["text"],
+      "out": ["text"]
+    }
+  },
+
+  "@refs": {
+    "workflow_module": "data/programs/kuhul.atomic.workflow.json",
+    "pipeline_module": "data/programs/kuhul.atomic.pipeline.json",
+    "canvas_module":   "data/programs/kuhul.atomic.canvas.json",
+    "tensor_micronaut":"data/micronauts/tensor.micronaut.json"
+  }
+}

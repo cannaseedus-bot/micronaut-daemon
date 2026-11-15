@@ -1,0 +1,52 @@
+{
+  "@program": "micronaut.gpt-oss.default-adapter",
+  "@kind": "kuhul.model.adapter.v1",
+  "@namespace": "https://kuhul.dev/",
+  "@version": "1.0.0",
+  "purpose": "Manifest-driven GPT-OSS chat/planner adapter with Micronaut helper routing.",
+  "model": {
+    "id": "gpt-oss",
+    "identity": "gpt-oss-20b-MXFP4",
+    "container": "SCXQDDS",
+    "manifest": "E:/models/GPT-DDS/GPT-OSS/model.scxqdds",
+    "hot_swap_cache": "C:/SCXQDDS-cache",
+    "template": "negotiate",
+    "template_policy": "use_model_metadata; never_assume_chatml"
+  },
+  "runtime": {
+    "endpoint_source": "programs/api.manifest.json -> server.manifest -> dist/json-runtime/server.json",
+    "adapter": "tools/gptoss_micronaut_adapter.py",
+    "semantic_layer": "KXML",
+    "compiled_container": "JROM+CBOR",
+    "authority": "AtomicDOM/Micronaut host"
+  },
+  "helpers": [
+    { "id": "micronaut-coder", "role": "ast_parse_compile_file_patch", "program": "programs/micronauts/micronaut-coder.native.json" },
+    { "id": "dolphin-phi2", "role": "chatml_tool_planner", "manifest": "models/dolphin-phi2/atomic.manifest.json" },
+    { "id": "phi3-mini-4k", "role": "chatml_tool_caller", "manifest": "models/phi3-mini-4k/atomic.manifest.json" },
+    { "id": "mini", "role": "low_latency_classifier", "manifest": "programs/manifest.json" },
+    { "id": "kube-semantic-cube", "role": "semantic_cube_executor", "manifest": "dist/GPU-TRAINER/models/kube.model.json" }
+  ],
+  "tool_policy": {
+    "max_tool_calls_per_turn": 1,
+    "execution": "host_only",
+    "required_checks": ["tool_registered", "arguments_json", "approved_folders", "capability_policy"],
+    "result_turn": "tool",
+    "unadmissible_call": "route_to_helper_or_return_degraded"
+  },
+  "pipeline": [
+    { "phase": "Pop", "op": "LOAD_MODEL_CONTRACT" },
+    { "phase": "Wo", "op": "DISCOVER_ENDPOINT_AND_TEMPLATE" },
+    { "phase": "Yax", "op": "ROUTE_CHAT_CODE_OR_TOOL" },
+    { "phase": "Sek", "op": "DECODE_GPT_OSS" },
+    { "phase": "Chen", "op": "VALIDATE_RESPONSE_AND_TOOL_CANDIDATE" },
+    { "phase": "Xul", "op": "EMIT_RESPONSE_OR_ATOMICDOM_COMMAND" }
+  ],
+  "invariants": [
+    "GPT-OSS proposes; the host executes.",
+    "ChatML, Jinja, Harmony, and KXML are dialects; KXML remains the semantic layer.",
+    "SLERP may combine validated semantic state only, never tool arguments or paths.",
+    "A missing GPU fold is loaded from the canonical SCXQDDS source.",
+    "No hard-coded server port is allowed in the adapter."
+  ]
+}

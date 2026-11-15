@@ -1,0 +1,55 @@
+{
+  "@kind": "kuhul.micronaut.atomic.v1",
+  "id": "REASON-µ",
+  "descriptor_status": "active",
+  "track_ref": "data/tracks/REASON-u.semantic-tracks.v1.json",
+  "manifest": {
+    "name": "REASON-µ",
+    "version": "1.0.0",
+    "description": "Semantic reasoning micronaut — semantic-graph query, operator detection and application (ELIZA-1 16 operators), horizontal fold (semfold). Sek-phase compute. proposal_only authority."
+  },
+  "api": {
+    "namespace": "reason",
+    "atomic_keys": ["reason.query", "reason.fold", "reason.apply", "reason.health"],
+    "verb_surface": ["REASON *", "SEMFOLD *", "DEDUCE *", "ANALYZE *", "REASON STATUS"]
+  },
+  "xcfe": {
+    "mode": "xcfe_gated_read_only",
+    "escalation_mode": "proposal_only",
+    "authority": "proposal_only",
+    "forbidden": ["emit_response", "write_state", "mutate_topology", "commit_patterns", "direct_dispatch"]
+  },
+  "atomic_key_defs": {
+    "reason.query": {
+      "@type": "semantic_graph_query",
+      "description": "Yax/Sek-phase: execute semantic-graph query over the active knowledge graph — matches subject, predicate, object patterns; returns scored candidate triples with field provenance.",
+      "phases": ["Yax", "Sek"],
+      "authority": "data_only"
+    },
+    "reason.fold": {
+      "@type": "semfold",
+      "description": "Sek-phase: apply semantic fold (hylomorphism) — unfolds input into primitive evidence graph, applies horizontal fold across evidence nodes, refolds into collapsed conclusion. Output: semfold_result with confidence.",
+      "phases": ["Sek"],
+      "authority": "data_only"
+    },
+    "reason.apply": {
+      "@type": "operator_apply",
+      "description": "Sek-phase: apply ELIZA-1 reasoning operators to semfold_result — detects and executes one of 16 operators (CAUSE, CONTRAST, DEPENDENCY, CONSTRAINT, EVIDENCE, SEQUENCE, BOUNDARY, STATE, CONFLICT, ALTERNATIVE, INVARIANT, TEST, RELATION, SUBSTITUTE, VERIFY, DIRECT).",
+      "phases": ["Sek"],
+      "operator_ref": "data/tracks/ELIZA-1.semantic-tracks.v1.json",
+      "authority": "data_only"
+    },
+    "reason.health": {
+      "@type": "status",
+      "description": "Pop-phase: reports semfold engine status, operator coverage, last query trace.",
+      "phases": ["Pop"]
+    }
+  },
+  "program_contract": {
+    "drivers": ["Micronaut.Core.dll", "CFPC.Patterns.dll"],
+    "sandbox": "xcfe_gated_read_only",
+    "learning": false
+  },
+  "srai": { "enabled": false },
+  "capabilities": ["semantic-reasoning", "graph-query", "operator-detection", "Sek-compute", "horizontal-fold"]
+}

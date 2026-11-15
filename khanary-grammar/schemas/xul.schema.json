@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Xul Collapse Request",
+  "type": "object",
+  "properties": {
+    "@kind": {
+      "const": "semantic.xul.v1"
+    },
+    "@operation": {
+      "enum": [
+        "close",
+        "select"
+      ]
+    },
+    "@candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "semantic_address": {
+            "type": "object",
+            "properties": {
+              "semantic_bits": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "phase": {
+                "const": "Xul"
+              },
+              "local_id": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "semantic_bits",
+              "phase",
+              "local_id"
+            ],
+            "additionalProperties": false
+          },
+          "provenance_ref": {
+            "type": "string"
+          },
+          "legal": {
+            "type": "boolean"
+          },
+          "wcr": {
+            "type": "number",
+            "minimum": 0
+          },
+          "cheese": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10
+          }
+        },
+        "required": [
+          "id",
+          "semantic_address",
+          "provenance_ref",
+          "legal",
+          "wcr",
+          "cheese"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "@selection": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "const": "WCR*(1-cheese/10)"
+        },
+        "admissible_only": {
+          "const": true
+        },
+        "tie_break": {
+          "const": "stable_id"
+        },
+        "on_empty": {
+          "const": "Bottom"
+        }
+      },
+      "required": [
+        "method",
+        "admissible_only",
+        "tie_break",
+        "on_empty"
+      ],
+      "additionalProperties": false
+    },
+    "@policy": {
+      "type": "object",
+      "properties": {
+        "no_automatic_fact_promotion": {
+          "const": true
+        }
+      },
+      "required": [
+        "no_automatic_fact_promotion"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "@kind",
+    "@operation"
+  ],
+  "additionalProperties": false
+}

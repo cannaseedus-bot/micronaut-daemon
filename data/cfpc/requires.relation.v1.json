@@ -1,0 +1,9 @@
+{
+  "@kind": "semantic.relation.v1",
+  "@id": "requires",
+  "@domain": "function",
+  "@range": "binding",
+  "@transitive": false,
+  "@authority": "declared",
+  "@description": "Declares that a function requires a particular binding to be supplied at invocation time. domain=function, range=binding; non-transitive."
+}

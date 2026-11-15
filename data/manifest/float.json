@@ -1,0 +1,174 @@
+{
+  "@kind": "kuhul.type-manifest.float.v1",
+  "type": "float",
+  "FLOAT:": [
+    "@float",
+    "FLOAT-µ",
+    "float:variants",
+    "float:bindings",
+    "float:operators",
+    "float:authority-boundary",
+    "float:precision-contract",
+    "float:phase-affinity",
+    "data_only",
+    "⟁Yax",
+    "⟁Sek",
+    "⟁Ch'en"
+  ],
+  "@float": [
+    "@node:FLOAT-µ",
+    "FLOAT:",
+    "float32",
+    "float16",
+    "bfloat16",
+    "float:field",
+    "float:range",
+    "float:precision-contract",
+    "float:authority-boundary"
+  ],
+  "float": [
+    "FLOAT-µ",
+    "data_only",
+    "float32",
+    "float16",
+    "bfloat16",
+    "ieee754",
+    "hub_cost",
+    "pi_routing_weight",
+    "entropy_norm",
+    "routing_signal",
+    "probability",
+    "weight",
+    "coordinate"
+  ],
+  "FLOAT-µ": [
+    "FLOAT:",
+    "@float",
+    "float:variants",
+    "float:bindings",
+    "float:operators",
+    "semantic_authority:false",
+    "execution_authority:false",
+    "data_only:true",
+    "xcfe_admission_required:true"
+  ],
+  "variants": {
+    "float32": {
+      "bits": 32,
+      "exponent": 8,
+      "mantissa": 23,
+      "storage": "ieee754-binary32",
+      "precision": "standard",
+      "uses": [
+        "hub_costs",
+        "pi_routing_weight",
+        "entropy_norm",
+        "entropy_out",
+        "field_modes",
+        "pi_arc_weight",
+        "gradient_accumulation"
+      ],
+      "note": "required precision for hub_cost accumulation and routing_weight derivation"
+    },
+    "float16": {
+      "bits": 16,
+      "exponent": 5,
+      "mantissa": 10,
+      "storage": "ieee754-binary16",
+      "precision": "half",
+      "uses": [
+        "embedding_vectors",
+        "attention_scores",
+        "kv_cache"
+      ],
+      "note": "reduced dynamic range; not suitable for hub_cost accumulation"
+    },
+    "bfloat16": {
+      "bits": 16,
+      "exponent": 8,
+      "mantissa": 7,
+      "storage": "bfloat16",
+      "precision": "brain_float",
+      "uses": [
+        "training_weights",
+        "model_checkpoint_storage"
+      ],
+      "note": "same exponent range as float32; preferred for checkpoint storage. gradient accumulation requires float32 for numerical stability"
+    }
+  },
+  "bindings": {
+    "hub_cost": {
+      "type": "float32",
+      "range": [0.0, 1.0],
+      "phase": "Yax",
+      "formula": "hub_costs[t*3+i] = 0.5*(r_ij + r_ik)",
+      "kernel": "field/pi-routing-weight.cl",
+      "op": "pi_triangle_route"
+    },
+    "pi_routing_weight": {
+      "type": "float32",
+      "range": [0.0, 1.0],
+      "phase": "Sek",
+      "formula": "routing_weights[k] = 1.0 - hub_costs[k]",
+      "kernel": "field/pi-routing-weight.cl",
+      "op": "srai_xcfe_propose"
+    },
+    "entropy_norm": {
+      "type": "float32",
+      "range": [0.0, 1.0],
+      "phase": "Ch'en",
+      "formula": "entropy_norm = -sum(p * log2(p)) / log2(N)",
+      "kernel": "field/pi-routing-weight.cl",
+      "op": "verify_srai_recursion_limits",
+      "guard": "must satisfy ENTROPY_BOUNDS before Xul admission"
+    }
+  },
+  "operators": {
+    "MAP": ["float32", "float32"],
+    "FILTER": ["float32", "bool"],
+    "FOLD": ["float32", "float32"],
+    "REDUCE": ["float32", "float32"]
+  },
+  "float:authority-boundary": [
+    "float data is raw material — confers no semantic authority",
+    "routing_weights and hub_costs are projection signals only",
+    "pi_routing_weight = 1.0 - hub_cost is a derived candidate, not a verified claim",
+    "entropy_out (levity signal) is a distributional measure, not a truth value",
+    "Ch'en VERIFY ENTROPY_BOUNDS required before float signals advance to Xul",
+    "NaN and Inf must produce status=1 in pi_triangle_hub_costs and pi_triangle_softmax",
+    "float values in srai_xcfe_propose envelope are DATA_ONLY fields",
+    "match_grants_execution:false",
+    "xcfe_admission_required:true",
+    "semantic_authority:false"
+  ],
+  "float:precision-contract": [
+    "float32 required for hub_costs and routing_weights (accumulation precision)",
+    "float16 acceptable for embedding storage after normalization",
+    "bfloat16 acceptable for checkpoint storage; gradient accumulation requires float32",
+    "mixed precision requires explicit cast annotation at lane boundary",
+    "NaN and Inf must produce status=1 in pi_triangle_hub_costs and pi_triangle_softmax",
+    "JSON numeric values do not preserve float16/bfloat16 representation; loader must convert and validate",
+    "range [0.0, 1.0] enforced at Ch'en for hub_cost, pi_routing_weight, entropy_norm"
+  ],
+  "float:phase-affinity": {
+    "Pop": "embedgemma_prompt_vectorize emits float32 vectors; srai_intent_detect carries float metadata",
+    "Wo": "srai_recursion_guard_init binds evidence_budget (integer) and depth (integer); no float accumulation",
+    "Yax": "pi_triangle_route computes hub_costs[t*3+i] = 0.5*(r_ij+r_ik) in float32 via pi-routing-weight.cl",
+    "Sek": "routing_weights[k] = 1.0 - hub_costs[k]; srai_xcfe_propose packages float fields as DATA_ONLY",
+    "Ch'en": "verify_srai_recursion_limits checks entropy_norm in [0,1]; VERIFY ENTROPY_BOUNDS + PROXIMITY_CONTRACT",
+    "Xul": "fold_reasoning_result emits float32 routing signals as data_only fields; FEL replay records values"
+  },
+  "float:kernel-ref": [
+    "field/pi-routing-weight.cl",
+    "kernel:pi_triangle_hub_costs — float32 input/output",
+    "kernel:pi_triangle_softmax — float32 routing_weights normalization",
+    "float32 throughout; no mixed-precision in kernel layer"
+  ],
+  "float:type-hierarchy": [
+    "float → tensor (tensors are built on float data)",
+    "float → vector (vectors are float32 coordinate tuples)",
+    "float → metric (metric edge costs are float32)",
+    "float → pi_routing_weight (derived from hub_costs)",
+    "float → entropy_norm (distributional signal, not truth)"
+  ]
+}

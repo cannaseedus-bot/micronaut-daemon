@@ -1,0 +1,8 @@
+<div id="google-oauth-admin" data-asx-key="⟁APP:GOOGLE_OAUTH_ADMIN/⟁ROOT:GOOGLE_OAUTH_ADMIN">
+  <section data-asx-key="⟁APP:GOOGLE_OAUTH_ADMIN/⟁WIDGET:OAUTH_SETTINGS" data-bind="state.settings_open,state.client_id,state.callback_url,state.config_url,state.admin_google_id" data-event="settings.save">
+    <h1>Google OAuth Settings</h1><p>Configure this app’s Google authorization endpoints. Client secrets are stored server-side only.</p>
+    <form><input name="client_id" required placeholder="Google client ID" /><input name="callback_url" type="url" required placeholder="Callback URL" /><input name="config_url" type="url" placeholder="Config URL" /><input name="admin_google_id" required placeholder="Admin Google account ID" /><button type="submit">Save Settings</button><button type="button" data-event="settings.lock">Lock to Admin ID</button></form>
+  </section>
+  <button data-asx-key="⟁APP:GOOGLE_OAUTH_ADMIN/⟁ACTION:OAUTH_AUTHORIZE" data-event="authorize.click">Connect Google</button>
+</div>
+<script type="application/json" id="asx-json-runtime">{"@kind":"asx.key-runtime.binding.v1","@app":"⟁APP:GOOGLE_OAUTH_ADMIN","@manifest":"data/host/apps/google-oauth-admin.asx-app.json","@executor":"mx.run","@authority":"projection_only","@state":"account_scoped","@semantic_commit":false}</script>

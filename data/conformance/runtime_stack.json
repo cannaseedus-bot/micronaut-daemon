@@ -1,0 +1,1980 @@
+{
+  "@kind": "khanary.conformance.boot_gate_fixtures.v1",
+  "cases": [
+    {
+      "expect": "PASS",
+      "expect_cases": [
+        "cycle_hash_spec_hash_declared",
+        "cycle_hash_spec_hash_match",
+        "cycle_spec_present",
+        "fold_runtime_hash_declared",
+        "fold_runtime_hash_match",
+        "fold_runtime_parse",
+        "fold_runtime_present",
+        "phase_Ch'en_artifact_declared",
+        "phase_Ch'en_artifact_exists",
+        "phase_Ch'en_hash_declared",
+        "phase_Ch'en_hash_match",
+        "phase_Pop_artifact_declared",
+        "phase_Pop_artifact_exists",
+        "phase_Pop_hash_declared",
+        "phase_Pop_hash_match",
+        "phase_Sek_artifact_declared",
+        "phase_Sek_artifact_exists",
+        "phase_Sek_hash_declared",
+        "phase_Sek_hash_match",
+        "phase_Wo_artifact_declared",
+        "phase_Wo_artifact_exists",
+        "phase_Wo_hash_declared",
+        "phase_Wo_hash_match",
+        "phase_Xul_artifact_declared",
+        "phase_Xul_artifact_exists",
+        "phase_Xul_hash_declared",
+        "phase_Xul_hash_match",
+        "phase_Yax_artifact_declared",
+        "phase_Yax_artifact_exists",
+        "phase_Yax_hash_declared",
+        "phase_Yax_hash_match",
+        "phase_driver_enabled",
+        "phase_driver_hash_algo_sha256",
+        "phase_driver_hash_map_object",
+        "phase_driver_lock_object",
+        "phase_driver_mode_enforce",
+        "phase_list_present",
+        "phase_root_in_root",
+        "phase_row_wellformed",
+        "phase_set_exact",
+        "phase_unique",
+        "runtime_hash_algo_sha256",
+        "runtime_hash_map_object",
+        "runtime_meta_parse",
+        "runtime_meta_present"
+      ],
+      "files": {
+        "data/drivers/phases/chen.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Ch'en"
+          }
+        },
+        "data/drivers/phases/pop.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Pop"
+          }
+        },
+        "data/drivers/phases/sek.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Sek"
+          }
+        },
+        "data/drivers/phases/wo.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Wo"
+          }
+        },
+        "data/drivers/phases/xul.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Xul"
+          }
+        },
+        "data/drivers/phases/yax.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Yax"
+          }
+        },
+        "data/schema/cycle-hash.spec.json": {
+          "json": {
+            "algorithm": "sha256",
+            "id": "cycle-hash-spec-fixture"
+          }
+        },
+        "data/schema/fold.runtime.json": {
+          "json": {
+            "id": "khanary-fold-runtime-fixture",
+            "phase_driver_lock": {
+              "dll_root": "data/drivers/phases",
+              "enabled": true,
+              "mode": "enforce",
+              "phases": [
+                {
+                  "dll": "pop.json",
+                  "phase": "Pop"
+                },
+                {
+                  "dll": "wo.json",
+                  "phase": "Wo"
+                },
+                {
+                  "dll": "yax.json",
+                  "phase": "Yax"
+                },
+                {
+                  "dll": "sek.json",
+                  "phase": "Sek"
+                },
+                {
+                  "dll": "chen.json",
+                  "phase": "Ch'en"
+                },
+                {
+                  "dll": "xul.json",
+                  "phase": "Xul"
+                }
+              ]
+            }
+          }
+        },
+        "data/schema/kuhul.fold-runtime.json": {
+          "json": {
+            "id": "kuhul-fold-runtime-fixture",
+            "phase_driver_sha256": {
+              "algorithm": "sha256",
+              "chen.json": "$sha256:data/drivers/phases/chen.json",
+              "pop.json": "$sha256:data/drivers/phases/pop.json",
+              "sek.json": "$sha256:data/drivers/phases/sek.json",
+              "wo.json": "$sha256:data/drivers/phases/wo.json",
+              "xul.json": "$sha256:data/drivers/phases/xul.json",
+              "yax.json": "$sha256:data/drivers/phases/yax.json"
+            },
+            "sha256": {
+              "algorithm": "sha256",
+              "cycle_hash_spec": "$sha256:data/schema/cycle-hash.spec.json",
+              "fold_runtime": "$sha256:data/schema/fold.runtime.json"
+            }
+          }
+        }
+      },
+      "id": "canonical_stack"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "phase_Pop_hash_declared",
+      "files": {
+        "data/drivers/phases/chen.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Ch'en"
+          }
+        },
+        "data/drivers/phases/pop.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Pop"
+          }
+        },
+        "data/drivers/phases/sek.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Sek"
+          }
+        },
+        "data/drivers/phases/wo.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Wo"
+          }
+        },
+        "data/drivers/phases/xul.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Xul"
+          }
+        },
+        "data/drivers/phases/yax.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Yax"
+          }
+        },
+        "data/schema/cycle-hash.spec.json": {
+          "json": {
+            "algorithm": "sha256",
+            "id": "cycle-hash-spec-fixture"
+          }
+        },
+        "data/schema/fold.runtime.json": {
+          "json": {
+            "id": "khanary-fold-runtime-fixture",
+            "phase_driver_lock": {
+              "dll_root": "data/drivers/phases",
+              "enabled": true,
+              "mode": "enforce",
+              "phases": [
+                {
+                  "dll": "pop.json",
+                  "phase": "Pop"
+                },
+                {
+                  "dll": "wo.json",
+                  "phase": "Wo"
+                },
+                {
+                  "dll": "yax.json",
+                  "phase": "Yax"
+                },
+                {
+                  "dll": "sek.json",
+                  "phase": "Sek"
+                },
+                {
+                  "dll": "chen.json",
+                  "phase": "Ch'en"
+                },
+                {
+                  "dll": "xul.json",
+                  "phase": "Xul"
+                }
+              ]
+            }
+          }
+        },
+        "data/schema/kuhul.fold-runtime.json": {
+          "json": {
+            "id": "kuhul-fold-runtime-fixture",
+            "phase_driver_sha256": {
+              "algorithm": "sha256",
+              "chen.json": "$sha256:data/drivers/phases/chen.json",
+              "pop.json": "__PENDING__",
+              "sek.json": "$sha256:data/drivers/phases/sek.json",
+              "wo.json": "$sha256:data/drivers/phases/wo.json",
+              "xul.json": "$sha256:data/drivers/phases/xul.json",
+              "yax.json": "$sha256:data/drivers/phases/yax.json"
+            },
+            "sha256": {
+              "algorithm": "sha256",
+              "cycle_hash_spec": "$sha256:data/schema/cycle-hash.spec.json",
+              "fold_runtime": "$sha256:data/schema/fold.runtime.json"
+            }
+          }
+        }
+      },
+      "id": "phase_hash_pending"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "phase_Pop_hash_match",
+      "files": {
+        "data/drivers/phases/chen.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Ch'en"
+          }
+        },
+        "data/drivers/phases/pop.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Pop"
+          }
+        },
+        "data/drivers/phases/sek.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Sek"
+          }
+        },
+        "data/drivers/phases/wo.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Wo"
+          }
+        },
+        "data/drivers/phases/xul.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Xul"
+          }
+        },
+        "data/drivers/phases/yax.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Yax"
+          }
+        },
+        "data/schema/cycle-hash.spec.json": {
+          "json": {
+            "algorithm": "sha256",
+            "id": "cycle-hash-spec-fixture"
+          }
+        },
+        "data/schema/fold.runtime.json": {
+          "json": {
+            "id": "khanary-fold-runtime-fixture",
+            "phase_driver_lock": {
+              "dll_root": "data/drivers/phases",
+              "enabled": true,
+              "mode": "enforce",
+              "phases": [
+                {
+                  "dll": "pop.json",
+                  "phase": "Pop"
+                },
+                {
+                  "dll": "wo.json",
+                  "phase": "Wo"
+                },
+                {
+                  "dll": "yax.json",
+                  "phase": "Yax"
+                },
+                {
+                  "dll": "sek.json",
+                  "phase": "Sek"
+                },
+                {
+                  "dll": "chen.json",
+                  "phase": "Ch'en"
+                },
+                {
+                  "dll": "xul.json",
+                  "phase": "Xul"
+                }
+              ]
+            }
+          }
+        },
+        "data/schema/kuhul.fold-runtime.json": {
+          "json": {
+            "id": "kuhul-fold-runtime-fixture",
+            "phase_driver_sha256": {
+              "algorithm": "sha256",
+              "chen.json": "$sha256:data/drivers/phases/chen.json",
+              "pop.json": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+              "sek.json": "$sha256:data/drivers/phases/sek.json",
+              "wo.json": "$sha256:data/drivers/phases/wo.json",
+              "xul.json": "$sha256:data/drivers/phases/xul.json",
+              "yax.json": "$sha256:data/drivers/phases/yax.json"
+            },
+            "sha256": {
+              "algorithm": "sha256",
+              "cycle_hash_spec": "$sha256:data/schema/cycle-hash.spec.json",
+              "fold_runtime": "$sha256:data/schema/fold.runtime.json"
+            }
+          }
+        }
+      },
+      "id": "phase_hash_mismatch"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "phase_Pop_hash_declared",
+      "files": {
+        "data/drivers/phases/chen.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Ch'en"
+          }
+        },
+        "data/drivers/phases/pop.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Pop"
+          }
+        },
+        "data/drivers/phases/sek.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Sek"
+          }
+        },
+        "data/drivers/phases/wo.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Wo"
+          }
+        },
+        "data/drivers/phases/xul.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Xul"
+          }
+        },
+        "data/drivers/phases/yax.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Yax"
+          }
+        },
+        "data/schema/cycle-hash.spec.json": {
+          "json": {
+            "algorithm": "sha256",
+            "id": "cycle-hash-spec-fixture"
+          }
+        },
+        "data/schema/fold.runtime.json": {
+          "json": {
+            "id": "khanary-fold-runtime-fixture",
+            "phase_driver_lock": {
+              "dll_root": "data/drivers/phases",
+              "enabled": true,
+              "mode": "enforce",
+              "phases": [
+                {
+                  "dll": "pop.json",
+                  "phase": "Pop"
+                },
+                {
+                  "dll": "wo.json",
+                  "phase": "Wo"
+                },
+                {
+                  "dll": "yax.json",
+                  "phase": "Yax"
+                },
+                {
+                  "dll": "sek.json",
+                  "phase": "Sek"
+                },
+                {
+                  "dll": "chen.json",
+                  "phase": "Ch'en"
+                },
+                {
+                  "dll": "xul.json",
+                  "phase": "Xul"
+                }
+              ]
+            }
+          }
+        },
+        "data/schema/kuhul.fold-runtime.json": {
+          "json": {
+            "id": "kuhul-fold-runtime-fixture",
+            "phase_driver_sha256": {
+              "algorithm": "sha256",
+              "chen.json": "$sha256:data/drivers/phases/chen.json",
+              "sek.json": "$sha256:data/drivers/phases/sek.json",
+              "wo.json": "$sha256:data/drivers/phases/wo.json",
+              "xul.json": "$sha256:data/drivers/phases/xul.json",
+              "yax.json": "$sha256:data/drivers/phases/yax.json"
+            },
+            "sha256": {
+              "algorithm": "sha256",
+              "cycle_hash_spec": "$sha256:data/schema/cycle-hash.spec.json",
+              "fold_runtime": "$sha256:data/schema/fold.runtime.json"
+            }
+          }
+        }
+      },
+      "id": "phase_hash_missing"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "phase_driver_hash_algo_sha256",
+      "files": {
+        "data/drivers/phases/chen.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Ch'en"
+          }
+        },
+        "data/drivers/phases/pop.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Pop"
+          }
+        },
+        "data/drivers/phases/sek.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Sek"
+          }
+        },
+        "data/drivers/phases/wo.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Wo"
+          }
+        },
+        "data/drivers/phases/xul.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Xul"
+          }
+        },
+        "data/drivers/phases/yax.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Yax"
+          }
+        },
+        "data/schema/cycle-hash.spec.json": {
+          "json": {
+            "algorithm": "sha256",
+            "id": "cycle-hash-spec-fixture"
+          }
+        },
+        "data/schema/fold.runtime.json": {
+          "json": {
+            "id": "khanary-fold-runtime-fixture",
+            "phase_driver_lock": {
+              "dll_root": "data/drivers/phases",
+              "enabled": true,
+              "mode": "enforce",
+              "phases": [
+                {
+                  "dll": "pop.json",
+                  "phase": "Pop"
+                },
+                {
+                  "dll": "wo.json",
+                  "phase": "Wo"
+                },
+                {
+                  "dll": "yax.json",
+                  "phase": "Yax"
+                },
+                {
+                  "dll": "sek.json",
+                  "phase": "Sek"
+                },
+                {
+                  "dll": "chen.json",
+                  "phase": "Ch'en"
+                },
+                {
+                  "dll": "xul.json",
+                  "phase": "Xul"
+                }
+              ]
+            }
+          }
+        },
+        "data/schema/kuhul.fold-runtime.json": {
+          "json": {
+            "id": "kuhul-fold-runtime-fixture",
+            "phase_driver_sha256": {
+              "algorithm": "md5",
+              "chen.json": "$sha256:data/drivers/phases/chen.json",
+              "pop.json": "$sha256:data/drivers/phases/pop.json",
+              "sek.json": "$sha256:data/drivers/phases/sek.json",
+              "wo.json": "$sha256:data/drivers/phases/wo.json",
+              "xul.json": "$sha256:data/drivers/phases/xul.json",
+              "yax.json": "$sha256:data/drivers/phases/yax.json"
+            },
+            "sha256": {
+              "algorithm": "sha256",
+              "cycle_hash_spec": "$sha256:data/schema/cycle-hash.spec.json",
+              "fold_runtime": "$sha256:data/schema/fold.runtime.json"
+            }
+          }
+        }
+      },
+      "id": "phase_hash_algo_bad"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "runtime_hash_algo_sha256",
+      "files": {
+        "data/drivers/phases/chen.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Ch'en"
+          }
+        },
+        "data/drivers/phases/pop.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Pop"
+          }
+        },
+        "data/drivers/phases/sek.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Sek"
+          }
+        },
+        "data/drivers/phases/wo.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Wo"
+          }
+        },
+        "data/drivers/phases/xul.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Xul"
+          }
+        },
+        "data/drivers/phases/yax.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Yax"
+          }
+        },
+        "data/schema/cycle-hash.spec.json": {
+          "json": {
+            "algorithm": "sha256",
+            "id": "cycle-hash-spec-fixture"
+          }
+        },
+        "data/schema/fold.runtime.json": {
+          "json": {
+            "id": "khanary-fold-runtime-fixture",
+            "phase_driver_lock": {
+              "dll_root": "data/drivers/phases",
+              "enabled": true,
+              "mode": "enforce",
+              "phases": [
+                {
+                  "dll": "pop.json",
+                  "phase": "Pop"
+                },
+                {
+                  "dll": "wo.json",
+                  "phase": "Wo"
+                },
+                {
+                  "dll": "yax.json",
+                  "phase": "Yax"
+                },
+                {
+                  "dll": "sek.json",
+                  "phase": "Sek"
+                },
+                {
+                  "dll": "chen.json",
+                  "phase": "Ch'en"
+                },
+                {
+                  "dll": "xul.json",
+                  "phase": "Xul"
+                }
+              ]
+            }
+          }
+        },
+        "data/schema/kuhul.fold-runtime.json": {
+          "json": {
+            "id": "kuhul-fold-runtime-fixture",
+            "phase_driver_sha256": {
+              "algorithm": "sha256",
+              "chen.json": "$sha256:data/drivers/phases/chen.json",
+              "pop.json": "$sha256:data/drivers/phases/pop.json",
+              "sek.json": "$sha256:data/drivers/phases/sek.json",
+              "wo.json": "$sha256:data/drivers/phases/wo.json",
+              "xul.json": "$sha256:data/drivers/phases/xul.json",
+              "yax.json": "$sha256:data/drivers/phases/yax.json"
+            },
+            "sha256": {
+              "algorithm": "md5",
+              "cycle_hash_spec": "$sha256:data/schema/cycle-hash.spec.json",
+              "fold_runtime": "$sha256:data/schema/fold.runtime.json"
+            }
+          }
+        }
+      },
+      "id": "runtime_hash_algo_bad"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "fold_runtime_hash_declared",
+      "files": {
+        "data/drivers/phases/chen.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Ch'en"
+          }
+        },
+        "data/drivers/phases/pop.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Pop"
+          }
+        },
+        "data/drivers/phases/sek.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Sek"
+          }
+        },
+        "data/drivers/phases/wo.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Wo"
+          }
+        },
+        "data/drivers/phases/xul.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Xul"
+          }
+        },
+        "data/drivers/phases/yax.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Yax"
+          }
+        },
+        "data/schema/cycle-hash.spec.json": {
+          "json": {
+            "algorithm": "sha256",
+            "id": "cycle-hash-spec-fixture"
+          }
+        },
+        "data/schema/fold.runtime.json": {
+          "json": {
+            "id": "khanary-fold-runtime-fixture",
+            "phase_driver_lock": {
+              "dll_root": "data/drivers/phases",
+              "enabled": true,
+              "mode": "enforce",
+              "phases": [
+                {
+                  "dll": "pop.json",
+                  "phase": "Pop"
+                },
+                {
+                  "dll": "wo.json",
+                  "phase": "Wo"
+                },
+                {
+                  "dll": "yax.json",
+                  "phase": "Yax"
+                },
+                {
+                  "dll": "sek.json",
+                  "phase": "Sek"
+                },
+                {
+                  "dll": "chen.json",
+                  "phase": "Ch'en"
+                },
+                {
+                  "dll": "xul.json",
+                  "phase": "Xul"
+                }
+              ]
+            }
+          }
+        },
+        "data/schema/kuhul.fold-runtime.json": {
+          "json": {
+            "id": "kuhul-fold-runtime-fixture",
+            "phase_driver_sha256": {
+              "algorithm": "sha256",
+              "chen.json": "$sha256:data/drivers/phases/chen.json",
+              "pop.json": "$sha256:data/drivers/phases/pop.json",
+              "sek.json": "$sha256:data/drivers/phases/sek.json",
+              "wo.json": "$sha256:data/drivers/phases/wo.json",
+              "xul.json": "$sha256:data/drivers/phases/xul.json",
+              "yax.json": "$sha256:data/drivers/phases/yax.json"
+            },
+            "sha256": {
+              "algorithm": "sha256",
+              "cycle_hash_spec": "$sha256:data/schema/cycle-hash.spec.json"
+            }
+          }
+        }
+      },
+      "id": "anchor_missing"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "fold_runtime_hash_match",
+      "files": {
+        "data/drivers/phases/chen.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Ch'en"
+          }
+        },
+        "data/drivers/phases/pop.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Pop"
+          }
+        },
+        "data/drivers/phases/sek.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Sek"
+          }
+        },
+        "data/drivers/phases/wo.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Wo"
+          }
+        },
+        "data/drivers/phases/xul.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Xul"
+          }
+        },
+        "data/drivers/phases/yax.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Yax"
+          }
+        },
+        "data/schema/cycle-hash.spec.json": {
+          "json": {
+            "algorithm": "sha256",
+            "id": "cycle-hash-spec-fixture"
+          }
+        },
+        "data/schema/fold.runtime.json": {
+          "json": {
+            "id": "khanary-fold-runtime-fixture",
+            "phase_driver_lock": {
+              "dll_root": "data/drivers/phases",
+              "enabled": true,
+              "mode": "enforce",
+              "phases": [
+                {
+                  "dll": "pop.json",
+                  "phase": "Pop"
+                },
+                {
+                  "dll": "wo.json",
+                  "phase": "Wo"
+                },
+                {
+                  "dll": "yax.json",
+                  "phase": "Yax"
+                },
+                {
+                  "dll": "sek.json",
+                  "phase": "Sek"
+                },
+                {
+                  "dll": "chen.json",
+                  "phase": "Ch'en"
+                },
+                {
+                  "dll": "xul.json",
+                  "phase": "Xul"
+                }
+              ]
+            }
+          }
+        },
+        "data/schema/kuhul.fold-runtime.json": {
+          "json": {
+            "id": "kuhul-fold-runtime-fixture",
+            "phase_driver_sha256": {
+              "algorithm": "sha256",
+              "chen.json": "$sha256:data/drivers/phases/chen.json",
+              "pop.json": "$sha256:data/drivers/phases/pop.json",
+              "sek.json": "$sha256:data/drivers/phases/sek.json",
+              "wo.json": "$sha256:data/drivers/phases/wo.json",
+              "xul.json": "$sha256:data/drivers/phases/xul.json",
+              "yax.json": "$sha256:data/drivers/phases/yax.json"
+            },
+            "sha256": {
+              "algorithm": "sha256",
+              "cycle_hash_spec": "$sha256:data/schema/cycle-hash.spec.json",
+              "fold_runtime": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+            }
+          }
+        }
+      },
+      "id": "anchor_mismatch"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "cycle_spec_present",
+      "files": {
+        "data/drivers/phases/chen.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Ch'en"
+          }
+        },
+        "data/drivers/phases/pop.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Pop"
+          }
+        },
+        "data/drivers/phases/sek.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Sek"
+          }
+        },
+        "data/drivers/phases/wo.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Wo"
+          }
+        },
+        "data/drivers/phases/xul.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Xul"
+          }
+        },
+        "data/drivers/phases/yax.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Yax"
+          }
+        },
+        "data/schema/fold.runtime.json": {
+          "json": {
+            "id": "khanary-fold-runtime-fixture",
+            "phase_driver_lock": {
+              "dll_root": "data/drivers/phases",
+              "enabled": true,
+              "mode": "enforce",
+              "phases": [
+                {
+                  "dll": "pop.json",
+                  "phase": "Pop"
+                },
+                {
+                  "dll": "wo.json",
+                  "phase": "Wo"
+                },
+                {
+                  "dll": "yax.json",
+                  "phase": "Yax"
+                },
+                {
+                  "dll": "sek.json",
+                  "phase": "Sek"
+                },
+                {
+                  "dll": "chen.json",
+                  "phase": "Ch'en"
+                },
+                {
+                  "dll": "xul.json",
+                  "phase": "Xul"
+                }
+              ]
+            }
+          }
+        },
+        "data/schema/kuhul.fold-runtime.json": {
+          "json": {
+            "id": "kuhul-fold-runtime-fixture",
+            "phase_driver_sha256": {
+              "algorithm": "sha256",
+              "chen.json": "$sha256:data/drivers/phases/chen.json",
+              "pop.json": "$sha256:data/drivers/phases/pop.json",
+              "sek.json": "$sha256:data/drivers/phases/sek.json",
+              "wo.json": "$sha256:data/drivers/phases/wo.json",
+              "xul.json": "$sha256:data/drivers/phases/xul.json",
+              "yax.json": "$sha256:data/drivers/phases/yax.json"
+            },
+            "sha256": {
+              "algorithm": "sha256",
+              "cycle_hash_spec": "$sha256:data/schema/cycle-hash.spec.json",
+              "fold_runtime": "$sha256:data/schema/fold.runtime.json"
+            }
+          }
+        }
+      },
+      "id": "cycle_spec_missing"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "fold_runtime_parse",
+      "files": {
+        "data/drivers/phases/chen.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Ch'en"
+          }
+        },
+        "data/drivers/phases/pop.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Pop"
+          }
+        },
+        "data/drivers/phases/sek.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Sek"
+          }
+        },
+        "data/drivers/phases/wo.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Wo"
+          }
+        },
+        "data/drivers/phases/xul.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Xul"
+          }
+        },
+        "data/drivers/phases/yax.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Yax"
+          }
+        },
+        "data/schema/cycle-hash.spec.json": {
+          "json": {
+            "algorithm": "sha256",
+            "id": "cycle-hash-spec-fixture"
+          }
+        },
+        "data/schema/fold.runtime.json": {
+          "text": "{ \"phase_driver_lock\": "
+        },
+        "data/schema/kuhul.fold-runtime.json": {
+          "json": {
+            "id": "kuhul-fold-runtime-fixture",
+            "phase_driver_sha256": {
+              "algorithm": "sha256",
+              "chen.json": "$sha256:data/drivers/phases/chen.json",
+              "pop.json": "$sha256:data/drivers/phases/pop.json",
+              "sek.json": "$sha256:data/drivers/phases/sek.json",
+              "wo.json": "$sha256:data/drivers/phases/wo.json",
+              "xul.json": "$sha256:data/drivers/phases/xul.json",
+              "yax.json": "$sha256:data/drivers/phases/yax.json"
+            },
+            "sha256": {
+              "algorithm": "sha256",
+              "cycle_hash_spec": "$sha256:data/schema/cycle-hash.spec.json",
+              "fold_runtime": "$sha256:data/schema/fold.runtime.json"
+            }
+          }
+        }
+      },
+      "id": "fold_runtime_unparseable"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "phase_driver_enabled",
+      "files": {
+        "data/drivers/phases/chen.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Ch'en"
+          }
+        },
+        "data/drivers/phases/pop.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Pop"
+          }
+        },
+        "data/drivers/phases/sek.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Sek"
+          }
+        },
+        "data/drivers/phases/wo.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Wo"
+          }
+        },
+        "data/drivers/phases/xul.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Xul"
+          }
+        },
+        "data/drivers/phases/yax.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Yax"
+          }
+        },
+        "data/schema/cycle-hash.spec.json": {
+          "json": {
+            "algorithm": "sha256",
+            "id": "cycle-hash-spec-fixture"
+          }
+        },
+        "data/schema/fold.runtime.json": {
+          "json": {
+            "id": "khanary-fold-runtime-fixture",
+            "phase_driver_lock": {
+              "dll_root": "data/drivers/phases",
+              "enabled": false,
+              "mode": "enforce",
+              "phases": [
+                {
+                  "dll": "pop.json",
+                  "phase": "Pop"
+                },
+                {
+                  "dll": "wo.json",
+                  "phase": "Wo"
+                },
+                {
+                  "dll": "yax.json",
+                  "phase": "Yax"
+                },
+                {
+                  "dll": "sek.json",
+                  "phase": "Sek"
+                },
+                {
+                  "dll": "chen.json",
+                  "phase": "Ch'en"
+                },
+                {
+                  "dll": "xul.json",
+                  "phase": "Xul"
+                }
+              ]
+            }
+          }
+        },
+        "data/schema/kuhul.fold-runtime.json": {
+          "json": {
+            "id": "kuhul-fold-runtime-fixture",
+            "phase_driver_sha256": {
+              "algorithm": "sha256",
+              "chen.json": "$sha256:data/drivers/phases/chen.json",
+              "pop.json": "$sha256:data/drivers/phases/pop.json",
+              "sek.json": "$sha256:data/drivers/phases/sek.json",
+              "wo.json": "$sha256:data/drivers/phases/wo.json",
+              "xul.json": "$sha256:data/drivers/phases/xul.json",
+              "yax.json": "$sha256:data/drivers/phases/yax.json"
+            },
+            "sha256": {
+              "algorithm": "sha256",
+              "cycle_hash_spec": "$sha256:data/schema/cycle-hash.spec.json",
+              "fold_runtime": "$sha256:data/schema/fold.runtime.json"
+            }
+          }
+        }
+      },
+      "id": "phase_disabled"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "phase_driver_mode_enforce",
+      "files": {
+        "data/drivers/phases/chen.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Ch'en"
+          }
+        },
+        "data/drivers/phases/pop.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Pop"
+          }
+        },
+        "data/drivers/phases/sek.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Sek"
+          }
+        },
+        "data/drivers/phases/wo.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Wo"
+          }
+        },
+        "data/drivers/phases/xul.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Xul"
+          }
+        },
+        "data/drivers/phases/yax.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Yax"
+          }
+        },
+        "data/schema/cycle-hash.spec.json": {
+          "json": {
+            "algorithm": "sha256",
+            "id": "cycle-hash-spec-fixture"
+          }
+        },
+        "data/schema/fold.runtime.json": {
+          "json": {
+            "id": "khanary-fold-runtime-fixture",
+            "phase_driver_lock": {
+              "dll_root": "data/drivers/phases",
+              "enabled": true,
+              "mode": "audit",
+              "phases": [
+                {
+                  "dll": "pop.json",
+                  "phase": "Pop"
+                },
+                {
+                  "dll": "wo.json",
+                  "phase": "Wo"
+                },
+                {
+                  "dll": "yax.json",
+                  "phase": "Yax"
+                },
+                {
+                  "dll": "sek.json",
+                  "phase": "Sek"
+                },
+                {
+                  "dll": "chen.json",
+                  "phase": "Ch'en"
+                },
+                {
+                  "dll": "xul.json",
+                  "phase": "Xul"
+                }
+              ]
+            }
+          }
+        },
+        "data/schema/kuhul.fold-runtime.json": {
+          "json": {
+            "id": "kuhul-fold-runtime-fixture",
+            "phase_driver_sha256": {
+              "algorithm": "sha256",
+              "chen.json": "$sha256:data/drivers/phases/chen.json",
+              "pop.json": "$sha256:data/drivers/phases/pop.json",
+              "sek.json": "$sha256:data/drivers/phases/sek.json",
+              "wo.json": "$sha256:data/drivers/phases/wo.json",
+              "xul.json": "$sha256:data/drivers/phases/xul.json",
+              "yax.json": "$sha256:data/drivers/phases/yax.json"
+            },
+            "sha256": {
+              "algorithm": "sha256",
+              "cycle_hash_spec": "$sha256:data/schema/cycle-hash.spec.json",
+              "fold_runtime": "$sha256:data/schema/fold.runtime.json"
+            }
+          }
+        }
+      },
+      "id": "phase_mode_audit"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "phase_list_present",
+      "files": {
+        "data/drivers/phases/chen.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Ch'en"
+          }
+        },
+        "data/drivers/phases/pop.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Pop"
+          }
+        },
+        "data/drivers/phases/sek.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Sek"
+          }
+        },
+        "data/drivers/phases/wo.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Wo"
+          }
+        },
+        "data/drivers/phases/xul.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Xul"
+          }
+        },
+        "data/drivers/phases/yax.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Yax"
+          }
+        },
+        "data/schema/cycle-hash.spec.json": {
+          "json": {
+            "algorithm": "sha256",
+            "id": "cycle-hash-spec-fixture"
+          }
+        },
+        "data/schema/fold.runtime.json": {
+          "json": {
+            "id": "khanary-fold-runtime-fixture",
+            "phase_driver_lock": {
+              "dll_root": "data/drivers/phases",
+              "enabled": true,
+              "mode": "enforce",
+              "phases": [
+                {
+                  "dll": "pop.json",
+                  "phase": "Pop"
+                },
+                {
+                  "dll": "wo.json",
+                  "phase": "Wo"
+                },
+                {
+                  "dll": "yax.json",
+                  "phase": "Yax"
+                },
+                {
+                  "dll": "sek.json",
+                  "phase": "Sek"
+                },
+                {
+                  "dll": "chen.json",
+                  "phase": "Ch'en"
+                }
+              ]
+            }
+          }
+        },
+        "data/schema/kuhul.fold-runtime.json": {
+          "json": {
+            "id": "kuhul-fold-runtime-fixture",
+            "phase_driver_sha256": {
+              "algorithm": "sha256",
+              "chen.json": "$sha256:data/drivers/phases/chen.json",
+              "pop.json": "$sha256:data/drivers/phases/pop.json",
+              "sek.json": "$sha256:data/drivers/phases/sek.json",
+              "wo.json": "$sha256:data/drivers/phases/wo.json",
+              "xul.json": "$sha256:data/drivers/phases/xul.json",
+              "yax.json": "$sha256:data/drivers/phases/yax.json"
+            },
+            "sha256": {
+              "algorithm": "sha256",
+              "cycle_hash_spec": "$sha256:data/schema/cycle-hash.spec.json",
+              "fold_runtime": "$sha256:data/schema/fold.runtime.json"
+            }
+          }
+        }
+      },
+      "id": "phase_count_wrong"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "phase_set_exact",
+      "files": {
+        "data/drivers/phases/chen.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Ch'en"
+          }
+        },
+        "data/drivers/phases/pop.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Pop"
+          }
+        },
+        "data/drivers/phases/sek.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Sek"
+          }
+        },
+        "data/drivers/phases/wo.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Wo"
+          }
+        },
+        "data/drivers/phases/xul.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Xul"
+          }
+        },
+        "data/drivers/phases/yax.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Yax"
+          }
+        },
+        "data/schema/cycle-hash.spec.json": {
+          "json": {
+            "algorithm": "sha256",
+            "id": "cycle-hash-spec-fixture"
+          }
+        },
+        "data/schema/fold.runtime.json": {
+          "json": {
+            "id": "khanary-fold-runtime-fixture",
+            "phase_driver_lock": {
+              "dll_root": "data/drivers/phases",
+              "enabled": true,
+              "mode": "enforce",
+              "phases": [
+                {
+                  "dll": "pop.json",
+                  "phase": "Pop"
+                },
+                {
+                  "dll": "wo.json",
+                  "phase": "Wo"
+                },
+                {
+                  "dll": "yax.json",
+                  "phase": "Yax"
+                },
+                {
+                  "dll": "sek.json",
+                  "phase": "Sekk"
+                },
+                {
+                  "dll": "chen.json",
+                  "phase": "Ch'en"
+                },
+                {
+                  "dll": "xul.json",
+                  "phase": "Xul"
+                }
+              ]
+            }
+          }
+        },
+        "data/schema/kuhul.fold-runtime.json": {
+          "json": {
+            "id": "kuhul-fold-runtime-fixture",
+            "phase_driver_sha256": {
+              "algorithm": "sha256",
+              "chen.json": "$sha256:data/drivers/phases/chen.json",
+              "pop.json": "$sha256:data/drivers/phases/pop.json",
+              "sek.json": "$sha256:data/drivers/phases/sek.json",
+              "wo.json": "$sha256:data/drivers/phases/wo.json",
+              "xul.json": "$sha256:data/drivers/phases/xul.json",
+              "yax.json": "$sha256:data/drivers/phases/yax.json"
+            },
+            "sha256": {
+              "algorithm": "sha256",
+              "cycle_hash_spec": "$sha256:data/schema/cycle-hash.spec.json",
+              "fold_runtime": "$sha256:data/schema/fold.runtime.json"
+            }
+          }
+        }
+      },
+      "id": "phase_set_wrong"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "phase_unique",
+      "files": {
+        "data/drivers/phases/chen.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Ch'en"
+          }
+        },
+        "data/drivers/phases/pop.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Pop"
+          }
+        },
+        "data/drivers/phases/sek.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Sek"
+          }
+        },
+        "data/drivers/phases/wo.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Wo"
+          }
+        },
+        "data/drivers/phases/xul.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Xul"
+          }
+        },
+        "data/drivers/phases/yax.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Yax"
+          }
+        },
+        "data/schema/cycle-hash.spec.json": {
+          "json": {
+            "algorithm": "sha256",
+            "id": "cycle-hash-spec-fixture"
+          }
+        },
+        "data/schema/fold.runtime.json": {
+          "json": {
+            "id": "khanary-fold-runtime-fixture",
+            "phase_driver_lock": {
+              "dll_root": "data/drivers/phases",
+              "enabled": true,
+              "mode": "enforce",
+              "phases": [
+                {
+                  "dll": "pop.json",
+                  "phase": "Pop"
+                },
+                {
+                  "dll": "wo.json",
+                  "phase": "Wo"
+                },
+                {
+                  "dll": "yax.json",
+                  "phase": "Yax"
+                },
+                {
+                  "dll": "sek.json",
+                  "phase": "Wo"
+                },
+                {
+                  "dll": "chen.json",
+                  "phase": "Ch'en"
+                },
+                {
+                  "dll": "xul.json",
+                  "phase": "Xul"
+                }
+              ]
+            }
+          }
+        },
+        "data/schema/kuhul.fold-runtime.json": {
+          "json": {
+            "id": "kuhul-fold-runtime-fixture",
+            "phase_driver_sha256": {
+              "algorithm": "sha256",
+              "chen.json": "$sha256:data/drivers/phases/chen.json",
+              "pop.json": "$sha256:data/drivers/phases/pop.json",
+              "sek.json": "$sha256:data/drivers/phases/sek.json",
+              "wo.json": "$sha256:data/drivers/phases/wo.json",
+              "xul.json": "$sha256:data/drivers/phases/xul.json",
+              "yax.json": "$sha256:data/drivers/phases/yax.json"
+            },
+            "sha256": {
+              "algorithm": "sha256",
+              "cycle_hash_spec": "$sha256:data/schema/cycle-hash.spec.json",
+              "fold_runtime": "$sha256:data/schema/fold.runtime.json"
+            }
+          }
+        }
+      },
+      "id": "duplicate_phase"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "phase_row_wellformed",
+      "files": {
+        "data/drivers/phases/chen.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Ch'en"
+          }
+        },
+        "data/drivers/phases/pop.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Pop"
+          }
+        },
+        "data/drivers/phases/sek.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Sek"
+          }
+        },
+        "data/drivers/phases/wo.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Wo"
+          }
+        },
+        "data/drivers/phases/xul.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Xul"
+          }
+        },
+        "data/drivers/phases/yax.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Yax"
+          }
+        },
+        "data/schema/cycle-hash.spec.json": {
+          "json": {
+            "algorithm": "sha256",
+            "id": "cycle-hash-spec-fixture"
+          }
+        },
+        "data/schema/fold.runtime.json": {
+          "json": {
+            "id": "khanary-fold-runtime-fixture",
+            "phase_driver_lock": {
+              "dll_root": "data/drivers/phases",
+              "enabled": true,
+              "mode": "enforce",
+              "phases": [
+                {
+                  "phase": "Pop"
+                },
+                {
+                  "dll": "wo.json",
+                  "phase": "Wo"
+                },
+                {
+                  "dll": "yax.json",
+                  "phase": "Yax"
+                },
+                {
+                  "dll": "sek.json",
+                  "phase": "Sek"
+                },
+                {
+                  "dll": "chen.json",
+                  "phase": "Ch'en"
+                },
+                {
+                  "dll": "xul.json",
+                  "phase": "Xul"
+                }
+              ]
+            }
+          }
+        },
+        "data/schema/kuhul.fold-runtime.json": {
+          "json": {
+            "id": "kuhul-fold-runtime-fixture",
+            "phase_driver_sha256": {
+              "algorithm": "sha256",
+              "chen.json": "$sha256:data/drivers/phases/chen.json",
+              "pop.json": "$sha256:data/drivers/phases/pop.json",
+              "sek.json": "$sha256:data/drivers/phases/sek.json",
+              "wo.json": "$sha256:data/drivers/phases/wo.json",
+              "xul.json": "$sha256:data/drivers/phases/xul.json",
+              "yax.json": "$sha256:data/drivers/phases/yax.json"
+            },
+            "sha256": {
+              "algorithm": "sha256",
+              "cycle_hash_spec": "$sha256:data/schema/cycle-hash.spec.json",
+              "fold_runtime": "$sha256:data/schema/fold.runtime.json"
+            }
+          }
+        }
+      },
+      "id": "phase_row_malformed"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "phase_root_in_root",
+      "files": {
+        "data/drivers/phases/chen.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Ch'en"
+          }
+        },
+        "data/drivers/phases/pop.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Pop"
+          }
+        },
+        "data/drivers/phases/sek.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Sek"
+          }
+        },
+        "data/drivers/phases/wo.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Wo"
+          }
+        },
+        "data/drivers/phases/xul.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Xul"
+          }
+        },
+        "data/drivers/phases/yax.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Yax"
+          }
+        },
+        "data/schema/cycle-hash.spec.json": {
+          "json": {
+            "algorithm": "sha256",
+            "id": "cycle-hash-spec-fixture"
+          }
+        },
+        "data/schema/fold.runtime.json": {
+          "json": {
+            "id": "khanary-fold-runtime-fixture",
+            "phase_driver_lock": {
+              "dll_root": "../outside/phases",
+              "enabled": true,
+              "mode": "enforce",
+              "phases": [
+                {
+                  "dll": "pop.json",
+                  "phase": "Pop"
+                },
+                {
+                  "dll": "wo.json",
+                  "phase": "Wo"
+                },
+                {
+                  "dll": "yax.json",
+                  "phase": "Yax"
+                },
+                {
+                  "dll": "sek.json",
+                  "phase": "Sek"
+                },
+                {
+                  "dll": "chen.json",
+                  "phase": "Ch'en"
+                },
+                {
+                  "dll": "xul.json",
+                  "phase": "Xul"
+                }
+              ]
+            }
+          }
+        },
+        "data/schema/kuhul.fold-runtime.json": {
+          "json": {
+            "id": "kuhul-fold-runtime-fixture",
+            "phase_driver_sha256": {
+              "algorithm": "sha256",
+              "chen.json": "$sha256:data/drivers/phases/chen.json",
+              "pop.json": "$sha256:data/drivers/phases/pop.json",
+              "sek.json": "$sha256:data/drivers/phases/sek.json",
+              "wo.json": "$sha256:data/drivers/phases/wo.json",
+              "xul.json": "$sha256:data/drivers/phases/xul.json",
+              "yax.json": "$sha256:data/drivers/phases/yax.json"
+            },
+            "sha256": {
+              "algorithm": "sha256",
+              "cycle_hash_spec": "$sha256:data/schema/cycle-hash.spec.json",
+              "fold_runtime": "$sha256:data/schema/fold.runtime.json"
+            }
+          }
+        }
+      },
+      "id": "dll_root_escape"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "phase_Wo_artifact_exists",
+      "files": {
+        "data/drivers/phases/chen.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Ch'en"
+          }
+        },
+        "data/drivers/phases/pop.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Pop"
+          }
+        },
+        "data/drivers/phases/sek.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Sek"
+          }
+        },
+        "data/drivers/phases/xul.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Xul"
+          }
+        },
+        "data/drivers/phases/yax.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Yax"
+          }
+        },
+        "data/schema/cycle-hash.spec.json": {
+          "json": {
+            "algorithm": "sha256",
+            "id": "cycle-hash-spec-fixture"
+          }
+        },
+        "data/schema/fold.runtime.json": {
+          "json": {
+            "id": "khanary-fold-runtime-fixture",
+            "phase_driver_lock": {
+              "dll_root": "data/drivers/phases",
+              "enabled": true,
+              "mode": "enforce",
+              "phases": [
+                {
+                  "dll": "pop.json",
+                  "phase": "Pop"
+                },
+                {
+                  "dll": "wo.json",
+                  "phase": "Wo"
+                },
+                {
+                  "dll": "yax.json",
+                  "phase": "Yax"
+                },
+                {
+                  "dll": "sek.json",
+                  "phase": "Sek"
+                },
+                {
+                  "dll": "chen.json",
+                  "phase": "Ch'en"
+                },
+                {
+                  "dll": "xul.json",
+                  "phase": "Xul"
+                }
+              ]
+            }
+          }
+        },
+        "data/schema/kuhul.fold-runtime.json": {
+          "json": {
+            "id": "kuhul-fold-runtime-fixture",
+            "phase_driver_sha256": {
+              "algorithm": "sha256",
+              "chen.json": "$sha256:data/drivers/phases/chen.json",
+              "pop.json": "$sha256:data/drivers/phases/pop.json",
+              "sek.json": "$sha256:data/drivers/phases/sek.json",
+              "wo.json": "$sha256:data/drivers/phases/wo.json",
+              "xul.json": "$sha256:data/drivers/phases/xul.json",
+              "yax.json": "$sha256:data/drivers/phases/yax.json"
+            },
+            "sha256": {
+              "algorithm": "sha256",
+              "cycle_hash_spec": "$sha256:data/schema/cycle-hash.spec.json",
+              "fold_runtime": "$sha256:data/schema/fold.runtime.json"
+            }
+          }
+        }
+      },
+      "id": "artifact_missing"
+    },
+    {
+      "expect": "FAIL",
+      "expect_case": "phase_Pop_artifact_exists",
+      "files": {
+        "data/drivers/phases/chen.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Ch'en"
+          }
+        },
+        "data/drivers/phases/pop.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Pop"
+          }
+        },
+        "data/drivers/phases/pop/keep.txt": {
+          "text": "a directory, not an artifact"
+        },
+        "data/drivers/phases/sek.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Sek"
+          }
+        },
+        "data/drivers/phases/wo.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Wo"
+          }
+        },
+        "data/drivers/phases/xul.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Xul"
+          }
+        },
+        "data/drivers/phases/yax.json": {
+          "json": {
+            "kind": "semantic-microkernel",
+            "phase": "Yax"
+          }
+        },
+        "data/schema/cycle-hash.spec.json": {
+          "json": {
+            "algorithm": "sha256",
+            "id": "cycle-hash-spec-fixture"
+          }
+        },
+        "data/schema/fold.runtime.json": {
+          "json": {
+            "id": "khanary-fold-runtime-fixture",
+            "phase_driver_lock": {
+              "dll_root": "data/drivers/phases",
+              "enabled": true,
+              "mode": "enforce",
+              "phases": [
+                {
+                  "dll": "pop",
+                  "phase": "Pop"
+                },
+                {
+                  "dll": "wo.json",
+                  "phase": "Wo"
+                },
+                {
+                  "dll": "yax.json",
+                  "phase": "Yax"
+                },
+                {
+                  "dll": "sek.json",
+                  "phase": "Sek"
+                },
+                {
+                  "dll": "chen.json",
+                  "phase": "Ch'en"
+                },
+                {
+                  "dll": "xul.json",
+                  "phase": "Xul"
+                }
+              ]
+            }
+          }
+        },
+        "data/schema/kuhul.fold-runtime.json": {
+          "json": {
+            "id": "kuhul-fold-runtime-fixture",
+            "phase_driver_sha256": {
+              "algorithm": "sha256",
+              "chen.json": "$sha256:data/drivers/phases/chen.json",
+              "pop.json": "$sha256:data/drivers/phases/pop.json",
+              "sek.json": "$sha256:data/drivers/phases/sek.json",
+              "wo.json": "$sha256:data/drivers/phases/wo.json",
+              "xul.json": "$sha256:data/drivers/phases/xul.json",
+              "yax.json": "$sha256:data/drivers/phases/yax.json"
+            },
+            "sha256": {
+              "algorithm": "sha256",
+              "cycle_hash_spec": "$sha256:data/schema/cycle-hash.spec.json",
+              "fold_runtime": "$sha256:data/schema/fold.runtime.json"
+            }
+          }
+        }
+      },
+      "id": "artifact_not_a_regular_file"
+    }
+  ],
+  "gate": "runtime_stack",
+  "note": "Shared fixture matrix: executed by tools/boot_gate.py and by src/tests/test_schema_stack.cpp. Positive fixtures pin the full case-id set so native/Python divergence is detectable (GAP-013)."
+}

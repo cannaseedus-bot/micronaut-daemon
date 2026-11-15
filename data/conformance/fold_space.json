@@ -1,0 +1,3028 @@
+{
+  "@type": "khanary.fold_space.conformance.v1",
+  "cases": [
+    {
+      "id": "valid_full_fold_space_position",
+      "expect": "PASS",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "learned"
+        },
+        "@movements": [
+          {
+            "@type": "horizontal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "CAUSE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "valid_position_without_learning_sigma",
+      "expect": "PASS",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          }
+        },
+        "@movements": [
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Pop",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              }
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Pop",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              }
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "CAUSE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "invalid_phase",
+      "expect": "FAIL",
+      "error": "INVALID_PHASE",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Dream",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "learned"
+        },
+        "@movements": [
+          {
+            "@type": "horizontal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "CAUSE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "invalid_fold_state",
+      "expect": "FAIL",
+      "error": "INVALID_FOLD_STATE",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "expanded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "learned"
+        },
+        "@movements": [
+          {
+            "@type": "horizontal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "CAUSE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "missing_track",
+      "expect": "FAIL",
+      "error": "INVALID_TRACK",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "learned"
+        },
+        "@movements": [
+          {
+            "@type": "horizontal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "CAUSE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "invalid_runtime_state_mutable",
+      "expect": "FAIL",
+      "error": "INVALID_RUNTIME_STATE",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": "true",
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "learned"
+        },
+        "@movements": [
+          {
+            "@type": "horizontal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "CAUSE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "invalid_competence",
+      "expect": "FAIL",
+      "error": "INVALID_COMPETENCE",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "omega"
+        },
+        "@movements": [
+          {
+            "@type": "horizontal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "CAUSE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "invalid_movement_type",
+      "expect": "FAIL",
+      "error": "INVALID_MOVEMENT_TYPE",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "learned"
+        },
+        "@movements": [
+          {
+            "@type": "diagonal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "CAUSE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "horizontal_changed_phase",
+      "expect": "FAIL",
+      "error": "HORIZONTAL_PHASE_CHANGED",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "learned"
+        },
+        "@movements": [
+          {
+            "@type": "horizontal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Xul",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "CAUSE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "horizontal_track_not_changed",
+      "expect": "FAIL",
+      "error": "HORIZONTAL_TRACK_UNCHANGED",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "learned"
+        },
+        "@movements": [
+          {
+            "@type": "horizontal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "CAUSE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "vertical_changed_track",
+      "expect": "FAIL",
+      "error": "VERTICAL_TRACK_CHANGED",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "learned"
+        },
+        "@movements": [
+          {
+            "@type": "horizontal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "CAUSE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "vertical_wrong_step",
+      "expect": "FAIL",
+      "error": "VERTICAL_WRONG_PHASE_STEP",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "learned"
+        },
+        "@movements": [
+          {
+            "@type": "horizontal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Xul",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "CAUSE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "radial_not_toggle",
+      "expect": "FAIL",
+      "error": "RADIAL_FOLD_STATE_NOT_TOGGLED",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "learned"
+        },
+        "@movements": [
+          {
+            "@type": "horizontal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "CAUSE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "s1_claims_authority",
+      "expect": "FAIL",
+      "error": "S1_NOT_PROJECTION_ONLY",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "learned"
+        },
+        "@movements": [
+          {
+            "@type": "horizontal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "CAUSE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": false,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "semantic_authority_claimed",
+      "expect": "FAIL",
+      "error": "SEMANTIC_AUTHORITY_CLAIMED",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "learned"
+        },
+        "@movements": [
+          {
+            "@type": "horizontal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "CAUSE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": true,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "invalid_distance_metric",
+      "expect": "FAIL",
+      "error": "INVALID_DISTANCE_METRIC",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "learned"
+        },
+        "@movements": [
+          {
+            "@type": "horizontal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "CAUSE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "universal",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "distance_not_typed",
+      "expect": "FAIL",
+      "error": "DISTANCE_NOT_TYPED",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "learned"
+        },
+        "@movements": [
+          {
+            "@type": "horizontal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "CAUSE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": false
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "bad_pipeline_order",
+      "expect": "FAIL",
+      "error": "INVALID_PIPELINE",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "learned"
+        },
+        "@movements": [
+          {
+            "@type": "horizontal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "CAUSE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "OPERATE",
+          "UNFOLD",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "missing_book",
+      "expect": "FAIL",
+      "error": "INVALID_BOOK",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "learned"
+        },
+        "@movements": [
+          {
+            "@type": "horizontal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "book_handle_mismatch",
+      "expect": "FAIL",
+      "error": "BOOK_HANDLE_MISMATCH",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "learned"
+        },
+        "@movements": [
+          {
+            "@type": "horizontal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "EVIDENCE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-lattice.contracts.json"
+      }
+    },
+    {
+      "id": "bad_lattice_ref",
+      "expect": "FAIL",
+      "error": "INVALID_LATTICE_REF",
+      "space": {
+        "@type": "khanary.fold_space.v1",
+        "@coordinate": {
+          "@h": "CAUSE",
+          "@phase": "Sek",
+          "@track": "REASON-\u00b5",
+          "@fold_state": "unfolded",
+          "@runtime_state": {
+            "@mutable": true,
+            "@state_id": "runtime:fold-space:test"
+          },
+          "@competence": "learned"
+        },
+        "@movements": [
+          {
+            "@type": "horizontal",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "ADVISOR-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "vertical",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Yax",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          },
+          {
+            "@type": "radial",
+            "@from": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "folded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            },
+            "@to": {
+              "@h": "CAUSE",
+              "@phase": "Sek",
+              "@track": "REASON-\u00b5",
+              "@fold_state": "unfolded",
+              "@runtime_state": {
+                "@mutable": true,
+                "@state_id": "runtime:fold-space:test"
+              },
+              "@competence": "learned"
+            }
+          }
+        ],
+        "@book": {
+          "@handle": "CAUSE",
+          "@neighborhood": "N(CAUSE)",
+          "@bounded_by": "B_tau[h,e] != 0",
+          "@open": "UNFOLD",
+          "@close": "FOLD"
+        },
+        "@distances": [
+          {
+            "@type": "semantic",
+            "@formula": "Sim_tau(u,v) = sim(B_tau[u,*], B_tau[v,*])",
+            "@typed": true
+          },
+          {
+            "@type": "phase",
+            "@formula": "d_phase = shortest path distance on C6",
+            "@typed": true
+          },
+          {
+            "@type": "track",
+            "@formula": "d_track = field alignment over T",
+            "@typed": true
+          },
+          {
+            "@type": "behavior",
+            "@formula": "d_behavior = Burner pattern similarity",
+            "@typed": true
+          },
+          {
+            "@type": "fold_field",
+            "@formula": "d_fold(a,b) = alpha * L1(field_a - field_b)/2 + (1-alpha) * mean_abs_dev(wcr_scores); alpha default 0.7; range [0,1]",
+            "@typed": true
+          }
+        ],
+        "@pipeline": [
+          "LOCATE",
+          "UNFOLD",
+          "NAVIGATE",
+          "OPERATE",
+          "VERIFY",
+          "FOLD",
+          "XUL"
+        ],
+        "@authority": {
+          "@c6_authority": true,
+          "@s1_projection_only": true,
+          "@semantic_authority": false,
+          "@route_authority": "XCFE",
+          "@proof_boundary": "Sek proposes, Ch'en proves, XCFE authorizes, Xul commits"
+        },
+        "@lattice_ref": "data/grammar/fold-kernel.contracts.json"
+      }
+    }
+  ]
+}

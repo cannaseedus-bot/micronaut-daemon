@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0" xmlns="http://alicebot.org/2001/AIML-2020" xmlns:xcfe="urn:kuhul:xcfe:aiml:1.0">
+  <category><pattern>HELLO</pattern><template>Hey! 🌱 I'm Seed Bot. I can show seeds, recommend strains, read the blog, or answer growing questions.</template></category>
+  <category><pattern>HI</pattern><template><srai>HELLO</srai></template></category>
+  <category><pattern>WHAT CAN YOU DO</pattern><template>I can show products, recommend strains, read blog posts, manage your cart, explain growing, and open checkout.</template></category>
+  <category><pattern>SHOW ME YOUR SEEDS</pattern><template>Here's our lineup 🌱<xcfe:product-rail ids="jelly-donutz,hella-jelly,octane-cbd-h,alien-og,pineapple-express,strawberry-cbd-h" catalog="⟁APP:SEED_STORE/catalog.products" authority="observation_only"/></template></category>
+  <category><pattern>SHOW * SEEDS</pattern><template><srai>SHOW ME YOUR SEEDS</srai></template></category>
+  <category><pattern>TELL ME ABOUT *</pattern><template><xcfe:product-lookup name="&lt;star/&gt;" catalog="⟁APP:SEED_STORE/catalog.products" authority="observation_only"/></template></category>
+  <category><pattern>HOW MUCH IS *</pattern><template><xcfe:product-price name="&lt;star/&gt;" catalog="⟁APP:SEED_STORE/catalog.products" authority="observation_only"/></template></category>
+  <category><pattern>RECOMMEND SOMETHING FOR ANXIETY</pattern><template>Based on what you're looking for, these are my top picks:<xcfe:product-rail ids="octane-cbd-h,strawberry-cbd-h,alien-og" catalog="⟁APP:SEED_STORE/catalog.products" authority="observation_only"/></template></category>
+  <category><pattern>RECOMMEND SOMETHING FOR PAIN</pattern><template><srai>RECOMMEND SOMETHING FOR ANXIETY</srai></template></category>
+  <category><pattern>RECOMMEND SOMETHING FOR SLEEP</pattern><template><xcfe:product-rail ids="alien-og,octane-cbd-h" catalog="⟁APP:SEED_STORE/catalog.products" authority="observation_only"/></template></category>
+  <category><pattern>SHOW ME MY CART</pattern><template>Here's what's in your cart:<xcfe:cart-snapshot app="⟁APP:SEED_STORE" authority="observation_only"/></template></category>
+  <category><pattern>ADD * TO MY CART</pattern><template><xcfe:cart-add name="&lt;star/&gt;" app="⟁APP:SEED_STORE" authority="observation_only"/>Your cart has been updated.</template></category>
+  <category><pattern>I WANT TO PAY</pattern><template>Ready when you are:<xcfe:payment-panel app="⟁APP:SEED_CHECKOUT" route="commerce.order" authority="observation_only"/></template></category>
+  <category><pattern>CHECKOUT</pattern><template><srai>I WANT TO PAY</srai></template></category>
+  <category><pattern>CHECKOUT</pattern><that>YOUR CART IS EMPTY *</that><template>Your cart is empty, so there's nothing to check out yet. Want to see our seeds?<xcfe:product-rail catalog="⟁APP:SEED_STORE/catalog.products" authority="observation_only"/></template></category>
+  <category><pattern>CHECKOUT</pattern><that>* ADDED *</that><template>Ready when you are — here's your total:<xcfe:payment-panel app="⟁APP:SEED_CHECKOUT" route="commerce.order" authority="observation_only"/></template></category>
+  <category><pattern>HOW MUCH IS SHIPPING</pattern><template>Ground shipping is $15 flat; availability and delivery times depend on destination and applicable law.</template></category>
+  <category><pattern>SHOW ME THE LATEST BLOG POSTS</pattern><template>Here are the latest posts:<xcfe:feed-rail limit="6" source="blog.store-and-community.v1" authority="observation_only"/></template></category>
+  <category><pattern>POSTS ABOUT *</pattern><template><xcfe:feed-search query="&lt;star/&gt;" source="blog.store-and-community.v1" authority="observation_only"/></template></category>
+  <category><pattern>WHAT ARE THE BLOG TOPICS</pattern><template><xcfe:token-cloud source="blog.store-and-community.v1" authority="observation_only"/></template></category>
+  <category><pattern>ORGANIC VS HYDRO</pattern><template>Organic uses living soil and microbial buffering; hydro uses dissolved nutrients with tighter EC/pH control. See the Plant Growers Bible for the full comparison.</template></category>
+  <category><pattern>HOW TO GERMINATE SEEDS</pattern><template>Use a warm, damp, dark setup, check daily, and plant the taproot carefully. Follow local laws and the detailed germination guide.</template></category>
+  <category><pattern>WHAT IS PH</pattern><template>pH affects nutrient availability. Typical guidance is soil 6.0–7.0, coco 5.8–6.5, and hydro 5.5–6.5.</template></category>
+  <category><pattern>WHAT ARE THE FORUM RULES</pattern><template>Be respectful, stay on topic, protect privacy, avoid illegal activity, and share growing information responsibly.</template></category>
+  <category><pattern>THANKS</pattern><template>You're welcome! 🌱 Happy growing.</template></category>
+  <category><pattern>BYE</pattern><template>Take care! 🌱</template></category>
+  <category><pattern>*</pattern><template>I'm not sure I understood "&lt;star/&gt;". Try “show me your seeds”, “recommend something for anxiety”, “latest blog posts”, or “checkout”.</template></category>
+</aiml>

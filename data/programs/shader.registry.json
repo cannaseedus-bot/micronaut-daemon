@@ -1,0 +1,70 @@
+{
+  "@kind": "kuhul.shader-registry.v1",
+  "@id": "shader://shared-stack",
+  "description": "Merged logical shader catalog for native trainer, WebX, JSON runtime, and CS5 compute sources.",
+  "roots": [
+    {
+      "id": "gpu-trainer",
+      "path": "dist/GPU-TRAINER",
+      "backend": ["d3d11", "cs5"],
+      "priority": 500,
+      "role": "semantic-cube-kube-engine"
+    },
+    {
+      "id": "trainer-build",
+      "path": "trainer/build/shaders",
+      "backend": ["d3d11", "cs5"],
+      "priority": 400,
+      "role": "native-training"
+    },
+    {
+      "id": "webx-cs5",
+      "path": "dist/v3.5.0-WebX/shaders/cs5",
+      "backend": ["d3d11", "cs5"],
+      "priority": 300,
+      "role": "WebX-native"
+    },
+    {
+      "id": "webx",
+      "path": "dist/v3.5.0-WebX/shaders",
+      "backend": ["d3d11", "hlsl"],
+      "priority": 200,
+      "role": "WebX-runtime"
+    },
+    {
+      "id": "json-runtime",
+      "path": "dist/json-runtime/shaders",
+      "backend": ["d3d11", "hlsl", "webgl2", "opencl"],
+      "priority": 100,
+      "role": "JSON-runtime"
+    }
+  ],
+  "resolution": {
+    "policy": "highest-priority-compatible-source",
+    "do_not_overwrite": true,
+    "duplicate_name": "record-all-and-select-by-backend",
+    "compiled_outputs": ["cso", "dxil", "spirv"],
+    "source_of_truth": "selected source path plus sha256"
+  },
+  "trainer": {
+    "required": [
+      "gpt2_adam.hlsl",
+      "gpt2_attn_fwd.hlsl",
+      "gpt2_attn_bwd.hlsl",
+      "gpt2_matmul_fwd.hlsl",
+      "gpt2_matmul_bwd.hlsl",
+      "gpt2_layernorm_fwd.hlsl",
+      "gpt2_layernorm_bwd.hlsl"
+    ],
+    "working_directory": "trainer/build/Release",
+    "shader_directory": "trainer/build/shaders",
+    "device_removed_policy": "fallback-to-cpu-or-xshard; never continue GPU updates"
+  },
+  "integration": {
+    "native_training": "trainer/build/Release/gpt2_trainer.exe",
+    "xshard_adapter": "trainer/build/Release/xshard_adapt.exe",
+    "xshard_backward": "trainer/build/Release/xshard_backward.exe",
+    "json_runtime": "dist/json-runtime/shaders",
+    "program": "programs/micronauts/micronaut-coder.native.json"
+  }
+}

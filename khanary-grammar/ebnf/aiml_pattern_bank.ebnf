@@ -1,0 +1,43 @@
+(* Compiled AIML pattern bank, v1.1. Templates describe data only. *)
+pattern-bank = "pattern-bank", space, identifier, "{version:", semver,
+               ";source-file:", quoted, ";source-hash:", hex64,
+               ";rule-count:", integer, ";rules:[", rule, { ",", rule }, "]}" ;
+rule = "{id:", quoted, ",pattern:", quoted, ",topic:", quoted,
+       ",template:", template, ",specificity:", number,
+       ",literal-chars:", integer, ",wildcard-count:", integer,
+       ",wildcard-priority:", priority, "}" ;
+template = literal-template | srai-template | guard-template | dispatch-template | closure-template ;
+literal-template = "{kind:literal,text:", quoted, "}" ;
+srai-template = "{kind:srai,target:", quoted, "}" ;
+guard-template = "{kind:guard-check,field:", guard-field,
+                 ",operator:", comparison, ",value:", quoted,
+                 ",on-fail:", fail-action, "}" ;
+dispatch-template = "{kind:dispatch,operator:", operator,
+                    ",arity:", arity, ",envelope:", quoted, "}" ;
+closure-template = "{kind:closure,result:\"REASONING RESULT *\",denied:\"REASONING DENIED *\"}" ;
+guard-field = "reasoning.depth" | "reasoning.visited" | "reasoning.guard" ;
+operator = "DEDUCTION" | "INDUCTION" | "ABDUCTION" | "DEPENDENCY" | "CONTRAST" | "ANALOGY" ;
+arity = "1" | "2" ;
+comparison = "==" | "!=" | "<" | "<=" | ">" | ">=" ;
+fail-action = "reject" | "warn" | "defer" ;
+priority = "0" | "1" | "2" | "3" | "4" ;
+semver = integer, ".", integer, ".", integer ;
+number = integer, [ ".", integer ] ;
+integer = digit, { digit } ;
+digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+identifier = letter, { letter | digit | "_" | "-" } ;
+letter = "A".."Z" | "a".."z" ;
+hex64 = hex, hex, hex, hex, hex, hex, hex, hex,
+        hex, hex, hex, hex, hex, hex, hex, hex,
+        hex, hex, hex, hex, hex, hex, hex, hex,
+        hex, hex, hex, hex, hex, hex, hex, hex,
+        hex, hex, hex, hex, hex, hex, hex, hex,
+        hex, hex, hex, hex, hex, hex, hex, hex,
+        hex, hex, hex, hex, hex, hex, hex, hex,
+        hex, hex, hex, hex, hex, hex, hex, hex ;
+hex = digit | "a".."f" | "A".."F" ;
+quoted = '"', { letter | digit | " " | "_" | "-" | "." | "*" | "/" }, '"' ;
+space = " " | "\t" | "\r" | "\n" ;
+
+(* Binding constraints: ids are unique; SRAI targets resolve; guard fields
+   resolve; dispatch operators resolve with matching arity; closure is terminal. *)

@@ -1,0 +1,52 @@
+{
+  "@program": "mx2.brain.jrom.adapter",
+  "@kind": "kuhul.jrom.atomicdom.brain-adapter.v1",
+  "@namespace": "https://kuhul.dev/",
+  "@source": "dist/MX-2/brains/brain_catalog.json",
+  "@compiled": "dist/MX-2/brains/jrom",
+  "formats": {
+    "brain_graph": "scx.json",
+    "brain_code": "kbc1",
+    "container": "jrom_atomicdom",
+    "wire": "JROM+CBOR",
+    "semantic": "KXML",
+    "language": "ChatML|Jinja|KXML"
+  },
+  "profiles": {
+    "atomic_fast": {
+      "graph": "dist/MX-2/brains/atomic_fast.scx.json",
+      "code": "dist/MX-2/brains/atomic_fast.kbc1",
+      "rom": "dist/MX-2/brains/jrom/atomic_fast_jrom.rom"
+    },
+    "atomic_deep": {
+      "graph": "dist/MX-2/brains/atomic_deep.scx.json",
+      "code": "dist/MX-2/brains/atomic_deep.kbc1",
+      "rom": "dist/MX-2/brains/jrom/atomic_deep_jrom.rom"
+    },
+    "tri_brain": {
+      "graph": "dist/MX-2/brains/tri_brain.scx.json",
+      "code": null,
+      "rom": "dist/MX-2/brains/jrom/tri_brain_jrom.rom"
+    }
+  },
+  "pipeline": [
+    { "phase": "Pop", "op": "BRAIN_LOAD", "inputs": ["scx.json", "kbc1"] },
+    { "phase": "Wo", "op": "JROM_PROFILE_SELECT", "inputs": ["profile", "thinking_mode"] },
+    { "phase": "Yax", "op": "KXML_NORMALIZE", "inputs": ["micronaut_events", "messages", "tool_calls"] },
+    { "phase": "Sek", "op": "JROM_DISPATCH", "inputs": ["profile_rom", "brain_state"] },
+    { "phase": "Chen", "op": "BLOCK_VERIFY", "checks": ["cm1_gate", "profile_hash", "role_order"] },
+    { "phase": "Xul", "op": "JROM_COMMIT", "format": "JROM_v1_CBOR" }
+  ],
+  "template_adapter": {
+    "source": "KXML",
+    "targets": ["ChatML", "Jinja", "KXML"],
+    "renderer": "programs/micronauts/jrom-template-adapter.json",
+    "preserve": ["role_blocks", "generation_prompt", "bos_token", "eos_token", "tool_call_branch"]
+  },
+  "invariants": [
+    "JROM is the compiled AtomicDOM container for the brain adapter.",
+    "SCX graph and KBC1 code remain source artifacts and are not overwritten.",
+    "CM-1 gates brain dispatch before the ChatML language adapter renders output.",
+    "KXML remains the universal semantic layer between brain state and model template."
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:khanary:schema:cfpc-pattern:1",
+  "title": "CFPCPattern",
+  "description": "Context Fluency Pattern Creation pattern contract v1.",
+  "type": "object",
+  "required": ["@kind", "id", "intent"],
+  "additionalProperties": false,
+  "properties": {
+    "@kind": {
+      "type": "string",
+      "enum": ["khanary.cfpc.pattern.v1"],
+      "description": "Kind discriminator; must be khanary.cfpc.pattern.v1."
+    },
+    "id": {
+      "type": "string",
+      "description": "Stable pattern identifier (kebab-case)."
+    },
+    "intent": {
+      "type": "string",
+      "description": "Human-readable description of what the pattern resolves."
+    },
+    "phase": {
+      "type": "string",
+      "enum": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"],
+      "description": "C6 phase where this pattern anchors its field resolution."
+    },
+    "@captures": {
+      "type": "object",
+      "description": "Map of capture variable name to capture spec.",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": ["*"],
+            "description": "Simple wildcard: bind entire lowercased query."
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "wildcard": { "type": "string" },
+              "strip_prefix": {
+                "type": "string",
+                "description": "Strip this prefix from the lowercased query before binding."
+              }
+            }
+          }
+        ]
+      }
+    },
+    "neighborhood_resolve": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "from_captures": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Which capture names to resolve neighborhoods for."
+        },
+        "max_hops": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum graph traversal depth. Currently 1-hop only."
+        }
+      }
+    },
+    "question_templates": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Templates for candidate question generation. Supports {subject}, {neighbor}, {field_keys} placeholders."
+    },
+    "context_template": {
+      "type": "string",
+      "description": "Template for the Xul-phase context_text output. Supports same placeholders plus {query} and {neighbors}."
+    }
+  }
+}

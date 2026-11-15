@@ -1,0 +1,87 @@
+{
+  "@program": "adapter.kuhul.pi",
+  "@schema": "kuhul.pi.semantic-adapter.v1",
+  "@version": "1.0.0",
+  "@description": "π-KUHUL Semantic Cube adapter for training and runtime inference.",
+  "runtime": {
+    "adapter": "tools/pi_kuhul_semantic_adapter.py",
+    "trainer": "tools/pi_kuhul_train.py",
+    "inference": "tools/pi_kuhul_serve.py",
+    "checkpoint_format": "pi-kuhul.pt",
+    "tokenizer": "glyph",
+    "vocab_size": 1024,
+    "gradient_authority": "pytorch",
+    "fold_tensor_map": "programs/kuhul.fold-tensor-map.json"
+  },
+  "backends": {
+    "preferred": "opencl_1_2",
+    "fallback": "cpu.semantic_cube",
+    "available": ["opencl_1_2", "cpu.semantic_cube"],
+    "planned": ["d3d11.semantic_cube", "webgl2.semantic_cube"],
+    "webgl2_authority": "inference_projection_only"
+  },
+  "shader_contracts": {
+    "semantic_cube": {
+      "source": "dist/GPU-TRAINER/semantic_cube.hlsl",
+      "binary": "dist/GPU-TRAINER/semantic_cube.cso",
+      "status": "contracted"
+    },
+    "opencl_field_projection": {
+      "source": "drivers/opencl_1_2/matrix5x4.cl",
+      "entry": "matrix5x4_matmul",
+      "host_bridge": "scratch/opencl_matrix5x4_bridge.exe",
+      "build_options": "-cl-std=CL1.2",
+      "status": "validated"
+    },
+    "webgl2_field_projection": {
+      "source": "drivers/webgl2/gravity_corrective.mjs",
+      "shader": "drivers/webgl2/gravity_corrective.frag",
+      "status": "contracted"
+    }
+  },
+  "modes": {
+    "training": {
+      "command": "python tools/pi_kuhul_train.py",
+      "observation_phase": "Sek",
+      "dispatch_interval_default": 50,
+      "loss_regularizer_default": 0.0,
+      "effect": "bounded_semantic_field_energy"
+    },
+    "inference": {
+      "command": "python tools/pi_kuhul_serve.py",
+      "observation_phase": "Sek",
+      "dispatch_interval_default": 1,
+      "effect": "bounded_logit_field_gain"
+    }
+  },
+  "tensor_contract": {
+    "projection_input": "logits[B,T,V]",
+    "projection_shape": [5, 4],
+    "projection_dtype": "float32",
+    "opencl_rhs_shape": [4, 5],
+    "signal": "bounded_tanh_mean",
+    "confidence": "sigmoid_abs_signal"
+  },
+  "replay": {
+    "format": "jsonl",
+    "default_path": "scratch/pi_kuhul_semantic_replay.jsonl",
+    "operation": "semantic_cube.dispatch",
+    "records_backend": true,
+    "records_fallback": true
+  },
+  "program": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "semantic-adapter" },
+    { "@op": "SEMANTIC_PROJECT", "@args": ["$logits", "$phase"], "@out": "field" },
+    { "@op": "GPU_DISPATCH", "@backend": "$backend", "@args": ["$field"], "@out": "signal" },
+    { "@op": "FOLD_EXIT", "@fold": "Chen", "@node": "semantic-verify", "@args": ["$signal"] },
+    { "@op": "REPLAY", "@target": "scratch/pi_kuhul_semantic_replay.jsonl", "@args": ["$signal"] },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "semantic-commit", "@args": ["$signal"] }
+  ],
+  "safety": {
+    "max_logit_gain": 0.05,
+    "max_training_regularizer": 0.0001,
+    "opencl_timeout_seconds": 20,
+    "fallback_on_backend_error": true,
+    "never_replaces_pytorch_gradients": true
+  }
+}

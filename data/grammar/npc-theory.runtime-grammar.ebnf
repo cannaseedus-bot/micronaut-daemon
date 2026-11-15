@@ -1,0 +1,132 @@
+(* ============================================================ *)
+(* NPC Theory Runtime Grammar                                   *)
+(* Formal behavior grammar for NPCs as perceive-match-act loops. *)
+(* ============================================================ *)
+
+Npc            ::= Identity Goals Perception Memory Decision Action Feedback [ NpcSemanticField ] ;
+
+Identity       ::= Role Personality Faction ;
+Role           ::= "guard" | "merchant" | "quest_giver" | "combatant" | "advisor" | Identifier ;
+Personality    ::= "aggressive" | "cautious" | "curious" | "friendly" | "cowardly" | Identifier ;
+Faction        ::= Identifier ;
+
+Goals          ::= Objective { Objective } ;
+Objective      ::= "patrol" | "protect" | "trade" | "survive" | "attack" | "help" | Identifier ;
+
+Perception     ::= Environment PlayerState NpcState ;
+Environment    ::= "environment" "{" { Percept } "}" ;
+PlayerState    ::= "player" "{" { Percept } "}" ;
+NpcState       ::= "npc_state" "{" { Percept } "}" ;
+Percept        ::= Identifier [ ":" Value ] ;
+
+Memory         ::= "memory" "{" { KnownFact } "}" ;
+KnownFact      ::= Subject Relation Target ;
+RelationshipGraph ::= Subject Relation Target ;
+Relation       ::= "friend" | "enemy" | "merchant" | "ally" | "rival" | "protects" | "distrusts" | "serves" | Identifier ;
+
+Decision       ::= FiniteStateMachine | BehaviorTree | UtilityAI | Planner | WildcardReasoning ;
+
+FiniteStateMachine ::= "fsm" "{" State { Transition } "}" ;
+State          ::= "patrol" | "alert" | "investigate" | "attack" | "retreat" | Identifier ;
+Transition     ::= Trigger "->" State ;
+Trigger        ::= Identifier [ Comparator Value ] ;
+Comparator     ::= "=" | "!=" | "<" | ">" | "<=" | ">=" ;
+
+BehaviorTree   ::= Selector | Sequence | Condition | Action ;
+Selector       ::= "selector" "{" BehaviorTree { BehaviorTree } "}" ;
+Sequence       ::= "sequence" "{" BehaviorTree { BehaviorTree } "}" ;
+Condition      ::= "condition" "(" Trigger ")" ;
+
+UtilityAI      ::= "utility" "{" ActionScore { ActionScore } "}" "maximize" ;
+ActionScore    ::= Action ":" Number ;
+
+Planner        ::= "planner" "{" Goals Constraints SearchPlan "}" ;
+Constraints    ::= "constraints" "{" { Trigger } "}" ;
+SearchPlan     ::= "search" "(" "state_pattern" ")" ;
+
+WildcardReasoning ::= "wildcard" "{" "observe" "evaluate" [ "learn" ] "}" ;
+
+Action         ::= "patrol" | "move" | "talk" | "trade" | "attack" | "flee" | "idle" | "heal" | "chase" | Identifier ;
+Feedback       ::= UpdateMemory UpdateRelationships UpdateGoals ;
+UpdateMemory   ::= "update_memory" ;
+UpdateRelationships ::= "update_relationships" ;
+UpdateGoals    ::= "update_goals" ;
+
+NpcCycle       ::= Perception Decision Action Feedback ;
+
+Subject        ::= Identifier ;
+Target         ::= Identifier ;
+Value          ::= Identifier | Number | String ;
+Identifier     ::= [A-Za-z_][A-Za-z0-9_:-]* ;
+Number         ::= [0-9]+ [ "." [0-9]+ ] ;
+String         ::= '"' { ? any character except quote ? } '"' ;
+
+
+(* ================================================================ *)
+(* v2 OPTIONAL NPC SEMANTIC FIELD / PHASE EXECUTION EXTENSION       *)
+(* Original perceive-match-act, FSM, BT, utility, planner and       *)
+(* wildcard reasoning productions remain valid.                   *)
+(* ================================================================ *)
+NpcSemanticField ::= NpcTrack NpcContext NpcKeyGrammar
+                     NpcUnigrams NpcBigrams NpcTrigrams NpcBindings
+                     NpcProgram NpcExecutionPolicy ;
+
+(* Track is the bounded field of play; context is per-invocation state. *)
+NpcTrack        ::= "track" "{" "id" ":" String "grammar_ref" ":" String
+                    [ "vector_field_ref" ":" String ] "}" ;
+NpcContext      ::= "context" "{" "query" ":" String
+                    [ "percepts" ":" NpcRefList ]
+                    [ "candidate_refs" ":" NpcRefList ] "}" ;
+NpcKeyGrammar   ::= "key_grammar" "(" String ")" ;
+
+(* Unigrams: frozen lexical/corpus weights. *)
+NpcUnigrams     ::= "unigrams" "{" { NpcUnigram } "}" ;
+NpcUnigram      ::= "unigram" "(" String "," Number ")" ;
+
+(* Bigrams: ordered geometric relation keys, not automatic tensors. *)
+NpcBigrams      ::= "bigrams" "{" { NpcBigram } "}" ;
+NpcBigram       ::= "bigram" "(" String "," String "," "vector_ref" "(" String ")" ")" ;
+
+(* Trigrams: executable fold references with REQUIRED stored phase. *)
+NpcTrigrams     ::= "trigrams" "{" { NpcTrigram } "}" ;
+NpcTrigram      ::= "trigram" "(" NpcPattern3 "," NpcPhase ","
+                    "fold_ref" "(" String ")"
+                    [ "," "binding_ref" "(" String ")" ] ")" ;
+NpcPattern3     ::= "[" NpcPatternAtom "," NpcPatternAtom "," NpcPatternAtom "]" ;
+NpcPatternAtom  ::= String | "*" | "?" ;
+NpcPhase        ::= "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul" ;
+
+(* Preserve existing wildcard reasoning and add typed binding sources. *)
+NpcBindings     ::= "bindings" "{" { NpcBinding } "}" ;
+NpcBinding      ::= "bind" "(" String "," NpcBindingSource "," String ")" ;
+NpcBindingSource ::= "capture" | "lm_chain" | "char_overlap" | "explicit" ;
+NpcRefList      ::= "[" [ String { "," String } ] "]" ;
+
+(* Micronaut calls may compose NPC behavior but never bypass authority. *)
+NpcProgram      ::= "micronaut_program" "{" "ref" ":" String
+                    "pipeline" ":" NpcPipeline
+                    [ "calls" ":" NpcCalls ] "}" ;
+NpcPipeline     ::= "[" "match" "," "bind" "," "filter" "," "map"
+                    "," "score" "," "phase_execute"
+                    [ "," "collection_fold" ] "]" ;
+NpcCalls        ::= "[" [ NpcCall { "," NpcCall } ] "]" ;
+NpcCall         ::= "call" "(" String "," String ")" ;
+
+(* NPC actions and memory updates remain subject to simulation policy;
+   observations and commits are different authority transitions. *)
+NpcExecutionPolicy ::= "authority" "{" "admission" ":" "XCFE"
+                       "observe" ":" "Ch'en" "commit" ":" "Xul" "}" ;
+
+(* HOST VALIDATION / SEMANTIC INVARIANTS:
+  1. A trigram must store its phase; neither track nor template overrides it.
+  2. Resolve pattern/fold/binding/vector/program references and wildcard slots.
+  3. Keep track definitions separate from active context and NPC memory.
+  4. Match/Bind/Filter/Map and optional collection_fold are NOT phase names.
+  5. XCFE admission and legal phase transitions precede execution.
+  6. Ch'en records observations; Xul updates require an authorized commit.
+  7. Micronaut recursion requires depth/cycle/resource limits.
+  8. Static unigram priors are not overwritten by learned NPC experience.
+  9. BSON/CBOR round-trips preserve key, value, phase, fold and bindings;
+     optional SCXQ2 lowering has separate semantic-equivalence tests.
+ 10. This extension is a grammar contract, not a runtime implementation.
+*)

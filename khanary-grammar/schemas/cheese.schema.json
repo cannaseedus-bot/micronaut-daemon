@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Contextual Cheese Evaluation",
+  "type": "object",
+  "properties": {
+    "@kind": {
+      "const": "semantic.cheese.v1"
+    },
+    "@candidate": {
+      "type": "string",
+      "minLength": 1
+    },
+    "@context": {
+      "type": "string"
+    },
+    "@score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "@evaluated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "@dimensions": {
+      "type": "object",
+      "properties": {
+        "pessimism": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "doubt": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "reasoning_quality": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "counterevidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "contradictions": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "staleness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "supporting_evidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        }
+      },
+      "additionalProperties": false
+    },
+    "@objections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string"
+          },
+          "evidence_ref": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "@support": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "@provenance": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "@policy": {
+      "type": "object",
+      "properties": {
+        "freshness_class": {
+          "type": "string"
+        },
+        "recompute_on_query": {
+          "type": "boolean"
+        },
+        "no_auto_promotion": {
+          "const": true
+        }
+      },
+      "required": [
+        "recompute_on_query",
+        "no_auto_promotion"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "@kind",
+    "@candidate",
+    "@score"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,39 @@
+{
+  "schema": "key.grammar.advisor_bootstrap.v1",
+  "description": "Authored request-to-expert bootstrap. The generated AIML is a projection; the runtime track and router remain authoritative.",
+  "track": "ADVISOR-µ",
+  "card": {
+    "id": "advisor",
+    "label": "Advisor",
+    "symbol": "⟁WIDGETCARD",
+    "fields": ["task", "target", "evidence", "gaps", "proposal", "authority", "next"],
+    "authority": "none"
+  },
+  "routes": [
+    {"pattern": "ADVISE MATH *", "prefix": "math:", "expert": "MATH-µ", "phase": "Yax", "next": "Sek"},
+    {"pattern": "ADVISE CODE *", "prefix": "code:", "expert": "coder", "phase": "Yax", "next": "Sek"},
+    {"pattern": "ADVISE RESEARCH *", "prefix": "search:", "expert": "WEB-RESEARCH-µ", "phase": "Yax", "next": "Ch'en"},
+    {"pattern": "ADVISE RESEARCH FACT MISS", "prefix": "search: event=advisor_web_research_trigger cue=miss_low_confidence", "expert": "WEB-RESEARCH-µ", "phase": "Yax", "next": "Ch'en"},
+    {"pattern": "ADVISE RESEARCH FACT MISS *", "prefix": "search: event=advisor_web_research_trigger cue=miss_low_confidence", "expert": "WEB-RESEARCH-µ", "phase": "Yax", "next": "Ch'en"},
+    {"pattern": "I DON'T KNOW THE ANSWER TO THAT QUESTION", "prefix": "search: event=advisor_web_research_trigger cue=miss_low_confidence", "expert": "WEB-RESEARCH-µ", "phase": "Yax", "next": "Ch'en"},
+    {"pattern": "I DON'T KNOW THE ANSWER TO THAT QUESTION *", "prefix": "search: event=advisor_web_research_trigger cue=miss_low_confidence", "expert": "WEB-RESEARCH-µ", "phase": "Yax", "next": "Ch'en"},
+    {"pattern": "I DO NOT KNOW THE ANSWER TO THAT QUESTION", "prefix": "search: event=advisor_web_research_trigger cue=miss_low_confidence", "expert": "WEB-RESEARCH-µ", "phase": "Yax", "next": "Ch'en"},
+    {"pattern": "I DO NOT KNOW THE ANSWER TO THAT QUESTION *", "prefix": "search: event=advisor_web_research_trigger cue=miss_low_confidence", "expert": "WEB-RESEARCH-µ", "phase": "Yax", "next": "Ch'en"},
+    {"pattern": "LET ME SEARCH THE WEB AND ASK MY ADVISOR", "prefix": "search: event=advisor_web_research_trigger cue=miss_low_confidence", "expert": "WEB-RESEARCH-µ", "phase": "Yax", "next": "Ch'en"},
+    {"pattern": "LET ME SEARCH THE WEB AND ASK MY ADVISOR *", "prefix": "search: event=advisor_web_research_trigger cue=miss_low_confidence", "expert": "WEB-RESEARCH-µ", "phase": "Yax", "next": "Ch'en"},
+    {"pattern": "ADVISE EXPLAIN *", "prefix": "explain:", "expert": "reasoner", "phase": "Yax", "next": "Sek"},
+    {"pattern": "ADVISE TOOL HELP LFM", "prefix": "chat-u op=tool_selection_help event=lfm_tool_help_trigger cue=tool_uncertain", "expert": "CHAT-u", "phase": "Wo", "next": "Sek"},
+    {"pattern": "ADVISE TOOL HELP LFM *", "prefix": "chat-u op=tool_selection_help event=lfm_tool_help_trigger cue=tool_uncertain", "expert": "CHAT-u", "phase": "Wo", "next": "Sek"},
+    {"pattern": "I'M NOT SURE WHAT TOOL TO USE", "prefix": "chat-u op=tool_selection_help event=lfm_tool_help_trigger cue=tool_uncertain", "expert": "CHAT-u", "phase": "Wo", "next": "Sek"},
+    {"pattern": "I'M NOT SURE WHAT TOOL TO USE *", "prefix": "chat-u op=tool_selection_help event=lfm_tool_help_trigger cue=tool_uncertain", "expert": "CHAT-u", "phase": "Wo", "next": "Sek"},
+    {"pattern": "I AM NOT SURE WHAT TOOL TO USE", "prefix": "chat-u op=tool_selection_help event=lfm_tool_help_trigger cue=tool_uncertain", "expert": "CHAT-u", "phase": "Wo", "next": "Sek"},
+    {"pattern": "I AM NOT SURE WHAT TOOL TO USE *", "prefix": "chat-u op=tool_selection_help event=lfm_tool_help_trigger cue=tool_uncertain", "expert": "CHAT-u", "phase": "Wo", "next": "Sek"},
+    {"pattern": "LET ME ASK FOR HELP FROM LFM", "prefix": "chat-u op=tool_selection_help event=lfm_tool_help_trigger cue=tool_uncertain", "expert": "CHAT-u", "phase": "Wo", "next": "Sek"},
+    {"pattern": "LET ME ASK FOR HELP FROM LFM *", "prefix": "chat-u op=tool_selection_help event=lfm_tool_help_trigger cue=tool_uncertain", "expert": "CHAT-u", "phase": "Wo", "next": "Sek"},
+    {"pattern": "ADVISE PLAN *", "prefix": "plan:", "expert": "Coordinator", "phase": "Wo", "next": "Ch'en"},
+    {"pattern": "ADVISE *", "prefix": "plan:", "expert": "Coordinator", "phase": "Wo", "next": "Ch'en"},
+    {"pattern": "I NEED HELP WITH *", "prefix": "plan:", "expert": "Coordinator", "phase": "Wo", "next": "Ch'en"},
+    {"pattern": "HELP ME WITH *", "prefix": "plan:", "expert": "Coordinator", "phase": "Wo", "next": "Ch'en"},
+    {"pattern": "WHO CAN HELP WITH *", "prefix": "plan:", "expert": "Coordinator", "phase": "Wo", "next": "Ch'en"}
+  ]
+}

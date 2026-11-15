@@ -1,0 +1,31 @@
+{
+  "@type": "khanary.xcfe_program_registry.v1",
+  "@no-eval": true,
+  "version": "1.0.0",
+  "programs": [
+    {
+      "id": "xcfe.causal-link.v1",
+      "name": "Causal link proposal",
+      "class": "CAUSAL",
+      "executor": "xcfe_eval",
+      "phase": "Yax",
+      "input_role": "causal_claim",
+      "output_role": "causal_relation_proposal",
+      "input_keys": ["effect", "cause"],
+      "admission": {
+        "required": true,
+        "capability": "xcfe.program.execute",
+        "approved": true
+      },
+      "effects": [],
+      "definition": {
+        "@cause": "effect",
+        "@because": "cause"
+      },
+      "verification": {
+        "required_before_learning": true,
+        "promotion_phase": "Xul"
+      }
+    }
+  ]
+}

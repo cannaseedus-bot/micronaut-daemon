@@ -1,0 +1,55 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "meal-planner",
+  "@key": "⟁APP:MEAL_PLANNER",
+  "@mount": "⟁ROOT:MEAL_PLANNER",
+  "@theme": { "accent": "#4ade80", "bg": "#030b05", "surface": "#05160a", "text": "#dcfce7", "hero_phase": "Yax", "tagline": "Plan the week. Eat better." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "weekly_plan", "component": "⟁WIDGET:PLAN", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "plan": [], "shopping_list": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:MEAL_PLANNER": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:PLAN_WEEK", "⟁ACTION:SHOPPING"] },
+    "⟁ACTION:PLAN_WEEK": { "@type": "button", "@text": "Plan Week", "@on": { "click": "meals.open_compose" } },
+    "⟁ACTION:SHOPPING": { "@type": "button", "@text": "Shopping List", "@on": { "click": "meals.open_shopping" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:PLAN", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:PLAN": { "@type": "calendar-grid", "@bind": "state.plan", "@on": { "add": "meals.add_meal" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:SHOPPING_LIST", "⟁WIDGET:NUTRITION"] },
+    "⟁WIDGET:SHOPPING_LIST": { "@type": "list", "@bind": "state.shopping_list" },
+    "⟁WIDGET:NUTRITION": { "@type": "stat", "@bind": "data.weekly_nutrition" }
+  },
+  "@programs": {
+    "meals.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "meals.open_shopping": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "meals.add_meal": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "APPEND", "@in": "event_meal", "@out": "plan" }] }
+  },
+  "@events": { "plan.compose": "meals.open_compose", "shopping.open": "meals.open_shopping", "meal.add": "meals.add_meal" },
+  "@imports": [{ "ref": "meal_plan", "mode": "schema_table" }, { "ref": "ingredient", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "recipe-import", "name": "Recipe Import", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Import meals from your Recipe Book app." },
+      { "id": "nutrition-bot", "name": "Nutrition Bot", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Auto-calculate daily nutritional totals for your plan." },
+      { "id": "grocery-delivery", "name": "Grocery Delivery", "category": "commerce", "price": "optional", "status": "available_unconfigured", "description": "Order your shopping list via a connected grocery service." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "meals.plan", "pattern": "PLAN MEALS|PLAN THIS WEEK|ADD MEAL *", "intent": "open_compose" },
+      { "id": "meals.shopping", "pattern": "SHOPPING LIST|GENERATE SHOPPING LIST", "intent": "open_shopping" }
+    ]
+  },
+  "@data": {
+    "weekly_nutrition": { "avg_calories": 2100, "protein_g": 142, "carbs_g": 240 },
+    "spotlight": [
+      { "id": "sp1", "title": "Monday — Grilled Salmon", "meal": "dinner", "badge": "High Protein", "excerpt": "Omega-3 source. 35g protein. Pair with roasted veg." },
+      { "id": "sp2", "title": "Wednesday — Buddha Bowl", "meal": "lunch", "badge": "Plant-Based", "excerpt": "Quinoa, chickpeas, tahini, cucumber. Easy batch-cook." },
+      { "id": "sp3", "title": "Friday — Pasta Primavera", "meal": "dinner", "badge": "Comfort", "excerpt": "Whole wheat penne, seasonal vegetables, garlic and olive oil." }
+    ],
+    "schema": {
+      "meal_plan": { "primaryKey": "plan_id", "fields": { "plan_id": { "type": "string" }, "day": { "type": "string", "required": true }, "meal_type": { "type": "string", "required": true }, "recipe_id": { "type": "string" }, "custom_meal": { "type": "string" }, "week_start": { "type": "datetime" } } },
+      "ingredient": { "primaryKey": "ingredient_id", "fields": { "ingredient_id": { "type": "string" }, "name": { "type": "string", "required": true }, "quantity": { "type": "string" }, "unit": { "type": "string" }, "checked": { "type": "bool" } } }
+    }
+  }
+}

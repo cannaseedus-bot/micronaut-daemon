@@ -1,0 +1,269 @@
+{
+  "@program": "opencl.kernel",
+  "@schema": "kuhul.opencl.kernel.v1",
+  "@version": "1.0.0",
+  "@description": "OpenCL 1.2 kernel registry and dispatch contract for the Intel HD 4600 GPU path.",
+  "backend": {
+    "name": "opencl_1_2",
+    "language": "OpenCL C 1.2",
+    "build_options": ["-cl-std=CL1.2"],
+    "loader": "OpenCL.dll",
+    "device_preference": "GPU",
+    "validated_on": "Intel HD Graphics 4600",
+    "host_binding": "scratch/cl_harness.cpp",
+    "driver_manifest": "programs/driver.manifest.json"
+  },
+  "phase_hooks": {
+    "Pop": "allocate_context_and_buffers",
+    "Wo": "bind_kernel_arguments",
+    "Yax": "select_kernel",
+    "Sek": "enqueue_ndrange",
+    "Chen": "finish_and_readback",
+    "Xul": "commit_tensor_state"
+  },
+  "fold_targets": {
+    "Pop": {
+      "semantic": "opencl.context.allocate",
+      "host_ops": ["clGetPlatformIDs", "clGetDeviceIDs", "clCreateContext", "clCreateCommandQueue"]
+    },
+    "Wo": {
+      "semantic": "opencl.tensor.bind",
+      "host_ops": ["clCreateBuffer", "clSetKernelArg"]
+    },
+    "Yax": {
+      "semantic": "opencl.kernel.select",
+      "host_ops": ["clCreateProgramWithSource", "clBuildProgram", "clCreateKernel"]
+    },
+    "Sek": {
+      "semantic": "opencl.kernel.dispatch",
+      "host_ops": ["clEnqueueNDRangeKernel"]
+    },
+    "Chen": {
+      "semantic": "opencl.result.collect",
+      "host_ops": ["clFinish", "clEnqueueReadBuffer"]
+    },
+    "Xul": {
+      "semantic": "opencl.tensor.commit",
+      "host_ops": ["state_write", "release_or_retain_buffers"]
+    }
+  },
+  "dispatch_contract": {
+    "create_program": "clCreateProgramWithSource",
+    "build_program": "clBuildProgram",
+    "create_kernel": "clCreateKernel",
+    "set_arguments": "clSetKernelArg",
+    "dispatch": "clEnqueueNDRangeKernel",
+    "synchronize": "clFinish",
+    "readback": "clEnqueueReadBuffer"
+  },
+  "glyph_opcodes": {
+    "0x30": { "glyph": "G_LOAD_BIN_TENSOR", "semantic": "tensor.load", "status": "host_only" },
+    "0x40": { "glyph": "G_TENSOR_MATMUL", "semantic": "tensor.matmul", "kernel": "matmul", "status": "contracted" },
+    "0x41": { "glyph": "G_TENSOR_ADD", "semantic": "elementwise.add", "kernel": "add", "status": "validated" },
+    "0x42": { "glyph": "G_TENSOR_CONV2D", "semantic": "tensor.conv2d", "status": "contracted" },
+    "0x50": { "glyph": "G_RELU", "semantic": "activation.relu", "status": "contracted" },
+    "0x51": { "glyph": "G_GELU", "semantic": "activation.gelu", "kernel": "gelu_forward", "status": "implemented" },
+    "0x52": { "glyph": "G_SOFTMAX", "semantic": "activation.softmax", "kernel": "softmax_forward", "status": "implemented" },
+    "0x60": { "glyph": "G_QKV_PROJECTION", "semantic": "attention.qkv", "status": "contracted" },
+    "0x61": { "glyph": "G_SCALED_DOT_PRODUCT", "semantic": "attention.scaled_dot", "status": "contracted" },
+    "0x70": { "glyph": "G_FORWARD_PASS", "semantic": "training.forward", "status": "contracted" },
+    "0x71": { "glyph": "G_BACKWARD_PASS", "semantic": "training.backward", "status": "contracted" },
+    "0x80": { "glyph": "G_MATRIX5X4_MUL", "semantic": "buffer.matrix5x4.mul", "kernel": "matrix5x4_mul", "status": "implemented" },
+    "0x81": { "glyph": "G_MATRIX5X4_MATMUL", "semantic": "buffer.matrix5x4.matmul", "kernel": "matrix5x4_matmul", "status": "implemented" },
+    "0x82": { "glyph": "G_MATRIX5X4_ADD", "semantic": "buffer.matrix5x4.add", "kernel": "matrix5x4_add", "status": "implemented" },
+    "0x83": { "glyph": "G_MATRIX5X4_SWIGLU", "semantic": "buffer.matrix5x4.swiglu", "kernel": "matrix5x4_swiglu", "status": "implemented" },
+    "0x100": { "glyph": "G_SOBEL_X", "semantic": "convolution.sobel_x", "kernel": "sobel_x", "status": "implemented" },
+    "0x101": { "glyph": "G_SOBEL_Y", "semantic": "convolution.sobel_y", "kernel": "sobel_y", "status": "implemented" },
+    "0x102": { "glyph": "G_SOBEL_MAGNITUDE", "semantic": "convolution.gradient", "kernel": "sobel_magnitude", "status": "implemented" },
+    "0x103": { "glyph": "G_ELEMENTWISE_MUL", "semantic": "elementwise.mul", "kernel": "elementwise_mul", "status": "implemented" },
+    "0x104": { "glyph": "G_REDUCE_PAIR_SUM", "semantic": "reduce.pair_sum", "kernel": "reduce_pair_sum", "status": "implemented" },
+    "0x105": { "glyph": "G_SOBEL_THRESHOLD", "semantic": "convolution.threshold", "kernel": "sobel_threshold", "status": "implemented" },
+    "0x110": { "glyph": "G_SWIGLU", "semantic": "activation.swiglu", "kernel": "swiglu_forward", "status": "implemented" },
+    "0x111": { "glyph": "G_SILU", "semantic": "activation.silu", "kernel": "silu_forward", "status": "implemented" },
+    "0x112": { "glyph": "G_SOFTMAX_BACK", "semantic": "activation.softmax_back", "kernel": "cross_entropy_loss_back", "status": "implemented" },
+    "0x113": { "glyph": "G_RMS_NORM_BACK", "semantic": "normalization.rms_back", "kernel": "rms_norm_back", "status": "implemented" },
+    "0x114": { "glyph": "G_SILU_BACK", "semantic": "activation.silu_back", "kernel": "silu_back", "status": "implemented" },
+    "0x115": { "glyph": "G_GELU_BACK", "semantic": "activation.gelu_back", "kernel": "gelu_back", "status": "implemented" },
+    "0x116": { "glyph": "G_ADAMW", "semantic": "optimizer.adamw", "kernel": "adamw_step", "status": "implemented" },
+    "0x117": { "glyph": "G_SGD", "semantic": "optimizer.sgd", "kernel": "sgd_step", "status": "implemented" },
+    "0x118": { "glyph": "G_RMS_NORM", "semantic": "normalization.rms", "kernel": "rms_norm_forward", "status": "implemented" },
+    "0x119": { "glyph": "G_CROSS_ENTROPY_BACK", "semantic": "loss.cross_entropy_back", "kernel": "cross_entropy_loss_back", "status": "implemented" },
+    "0x200": { "glyph": "G_HF_LOAD", "semantic": "hf.tensor.load", "status": "host_only" },
+    "0x201": { "glyph": "G_HF_MATMUL", "semantic": "hf.tensor.matmul", "kernel": "matmul", "status": "contracted" },
+    "0x202": { "glyph": "G_HF_ATTENTION", "semantic": "hf.attention", "status": "contracted" },
+    "0x203": { "glyph": "G_HF_SWIGLU", "semantic": "hf.swiglu", "kernel": "swiglu_forward", "status": "implemented" },
+    "0x204": { "glyph": "G_HF_RMS_NORM", "semantic": "hf.rms_norm", "kernel": "rms_norm_forward", "status": "implemented" }
+  },
+  "kernels": {
+    "add": {
+      "status": "validated",
+      "source": "scratch/cl_harness.cpp",
+      "entry": "add",
+      "operation": "elementwise.add",
+      "buffers": ["a:read", "b:read", "output:write"],
+      "work_item": "one output element"
+    },
+    "moe_matvec": {
+      "status": "validated",
+      "source": "scratch/cl_moe_matvec.cpp",
+      "entry": "matvec",
+      "operation": "expert.matvec",
+      "buffers": ["plane:read", "input:read", "output:write"],
+      "constraint": "active plane must remain within the 128 MB dedicated VRAM budget"
+    },
+    "moe_layer": {
+      "status": "partial",
+      "source": "scratch/cl_moe_layer.cpp",
+      "operation": "expert.layer",
+      "note": "Use top-4 33 MB planes; the full 141 MB buffer path exceeds the HD 4600 limit."
+    },
+    "tensor_evolve": {
+      "status": "contracted",
+      "source": "drivers/opencl_1_2/tensor_evolve.cl",
+      "entry": "tensor_evolve",
+      "operation": "tensor.evolve",
+      "buffers": ["tensor:read_write", "scratch:read_write"]
+    },
+    "geodesic_distance": {
+      "status": "implemented",
+      "source": "drivers/opencl_1_2/geodesic_distance.cl",
+      "entry": "geodesic_distance",
+      "operation": "geometry.geodesic",
+      "buffers": ["points:read", "distances:write"]
+    },
+    "kson_fold_node_gate": {
+      "status": "implemented",
+      "source": "drivers/opencl_1_2/kson_fold_node_expert.cl",
+      "entry": "kson_fold_node_gate",
+      "operation": "kson.expert.fold_node_gate",
+      "buffers": ["hidden:read", "fold_scores:read", "node_scores:read", "correction:write"],
+      "residual_scale": 0.1
+    },
+    "arc_replay": {
+      "status": "contracted",
+      "source": "drivers/opencl_1_2/arc_replay.cl",
+      "entry": "replay_arc",
+      "operation": "arc.replay",
+      "buffers": ["arc_inputs:read", "paths:write", "entropy:read_write", "quality:write"]
+    },
+    "matrix5x4_mul": {
+      "status": "implemented",
+      "source": "drivers/opencl_1_2/matrix5x4.cl",
+      "entry": "matrix5x4_mul",
+      "operation": "buffer.matrix5x4.mul",
+      "buffers": ["a:read", "b:read", "output:write"],
+      "shape": [5, 4]
+    },
+    "matrix5x4_matmul": {
+      "status": "implemented",
+      "source": "drivers/opencl_1_2/matrix5x4.cl",
+      "entry": "matrix5x4_matmul",
+      "operation": "buffer.matrix5x4.matmul",
+      "buffers": ["a:read", "b:read", "output:write"],
+      "lhs_shape": [5, 4],
+      "rhs_shape": [4, 5],
+      "shape": [5, 4]
+    },
+    "matrix5x4_add": {
+      "status": "implemented",
+      "source": "drivers/opencl_1_2/matrix5x4.cl",
+      "entry": "matrix5x4_add",
+      "operation": "buffer.matrix5x4.add",
+      "buffers": ["a:read", "b:read", "output:write"],
+      "shape": [5, 4]
+    },
+    "matrix5x4_swiglu": {
+      "status": "implemented",
+      "source": "drivers/opencl_1_2/matrix5x4.cl",
+      "entry": "matrix5x4_swiglu",
+      "operation": "buffer.matrix5x4.swiglu",
+      "buffers": ["x:read", "gate:read", "output:write"],
+      "shape": [5, 4]
+    },
+    "sobel_x": {
+      "status": "implemented", "source": "drivers/opencl_1_2/sobel.cl", "entry": "sobel_x",
+      "operation": "convolution.sobel_x", "buffers": ["input:read", "output:write"]
+    },
+    "sobel_y": {
+      "status": "implemented", "source": "drivers/opencl_1_2/sobel.cl", "entry": "sobel_y",
+      "operation": "convolution.sobel_y", "buffers": ["input:read", "output:write"]
+    },
+    "sobel_magnitude": {
+      "status": "implemented", "source": "drivers/opencl_1_2/sobel.cl", "entry": "sobel_magnitude",
+      "operation": "convolution.gradient", "buffers": ["gx:read", "gy:read", "output:write"]
+    },
+    "elementwise_mul": {
+      "status": "implemented", "source": "drivers/opencl_1_2/sobel.cl", "entry": "elementwise_mul",
+      "operation": "elementwise.mul", "buffers": ["a:read", "b:read", "output:write"]
+    },
+    "reduce_pair_sum": {
+      "status": "implemented", "source": "drivers/opencl_1_2/sobel.cl", "entry": "reduce_pair_sum",
+      "operation": "reduce.pair_sum", "buffers": ["a:read", "b:read", "output:write"]
+    },
+    "sobel_threshold": {
+      "status": "implemented", "source": "drivers/opencl_1_2/sobel.cl", "entry": "sobel_threshold",
+      "operation": "convolution.threshold", "buffers": ["magnitude:read", "output:write"]
+    },
+    "swiglu_forward": {
+      "status": "implemented", "source": "drivers/opencl_1_2/training.cl", "entry": "swiglu_forward",
+      "operation": "activation.swiglu", "buffers": ["x:read", "gate:read", "up:read", "output:write"]
+    },
+    "silu_forward": {
+      "status": "implemented", "source": "drivers/opencl_1_2/training.cl", "entry": "silu_forward",
+      "operation": "activation.silu", "buffers": ["input:read", "output:write"]
+    },
+    "gelu_forward": {
+      "status": "implemented", "source": "drivers/opencl_1_2/training.cl", "entry": "gelu_forward",
+      "operation": "activation.gelu", "buffers": ["input:read", "output:write"]
+    },
+    "rms_norm_forward": {
+      "status": "implemented", "source": "drivers/opencl_1_2/training.cl", "entry": "rms_norm_forward",
+      "operation": "normalization.rms", "buffers": ["input:read", "output:write"]
+    },
+    "softmax_forward": {
+      "status": "implemented", "source": "drivers/opencl_1_2/training.cl", "entry": "softmax_forward",
+      "operation": "activation.softmax", "buffers": ["input:read", "output:write"]
+    },
+    "cross_entropy_loss_back": {
+      "status": "implemented", "source": "drivers/opencl_1_2/training.cl", "entry": "cross_entropy_loss_back",
+      "operation": "loss.cross_entropy_back", "buffers": ["logits:read", "labels:read", "grad:write"]
+    },
+    "rms_norm_back": {
+      "status": "implemented", "source": "drivers/opencl_1_2/training.cl", "entry": "rms_norm_back",
+      "operation": "normalization.rms_back", "buffers": ["input:read", "grad_output:read", "grad_input:write"]
+    },
+    "silu_back": {
+      "status": "implemented", "source": "drivers/opencl_1_2/training.cl", "entry": "silu_back",
+      "operation": "activation.silu_back", "buffers": ["input:read", "grad_output:read", "grad_input:write"]
+    },
+    "gelu_back": {
+      "status": "implemented", "source": "drivers/opencl_1_2/training.cl", "entry": "gelu_back",
+      "operation": "activation.gelu_back", "buffers": ["input:read", "grad_output:read", "grad_input:write"]
+    },
+    "adamw_step": {
+      "status": "implemented", "source": "drivers/opencl_1_2/training.cl", "entry": "adamw_step",
+      "operation": "optimizer.adamw", "buffers": ["params:read_write", "grads:read", "m:read_write", "v:read_write"]
+    },
+    "sgd_step": {
+      "status": "implemented", "source": "drivers/opencl_1_2/training.cl", "entry": "sgd_step",
+      "operation": "optimizer.sgd", "buffers": ["params:read_write", "grads:read"]
+    }
+  },
+  "program": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "opencl-context" },
+    { "@op": "CALL", "@fn": "opencl_create_context", "@args": ["opencl_1_2"], "@out": "context" },
+    { "@op": "FOLD_EXIT", "@fold": "Wo", "@node": "opencl-context", "@args": ["$context"] },
+    { "@op": "CALL", "@fn": "opencl_bind_kernel", "@args": ["$context", "$kernel", "$buffers"], "@out": "bound" },
+    { "@op": "FOLD_EXIT", "@fold": "Yax", "@node": "opencl-bind", "@args": ["$bound"] },
+    { "@op": "GPU_DISPATCH", "@args": ["$kernel", "$buffers", "CL1.2"], "@out": "dispatch" },
+    { "@op": "FOLD_EXIT", "@fold": "Chen", "@node": "opencl-dispatch", "@args": ["$dispatch"] },
+    { "@op": "CALL", "@fn": "opencl_finish_readback", "@args": ["$dispatch"], "@out": "result" },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "opencl-commit", "@args": ["$result"] }
+  ],
+  "constraints": {
+    "version": "1.2",
+    "forbidden_features": ["OpenCL 2.0 pipes", "device-side enqueue", "generic address space", "SPIR-V-only features"],
+    "local_work_size": "must be supported by the selected Intel GPU device",
+    "storage_authority": "tools/stb.py"
+  }
+}

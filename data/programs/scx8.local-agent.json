@@ -1,0 +1,39 @@
+{
+  "@kind": "kuhul.local-agent.scx8.v1",
+  "@namespace": "https://kuhul.dev/",
+  "id": "scx-expert-8",
+  "role": "base-weight-provider",
+  "planner": "dolphin-or-micronaut-reasoning-adapter",
+  "provider": {
+    "type": "llama.cpp-openai-compatible",
+    "endpoint": "http://127.0.0.1:9010/v1/chat/completions",
+    "model_alias": "scx-expert-8",
+    "launch": "dist/khanary-server/llama-server.exe",
+    "gpu_layers": 0,
+    "fallback": "directxmath_cpu"
+  },
+  "weights": {
+    "format": "gguf",
+    "path": "E:/models/GPT2/mini-GPT/gpt2_small_lite_tool_g003_q8.gguf",
+    "architecture": "gpt2",
+    "dtype": "q8_0",
+    "purpose": "temporary SCX-8 base weights until native SCX-MoE weights are promoted"
+  },
+  "geodesic_cache": {
+    "adapter": "programs/gpt_oss_geodesic_cache_jrom.json",
+    "rom": "dist/MX-2/geodesic_cache/gpt_oss_geodesic_cache.jrom.rom",
+    "source": "E:/models/GPT-DDS/GPT-OSS/model.scxqdds",
+    "hot_swap_cache": "C:/SCXQDDS-cache",
+    "residency": "canonical-fold-manifest; demand-driven hot swap",
+    "authority": "MX-2 evolution / CM-1 gate"
+  },
+  "tool_contract": {
+    "max_commands_per_turn": 1,
+    "verbs": ["list_files", "read_file", "write_file"],
+    "host_validation": "AtomicDOM approved-folder policy",
+    "writes_require": "Allow edits",
+    "planner_required_for": ["multi-step edits", "tool selection", "refactoring"],
+    "slerp": "plan -> one command -> execute -> observe -> next phase"
+  },
+  "phases": ["Pop", "Wo", "Yax", "Sek", "Chen", "Xul"]
+}

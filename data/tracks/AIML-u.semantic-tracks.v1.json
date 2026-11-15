@@ -1,0 +1,106 @@
+{
+  "@no-eval": true,
+  "id": "AIML-µ",
+
+  "schemes": ["aiml"],
+  "description": "Thinking Question generator — produces reflection and metacognitive questions that prompt deeper thinking. Uses AIML-style pattern templates to formulate questions at the candidate expansion phase.",
+  "phase": "Yax",
+  "category": "advisory",
+  "confidence": 0.86,
+  "governs": [
+    "thinking question",
+    "reflection question",
+    "thought prompt",
+    "metacognitive question",
+    "contemplation question",
+    "aiml question",
+    "thinking prompt",
+    "philosophical question",
+    "self-reflection",
+    "what if question",
+    "thinking deeper",
+    "thought generation",
+    "open question",
+    "exploratory question"
+  ],
+  "capabilities": [
+    "THINKING_QUESTION_GENERATE",
+    "REFLECTION_PROMPT",
+    "METACOGNITIVE_EXPAND",
+    "THOUGHT_CANDIDATE_EMIT"
+  ],
+  "grammar_files": [
+    "data/grammar/aiml.runtime-grammar.ebnf"
+  ],
+  "relations": [
+    {
+      "target": "REASON-µ",
+      "verb": "@supports",
+      "directed": true
+    },
+    {
+      "target": "ELIZA-µ",
+      "verb": "@related_to",
+      "directed": false
+    },
+    {
+      "target": "THOUGHT-OUTLINE-µ",
+      "verb": "@supports",
+      "directed": true
+    }
+  ],
+  "folds": [
+    {
+      "phase": "Pop",
+      "op": "gramRead",
+      "key": "thinking_question_query"
+    },
+    {
+      "phase": "Wo",
+      "op": "classify_thought_domain",
+      "note": "identify what kind of thinking is needed"
+    },
+    {
+      "phase": "Yax",
+      "op": "expand_thinking_candidates",
+      "note": "R generate thinking question candidates"
+    },
+    {
+      "phase": "Sek",
+      "op": "score_thought_relevance",
+      "note": "W score against semantic field"
+    },
+    {
+      "phase": "Ch'en",
+      "op": "verify_thought_coverage",
+      "note": "C validate thinking depth"
+    },
+    {
+      "phase": "Xul",
+      "op": "emit_thinking_questions",
+      "scope": "local"
+    }
+  ],
+  "sandbox": {
+    "gram_ns": "AIML-µ",
+    "manifest_access": [
+      "words",
+      "micronaut",
+      "kuhul"
+    ],
+    "effects": [
+      "gramRead",
+      "gramWrite",
+      "thinking:question_emit"
+    ],
+    "ports": [],
+    "coordinator": false
+  },
+  "model": {
+    "gguf": "C:/Users/canna/.lmstudio/models/lmstudio-community/LFM2.5-1.2B-Instruct-GGUF/LFM2.5-1.2B-Instruct-Q8_0.gguf",
+    "template": "chatml",
+    "role": "instruction",
+    "pattern_source": "aiml",
+    "pattern_mode": "system_context"
+  }
+}

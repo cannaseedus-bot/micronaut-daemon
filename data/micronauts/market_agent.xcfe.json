@@ -1,0 +1,120 @@
+{
+  "@program": "market_agent",
+  "@kind": "kuhul.xcfe.market-agent.v1",
+  "@namespace": "https://kuhul.dev/",
+  "@stack": ["xjson", "xcfe", "scxq2", "kuhul"],
+  "@state": {
+    "role": "living_stock_market_analysis_agent",
+    "context": "ASX_real_time",
+    "kuhul_port": 17474,
+    "price_tensor": null,
+    "prediction_weights": null,
+    "market_visual": "market_visual.svg",
+    "market_insights": null,
+    "symbol_vectors": null
+  },
+  "@control": [
+    {
+      "@op": "AGENT_TASK",
+      "@action": "initialize_market_monitor",
+      "@priority": "high",
+      "@context": "ASX_real_time",
+      "@out": "monitor"
+    },
+    {
+      "@op": "TENSOR_CREATE",
+      "@type": "matrix",
+      "@dimensions": [100, 100],
+      "@dtype": "f32",
+      "@store": "price_tensor"
+    },
+    {
+      "@op": "WEIGHTS_GENERATE",
+      "@layers": [64, 32, 10],
+      "@format": "float32",
+      "@store": "prediction_weights"
+    },
+    {
+      "@op": "SVG_3D_RENDER",
+      "@shape": "cube",
+      "@size": 500,
+      "@rotation": [45, 30, 15],
+      "@store": "market_visual.svg"
+    },
+    {
+      "@op": "PARALLEL",
+      "@tasks": [
+        {
+          "@name": "fetch_prices",
+          "@op": "AGENT_WRITE",
+          "@target": "price_tensor",
+          "@source": "ASX_real_time"
+        },
+        {
+          "@name": "analyze_patterns",
+          "@op": "CLUSTER_CALL",
+          "@nodes": 4,
+          "@operation": "tensor_convolution",
+          "@input": "$price_tensor",
+          "@weights": "$prediction_weights",
+          "@out": "pattern_result"
+        }
+      ]
+    },
+    {
+      "@op": "SEMANTIC_QUERY",
+      "@query": "find bullish patterns in market data",
+      "@store": "market_insights"
+    },
+    {
+      "@op": "IF",
+      "@cond": "$market_insights.contains_bullish",
+      "@then": {
+        "@op": "SEQUENCE",
+        "@steps": [
+          {
+            "@op": "LOG",
+            "@args": ["Bullish pattern detected"],
+            "@level": "high"
+          },
+          {
+            "@op": "AGENT_TASK",
+            "@action": "send_alert",
+            "@priority": "critical",
+            "@out": "alert"
+          }
+        ]
+      },
+      "@else": {
+        "@op": "LOG",
+        "@args": ["No significant patterns"],
+        "@level": "info"
+      }
+    },
+    {
+      "@op": "LOOP",
+      "@iterations": 10,
+      "@body": {
+        "@op": "TENSOR_CREATE",
+        "@type": "vector",
+        "@dimensions": [1, 10],
+        "@dtype": "f32",
+        "@store": "symbol_vectors"
+      }
+    },
+    {
+      "@op": "LOG",
+      "@args": ["Market analysis complete"],
+      "@level": "info"
+    }
+  ],
+  "@invariants": {
+    "kuhul_port": 17474,
+    "forbidden_port": 8080,
+    "tensor_dtype": "f32",
+    "cluster_nodes": 4,
+    "analysis_only": true,
+    "order_execution": false,
+    "compression": "scxq2"
+  }
+}

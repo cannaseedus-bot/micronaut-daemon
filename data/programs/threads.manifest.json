@@ -1,0 +1,22 @@
+{
+  "@kind": "kuhul.threads.manifest.v1",
+  "cluster": {
+    "logical_cores": 8,
+    "threads": 8,
+    "simd": "DirectXMath (SSE/AVX2)",
+    "fabric": "CPU thread cluster x DirectXMath SIMD (validated 1.64x, bit-correct)"
+  },
+  "gpu": {
+    "backend": "OpenCL 1.2",
+    "device": "Intel HD Graphics 4600",
+    "vram_dedicated_mb": 128,
+    "vram_shared_gb": 2.0,
+    "note": "OpenCL kernels execute (igc64 compiler); GLSL compute blocked (wglGetProcAddress null)"
+  },
+  "hybrid": {
+    "cpu": "DirectXMath SIMD x 8-thread fabric (dequant + attention + norms)",
+    "gpu": "OpenCL (top-4 expert matvec + merge on 128MB VRAM)",
+    "sequence": "CPU dequant -> upload 33MB planes -> GPU matvec"
+  },
+  "note": "Thread cluster + GPU config for the hybrid compute fabric."
+}

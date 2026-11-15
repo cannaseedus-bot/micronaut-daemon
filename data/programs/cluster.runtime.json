@@ -1,0 +1,46 @@
+{
+  "@program": "cluster.runtime",
+  "@fold": "Pop",
+  "@node": "cluster-runtime-root",
+  "@state": {
+    "model": "E:/models/GPT2/coder_micronaut/ultrachat_coder_slerp_0p35.webgl2.dashboard.safetensors",
+    "token_bin": "E:/models/GPT2/coder_micronaut/coder_ast_json_seq256_tokens.bin",
+    "output": "E:/models/GPT2/micronaut_four_lanes_v2",
+    "workers": 8,
+    "fibers": 1000,
+    "backend": "xvm_fiber",
+    "cluster": null,
+    "dispatch": null,
+    "results": null,
+    "verified": false
+  },
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Pop", "@node": "cluster-validate" },
+    { "@op": "CALL", "@fn": "validate_safetensors", "@args": ["$model"], "@out": "model_valid" },
+    { "@op": "CALL", "@fn": "validate_token_bin", "@args": ["$token_bin"], "@out": "dataset_valid" },
+    { "@op": "LOG", "@args": ["[cluster.runtime] inputs validated"] },
+    { "@op": "FOLD_EXIT", "@fold": "Wo", "@node": "cluster-validate", "@args": ["$model_valid", "$dataset_valid"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Wo", "@node": "cluster-spawn" },
+    { "@op": "CALL", "@fn": "cluster_spawn", "@args": ["$workers", "$fibers", "$backend"], "@out": "cluster" },
+    { "@op": "LOG", "@args": ["[cluster.runtime] cluster spawned workers=$workers fibers=$fibers backend=$backend"] },
+    { "@op": "FOLD_EXIT", "@fold": "Yax", "@node": "cluster-spawn", "@args": ["$cluster"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Yax", "@node": "cluster-dispatch" },
+    { "@op": "GPU_DISPATCH", "@args": ["fabric_kernels.hlsl", "$model", "$token_bin", "$cluster"], "@out": "dispatch" },
+    { "@op": "CALL", "@fn": "cluster_fanout", "@args": ["$cluster", "$dispatch", "$output"], "@out": "dispatch_results" },
+    { "@op": "LOG", "@args": ["[cluster.runtime] GPU work dispatched across cluster"] },
+    { "@op": "FOLD_EXIT", "@fold": "Sek", "@node": "cluster-dispatch", "@args": ["$dispatch_results"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Sek", "@node": "cluster-reduce" },
+    { "@op": "CALL", "@fn": "cluster_sync", "@args": ["$cluster", "$dispatch_results"], "@out": "synced" },
+    { "@op": "CALL", "@fn": "cluster_reduce", "@args": ["$synced"], "@out": "results" },
+    { "@op": "LOG", "@args": ["[cluster.runtime] worker results synchronized and reduced"] },
+    { "@op": "FOLD_EXIT", "@fold": "Chen", "@node": "cluster-reduce", "@args": ["$results"] },
+
+    { "@op": "FOLD_ENTER", "@fold": "Chen", "@node": "cluster-verify" },
+    { "@op": "CALL", "@fn": "verify_safetensors_output", "@args": ["$results", "$output"], "@out": "verified" },
+    { "@op": "LOG", "@args": ["[cluster.runtime] output verified=$verified"] },
+    { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "cluster-verify", "@args": ["$results", "$verified"] }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "habit-tracker",
+  "@key": "⟁APP:HABIT_TRACKER",
+  "@mount": "⟁ROOT:HABIT_TRACKER",
+  "@theme": { "accent": "#4ade80", "bg": "#030b06", "surface": "#051409", "text": "#dcfce7", "hero_phase": "Yax", "tagline": "Small steps. Big change." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "habits_grid", "component": "⟁WIDGET:HABITS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "habits": [], "today_logs": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:HABIT_TRACKER": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:ADD_HABIT", "⟁ACTION:LOG_TODAY"] },
+    "⟁ACTION:ADD_HABIT": { "@type": "button", "@text": "Add Habit", "@on": { "click": "habits.open_compose" } },
+    "⟁ACTION:LOG_TODAY": { "@type": "button", "@text": "Log Today", "@on": { "click": "habits.log_today" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:HABITS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:HABITS": { "@type": "grid", "@bind": "state.habits", "@children": ["⟁WIDGET:HABIT_CARD"] },
+    "⟁WIDGET:HABIT_CARD": { "@type": "content-card", "@bind": "habit", "@on": { "check": "habits.check", "view": "habits.view" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:STREAK_STAT", "⟁WIDGET:WEEKLY_GRID"] },
+    "⟁WIDGET:STREAK_STAT": { "@type": "stat", "@bind": "data.best_streak" },
+    "⟁WIDGET:WEEKLY_GRID": { "@type": "heatmap", "@bind": "data.weekly" }
+  },
+  "@programs": {
+    "habits.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "habits.check": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "APPEND", "@in": "event_log", "@out": "today_logs" }] },
+    "habits.log_today": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "habits.view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "habit.check": "habits.check", "habit.view": "habits.view", "compose.open": "habits.open_compose", "log.today": "habits.log_today" },
+  "@imports": [{ "ref": "habit", "mode": "schema_table" }, { "ref": "habit_log", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "streak-badges", "name": "Streak Badges", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Earn milestone badges for 7, 30, and 100-day streaks." },
+      { "id": "accountability-bot", "name": "Accountability Bot", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Daily check-in reminders via KHANARY assistant." },
+      { "id": "export-report", "name": "Monthly Report", "category": "tools", "price": "optional", "status": "available_unconfigured", "description": "Auto-generate a monthly habit performance report." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "habits.add", "pattern": "ADD HABIT|NEW HABIT|TRACK *", "intent": "open_compose" },
+      { "id": "habits.log", "pattern": "LOG TODAY|MARK DONE|CHECK OFF *", "intent": "log_today" }
+    ]
+  },
+  "@data": {
+    "best_streak": { "label": "Best Streak", "value": "42 days", "habit": "Morning meditation" },
+    "weekly": [1,1,0,1,1,1,0],
+    "spotlight": [
+      { "id": "sp1", "title": "Morning Meditation", "frequency": "daily", "badge": "🔥 42-day streak", "excerpt": "10 minutes. No phone. Non-negotiable." },
+      { "id": "sp2", "title": "Read 20 pages", "frequency": "daily", "badge": "📚 18-day streak", "excerpt": "Before bed, away from screens." },
+      { "id": "sp3", "title": "Weekly exercise (3×)", "frequency": "3x_week", "badge": "💪 On track", "excerpt": "Anything that gets the heart rate up counts." }
+    ],
+    "schema": {
+      "habit": { "primaryKey": "habit_id", "fields": { "habit_id": { "type": "string" }, "name": { "type": "string", "required": true }, "frequency": { "type": "string", "required": true }, "target_per_week": { "type": "integer" }, "streak": { "type": "integer" }, "color": { "type": "string" }, "created_at": { "type": "datetime" } } },
+      "habit_log": { "primaryKey": "log_id", "fields": { "log_id": { "type": "string" }, "habit_id": { "type": "string", "required": true }, "date": { "type": "datetime", "required": true }, "completed": { "type": "bool" }, "note": { "type": "text" } } }
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "flashcards",
+  "@key": "⟁APP:FLASHCARDS",
+  "@mount": "⟁ROOT:FLASHCARDS",
+  "@theme": { "accent": "#f472b6", "bg": "#0e0410", "surface": "#1a071e", "text": "#fce7f3", "hero_phase": "Yax", "tagline": "Remember everything worth knowing" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "deck_list", "component": "⟁WIDGET:DECK_LIST", "position": "left" }, { "id": "study_area", "component": "⟁WIDGET:STUDY", "position": "center" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "decks": [], "active_deck": null, "current_card": null, "showing_answer": false, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:FLASHCARDS": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:NEW_DECK"] },
+    "⟁ACTION:NEW_DECK": { "@type": "button", "@text": "New Deck", "@on": { "click": "flash.open_compose" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:DECK_LIST", "⟁WIDGET:STUDY"] },
+    "⟁WIDGET:DECK_LIST": { "@type": "navigation", "@bind": "state.decks", "@on": { "select": "flash.select_deck" } },
+    "⟁WIDGET:STUDY": { "@type": "flashcard", "@bind": "state.current_card", "@on": { "flip": "flash.flip", "next": "flash.next", "grade": "flash.grade" } }
+  },
+  "@programs": {
+    "flash.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "flash.select_deck": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_deck", "@out": "active_deck" }] },
+    "flash.flip": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_showing", "@out": "showing_answer" }] },
+    "flash.next": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_card", "@out": "current_card" }] },
+    "flash.grade": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "deck.select": "flash.select_deck", "card.flip": "flash.flip", "card.next": "flash.next", "card.grade": "flash.grade", "compose.open": "flash.open_compose" },
+  "@imports": [{ "ref": "deck", "mode": "schema_table" }, { "ref": "review_log", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "spaced-repetition", "name": "Spaced Repetition", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "SM-2 algorithm schedules cards based on your recall grades." },
+      { "id": "image-cards", "name": "Image Cards", "category": "tools", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Add images to card fronts and backs." },
+      { "id": "ai-card-gen", "name": "AI Card Generator", "category": "agents", "price": "optional", "status": "available_unconfigured", "description": "Paste any text and auto-generate flashcards." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "flash.new-deck", "pattern": "NEW DECK|CREATE DECK|ADD DECK *", "intent": "open_compose" },
+      { "id": "flash.study", "pattern": "STUDY *|REVIEW DECK *|START SESSION", "intent": "select_deck" }
+    ]
+  },
+  "@data": {
+    "spotlight": [
+      { "id": "sp1", "title": "K'UHUL Phases", "cards": 24, "badge": "Due Today", "mastery": 0.62, "excerpt": "Pop → Wo → Yax → Sek → Ch'en → Xul. Six phases, six meanings." },
+      { "id": "sp2", "title": "Spanish Vocabulary — A2", "cards": 150, "badge": "Active", "mastery": 0.78, "excerpt": "1,000 most common Spanish words with gendered articles." },
+      { "id": "sp3", "title": "AWS Cert Prep", "cards": 88, "badge": "New", "mastery": 0.0, "excerpt": "Core services and architecture patterns for Solutions Architect." }
+    ],
+    "schema": {
+      "deck": { "primaryKey": "deck_id", "fields": { "deck_id": { "type": "string" }, "name": { "type": "string", "required": true }, "description": { "type": "text" }, "card_count": { "type": "integer" }, "cards": { "type": "json" }, "created_at": { "type": "datetime" } } },
+      "review_log": { "primaryKey": "log_id", "fields": { "log_id": { "type": "string" }, "deck_id": { "type": "string", "required": true }, "card_id": { "type": "string", "required": true }, "grade": { "type": "integer", "required": true }, "next_review": { "type": "datetime" }, "reviewed_at": { "type": "datetime" } } }
+    }
+  }
+}

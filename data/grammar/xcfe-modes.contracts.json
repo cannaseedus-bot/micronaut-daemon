@@ -1,0 +1,88 @@
+{
+  "@type": "khanary.xcfe_modes.v1",
+  "version": "1.0.0",
+  "semantic_authority": false,
+  "authority_boundary": "a_mode_selects_behavior_and_may_only_narrow_never_grant",
+  "lane": "KHANARY_XCFE_MODE_TEST",
+  "owner": "src/kuhul/xcfe_mode.h",
+  "docs": [
+    "data/grammar/xcfe-programs.ebnf",
+    "data/grammar/operator-algebra.contracts.json",
+    "src/kuhul/xcfe_node_class.h"
+  ],
+  "why": "Modes (determinism, output, ordering, response) are declared in three separate contracts and nothing checks whether a mode is legal in the phase or capability it is used with. The tempting fix — a MODE node class — would break the closed 14-class XCFE node ISA and double-encode authority, which the ISA header already refuses for `Policy` ('making it a node class would double-encode it'). Modes therefore become a P13 *program-descriptor* class plus a guard that XCFE applies to narrow admission.",
+  "descriptor_class": {
+    "name": "MODE",
+    "kind": "program_descriptor_class",
+    "in_node_isa": false,
+    "grammar_invariant": "P13 — program-descriptor classes only, disjoint from xcfe_node_class.h",
+    "why_not_a_node_class": [
+      "the node ISA assigns every class a fixed authority phase, and a mode is not Wo/Yax/Sek/Ch'en/Xul work",
+      "the ISA header already refuses a `Policy` class for the same reason: operation authority is XCFE's own mechanism, so a node class would double-encode it",
+      "the mode vocabulary already exists in operator-algebra.contracts.json (determinism), filter.ebnf (output) and reduce.ebnf (ordering); a node class would create a second vocabulary for one word"
+    ],
+    "authority_law": "descriptor governs the lane form; XCFE governs execution"
+  },
+  "families": {
+    "determinism": {
+      "declared_in": "data/grammar/operator-algebra.contracts.json#determinism",
+      "values": ["deterministic", "seeded", "observational", "stochastic"]
+    },
+    "output": {
+      "declared_in": "data/grammar/filter.ebnf#OutputMode",
+      "values": ["keep", "drop", "new_fold", "in_place"]
+    },
+    "ordering": {
+      "declared_in": "data/grammar/reduce.ebnf#OrderingMode",
+      "values": ["structural", "phase", "incidence", "confidence"]
+    },
+    "response": {
+      "declared_in": "this contract",
+      "values": ["neutral", "reset", "explicit"]
+    }
+  },
+  "mode_phase_laws": {
+    "law": "a mode may only narrow what XCFE would otherwise admit; no mode can grant admission, verification or commit",
+    "M1": "no mode grants commit authority: commit_authorized stays false for every mode, and the guard has no granting outcome",
+    "M2": "Ch'en verification requires reproducible evidence: the stochastic determinism mode is refused there (unreproducible_evidence), and an observational mode is refused unless it declares that external observations are recorded",
+    "M3": "Xul is not a filter: the drop output mode is refused in Xul (commit_is_not_a_filter)",
+    "M4": "ordering follows the consumer: where a consumer requires structural order, the confidence ordering mode is refused (ordering_must_be_structural)",
+    "M5": "a neutral or reset response mode carries no evidence and cannot stand as one (neutral_mode_carries_no_evidence)",
+    "M6": "an undeclared mode or family is refused by name (unknown_mode), never mapped onto a legal one",
+    "M7": "a mode is a selector: it applies to a phase and an optional capability, and it is refused everywhere the law table does not admit it"
+  },
+  "guard": {
+    "owner": "XCFE",
+    "input": ["mode family", "mode value", "phase", "optional capability"],
+    "outputs": ["allowed", "denied"],
+    "never": ["grants_admission", "grants_verification", "grants_commit"],
+    "narrowing_only": true,
+    "detail_example": "the denied status is always a named reason, so a refusal is diagnosable"
+  },
+  "status_vocabulary": [
+    "allowed",
+    "unknown_mode",
+    "unreproducible_evidence",
+    "observations_not_recorded",
+    "commit_is_not_a_filter",
+    "ordering_must_be_structural",
+    "neutral_mode_carries_no_evidence"
+  ],
+  "status_vocabulary_note": "the outcome set is exactly these seven; there is deliberately no granting status, which is what MODE3/MODE5 state",
+  "trace": {
+    "contract": "data/grammar/daemon-bot.trace.contracts.json",
+    "contributes": ["mode", "steps"],
+    "law": "the trace records the mode that filtered candidate selection and marks it narrows_only; no mode is recorded as granting admission or commit (M1, MODE4, MODE5)",
+    "fields": {
+      "mode": "{family: behavior, value, narrows_only: true}",
+      "steps": "mode-filtering decisions appear in the ordered step log"
+    }
+  },
+  "invariants": {
+    "MODE1": "MODE is a program-descriptor class: it does not appear in the 14-class node ISA and claims no canonical phase",
+    "MODE2": "the four families and their values are exactly the union of what the three existing contracts declare plus this contract's response family",
+    "MODE3": "the guard's outcome set is {allowed, denied}; there is no granting outcome and every refusal names a typed reason",
+    "MODE4": "a mode may narrow an admission the host already granted and may never widen one it denied",
+    "MODE5": "no mode, in any family, sets commit_authorized true"
+  }
+}

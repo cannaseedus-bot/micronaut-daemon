@@ -1,0 +1,17 @@
+{
+  "@program": "lib_math",
+  "@module": true,
+  "@exports": ["square", "add", "mul"],
+  "@types": {
+    "@interface": "Vec2",
+    "@fields": ["x", "y"]
+  },
+  "@enum": {
+    "OpKind": ["ADD", "MUL", "SUB"]
+  },
+  "@control": [
+    { "@op": "DEFINE_OP", "@name": "square", "@definition": { "@type": "pure", "@in": ["n"], "@out": "n2", "@body": [ { "@op": "MUL", "@in": ["n", "n"], "@out": "n2" } ] } },
+    { "@op": "DEFINE_OP", "@name": "add", "@definition": { "@type": "pure", "@in": ["a", "b"], "@out": "c", "@body": [ { "@op": "ADD", "@in": ["a", "b"], "@out": "c" } ] } },
+    { "@op": "DEFINE_OP", "@name": "mul", "@definition": { "@type": "pure", "@in": ["a", "b"], "@out": "c", "@body": [ { "@op": "MUL", "@in": ["a", "b"], "@out": "c" } ] } }
+  ]
+}

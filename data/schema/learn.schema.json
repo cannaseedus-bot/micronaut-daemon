@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:khanary:schema:learn:1",
+  "title": "CfpcLearnContract",
+  "description": "Schema for semantic.learn.v1 contracts. Earned epistemic states (Verified, Inferred, Disputed) are not admissible as proposed_epistemic_status — they are assigned by the engine. route_weight is not an admissible target — it is guarded at parse time.",
+  "type": "object",
+  "required": ["@kind", "@id", "@owner", "@candidates"],
+  "properties": {
+    "@kind":  { "type": "string", "const": "semantic.learn.v1" },
+    "@id":    { "type": "string" },
+    "@owner": { "type": "string" },
+    "@targets": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["fact", "event"]
+      }
+    },
+    "@candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id", "@destination", "@subject", "@predicate", "@object"],
+        "properties": {
+          "@id":                       { "type": "string" },
+          "@destination":              { "type": "string", "enum": ["fact", "event"] },
+          "@subject":                  { "type": "string" },
+          "@subject_type":             { "type": "string" },
+          "@predicate":                { "type": "string" },
+          "@object":                   { "type": "string" },
+          "@object_type":              { "type": "string" },
+          "@proposed_epistemic_status": {
+            "type": "string",
+            "enum": ["Asserted", "Observed", "Reported"],
+            "description": "Earned states (Verified, Inferred, Disputed) are not schema-admissible — they are assigned by the engine."
+          },
+          "@provenance": { "type": "array", "items": { "type": "string" } },
+          "@authority":  { "type": "string" }
+        }
+      }
+    },
+    "@policy": {
+      "type": "object",
+      "properties": {
+        "max_depth":             { "type": "integer", "minimum": 0 },
+        "verify_before_promote": { "type": "boolean" }
+      }
+    }
+  }
+}

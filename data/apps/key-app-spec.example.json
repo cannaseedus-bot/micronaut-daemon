@@ -1,0 +1,19 @@
+{
+  "@kind": "kuhul.key-app-spec.v1",
+  "id": "field-notebook",
+  "title": "Semantic Field Notebook",
+  "description": "A small key app for reviewing semantic field concepts and their source scope.",
+  "theme": "dark",
+  "sections": [
+    {
+      "heading": "Current field",
+      "text": "Show the selected field key, its definition, and links to declared local evidence.",
+      "style_keys": ["⟁APPSECTION", "⟁Psecondary"]
+    },
+    {
+      "heading": "Candidate relationships",
+      "text": "Display typed neighbor candidates with their source and verification status.",
+      "style_keys": ["⟁CARD", "⟁Pprimary"]
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "loyalty-points",
+  "@key": "⟁APP:LOYALTY_POINTS",
+  "@mount": "⟁ROOT:LOYALTY_POINTS",
+  "@theme": { "accent": "#f472b6", "bg": "#0a0006", "surface": "#180010", "text": "#fce7f3", "hero_phase": "Xul", "tagline": "Reward loyalty. Build community." },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "members", "component": "⟁WIDGET:MEMBERS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "members": [], "rewards": [], "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:LOYALTY_POINTS": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁ACTION:ADD_MEMBER", "⟁ACTION:REWARDS"] },
+    "⟁ACTION:ADD_MEMBER": { "@type": "button", "@text": "Add Member", "@on": { "click": "lp.open_compose" } },
+    "⟁ACTION:REWARDS": { "@type": "button", "@text": "Rewards", "@on": { "click": "lp.open_rewards" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:MEMBERS", "⟁WIDGET:SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:MEMBERS": { "@type": "feed", "@bind": "state.members", "@children": ["⟁WIDGET:MEMBER_CARD"] },
+    "⟁WIDGET:MEMBER_CARD": { "@type": "content-card", "@bind": "member", "@on": { "view": "lp.view_member" } },
+    "⟁WIDGET:SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:PROGRAM_STATS", "⟁WIDGET:TOP_MEMBERS"] },
+    "⟁WIDGET:PROGRAM_STATS": { "@type": "stat", "@bind": "data.stats" },
+    "⟁WIDGET:TOP_MEMBERS": { "@type": "list", "@bind": "data.top_members" }
+  },
+  "@programs": {
+    "lp.open_compose": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "lp.open_rewards": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "lp.view_member": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] }
+  },
+  "@events": { "member.add": "lp.open_compose", "rewards.open": "lp.open_rewards", "member.view": "lp.view_member" },
+  "@imports": [{ "ref": "member", "mode": "schema_table" }, { "ref": "reward", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "tier-system", "name": "Tier System", "category": "tools", "price": "free", "status": "available_unconfigured", "description": "Bronze / Silver / Gold tiers with automated upgrades." },
+      { "id": "redemption-qr", "name": "QR Redemption", "category": "commerce", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "In-store QR codes for point redemption at checkout." },
+      { "id": "referral-engine", "name": "Referral Engine", "category": "growth", "price": "optional", "status": "available_unconfigured", "description": "Award bonus points to members who refer new customers." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "lp.enrol", "pattern": "ENROL MEMBER|ADD TO LOYALTY PROGRAM|NEW MEMBER", "intent": "open_compose" },
+      { "id": "lp.redeem", "pattern": "REDEEM POINTS|MEMBER REDEMPTION|USE POINTS", "intent": "redeem_flow" }
+    ]
+  },
+  "@data": {
+    "stats": { "members": 482, "points_issued": 124800, "points_redeemed": 58200, "redemption_rate_pct": 46.6 },
+    "top_members": [{ "name": "Jamie C.", "tier": "Gold", "points": 4820 }, { "name": "Sam R.", "tier": "Silver", "points": 2310 }],
+    "spotlight": [
+      { "id": "sp1", "title": "Gold Tier Members", "badge": "Top Tier", "count": 38, "points_avg": 3240, "excerpt": "38 Gold members holding an average of 3,240 points each." },
+      { "id": "sp2", "title": "Points Redeemed This Month", "badge": "Active", "points": 8400, "excerpt": "8,400 points redeemed across 122 transactions." },
+      { "id": "sp3", "title": "New This Month: 24 Members", "badge": "Growth", "excerpt": "Above average sign-up rate. Referral engine driving 30%." }
+    ],
+    "schema": {
+      "member": { "primaryKey": "member_id", "fields": { "member_id": { "type": "string" }, "name": { "type": "string", "required": true }, "email": { "type": "string" }, "tier": { "type": "string" }, "points_balance": { "type": "integer" }, "joined_at": { "type": "datetime" } } },
+      "reward": { "primaryKey": "reward_id", "fields": { "reward_id": { "type": "string" }, "name": { "type": "string", "required": true }, "points_cost": { "type": "integer", "required": true }, "description": { "type": "text" }, "active": { "type": "boolean" } } }
+    }
+  }
+}

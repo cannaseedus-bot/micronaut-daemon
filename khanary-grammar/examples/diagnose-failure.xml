@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfpc>
+  <relation id="CAUSE" domain="Event" range="Event" transitive="false"/>
+  <relation id="CONTRADICTS" domain="Claim" range="Claim" transitive="false"/>
+  <think id="diagnose-failure" owner="REASON-µ" intent="explain" mode="bounded">
+    <pattern>WHY DID {subject} FAIL?</pattern>
+    <wildcard name="subject"/>
+    <context><query>Find independently supported causes</query></context>
+    <explore><relation-ref id="CAUSE"/><relation-ref id="CONTRADICTS"/></explore>
+    <function ref="resolve_evidence"/>
+    <function ref="compare_hypotheses"/>
+    <cheese candidate="candidate-cause" owner="SHEOGORATH-µ">
+      <pessimism><question>What assumptions could fail?</question></pessimism>
+      <doubt><question>Which diagnostics are missing?</question></doubt>
+      <pros><pro>Corroborated logs may support a cause</pro></pros>
+      <cons><con>A plausible cause is not a verified cause</con></cons>
+    </cheese>
+    <policy max_depth="4" max_candidates="16" promote_generated_facts="false"/>
+    <result><finding>Return supported evidence and unresolved gaps</finding></result>
+  </think>
+</cfpc>

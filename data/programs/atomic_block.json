@@ -1,0 +1,311 @@
+{
+    "@kind":  "kuhul.program.v1",
+    "@program":  "atomic_block",
+    "@title":  "KUHUL Atomic Blocks",
+    "@version":  "π/2.7.1",
+    "@rom":  {
+                 "@format":  "khl.json",
+                 "@abi":  1,
+                 "@note":  "single-manifest game: one file is the whole program; the runtime folders provide the backend for any number of manifests like this one"
+             },
+    "@import":  [
+                    {
+                        "@from":  "stdlib/pi.kuhul",
+                        "@use":  [
+                                     "pi_value",
+                                     "golden_ratio"
+                                 ]
+                    },
+                    {
+                        "@from":  "stdlib/fibonacci.kuhul",
+                        "@use":  [
+                                     "fib"
+                                 ]
+                    },
+                    {
+                        "@from":  "stdlib/random.kuhul",
+                        "@use":  [
+                                     "rand_int"
+                                 ]
+                    },
+                    {
+                        "@from":  "stdlib/gravity.kuhul",
+                        "@use":  [
+                                     "gravity_step"
+                                 ]
+                    },
+                    {
+                        "@from":  "stdlib/audio.kuhul",
+                        "@use":  [
+                                     "fold_tone"
+                                 ]
+                    },
+                    {
+                        "@from":  "stdlib/colors.kuhul",
+                        "@use":  [
+                                     "hex"
+                                 ]
+                    }
+                ],
+    "@state":  {
+                   "game":  {
+                                "name":  "KUHUL Atomic Blocks",
+                                "type":  "glyph-matching-swapping",
+                                "version":  "π/2.7.1"
+                            },
+                   "board":  {
+                                 "columns":  6,
+                                 "rows":  12,
+                                 "glyph_size":  50,
+                                 "column_spread":  0.86,
+                                 "match_min":  3,
+                                 "folds":  [
+                                               "Pop",
+                                               "Wo",
+                                               "Sek",
+                                               "Chen",
+                                               "Xul",
+                                               "Yax"
+                                           ],
+                                 "fold_sequence":  [
+                                                       1,
+                                                       1,
+                                                       2,
+                                                       3,
+                                                       5,
+                                                       8
+                                                   ],
+                                 "native_glyph_bias":  0.45,
+                                 "start_columns":  3,
+                                 "max_columns":  6
+                             },
+                   "glyphs":  [
+                                  {
+                                      "symbol":  "⚛️",
+                                      "color":  "#ff5555",
+                                      "name":  "Atom",
+                                      "weight":  1.57,
+                                      "power":  {
+                                                    "kind":  "blast",
+                                                    "dice":  [
+                                                                 2,
+                                                                 4
+                                                             ]
+                                                }
+                                  },
+                                  {
+                                      "symbol":  "☣",
+                                      "color":  "#5555ff",
+                                      "name":  "Biohazard",
+                                      "weight":  1.618,
+                                      "power":  {
+                                                    "kind":  "gas",
+                                                    "dice":  [
+                                                                 2,
+                                                                 4
+                                                             ]
+                                                }
+                                  },
+                                  {
+                                      "symbol":  "⚡",
+                                      "color":  "#55ff55",
+                                      "name":  "Energy",
+                                      "weight":  3.14,
+                                      "power":  {
+                                                    "kind":  "rail",
+                                                    "dice":  [
+                                                                 2,
+                                                                 4
+                                                             ]
+                                                }
+                                  },
+                                  {
+                                      "symbol":  "☢",
+                                      "color":  "#aa55ff",
+                                      "name":  "Radioactive",
+                                      "weight":  4.71,
+                                      "power":  {
+                                                    "kind":  "decay",
+                                                    "dice":  [
+                                                                 2,
+                                                                 4
+                                                             ]
+                                                }
+                                  },
+                                  {
+                                      "symbol":  "★",
+                                      "color":  "#ffcc00",
+                                      "name":  "Reward",
+                                      "weight":  9.87,
+                                      "reward":  true,
+                                      "points":  500,
+                                      "power":  {
+                                                    "kind":  "surge",
+                                                    "power_min":  3
+                                                }
+                                  }
+                              ],
+                   "scoring":  {
+                                   "match_4":  150,
+                                   "match_5":  350,
+                                   "match_6_plus":  750,
+                                   "combo_multiplier":  1.3,
+                                   "φ_golden_bonus":  1.618,
+                                   "chain_bonus":  1.5
+                               },
+                   "physics":  {
+                                   "gravity":  0.4,
+                                   "fall_speed_scale":  0.4,
+                                   "tilt_sensitivity":  0.08,
+                                   "tilt_boost":  8
+                               },
+                   "gameplay":  {
+                                    "one_at_a_time":  true,
+                                    "dispatch_seconds":  10,
+                                    "dispatch_step":  1.5,
+                                    "dispatch_min":  4,
+                                    "phase_charges":  3,
+                                    "level_glyph_target":  8,
+                                    "level_glyph_activate":  3,
+                                    "level_glyph_step":  2,
+                                    "power_min":  4,
+                                    "chain_max":  8
+                                },
+                   "match_base":  150,
+                   "count_ratio":  1.0,
+                   "combo_multiplier":  1.3,
+                   "cleared":  9,
+                   "level_target":  8,
+                   "level":  1,
+                   "φ_golden_bonus":  1.618
+               },
+    "@rules":  [
+                   "match: 3+ touching glyphs vertically inside a fold lane, or horizontally across active lanes (locked folds break runs)",
+                   "power: a 4+ match dice-rolls extra glyphs out of the board (Atom blast / Biohazard gas / Energy rail / Radioactive decay)",
+                   "surge: matching 3+ reward stars refills the phase budget",
+                   "level: passes when EVERY glyph type is collected to its target (8 + 2/level) — camping one type never levels up",
+                   "columns: 3 active at level 1, +1 per level to 6; swap exchanges glyphs only, locks never change",
+                   "dispatch: the in-hand glyph auto-drops after dispatch_seconds (10s, -1.5s/level, floor 4s); phase dice-rolls it (3 charges); tilt is the limited recourse",
+                   "chain: collapse-formed matches resolve recursively with a ×1.3 combo (chain_max 8)"
+               ],
+    "@folds":  {
+                   "runtime":  "dist/kuhul_folds/fold.runtime.json",
+                   "cycle":  [
+                                 "Pop",
+                                 "Wo",
+                                 "Sek",
+                                 "Chen",
+                                 "Xul",
+                                 "Yax"
+                             ],
+                   "columns":  {
+                                   "0":  {
+                                             "fold":  "Pop",
+                                             "native":  "Atom",
+                                             "role":  "spawn"
+                                         },
+                                   "1":  {
+                                             "fold":  "Wo",
+                                             "native":  "Biohazard",
+                                             "role":  "gravity"
+                                         },
+                                   "2":  {
+                                             "fold":  "Sek",
+                                             "native":  "Energy",
+                                             "role":  "dispatch"
+                                         },
+                                   "3":  {
+                                             "fold":  "Chen",
+                                             "native":  "Radioactive",
+                                             "role":  "bonus"
+                                         },
+                                   "4":  {
+                                             "fold":  "Xul",
+                                             "native":  "Reward",
+                                             "role":  "reward"
+                                         },
+                                   "5":  {
+                                             "fold":  "Yax",
+                                             "native":  "Atom",
+                                             "role":  "phase"
+                                         }
+                               }
+               },
+    "@control":  [
+                     {
+                         "@op":  "MUL",
+                         "@in":  [
+                                     "match_base",
+                                     "count_ratio"
+                                 ],
+                         "@out":  "pi_bonus"
+                     },
+                     {
+                         "@op":  "MUL",
+                         "@in":  [
+                                     "pi_bonus",
+                                     "φ_golden_bonus"
+                                 ],
+                         "@out":  "phi_bonus"
+                     },
+                     {
+                         "@op":  "MUL",
+                         "@in":  [
+                                     "phi_bonus",
+                                     "combo_multiplier"
+                                 ],
+                         "@out":  "match_score"
+                     },
+                     {
+                         "@op":  "GT",
+                         "@args":  [
+                                       "$cleared",
+                                       "$level_target"
+                                   ],
+                         "@out":  "level_passed"
+                     },
+                     {
+                         "@op":  "IF",
+                         "@cond":  "$level_passed",
+                         "@then":  {
+                                       "@op":  "ADD",
+                                       "@in":  [
+                                                   "level",
+                                                   1
+                                               ],
+                                       "@out":  "next_level"
+                                   },
+                         "@else":  {
+                                       "@op":  "ADD",
+                                       "@in":  [
+                                                   "level",
+                                                   0
+                                               ],
+                                       "@out":  "next_level"
+                                   }
+                     },
+                     {
+                         "@op":  "LOG",
+                         "@args":  [
+                                       "match_score",
+                                       "level_passed",
+                                       "next_level"
+                                   ]
+                     }
+                 ],
+    "@run":  {
+                 "pwa":  "desktop/semantic_engine/include/build/atomic_blocks/index.html",
+                 "launcher":  "desktop/semantic_engine/include/Atomic-Blocks.cmd",
+                 "serve":  "desktop/semantic_engine/include/build/atomic_blocks/serve.cjs :8899 (POST /ai-log -\u003e logs/ai_train.jsonl)",
+                 "proof":  "desktop/semantic_engine/include/_prove_atomic.ps1 (45/45)",
+                 "backends":  {
+                                  "kuhul-c++":  "dist/Kuhul-c++ — native_glyph_engine, glyph ABI, pi-field runtime",
+                                  "kuhul-micronaut":  "dist/kuhul-micronaut — programs + interop + micronauts registry",
+                                  "kuhul-runtime-v1":  "dist/kuhul-runtime-v1 — folds, shaders, xvm, trainer",
+                                  "kuhul_folds":  "dist/kuhul_folds — fold DLL cycle (Pop..Yax), fold.runtime.json",
+                                  "json-runtime":  "dist/json-runtime — manifest executor (:8080), program store",
+                                  "stdlib":  "stdlib/ — pi, fibonacci, random, gravity, audio, colors, geometry, tensors..."
+                              }
+             },
+    "@note":  "one manifest, one game: the folders above provide the backend; this file alone is the whole program. Add a thousand more manifests the same way."
+}

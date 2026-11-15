@@ -1,0 +1,187 @@
+{
+  "@program": "kuhul.atomic.canvas",
+  "@kind": "kuhul.atomic.canvas.v1",
+  "@version": "1.0.0",
+  "@authority": "XCFE",
+  "@execution_default": "DATA_ONLY",
+  "@identity_model": "atomic_id",
+  "@role": "Visual graph representation, geometry, ports, and connections. Canvas describes.",
+  "@phase_order": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Xul"],
+
+  "@module_contract": {
+    "schema": "kuhul.atomic.canvas.v1",
+    "shared_identity": "atomic_id",
+    "authority_rule": "Canvas has NO execution authority. It is a read-only projection of the workflow graph. Canvas edits (Sek) only propose changes — XCFE must admit them before the workflow and pipeline models are mutated.",
+    "phase_hooks": {
+      "Pop":   "receive canvas declaration; resolve canvas.workflow_ref to live workflow",
+      "Wo":    "bind canvas.id; wire canvas_ref to workflow atomic_id",
+      "Yax":   "project workflow graph into canvas nodes/edges; derive geometry from workflow topology",
+      "Sek":   "propose canvas edits; require XCFE admission for any structural change; view mode skips Sek",
+      "Ch'en": "verify all node atomic_ids exist in block/pipeline/workflow registry; verify port link connectivity",
+      "Xul":   "emit canvas projection; return canvas state"
+    },
+    "modes": {
+      "view": "read-only projection; no Sek proposals; Ch'en verifies references only",
+      "edit": "XCFE-admitted edit mode; Sek proposes structural changes; Ch'en validates before Xul emits"
+    },
+    "xcfe": {
+      "authority": "read_only_projection",
+      "edit_requires_xcfe_admission": true,
+      "forbidden": [
+        "execute_node",
+        "modify_pipeline_directly",
+        "modify_workflow_directly",
+        "emit_facts",
+        "write_state"
+      ],
+      "note": "Canvas is a projection surface only. All semantic authority remains in blocks/pipeline/workflow. Canvas edits are proposals that flow BACK through XCFE admission to the authoritative modules."
+    }
+  },
+
+  "@types": {
+    "CanvasId":    { "base": "string", "pattern": "^canvas\\." },
+    "CanvasNode": {
+      "atomic_id": "string",
+      "x":         "number",
+      "y":         "number",
+      "width":     "number",
+      "height":    "number",
+      "label":     "string?",
+      "color":     "string?",
+      "ports": {
+        "in":  [{ "name": "string", "x_offset": "number", "y_offset": "number" }],
+        "out": [{ "name": "string", "x_offset": "number", "y_offset": "number" }]
+      }
+    },
+    "CanvasEdge": {
+      "from_id":   "string",
+      "from_port": "string",
+      "to_id":     "string",
+      "to_port":   "string",
+      "label":     "string?",
+      "color":     "string?"
+    },
+    "CanvasProjection": {
+      "canvas_id":    "CanvasId",
+      "workflow_ref": "string",
+      "nodes":        "CanvasNode[]",
+      "edges":        "CanvasEdge[]",
+      "mode":         "string",
+      "phase":        "string"
+    }
+  },
+
+  "@state": {
+    "canvas_id":    null,
+    "workflow_ref": null,
+    "nodes":        [],
+    "edges":        [],
+    "mode":         "view",
+    "projection":   null,
+    "phase":        "Pop"
+  },
+
+  "@control": [
+    {
+      "@phase": "Pop",
+      "@op": "FOLD_ENTER",
+      "@fold": "Pop",
+      "@node": "canvas-receive",
+      "@desc": "receive canvas declaration; resolve canvas.workflow_ref to live workflow atomic_id"
+    },
+    {
+      "@phase": "Wo",
+      "@op": "SEQUENCE",
+      "@steps": [
+        { "@op": "ASSIGN", "@key": "canvas_id",    "@from": "$input.canvas.id" },
+        { "@op": "ASSIGN", "@key": "workflow_ref",  "@from": "$input.canvas.workflow_ref" },
+        { "@op": "ASSIGN", "@key": "nodes",         "@from": "$input.canvas.nodes" },
+        { "@op": "ASSIGN", "@key": "edges",         "@from": "$input.canvas.edges" },
+        { "@op": "ASSIGN", "@key": "mode",          "@from": "$input.canvas.mode" },
+        { "@op": "LOG",    "@args": ["Wo: canvas wired — id=$canvas_id workflow=$workflow_ref mode=$mode"] }
+      ]
+    },
+    {
+      "@phase": "Yax",
+      "@op": "CALL",
+      "@fn": "project_workflow_graph",
+      "@in":  ["workflow_ref", "nodes", "edges"],
+      "@out": "projection",
+      "@desc": "merge declared nodes with workflow topology; derive missing geometry; annotate port positions"
+    },
+    {
+      "@phase": "Sek",
+      "@op": "IF",
+      "@cond": "$mode == 'edit'",
+      "@then": {
+        "@op": "CALL",
+        "@fn": "propose_canvas_edits",
+        "@in":  ["projection", "$input.canvas.edits"],
+        "@out": "edit_proposals",
+        "@desc": "require XCFE admission; build edit proposal objects for workflow/pipeline/blocks modules"
+      },
+      "@else": {
+        "@op": "LOG",
+        "@args": ["Sek: view mode — no edit proposals"],
+        "@level": "debug"
+      }
+    },
+    {
+      "@phase": "Ch'en",
+      "@op": "CALL",
+      "@fn": "verify_references_and_port_links",
+      "@in":  ["projection"],
+      "@out": "verified_projection",
+      "@desc": "confirm all node atomic_ids exist; confirm all edge from/to port names resolve; check geometry bounds"
+    },
+    {
+      "@phase": "Xul",
+      "@op": "FOLD_EXIT",
+      "@fold": "Xul",
+      "@node": "canvas-emit",
+      "@args": ["verified_projection"],
+      "@desc": "emit CanvasProjection; return canvas state; write phase log"
+    }
+  ],
+
+  "@example": {
+    "canvas.id":           "canvas.echo",
+    "canvas.workflow_ref": "workflow.echo",
+    "canvas.nodes": [
+      {
+        "atomic_id": "pipeline.echo",
+        "x": 160, "y": 120,
+        "width": 220, "height": 100,
+        "label": "Echo Pipeline",
+        "color": "#7c4dff",
+        "ports": {
+          "in":  [{ "name": "text", "x_offset": 0,   "y_offset": 50 }],
+          "out": [{ "name": "text", "x_offset": 220, "y_offset": 50 }]
+        }
+      }
+    ],
+    "canvas.edges": [],
+    "canvas.mode": "view"
+  },
+
+  "@geometry_defaults": {
+    "node_width":        220,
+    "node_height":       100,
+    "node_x_spacing":    80,
+    "node_y_spacing":    60,
+    "port_radius":       6,
+    "edge_curve":        "bezier",
+    "grid_snap":         20,
+    "canvas_background": "#1a1a2e",
+    "node_fill":         "#16213e",
+    "edge_color":        "#7c4dff",
+    "port_color_in":     "#00e5ff",
+    "port_color_out":    "#ff6d00"
+  },
+
+  "@refs": {
+    "workflow_module": "data/programs/kuhul.atomic.workflow.json",
+    "pipeline_module": "data/programs/kuhul.atomic.pipeline.json",
+    "blocks_module":   "data/programs/kuhul.atomic.blocks.json"
+  }
+}

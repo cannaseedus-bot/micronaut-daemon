@@ -1,0 +1,358 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:khanary:schema:micronaut-track-types:1",
+  "title": "KHANARY Micronaut Track Types",
+  "description": "Shared types for micronaut semantic track definitions.",
+  "type": "object",
+  "$defs": {
+    "PhaseName": {
+      "type": "string",
+      "enum": ["Pop", "Wo", "Yax", "Sek", "Ch'en", "Chen", "Xul"]
+    },
+    "RelationVerb": {
+      "type": "string",
+      "description": "Closed relation ISA with compatibility aliases. Prefer canonical relation tokens.",
+      "enum": [
+        "@is_a",
+        "@extends",
+        "@part_of",
+        "@has_a",
+        "@has_part",
+        "@has_property",
+        "@value",
+        "@possesses",
+        "@related_to",
+        "@contains",
+        "@declares",
+        "@defines",
+        "@causes",
+        "@prevents",
+        "@enables",
+        "@supports",
+        "@informs",
+        "@contradicts",
+        "@evidence_for",
+        "@requires",
+        "@produces",
+        "@depends_on",
+        "@imports",
+        "@uses",
+        "@accesses",
+        "@reads",
+        "@samples",
+        "@returns",
+        "@context",
+        "@previous",
+        "@next",
+        "@annotates",
+        "@via",
+        "@governs",
+        "@redirect",
+        "@calls",
+        "@delegates_to",
+        "@return_to",
+        "@resumes",
+        "@call",
+        "@delegate",
+        "@is_type",
+        "@instance_of",
+        "@has_component",
+        "@has_feature",
+        "@property_of",
+        "@owns",
+        "@own",
+        "@possess",
+        "@owner_of",
+        "@compose",
+        "@eval",
+        "@verify",
+        "@research",
+        "@invoke",
+        "@relate",
+        "@aggregate",
+        "@mx2lm",
+        "@app",
+        "@analogous_to",
+        "@dual_of",
+        "@specializes",
+        "@consumes",
+        "@follows",
+        "@precedes",
+        "@supervised_by",
+        "@supervised_by_inverse"
+      ]
+    },
+    "RelationEdge": {
+      "type": "object",
+      "required": ["target", "verb"],
+      "properties": {
+        "target": { "type": "string", "minLength": 1 },
+        "verb": { "$ref": "#/$defs/RelationVerb" },
+        "directed": { "type": "boolean" },
+        "note": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "HasARelation": {
+      "type": "object",
+      "required": ["owner", "member", "relation"],
+      "properties": {
+        "owner": { "type": "string" },
+        "member": { "type": "string" },
+        "relation": {
+          "type": "string",
+          "enum": ["has_a", "contains", "is_type_of", "instance_of"]
+        },
+        "ownership": {
+          "type": "string",
+          "enum": ["owned", "shared", "weak"],
+          "default": "owned"
+        },
+        "cardinality": {
+          "type": "string",
+          "enum": ["1:1", "1:n", "n:1", "m:n"]
+        },
+        "rule": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "TruthConditionalRule": {
+      "type": "object",
+      "required": ["proposition", "truth_when"],
+      "properties": {
+        "proposition": { "type": "string" },
+        "truth_when": { "type": "string" },
+        "false_when": { "type": "string" },
+        "evidence_required": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "QASemanticsProfile": {
+      "type": "object",
+      "properties": {
+        "modes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "reading_comprehension",
+              "closed_book",
+              "closed_domain",
+              "open_domain"
+            ]
+          }
+        },
+        "approaches": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "rule_based",
+              "statistical",
+              "hybrid",
+              "knowledge_graph"
+            ]
+          }
+        },
+        "answer_types": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "fact",
+              "list",
+              "definition",
+              "how",
+              "why",
+              "hypothetical",
+              "semantically_constrained",
+              "cross_lingual"
+            ]
+          }
+        },
+        "truth_model": {
+          "type": "string",
+          "enum": ["truth_conditional", "evidence_scored", "hybrid"]
+        },
+        "ontology_required": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "FoldEntry": {
+      "type": "object",
+      "required": ["phase", "op"],
+      "properties": {
+        "phase": { "$ref": "#/$defs/PhaseName" },
+        "op": { "type": "string", "minLength": 1 },
+        "weight": { "type": "number", "minimum": 0, "maximum": 1 },
+        "key": { "type": "string" },
+        "scope": { "type": "string" },
+        "delegate": { "type": "string" },
+        "note": { "type": "string" },
+        "gate": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "ContrastSetItem": {
+      "type": "object",
+      "required": ["id", "label"],
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "description": { "type": "string" },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ContrastSet": {
+      "type": "object",
+      "required": ["id", "slot", "items"],
+      "properties": {
+        "id": { "type": "string" },
+        "slot": { "type": "string" },
+        "context": { "type": "string" },
+        "items": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "$ref": "#/$defs/ContrastSetItem" }
+        },
+        "compare_axes": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ProjectionOnlyObject": {
+      "type": "object",
+      "description": "Profile/brain/progression projection metadata. This object may bias presentation or routing diagnostics, but it is not semantic or execution authority.",
+      "properties": {
+        "projection_only": { "const": true },
+        "authority_boundary": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "Sandbox": {
+      "type": "object",
+      "properties": {
+        "gram_ns": { "type": "string" },
+        "manifest_access": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "effects": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "ports": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 1, "maximum": 65535 }
+        },
+        "coordinator": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "GlyphPattern": {
+      "type": "object",
+      "description": "One pattern in a micronaut glyph-pattern grammar. @sequence is an ordered list of glyph tokens or wildcards ('*' = one, '**' = any span). @fold names the fold program executed on match.",
+      "required": ["@sequence", "@fold"],
+      "properties": {
+        "@sequence": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "@fold": { "type": "string", "minLength": 1 },
+        "@capture": { "type": "string" },
+        "@delegate": { "type": "string" },
+        "@weight": { "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "ControlStateBinding": {
+      "type": "object",
+      "description": "Field-local binding of one K₁₀ control-state address to a fold program. id is stable (0–9); label and fold are field-local and may differ across micronauts that share the same id. phases lists the K'UHUL phases where this state is valid; empty means valid in all phases.",
+      "required": ["id", "fold"],
+      "properties": {
+        "id": { "type": "integer", "minimum": 0, "maximum": 9 },
+        "label": { "type": "string" },
+        "fold": { "type": "string", "minLength": 1 },
+        "phases": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/PhaseName" }
+        },
+        "weight": { "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "PatternField": {
+      "type": "object",
+      "description": "Semantic field binding for a micronaut pattern grammar. @shared_dictionary references the canonical glyph namespace; @local_weights isolates per-micronaut WCR selection weights. control_states binds K₁₀ state addresses to field-local fold programs.",
+      "properties": {
+        "@namespace": { "type": "string" },
+        "@shared_dictionary": { "type": "boolean" },
+        "@local_weights": { "type": "boolean" },
+        "control_states": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ControlStateBinding" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "NeighborhoodProjection": {
+      "type": "string",
+      "description": "Closed vocabulary for neighborhood projection targets. Stage 2 authoritative: governs — node label auto-extends entry.governs; relations — edge auto-extends entry.relations dispatch; tokens — node label auto-extends route_contract.tokens.",
+      "enum": ["governs", "relations", "tokens"]
+    },
+    "NeighborhoodNode": {
+      "type": "object",
+      "description": "One concept node in the intra-micronaut semantic graph. label feeds governs projection; glyph feeds @patterns vocabulary. projects_to declares which runtime views this node contributes to in Stage 2.",
+      "required": ["id"],
+      "properties": {
+        "id":          { "type": "string", "minLength": 1 },
+        "label":       { "type": "string" },
+        "glyph":       { "type": "string" },
+        "weight":      { "type": "number", "minimum": 0, "maximum": 1 },
+        "projects_to": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/NeighborhoodProjection" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "NeighborhoodEdge": {
+      "type": "object",
+      "description": "One typed semantic edge in the intra-micronaut neighborhood graph. from/to are node IDs (e.g. \"n:decide\") or external micronaut IDs (e.g. \"MATH-µ\"). verb is a closed RelationVerb. projects_to=[\"relations\"] on an external edge auto-derives a RelationEntry in Stage 2.",
+      "required": ["from", "to", "verb"],
+      "properties": {
+        "from":     { "type": "string", "minLength": 1 },
+        "to":       { "type": "string", "minLength": 1 },
+        "verb":     { "$ref": "#/$defs/RelationVerb" },
+        "weight":   { "type": "number", "minimum": 0, "maximum": 1 },
+        "directed": { "type": "boolean" },
+        "projects_to": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/NeighborhoodProjection" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "Neighborhood": {
+      "type": "object",
+      "description": "Intra-micronaut semantic graph. nodes are concept vocabulary with glyph bindings; edges are typed relations between them. In Stage 1 this block is parsed and stored additively — no runtime views are derived. Stage 2 activates projection from projects_to declarations. Stage 4: authoritative=true means derived governs/relations are merged unconditionally; redundant explicit declarations can be retired.",
+      "properties": {
+        "nodes": { "type": "array", "items": { "$ref": "#/$defs/NeighborhoodNode" } },
+        "edges": { "type": "array", "items": { "$ref": "#/$defs/NeighborhoodEdge" } },
+        "authoritative": {
+          "type": "boolean",
+          "description": "Stage 4 opt-in. When true, derived governs/relations are merged into live dispatch fields unconditionally, bypassing the Stage 3 diff-equality gate. Tokens are still declaration-driven regardless of this flag.",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

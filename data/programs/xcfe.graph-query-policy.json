@@ -1,0 +1,30 @@
+{
+  "schema": "kuhul.xcfe.graph-query-policy.v1",
+  "authority": "XCFE",
+  "execution": "permitted_after_admission",
+  "micronaut_id": "micronaut:GRAPH-THEORY",
+  "tool_id": "micronaut.graph.query",
+  "phase": "Sek",
+  "effect": "read_only",
+  "operations": {
+    "inventory": "read_graph_inventory",
+    "neighborhood": "propose_neighborhood_query",
+    "path": "propose_path_query"
+  },
+  "dictionary_neighborhood": {
+    "graph_id": "english_dictionary_definition_relations",
+    "operation": "neighborhood",
+    "capability": "propose_dictionary_relation_query"
+  },
+  "constraints": {
+    "graph_id_must_be_allowlisted": true,
+    "tool_must_be_registered_read_only": true,
+    "capability_must_be_registered": true,
+    "host_generated_admission_only": true,
+    "network": "none",
+    "process": "none",
+    "topology_mutation": false,
+    "semantic_truth_promotion": false,
+    "persistent_write": false
+  }
+}

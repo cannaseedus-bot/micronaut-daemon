@@ -1,0 +1,127 @@
+(* KHANARY AIML Runtime Grammar v5 — phase-trigram / track-field alignment *)
+(* Branch/control markup is delegated to SCFML. See scfml.runtime-grammar.ebnf. *)
+(* Legacy AIML documents remain valid. Track and grammar metadata are
+   optional extensions; an absent track is resolved by host policy. *)
+aiml_document = "<aiml>", { aiml_document_item }, "</aiml>" ;
+aiml_document_item = category | track_declaration | grammar_reference ;
+category = "<category>", ( aiml_pair | scfml_category ), "</category>" ;
+aiml_pair = pattern, [ that ], [ topic ], template ;
+scfml_category = scfml_surface_ref ;
+
+pattern = "<pattern>", { pattern_item }, "</pattern>" ;
+pattern_item = pattern_text | scfml_surface_ref ;
+that = "<that>", pattern_text, "</that>" ;
+topic = "<topic>", pattern_text, "</topic>" ;
+template = "<template>", { template_item }, "</template>" ;
+
+template_item =
+    text | srai | get_var | set_var | star | thatstar | tool_call | graph_call
+  | mx2lm_call | scfml_surface_ref | phase_trigram | context_binding
+  | attention_program ;
+srai = "<srai>", pattern_text, "</srai>" ;
+get_var = "<get name=\"", ident, "\"/>" ;
+set_var = "<set name=\"", ident, "\">", text, "</set>" ;
+star = "<star", [ " index=\"", integer, "\"" ], "/>" ;
+thatstar = "<thatstar", [ " index=\"", integer, "\"" ], "/>" ;
+
+scfml_surface_ref = ? SCFML semantic control-flow surface; normalized by scfml.runtime-grammar.ebnf before Pattern Learning or XCFE projection ? ;
+
+tool_call = "<tool name=\"", ident, "\">", tool_payload, "</tool>" ;
+graph_call = "<edges .../>" | "<getedge .../>" | "<traverse .../>" | "<node .../>" ;
+mx2lm_call = "<mx2lm>", mx2lm_payload, "</mx2lm>" ;
+
+mx2lm_payload = { token }, { gram_binding | phase_trigram | context_binding | unigram_weight | bigram_geometry } ;
+gram_binding =
+    "<gram channel=\"", gram_class, "\" role=\"", gram_role, "\">",
+    gram_text,
+    "</gram>" ;
+
+gram_class =
+    "unigram" | "bigram" | "trigram" | "quadgram" |
+    "coarse_gram" | "function_gram" | "tool_gram" ;
+gram_role =
+    "semantic_address" | "static_weight" | "vector_geometry" |
+    "executable_fold" | "context_association" |
+    "structural_shape" | "function_word_structure" |
+    "control_binding" | "operator_binding" | "tool_dispatch_intent" ;
+
+
+(* ── v5: field-of-play and active context ────────────────────────────── *)
+(* A track declares the bounded field of play: its grammar, candidate fold
+   inventory, and optional vector field. A context is a query-scoped activation,
+   NOT persistent track state. These are proposed AIML XML surfaces mirroring
+   key.grammar.track_field.v1; they do not alter SCFML authority. *)
+track_declaration =
+    "<track id=\"", qualified_ident, "\" grammar_ref=\"", reference, "\"",
+    [ " vector_field_ref=\"", reference, "\"" ], ">",
+    { track_member }, "</track>" ;
+track_member = fold_reference | pattern_reference ;
+fold_reference = "<fold-ref id=\"", reference, "\"/>" ;
+pattern_reference = "<pattern-ref id=\"", reference, "\"/>" ;
+grammar_reference = "<grammar-ref id=\"", reference, "\"/>" ;
+
+context_binding =
+    "<context track=\"", qualified_ident, "\" source=\"", binding_source,
+    "\" name=\"", ident, "\">", text, "</context>" ;
+binding_source = "capture" | "lm_chain" | "char_overlap" | "explicit" ;
+
+(* ── v5: typed n-gram responsibilities ─────────────────────────────── *)
+(* Legacy <gram> records remain accepted for compatibility. New typed
+   surfaces make the required semantic fields explicit and host-verifiable. *)
+unigram_weight =
+    "<unigram key=\"", gram_atom, "\" weight=\"", decimal, "\"/>" ;
+bigram_geometry =
+    "<bigram left=\"", gram_atom, "\" right=\"", gram_atom,
+    "\" vector_ref=\"", reference, "\"/>" ;
+
+(* A trigram is a pattern-addressed executable fold. Its phase MUST be
+   stored on this record, never inferred from the phase template. Identical
+   patterns can exist in different phases and/or tracks. *)
+phase_trigram =
+    "<trigram track=\"", qualified_ident, "\" pattern=\"", trigram_pattern,
+    "\" phase=\"", phase_name, "\" fold_ref=\"", reference, "\"",
+    [ " binding_ref=\"", reference, "\"" ],
+    [ " template_ref=\"", reference, "\"" ], ">",
+    { trigram_binding }, "</trigram>" ;
+trigram_binding =
+    "<bind name=\"", ident, "\" source=\"", binding_source,
+    "\"", [ " index=\"", integer, "\"" ], "/>" ;
+phase_name = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul" ;
+trigram_pattern = gram_atom, " ", gram_atom, " ", gram_atom ;
+gram_atom = ident | "*" | "_" ;
+
+(* The AIML runtime may request symbolic attention/routing primitives, but
+   actual scoring, filtering, execution and authority are runtime concerns. *)
+attention_program =
+    "<attention track=\"", qualified_ident, "\" pipeline=\"",
+    attention_pipeline, "\"/>" ;
+attention_pipeline = "match,bind,filter,map,score,phase_execute" ;
+
+(* EBNF recognises surfaces; the host validator MUST additionally enforce:
+   - Trigram phase + fold_ref are present and phase is authoritative.
+   - Trigram patterns resolve to exactly three ordered atoms (wildcards count).
+   - phase-qualified identity distinguishes identical patterns across phases.
+   - Unigram weights are immutable corpus priors; learned deltas live elsewhere.
+   - Bigram geometry resolves to a valid vector field/reference.
+   - Capture indices and binding references resolve within invocation context.
+   - Track references resolve; query context never mutates the track implicitly.
+   - XCFE admission, phase legality and execution authority precede dispatch.
+   - Round trips preserve key, value, captures, stored phase and fold_ref.
+   - SCFML remains the owner of branch/control markup.
+   - Functional collection fold is distinct from six-phase K'UHUL execution.
+   - Existing <gram> entries are legacy: a trigram there is NOT automatically
+     executable unless validated/enriched with a stored phase and fold_ref. *)
+
+qualified_ident = ident, { ".", ident } ;
+reference = qualified_ident | ident, { ":", ident | "." } ;
+decimal = [ "-" ], integer, [ ".", integer ] ;
+
+token = ident ;
+ident = ? ASCII letter/digit/underscore/hyphen/apostrophe sequence ? ;
+integer = digit, { digit } ;
+digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+text = { text_char } ;
+pattern_text = { text_char } ;
+tool_payload = { text_char } ;
+gram_text = { text_char } ;
+text_char = ? any UTF-8 char except unmatched '<' or '>' ? ;

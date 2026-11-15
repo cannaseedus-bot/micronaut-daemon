@@ -1,0 +1,59 @@
+{
+  "@kind": "asx.mini-app.v1",
+  "@id": "store",
+  "@key": "⟁APP:STORE",
+  "@mount": "⟁ROOT:STORE",
+  "@theme": { "accent": "#f59e0b", "bg": "#0a0e1a", "surface": "#131929", "text": "#fef9ee", "hero_phase": "Yax", "tagline": "Shop what inspires you" },
+  "@layout": { "mode": "panels", "regions": [{ "id": "navigation", "component": "⟁WIDGET:NAV", "position": "left" }, { "id": "product_grid", "component": "⟁WIDGET:PRODUCTS", "position": "center" }, { "id": "sidebar", "component": "⟁WIDGET:CART_SIDEBAR", "position": "right" }], "responsive": { "tablet": "stack_context_panels", "mobile": "stack_all_panels" } },
+  "@state": { "auth": { "user_id": null }, "products": [], "cart": [], "search": "", "category": null, "modal": null, "status": "idle" },
+  "@components": {
+    "⟁ROOT:STORE": { "@type": "app", "@children": ["⟁WIDGET:HEADER", "⟁WIDGET:PANELS"] },
+    "⟁WIDGET:HEADER": { "@type": "toolbar", "@children": ["⟁INPUT:SEARCH", "⟁ACTION:CART_ICON", "⟁ACTION:CHECKOUT"] },
+    "⟁INPUT:SEARCH": { "@type": "input", "@input_type": "search", "@bind": "state.search" },
+    "⟁ACTION:CART_ICON": { "@type": "button", "@text": "Cart", "@bind": "state.cart.length", "@on": { "click": "store.open_cart" } },
+    "⟁ACTION:CHECKOUT": { "@type": "button", "@text": "Checkout", "@on": { "click": "store.open_checkout" } },
+    "⟁WIDGET:PANELS": { "@type": "layout", "@children": ["⟁WIDGET:NAV", "⟁WIDGET:PRODUCTS", "⟁WIDGET:CART_SIDEBAR"] },
+    "⟁WIDGET:NAV": { "@type": "navigation", "@bind": "state.navigation" },
+    "⟁WIDGET:PRODUCTS": { "@type": "grid", "@bind": "state.products", "@children": ["⟁WIDGET:PRODUCT_CARD"] },
+    "⟁WIDGET:PRODUCT_CARD": { "@type": "media-card", "@bind": "product", "@on": { "add_to_cart": "store.cart_add", "view": "store.product_view" } },
+    "⟁WIDGET:CART_SIDEBAR": { "@type": "sidebar", "@children": ["⟁WIDGET:CART_ITEMS", "⟁WIDGET:CART_TOTAL"] },
+    "⟁WIDGET:CART_ITEMS": { "@type": "list", "@bind": "state.cart" },
+    "⟁WIDGET:CART_TOTAL": { "@type": "stat", "@bind": "state.cart_total" }
+  },
+  "@programs": {
+    "store.cart_add": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "APPEND", "@in": "event_product", "@out": "cart" }] },
+    "store.product_view": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "store.open_cart": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "store.open_checkout": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_modal", "@out": "modal" }] },
+    "store.search": { "@kind": "asx.state-program.v1", "@authority": "observation_only", "@control": [{ "@op": "SET", "@from": "event_search", "@out": "search" }] }
+  },
+  "@events": { "product.add_to_cart": "store.cart_add", "product.view": "store.product_view", "cart.open": "store.open_cart", "checkout.open": "store.open_checkout", "search.input": "store.search" },
+  "@imports": [{ "ref": "product", "mode": "schema_table" }, { "ref": "order", "mode": "schema_table" }],
+  "@permissions": { "network": false, "storage": "request_scoped", "tools": [], "semantic_commit": false },
+  "@lifecycle": { "load": "compile", "mount": "project", "event": "dispatch", "unmount": "discard_request_state" },
+  "@extensions": {
+    "@enabled": [], "@selected": [],
+    "@available": [
+      { "id": "stripe-payments", "name": "Stripe Payments", "category": "payments", "price": "free", "status": "setup_required", "description": "Accept payments with Stripe. Requires Stripe account setup." },
+      { "id": "inventory-bot", "name": "Inventory Bot", "category": "agents", "price": "membership", "status": "available_unconfigured", "requires_subscription": true, "description": "Auto-alert when product stock drops below threshold." },
+      { "id": "product-reviews", "name": "Product Reviews", "category": "community", "price": "optional", "status": "available_unconfigured", "description": "Verified buyer reviews on product pages." }
+    ],
+    "@billing": { "@model": "monthly_subscription", "@provider": "stripe", "@configured": false, "@subscription_status": "inactive" },
+    "@assistant_patterns": [
+      { "id": "store.add-product", "pattern": "ADD PRODUCT|NEW PRODUCT|LIST PRODUCT", "intent": "open_compose" },
+      { "id": "store.checkout", "pattern": "CHECKOUT|PLACE ORDER|BUY NOW", "intent": "open_checkout" },
+      { "id": "store.search", "pattern": "FIND * PRODUCT|SEARCH *", "intent": "filter_products" }
+    ]
+  },
+  "@data": {
+    "spotlight": [
+      { "id": "sp1", "title": "Handmade Ceramic Mug", "slug": "ceramic-mug", "badge": "Best Seller", "price": 28.00, "excerpt": "Wheel-thrown, food-safe glaze. Each piece is one-of-a-kind." },
+      { "id": "sp2", "title": "Linen Tote Bag", "slug": "linen-tote", "badge": "New Arrival", "price": 45.00, "excerpt": "Natural undyed linen with reinforced straps. Market-ready." },
+      { "id": "sp3", "title": "Beeswax Candle Set (3)", "slug": "beeswax-candle-set", "badge": "Gift Idea", "price": 38.00, "excerpt": "Hand-poured with cotton wicks. Subtle honey fragrance." }
+    ],
+    "schema": {
+      "product": { "primaryKey": "product_id", "fields": { "product_id": { "type": "string" }, "title": { "type": "string", "required": true }, "slug": { "type": "string", "required": true }, "description": { "type": "textarea" }, "price": { "type": "float", "required": true }, "stock": { "type": "integer" }, "tags": { "type": "json" }, "image_url": { "type": "uri" } } },
+      "order": { "primaryKey": "order_id", "fields": { "order_id": { "type": "string" }, "user_id": { "type": "string" }, "items": { "type": "json", "required": true }, "total": { "type": "float", "required": true }, "status": { "type": "string" }, "created_at": { "type": "datetime" } } }
+    }
+  }
+}

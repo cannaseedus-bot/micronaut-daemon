@@ -1,0 +1,18 @@
+{
+  "@program": "fold_node",
+  "@fold": "Yax",
+  "@node": "admission-node",
+  "@state": {
+    "candidate": 0.7,
+    "threshold": 0.5
+  },
+  "@control": [
+    { "@op": "FOLD_ENTER", "@fold": "Yax", "@node": "admission-node" },
+    { "@op": "GT", "@in": ["candidate", "threshold"], "@out": "admitted" },
+    { "@op": "IF",
+      "@cond": "$admitted",
+      "@then": { "@op": "FOLD_EXIT", "@fold": "Sek", "@node": "admission-node", "@args": ["admitted"] },
+      "@else": { "@op": "FOLD_EXIT", "@fold": "Xul", "@node": "admission-node", "@args": ["rejected"] }
+    }
+  ]
+}
