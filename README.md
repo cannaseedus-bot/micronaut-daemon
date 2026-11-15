@@ -1,23 +1,15 @@
-# Micronaut JSONL Runtime
+<div align="center">
+  <img src="data/apps/kuhul-infographic.png" alt="K'UHUL semantic runtime — six-phase cycle" width="860"/>
 
-This is a concrete C++ skeleton for `micronaut.exe`.
+  <h1>eliza-µ &mdash; Micronaut Daemon</h1>
+  <p>C++17 AIML runtime · K'UHUL phase-gated execution · SRAI semantic routing · OpenCL attention kernels</p>
+</div>
 
-The Alice AIML corpus is converted to `build/alice.aiml.jsonl`. `chat.generate` loads these JSONL records and runs the indexed category/template runtime. The source XML directory is not needed after the corpus file has been built.
+---
 
-## Contract
+## Overview
 
-One JSON line in:
-
-```json
-{"@kind":"micronaut.request.v1","op":"chat.generate","id":"r1","payload":{"prompt":"Hi","stream":true}}
-```
-
-One or more JSON lines out:
-
-```json
-{"@kind":"micronaut.event.v1","id":"r1","type":"token","data":{"token":"Micronaut","index":0}}
-{"@kind":"micronaut.result.v1","ok":true,"id":"r1","op":"chat.generate","result":{"text":"..."}}
-```
+`eliza-µ` is a lightweight, embeddable chat daemon built on the Alice AIML corpus (99,524 categories). It speaks a line-delimited JSON protocol, serves an HTTP API, and routes all inference through a typed six-phase K'UHUL execution cycle. SRAI redirects are resolved via EmbeddingGemma vector retrieval rather than pure string matching, turning `<srai>` into a semantic routing mechanism for Micronaut atomic workflows.
 
 ## Build
 
@@ -26,133 +18,215 @@ cmake -S . -B build
 cmake --build build --config Release
 ```
 
-Convert the AIML corpus to JSONL records before starting the daemon. This is the daemon's native line-oriented data transport:
+Output: `../bin/eliza-µ.exe`
+
+Prepare the AIML corpus before first run:
 
 ```powershell
 python aiml_to_gguf.py aiml-en-us-foundation-alice build\alice.aiml.jsonl
 ```
 
+External dependency: `vendor/nlohmann/json.hpp` — single-header nlohmann/json v3.11.3, committed in-repo.
+
 ## Run
 
+**JSONL mode** (line-oriented JSON protocol):
+
 ```powershell
-echo {"@kind":"micronaut.request.v1","op":"chat.generate","id":"r1","prompt":"Hello","stream":true} | .\build\Release\micronaut.exe
+echo {"@kind":"micronaut.request.v1","op":"chat.generate","id":"r1","prompt":"Hello","stream":true} | ..\bin\eliza-µ.exe
 ```
 
-Or:
+**Chat mode:**
 
 ```powershell
-.\build\Release\micronaut.exe --chat "Hello"
+..\bin\eliza-µ.exe --chat "Hello"
 ```
 
-To select a corpus explicitly, pass `--aiml-corpus PATH` before `--http`, `--chat`, or JSONL mode. The JSONL corpus is preferred automatically. Set `MICRONAUT_AIML_CORPUS` to override its path. GGUF remains an optional packaged form, produced by choosing an `.gguf` output extension; the daemon can read either form.
-
-## Render basic AIML with Jinja
-
-`render_aiml.py` renders the daemon's supported basic AIML constructs from a JSON manifest using `templates/aiml_macros.jinja`. The binding whitelist is in `aiml_bindings.v1.json`; it covers patterns, templates, categories, `<star/>`, `<that/>`, `<topicstar/>`, `<srai>`, `<random>`, `<condition>/<li>`, predicates (`<get>`, `<set>`, `<think>`), and bot properties. It intentionally does not implement advanced AIML extensions such as runtime `<learnf>` ingestion.
+**HTTP mode** (default port 9879):
 
 ```powershell
-python micronaut_daemon\render_aiml.py `
-  --manifest micronaut_daemon\examples\aiml_basic_brain.json `
-  --output micronaut_daemon\build\daemon_basic.aiml
-
-New-Item -ItemType Directory -Force micronaut_daemon\build\jinja_source | Out-Null
-Copy-Item micronaut_daemon\build\daemon_basic.aiml micronaut_daemon\build\jinja_source\daemon_basic.aiml -Force
-python micronaut_daemon\aiml_to_gguf.py `
-  micronaut_daemon\build\jinja_source `
-  micronaut_daemon\build\daemon_basic.jsonl
+..\bin\eliza-µ.exe --http
+# GET  /health
+# POST /api/chat              { "prompt": "..." }
+# POST /v1/chat/completions   OpenAI-compatible
 ```
 
-The renderer validates manifest nodes against the binding whitelist, escapes XML text/attributes, and parses its own output before writing. The generated XML then follows the same JSONL compilation and `chat.generate` runtime path as other AIML categories. Each brain may provide top-level categories and topic-scoped categories; categories and topics are composed without adding daemon-specific template syntax.
+Override corpus path: `--aiml-corpus PATH` or `MICRONAUT_AIML_CORPUS` env var.
 
-## Files
+## SRAI Semantic Routing
 
-- `input.cpp` — stdin/CLI ingestion
-- `output.cpp` — JSONL event/result emission
-- `process.cpp` — external process runner
-- `chat.cpp` — session history and `chat.generate` integration
-- `aiml_runtime.cpp` / `aiml_runtime.h` — JSONL/GGUF corpus reader, category matcher, AIML session/template runtime
-- `batches.cpp` — batch envelope handler
-- `threads.cpp` — async job registry
-- `scheduler.cpp` — deterministic job ordering
-- `canvas.cpp` — terminal projection
-- `frames.cpp` — redraw scheduler
-- `xcfe_router.cpp` — op routing layer
-- `scxq2_runtime.cpp` — JSONL → SCXQ2 frame → XCFE route
-- `aiml_to_gguf.py` — converts Alice AIML sources to runtime JSONL or optional GGUF package
-# Phase-gated attention kernel
+AIML `<srai>` normally redirects to another pattern by exact string. The daemon extends this into a three-component semantic routing system.
 
-`SEK_PI_RADIUS` (glyph `⊙`) consumes `positions` shaped `[points, dimensions]` and a positive `radius` scalar. It writes `pi_radius_weights` shaped `[points, points]` using the compact-support cosine radial function `0.5 * (1 + cos(pi * distance / radius))` for `distance <= radius`, and zero outside the radius. The kernel only executes while the shared `kuhul::phase::Name` is `Sek`.
+### AIML-SRAI-ROUTER-µ
 
-The phase helpers are split across `pop.cpp`, `wo.cpp`, `yax.cpp`, `sek.cpp`, `chen.cpp`, and `xul.cpp`. Each helper validates its current phase and advances only along the legal cycle declared in `phase.hpp`. Call `pop`, `wo`, and `yax`, execute the Sek kernel, then call `sek`, `chen`, and `xul` to complete the phase trace.
+`data/micronauts/aiml-srai-router.v1.json` — schema `kuhul.micronaut.semantic-router.v1`
 
-# HTTP API
+The router walks the K'UHUL phase cycle with bounded authority at each step:
 
-Run `eliza-µ.exe --http [port]` to start a loopback-only HTTP listener (default port `9879`). It serves `GET /health`, `POST /api/chat` with `{ "prompt": "..." }`, and `POST /v1/chat/completions` with a JSON chat request. The existing JSONL `chat.create`, `chat.history`, and `chat.generate` operations remain available through piped stdin/stdout. Launching the executable interactively without arguments prints usage instead of waiting silently for stdin.
+| Phase | Responsibility |
+|-------|---------------|
+| Pop | Capture surface and explicit context |
+| Wo | Normalize, match registered rules, bind wildcard captures |
+| Yax | Expand bounded SRAI redirects and semantic candidates |
+| Sek | Rank candidates and form a route proposal |
+| Ch'en | Verify phase order, captures, cycles, and XCFE admission |
+| Xul | Close the verified data route — no executable commit in this API |
 
-# Alice AIML corpus in GGUF
+Constraints: `srai_max_depth=16`, `cycle_policy=reject`, wildcard priority `exact > _ > *`. Vector ranking uses `google/embeddinggemma-2` (256-dim) against `io/aiml-grams/aiml-relations-grams.json`.
 
-Optionally package the corpus as GGUF using llama.cpp's bundled `gguf-py` writer:
+### aiml.srai.vector
 
-```powershell
-python micronaut_daemon\aiml_to_gguf.py `
-  micronaut_daemon\aiml-en-us-foundation-alice `
-  micronaut_daemon\build\alice.aiml.gguf
+`data/micronauts/aiml-srai-vector.micronaut.json` — phase Yax, shared block
+
+Embeds the SRAI target query with EmbeddingGemma, retrieves top-5 nearest AIML categories from pre-built `pattern_vectors.f32.npy` / `template_vectors.f32.npy`, filters by wildcard-count compatibility and field scope, re-ranks by `default_bias × cosine_score`, then follows the SRAI chain up to depth 3.
+
+```
+EMBED → RETRIEVE → FILTER → RANK → SRAI → FOLD
 ```
 
-The GGUF contains a `micronaut_aiml` data payload with the original UTF-8 AIML source text and an ordered category index. It is a GGUF data container, not neural-network weights and not loadable by llama.cpp as a chat model. The daemon can read it, though JSONL is its native corpus format. Reopen and inspect either format without consulting the AIML directory:
+The resolved candidate is packaged as a typed `aiml.srai.vector.proposal`. XCFE admission is required before dispatch — vector similarity alone does not authorize execution.
 
-```powershell
-python micronaut_daemon\aiml_to_gguf.py --inspect `
-  micronaut_daemon\build\alice.aiml.jsonl
+**Consumers:** `ELIZA-µ`, `VECTOR-µ`, `PATTERNS-µ`, `TOOL-µ`
+
+### eliza.srai.bridge
+
+`data/micronauts/eliza-srai-bridge.micronaut.json` — phase Ch'en, atomic block
+
+Bridges ELIZA-µ's Ch'en accumulator to the vector SRAI chain:
+
+```
+Ch'en accumulator → SRAI_DETECT → ROUTE_RESOLVE → PROPOSAL (pending XCFE)
 ```
 
-## Tokenize AIML into a training `.bin`
+If the matched template contains `<srai>...</srai>`, the bridge delegates to `aiml.srai.vector` with wildcard captures substituted. Terminal patterns (no SRAI) are wrapped directly into a routing proposal. The output `eliza.srai.routing_proposal` must be XCFE-admitted before `Xul` template fill proceeds.
 
-Build the repository's native tokenizer with binary token output enabled:
+**XCFE invariants:**
+- `eliza.reflect` (Xul template fill) must not execute unless routing proposal status is `xcfe_admitted`
+- `gramWrite` keys (`eliza:last_response`, `eliza:active_field`, `eliza:match_score`) are gated by principal and memory scope — not automatically authorized by proposal admission
+- `field_score` computation is `data_only` — ranking evidence is preserved in provenance, not promoted to fact
 
-```powershell
-cmake --build build-haswell --target llama-tokenize --config Release
+## K'UHUL Phase Cycle
+
+The phase-gated execution cycle: `pop → wo → yax → (SEK_PI_RADIUS kernel) → sek → chen → xul`
+
+Each helper (`pop.cpp`, `wo.cpp`, `yax.cpp`, `sek.cpp`, `chen.cpp`, `xul.cpp`) validates its current phase and advances only along the legal cycle declared in `phase.hpp`.
+
+**SEK_PI_RADIUS** (glyph `⊙`, `pi_radius.cpp`) — executes only while `kuhul::phase::Name` is `Sek`. Consumes `positions [points, dimensions]` and a positive `radius` scalar, writes `pi_radius_weights [points, points]` using the compact-support cosine radial function:
+
+```
+w(d) = 0.5 × (1 + cos(π × d / radius))   for d ≤ radius
+w(d) = 0                                   otherwise
 ```
 
-For a Hugging Face model directory, use its tokenizer and chat template together:
+**OpenCL kernels:** `vector_lane.cl`, `attention.cl`, `micronaut.cl` — CMake copies each next to its target executable post-build.
+
+## Architecture
+
+| Source | Role |
+|--------|------|
+| `main.cpp` | Entry point, mode dispatch |
+| `aiml_runtime.cpp` | JSONL/GGUF corpus reader, category matcher, AIML session runtime |
+| `xcfe_router.cpp` | Op routing layer — dispatches XCFE frames |
+| `scxq2_runtime.cpp` | JSONL → SCXQ2 frame → XCFE route |
+| `gemma_bridge_route.cpp` | Gemma inference bridge |
+| `semantic_bridge.cpp` | Relational-graph semantic lookup |
+| `query_attestation.cpp` | Attestation key validation (`.env` → `MICRONAUT_GEMMA_ATTEST_KEY`) |
+| `pi_radius.cpp` | SEK_PI_RADIUS attention kernel (glyph `⊙`) |
+| `phase_gate.cpp` | Phase enforcement and transition |
+| `kuhul_runtime.cpp` | K'UHUL phase cycle host |
+| `vector_plan.cpp` | Vector operator plan |
+| `http_server.cpp` | Loopback HTTP listener |
+| `opencl.cpp` | OpenCL context and kernel dispatch |
+
+## Tests
+
+Run test executables directly — `npm test` is intentionally broken:
 
 ```powershell
-python micronaut_daemon\tokenize_aiml.py `
-  --input micronaut_daemon\build\alice.aiml.jsonl `
+.\build\Release\test_vector_plan.exe
+.\build\Release\test_semantic_bridge.exe
+.\build\Release\test_gemma_bridge_route.exe
+python tools/test_fold_pair.py
+```
+
+## AIML Corpus
+
+The Alice corpus compiles to 99,524 categories. The runtime supports wildcard pattern matching, topic/that constraints, captures, `<srai>`, predicates, `<condition>/<li>`, `<random>`, and common text transforms. `<learn>` cannot mutate the loaded read-only corpus at runtime.
+
+**Corpus formats:**
+- **JSONL** — native line-oriented format, default output of `aiml_to_gguf.py`
+- **GGUF** — optional packaged form; pass `.gguf` extension to `aiml_to_gguf.py`. A GGUF data container, not neural-network weights.
+
+Inspect either format without the AIML directory:
+
+```powershell
+python aiml_to_gguf.py --inspect build\alice.aiml.jsonl
+```
+
+## Training Pipeline
+
+**Tokenize the corpus:**
+
+```powershell
+python tokenize_aiml.py `
+  --input build\alice.aiml.jsonl `
   --tokenizer-json E:\models\GPT2\gemma_toolcall\merged\tokenizer.json `
   --tokenizer-config E:\models\GPT2\gemma_toolcall\merged\tokenizer_config.json `
   --model-config E:\models\GPT2\gemma_toolcall\merged\config.json `
-  --output micronaut_daemon\build\alice.gemma_toolcall.tokens.bin
+  --output build\alice.gemma_toolcall.tokens.bin
 ```
 
-The Hugging Face path applies the local chat template to each AIML pattern/template pair, including its BOS and turn-ending tokens. Use the **same model tokenizer that the training run will use**. Alternatively, the native llama.cpp tokenizer path accepts a GGUF vocabulary:
+The `.bin` is a headerless stream of little-endian `uint32` token IDs. Its adjacent `.bin.json` records the tokenizer model, counts, and SHA-256 hashes.
+
+**Train a compact Gemma 3 model from scratch (CPU):**
 
 ```powershell
-python micronaut_daemon\tokenize_aiml.py `
-  --input micronaut_daemon\build\alice.aiml.jsonl `
-  --model path\to\target-tokenizer.gguf `
-  --tokenizer build-haswell\bin\llama-tokenize.exe `
-  --output micronaut_daemon\build\alice.tokens.bin
-```
-
-The `.bin` is a headerless stream of little-endian `uint32` token IDs. Its adjacent `.bin.json` records the tokenizer model, category/token counts, and SHA-256 hashes. IDs are vocabulary-specific; do not train against this file with a different tokenizer. It is tokenized training data, not Safetensors weights. A training program must consume the IDs and produce the model checkpoint separately.
-
-The supplied Gemma config sets `use_bidirectional_attention` to `false`. The token file records this setting, but the training code must still construct the causal attention mask; setting it to `true` would let training positions see future tokens and would not match autoregressive chat generation.
-
-## Train a compact Gemma3 model from scratch on CPU
-
-The GPT-2 D3D11 executable cannot train this Gemma3 token stream. Use the PyTorch/Transformers CPU trainer instead:
-
-```powershell
-python micronaut_daemon\train_gemma3_scratch.py `
-  --tokens micronaut_daemon\build\alice.gemma_toolcall.tokens.bin `
+python train_gemma3_scratch.py `
+  --tokens build\alice.gemma_toolcall.tokens.bin `
   --tokenizer-dir E:\models\GPT2\gemma_toolcall\merged `
   --model-config E:\models\GPT2\gemma_toolcall\merged\config.json `
-  --output micronaut_daemon\build\alice-gemma3-scratch-cpu `
+  --output build\alice-gemma3-scratch-cpu `
   --steps 200 --threads 4 --sequence-length 32 `
   --hidden-size 32 --heads 4 --layers 2 --intermediate-size 64
 ```
 
-This initializes a tiny two-layer Gemma3 causal model randomly, trains it on CPU, and saves `model.safetensors`, `config.json`, the tokenizer files, and `training_report.json`. The AIML pattern is the user turn; visible template text is the assistant turn. `<think>` and `<srai>` contents are omitted; other dynamic AIML constructs are not executed during flattening, so this is an approximate training set. It is intentionally not the 26-layer, width-1152 source model. At 200 steps × 32 tokens, it sees about 6,400 target-token positions (random windows from the corpus), so this produces a valid starter checkpoint, not a capable conversational model. Longer training requires more steps and CPU time.
+**GPU trainer (D3D11):** `tools/bin/gpt2_trainer.exe`, work dir `tools/d3d11-build`. Launch from the WebGL2 Trainer Dashboard:
 
-The current compiled corpus contains 66 sources and 99,524 categories. The runtime supports wildcard pattern matching, topic/that constraints, captures, SRAI, predicates, conditions, random-list cycling, and common text transforms. It never evaluates template code; `<learn>` cannot mutate the loaded read-only corpus. Unsupported AIML behavior may therefore produce different replies from a complete reference AIML interpreter.
+```powershell
+pwsh -STA -File .\tools\trainer-dashboard\webgl2-trainer-dashboard.ps1
+```
+
+## WPF Dashboards
+
+All WPF apps require PowerShell 7+ in STA mode (`pwsh -STA`):
+
+| Script | Purpose |
+|--------|---------|
+| `Micronaut.ps1` | Chat UI — connects to `eliza-µ` |
+| `tools/trainer-dashboard/webgl2-trainer-dashboard.ps1` | WebGL2 / XSHARD / D3D11 trainer |
+| `tools/trainer-dashboard/micronaut-factory-dashboard.ps1` | Factory + evolution dashboard (ports 17474 / 8764) |
+| `tools/trainer-dashboard/mx2_integration.ps1` | MX2LM bridge integration |
+| `tools/trainer-dashboard/css_micronaut_pigccp_bridge.ps1` | CSS-C / PIGCCP protocol bridge |
+
+## CSS-C Native Runners
+
+`.CSS-C/native/` has its own independent build (requires MSVC dev shell):
+
+```powershell
+# From a VS x64 dev shell
+cd .CSS-C\native
+build.cmd release
+```
+
+Produces `cssc_gate_run.exe`, `cssc_klsl_run.exe`, `cssc_softmax_run.exe`, and related runners.
+
+## External Dependencies
+
+| Path | Used by |
+|------|---------|
+| `vendor/nlohmann/json.hpp` | C++ build — in-repo single header |
+| `C:\Users\canna\.key-grammar-kit\` | Key-grammar manifests and test suite |
+| `E:\models\_khanary_inspect\.Powernaut-v1.0.0\Kuhul3D.psm1` | K3D infographic renderer |
+| `tools/bin/gpt2_trainer.exe` | Factory dashboard D3D11 trainer — in-repo |
+
+`.env` holds `MICRONAUT_GEMMA_ATTEST_KEY` — excluded from commits.
