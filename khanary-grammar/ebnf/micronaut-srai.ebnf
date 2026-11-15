@@ -1,0 +1,44 @@
+(* micronaut-srai.ebnf
+   Surface grammar for Micronaut SRAI.
+   Compiles to: micronaut-srai.v1.json (see data/schema/micronaut-srai.v1.schema.json).
+   Authority: proposal_only. Never executes; constructs proposals. *)
+
+srai            = "srai" , "[" , srai_body , "]" ;
+
+srai_body       = { field } , "route" , ":" , route_ref ,
+                  [ "input" , ":" , input_expr ] ,
+                  "max_depth" , ":" , integer ,
+                  [ "provenance" , ":" , provenance_mode ] ,
+                  { admission_field } ;
+
+field           = "kind" , ":" , "micronaut_srai" ;
+
+route_ref       = identifier | capability_ref ;
+
+capability_ref  = "micronaut" , ":" , identifier ;
+
+input_expr      = string_literal
+                | binding_expr ;
+
+binding_expr    = "{" , binding_path , "}" ;
+
+binding_path    = identifier , { "." , identifier } , [ "[" , integer , "]" ] ;
+
+provenance_mode = "required" | "optional" | "forbidden" ;
+
+admission_field = "admission" , ":" , admission_mode
+                | "fallback"  , ":" , fallback_mode
+                | "phase"     , ":" , phase_name
+                | "authority" , ":" , "proposal_only" ;
+
+admission_mode  = "xcfe_required" | "not_applicable_read_only" ;
+
+fallback_mode   = "fail_template" | "return_empty" | "route" , ":" , route_ref ;
+
+phase_name      = "Pop" | "Wo" | "Yax" | "Sek" | "Ch'en" | "Xul" ;
+
+identifier      = letter , { letter | digit | "_" } ;
+integer         = digit , { digit } ;
+string_literal  = '"' , { any_char - '"' } , '"' ;
+letter          = "A".."Z" | "a".."z" ;
+digit           = "0".."9" ;

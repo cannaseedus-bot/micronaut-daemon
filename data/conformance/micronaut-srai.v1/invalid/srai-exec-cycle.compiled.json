@@ -1,0 +1,23 @@
+{
+  "_fixture": "invalid/srai-exec-cycle",
+  "_expected_error": "E_EXEC_CYCLE",
+  "_note": "execution_dependencies contains a cycle: A → B → A. Surface GML cannot directly express cycles; this tests the compiled-form validator.",
+  "schema": "micronaut-srai.v1",
+  "nodes": [
+    { "id": "root_srai", "kind": "SRAI",  "params": { "max_depth": 2, "authority": "proposal_only" } },
+    { "id": "route_A",   "kind": "ROUTE", "params": { "target": "capital_of" } },
+    { "id": "route_B",   "kind": "ROUTE", "params": { "target": "country_lookup" } }
+  ],
+  "containment": [
+    { "parent_id": "root_srai", "child_id": "route_A", "role": "owns_route" },
+    { "parent_id": "root_srai", "child_id": "route_B", "role": "owns_route" }
+  ],
+  "data_flow": [
+    { "source_id": "root_srai", "output_port": "out", "target_id": "route_A", "input_port": "in" },
+    { "source_id": "route_A",   "output_port": "out", "target_id": "route_B", "input_port": "in" }
+  ],
+  "execution_dependencies": [
+    { "before_id": "route_A", "after_id": "route_B" },
+    { "before_id": "route_B", "after_id": "route_A" }
+  ]
+}
