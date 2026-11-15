@@ -1,0 +1,265 @@
+(* ============================================================ *)
+(* CODEGEN-µ Generator Grammar                                 *)
+(* Serializes an EditCandidate to output representations.      *)
+(* ============================================================ *)
+
+(* The generator occupies the Sek→Xul phases of CODEGEN-µ.
+   It takes the EditCandidate produced by the compiler and
+   produces:
+     (a) A GeneratedCodeProposal  (the typed output from the
+         CODEGEN-µ runtime grammar; candidate_only: true)
+     (b) A route label            (identifies the edit path)
+     (c) A diff preview           (human-readable change summary)
+     (d) A JROM record extension  (evidence trace at Xul)
+
+   The generator has no authority; it emits data only.
+   It never modifies run state; it reads it.
+
+   Phase contract:
+     Sek: generate(EditCandidate) → { proposal, route, diff_preview }
+     Xul: jrom_record(proposal) → JROMPhaseRecord (evidence trace) *)
+
+
+(* ============================================================ *)
+(* 1. ROUTE LABEL GRAMMAR                                       *)
+(* ============================================================ *)
+
+(* Every GeneratedCodeProposal carries a route field that
+   identifies which edit path produced it. *)
+
+RouteLabel        ::= EditRoute | GenerateRoute | RefactorRoute
+                    | DebugRoute | TestRoute
+                    ;
+
+EditRoute         ::= "CODEGEN:edit · LANG:" LanguageId
+                      " · TRACK:CODEGEN-µ" ;
+
+GenerateRoute     ::= "CODEGEN:generate · LANG:" LanguageId
+                      " · TRACK:CODEGEN-µ" ;
+
+RefactorRoute     ::= "CODEGEN:refactor · LANG:" LanguageId
+                      " · TRACK:CODEGEN-µ" ;
+
+DebugRoute        ::= "CODEGEN:debug · LANG:" LanguageId
+                      " · TRACK:CODEGEN-µ" ;
+
+TestRoute         ::= "CODEGEN:test · LANG:" LanguageId
+                      " · TRACK:CODEGEN-µ" ;
+
+(* Route is determined by EditCandidate.ir.ir_op:
+     replace_function | replace_expression | insert_block
+     | delete_node | rename_symbol | add_parameter
+     | modify_field → EditRoute
+     generate        → GenerateRoute
+   Task overrides: task=refactor → RefactorRoute,
+                   task=debug   → DebugRoute,
+                   task=test    → TestRoute *)
+
+
+(* ============================================================ *)
+(* 2. GENERATED CODE PROPOSAL GRAMMAR                          *)
+(* ============================================================ *)
+
+(* The canonical output type of CODEGEN-µ. This is the wire
+   format consumed by XCFE admission and downstream micronauts.
+   candidate_only and xcfe_required are always true; they are
+   not optional fields. *)
+
+GeneratedCodeProposal ::= "{"
+    '"schema"'         ":" '"codegen-mu.proposal.v1"' ","
+    '"candidate_only"' ":" "true" ","
+    '"xcfe_required"'  ":" "true" ","
+    '"authority"'      ":" '"candidate_only"' ","
+    '"ir_op"'          ":" EditOpName ","
+    '"language"'       ":" LanguageId ","
+    '"file"'           ":" QuotedPath ","
+    '"locator"'        ":" ProposalLocator ","
+    '"content"'        ":" QuotedString ","
+    '"diff_preview"'   ":" DiffPreview ","
+    '"route"'          ":" RouteLabel
+    ( "," '"reason"' ":" QuotedString )?
+    ( "," '"bigram_key"' ":" QuotedString )?
+  "}" ;
+
+EditOpName        ::= '"replace_function"'   | '"replace_expression"'
+                    | '"insert_block"'        | '"delete_node"'
+                    | '"rename_symbol"'       | '"add_parameter"'
+                    | '"modify_field"'        | '"generate"'
+                    ;
+
+ProposalLocator   ::= "{"
+                        '"kind"' ":" LocatorKind ","
+                        '"name"' ":" QuotedString
+                        ( "," '"line_hint"' ":" Integer )?
+                      "}" ;
+
+
+(* ============================================================ *)
+(* 3. DIFF PREVIEW GRAMMAR                                      *)
+(* ============================================================ *)
+
+(* The diff_preview field gives a human-readable summary of
+   what the proposal would change. It is NOT a git diff; it is
+   a structured description suitable for XCFE Ch'en admission
+   review. The format parallels the edit operation. *)
+
+DiffPreview       ::= QuotedString ;
+
+(* Construction rules per ir_op:
+
+   replace_function:
+     "Replace function <name>: <first 60 chars of body>..."
+
+   replace_expression:
+     "In <scope>: replace <old_expr> → <new_expr>"
+
+   insert_block:
+     "After <locator.kind> <locator.name>: insert <first 60 chars>..."
+
+   delete_node:
+     "Delete <locator.kind> <locator.name>"
+
+   rename_symbol:
+     "Rename <from> → <to> in <scope.kind> <scope.name>"
+
+   add_parameter:
+     "Add parameter <param_type> <param_name> to <function>()"
+
+   modify_field:
+     "Set <target.kind> <target.name> = <new_value>"
+
+   generate:
+     "Generate <task> from bigram key <bigram_key> in <language>"
+*)
+
+
+(* ============================================================ *)
+(* 4. PROPOSAL SERIALIZATION RULES                             *)
+(* ============================================================ *)
+
+SerializeProposal ::= SerializeEdit | SerializeGenerate ;
+
+SerializeEdit     ::= EditCandidate.ir.ir_op IN edit_ops
+                      → GeneratedCodeProposal {
+                            schema:         "codegen-mu.proposal.v1",
+                            candidate_only: true,
+                            xcfe_required:  true,
+                            authority:      "candidate_only",
+                            ir_op:          EditCandidate.ir.ir_op,
+                            language:       EditCandidate.ir.language,
+                            file:           EditCandidate.ir.file,
+                            locator:        EditLocator(EditCandidate.ir),
+                            content:        EditContent(EditCandidate.ir),
+                            diff_preview:   BuildDiffPreview(EditCandidate.ir),
+                            route:          EditRoute(EditCandidate.ir.language),
+                            reason:         EditCandidate.ir.reason
+                        } ;
+
+SerializeGenerate ::= EditCandidate.ir.ir_op = "generate"
+                      → GeneratedCodeProposal {
+                            schema:         "codegen-mu.proposal.v1",
+                            candidate_only: true,
+                            xcfe_required:  true,
+                            authority:      "candidate_only",
+                            ir_op:          "generate",
+                            language:       EditCandidate.ir.language,
+                            file:           EditCandidate.ir.file,
+                            locator:        { kind: "file", name: EditCandidate.ir.file },
+                            content:        BigramContent(EditCandidate.ir.bigrams),
+                            diff_preview:   BuildGeneratePreview(EditCandidate.ir),
+                            route:          GenerateRoute(EditCandidate.ir.language),
+                            bigram_key:     EditCandidate.ir.bigrams[0].key
+                        } ;
+
+(* edit_ops = { replace_function, replace_expression, insert_block,
+                delete_node, rename_symbol, add_parameter, modify_field } *)
+
+
+(* ============================================================ *)
+(* 5. JROM RECORD EXTENSION (Xul)                              *)
+(* ============================================================ *)
+
+(* When an EditCandidate reaches Xul and is committed, the
+   JROM phase-run record includes a codegen_evidence field
+   for the learning lanes. This is an evidence trace only;
+   it does not re-grant execution authority in a future fold. *)
+
+JROMPhaseRecord   ::= "{" BasePhaseMember ","
+                          CodegenEvidenceMember "}" ;
+
+CodegenEvidenceMember ::= '"codegen_evidence"' ":" CodegenEvidence ;
+
+CodegenEvidence   ::= "{"
+                        '"schema"'   ":" '"codegen-mu.evidence.v1"' ","
+                        '"ir_op"'    ":" EditOpName ","
+                        '"language"' ":" LanguageId ","
+                        '"file"'     ":" QuotedPath ","
+                        '"route"'    ":" RouteLabel ","
+                        '"admitted"' ":" Boolean
+                      "}" ;
+
+(* admitted: true means XCFE Ch'en admitted the proposal.
+   admitted: false means the proposal was recorded but not applied.
+   The evidence record is DATA_ONLY. Its presence in the JROM
+   record does not re-authorize the edit in a future fold.
+   Corpus bigrams are immutable; evidence records feed the
+   delta learning lane, never overwrite a prior. *)
+
+
+(* ============================================================ *)
+(* 6. XCFE ADMISSION HANDOFF                                    *)
+(* ============================================================ *)
+
+(* After the generator emits a GeneratedCodeProposal, the
+   XCFE routing layer handles admission. The generator's
+   responsibility ends at emission. It does not:
+     - read the target file
+     - apply the diff
+     - invoke downstream micronauts
+     - write to gram namespace
+
+   The handoff shape the XCFE layer receives: *)
+
+XCFEHandoff       ::= "{"
+                        '"proposal"'  ":" GeneratedCodeProposal ","
+                        '"phase"'     ":" '"Chen"' ","
+                        '"gate"'      ":" '"xcfe_admission"' ","
+                        '"authority"' ":" '"candidate_only"'
+                      "}" ;
+
+(* At Chen: XCFE admission evaluates the proposal.
+   At Xul: if admitted, the authorized commit applies the edit
+           and writes the JROM evidence record. *)
+
+
+(* ============================================================ *)
+(* 7. SEMANTIC INVARIANTS                                       *)
+(* ============================================================ *)
+
+G1  ::= GeneratedCodeProposal.candidate_only = true unconditionally ;
+G2  ::= GeneratedCodeProposal.xcfe_required = true unconditionally ;
+G3  ::= GeneratedCodeProposal.authority = "candidate_only" unconditionally ;
+G4  ::= RouteLabel always includes the language_id ;
+G5  ::= diff_preview is a human-readable string, never a raw code fragment ;
+G6  ::= JROM codegen_evidence.admitted defaults to false before Chen evaluation ;
+G7  ::= codegen_evidence is DATA_ONLY; it does not re-grant execution ;
+G8  ::= the generator does not read or modify the target file ;
+G9  ::= XCFEHandoff.phase = "Chen" (admission gate, not Sek) ;
+G10 ::= same EditCandidate always produces same GeneratedCodeProposal (deterministic) ;
+
+
+(* ============================================================ *)
+(* 8. TOKEN DEFINITIONS                                         *)
+(* ============================================================ *)
+
+LanguageId    ::= "cpp" | "py" | "h" | "json" | "html"
+                | "js" | "ts" | "hlsl" | "kxml" | "css" ;
+LocatorKind   ::= "function" | "class" | "method"
+                | "block" | "expr" | "field" | "namespace" | "file" ;
+QuotedString  ::= '"' StringChar* '"' ;
+QuotedPath    ::= '"' PathChar+ '"' ;
+StringChar    ::= ? any Unicode character except unescaped '"' ? ;
+PathChar      ::= ? any character valid in a file-system path ? ;
+Integer       ::= Digit+ ;
+Digit         ::= "0" .. "9" ;
+Boolean       ::= "true" | "false" ;

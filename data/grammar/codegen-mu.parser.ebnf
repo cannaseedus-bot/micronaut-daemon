@@ -1,0 +1,222 @@
+(* ============================================================ *)
+(* CODEGEN-µ Parser Grammar                                    *)
+(* Declares the input domain that CODEGEN-µ can accept and     *)
+(* validate before compilation begins.                         *)
+(* ============================================================ *)
+
+(* The parser occupies the Pop (gramRead) phase of CODEGEN-µ.
+   It declares two input shapes:
+
+     (a) CodeTask — the gramRead packet from the CODEGEN-µ gram
+         namespace; always present; the primary dispatch trigger.
+
+     (b) Gemma3EditAST — a JSON object from Gemma 3 generative
+         output (via gemma3-generate.py --single-turn); present
+         only when the task.op is an edit variant. It carries the
+         structured edit intent the compiler will act on.
+
+   Authority rules:
+     - Parsing this grammar does NOT authorize any file write.
+     - A valid Gemma3EditAST is a candidate, not an invocation.
+     - XCFE Ch'en admission is required before any EditCandidate
+       crosses into the generator's output phase.
+     - authority on all outputs from this stage: candidate_only. *)
+
+
+(* ============================================================ *)
+(* 1. CODE TASK GRAMMAR (gramRead input)                        *)
+(* ============================================================ *)
+
+(* CodeTask arrives from gramRead at Pop. The fields mirror the
+   operation contract in codegen-mu.runtime.ebnf. *)
+
+CodeTask          ::= "{"
+                        '"op"'       ":" TaskOp       ","
+                        '"language"' ":" LanguageId   ","
+                        '"task"'     ":" TaskKind     ","
+                        '"phase"'    ":" PhaseName
+                        ( "," '"file"'    ":" QuotedPath )?
+                        ( "," '"prompt"'  ":" QuotedString )?
+                        ( "," '"gemma3"'  ":" Gemma3EditAST )?
+                      "}" ;
+
+TaskOp            ::= '"chat.generate"'
+                    | '"code.edit"'
+                    | '"code.generate"'
+                    | '"code.refactor"'
+                    | '"code.debug"'
+                    | '"code.test"'
+                    ;
+
+TaskKind          ::= '"generate"'
+                    | '"edit"'
+                    | '"refactor"'
+                    | '"debug"'
+                    | '"test"'
+                    | '"implement"'
+                    | '"emit"'
+                    ;
+
+LanguageId        ::= '"cpp"' | '"py"' | '"h"' | '"json"'
+                    | '"html"' | '"js"' | '"ts"' | '"hlsl"'
+                    | '"kxml"' | '"css"'
+                    ;
+
+PhaseName         ::= '"Pop"' | '"Wo"' | '"Yax"' | '"Sek"'
+                    | '"Chen"' | '"Xul"'
+                    ;
+
+
+(* ============================================================ *)
+(* 2. GEMMA 3 EDIT AST GRAMMAR (generative model input)        *)
+(* ============================================================ *)
+
+(* Gemma 3 produces this JSON object when asked to plan a code
+   edit. gemma3-generate.py strips markdown fences before
+   delivery. This schema declares the shapes the compiler
+   recognises; unknown ops are rejected with E_UNKNOWN_EDIT_OP. *)
+
+Gemma3EditAST     ::= ReplaceFunction
+                    | ReplaceExpression
+                    | InsertBlock
+                    | DeleteNode
+                    | RenameSymbol
+                    | AddParameter
+                    | ModifyField
+                    ;
+
+(* Replace a function's entire body, preserving signature. *)
+ReplaceFunction   ::= "{"
+                        '"op"'          ":" '"replace_function"' ","
+                        '"name"'        ":" QuotedString ","
+                        '"body"'        ":" QuotedString
+                        ( "," '"reason"' ":" QuotedString )?
+                      "}" ;
+
+(* Replace a sub-expression inside a named scope. *)
+ReplaceExpression ::= "{"
+                        '"op"'          ":" '"replace_expression"' ","
+                        '"scope"'       ":" QuotedString ","
+                        '"old_expr"'    ":" QuotedString ","
+                        '"new_expr"'    ":" QuotedString
+                        ( "," '"reason"' ":" QuotedString )?
+                      "}" ;
+
+(* Insert a new code block after a named anchor. *)
+InsertBlock       ::= "{"
+                        '"op"'          ":" '"insert_block"' ","
+                        '"after"'       ":" Locator ","
+                        '"content"'     ":" QuotedString
+                        ( "," '"reason"' ":" QuotedString )?
+                      "}" ;
+
+(* Remove a named node entirely. *)
+DeleteNode        ::= "{"
+                        '"op"'          ":" '"delete_node"' ","
+                        '"target"'      ":" Locator
+                        ( "," '"reason"' ":" QuotedString )?
+                      "}" ;
+
+(* Rename a symbol across its declared scope. *)
+RenameSymbol      ::= "{"
+                        '"op"'          ":" '"rename_symbol"' ","
+                        '"from"'        ":" QuotedString ","
+                        '"to"'          ":" QuotedString ","
+                        '"scope"'       ":" Locator
+                        ( "," '"reason"' ":" QuotedString )?
+                      "}" ;
+
+(* Add a parameter to a function signature. *)
+AddParameter      ::= "{"
+                        '"op"'          ":" '"add_parameter"' ","
+                        '"function"'    ":" QuotedString ","
+                        '"param_type"'  ":" QuotedString ","
+                        '"param_name"'  ":" QuotedString
+                        ( "," '"position"' ":" Integer )?
+                        ( "," '"reason"' ":" QuotedString )?
+                      "}" ;
+
+(* Modify a field, member, or top-level variable. *)
+ModifyField       ::= "{"
+                        '"op"'          ":" '"modify_field"' ","
+                        '"target"'      ":" Locator ","
+                        '"new_value"'   ":" QuotedString
+                        ( "," '"reason"' ":" QuotedString )?
+                      "}" ;
+
+(* Locator — identifies a node in the target file. *)
+Locator           ::= "{"
+                        '"kind"'  ":" LocatorKind ","
+                        '"name"'  ":" QuotedString
+                        ( "," '"line_hint"' ":" Integer )?
+                      "}" ;
+
+LocatorKind       ::= '"function"' | '"class"' | '"method"'
+                    | '"block"'    | '"expr"'   | '"field"'
+                    | '"namespace"'
+                    ;
+
+
+(* ============================================================ *)
+(* 3. STRUCTURAL CONSTRAINTS                                    *)
+(* ============================================================ *)
+
+(* P1: Every CodeTask must have op, language, task, phase. *)
+P1  ::= CodeTask.op != null
+        AND CodeTask.language != null
+        AND CodeTask.task != null
+        AND CodeTask.phase != null ;
+
+(* P2: edit/refactor ops require a file field. *)
+P2  ::= CodeTask.op IN { "code.edit", "code.refactor" }
+        IMPLIES CodeTask.file != null ;
+
+(* P3: gemma3 field requires op to be an edit variant. *)
+P3  ::= CodeTask.gemma3 != null
+        IMPLIES CodeTask.op IN { "code.edit", "code.refactor",
+                                  "code.debug", "code.test" } ;
+
+(* P4: ReplaceFunction.name must be a non-empty identifier. *)
+P4  ::= ReplaceFunction.name.length >= 1 ;
+
+(* P5: InsertBlock.after must have kind and name. *)
+P5  ::= InsertBlock.after.kind != null
+        AND InsertBlock.after.name != null ;
+
+(* P6: RenameSymbol.from and .to must differ. *)
+P6  ::= RenameSymbol.from != RenameSymbol.to ;
+
+(* P7: AddParameter.position, when present, is non-negative. *)
+P7  ::= AddParameter.position != null IMPLIES AddParameter.position >= 0 ;
+
+(* P8: Authority — parsing grants no execution. *)
+P8  ::= parse(CodeTask) grants authority {} ;
+P9  ::= parse(Gemma3EditAST) grants authority {} ;
+
+
+(* ============================================================ *)
+(* 4. STATIC ERRORS                                             *)
+(* ============================================================ *)
+
+(*
+  E_UNKNOWN_EDIT_OP         — gemma3.op not in the recognised set
+  E_MISSING_FILE_TARGET     — edit op without file field in CodeTask
+  E_GEMMA3_ON_NON_EDIT      — gemma3 field present on non-edit op
+  E_EMPTY_FUNCTION_NAME     — ReplaceFunction.name is empty string
+  E_RENAME_SAME_NAME        — RenameSymbol.from equals .to
+  E_LOCATOR_MISSING_KIND    — Locator without kind field
+  E_LOCATOR_MISSING_NAME    — Locator without name field
+  E_NEGATIVE_PARAM_POSITION — AddParameter.position < 0
+*)
+
+
+(* ============================================================ *)
+(* 5. TOKEN DEFINITIONS                                         *)
+(* ============================================================ *)
+
+QuotedString  ::= '"' StringChar* '"' ;
+QuotedPath    ::= '"' PathChar+ '"' ;
+StringChar    ::= ? any Unicode character except unescaped '"' ? ;
+PathChar      ::= ? any character valid in a file-system path ? ;
+Integer       ::= Digit+ ;
+Digit         ::= "0" .. "9" ;

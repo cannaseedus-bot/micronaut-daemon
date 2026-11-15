@@ -1,0 +1,325 @@
+(* ============================================================ *)
+(* CODEGEN-µ Compiler Grammar                                  *)
+(* Transforms a parsed CodeTask + Gemma3EditAST into an        *)
+(* EditOperationIR suitable for the generator.                 *)
+(* ============================================================ *)
+
+(* The compiler occupies the Wo and Yax phases of CODEGEN-µ.
+   Its job is to decide whether a CodeTask is a recognisable
+   edit/generate request, and if so, produce:
+     (a) a LanguageBinding    (Wo: classified language_id + corpus ref)
+     (b) a BigramMatch        (Wo: nearest bigram records from JSONL)
+     (c) an EditOperationIR   (Yax: structured edit intent, no model call)
+
+   The compiler is deterministic and purely functional:
+     - same input always yields same output
+     - no network calls, no model calls, no I/O during compilation
+     - Gemma 3 AST is treated as TYPED INPUT, not an authority source
+     - all EditOperationIR nodes carry candidate_only: true
+
+   Phase contract:
+     Wo:  classify_language(CodeTask) → LanguageBinding
+     Wo:  lookup_bigram(LanguageBinding) → BigramMatch
+     Yax: compile_edit(BigramMatch, Gemma3EditAST?) → EditOperationIR
+     Sek: validate_authority(EditOperationIR) → EditCandidate
+
+   Authority:
+     compile() grants authority {}
+     An EditOperationIR is data, not an invocation. *)
+
+
+(* ============================================================ *)
+(* 1. LANGUAGE CLASSIFICATION (Wo)                             *)
+(* ============================================================ *)
+
+(* Wo phase: resolve the declared language_id to a corpus
+   binding. The corpus is read-only; classification never
+   modifies it or triggers a model call. *)
+
+ClassifyLanguage  ::= ClassifyCpp  | ClassifyPy   | ClassifyH
+                    | ClassifyJson | ClassifyHtml  | ClassifyJs
+                    | ClassifyTs   | ClassifyHlsl  | ClassifyKxml
+                    | ClassifyCss  | ClassifyFail
+                    ;
+
+ClassifyCpp   ::= CodeTask.language = "cpp"  → LanguageBinding { id:"cpp",  corpus:"codegen-cpp.jsonl",  records:56176  } ;
+ClassifyPy    ::= CodeTask.language = "py"   → LanguageBinding { id:"py",   corpus:"codegen-py.jsonl",   records:42105  } ;
+ClassifyH     ::= CodeTask.language = "h"    → LanguageBinding { id:"h",    corpus:"codegen-h.jsonl",    records:25003  } ;
+ClassifyJson  ::= CodeTask.language = "json" → LanguageBinding { id:"json", corpus:"codegen-json.jsonl", records:14929  } ;
+ClassifyHtml  ::= CodeTask.language = "html" → LanguageBinding { id:"html", corpus:"codegen-html.jsonl", records:11417  } ;
+ClassifyJs    ::= CodeTask.language = "js"   → LanguageBinding { id:"js",   corpus:"codegen-js.jsonl",   records:3691   } ;
+ClassifyTs    ::= CodeTask.language = "ts"   → LanguageBinding { id:"ts",   corpus:"codegen-ts.jsonl",   records:48     } ;
+ClassifyHlsl  ::= CodeTask.language = "hlsl" → LanguageBinding { id:"hlsl", corpus:"codegen-hlsl.jsonl", records:1347   } ;
+ClassifyKxml  ::= CodeTask.language = "kxml" → LanguageBinding { id:"kxml", corpus:"codegen-kxml.jsonl", records:974    } ;
+ClassifyCss   ::= CodeTask.language = "css"  → LanguageBinding { id:"css",  corpus:"codegen-css.jsonl",  records:73     } ;
+ClassifyFail  ::= CodeTask.language NOT IN known_ids → { error: "E_UNKNOWN_LANGUAGE" } ;
+
+LanguageBinding  ::= "{"
+                       '"id"'      ":" LanguageId ","
+                       '"corpus"'  ":" CorpusFile ","
+                       '"records"' ":" Integer
+                     "}" ;
+
+CorpusFile       ::= QuotedString ;  (* filename under data/gram/ *)
+
+
+(* ============================================================ *)
+(* 2. BIGRAM LOOKUP (Wo)                                        *)
+(* ============================================================ *)
+
+(* Wo phase: look up the most relevant bigram record(s) for the
+   task prompt or edit target name. Each JSONL record has a
+   key (bigram) and a source (code fragment). The lookup is
+   read-only and never triggers a model call. *)
+
+BigramLookup     ::= LookupByPrompt | LookupByName | LookupFail ;
+
+LookupByPrompt   ::= CodeTask.prompt != null
+                     → scan LanguageBinding.corpus for records
+                       matching BigramKey(CodeTask.prompt)
+                     → BigramMatch { key: BigramKey, records: BigramRecord+ } ;
+
+LookupByName     ::= CodeTask.gemma3.name != null
+                     → scan LanguageBinding.corpus for records
+                       matching BigramKey(CodeTask.gemma3.name)
+                     → BigramMatch { key: BigramKey, records: BigramRecord+ } ;
+
+LookupFail       ::= no match found
+                     → BigramMatch { key: BigramKey, records: [] } ;
+
+BigramKey        ::= QuotedString ;  (* normalised bigram from prompt or name *)
+
+BigramRecord     ::= "{"
+                       '"key"'    ":" QuotedString ","
+                       '"source"' ":" QuotedString
+                       ( "," '"phase"' ":" PhaseName )?
+                     "}" ;
+
+BigramMatch      ::= "{"
+                       '"key"'     ":" BigramKey ","
+                       '"records"' ":" "[" BigramRecord* "]"
+                     "}" ;
+
+
+(* ============================================================ *)
+(* 3. EDIT COMPILATION (Yax)                                    *)
+(* ============================================================ *)
+
+(* Yax phase: compile the parsed Gemma3EditAST (or derive an
+   edit from bigram records alone when no gemma3 field is
+   present) into an EditOperationIR. No model calls; pure
+   structural transformation of validated input. *)
+
+CompileEdit       ::= CompileReplace | CompileInsert | CompileDelete
+                    | CompileRename  | CompileAddParam | CompileModify
+                    | CompileGenerate
+                    ;
+
+(* Compile from Gemma3EditAST ops *)
+CompileReplace    ::= Gemma3EditAST.op = "replace_function"
+                      → EditIR_ReplaceFunction {
+                            language: LanguageBinding.id,
+                            file:     CodeTask.file,
+                            locator:  { kind:"function", name: Gemma3EditAST.name },
+                            content:  Gemma3EditAST.body,
+                            reason:   Gemma3EditAST.reason
+                        } ;
+
+CompileInsert     ::= Gemma3EditAST.op = "insert_block"
+                      → EditIR_InsertBlock {
+                            language: LanguageBinding.id,
+                            file:     CodeTask.file,
+                            after:    Gemma3EditAST.after,
+                            content:  Gemma3EditAST.content,
+                            reason:   Gemma3EditAST.reason
+                        } ;
+
+CompileDelete     ::= Gemma3EditAST.op = "delete_node"
+                      → EditIR_DeleteNode {
+                            language: LanguageBinding.id,
+                            file:     CodeTask.file,
+                            target:   Gemma3EditAST.target,
+                            reason:   Gemma3EditAST.reason
+                        } ;
+
+CompileRename     ::= Gemma3EditAST.op = "rename_symbol"
+                      → EditIR_RenameSymbol {
+                            language: LanguageBinding.id,
+                            file:     CodeTask.file,
+                            from:     Gemma3EditAST.from,
+                            to:       Gemma3EditAST.to,
+                            scope:    Gemma3EditAST.scope,
+                            reason:   Gemma3EditAST.reason
+                        } ;
+
+CompileAddParam   ::= Gemma3EditAST.op = "add_parameter"
+                      → EditIR_AddParameter {
+                            language:   LanguageBinding.id,
+                            file:       CodeTask.file,
+                            function:   Gemma3EditAST.function,
+                            param_type: Gemma3EditAST.param_type,
+                            param_name: Gemma3EditAST.param_name,
+                            position:   Gemma3EditAST.position,
+                            reason:     Gemma3EditAST.reason
+                        } ;
+
+CompileModify     ::= Gemma3EditAST.op = "modify_field"
+                      → EditIR_ModifyField {
+                            language:  LanguageBinding.id,
+                            file:      CodeTask.file,
+                            target:    Gemma3EditAST.target,
+                            new_value: Gemma3EditAST.new_value,
+                            reason:    Gemma3EditAST.reason
+                        } ;
+
+(* Generate from bigram corpus alone — no Gemma3EditAST present. *)
+CompileGenerate   ::= CodeTask.gemma3 = null AND BigramMatch.records.length > 0
+                      → EditIR_Generate {
+                            language: LanguageBinding.id,
+                            file:     CodeTask.file,
+                            bigrams:  BigramMatch.records,
+                            task:     CodeTask.task
+                        } ;
+
+
+(* ============================================================ *)
+(* 4. EDIT OPERATION IR TYPE DEFINITIONS                        *)
+(* ============================================================ *)
+
+EditOperationIR   ::= EditIR_ReplaceFunction
+                    | EditIR_InsertBlock
+                    | EditIR_DeleteNode
+                    | EditIR_RenameSymbol
+                    | EditIR_AddParameter
+                    | EditIR_ModifyField
+                    | EditIR_Generate
+                    ;
+
+(* All IR nodes share these base fields. *)
+EditIR_Base       ::= '"language"'       ":" LanguageId ","
+                      '"file"'           ":" QuotedPath ","
+                      '"candidate_only"' ":" "true"
+                      ;
+
+EditIR_ReplaceFunction ::= "{" EditIR_Base ","
+                               '"ir_op"'   ":" '"replace_function"' ","
+                               '"locator"' ":" IRLocator ","
+                               '"content"' ":" QuotedString
+                               ( "," '"reason"' ":" QuotedString )?
+                           "}" ;
+
+EditIR_InsertBlock ::= "{" EditIR_Base ","
+                           '"ir_op"'   ":" '"insert_block"' ","
+                           '"after"'   ":" IRLocator ","
+                           '"content"' ":" QuotedString
+                           ( "," '"reason"' ":" QuotedString )?
+                       "}" ;
+
+EditIR_DeleteNode  ::= "{" EditIR_Base ","
+                           '"ir_op"'  ":" '"delete_node"' ","
+                           '"target"' ":" IRLocator
+                           ( "," '"reason"' ":" QuotedString )?
+                       "}" ;
+
+EditIR_RenameSymbol ::= "{" EditIR_Base ","
+                            '"ir_op"' ":" '"rename_symbol"' ","
+                            '"from"'  ":" QuotedString ","
+                            '"to"'    ":" QuotedString ","
+                            '"scope"' ":" IRLocator
+                            ( "," '"reason"' ":" QuotedString )?
+                        "}" ;
+
+EditIR_AddParameter ::= "{" EditIR_Base ","
+                            '"ir_op"'      ":" '"add_parameter"' ","
+                            '"function"'   ":" QuotedString ","
+                            '"param_type"' ":" QuotedString ","
+                            '"param_name"' ":" QuotedString
+                            ( "," '"position"' ":" Integer )?
+                            ( "," '"reason"' ":" QuotedString )?
+                        "}" ;
+
+EditIR_ModifyField  ::= "{" EditIR_Base ","
+                            '"ir_op"'     ":" '"modify_field"' ","
+                            '"target"'    ":" IRLocator ","
+                            '"new_value"' ":" QuotedString
+                            ( "," '"reason"' ":" QuotedString )?
+                        "}" ;
+
+EditIR_Generate     ::= "{" EditIR_Base ","
+                            '"ir_op"'   ":" '"generate"' ","
+                            '"bigrams"' ":" "[" BigramRecord+ "]" ","
+                            '"task"'    ":" TaskKind
+                        "}" ;
+
+(* IRLocator resolves a node relative to the file and language. *)
+IRLocator          ::= "{"
+                         '"kind"' ":" LocatorKind ","
+                         '"name"' ":" QuotedString
+                         ( "," '"line_hint"' ":" Integer )?
+                       "}" ;
+
+
+(* ============================================================ *)
+(* 5. AUTHORITY VALIDATION (Sek gate)                           *)
+(* ============================================================ *)
+
+(* Sek phase: before the IR can proceed to the generator, the
+   authority validator confirms every node is candidate_only. *)
+
+ValidateAuthority ::= EditOperationIR.candidate_only = true
+                      AND EditOperationIR.file != null
+                      AND LanguageBinding.id IN known_ids
+                      → EditCandidate { ir: EditOperationIR,
+                                        xcfe_required: true,
+                                        authority: "candidate_only" } ;
+
+ValidateFail      ::= EditOperationIR.candidate_only != true
+                      → { error: "E_CANDIDATE_AUTHORITY_VIOLATION" } ;
+
+
+(* ============================================================ *)
+(* 6. SEMANTIC INVARIANTS                                       *)
+(* ============================================================ *)
+
+C1  ::= EditOperationIR.candidate_only = true in all IR nodes ;
+C2  ::= ClassifyFail produces an error, never a LanguageBinding ;
+C3  ::= BigramLookup is read-only; it never modifies the corpus ;
+C4  ::= Gemma3EditAST is typed input; it carries no authority ;
+C5  ::= CompileGenerate requires at least one BigramRecord ;
+C6  ::= same CodeTask + same Gemma3EditAST always yields same EditOperationIR (deterministic) ;
+C7  ::= no model calls, I/O, or network calls occur during compilation ;
+C8  ::= EditCandidate.xcfe_required = true unconditionally ;
+C9  ::= the compiler does not grant execute authority ;
+C10 ::= EditIR_RenameSymbol requires from != to (validated in parser P6) ;
+
+
+(* ============================================================ *)
+(* 7. STATIC ERRORS                                             *)
+(* ============================================================ *)
+
+(*
+  E_UNKNOWN_LANGUAGE           — language_id not in the declared set
+  E_NO_BIGRAM_AND_NO_GEMMA3    — generate task with no bigram matches and no gemma3
+  E_CANDIDATE_AUTHORITY_VIOLATION — IR node without candidate_only: true
+  E_COMPILE_MISSING_FILE       — edit IR missing file field
+  E_IR_MISSING_LOCATOR         — replace/insert/delete IR missing locator
+*)
+
+
+(* ============================================================ *)
+(* 8. TOKEN DEFINITIONS                                         *)
+(* ============================================================ *)
+
+LanguageId    ::= "cpp" | "py" | "h" | "json" | "html"
+                | "js" | "ts" | "hlsl" | "kxml" | "css" ;
+TaskKind      ::= "generate" | "edit" | "refactor"
+                | "debug" | "test" | "implement" | "emit" ;
+LocatorKind   ::= "function" | "class" | "method"
+                | "block" | "expr" | "field" | "namespace" ;
+PhaseName     ::= "Pop" | "Wo" | "Yax" | "Sek" | "Chen" | "Xul" ;
+QuotedString  ::= '"' StringChar* '"' ;
+QuotedPath    ::= '"' PathChar+ '"' ;
+StringChar    ::= ? any Unicode character except unescaped '"' ? ;
+PathChar      ::= ? any character valid in a file-system path ? ;
+Integer       ::= Digit+ ;
+Digit         ::= "0" .. "9" ;
