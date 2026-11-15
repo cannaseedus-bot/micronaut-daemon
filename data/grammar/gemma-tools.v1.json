@@ -1,0 +1,218 @@
+{
+  "schema": "gemma-tools.v1",
+  "description": "Tool and verb implementation catalog for Gemma 3 reasoning. Maps each registered tool verb to its surface, method, params, phase authority, script/implementation path, and admission constraints. All entries carry candidate_only:true — no entry here grants execution authority.",
+
+  "cli": {
+    "binary": "C:\\Users\\canna\\.llama-win-cpu-x64\\llama-cli.exe",
+    "model": "C:\\Users\\canna\\.models\\gemma-3-1B-it-QAT-Q4_0.gguf",
+    "note": "llama-mtmd-cli.exe requires --mmproj and does not support --single-turn; llama-gemma3-cli.exe is deprecated and exits immediately. Use llama-cli.exe for all text-only Gemma 3 inference."
+  },
+
+  "verb_catalog": [
+    {
+      "verb": "tool_keys",
+      "ngrams": ["tool keys", "tool key map", "list tool keys"],
+      "surface": "rpc",
+      "method": "key_query",
+      "params": { "query": "TOOL KEYS" },
+      "phase": "Pop",
+      "authority": "data_only",
+      "implementation": "xcfe_router.cpp → key_query handler"
+    },
+    {
+      "verb": "status",
+      "ngrams": ["status", "runtime status", "system status", "health status"],
+      "surface": "rpc",
+      "method": "key_query",
+      "params": { "query": "STATUS:" },
+      "phase": "Pop",
+      "authority": "data_only",
+      "implementation": "xcfe_router.cpp → key_query handler"
+    },
+    {
+      "verb": "tools",
+      "ngrams": ["tools", "tool list", "available tools"],
+      "surface": "rpc",
+      "method": "key_query",
+      "params": { "query": "TOOLS:" },
+      "phase": "Pop",
+      "authority": "data_only",
+      "implementation": "xcfe_router.cpp → key_query handler"
+    },
+    {
+      "verb": "dispatch",
+      "ngrams": ["dispatch", "route query", "micronaut dispatch"],
+      "surface": "rpc",
+      "method": "micronaut_dispatch",
+      "params": { "query": "__USER_QUERY__" },
+      "phase": "Wo",
+      "authority": "proposal_only",
+      "implementation": "xcfe_router.cpp → micronaut_dispatch; routes through SCXQ2"
+    },
+    {
+      "verb": "confidence",
+      "ngrams": ["confidence", "confidence score", "confidence global"],
+      "surface": "mcp",
+      "method": "confidence_get",
+      "params": { "id": "global" },
+      "phase": "Pop",
+      "authority": "data_only",
+      "implementation": "xcfe_router.cpp → confidence_get"
+    },
+    {
+      "verb": "sandbox",
+      "ngrams": ["sandbox", "sandbox list", "sandbox violations"],
+      "surface": "mcp",
+      "method": "sandbox_list",
+      "params": {},
+      "phase": "Ch'en",
+      "authority": "data_only",
+      "implementation": "xcfe_router.cpp → sandbox_list"
+    },
+    {
+      "verb": "world",
+      "ngrams": ["world", "world state", "cube world"],
+      "surface": "mcp",
+      "method": "world_state",
+      "params": {},
+      "phase": "Pop",
+      "authority": "data_only",
+      "implementation": "xcfe_router.cpp → world_state; reads CCC4 tensor graph"
+    },
+    {
+      "verb": "semantic_fold",
+      "ngrams": ["semantic fold", "semfold", "fold similarity"],
+      "surface": "mcp",
+      "method": "semantic_fold",
+      "params": { "include_phase_folds": true },
+      "phase": "Yax",
+      "authority": "proposal_only",
+      "implementation": "xcfe_router.cpp → semantic_fold; concept-relative-fold.v1 operator plan"
+    },
+    {
+      "verb": "replay",
+      "ngrams": ["replay", "jrom replay", "trace replay"],
+      "surface": "mcp",
+      "method": "jrom_replay",
+      "params": { "from_seq": 0 },
+      "phase": "Sek",
+      "authority": "data_only",
+      "implementation": "xcfe_router.cpp → jrom_replay; reads data/programs/tools/jrom_replay.manifest.json"
+    },
+    {
+      "verb": "vector_match",
+      "ngrams": ["vector match", "vector search", "cosine lookup", "semantic srai"],
+      "surface": "mcp",
+      "method": "vector_match",
+      "params": { "query": "__USER_QUERY__", "top_k": 5 },
+      "phase": "Wo",
+      "authority": "data_only",
+      "implementation": "tools/aiml_vector_match.py; data:build/io/aiml-embeddinggemma2-vectors; model:google/embeddinggemma-2 256-dim",
+      "script": "scripts/gemma-fields.py"
+    },
+    {
+      "verb": "word_tree",
+      "ngrams": ["word tree", "gram neighbors", "disambiguation tree"],
+      "surface": "script",
+      "method": "gemma_word_tree",
+      "params": { "gram": "__GRAM__", "top_k": 10 },
+      "phase": "Wo",
+      "authority": "data_only",
+      "implementation": "scripts/gemma-word-tree.py; walks words.manifest.json + semantic-fields.manifest.json"
+    },
+    {
+      "verb": "xcfe_eval",
+      "ngrams": ["xcfe eval", "xcfe execute", "phase execute"],
+      "surface": "mcp",
+      "method": "xcfe_eval",
+      "params": { "phase": "__PHASE__", "op": "__OP__" },
+      "phase": "Sek",
+      "authority": "XCFE_required",
+      "implementation": "xcfe_router.cpp → xcfe_eval; must pass Ch'en verification before Xul"
+    },
+    {
+      "verb": "fold_execute",
+      "ngrams": ["fold execute", "run fold", "execute fold"],
+      "surface": "mcp",
+      "method": "fold_execute",
+      "params": { "fold_id": "__FOLD_ID__" },
+      "phase": "Xul",
+      "authority": "XCFE_required",
+      "implementation": "xcfe_router.cpp → fold_execute; operator plan: data/conformance/concept-field-accumulator.v1/concept-relative-fold.v1.plan.gml"
+    },
+    {
+      "verb": "field_query",
+      "ngrams": ["field query", "xquery ngram", "pop query", "wo query", "yax query"],
+      "surface": "script",
+      "method": "field_query",
+      "params": { "query": "__QUERY__", "phase": "Wo" },
+      "phase": "Wo",
+      "authority": "data_only",
+      "implementation": "tools/field_query.py; data:data/mx2lm.vectors.safetensors; axes:Pop=unigrams/Wo=bigrams/Yax=trigrams"
+    },
+    {
+      "verb": "factory_research",
+      "ngrams": ["factory research", "distill lfm", "eliza emit", "aiml emit"],
+      "surface": "script",
+      "method": "factory_research",
+      "params": { "query": "__QUERY__" },
+      "phase": "Sek",
+      "authority": "proposal_only",
+      "implementation": "tools/factory_research.py; output:drivers/micronauts/semantic/; model:LFM2.5-1.2B-Instruct-Q8_0.gguf"
+    }
+  ],
+
+  "tool_families": {
+    "tool:rpc": {
+      "verbs": ["resolve_manifest", "key_query", "fold_graph_parse", "infer", "list_keys", "key_encode", "key_decode", "keyspace_status"],
+      "phase": "Pop/Wo",
+      "authority": "data_only"
+    },
+    "tool:file": {
+      "verbs": ["sandbox_query", "sandbox_list", "sandbox_violations"],
+      "phase": "Ch'en",
+      "authority": "data_only"
+    },
+    "tool:graph": {
+      "verbs": ["world_state", "field_dag", "field_dag_svg", "relational_graph"],
+      "phase": "Pop",
+      "authority": "data_only"
+    },
+    "tool:xcfe": {
+      "verbs": ["xcfe_eval", "kuhul_forge", "fold_execute", "op:if", "op:then", "op:else", "op:for", "op:from", "op:as", "op:cause", "op:direct"],
+      "phase": "Pop→Xul",
+      "authority": "XCFE_required"
+    },
+    "tool:dispatch": {
+      "verbs": ["micronaut_dispatch"],
+      "phase": "Wo/Sek",
+      "authority": "proposal_only"
+    },
+    "tool:math": {
+      "verbs": ["math:normalize_number_words", "mathml:parse_compile_evaluate"],
+      "phase": "Pop/Wo/Yax/Sek/Ch'en",
+      "authority": "data_only",
+      "implementation": "lib/mathml-eval.cjs"
+    },
+    "tool:app": {
+      "verbs": ["app:inspect", "app:build_candidate", "app:validate_candidate", "app:edit_spec_and_rebuild"],
+      "phase": "Pop→Xul",
+      "authority": "proposal_only",
+      "route": "worker.py"
+    }
+  },
+
+  "intent_to_verb": {
+    "intent:tool_retrieve": "verb:GET",
+    "intent:tool_invoke":   "verb:POST",
+    "intent:tool_file_read": "verb:READ",
+    "intent:tool_file_write": "verb:WRITE",
+    "intent:tool_file_patch": "verb:PATCH",
+    "intent:tool_code": "verb:COMPILE",
+    "intent:tool_research": "verb:SEARCH",
+    "intent:tool_program": "verb:RUN"
+  },
+
+  "admission_rule": "Both intent_key (from words.manifest.json) AND registered_verb (from tool.manifest.json) are required for admission. Neither alone is sufficient. InvocationValidationBoundary must be satisfied before any verb is promoted from candidate to dispatch.",
+  "execution_boundary": "candidate_only:true on all tool intents — no tool call here grants XCFE execution authority. Execution requires Ch'en verification and Xul commit."
+}
