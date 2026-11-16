@@ -65,9 +65,23 @@ function Get-MimeType([string]$path) {
 }
 
 # ── Static HTTP server + /api/chat proxy (background runspace) ────────────────
-$script:Listener = [System.Net.HttpListener]::new()
-$script:Listener.Prefixes.Add("http://127.0.0.1:${DashboardPort}/")
-$script:Listener.Start()
+# Try preferred port; advance up to +4 if HTTP.sys has an orphaned reservation
+$script:Listener = $null
+$script:DashboardPort = $DashboardPort
+for ($__p = 0; $__p -lt 5; $__p++) {
+    try {
+        $script:Listener = [System.Net.HttpListener]::new()
+        $script:Listener.Prefixes.Add("http://127.0.0.1:$($script:DashboardPort)/")
+        $script:Listener.Start()
+        break
+    } catch {
+        $script:Listener = $null
+        $script:DashboardPort++
+    }
+}
+if (-not $script:Listener) { throw "Could not bind to any port in range ${DashboardPort}-$($DashboardPort+4)" }
+$DashboardPort = $script:DashboardPort
+$script:DashUrl = "http://127.0.0.1:${DashboardPort}?runtime=${RuntimePort}"
 
 $rs = [runspacefactory]::CreateRunspace()
 $rs.Open()
@@ -225,7 +239,7 @@ $window = [System.Windows.Markup.XamlReader]::Load($reader)
 $statusText   = $window.FindName('StatusText')
 $contentBorder = $window.FindName('ContentBorder')
 
-$statusText.Text = $script:WebView2Status
+$statusText.Text = "$($script:WebView2Status)  ·  port $DashboardPort"
 
 # ── Mount WebView2 or text fallback ───────────────────────────────────────────
 if ($script:WebView2Available) {
