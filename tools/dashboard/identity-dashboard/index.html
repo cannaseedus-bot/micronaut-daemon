@@ -13,12 +13,10 @@
 <body>
 <div id="root"></div>
 
-<!-- React 18 UMD (dev) -->
-<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-
-<!-- Babel standalone — transforms the TSX on load (dev/CDN mode) -->
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<!-- React 18 UMD + Babel — served locally to work offline / inside WebView2 -->
+<script src="/vendor/react.development.js"></script>
+<script src="/vendor/react-dom.development.js"></script>
+<script src="/vendor/babel.min.js"></script>
 
 <!-- The component (served by the PS HttpListener alongside this page) -->
 <script type="text/babel" src="IdentityDashboard.tsx" data-presets="react,typescript"></script>
