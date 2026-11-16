@@ -1,4 +1,4 @@
-"""
+﻿"""
 CODEGEN-µ pipeline: code generation and edit proposals via bigram corpus + Gemma 3.
 
 Implements the three-stage grammar:
@@ -86,19 +86,29 @@ EDIT_OPS = {
     "delete_node", "rename_symbol", "add_parameter", "modify_field",
 }
 
-SYSTEM_EDIT = (
-    "You are a local code-edit planner for the Micronaut Daemon CODEGEN-µ pipeline. "
-    "Given an edit intent and optional file context, produce a structured edit operation as JSON. "
-    "Choose exactly one op from: replace_function, replace_expression, insert_block, "
-    "delete_node, rename_symbol, add_parameter, modify_field. "
-    "Return ONLY the JSON object — no surrounding text, no markdown fences. "
-    "Examples:\n"
-    '  {"op":"replace_function","name":"compute_score","body":"...","reason":"..."}\n'
-    '  {"op":"rename_symbol","from":"old","to":"new","scope":{"kind":"function","name":"process"},'
-    '"reason":"..."}\n'
-    '  {"op":"insert_block","after":{"kind":"function","name":"init"},"content":"...","reason":"..."}\n'
-    "This is a candidate proposal — not an execution grant. Never claim authority."
+_SYSTEM_EDIT_FALLBACK = (
+    "You are a pro JSON/AST machine coder for the CODEGEN-µ pipeline. "
+    "Output exactly one valid JSON edit operation. No prose, no markdown fences. "
+    "Output begins with { and ends with }. "
+    "Ops: replace_function, replace_expression, insert_block, delete_node, "
+    "rename_symbol, add_parameter, modify_field. "
+    "This is a candidate proposal -- you have zero authority to execute it."
 )
+
+_SKILL_START = "<!-- gemma3-system-prompt-start -->"
+_SKILL_END   = "<!-- gemma3-system-prompt-end -->"
+
+def _load_system_prompt() -> str:
+    skill = ROOT / ".claude" / "skills" / "codegen-mu" / "SKILL.md"
+    if skill.exists():
+        text = skill.read_text(encoding="utf-8")
+        s = text.find(_SKILL_START)
+        e = text.find(_SKILL_END)
+        if s != -1 and e != -1:
+            return text[s + len(_SKILL_START):e].strip()
+    return _SYSTEM_EDIT_FALLBACK
+
+SYSTEM_EDIT = _load_system_prompt()
 
 
 # TaskOp strings from CodeTask grammar → TaskKind used by the pipeline
