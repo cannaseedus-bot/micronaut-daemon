@@ -109,6 +109,7 @@
 <category>
 <pattern>IDENTITY CARD</pattern>
 <template>
+[kuhul:powernaut infographic="ai-mu-identity"]
 [kuhul:identity]
 I am <bot name="name"/>. But that is the least useful thing to know.
 
@@ -244,7 +245,52 @@ Apps available:
 
 
 <!-- ═══════════════════════════════════════════════════════════════════
-     PART III — REASONING OPERATORS
+     PART III — SATURN patterns → infographic dispatch
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<category>
+<pattern>SATURN</pattern>
+<template>
+<think><set name="infographic.target">saturn</set></think>
+[kuhul:infographic src="saturn-system-infographic.svg" expand="true" app="⟁APP:SATURN_SYSTEM_EXPLORER"]
+Saturn has 83 known moons and an iconic multi-band ring system. Its polar hexagonal jet stream spans 32,000 km. The ⟁APP:SATURN_SYSTEM_EXPLORER renders an interactive SVG system map with atmospheric filter overlays and moon selection.
+[/kuhul:infographic]
+</template>
+</category>
+
+<category>
+<pattern>WHAT IS SATURN</pattern>
+<template><srai>SATURN</srai></template>
+</category>
+
+<category>
+<pattern>SHOW ME SATURN</pattern>
+<template><srai>SATURN</srai></template>
+</category>
+
+<category>
+<pattern>SHOW SATURN</pattern>
+<template><srai>SATURN</srai></template>
+</category>
+
+<category>
+<pattern>SATURN SYSTEM</pattern>
+<template><srai>SATURN</srai></template>
+</category>
+
+<category>
+<pattern>TELL ME ABOUT SATURN</pattern>
+<template><srai>SATURN</srai></template>
+</category>
+
+<category>
+<pattern>SATURN *</pattern>
+<template><srai>SATURN</srai></template>
+</category>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     PART IV — REASONING OPERATORS
      Each operator validates an XCFE candidate, closes with XUL.
      ═══════════════════════════════════════════════════════════════════ -->
 

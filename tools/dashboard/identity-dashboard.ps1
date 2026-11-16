@@ -74,7 +74,7 @@ $rs.Open()
 $ps = [powershell]::Create()
 $ps.Runspace = $rs
 $null = $ps.AddScript({
-    param($listener, $dashDir, $runtimePort, $fn)
+    param($listener, $dashDir, $runtimePort, $appsDir)
 
     function MimeFor([string]$p) {
         switch ([System.IO.Path]::GetExtension($p).ToLower()) {
@@ -84,6 +84,8 @@ $null = $ps.AddScript({
             '.js'   { 'application/javascript; charset=utf-8' }
             '.css'  { 'text/css; charset=utf-8' }
             '.json' { 'application/json; charset=utf-8' }
+            '.svg'  { 'image/svg+xml' }
+            '.png'  { 'image/png' }
             default { 'application/octet-stream' }
         }
     }
@@ -136,10 +138,16 @@ $null = $ps.AddScript({
                 continue
             }
 
-            # Static files
-            $filePath = Join-Path $dashDir ($urlPath -replace '/', [System.IO.Path]::DirectorySeparatorChar)
-            if ([string]::IsNullOrEmpty($urlPath) -or $urlPath -eq '/') {
-                $filePath = Join-Path $dashDir 'index.html'
+            # /infographics/* — serve SVG assets from data/apps/
+            if ($urlPath.StartsWith('infographics/')) {
+                $assetFile = $urlPath.Substring('infographics/'.Length)
+                $filePath  = Join-Path $appsDir $assetFile
+            } else {
+                # Static files from dashboard dir
+                $filePath = Join-Path $dashDir ($urlPath -replace '/', [System.IO.Path]::DirectorySeparatorChar)
+                if ([string]::IsNullOrEmpty($urlPath) -or $urlPath -eq '/') {
+                    $filePath = Join-Path $dashDir 'index.html'
+                }
             }
             if (Test-Path $filePath -PathType Leaf) {
                 $bytes = [System.IO.File]::ReadAllBytes($filePath)
@@ -158,7 +166,7 @@ $null = $ps.AddScript({
             try { $ctx.Response.StatusCode = 500; $ctx.Response.OutputStream.Close() } catch {}
         }
     }
-}).AddArgument($script:Listener).AddArgument($script:DashDir).AddArgument($RuntimePort).AddArgument($null)
+}).AddArgument($script:Listener).AddArgument($script:DashDir).AddArgument($RuntimePort).AddArgument((Join-Path $script:RepoRoot 'data\apps'))
 
 $script:ListenerJob = $ps.BeginInvoke()
 

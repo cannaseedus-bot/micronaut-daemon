@@ -9,30 +9,71 @@
 //   ⟁BORDER=rgba(148,163,184,0.5)  ⟁BORDERglow=rgba(56,189,248,0.9)
 //   ⟁BRsm=0.375rem  ⟁BRmd=0.75rem  ⟁BRlg=1.25rem
 
-// ── Manifest data ─────────────────────────────────────────────────────────────
+// ── Manifest data — asx-mini-app.key-grammar.jsonl ────────────────────────────
 
-type SyntaxKind = 'atom' | 'snippet' | 'block' | 'component' | 'layout' | 'application';
-
-interface CssApp {
-  kind: SyntaxKind;
-  lang: string;
-  keys: string[];
+interface AsxComponent {
+  id: string;
+  role: string;
+  type: string;
+  phase: string;
+  program?: string;
+  event?: string;
+  source?: string;
 }
 
-const CSS_APPS: Record<string, CssApp> = {
-  '⟁TYPE:BGPANEL':    { kind: 'snippet',     lang: 'css',      keys: ['⟁BGpanel'] },
-  '⟁TYPE:BTNPRIMARY': { kind: 'snippet',     lang: 'css',      keys: ['⟁BTNPRIMARY', '⟁BTNBASE'] },
-  '⟁TYPE:PANEL':      { kind: 'block',       lang: 'css',      keys: ['⟁PANEL', '⟁BGpanel', '⟁BRlg', '⟁BORDER'] },
-  '⟁TYPE:CARD':       { kind: 'block',       lang: 'css',      keys: ['⟁CARD', '⟁PANEL'] },
-  '⟁TYPE:WIDGETCARD': { kind: 'component',   lang: 'html+css', keys: ['⟁WIDGETCARD', '⟁CARD', '⟁FLEXCOL', '⟁GAP'] },
-  '⟁TYPE:WIDGET':     { kind: 'component',   lang: 'html+css', keys: ['⟁WIDGET', '⟁WIDGETHEADER', '⟁WIDGETBODY', '⟁WIDGETFOOTER', '⟁WIDGETBTN'] },
-  '⟁TYPE:HTMLPAGE':   { kind: 'layout',      lang: 'html+css', keys: ['⟁HTMLPAGE', '⟁HTMLSHELL', '⟁GRID'] },
-  '⟁TYPE:BLOGLAYOUT': { kind: 'layout',      lang: 'html+css', keys: ['⟁BLOGLAYOUT', '⟁BLOG', '⟁BLOGEDITOR', '⟁BLOGTOOLBAR'] },
-  '⟁TYPE:CHAT':       { kind: 'component',   lang: 'html+css', keys: ['⟁CHAT', '⟁CHAT:STYLE', '⟁CHAT:STRUCTURE', '⟁CHAT:MICRONAUT'] },
-  '⟁TYPE:DOGWALKAPP': { kind: 'application', lang: 'html+css', keys: ['⟁DOGWALKAPP', '⟁DOGWALKCARD', '⟁DOGWALKROUTE', '⟁DOGWALKSCHED'] },
+interface AsxApp {
+  key: string;
+  type: string;
+  domain: string;
+  components: AsxComponent[];
+}
+
+const ASX_APPS: Record<string, AsxApp> = {
+  'SOCIALSPHERE':          { key: '⟁APP:SOCIALSPHERE',          type: 'app',                  domain: 'Social & Forum',    components: [{ id: 'HEADER', role: 'widget', type: 'toolbar', phase: 'Pop' }, { id: 'INPUT:SEARCH', role: 'input', type: 'search', phase: 'Wo', program: 'socialsphere.search', event: 'search.input' }, { id: 'FEED', role: 'widget', type: 'feed', phase: 'Pop' }, { id: 'POST', role: 'action', type: 'post-card', phase: 'Sek', program: 'socialsphere.like', event: 'post.like' }, { id: 'AUTH_MODAL', role: 'widget', type: 'modal', phase: 'Wo', program: 'socialsphere.auth_submit', event: 'auth.submit' }, { id: 'COMPOSE_MODAL', role: 'widget', type: 'modal', phase: 'Wo', program: 'socialsphere.post_submit', event: 'post.submit' }] },
+  'SELF_HOSTED_FORUM':     { key: '⟁APP:SELF_HOSTED_FORUM',     type: 'app',                  domain: 'Social & Forum',    components: [{ id: 'HEADER', role: 'widget', type: 'toolbar', phase: 'Pop' }, { id: 'INPUT:SEARCH', role: 'input', type: 'search', phase: 'Wo', program: 'forum.search', event: 'search.input' }, { id: 'POSTS', role: 'widget', type: 'table', phase: 'Pop' }, { id: 'AUTH_MODAL', role: 'widget', type: 'modal', phase: 'Wo', program: 'forum.auth_submit', event: 'auth.submit' }, { id: 'POST_MODAL', role: 'widget', type: 'modal', phase: 'Wo', program: 'forum.post_submit', event: 'post.submit' }] },
+  'SELF_HOSTED_FORUM_V2':  { key: '⟁APP:SELF_HOSTED_FORUM_V2',  type: 'self-hosted-forum',    domain: 'Social & Forum',    components: [{ id: 'SHF_TABLE', role: 'widget', type: 'forum-table', phase: 'Sek', program: 'forum.rows', event: 'rows.refresh' }, { id: 'SHF_AUTH', role: 'form', type: 'auth-modal', phase: 'Xul', program: 'forum.auth', event: 'auth.submit' }] },
+  'COMMUNITY_FORUM':       { key: '⟁APP:COMMUNITY_FORUM',       type: 'feed-community',       domain: 'Social & Forum',    components: [{ id: 'FW_POST_GROUPS', role: 'widget', type: 'post-groups', phase: 'Sek' }, { id: 'FW_CREATE', role: 'form', type: 'topic-form', phase: 'Xul', program: 'forum.create_topic', event: 'topic.submit' }] },
+
+  'SEED_STORE':            { key: '⟁APP:SEED_STORE',            type: 'commerce-app',         domain: 'Seed & Commerce',   components: [{ id: 'PRODUCT_GRID', role: 'widget', type: 'product-grid', phase: 'Pop', program: 'store.add_to_cart', event: 'product.add' }, { id: 'CART', role: 'widget', type: 'cart', phase: 'Wo', program: 'store.set_quantity', event: 'cart.quantity' }, { id: 'CHECKOUT', role: 'form', type: 'checkout-form', phase: 'Xul', program: 'store.submit_order', event: 'checkout.submit' }] },
+  'SEEDBOT_HERO':          { key: '⟁APP:SEEDBOT_HERO',          type: 'hero-guide',           domain: 'Seed & Commerce',   components: [{ id: 'NAV:CAPABILITIES', role: 'navigation', type: 'tab-list', phase: 'Wo', program: 'seedbot.select_capability', event: 'capability.select' }, { id: 'DETAIL', role: 'widget', type: 'capability-card', phase: 'Pop' }] },
+  'SEED_CHECKOUT':         { key: '⟁APP:SEED_CHECKOUT',         type: 'checkout',             domain: 'Seed & Commerce',   components: [{ id: 'CHECKOUT_FORM', role: 'form', type: 'checkout-form', phase: 'Xul', program: 'checkout.submit_order', event: 'checkout.submit' }] },
+  'SEED_LANDING':          { key: '⟁APP:SEED_LANDING',          type: 'landing-page',         domain: 'Seed & Commerce',   components: [{ id: 'LANDING_GRID', role: 'widget', type: 'card-grid', phase: 'Pop' }] },
+  'PLANT_GROWERS_BIBLE':   { key: '⟁APP:PLANT_GROWERS_BIBLE',   type: 'guide',                domain: 'Seed & Commerce',   components: [{ id: 'PLANT_CONTENT', role: 'widget', type: 'knowledge-panel', phase: 'Pop' }, { id: 'INPUT:PLANT_SEARCH', role: 'input', type: 'search', phase: 'Wo', program: 'plant.search', event: 'search.input' }, { id: 'plant.select_section', role: 'program', type: 'section', phase: 'Wo', event: 'section.select' }, { id: 'plant.toggle_panel', role: 'program', type: 'toggle', phase: 'Sek', event: 'panel.toggle' }] },
+  'DAEMON_BOT':            { key: '⟁APP:DAEMON_BOT',            type: 'prompt-launcher',      domain: 'Seed & Commerce',   components: [{ id: 'DB_FORM', role: 'form', type: 'search-form', phase: 'Wo', program: 'daemon.submit', event: 'form.submit' }] },
+  'MINI_SEEDBOT':          { key: '⟁APP:MINI_SEEDBOT',          type: 'prompt-launcher',      domain: 'Seed & Commerce',   components: [{ id: 'MSB_FORM', role: 'form', type: 'search-form', phase: 'Wo', program: 'mini.submit', event: 'form.submit' }] },
+
+  'CLOUD_MODEL_CHAT':      { key: '⟁APP:CLOUD_MODEL_CHAT',      type: 'app',                  domain: 'Chat & AI',         components: [{ id: 'HEADER', role: 'widget', type: 'toolbar', phase: 'Pop' }, { id: 'SELECT:MODEL', role: 'input', type: 'select', phase: 'Wo', program: 'cloud.select_model', event: 'model.change' }, { id: 'MESSAGES', role: 'widget', type: 'chat-feed', phase: 'Pop' }, { id: 'INPUT', role: 'action', type: 'chat-input', phase: 'Sek', program: 'cloud.send', event: 'chat.send' }, { id: 'cloud.receive', role: 'program', type: 'receive', phase: "Ch'en", event: 'chat.receive' }] },
+  'AI_UI_KIT':             { key: '⟁APP:AI_UI_KIT',             type: 'pattern-library',      domain: 'Chat & AI',         components: [{ id: 'AI_PATTERNS', role: 'widget', type: 'pattern-editor', phase: 'Wo', program: 'ai.select_pattern', event: 'pattern.select' }] },
+  'BUY_YOUR_OWN_BOT':      { key: '⟁APP:BUY_YOUR_OWN_BOT',      type: 'configurator',         domain: 'Chat & AI',         components: [{ id: 'BOT_CONFIG', role: 'widget', type: 'pricing-configurator', phase: 'Wo' }, { id: 'BOT_CHECKOUT', role: 'form', type: 'checkout-form', phase: 'Xul', program: 'bot.submit_order', event: 'checkout.submit' }] },
+  'TOKENS_VS_BOTS':        { key: '⟁APP:TOKENS_VS_BOTS',        type: 'cost-comparison',      domain: 'Chat & AI',         components: [{ id: 'TV_INPUTS', role: 'widget', type: 'usage-profile', phase: 'Wo' }, { id: 'TV_CHART', role: 'widget', type: 'line-chart', phase: 'Sek' }] },
+
+  'GOOGLE_OAUTH_ADMIN':    { key: '⟁APP:GOOGLE_OAUTH_ADMIN',    type: 'oauth-admin-console',  domain: 'Admin & Integrations', components: [{ id: 'OAUTH_SETTINGS', role: 'form', type: 'settings-panel', phase: 'Xul', program: 'oauth.save_settings', event: 'settings.save' }] },
+  'GOOGLE_OAUTH_CALLBACK': { key: '⟁APP:GOOGLE_OAUTH_CALLBACK', type: 'oauth-callback',       domain: 'Admin & Integrations', components: [{ id: 'OAUTH_RESULT', role: 'widget', type: 'callback-status', phase: 'Xul', program: 'oauth.exchange', event: 'callback.load' }] },
+  'STRIPE_PAYMENTS_ADMIN': { key: '⟁APP:STRIPE_PAYMENTS_ADMIN', type: 'payments-admin-console', domain: 'Admin & Integrations', components: [{ id: 'STRIPE_SETTINGS', role: 'form', type: 'settings-panel', phase: 'Xul', program: 'stripe.save_settings', event: 'settings.save' }] },
+  'STRIPE_PAYMENT_RETURN': { key: '⟁APP:STRIPE_PAYMENT_RETURN', type: 'payment-return',       domain: 'Admin & Integrations', components: [{ id: 'STRIPE_RESULT', role: 'widget', type: 'payment-status', phase: 'Xul', program: 'stripe.verify_return', event: 'return.load' }] },
+  'GITHUB_CICD':           { key: '⟁APP:GITHUB_CICD',           type: 'cicd-console',         domain: 'Admin & Integrations', components: [{ id: 'GH_SETTINGS', role: 'form', type: 'repository-settings', phase: 'Xul', program: 'github.save_settings', event: 'settings.save' }, { id: 'ACTION:GH_DISPATCH', role: 'action', type: 'workflow-dispatch', phase: 'Sek', program: 'github.dispatch', event: 'dispatch.click' }] },
+  'MAINTENANCE':           { key: '⟁APP:MAINTENANCE',           type: 'service-pricing',      domain: 'Admin & Integrations', components: [{ id: 'MW_PLANS', role: 'widget', type: 'plan-picker', phase: 'Wo', program: 'maintenance.select_plan', event: 'plan.select' }] },
+  'MICRONAUT_GALLERY':     { key: '⟁APP:MICRONAUT_GALLERY',     type: 'catalog-cart',         domain: 'Admin & Integrations', components: [{ id: 'MG_GALLERY', role: 'widget', type: 'product-gallery', phase: 'Wo', program: 'gallery.add', event: 'gallery.add' }, { id: 'MG_CHECKOUT', role: 'form', type: 'checkout-form', phase: 'Xul', program: 'gallery.submit_order', event: 'checkout.submit' }] },
+  'CDATA_MODAL':           { key: '⟁APP:CDATA_MODAL',           type: 'schema-modal',         domain: 'Admin & Integrations', components: [{ id: 'CDM_FORM', role: 'form', type: 'dynamic-form', phase: 'Xul', program: 'cdata.submit', event: 'form.submit' }] },
+  'CDATA_DB':              { key: '⟁APP:CDATA_DB',              type: 'local-data-store',     domain: 'Admin & Integrations', components: [{ id: 'CDATA_ROWS', role: 'widget', type: 'row-list', phase: 'Sek', program: 'cdata.get_all', event: 'rows.refresh' }] },
+  'CDATA_LOCAL_MODAL':     { key: '⟁APP:CDATA_LOCAL_MODAL',     type: 'local-schema-modal',   domain: 'Admin & Integrations', components: [{ id: 'CDLM_FORM', role: 'form', type: 'dynamic-form', phase: 'Xul', program: 'cdlm.save', event: 'form.submit' }] },
+
+  'SATURN_SYSTEM_EXPLORER': { key: '⟁APP:SATURN_SYSTEM_EXPLORER', type: 'astronomy-infographic', domain: 'Visual & Science',   components: [{ id: 'BRAND_MARK', role: 'widget', type: 'svg-logo', phase: 'Pop', source: 'data/apps/saturn-system-mark.svg' }, { id: 'SYSTEM_MAP', role: 'widget', type: 'svg-system-map', phase: 'Yax', source: 'data/apps/saturn-system-infographic.svg' }, { id: 'MOON_DETAILS', role: 'widget', type: 'object-inspector', phase: 'Wo' }, { id: 'ATMOSPHERE_KEY', role: 'widget', type: 'filter-legend', phase: 'Wo' }, { id: 'ACTION:SELECT_OBJECT', role: 'action', type: 'selection', phase: 'Sek', program: 'saturn.select_object', event: 'object.select' }, { id: 'ACTION:ATMOSPHERE_FILTER', role: 'action', type: 'filter', phase: 'Sek', program: 'saturn.filter_atmosphere', event: 'atmosphere.filter' }] },
+  'KUHUL_EXPLORER':        { key: '⟁APP:KUHUL_EXPLORER',        type: 'runtime-infographic',  domain: 'Visual & Science',   components: [{ id: 'PHASE_MAP', role: 'widget', type: 'svg-runtime-map', phase: 'Yax', source: 'data/apps/kuhul-infographic.svg' }, { id: 'ADMISSION_BOUNDARY', role: 'widget', type: 'execution-boundary', phase: "Ch'en" }, { id: 'TRACKS', role: 'widget', type: 'semantic-track-index', phase: 'Wo', source: 'data/tracks/' }] },
+  'SCENE_CUBE':            { key: '⟁APP:SCENE_CUBE',            type: 'render-surface',       domain: 'Visual & Science',   components: [{ id: 'CUBE_CANVAS', role: 'widget', type: 'canvas-3d', phase: 'Pop', program: 'scene.render', event: 'scene.render' }] },
+
+  'QUEST':                 { key: '⟁APP:QUEST',                 type: 'app',                  domain: 'Games',             components: [] },
+  'ANIMAL_FARM':           { key: '⟁APP:ANIMAL_FARM',           type: 'app',                  domain: 'Games',             components: [{ id: 'WIDGET:ALGORITHM', role: 'widget', type: 'svg', phase: 'Yax', program: 'svg.field' }, { id: 'WIDGET:CHOICES', role: 'action', type: 'choice-list', phase: 'Sek', program: 'social.choose', event: 'choice.select' }] },
+  'PIG_KINGDOM':           { key: '⟁APP:PIG_KINGDOM',           type: 'app',                  domain: 'Games',             components: [{ id: 'WIDGET:WITNESS', role: 'widget', type: 'companion-addon', phase: "Ch'en" }, { id: 'WIDGET:CHOICES', role: 'action', type: 'choice-list', phase: 'Sek', program: 'kingdom.choose', event: 'choice.select' }] },
+  'WAR_PIGS':              { key: '⟁APP:WAR_PIGS',              type: 'app',                  domain: 'Games',             components: [{ id: 'WIDGET:WAR_MAP', role: 'widget', type: 'map', phase: 'Yax' }, { id: 'WIDGET:TRIBUNAL', role: 'action', type: 'choice-list', phase: 'Sek', program: 'war.choose', event: 'choice.select' }, { id: 'war.trace_contract', role: 'program', type: 'trace', phase: 'Yax' }, { id: 'war.verify_evidence', role: 'program', type: 'verify', phase: "Ch'en" }, { id: 'war.protect_civilians', role: 'program', type: 'protect', phase: 'Sek' }] },
 };
 
-const KIND_ORDER: SyntaxKind[] = ['snippet', 'block', 'component', 'layout', 'application'];
+const APP_DOMAINS = ['Social & Forum', 'Seed & Commerce', 'Chat & AI', 'Visual & Science', 'Admin & Integrations', 'Games'] as const;
+
+const PHASE_COLOR: Record<string, string> = {
+  'Pop': '#38bdf8', 'Wo': '#22f2b3', 'Yax': '#a855f7',
+  "Sek": '#facc15', "Ch'en": '#fb7185', 'Xul': '#4ade80',
+};
 
 const TOOLS: Record<string, string[]> = {
   MATH:  ['ADD', 'SUB', 'MUL', 'DIV', 'CLAMP', 'LERP', 'NORM', 'MOD'],
@@ -103,14 +144,29 @@ interface Props {
   runtimePort?: string;
 }
 
+function parseMarker(text: string, tag: string): string | null {
+  const m = text.match(new RegExp(`\\[kuhul:${tag}\\s+([^\\]]+)\\]`));
+  if (!m) return null;
+  const srcM = m[1].match(/src="([^"]+)"/);
+  return srcM ? srcM[1] : null;
+}
+
+function cleanKuhul(text: string): string {
+  return text.replace(/\[kuhul:[^\]]*\]|\[\/kuhul:[^\]]*\]/g, '').replace(/\s{3,}/g, '\n\n').trim();
+}
+
 function IdentityDashboard({ runtimePort = '9879' }: Props) {
   const [tab, setTab] = React.useState<Tab>('apps');
   const [runtimeStatus, setRuntimeStatus] = React.useState<'connecting' | 'live' | 'offline'>('connecting');
   const [identityText, setIdentityText] = React.useState<string>('');
+  const [identityInfographic, setIdentityInfographic] = React.useState<string | null>(null);
+  const [lightboxSrc, setLightboxSrc] = React.useState<string | null>(null);
+  const [bubbleDismissed, setBubbleDismissed] = React.useState(false);
 
   React.useEffect(() => {
     if (!runtimePort) { setRuntimeStatus('offline'); return; }
-    fetch(`http://127.0.0.1:${runtimePort}/api/chat`, {
+    // Use same-origin proxy to avoid CORS (page served on 9882, proxy forwards to runtimePort)
+    fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt: 'WHO ARE YOU' }),
@@ -118,7 +174,9 @@ function IdentityDashboard({ runtimePort = '9879' }: Props) {
       .then(r => r.json())
       .then((data: any) => {
         const text: string = data.response ?? data.text ?? JSON.stringify(data);
-        // If runtime returns a dispatch marker, switch to dashboard view
+        // Parse [kuhul:powernaut infographic="..."] marker
+        const pMatch = text.match(/\[kuhul:powernaut infographic="([^"]+)"\]/);
+        if (pMatch) setIdentityInfographic(`/infographics/${pMatch[1]}.svg`);
         if (text.includes('[kuhul:dispatch')) setTab('apps');
         setIdentityText(text);
         setRuntimeStatus('live');
@@ -127,7 +185,9 @@ function IdentityDashboard({ runtimePort = '9879' }: Props) {
   }, [runtimePort]);
 
   const statusColor = runtimeStatus === 'live' ? '#22f2b3' : runtimeStatus === 'offline' ? '#fb7185' : '#facc15';
-  const statusLabel = runtimeStatus === 'live' ? 'runtime live' : runtimeStatus === 'offline' ? 'runtime offline' : 'connecting…';
+  const statusLabel = runtimeStatus === 'live' ? `runtime live · port ${runtimePort}` : runtimeStatus === 'offline' ? 'runtime offline' : 'connecting…';
+
+  const showBubble = !bubbleDismissed && identityInfographic && identityText;
 
   return (
     <div style={S.root}>
@@ -136,10 +196,28 @@ function IdentityDashboard({ runtimePort = '9879' }: Props) {
           <div style={S.brand}>AI-µ</div>
           <div style={S.subtitle}>Not who I am — what I can do.</div>
         </div>
-        <div style={{ ...S.badge, color: statusColor, borderColor: statusColor }}>
-          {statusLabel}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          {identityInfographic && (
+            <img src={identityInfographic} alt="AI-µ"
+                 style={{ width: 36, height: 44, cursor: 'pointer', borderRadius: 4 }}
+                 title="Click to view full identity"
+                 onClick={() => setLightboxSrc(identityInfographic!)} />
+          )}
+          <div style={{ ...S.badge, color: statusColor, borderColor: statusColor }}>
+            {statusLabel}
+          </div>
         </div>
       </div>
+
+      {showBubble && (
+        <IdentityBubble
+          src={identityInfographic!}
+          text={cleanKuhul(identityText)}
+          onEnlarge={() => setLightboxSrc(identityInfographic!)}
+          onDashboard={() => setTab('apps')}
+          onDismiss={() => setBubbleDismissed(true)}
+        />
+      )}
 
       <div style={S.tabs}>
         {TABS.map(t => (
@@ -151,12 +229,60 @@ function IdentityDashboard({ runtimePort = '9879' }: Props) {
       </div>
 
       <div style={S.body}>
-        {tab === 'apps'     && <AppsTab />}
+        {tab === 'apps'     && <AppsTab onEnlarge={setLightboxSrc} />}
         {tab === 'tools'    && <ToolsTab />}
         {tab === 'programs' && <ProgramsTab />}
         {tab === 'grammar'  && <GrammarTab />}
         {tab === 'traces'   && <TracesTab identityText={identityText} />}
         {tab === 'hosting'  && <HostingTab />}
+      </div>
+
+      {lightboxSrc && <Lightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />}
+    </div>
+  );
+}
+
+// ── IdentityBubble — WHO ARE YOU response with animated character ─────────────
+
+function IdentityBubble({ src, text, onEnlarge, onDashboard, onDismiss }: {
+  src: string;
+  text: string;
+  onEnlarge: () => void;
+  onDashboard: () => void;
+  onDismiss: () => void;
+}) {
+  const [expanded, setExpanded] = React.useState(false);
+  const preview = text.length > 320 ? text.substring(0, 320) + '…' : text;
+
+  return (
+    <div style={S.bubbleBar}>
+      <img src={src} alt="AI-µ" style={S.bubbleChar}
+           onClick={onEnlarge} title="Click to enlarge"/>
+      <div style={S.bubbleSpeech}>
+        <div style={S.bubbleText}>{expanded ? text : preview}</div>
+        <div style={{ display: 'flex', gap: 7, marginTop: 10, flexWrap: 'wrap' as const }}>
+          <button style={S.bubbleBtn} onClick={onEnlarge}>⤢ Enlarge</button>
+          <button style={S.bubbleBtn} onClick={onDashboard}>Dashboard</button>
+          {text.length > 320 && (
+            <button style={S.bubbleBtn} onClick={() => setExpanded(!expanded)}>
+              {expanded ? 'Collapse' : 'Full Response'}
+            </button>
+          )}
+          <button style={{ ...S.bubbleBtn, marginLeft: 'auto' }} onClick={onDismiss}>✕</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Lightbox ──────────────────────────────────────────────────────────────────
+
+function Lightbox({ src, onClose }: { src: string; onClose: () => void }) {
+  return (
+    <div style={S.lightboxOverlay} onClick={onClose}>
+      <div style={S.lightboxInner} onClick={(e: any) => e.stopPropagation()}>
+        <button style={S.lightboxClose} onClick={onClose}>✕</button>
+        <img src={src} alt="infographic" style={S.lightboxImg}/>
       </div>
     </div>
   );
@@ -164,55 +290,109 @@ function IdentityDashboard({ runtimePort = '9879' }: Props) {
 
 // ── Apps tab ──────────────────────────────────────────────────────────────────
 
-function AppsTab() {
-  const [selected, setSelected] = React.useState<string | null>(null);
-  const app = selected ? CSS_APPS[selected] : null;
+function AppsTab({ onEnlarge }: { onEnlarge: (src: string) => void }) {
+  const [selectedDomain, setSelectedDomain] = React.useState<string>(APP_DOMAINS[0]);
+  const [selectedId, setSelectedId] = React.useState<string | null>(null);
+  const app = selectedId ? ASX_APPS[selectedId] : null;
+
+  const domainApps = Object.entries(ASX_APPS).filter(([, v]) => v.domain === selectedDomain);
 
   return (
     <div style={S.appsLayout}>
-      <div style={S.appList}>
-        <div style={S.sectionHead}>⟁SYNTAXUNITKINDS</div>
-        {KIND_ORDER.map(kind => (
-          <div key={kind}>
-            <div style={S.kindLabel}>{kind}</div>
-            {Object.entries(CSS_APPS).filter(([, v]) => v.kind === kind).map(([name]) => (
-              <button key={name} style={{ ...S.appItem, ...(selected === name ? S.appItemActive : {}) }}
-                onClick={() => setSelected(name === selected ? null : name)}>
-                <span style={{ color: '#38bdf8' }}>{name}</span>
-              </button>
-            ))}
-          </div>
+      {/* Left: domain tabs + app list */}
+      <div style={{ ...S.appList, width: 240 }}>
+        <div style={S.sectionHead}>source: asx-mini-app.key-grammar.jsonl</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 4, marginBottom: 10, marginTop: 6 }}>
+          {APP_DOMAINS.map(d => (
+            <button key={d}
+              style={{ ...S.appItem, padding: '3px 8px', fontSize: '0.72rem',
+                       ...(selectedDomain === d ? { background: 'rgba(56,189,248,0.12)', color: '#38bdf8' } : {}) }}
+              onClick={() => { setSelectedDomain(d); setSelectedId(null); }}>
+              {d}
+            </button>
+          ))}
+        </div>
+        {domainApps.map(([id, a]) => (
+          <button key={id}
+            style={{ ...S.appItem, ...(selectedId === id ? S.appItemActive : {}) }}
+            onClick={() => setSelectedId(id === selectedId ? null : id)}>
+            <span style={{ color: '#38bdf8', fontSize: '0.78rem', fontFamily: 'ui-monospace,monospace' }}>{a.key}</span>
+            <span style={{ color: '#6b7280', fontSize: '0.7rem', display: 'block', marginTop: 1 }}>{a.type}</span>
+          </button>
         ))}
       </div>
 
+      {/* Right: app detail */}
       <div style={S.appDetail}>
         {!app && (
           <div style={S.appPlaceholder}>
-            <div style={{ color: '#22f2b3', fontSize: '1.1rem', fontWeight: 700 }}>key-app-builder</div>
-            <div style={{ color: '#9ca3af', marginTop: 8 }}>Select a ⟁TYPE to see its key grammar.</div>
-            <div style={{ color: '#6b7280', marginTop: 12, fontSize: '0.8rem' }}>
-              source: css.manifest.json · authority: proposal_only · output: asx.mini-app.v1 + html-preview
+            <div style={{ color: '#22f2b3', fontSize: '1rem', fontWeight: 700 }}>key-app-builder</div>
+            <div style={{ color: '#9ca3af', marginTop: 8 }}>
+              Select a ⟁APP to see its component map.
+            </div>
+            <div style={{ color: '#6b7280', marginTop: 12, fontSize: '0.78rem', lineHeight: 1.6 }}>
+              {Object.keys(ASX_APPS).length} apps registered<br/>
+              source: asx-mini-app.key-grammar.jsonl<br/>
+              authority: projection_only · executor: mx.run
             </div>
           </div>
         )}
-        {app && (
-          <div>
-            <div style={{ color: '#f9fafb', fontWeight: 700, marginBottom: 6 }}>{selected}</div>
-            <div style={{ color: '#9ca3af', fontSize: '0.8rem', marginBottom: 12 }}>
-              kind: <span style={{ color: '#38bdf8' }}>{app.kind}</span>
-              {' · '}lang: <span style={{ color: '#38bdf8' }}>{app.lang}</span>
+        {app && (() => {
+          const svgComp = app.components.find(c => c.source?.endsWith('.svg'));
+          const svgUrl  = svgComp ? `/infographics/${svgComp.source!.split('/').pop()}` : null;
+          return (
+            <div>
+              <div style={{ color: '#f9fafb', fontWeight: 700, fontFamily: 'ui-monospace,monospace', marginBottom: 4 }}>{app.key}</div>
+              <div style={{ color: '#9ca3af', fontSize: '0.78rem', marginBottom: 12 }}>
+                type: <span style={{ color: '#38bdf8' }}>{app.type}</span>
+                {' · '}domain: <span style={{ color: '#a855f7' }}>{app.domain}</span>
+                {' · '}phase: <span style={{ color: '#22f2b3' }}>Pop</span>
+              </div>
+
+              {/* SVG infographic panel (Saturn, Kuhul, etc.) */}
+              {svgUrl && (
+                <div style={S.infographicPanel}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                    <span style={S.sectionHead}>infographic</span>
+                    <button style={S.bubbleBtn} onClick={() => onEnlarge(svgUrl)}>⤢ Enlarge</button>
+                  </div>
+                  <img
+                    src={svgUrl} alt={`${app.key} infographic`}
+                    style={{ width: '100%', maxHeight: 180, objectFit: 'contain', borderRadius: '0.5rem', cursor: 'pointer', display: 'block' }}
+                    onClick={() => onEnlarge(svgUrl)}
+                  />
+                  {svgComp?.source && (
+                    <div style={{ color: '#6b7280', fontSize: '0.7rem', marginTop: 4, fontFamily: 'ui-monospace,monospace' }}>
+                      src: {svgComp.source}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {app.components.length > 0 && (
+                <>
+                  <div style={S.sectionHead}>components ({app.components.length})</div>
+                  <div style={{ marginTop: 6, display: 'flex', flexDirection: 'column' as const, gap: 6 }}>
+                    {app.components.map(c => (
+                      <div key={c.id} style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' as const }}>
+                        <span style={{ color: PHASE_COLOR[c.phase] ?? '#9ca3af', fontFamily: 'ui-monospace,monospace', fontSize: '0.72rem', minWidth: 50 }}>{c.phase}</span>
+                        <span style={{ color: '#38bdf8', fontFamily: 'ui-monospace,monospace', fontSize: '0.76rem' }}>{c.id}</span>
+                        <span style={S.chip}>{c.type}</span>
+                        <span style={{ color: '#6b7280', fontSize: '0.7rem' }}>{c.role}</span>
+                        {c.program && <span style={{ color: '#6b7280', fontSize: '0.7rem', fontFamily: 'ui-monospace,monospace' }}>→ {c.program}</span>}
+                        {c.source && <span style={{ color: '#6b7280', fontSize: '0.7rem', fontFamily: 'ui-monospace,monospace' }}>src: {c.source.split('/').pop()}</span>}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              <div style={{ marginTop: 14, color: '#6b7280', fontSize: '0.72rem', borderTop: '1px solid rgba(148,163,184,0.1)', paddingTop: 10 }}>
+                authority: projection_only · semantic_authority: false · executor: mx.run · candidate_only: true
+              </div>
             </div>
-            <div style={S.sectionHead}>key grammar</div>
-            <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 6, marginTop: 6 }}>
-              {app.keys.map(k => (
-                <span key={k} style={S.chip}>{k}</span>
-              ))}
-            </div>
-            <div style={{ marginTop: 16, color: '#6b7280', fontSize: '0.75rem' }}>
-              authority: proposal_only · candidate_only: true · xcfe_required: true
-            </div>
-          </div>
-        )}
+          );
+        })()}
       </div>
     </div>
   );
@@ -539,13 +719,110 @@ const S: Record<string, React.CSSProperties> = {
   },
   btnPrimary: {
     background: '#02281e',
-    color: '#22f2b3',               // ⟁BTNPRIMARY tokens
-    border: '1px solid rgba(56,189,248,0.9)',  // ⟁BORDERglow
+    color: '#22f2b3',
+    border: '1px solid rgba(56,189,248,0.9)',
     borderRadius: '0.75rem',
     padding: '8px 14px',
     fontWeight: 600,
     fontFamily: 'Inter,system-ui,sans-serif',
     cursor: 'pointer',
+  },
+  // ── identity bubble bar ──
+  bubbleBar: {
+    display: 'flex',
+    gap: 14,
+    alignItems: 'flex-start',
+    background: '#020b12',
+    borderBottom: '1px solid rgba(34,242,179,0.18)',
+    padding: '12px 20px',
+  },
+  bubbleChar: {
+    width: 72,
+    height: 92,
+    flexShrink: 0,
+    borderRadius: 6,
+    cursor: 'pointer',
+    border: '1px solid rgba(34,242,179,0.3)',
+  },
+  bubbleSpeech: {
+    flex: 1,
+    background: '#010b18',
+    border: '1px solid rgba(34,242,179,0.25)',
+    borderRadius: '0 0.75rem 0.75rem 0.75rem',
+    padding: '10px 14px',
+    position: 'relative' as const,
+  },
+  bubbleText: {
+    color: '#c8dce8',
+    fontSize: '0.82rem',
+    lineHeight: 1.65,
+    whiteSpace: 'pre-wrap' as const,
+    fontFamily: 'ui-monospace,monospace',
+  },
+  bubbleBtn: {
+    background: 'rgba(34,242,179,0.07)',
+    color: '#22f2b3',
+    border: '1px solid rgba(34,242,179,0.3)',
+    borderRadius: '0.375rem',
+    padding: '3px 10px',
+    fontSize: '0.76rem',
+    fontWeight: 600,
+    cursor: 'pointer',
+    fontFamily: 'Inter,system-ui,sans-serif',
+  },
+  // ── infographic panel in app detail ──
+  infographicPanel: {
+    background: '#010b14',
+    border: '1px solid rgba(56,189,248,0.2)',
+    borderRadius: '0.75rem',
+    padding: 10,
+    marginBottom: 14,
+  },
+  // ── lightbox ──
+  lightboxOverlay: {
+    position: 'fixed' as const,
+    inset: 0,
+    background: 'rgba(0,0,0,0.88)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 9999,
+    backdropFilter: 'blur(4px)',
+  },
+  lightboxInner: {
+    position: 'relative' as const,
+    background: '#020b12',
+    border: '1px solid rgba(34,242,179,0.35)',
+    borderRadius: '1rem',
+    padding: 20,
+    maxWidth: '90vw',
+    maxHeight: '90vh',
+    overflow: 'auto',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'center',
+  },
+  lightboxClose: {
+    alignSelf: 'flex-end',
+    background: 'rgba(34,242,179,0.07)',
+    color: '#22f2b3',
+    border: '1px solid rgba(34,242,179,0.3)',
+    borderRadius: '50%',
+    width: 30,
+    height: 30,
+    cursor: 'pointer',
+    fontWeight: 700,
+    fontSize: '1rem',
+    marginBottom: 12,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  lightboxImg: {
+    maxWidth: '80vw',
+    maxHeight: '80vh',
+    objectFit: 'contain' as const,
+    borderRadius: '0.5rem',
   },
 };
 
