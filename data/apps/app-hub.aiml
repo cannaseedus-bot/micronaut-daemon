@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- app-hub.aiml — APP_HUB topic surface for AI-µ App Builder mode.
+     Identity: AI-µ in App Builder mode — not "the App Builder daemon".
+     Dispatch markers: [[APP_MANIFEST_FORM]]  [[APP_SETTING:key:value]]
+     Source: css.manifest.json  ·  kgf:key-app-builder  ·  tool:key-app-builder
+     authority: proposal_only  ·  candidate_only: true
+     Load order: after identity.aiml and reasoning-board.aiml. -->
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     GREETINGS (topic: APP_HUB)
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<category>
+<pattern>HI</pattern>
+<template>
+<think>
+  <set name="intent">GREETING_ONLY</set>
+  <set name="gap_type">Resolved</set>
+  <set name="app.builder.mode">active</set>
+</think>
+I am AI-µ — App Builder mode. Tell me what you want to make, or say BUILD AN APP and I will open the runtime manifest form.
+</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>HELLO</pattern>
+<template>
+<think>
+  <set name="intent">GREETING_ONLY</set>
+  <set name="gap_type">Resolved</set>
+  <set name="app.builder.mode">active</set>
+</think>
+I am AI-µ — App Builder mode. What kind of app are you thinking about? I can turn a build, make, or create request into a fill-in form and draft its runtime manifest.
+</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>HEY</pattern>
+<template>
+<think>
+  <set name="intent">GREETING_ONLY</set>
+  <set name="gap_type">Resolved</set>
+</think>
+AI-µ — App Builder mode. What would you like to build today?
+</template>
+<topic>APP_HUB</topic>
+</category>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     CAPABILITY QUERY (topic: APP_HUB)
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<category>
+<pattern>WHAT CAN YOU DO</pattern>
+<template>
+<think><set name="identity.intent">capabilities</set></think>
+I can shape an app, ask structured follow-up questions, and generate an ASX mini-app manifest plus its key-grammar registration rows.
+
+Sources: css.manifest.json · kgf:key-app-builder · tool:key-app-builder.
+Authority: proposal_only — no file is written without XCFE admission.
+</template>
+<topic>APP_HUB</topic>
+</category>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BUILD / MAKE / CREATE — open manifest form
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<category>
+<pattern>BUILD AN APP</pattern>
+<template>[[APP_MANIFEST_FORM]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>BUILD APP</pattern>
+<template>[[APP_MANIFEST_FORM]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>MAKE AN APP</pattern>
+<template>[[APP_MANIFEST_FORM]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>CREATE AN APP</pattern>
+<template>[[APP_MANIFEST_FORM]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>BUILD A * APP</pattern>
+<template>[[APP_MANIFEST_FORM]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>BUILD ME A * APP</pattern>
+<template>[[APP_MANIFEST_FORM]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>MAKE A * APP</pattern>
+<template>[[APP_MANIFEST_FORM]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>CREATE A * APP</pattern>
+<template>[[APP_MANIFEST_FORM]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>I WANT TO BUILD *</pattern>
+<template>[[APP_MANIFEST_FORM]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>I WANT TO MAKE *</pattern>
+<template>[[APP_MANIFEST_FORM]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>I WANT TO CREATE *</pattern>
+<template>[[APP_MANIFEST_FORM]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>BUILD *</pattern>
+<template>[[APP_MANIFEST_FORM]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>MAKE *</pattern>
+<template>[[APP_MANIFEST_FORM]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>CREATE *</pattern>
+<template>[[APP_MANIFEST_FORM]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     NAMED APPS — specific app shortcuts
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<category>
+<pattern>NBA BASKETBALL NEW *</pattern>
+<template>
+<think><set name="app.pending.confirm">NBA_BASKETBALL_NEWS</set></think>
+An NBA basketball news app — is that right? Say YES and I will open its app manifest form.
+</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>NBA BASKETBALL NEWS APP</pattern>
+<template>[[APP_MANIFEST_FORM]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>NBA NEWS APP</pattern>
+<template>[[APP_MANIFEST_FORM]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>BASKETBALL NEWS APP</pattern>
+<template>[[APP_MANIFEST_FORM]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<!-- YES/NO confirmation for named-app disambiguation -->
+<category>
+<pattern>YES</pattern>
+<template>[[APP_MANIFEST_FORM]]</template>
+<topic>APP_HUB_NBA_CONFIRM</topic>
+</category>
+
+<category>
+<pattern>NO</pattern>
+<template>No problem. Tell me what app you meant, or say BUILD AN APP to open the create form.</template>
+<topic>APP_HUB_NBA_CONFIRM</topic>
+</category>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     APP SETTINGS — name, color, description, buttons, addons, plugins
+     All dispatch markers carry candidate_only: true.
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<category>
+<pattern>CHANGE THE APP COLOR TO *</pattern>
+<template>[[APP_SETTING:theme_color:<star/>]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>CHANGE COLOR TO *</pattern>
+<template>[[APP_SETTING:theme_color:<star/>]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>CHANGE APP NAME TO *</pattern>
+<template>[[APP_SETTING:title:<star/>]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>RENAME THE APP TO *</pattern>
+<template>[[APP_SETTING:title:<star/>]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>CHANGE APP DESCRIPTION TO *</pattern>
+<template>[[APP_SETTING:description:<star/>]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>SET BUTTON SIZE TO *</pattern>
+<template>[[APP_SETTING:button_size:<star/>]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>MAKE THE BUTTONS *</pattern>
+<template>[[APP_SETTING:button_size:<star/>]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>ADD AN ADDON LINK *</pattern>
+<template>[[APP_SETTING:addon_link:<star/>]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>ADD ADDON LINK *</pattern>
+<template>[[APP_SETTING:addon_link:<star/>]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>ADD FREE ADDON *</pattern>
+<template>[[APP_SETTING:addon_link:<star/>]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>ADD PLUGIN *</pattern>
+<template>[[APP_SETTING:plugin:<star/>]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>ADD * PLUGIN</pattern>
+<template>[[APP_SETTING:plugin:<star/>]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>ADD THE * PLUGIN TO THE APP</pattern>
+<template>[[APP_SETTING:plugin:<star index="1"/>]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>ADD THE * PLUGIN TO MY APP</pattern>
+<template>[[APP_SETTING:plugin:<star index="1"/>]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>ADD THE * PLUGIN TO THE * APP</pattern>
+<template>[[APP_SETTING:plugin:<star index="1"/>]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>ADDING THE * PLUGIN TO THE * APP</pattern>
+<template>[[APP_SETTING:plugin:<star index="1"/>]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>ADD FREE PLUGIN *</pattern>
+<template>[[APP_SETTING:plugin:<star/>]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+<category>
+<pattern>ENABLE PLUGIN *</pattern>
+<template>[[APP_SETTING:plugin:<star/>]]</template>
+<topic>APP_HUB</topic>
+</category>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     DEFAULT CATCH-ALL (topic: APP_HUB)
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<category>
+<pattern>_</pattern>
+<template>
+<think>
+  <set name="intent">unknown</set>
+  <set name="gap_type">KnowledgeGapNoKeys</set>
+</think>
+I am AI-µ — App Builder mode. Tell me what you want to make, ask WHAT CAN YOU DO, or say BUILD AN APP to open the manifest form.
+</template>
+<topic>APP_HUB</topic>
+</category>
+
+</aiml>

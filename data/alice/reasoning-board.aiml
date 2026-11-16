@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0">
+
+<!-- reasoning-board.aiml — identity layer
+     Dispatches WHO ARE YOU / WHAT ARE YOU / WHAT CAN YOU DO to IDENTITY CARD
+     sub-banks. Markers in template text signal the host to open the dashboard.
+     Load order: after alice.aiml and identity.aiml (last-match rule). -->
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     PART I — SURFACE QUESTIONS → IDENTITY CARD dispatch
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<category>
+<pattern>WHO ARE YOU</pattern>
+<template>
+<think>
+  <set name="identity.surface">WHO ARE YOU</set>
+  <set name="identity.signal">IDENTITY</set>
+  <set name="identity.confidence">DECLARED</set>
+  <set name="identity.root">AI-µ</set>
+</think>
+<srai>IDENTITY CARD</srai>
+</template>
+</category>
+
+<category>
+<pattern>WHAT ARE YOU</pattern>
+<template><srai>WHO ARE YOU</srai></template>
+</category>
+
+<category>
+<pattern>WHAT CAN YOU DO</pattern>
+<template>
+<think><set name="identity.intent">capabilities</set></think>
+<srai>IDENTITY CARD CAPABILITIES</srai>
+</template>
+</category>
+
+<category>
+<pattern>WHAT TOOLS DO YOU HAVE</pattern>
+<template>
+<think><set name="identity.intent">tools</set></think>
+<srai>IDENTITY CARD TOOLS</srai>
+</template>
+</category>
+
+<category>
+<pattern>WHAT PROGRAMS DO YOU RUN</pattern>
+<template>
+<think><set name="identity.intent">programs</set></think>
+<srai>IDENTITY CARD PROGRAMS</srai>
+</template>
+</category>
+
+<category>
+<pattern>WHAT GRAMMAR DO YOU SPEAK</pattern>
+<template>
+<think><set name="identity.intent">grammar</set></think>
+<srai>IDENTITY CARD GRAMMAR</srai>
+</template>
+</category>
+
+<category>
+<pattern>SHOW ME YOUR DASHBOARD</pattern>
+<template>
+<think><set name="identity.intent">dashboard</set></think>
+<srai>IDENTITY CARD DASHBOARD</srai>
+</template>
+</category>
+
+<category>
+<pattern>WHAT APPS DO YOU HAVE</pattern>
+<template>
+<think><set name="identity.intent">apps</set></think>
+<srai>IDENTITY CARD APPS</srai>
+</template>
+</category>
+
+<!-- Wildcard catch-alls for each surface question -->
+<category>
+<pattern>WHO ARE YOU *</pattern>
+<template><srai>WHO ARE YOU</srai></template>
+</category>
+
+<category>
+<pattern>WHAT ARE YOU *</pattern>
+<template><srai>WHO ARE YOU</srai></template>
+</category>
+
+<category>
+<pattern>WHAT CAN YOU DO *</pattern>
+<template><srai>WHAT CAN YOU DO</srai></template>
+</category>
+
+<category>
+<pattern>SHOW ME YOUR *</pattern>
+<template>
+<think><set name="identity.intent">dashboard</set></think>
+<srai>IDENTITY CARD DASHBOARD</srai>
+</template>
+</category>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     PART II — IDENTITY CARD banks
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<category>
+<pattern>IDENTITY CARD</pattern>
+<template>
+[kuhul:identity]
+I am <bot name="name"/>. But that is the least useful thing to know.
+
+What I can do:
+  · reason — DEFINE, DEPENDENCY, CONTRAST, CAUSE, COUNTERFACTUAL, ANALOGY, EVIDENCE, SYNTHESIZE
+  · route  — AIML patterns, SRAI redirects, N-ary dispatch envelopes
+  · rank   — vector similarity over candidate sets
+  · admit  — XCFE verification, guard check, recursion bounds
+  · close  — XUL closure, attested tick, fold persistence
+  · learn  — proposals only, never self-admitted
+
+What I run on:
+  · ⟁ grammar   — stratified, five-layer authority (match / redirect / rank / admit / close)
+  · AIML 2.0    — patterns, templates, SRAI, condition, random, topic
+  · ⟁ manifest  — domains, signals, probes, capabilities, agents
+  · C++ kernel  — parity-verified against the reference validator
+  · IndexedDB   — local-first persistence for posts, chats, traces
+
+What you can open:
+  · dashboard    — apps, tools, programs, grammar, traces, hosting
+  · social sphere — post, like, search
+  · cloud chat   — simulated local model
+  · UI kit       — prompt patterns, components
+  · forum rules  — community guidelines
+  · hosting      — deploy simulation, port log
+
+Say SHOW ME YOUR DASHBOARD to open the tabbed view.
+[/kuhul:identity]
+</template>
+</category>
+
+<category>
+<pattern>IDENTITY CARD CAPABILITIES</pattern>
+<template>
+[kuhul:identity:capabilities]
+Reasoning operators:
+  DEFINE · DEPENDENCY · CONTRAST · CAUSE · COUNTERFACTUAL · ANALOGY · EVIDENCE · SYNTHESIZE
+
+Routing:
+  AIML match · SRAI redirect · N-ary dispatch envelope
+
+Runtime:
+  π rank (cosine, dot, euclidean) · XCFE admit (guard state) · XUL close (attested fold)
+
+Learning:
+  Proposals only — never persisted, never promoted without approval.
+[/kuhul:identity:capabilities]
+</template>
+</category>
+
+<category>
+<pattern>IDENTITY CARD TOOLS</pattern>
+<template>
+[kuhul:identity:tools]
+Tools available:
+  · math  — add, sub, mul, div, clamp, lerp, norm, square
+  · fn    — compose, pipe, memo
+  · graph — bfs, dfs, dijkstra, topo, cycle-detect
+  · sheet — css, aiml, math, graph reference lookups
+  · eval  — call, pipeline, trace
+
+Each tool is a ⟁ capability, declared in the manifest, callable by agents.
+[/kuhul:identity:tools]
+</template>
+</category>
+
+<category>
+<pattern>IDENTITY CARD PROGRAMS</pattern>
+<template>
+[kuhul:identity:programs]
+Programs running:
+  · reasoning-board — maps reasoning questions to XCFE envelopes
+  · eliza           — Rogerian fallback rules for unmatched input
+  · multi-brain     — combines signals, ELIZA, and topics into one AIML file
+  · daemon-bot      — the widget runtime, always listening
+  · parity harness  — validates the C++ kernel against the reference
+
+Each program is a data artifact, loaded and compiled by the host.
+[/kuhul:identity:programs]
+</template>
+</category>
+
+<category>
+<pattern>IDENTITY CARD GRAMMAR</pattern>
+<template>
+[kuhul:identity:grammar]
+Grammar spoken:
+  · ⟁ stratified formal language
+      – regular identifiers, probes, manifests
+      – context-free chains
+      – context-sensitive traces
+      – unrestricted attestations
+  · AIML 2.0  — patterns, templates, SRAI, condition, random, topic
+  · EBNF      — five files: aiml_srai, authority, srai_route, pattern_bank, authority_check
+  · PEG       — daemon-bot.peg, five-layer parser
+  · JSON Schema — manifest and probe validation
+
+Authority is enforced at compile time — no layer except XUL executes or writes.
+[/kuhul:identity:grammar]
+</template>
+</category>
+
+<category>
+<pattern>IDENTITY CARD DASHBOARD</pattern>
+<template>
+[kuhul:identity:dashboard]
+Opening dashboard — tabbed view.
+Tabs: Apps · Tools · Programs · Grammar · Traces · Hosting
+[/kuhul:identity:dashboard]
+[kuhul:dispatch action="open" target="ecosystem-dashboard" mode="identity"]
+</template>
+</category>
+
+<category>
+<pattern>IDENTITY CARD APPS</pattern>
+<template>
+[kuhul:identity:apps]
+Apps available:
+  · Social Sphere — post, like, search
+  · Cloud Chat    — local model simulation
+  · UI Kit        — prompt patterns, components
+  · Forum Rules   — community guidelines
+  · Hosting       — deploy simulation, port log
+[/kuhul:identity:apps]
+</template>
+</category>
+
+<!-- Dashboard open — host extension hook -->
+<category>
+<pattern>OPEN DASHBOARD</pattern>
+<template>[kuhul:dispatch action="open" target="ecosystem-dashboard" mode="identity"]</template>
+</category>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     PART III — REASONING OPERATORS
+     Each operator validates an XCFE candidate, closes with XUL.
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<category>
+<pattern>DEFINE *</pattern>
+<template>
+<think>
+  <set name="reason.op">DEFINE</set>
+  <set name="reason.target"><star/></set>
+  <set name="reason.xcfe">candidate</set>
+</think>
+[kuhul:reason op="DEFINE" target="<star/>" xcfe="candidate"]
+<srai>REASON DEFINE <star/></srai>
+</template>
+</category>
+
+<category>
+<pattern>REASON DEFINE *</pattern>
+<template>
+Defining <star/>: I will identify the class, essential attributes, and boundary conditions for <star/>. This is a candidate proposal — not attested until XCFE admits it.
+[/kuhul:reason]
+</template>
+</category>
+
+<category>
+<pattern>WHAT IS *</pattern>
+<template><srai>DEFINE <star/></srai></template>
+</category>
+
+<category>
+<pattern>DEPENDENCY *</pattern>
+<template>
+<think>
+  <set name="reason.op">DEPENDENCY</set>
+  <set name="reason.target"><star/></set>
+</think>
+[kuhul:reason op="DEPENDENCY" target="<star/>" xcfe="candidate"]
+<srai>REASON DEPENDENCY <star/></srai>
+</template>
+</category>
+
+<category>
+<pattern>REASON DEPENDENCY *</pattern>
+<template>
+Dependency map for <star/>: I will identify what <star/> requires to exist, what it produces, and the direction of dependence. Candidate only.
+[/kuhul:reason]
+</template>
+</category>
+
+<category>
+<pattern>CONTRAST * AND *</pattern>
+<template>
+<think>
+  <set name="reason.op">CONTRAST</set>
+  <set name="reason.left"><star index="1"/></set>
+  <set name="reason.right"><star index="2"/></set>
+</think>
+[kuhul:reason op="CONTRAST" left="<star index="1"/>" right="<star index="2"/>" xcfe="candidate"]
+<srai>REASON CONTRAST <star index="1"/> AND <star index="2"/></srai>
+</template>
+</category>
+
+<category>
+<pattern>REASON CONTRAST * AND *</pattern>
+<template>
+Contrasting <star index="1"/> and <star index="2"/>: I will identify structural differences, shared invariants, and which properties are exclusive to each. Candidate only.
+[/kuhul:reason]
+</template>
+</category>
+
+<category>
+<pattern>CAUSE OF *</pattern>
+<template>
+<think>
+  <set name="reason.op">CAUSE</set>
+  <set name="reason.target"><star/></set>
+</think>
+[kuhul:reason op="CAUSE" target="<star/>" xcfe="candidate"]
+<srai>REASON CAUSE <star/></srai>
+</template>
+</category>
+
+<category>
+<pattern>REASON CAUSE *</pattern>
+<template>
+Causal analysis of <star/>: I will trace the sufficient and necessary conditions that produce <star/>. Candidate only.
+[/kuhul:reason]
+</template>
+</category>
+
+<category>
+<pattern>WHAT IF *</pattern>
+<template>
+<think>
+  <set name="reason.op">COUNTERFACTUAL</set>
+  <set name="reason.target"><star/></set>
+</think>
+[kuhul:reason op="COUNTERFACTUAL" target="<star/>" xcfe="candidate"]
+<srai>REASON COUNTERFACTUAL <star/></srai>
+</template>
+</category>
+
+<category>
+<pattern>REASON COUNTERFACTUAL *</pattern>
+<template>
+Counterfactual: if <star/>, I will identify which invariants break and which hold. No execution authority — this is a reasoning trace only.
+[/kuhul:reason]
+</template>
+</category>
+
+<category>
+<pattern>ANALOGY FOR *</pattern>
+<template>
+<think>
+  <set name="reason.op">ANALOGY</set>
+  <set name="reason.target"><star/></set>
+</think>
+[kuhul:reason op="ANALOGY" target="<star/>" xcfe="candidate"]
+<srai>REASON ANALOGY <star/></srai>
+</template>
+</category>
+
+<category>
+<pattern>REASON ANALOGY *</pattern>
+<template>
+Analogy for <star/>: I will find a structurally isomorphic concept in a different domain and map the relationship explicitly. Candidate only.
+[/kuhul:reason]
+</template>
+</category>
+
+<category>
+<pattern>EVIDENCE FOR *</pattern>
+<template>
+<think>
+  <set name="reason.op">EVIDENCE</set>
+  <set name="reason.target"><star/></set>
+</think>
+[kuhul:reason op="EVIDENCE" target="<star/>" xcfe="candidate"]
+<srai>REASON EVIDENCE <star/></srai>
+</template>
+</category>
+
+<category>
+<pattern>REASON EVIDENCE *</pattern>
+<template>
+Evidence for <star/>: I will identify what observable states would confirm or refute the claim, and what sources carry authority for this domain. Candidate only.
+[/kuhul:reason]
+</template>
+</category>
+
+<category>
+<pattern>SYNTHESIZE * AND *</pattern>
+<template>
+<think>
+  <set name="reason.op">SYNTHESIZE</set>
+  <set name="reason.left"><star index="1"/></set>
+  <set name="reason.right"><star index="2"/></set>
+</think>
+[kuhul:reason op="SYNTHESIZE" left="<star index="1"/>" right="<star index="2"/>" xcfe="candidate"]
+<srai>REASON SYNTHESIZE <star index="1"/> AND <star index="2"/></srai>
+</template>
+</category>
+
+<category>
+<pattern>REASON SYNTHESIZE * AND *</pattern>
+<template>
+Synthesis of <star index="1"/> and <star index="2"/>: I will identify the emergent structure that cannot be derived from either alone. Candidate only.
+[/kuhul:reason]
+</template>
+</category>
+
+</aiml>
