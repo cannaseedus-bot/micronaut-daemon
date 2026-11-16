@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0">
+
+<!-- Pop phase bank: greeting intake and intent formation for GREETING-µ.
+     K'UHUL Pop ops: greeting.decompose, greeting.bank, greeting.intent.
+     Responsibility split:
+       - GREETING_ONLY intents resolve here via greeting.bank (no escalation).
+       - All other intents emit <srai> to Wo-phase for deeper intent traversal.
+     Authority: data_only at Pop; routing proposals require XCFE Ch'en admission.
+     Pattern.Log.dll: appends decompose entry on every match. -->
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     PART I — GREETING_ONLY
+     Canonical surface forms → greeting.bank (gap_type = Resolved;
+     routing.primary_target = ELIZA-µ; no escalation).
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<category>
+<pattern>HI</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">GREETING_ONLY</set>
+  <set name="gap_type">Resolved</set>
+  <set name="greeting"><input/></set>
+</think>
+<srai>GREETING POP HI</srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>HELLO</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">GREETING_ONLY</set>
+  <set name="gap_type">Resolved</set>
+  <set name="greeting"><input/></set>
+</think>
+<srai>GREETING POP HELLO</srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>HEY</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">GREETING_ONLY</set>
+  <set name="gap_type">Resolved</set>
+  <set name="greeting"><input/></set>
+</think>
+<srai>GREETING POP HEY</srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>HI THERE</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">GREETING_ONLY</set>
+  <set name="gap_type">Resolved</set>
+  <set name="greeting"><input/></set>
+</think>
+<srai>GREETING POP HI</srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>HEY THERE</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">GREETING_ONLY</set>
+  <set name="gap_type">Resolved</set>
+  <set name="greeting"><input/></set>
+</think>
+<srai>GREETING POP HEY</srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>HOWDY</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">GREETING_ONLY</set>
+  <set name="gap_type">Resolved</set>
+  <set name="greeting"><input/></set>
+</think>
+<srai>GREETING POP REACTIVE_MIRROR HOWDY</srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>YO</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">GREETING_ONLY</set>
+  <set name="gap_type">Resolved</set>
+  <set name="greeting"><input/></set>
+</think>
+<srai>GREETING POP REACTIVE_MIRROR YO</srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>SUP</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">GREETING_ONLY</set>
+  <set name="gap_type">Resolved</set>
+  <set name="greeting"><input/></set>
+</think>
+<srai>GREETING POP REACTIVE_MIRROR SUP</srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>GREETINGS</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">GREETING_ONLY</set>
+  <set name="gap_type">Resolved</set>
+  <set name="greeting"><input/></set>
+</think>
+<srai>GREETING POP GREETINGS</srai>
+</mx2lm>
+</template>
+</category>
+
+<!-- Greeting + name or cue: mirror-and-absorb lingo path -->
+<category>
+<pattern>HI *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">GREETING_ONLY</set>
+  <set name="gap_type">Resolved</set>
+  <set name="greeting">HI</set>
+  <set name="cue"><star/></set>
+</think>
+<srai>GREETING POP REACTIVE_MIRROR <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>HEY *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">GREETING_ONLY</set>
+  <set name="gap_type">Resolved</set>
+  <set name="greeting">HEY</set>
+  <set name="cue"><star/></set>
+</think>
+<srai>GREETING POP REACTIVE_MIRROR <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>HELLO *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">GREETING_ONLY</set>
+  <set name="gap_type">Resolved</set>
+  <set name="greeting">HELLO</set>
+  <set name="cue"><star/></set>
+</think>
+<srai>GREETING POP REACTIVE_MIRROR <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     PART II — CODE_REQUEST (pos_hint_trigger: code_token)
+     code_signal detected → route to Wo-phase for CODE-µ escalation.
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<!-- Intent templates from greeting.micronaut.json -->
+<category>
+<pattern>CAN YOU WRITE * IN *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">CODE_REQUEST</set>
+  <set name="gap_type">IntentGap</set>
+  <set name="code_target"><star/></set>
+  <set name="code_lang"><star index="2"/></set>
+</think>
+intent=CODE_REQUEST target=<star/> lang=<star index="2"/>.
+<srai>GREETING WO CODE_REQUEST CAN YOU WRITE <star/> IN <star index="2"/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>FIX THIS * CODE</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">CODE_REQUEST</set>
+  <set name="gap_type">IntentGap</set>
+  <set name="code_target"><star/></set>
+</think>
+intent=CODE_REQUEST fix_target=<star/>.
+<srai>GREETING WO CODE_REQUEST FIX <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>WHAT IS WRONG WITH THIS *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">CODE_REQUEST</set>
+  <set name="gap_type">IntentGap</set>
+  <set name="code_target"><star/></set>
+</think>
+intent=CODE_REQUEST debug_target=<star/>.
+<srai>GREETING WO CODE_REQUEST DEBUG <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<!-- Keyword-driven code signal patterns -->
+<category>
+<pattern>_ FUNCTION *</pattern>
+<template>
+<mx2lm>
+<think><set name="intent">CODE_REQUEST</set><set name="gap_type">IntentGap</set></think>
+intent=CODE_REQUEST code_signal=function.
+<srai>GREETING WO CODE_REQUEST <star/> FUNCTION <star index="2"/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>_ CLASS *</pattern>
+<template>
+<mx2lm>
+<think><set name="intent">CODE_REQUEST</set><set name="gap_type">IntentGap</set></think>
+intent=CODE_REQUEST code_signal=class.
+<srai>GREETING WO CODE_REQUEST <star/> CLASS <star index="2"/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>DEBUG *</pattern>
+<template>
+<mx2lm>
+<think><set name="intent">CODE_REQUEST</set><set name="gap_type">IntentGap</set></think>
+intent=CODE_REQUEST code_signal=debug target=<star/>.
+<srai>GREETING WO CODE_REQUEST DEBUG <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>REFACTOR *</pattern>
+<template>
+<mx2lm>
+<think><set name="intent">CODE_REQUEST</set><set name="gap_type">IntentGap</set></think>
+intent=CODE_REQUEST code_signal=refactor target=<star/>.
+<srai>GREETING WO CODE_REQUEST REFACTOR <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>IMPLEMENT *</pattern>
+<template>
+<mx2lm>
+<think><set name="intent">CODE_REQUEST</set><set name="gap_type">IntentGap</set></think>
+intent=CODE_REQUEST code_signal=implement target=<star/>.
+<srai>GREETING WO CODE_REQUEST IMPLEMENT <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     PART III — KNOWLEDGE_QUERY
+     → INFER-µ → REASON-µ escalation path via Wo.
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<category>
+<pattern>WHAT IS *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">KNOWLEDGE_QUERY</set>
+  <set name="gap_type">QueryGap</set>
+  <set name="query_subject"><star/></set>
+</think>
+intent=KNOWLEDGE_QUERY subject=<star/>.
+<srai>GREETING WO KNOWLEDGE_QUERY WHAT IS <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>WHAT ARE *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">KNOWLEDGE_QUERY</set>
+  <set name="gap_type">QueryGap</set>
+  <set name="query_subject"><star/></set>
+</think>
+intent=KNOWLEDGE_QUERY subject=<star/>.
+<srai>GREETING WO KNOWLEDGE_QUERY WHAT ARE <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>EXPLAIN *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">KNOWLEDGE_QUERY</set>
+  <set name="gap_type">QueryGap</set>
+  <set name="query_subject"><star/></set>
+</think>
+intent=KNOWLEDGE_QUERY explain=<star/>.
+<srai>GREETING WO KNOWLEDGE_QUERY EXPLAIN <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>TELL ME ABOUT *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">KNOWLEDGE_QUERY</set>
+  <set name="gap_type">QueryGap</set>
+  <set name="query_subject"><star/></set>
+</think>
+intent=KNOWLEDGE_QUERY subject=<star/>.
+<srai>GREETING WO KNOWLEDGE_QUERY EXPLAIN <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>HOW DOES *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">KNOWLEDGE_QUERY</set>
+  <set name="gap_type">QueryGap</set>
+  <set name="query_subject"><star/></set>
+</think>
+intent=KNOWLEDGE_QUERY mechanism=<star/>.
+<srai>GREETING WO KNOWLEDGE_QUERY HOW DOES <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     PART IV — ACTION_REQUEST
+     → ORCH-µ → MEM-µ escalation via Wo.
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<category>
+<pattern>CAN YOU *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">ACTION_REQUEST</set>
+  <set name="gap_type">IntentGap</set>
+  <set name="action_target"><star/></set>
+</think>
+intent=ACTION_REQUEST action=<star/>.
+<srai>GREETING WO ACTION_REQUEST CAN YOU <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>HELP ME *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">ACTION_REQUEST</set>
+  <set name="gap_type">IntentGap</set>
+  <set name="action_target"><star/></set>
+</think>
+intent=ACTION_REQUEST help=<star/>.
+<srai>GREETING WO ACTION_REQUEST HELP ME <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>GENERATE *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">ACTION_REQUEST</set>
+  <set name="gap_type">IntentGap</set>
+  <set name="action_target"><star/></set>
+</think>
+intent=ACTION_REQUEST generate=<star/>.
+<srai>GREETING WO ACTION_REQUEST GENERATE <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>CREATE *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">ACTION_REQUEST</set>
+  <set name="gap_type">IntentGap</set>
+  <set name="action_target"><star/></set>
+</think>
+intent=ACTION_REQUEST create=<star/>.
+<srai>GREETING WO ACTION_REQUEST CREATE <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     PART V — TASK_REQUEST
+     → ORCH-µ → PLAN-µ → MEM-µ escalation via Wo.
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<category>
+<pattern>HELP ME PLAN *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">TASK_REQUEST</set>
+  <set name="gap_type">IntentGap</set>
+  <set name="task_subject"><star/></set>
+</think>
+intent=TASK_REQUEST plan=<star/>.
+<srai>GREETING WO TASK_REQUEST PLAN <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>BREAK * INTO STEPS</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">TASK_REQUEST</set>
+  <set name="gap_type">IntentGap</set>
+  <set name="task_subject"><star/></set>
+</think>
+intent=TASK_REQUEST decompose=<star/>.
+<srai>GREETING WO TASK_REQUEST DECOMPOSE <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>PLAN *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">TASK_REQUEST</set>
+  <set name="gap_type">IntentGap</set>
+  <set name="task_subject"><star/></set>
+</think>
+intent=TASK_REQUEST plan=<star/>.
+<srai>GREETING WO TASK_REQUEST PLAN <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     PART VI — OPINION_REQUEST
+     → REASON-µ → INFER-µ escalation via Wo.
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<category>
+<pattern>WHAT DO YOU THINK ABOUT *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">OPINION_REQUEST</set>
+  <set name="gap_type">QueryGap</set>
+  <set name="opinion_subject"><star/></set>
+</think>
+intent=OPINION_REQUEST subject=<star/>.
+<srai>GREETING WO OPINION_REQUEST <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>DO YOU THINK *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">OPINION_REQUEST</set>
+  <set name="gap_type">QueryGap</set>
+  <set name="opinion_subject"><star/></set>
+</think>
+intent=OPINION_REQUEST subject=<star/>.
+<srai>GREETING WO OPINION_REQUEST <star/></srai>
+</mx2lm>
+</template>
+</category>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     PART VII — RELATIONSHIP_QUERY
+     → REASON-µ → ELIZA-µ escalation via Wo.
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<category>
+<pattern>HOW IS * RELATED TO *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">RELATIONSHIP_QUERY</set>
+  <set name="gap_type">QueryGap</set>
+</think>
+intent=RELATIONSHIP_QUERY a=<star/> b=<star index="2"/>.
+<srai>GREETING WO RELATIONSHIP_QUERY <star/> AND <star index="2"/></srai>
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>WHAT IS THE CONNECTION BETWEEN * AND *</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">RELATIONSHIP_QUERY</set>
+  <set name="gap_type">QueryGap</set>
+</think>
+intent=RELATIONSHIP_QUERY a=<star/> b=<star index="2"/>.
+<srai>GREETING WO RELATIONSHIP_QUERY <star/> AND <star index="2"/></srai>
+</mx2lm>
+</template>
+</category>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     PART VIII — DIAGNOSTICS
+     greeting.health — Pop-phase status report; data_only.
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<category>
+<pattern>GREETING HEALTH</pattern>
+<template>
+<mx2lm>
+greeting.health — Pop-phase diagnostics.
+intent_graph: data/intent-graph.gml.
+greeting_bank: data/greeting-bank.json (8 phases: Pop Wo Yax Sek Ch'en Xul reactive_mirror synthesized).
+gyro_abi: data/gyro_abi_v1.json.
+pattern_log: Pattern.Log.dll (append-only).
+word_key_field_schema: data/schema/kuhul.word-key-field.v1.json.
+cfpc_track: data/tracks/CFPC-u.semantic-tracks.v1.json.
+authority: data_only.
+</mx2lm>
+</template>
+</category>
+
+<category>
+<pattern>GREETING HEALTH *</pattern>
+<template>
+<mx2lm>
+greeting.health subsystem=<star/>.
+<srai>GREETING HEALTH</srai>
+</mx2lm>
+</template>
+</category>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     PART IX — DEFAULT INTAKE
+     Catch-all: run greeting.decompose on the raw input, emit
+     WordKeyField, let Wo-phase intent traversal continue.
+     gap_type = KnowledgeGapNoKeys until Wo resolves it.
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<category>
+<pattern>_</pattern>
+<template>
+<mx2lm>
+<think>
+  <set name="intent">unknown</set>
+  <set name="gap_type">KnowledgeGapNoKeys</set>
+</think>
+greeting.decompose input=<input/>.
+Tokenize and produce kuhul.word-key-field.v1.
+<srai>GREETING WO <input/></srai>
+</mx2lm>
+</template>
+</category>
+
+</aiml>
