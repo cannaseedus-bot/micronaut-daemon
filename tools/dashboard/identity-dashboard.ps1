@@ -23,7 +23,7 @@ trap {
     break
 }
 
-$script:RepoRoot  = (Resolve-Path (Join-Path $PSScriptRoot '..\..')) .Path
+$script:RepoRoot  = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 $script:DashDir   = Join-Path $PSScriptRoot 'identity-dashboard'
 $script:CliPath   = $CliPath
 $script:DashUrl   = "http://127.0.0.1:${DashboardPort}?runtime=${RuntimePort}"
@@ -233,7 +233,17 @@ if ($script:WebView2Available) {
     $contentBorder.Child = $wv
 
     $wv.Add_Loaded({
-        $wv.EnsureCoreWebView2Async($null) | Out-Null
+        try {
+            $udFolder = Join-Path $env:LOCALAPPDATA 'AI-mu-WebView2'
+            [System.IO.Directory]::CreateDirectory($udFolder) | Out-Null
+            $envTask = [Microsoft.Web.WebView2.Core.CoreWebView2Environment]::CreateAsync(
+                [string]::Empty, $udFolder, $null)
+            $envTask.Wait()
+            $wv.EnsureCoreWebView2Async($envTask.Result) | Out-Null
+        } catch {
+            # fallback: let WebView2 pick its own folder
+            $wv.EnsureCoreWebView2Async($null) | Out-Null
+        }
     })
 
     $wv.Add_CoreWebView2InitializationCompleted({
