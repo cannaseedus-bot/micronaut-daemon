@@ -608,6 +608,82 @@ source (`buildTarget`).
 
 ---
 
+## 16. GML — Graph Map Language
+
+GML is **Graph Map Language** — not graph machine learning. It is the topology substrate `B`:
+the authoritative discrete graph that K'UHUL fold operations traverse.
+
+### Why "Graph Map Language"
+
+The *map* in GML names the **anamorphism** (unfold): the fold map function walks GML edges
+to generate candidate-continuation structure. In hylomorphism terms:
+
+| Fold algebra term | GML role |
+|-------------------|----------|
+| `B` | The discrete topology — nodes + typed edges (this is a GML graph) |
+| `M_mu` | VECTOR-µ learned geometry *over* B — derived, not authoritative |
+| `unfold` / ana | Walks GML edges; generates fold-candidate structure |
+| `fold` / cata | Collapses KFOLD/1 phase slices back to a committed answer |
+| `unfold-graph.gml` | Q3×C6 (3D hypercube × C6 phase cycle) — phase-aware neighbor map |
+
+**Laws:**
+- `topology-before-coordinates` — GML graph shape precedes any learned geometry
+- `GML != VECTOR` — VECTOR-µ learns geometry over B; it cannot redefine B
+- `ParsedGraph ≠ VerifiedGraph ≠ B` — parse → validate → admit are three distinct gates
+
+### GML Files and Roles
+
+GML files fall into three categories:
+
+| Category | Examples | Role |
+|----------|---------|------|
+| Reference topology | `hypercube_Q3.gml`, `hypercube_Q4.gml`, `khanary_topology.gml` | 3D/4D geodesic reference; CCC interconnects; cognitive track adjacency |
+| Fold-map traversal | `unfold-graph.gml` (Q3×C6, 48 nodes, 120 edges) | Phase-aware neighbor map for fold iterations |
+| Semantic graphs | `intent-graph.gml`, `cfpc-questions.gml`, `metric_graph.gml`, `micronaut_fieldgraph.gml` | Intent routing, CFPC question traversal, WCR metric graph, fold-phase projection |
+| Bias / wildcard | `eliza-bias.gml`, `bias.gml`, `pi-radius-bias.gml`, `wildcard.gml` | ELIZA pattern bias; π-radius weights; wildcard capture routing |
+| Field projections | `vectors.gml`, `kuhul-pi.gml`, `tensor_field.gml`, `entropy_gradient_field.gml` | Read-only ranking/projection; `semantic_authority=false` |
+
+### GML Grammar Layers
+
+| Grammar | Location | Coverage |
+|---------|---------|---------|
+| `gml-1.ebnf` | `tools/trainer-dashboard/kuhul-es/grammars/` | Fold-map interface contract: nodes, edges, relation verbs, WCR weights, phase/epistemic state |
+| `gml.khanary.ebnf` | `data/grammar/` (this repo) | Full Khanary grammar: all extensions — geodesic coordinates, Minkowski events, tensor bundles, quantum graphs, training gradients, deductive system |
+| `gml.validator.json` | `data/grammar/` (this repo) | Semantic validator: V1–V5, R1–R5, W1–W4, G1–G2, S1–S4, D1–D4, Q1–Q14, L1–L3, A1, HE1–HE8, LB1–LB3, P1–P2, T1–T7, E1–E9, TB1–TB11 |
+
+### Validation Pipeline
+
+```
+GML text
+  → ParseGML (gml.khanary.ebnf)       → ParsedGraph
+  → ValidateGML (gml.validator.json)  → VerifiedGraph   grade: VALID
+  → Proposal (field_dag.cpp)          → Candidate
+  → Ch'en (assert_and_verify)         → Certificate
+  → XCFE (dispatch authority)         → Authorization
+  → XulGate (compare_and_commit)      → B'              grade: ADMITTED
+```
+
+**Key rule:** A VerifiedGraph (grade=VALID) does not automatically update B. The admission
+path `Proposal → Ch'en → XCFE → XulGate` is mandatory for topology mutation.
+
+### Relation Verbs
+
+Canonical verbs (`src/micronaut/relation_isa.h`) produce VerifiedRelations:
+`@related_to`, `@delegates_to`, `@requires`, `@part_of`, `@defines`, `@is_a`,
+`@causes`, `@contradicts`, `@has_part`, `@has_property`, `@possesses`, `@value`,
+`@imports`, `@calls`, `@exposes`.
+
+Non-canonical strings → `infer_relation_from_lexical()` → RelationCandidate (confidence < 1.0,
+must pass Ch'en before use in B). **Law:** `Representation → Relevance → Candidate → Verification`.
+
+### Authority Boundary
+
+GML files are topology contracts, not truth certificates. `semantic_authority=false` for
+all GML projections. Only an authorized Xul commit may mutate B. VECTOR-µ / METRIC-µ / TENSOR-µ
+learn geometry *over* B — they cannot redefine the graph topology.
+
+---
+
 ## File Locations
 
 | Artifact | Canonical location |
@@ -619,6 +695,13 @@ source (`buildTarget`).
 | field-factory | `../key-grammar-kit/field-factory/` |
 | kuhul.atomic.khl | `data/grammar/kuhul.atomic.khl` |
 | kuhul-es (KHL runtime) | `tools/trainer-dashboard/kuhul-es/` |
+| GML/1 fold-map grammar | `tools/trainer-dashboard/kuhul-es/grammars/gml-1.ebnf` |
+| GML full Khanary grammar | `data/grammar/gml.khanary.ebnf` |
+| GML semantic validator | `data/grammar/gml.validator.json` |
+| GML manifest | `data/manifest/gml.manifest.json` |
+| GML C++ parser | `src/world/gml_parser.cpp` |
+| GML field DAG builder | `src/world/field_dag.cpp` |
+| GML fold-map graph | `data/unfold-graph.gml` (Q3×C6, 48 nodes) |
 | KHL kernel program | `tools/trainer-dashboard/kuhul-es/sw.khl` |
 | AIML Jinja macros | `templates/aiml_macros.jinja` |
 | Jinja AIML example output | `build/jinja_source/daemon_basic.aiml` |
