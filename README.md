@@ -35,6 +35,18 @@ A K'UHUL program isn't a list of instructions — it's a constrained topology of
 
 The graph is not merely input to an external algorithm. The graph *is* the program. Glyphs and node operators are its executable instructions.
 
+K'UHUL treats graph topology as a **machine-executable computational space**. Nodes encode operations and state, edges encode relationships and dependencies, and phase-governed traversal transforms that space without requiring any visual rendering.
+
+Three architectural invariants govern execution:
+
+| Invariant | Statement |
+|-----------|-----------|
+| Topology precedes geometry | `GRAPH_TOPOLOGY ≠ VISUAL_PROJECTION` — coordinate fields are projection metadata, not the topology |
+| Computation does not imply authority | `GPU_RESULT ≠ PROOF ≠ AUTHORIZATION ≠ COMMIT` — DirectML / OpenCL kernels produce candidate evidence, not authorized effects |
+| The graph defines the program | `GRAPH + NODE_OPERATORS + PHASE_SEMANTICS = EXECUTION_STRUCTURE` |
+
+GPU work (`dml_gemm.dll`, `gl_infer_driver.dll`, `vector_lane.cl`) may execute speculatively to produce candidate evidence before authorization. No candidate result may cross into authorized state or persistent commit without Ch'en proof + XCFE authorization + Xul gate.
+
 ---
 
 ## Overview
