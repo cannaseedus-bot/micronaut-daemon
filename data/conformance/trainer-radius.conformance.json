@@ -1,0 +1,164 @@
+{
+  "id": "trainer-radius.conformance.v1",
+  "kind": "gml_conformance_suite",
+  "version": "1.0.0",
+  "description": "Conformance tests for KUHUL-FIELD.md §17-§18: four-graph training architecture and radius contract. Each test specifies a GML fragment, expected validator grade, and expected error codes. All tests run against gml.validator.json RD1-RD7 checks.",
+  "reference": ["KUHUL-FIELD.md §17", "KUHUL-FIELD.md §18", "data/grammar/gml.validator.json"],
+  "tests": [
+    {
+      "id": "RD-001",
+      "name": "radius_type_valid_graph_hops",
+      "description": "radius_type=graph_hops with radius=1 and no path_aggregation. Valid because radius=1 does not require path_aggregation.",
+      "check": "RD1, RD2",
+      "fragment": "node [ id 1 radius_type \"graph_hops\" radius 1 ]",
+      "expected_grade": "VALID",
+      "expected_errors": []
+    },
+    {
+      "id": "RD-002",
+      "name": "radius_type_invalid_string",
+      "description": "radius_type with unknown value must fail RD1.",
+      "check": "RD1",
+      "fragment": "node [ id 1 radius_type \"euclidean\" radius 2 ]",
+      "expected_grade": "ERROR",
+      "expected_errors": ["INVALID_RADIUS_TYPE"]
+    },
+    {
+      "id": "RD-003",
+      "name": "radius_hops_negative",
+      "description": "radius=-1 is invalid for graph_hops (topology distance is nonneg).",
+      "check": "RD2",
+      "fragment": "node [ id 1 radius_type \"graph_hops\" radius -1 ]",
+      "expected_grade": "ERROR",
+      "expected_errors": ["RADIUS_HOPS_NEGATIVE"]
+    },
+    {
+      "id": "RD-004",
+      "name": "radius_distance_zero",
+      "description": "radius_distance=0.0 is invalid for vector_distance (must be positive).",
+      "check": "RD3",
+      "fragment": "node [ id 1 radius_type \"vector_distance\" radius_distance 0.0 ]",
+      "expected_grade": "ERROR",
+      "expected_errors": ["RADIUS_DISTANCE_NONPOSITIVE"]
+    },
+    {
+      "id": "RD-005",
+      "name": "radius_influence_out_of_range_zero",
+      "description": "radius_influence=0.0 is invalid for influence radius (must be in (0,1]).",
+      "check": "RD4",
+      "fragment": "node [ id 1 radius_type \"influence\" radius_influence 0.0 ]",
+      "expected_grade": "ERROR",
+      "expected_errors": ["RADIUS_INFLUENCE_OUT_OF_RANGE"]
+    },
+    {
+      "id": "RD-006",
+      "name": "radius_influence_out_of_range_above_one",
+      "description": "radius_influence=1.5 is invalid (must be <= 1.0).",
+      "check": "RD4",
+      "fragment": "node [ id 1 radius_type \"influence\" radius_influence 1.5 ]",
+      "expected_grade": "ERROR",
+      "expected_errors": ["RADIUS_INFLUENCE_OUT_OF_RANGE"]
+    },
+    {
+      "id": "RD-007",
+      "name": "multihop_missing_path_aggregation",
+      "description": "radius=2 without path_aggregation. Must fail RD5 — path_aggregation required when radius > 1.",
+      "check": "RD5",
+      "fragment": "node [ id 1 radius_type \"graph_hops\" radius 2 ]",
+      "expected_grade": "ERROR",
+      "expected_errors": ["PATH_AGGREGATION_MISSING"]
+    },
+    {
+      "id": "RD-008",
+      "name": "multihop_with_path_aggregation_valid",
+      "description": "radius=2 with path_aggregation=max_product is valid.",
+      "check": "RD5",
+      "fragment": "node [ id 1 radius_type \"graph_hops\" radius 2 path_aggregation \"max_product\" ]",
+      "expected_grade": "VALID",
+      "expected_errors": []
+    },
+    {
+      "id": "RD-009",
+      "name": "radius_bound_not_access_grant",
+      "description": "radius field combined with commit_authority must fail RD6. RADIUS_BOUND != ACCESS_GRANT.",
+      "check": "RD6",
+      "fragment": "node [ id 1 radius_type \"graph_hops\" radius 1 commit_authority 1 ]",
+      "expected_grade": "ERROR",
+      "expected_errors": ["RADIUS_AUTHORITY_FORBIDDEN"],
+      "law": "RADIUS_BOUND != ACCESS_GRANT"
+    },
+    {
+      "id": "RD-010",
+      "name": "radius_bound_not_semantic_authority",
+      "description": "radius field combined with semantic_authority must fail RD6.",
+      "check": "RD6",
+      "fragment": "node [ id 1 radius_type \"vector_distance\" radius_distance 0.1 semantic_authority 1 ]",
+      "expected_grade": "ERROR",
+      "expected_errors": ["RADIUS_AUTHORITY_FORBIDDEN"],
+      "law": "RADIUS_BOUND != ACCESS_GRANT"
+    },
+    {
+      "id": "RD-011",
+      "name": "decay_mode_invalid",
+      "description": "decay_mode with unknown value must fail RD7.",
+      "check": "RD7",
+      "fragment": "node [ id 1 radius_type \"influence\" radius_influence 0.1 decay_mode \"gaussian\" decay_rate 1.0 ]",
+      "expected_grade": "ERROR",
+      "expected_errors": ["INVALID_DECAY_MODE"]
+    },
+    {
+      "id": "RD-012",
+      "name": "decay_rate_negative",
+      "description": "decay_rate=-0.5 is invalid (lambda must be nonneg in e^{-lambda*d}).",
+      "check": "RD7",
+      "fragment": "node [ id 1 radius_type \"influence\" radius_influence 0.1 decay_mode \"exponential\" decay_rate -0.5 ]",
+      "expected_grade": "ERROR",
+      "expected_errors": ["DECAY_RATE_NEGATIVE"]
+    },
+    {
+      "id": "RD-013",
+      "name": "full_influence_radius_valid",
+      "description": "Complete influence radius declaration with decay. Should be VALID.",
+      "check": "RD1, RD4, RD7",
+      "fragment": "node [ id 1 radius_type \"influence\" radius_influence 0.05 decay_mode \"exponential\" decay_rate 1.0 path_aggregation \"max_product\" ]",
+      "expected_grade": "VALID",
+      "expected_errors": []
+    },
+    {
+      "id": "RD-014",
+      "name": "trainer_topology_authority_separation",
+      "description": "trainer.gml gradient.propose node is candidate_only. GPU computation does not grant authority. GPU_RESULT != PROOF != AUTHORIZATION.",
+      "check": "RD6, T7",
+      "fragment": "node [ id 4 operator \"arc.call\" phase \"sek\" authority \"candidate_only\" gradient_mode \"routing_guidance\" training_step 0 grad_norm 0.0 ]",
+      "expected_grade": "VALID",
+      "expected_errors": [],
+      "note": "GPU computes gradient speculatively. Ch'en verification required before XCFE admission."
+    },
+    {
+      "id": "RD-015",
+      "name": "matryoshka_inactive_not_deleted",
+      "description": "is_active=0 is a valid working-set flag. The node exists; it is inactive, not deleted.",
+      "check": "RD6",
+      "fragment": "node [ id 1 is_active 0 radius_type \"vector_distance\" radius_distance 0.3 ]",
+      "expected_grade": "VALID",
+      "expected_errors": [],
+      "law": "INACTIVE != DELETED"
+    },
+    {
+      "id": "RD-016",
+      "name": "tensor_compatibility_dimensions_positive",
+      "description": "dimensions must be a positive integer when present.",
+      "check": "general",
+      "fragment": "node [ id 1 dimensions 0 ]",
+      "expected_grade": "ERROR",
+      "expected_errors": ["TENSOR_RANK_INCOMPLETE"],
+      "note": "dimensions=0 is inadmissible for vector/projection nodes; falls under existing tensor rank checks."
+    }
+  ],
+  "laws": {
+    "RADIUS_BOUND_NOT_ACCESS_GRANT": "RD-009, RD-010",
+    "GPU_RESULT_NOT_PROOF": "RD-014",
+    "INACTIVE_NOT_DELETED": "RD-015",
+    "TOPOLOGY_BEFORE_COORDINATES": "radius_type=graph_hops is the primary radius kind — coordinates (x,y,z) are projection metadata"
+  }
+}

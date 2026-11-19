@@ -891,3 +891,7 @@ G_active  = SelectKeys(G, intent, r, π)      ← matryoshka selects
 | Dev/test build | `build/Release/` |
 | Installed binaries | `bin/` |
 | All grammar/semantic files mirrored to | `data/alice/` and `data/grammar/` in both repos |
+| **Training architecture (§17–§20)** | |
+| Training graph topology | `data/trainer.gml` |
+| Matryoshka working-set controller | `data/matryoshka.gml` |
+| Radius contract conformance suite | `data/conformance/trainer-radius.conformance.json` |

@@ -743,6 +743,67 @@
       "check": "ricci_identity_residual or covariant_derivative.residual must be finite and within ricci_tolerance (default 1e-4). Violations emit RICCI_IDENTITY_VIOLATION.",
       "severity": "ERROR",
       "error": "RICCI_IDENTITY_VIOLATION"
+    },
+    "RD1": {
+      "layer": "radius_contract",
+      "name": "radius_type_enum",
+      "formal": "radius_type ∈ {graph_hops, vector_distance, influence}",
+      "check": "radius_type must be one of graph_hops/vector_distance/influence when present on a node. Default is graph_hops when radius is declared without radius_type.",
+      "severity": "ERROR",
+      "error": "INVALID_RADIUS_TYPE"
+    },
+    "RD2": {
+      "layer": "radius_contract",
+      "name": "radius_hops_nonnegative",
+      "formal": "radius_type=graph_hops => radius ∈ N₀",
+      "check": "radius must be a nonneg integer when radius_type is graph_hops or when radius_type is absent and radius is declared. graph_hops is topology-primary (topology-before-coordinates).",
+      "severity": "ERROR",
+      "error": "RADIUS_HOPS_NEGATIVE"
+    },
+    "RD3": {
+      "layer": "radius_contract",
+      "name": "radius_distance_positive",
+      "formal": "radius_type=vector_distance => radius_distance > 0",
+      "check": "radius_distance must be a positive finite number when radius_type=vector_distance. This is a derived radius — it operates over M_µ (EmbeddingGemma 2 vector space), not raw coordinates.",
+      "severity": "ERROR",
+      "error": "RADIUS_DISTANCE_NONPOSITIVE"
+    },
+    "RD4": {
+      "layer": "radius_contract",
+      "name": "radius_influence_range",
+      "formal": "radius_type=influence => radius_influence ∈ (0,1]",
+      "check": "radius_influence threshold I_min must be in (0,1] when radius_type=influence. It is derived from the decay equation I(i,j)=w_ij·e^{-λ·d_G(i,j)} and sets the cutoff below which influence is treated as zero.",
+      "severity": "ERROR",
+      "error": "RADIUS_INFLUENCE_OUT_OF_RANGE"
+    },
+    "RD5": {
+      "layer": "radius_contract",
+      "name": "path_aggregation_required_when_multihop",
+      "formal": "radius > 1 => path_aggregation declared",
+      "check": "When radius is an integer greater than 1, path_aggregation must be declared on the node. If absent, emit PATH_AGGREGATION_MISSING. Default max_product is not silently applied — the declaration is required so the validator can audit the aggregation policy.",
+      "severity": "ERROR",
+      "error": "PATH_AGGREGATION_MISSING"
+    },
+    "RD6": {
+      "layer": "radius_contract",
+      "name": "radius_bound_not_access_grant",
+      "formal": "RADIUS_BOUND ≠ ACCESS_GRANT",
+      "check": "radius, radius_distance, and radius_influence fields constrain topology scope and projection geometry only. They do not grant authorization. A node inside the declared radius is a candidate — it still requires Ch'en proof, XCFE authorization, and Xul commit to become an authorized effect. Nodes declaring radius fields alongside commit_authority=true or semantic_authority=true emit RADIUS_AUTHORITY_FORBIDDEN.",
+      "authority_keys": ["commit_authority", "semantic_authority", "topology_authority"],
+      "severity": "ERROR",
+      "error": "RADIUS_AUTHORITY_FORBIDDEN",
+      "law": "RADIUS_BOUND ≠ ACCESS_GRANT"
+    },
+    "RD7": {
+      "layer": "radius_contract",
+      "name": "decay_contract_valid",
+      "formal": "decay_mode ∈ {exponential,linear,none} and decay_rate ≥ 0",
+      "check": "decay_mode must be one of exponential/linear/none when present. decay_rate must be a nonneg finite number when present. When decay_mode=exponential, decay_rate is λ in I(i,j)=w_ij·e^{-λ·d_G(i,j)}. When decay_mode=none, decay_rate should be absent or zero.",
+      "severity": "ERROR",
+      "error": [
+        "INVALID_DECAY_MODE",
+        "DECAY_RATE_NEGATIVE"
+      ]
     }
   },
   "relation_authority": {
@@ -842,7 +903,15 @@
       "LORENTZ_NOT_IDENTITY_WHEN_DISABLED",
       "HYPERBOLIC_EVENT_INCOMPLETE",
       "EPISTEMIC_STATE_MISSING",
-      "EPISTEMIC_STATE_INVALID"
+      "EPISTEMIC_STATE_INVALID",
+      "INVALID_RADIUS_TYPE",
+      "RADIUS_HOPS_NEGATIVE",
+      "RADIUS_DISTANCE_NONPOSITIVE",
+      "RADIUS_INFLUENCE_OUT_OF_RANGE",
+      "PATH_AGGREGATION_MISSING",
+      "RADIUS_AUTHORITY_FORBIDDEN",
+      "INVALID_DECAY_MODE",
+      "DECAY_RATE_NEGATIVE"
     ],
     "WARNING": [
       "BOTH_VERB_AND_RELATION_PRESENT",

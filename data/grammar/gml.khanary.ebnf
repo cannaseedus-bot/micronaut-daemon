@@ -126,6 +126,25 @@ node_attr  =
   | "grad_norm"     , number    (* ||grad_phi L||, nonnegative *)
   | "learning_rate" , number    (* eta, positive when present *)
   | "gradient_clip" , number    (* clip bound for training gradient, positive when present *)
+  | "operator"       , string   (* K'UHUL glyph or opcode executed at this node, e.g. "arc.read", "arc.expand" *)
+  | "phase"          , string   (* K'UHUL phase binding, e.g. "pop", "wo", "yax", "sek", "chen", "xul" *)
+  | "backend"        , string   (* execution backend: "opencl" | "directml" | "cpu" | "wasm" *)
+  | "authority"      , string   (* XCFE principal claim, e.g. "xcfe_admitted" | "candidate_only" | "none" *)
+  | "schema"         , string   (* schema URI for this node's typed payload *)
+  | "dimensions"     , integer  (* embedding dimension for vector/projection nodes; nonneg *)
+  | "radius_type"    , radius_type   (* primary radius kind governing topology scope; default graph_hops *)
+  | "radius"         , integer  (* graph_hops radius; nonneg integer; required when radius_type=graph_hops *)
+  | "radius_distance", number   (* vector-distance threshold; positive when radius_type=vector_distance *)
+  | "radius_influence", number  (* influence threshold I_min; in (0,1] when radius_type=influence *)
+  | "decay_mode"     , decay_mode_kind (* influence decay function shape; default exponential *)
+  | "decay_rate"     , number   (* lambda in I(i,j)=w*e^{-lambda*d}; nonneg *)
+  | "path_aggregation", path_agg_mode (* aggregation mode when radius>1; required when radius>1; default max_product *)
+  | "gradient_mode"  , gradient_mode_kind (* gradient guidance mode; default none until convergence certificate *)
+  | "convergence_kind", convergence_kind (* convergence certificate type at this node; default none *)
+  | "convergence_value", number (* certificate value: empirical=min_improvement_N; theoretical=condition_bound; nonneg *)
+  | "contract_scope" , string   (* BoundedStepContract scope identifier bound at Ch'en/XCFE admission *)
+  | "contract_phase" , string   (* K'UHUL phase at which the contract was admitted *)
+  | "is_active"      , integer  (* 0/1 Matryoshka working-set active flag; INACTIVE≠DELETED *)
   | "entropy_spike" , number    (* ΔH: structural uncertainty jump, nonnegative *)
   | "entropy_bound" , number    (* optional maximum admitted entropy, positive when present *)
   | "diffusion_beta_inv", number (* beta^-1 entropy diffusion scale, nonnegative *)
@@ -224,6 +243,9 @@ edge_attr  =
   | "grad_norm"  , number       (* ||grad_phi L||, nonnegative *)
   | "learning_rate", number     (* eta, positive when present *)
   | "gradient_clip", number     (* clip bound, positive when present *)
+  | "radius_influence", number  (* edge influence I(i,j)=w*e^{-lambda*d}; nonneg *)
+  | "graph_hops"   , integer    (* discrete hop distance for topology radius; nonneg *)
+  | "path_agg"     , path_agg_mode (* per-path aggregation mode override; default inherits node path_aggregation *)
   | "entropy_delta", number     (* H(target)-H(source), signed *)
   | "diffusion_beta_inv", number (* beta^-1 entropy diffusion scale, nonnegative *)
   | "triangle_id"   , integer    (* Maps this edge to a verified 3-node simplicial loop token *)
@@ -240,6 +262,16 @@ edge_attr  =
   | "lorentz_boost" , block     (* LorentzTransitionTensor rows: row0..row3 plus enabled/alignment/mass controls *)
   | ident      , value          (* unknown edge attributes are silently accepted *)
   ;
+
+(* ── Radius contract ────────────────────────────────────────────────────── *)
+(* §18 of KUHUL-FIELD.md. RADIUS_BOUND ≠ ACCESS_GRANT: radius fields constrain
+   topology scope; Ch'en/XCFE/Xul remain the authority chain. *)
+
+radius_type    = '"' , ( "graph_hops" | "vector_distance" | "influence" ) , '"' ;
+path_agg_mode  = '"' , ( "max_product" | "min_product" | "sum_product" | "shortest_path_product" ) , '"' ;
+gradient_mode_kind = '"' , ( "routing_guidance" | "gradient_guidance" | "none" ) , '"' ;
+convergence_kind   = '"' , ( "theoretical" | "empirical" | "none" ) , '"' ;
+decay_mode_kind    = '"' , ( "exponential" | "linear" | "none" ) , '"' ;
 
 (* ── Differential / decision tracking ─────────────────────────────────── *)
 
