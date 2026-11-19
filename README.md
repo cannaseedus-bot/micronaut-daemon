@@ -60,6 +60,7 @@ Three corpus files exceed GitHub's 100 MB limit and are stored as zip archives. 
 ```powershell
 Expand-Archive data\alice\ag-news\ag-news-train.aiml.zip    data\alice\ag-news\
 Expand-Archive data\grammar\english-dictionary.lexicon.key-grammar.jsonl.zip  data\grammar\
+Expand-Archive data\ingest\english-dictionary.lexicon.key-grammar.jsonl.zip   data\ingest\
 Expand-Archive data\vectors.svg.zip  data\
 ```
 

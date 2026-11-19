@@ -684,6 +684,184 @@ learn geometry *over* B — they cannot redefine the graph topology.
 
 ---
 
+## 17. Four-Graph Architecture — Training and Retrieval
+
+The K'UHUL training system separates four distinct concerns across four GML graphs. The model does not own its training process — the graphs do.
+
+| Graph | Owns |
+|-------|------|
+| `model.gml` | Computational architecture — layer topology, tensor shapes, operator contracts |
+| `trainer.gml` | Training mechanics — forward pass, loss, backward pass, optimizer proposal, commit |
+| `learning.gml` | Meta-policy — evaluates training evidence, proposes adaptation of `trainer.gml` behavior |
+| `matryoshka.gml` | Semantic working-set — isolates active keys and neighborhoods from the full corpus |
+
+**Execution cascade:**
+```
+matryoshka.gml   selects G_active from corpus topology
+  ↓
+trainer.gml      trains θ_active within G_active dependency structure
+  ↓
+learning.gml     evaluates training evidence, proposes policy adaptations
+```
+
+### Bounded Training-Step Contract
+
+Requiring a full XCFE round trip per tensor update would make training prohibitively slow. XCFE instead admits a **bounded training-step contract** that covers a full training session. The GPU executes thousands of operations within the admitted scope; no individual step requires separate authorization.
+
+```
+BoundedStepContract {
+  permitted_parameters  : tensor address range or parameter group name
+  update_rule           : SGD | AdamW | WCR-informed
+  max_steps             : integer
+  resource_limits       : { max_memory_mb, max_vram_mb }
+  checkpoint_policy     : interval and validation criteria
+  convergence_evidence  : required before contract renewal
+}
+```
+
+### The Two-Loop Update Principle
+
+Model parameter updates and graph topology updates operate at different frequencies and require different gates:
+
+| Loop | Target | Frequency | Gate |
+|------|--------|-----------|------|
+| Inner | `θ` — model parameters | Per step, within admitted contract | Bounded training-step contract |
+| Outer | `G` — graph ARC weights, edges | Per evaluation epoch | Full Ch'en → XCFE → XulGate |
+
+```
+θ_{t+1} = UpdateModel(θ_t, G_t, π_t)   ← inner loop, per-step
+G_{t+1} = UpdateGraph(G_t, evidence)    ← outer loop, per epoch, full admission
+```
+
+Topology changes alter the **program structure** — they always require a full Xul commit. Parameter changes within an admitted contract scope do not.
+
+---
+
+## 18. Radius Contract
+
+A radius field in a GML node defines the neighborhood over which a proposed operation may consider influence. Three radius types are defined:
+
+| `radius_type` | Unit | Governed by |
+|--------------|------|-------------|
+| `graph_hops` | Integer number of edges | Graph topology — primary boundary |
+| `vector_distance` | Real distance in embedding space | `M_µ` geometry — derived |
+| `influence` | Real scalar influence magnitude | Model-defined threshold |
+
+**Primary boundary:** `topology-before-coordinates` — `graph_hops` is the principal radius type. `vector_distance` operates over `M_µ` (learned geometry over B), not over B itself.
+
+### Influence Equation
+
+```
+I(i,j) = w_ij · e^{-λ · d_G(i,j)}    for d_G(i,j) ≤ r
+         0                              otherwise
+```
+
+Where `d_G(i,j)` is shortest-path graph distance, `r` is `radius`, `λ` is `decay_rate`, and `w_ij` is the **aggregated path weight** (not a single edge weight for multi-hop neighbors).
+
+### Path Aggregation Modes
+
+| `path_aggregation` | Meaning |
+|-------------------|---------|
+| `max_product` | Strongest multiplicative path — **default** |
+| `min_product` | Weakest multiplicative path (conservative worst-case) |
+| `sum_product` | Sum of path contributions; normalization constant required |
+| `shortest_path_product` | Product along a deterministically selected shortest path |
+
+**Law:** `path_aggregation` must be declared when `radius > 1`. Omitting it when `radius == 1` is permitted (single-hop, no path ambiguity).
+
+### Radius does not grant access
+
+A radius restricts which nodes a proposed operation *may consider*. It does not authorize modification of those nodes. Ch'en verifies the neighborhood contracts. XCFE authorizes the update scope. Xul commits only admitted changes.
+
+**Law:** `RADIUS_BOUND ≠ ACCESS_GRANT`
+
+---
+
+## 19. KUHUL-π Gradient Guidance
+
+KUHUL-π can guide learning in two architecturally distinct ways.
+
+### Routing Guidance
+
+KUHUL-π selects which graph neighborhoods, operators, or parameter groups participate in a training step. Implemented as GML topology + phase dispatch — no gradient mathematics involved. This is the safer, implementable path.
+
+### Gradient Guidance
+
+KUHUL-π mathematically modifies gradient updates through a declared transformation:
+
+```
+g̃ = P_{π,G}(g)
+θ' = θ - η·g̃
+```
+
+`P_{π,G}` is a graph-aware gradient preconditioner. For ARC weights in `[0,1]`, elementwise scaling is:
+
+```
+g̃_i = w_i · g_i     where w_i = ARC weight on parameter i
+```
+
+An arbitrary weighting scheme can harm convergence. Any gradient transformation admitted by XCFE must carry a **convergence certificate**.
+
+### Convergence Certificate
+
+| `convergence_kind` | Evidence required |
+|-------------------|-----------------|
+| `theoretical` | Proof that P is a valid preconditioner; bounded condition number κ(P) stated |
+| `empirical` | Validation loss improved or held over `convergence_min_steps` consecutive steps by at least `convergence_loss_threshold` |
+| `none` | Validator issues WARNING — transformation is admissible but unverified |
+
+Ch'en accumulates convergence evidence before certifying a transformation as admissible. `theoretical` and `empirical` are distinct claims — a passing empirical run is not a theoretical guarantee.
+
+**Law:** `GPU_RESULT ≠ PROOF ≠ AUTHORIZATION ≠ COMMIT`
+
+---
+
+## 20. Matryoshka Semantic Working-Set
+
+`matryoshka.gml` is a **semantic working-set controller**. It isolates the active semantic subgraph from the full AIML corpus topology, bounding expansion with the radius contract.
+
+### Corpus Representation
+
+```
+AIML Corpus = Compact Vector Index + Exact Symbolic Store + GML Relationships
+```
+
+| Component | Contents | Purpose |
+|-----------|---------|---------|
+| Compact Vector Index | 32D–256D embeddings per category | Fast semantic candidate discovery |
+| Exact Symbolic Store | Pattern text, templates, wildcards, SRAI edges | Exact rule evaluation |
+| GML Relationships | Edge topology connecting keys, fields, categories | Active subgraph selection |
+
+### Progressive Vector Resolution
+
+```
+32D candidate discovery → 128D reranking → 256D verification → exact AIML resolution
+```
+
+At 32D float32: ~12 MiB for 99,524 categories. At int8: ~3 MiB. The 256D pass runs only on a small shortlist.
+
+**Matryoshka truncation caveat:** Truncating EmbeddingGemma 2 vectors from 256D to 32D preserves retrieval quality only when the model was trained with Matryoshka loss at that dimension. The existing vectors must be evaluated for top-k recall at 32D and 64D before the progressive resolution cascade can be trusted. PCA projection is a fallback but is not Matryoshka.
+
+### The "Inactive ≠ Deleted" Invariant
+
+**Law:** `INACTIVE ≠ DELETED`
+
+An inactive key means excluded from the current active working set. The full corpus and graph remain available for subsequent retrievals. `matryoshka.gml` is a *view controller*, not a delete operation.
+
+### Connection to trainer.gml
+
+During training, `matryoshka.gml` proposes the active parameter scope:
+
+```
+G_active  = SelectKeys(G, intent, r, π)      ← matryoshka selects
+θ_active  = Parameters(G_active)             ← trainer scope
+θ_active' = UpdateModel(θ_active, ...)       ← trainer updates within scope
+```
+
+**Dependency law:** If parameters are shared across key groups, their gradients may still depend on examples outside `G_active`. `G_active` restricts the update *proposal*, not the gradient computation graph.
+
+---
+
 ## File Locations
 
 | Artifact | Canonical location |
