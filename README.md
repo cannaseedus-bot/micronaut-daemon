@@ -53,6 +53,16 @@ GPU work (`dml_gemm.dll`, `gl_infer_driver.dll`, `vector_lane.cl`) may execute s
 
 `eliza-µ` is a lightweight, embeddable chat daemon built on the Alice AIML corpus (99,524 categories). It speaks a line-delimited JSON protocol, serves an HTTP API, and routes all inference through a typed six-phase K'UHUL execution cycle. SRAI redirects are resolved via EmbeddingGemma vector retrieval rather than pure string matching, turning `<srai>` into a semantic routing mechanism for Micronaut atomic workflows.
 
+## Large Assets
+
+Three corpus files exceed GitHub's 100 MB limit and are stored as zip archives. Unzip before building or running:
+
+```powershell
+Expand-Archive data\alice\ag-news\ag-news-train.aiml.zip    data\alice\ag-news\
+Expand-Archive data\grammar\english-dictionary.lexicon.key-grammar.jsonl.zip  data\grammar\
+Expand-Archive data\vectors.svg.zip  data\
+```
+
 ## Build
 
 ```powershell
