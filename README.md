@@ -7,6 +7,36 @@
 
 ---
 
+## What is K'UHUL?
+
+**K'UHUL is a graph-native, phase-governed computational language and runtime in which graph topology defines program structure, glyphs and node operators encode executable semantics, and a controlled hylomorphic cycle unfolds candidate structures, validates their authority, and folds admitted results into committed state.**
+
+A K'UHUL program isn't a list of instructions — it's a constrained topology of possible transformations. Execution is the phase-governed traversal and resolution of that topology.
+
+| Phase | Role | Algebra |
+|-------|------|---------|
+| Pop | Corpus entry, key grammar, context capture | — |
+| Wo | Intake, planning, field binding | Ana gate (unfold begins) |
+| Yax | Admission, candidate expansion, WCR scoring | — |
+| **Sek** | **Proposal generation, GML traversal** | **Anamorphism** |
+| **Ch'en** | **Evidence accumulation, proof** | **Verification gate** |
+| **XCFE** | **Authority enforcement** | **Admission boundary** |
+| **Xul** | **Compare, commit, collapse** | **Catamorphism** |
+
+`hylo = cata ∘ ana` — the full Pop→Xul cycle is a hylomorphism extended with context (Pop/Wo/Yax), a two-step authority gate (Ch'en proves, XCFE authorizes), and controlled persistence (Xul commits only what XCFE admitted).
+
+**Three computational layers:**
+
+| Layer | Responsibility |
+|-------|---------------|
+| GML topology (`B`) | Defines the shape of possible transformations — `topology-before-coordinates` |
+| Node operator fields | Encode behavior within that topology (`operator`, `authority`, phase bindings) |
+| Phase / XCFE runtime | Traverses, validates, and controls what executes |
+
+The graph is not merely input to an external algorithm. The graph *is* the program. Glyphs and node operators are its executable instructions.
+
+---
+
 ## Overview
 
 `eliza-µ` is a lightweight, embeddable chat daemon built on the Alice AIML corpus (99,524 categories). It speaks a line-delimited JSON protocol, serves an HTTP API, and routes all inference through a typed six-phase K'UHUL execution cycle. SRAI redirects are resolved via EmbeddingGemma vector retrieval rather than pure string matching, turning `<srai>` into a semantic routing mechanism for Micronaut atomic workflows.
